@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ===== SEO ===== -->
+<title>Gimnasio en Tocopilla | WGYMADNSPORT - Entrenamiento y Fitness</title>
+<meta name="description" content="WGYMADNSPORT, el gimnasio en Tocopilla para entrenar en serio. Musculación, entrenamiento funcional, HIIT y asesoría fitness personalizada. ¡Conoce nuestras promociones y únete hoy!">
+<meta name="keywords" content="gimnasio en Tocopilla, WGYMADNSPORT, gimnasio Tocopilla, fitness Tocopilla, entrenamiento funcional Tocopilla, musculación Tocopilla, crossfit Tocopilla, clases HIIT Tocopilla, personal trainer Tocopilla">
+<meta name="robots" content="index, follow">
+<meta name="author" content="WGYMADNSPORT Tocopilla">
+<link rel="canonical" href="https://www.wgymadnsport.cl/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="business.business">
+<meta property="og:title" content="WGYMADNSPORT - Gimnasio en Tocopilla">
+<meta property="og:description" content="El mejor gimnasio en Tocopilla. Entrenamiento funcional, musculación, HIIT y promociones exclusivas. ¡Ven a conocernos!">
+<meta property="og:locale" content="es_CL">
+<meta property="og:site_name" content="WGYMADNSPORT Tocopilla">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WGYMADNSPORT - Gimnasio en Tocopilla">
+<meta name="twitter:description" content="Entrena en el gimnasio más completo de Tocopilla. Musculación, funcional, HIIT y más.">
+
+<!-- Datos estructurados para Google (SEO local) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ExerciseGym",
+  "name": "WGYMADNSPORT",
+  "description": "Gimnasio en Tocopilla especializado en musculación, entrenamiento funcional, HIIT y asesoría fitness personalizada.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Calle 21 de Mayo 1520",
+    "addressLocality": "Tocopilla",
+    "addressRegion": "Antofagasta",
+    "addressCountry": "CL"
+  },
+  "telephone": "+56 9 9154 0156",
+  "email": "wadnsporttocopilla@gmail.com",
+  "sameAs": [
+    "https://www.instagram.com/wadnsport.tocopilla",
+    "https://www.facebook.com/share/1Cs1fQfYGA/?mibextid=wwXIfr"
+  ],
+  "priceRange": "$$",
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday"], "opens": "08:00", "closes": "23:30" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "09:00", "closes": "23:30" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "22:00" }
+  ]
+}
+</script>
+
+<style>
+  :root {
+    --rojo: #e30613;
+    --rojo-oscuro: #a40410;
+    --negro: #0a0a0a;
+    --negro-suave: #161616;
+    --gris: #cfcfcf;
+    --blanco: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--negro);
+    color: var(--blanco);
+    line-height: 1.6;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  a { text-decoration: none; color: inherit; }
+
+  ul { list-style: none; }
+
+  .contenedor {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  h2 {
+    font-size: clamp(26px, 4vw, 42px);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  h2 span { color: var(--rojo); }
+
+  .linea-titulo {
+    width: 70px;
+    height: 4px;
+    background: var(--rojo);
+    margin: 0 auto 40px;
+    border-radius: 2px;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(10,10,10,0.95);
+    border-bottom: 2px solid var(--rojo);
+    backdrop-filter: blur(6px);
+  }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    max-width: 1150px;
+    margin: 0 auto;
+  }
+  .logo {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .logo span { color: var(--rojo); }
+  .logo small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--gris);
+    letter-spacing: 3px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+  .nav-links a {
+    position: relative;
+    padding: 6px 0;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--rojo); }
+
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  .menu-toggle span {
+    width: 26px;
+    height: 3px;
+    background: var(--blanco);
+    border-radius: 2px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 100px 20px 60px;
+    background:
+      linear-gradient(180deg, rgba(10,10,10,0.55), rgba(10,10,10,0.92)),
+      url('https://picsum.photos/seed/wgym-hero/1600/900') center/cover no-repeat;
+    position: relative;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 -80px 80px -40px var(--negro);
+  }
+  .hero-contenido { position: relative; z-index: 2; max-width: 760px; }
+  .hero-contenido .pretitulo {
+    color: var(--rojo);
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+  .hero-contenido h1 {
+    font-size: clamp(36px, 7vw, 66px);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.05;
+    margin-bottom: 18px;
+  }
+  .hero-contenido h1 span { color: var(--rojo); }
+  .hero-contenido p {
+    font-size: clamp(15px, 2vw, 19px);
+    color: var(--gris);
+    margin-bottom: 30px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 34px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 15px;
+    transition: transform 0.15s, filter 0.2s;
+  }
+  .btn:hover { transform: translateY(-3px); filter: brightness(1.15); }
+  .btn-rojo { background: var(--rojo); color: var(--blanco); }
+  .btn-outline { background: transparent; color: var(--blanco); border: 2px solid var(--blanco); margin-left: 12px; }
+
+  .hero-botones { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+  /* ===== SOBRE NOSOTROS ===== */
+  .sobre {
+    padding: 90px 0;
+    background: var(--negro-suave);
+  }
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+  }
+  .sobre-texto p { color: var(--gris); margin-bottom: 16px; font-size: 16px; }
+  .sobre-img img {
+    border-radius: 14px;
+    border: 3px solid var(--rojo);
+  }
+  .valores {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .valor {
+    background: var(--negro);
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 18px 10px;
+    text-align: center;
+  }
+  .valor .num { font-size: 26px; font-weight: 900; color: var(--rojo); }
+  .valor .txt { font-size: 12px; color: var(--gris); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ===== GALERIA ===== */
+  .galeria { padding: 90px 0; }
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 180px;
+    grid-auto-flow: dense;
+    gap: 14px;
+  }
+  .galeria-grid .g1 { grid-column: span 2; grid-row: span 2; }
+  .galeria-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--negro-suave);
+  }
+  .galeria-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .galeria-item:hover img { transform: scale(1.1); }
+  .galeria-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(227,6,19,0.55));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .galeria-item:hover::before { opacity: 1; }
+
+  /* ===== HORARIOS ===== */
+  .horarios {
+    padding: 90px 0;
+    background: var(--negro-suave);
+  }
+  .horarios-tabla {
+    max-width: 620px;
+    margin: 0 auto;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #2a2a2a;
+  }
+  .horarios-fila {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 26px;
+    background: var(--negro);
+  }
+  .horarios-fila:nth-child(even) { background: #121212; }
+  .horarios-fila .dia { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .horarios-fila .hora { color: var(--rojo); font-weight: 700; }
+  .horarios-nota {
+    text-align: center;
+    color: var(--gris);
+    max-width: 620px;
+    margin: 20px auto 0;
+    font-size: 14px;
+  }
+
+  /* ===== PROMOCIONES ===== */
+  .promos { padding: 90px 0; }
+  .promos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .promo-card {
+    background: linear-gradient(160deg, var(--negro-suave), var(--negro));
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 30px 24px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .promo-card:hover { transform: translateY(-8px); border-color: var(--rojo); }
+  .promo-card.destacada { border: 2px solid var(--rojo); box-shadow: 0 0 30px rgba(227,6,19,0.25); }
+  .badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--rojo);
+    color: var(--blanco);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 16px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .promo-card h3 {
+    text-transform: uppercase;
+    font-size: 20px;
+    margin: 14px 0 10px;
+  }
+  .promo-card .precio {
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--rojo);
+    margin: 10px 0;
+  }
+  .promo-card .precio small { font-size: 14px; color: var(--gris); font-weight: 400; }
+  .promo-card ul { text-align: left; margin: 16px 0; color: var(--gris); font-size: 14px; }
+  .promo-card ul li { padding: 6px 0; border-bottom: 1px solid #232323; }
+  .promo-card ul li::before { content: "✔ "; color: var(--rojo); font-weight: 700; }
+
+  /* ===== CONTACTO ===== */
+  .contacto {
+    padding: 90px 0;
+    background: var(--negro-suave);
+  }
+  .contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .contacto-datos .dato {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 26px;
+  }
+  .contacto-datos .icono {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    background: var(--rojo);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .contacto-datos h4 { text-transform: uppercase; font-size: 14px; letter-spacing: 1px; color: var(--gris); margin-bottom: 4px; }
+  .contacto-datos p, .contacto-datos a { font-size: 17px; font-weight: 600; }
+  .contacto-datos a:hover { color: var(--rojo); }
+
+  .redes { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+  .redes a {
+    height: 44px;
+    padding: 0 16px;
+    border: 2px solid var(--rojo);
+    border-radius: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    transition: background 0.2s;
+  }
+  .redes a:hover { background: var(--rojo); }
+
+  .mapa iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 340px;
+    border: 0;
+    border-radius: 14px;
+    filter: grayscale(0.3) contrast(1.1);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 26px 20px;
+    background: var(--negro);
+    border-top: 2px solid var(--rojo);
+    color: var(--gris);
+    font-size: 13px;
+  }
+  footer strong { color: var(--blanco); }
+
+  .flotante-whatsapp {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    background: #25D366;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    z-index: 999;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    animation: pulso 2s infinite;
+  }
+  @keyframes pulso {
+    0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.6); }
+    70% { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+    100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .sobre-grid, .contacto-grid { grid-template-columns: 1fr; }
+    .promos-grid { grid-template-columns: repeat(2, 1fr); }
+    .galeria-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+    .galeria-grid .g1 { grid-column: span 2; grid-row: span 1; }
+  }
+
+  @media (max-width: 640px) {
+    .nav-links {
+      position: fixed;
+      top: 63px;
+      left: 0;
+      right: 0;
+      background: var(--negro);
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      border-bottom: 2px solid var(--rojo);
+    }
+    .nav-links.abierto { max-height: 320px; }
+    .nav-links a { display: block; padding: 16px 0; width: 100%; text-align: center; border-top: 1px solid #222; }
+    .menu-toggle { display: flex; }
+    .promos-grid { grid-template-columns: 1fr; }
+    .valores { grid-template-columns: 1fr; }
+    .hero-botones { flex-direction: column; }
+    .btn-outline { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">WGYMAD<span>N</span>SPORT<small>TOCOPILLA</small></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#sobre">Nosotros</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#horarios">Horarios</a></li>
+      <li><a href="#promociones">Promociones</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="inicio">
+  <div class="hero-contenido">
+    <div class="pretitulo">El gimnasio N°1 de Tocopilla</div>
+    <h1>Transforma tu cuerpo en <span>WGYMADNSPORT</span></h1>
+    <p>Musculación, entrenamiento funcional y HIIT en un solo lugar. Equipamiento de primer nivel, profesores certificados y la mejor energía de Tocopilla para que alcances tus metas.</p>
+    <div class="hero-botones">
+      <a href="#promociones" class="btn btn-rojo">Ver promociones</a>
+      <a href="#contacto" class="btn btn-outline">Contáctanos</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOBRE NOSOTROS ===== -->
+<section class="sobre" id="sobre">
+  <div class="contenedor sobre-grid">
+    <div class="sobre-texto">
+      <h2>Sobre <span>Nosotros</span></h2>
+      <p>En <strong>WGYMADNSPORT</strong> creemos que el esfuerzo de hoy es el resultado de mañana. Somos el gimnasio en Tocopilla pensado para quienes quieren entrenar en serio: máquinas de musculación, zona funcional y un equipo de instructores comprometido con tu progreso.</p>
+      <p>No importa si estás dando tus primeros pasos en el fitness o si ya eres un atleta experimentado: aquí encontrarás el ambiente, el equipamiento y la comunidad que necesitas para superar tus límites.</p>
+      <div class="valores">
+        <div class="valor"><div class="num">+200</div><div class="txt">Socios activos</div></div>
+        <div class="valor"><div class="num">6</div><div class="txt">Días a la semana</div></div>
+      </div>
+    </div>
+    <div class="sobre-img">
+      <img src="fotos-gym/gym-local-08.jpg" alt="Entrada principal del gimnasio WGYMADNSPORT en Tocopilla" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALERIA ===== -->
+<section class="galeria" id="galeria">
+  <div class="contenedor">
+    <h2>Nuestra <span>Galería</span></h2>
+    <div class="linea-titulo"></div>
+    <div class="galeria-grid">
+      <div class="galeria-item g1"><img src="fotos-gym/gym-local-08.jpg" alt="Entrada principal WGYMADNSPORT Tocopilla" loading="lazy"></div>
+      <div class="galeria-item"><img src="fotos-gym/gym-local-01.jpg" alt="Zona de cardio WGYMADNSPORT Tocopilla" loading="lazy"></div>
+      <div class="galeria-item"><img src="fotos-gym/gym-local-02.jpg" alt="Rack de mancuernas WGYMADNSPORT Tocopilla" loading="lazy"></div>
+      <div class="galeria-item"><img src="fotos-gym/gym-local-03.jpg" alt="Zona de pesas libres WGYMADNSPORT Tocopilla" loading="lazy"></div>
+      <div class="galeria-item"><img src="fotos-gym/gym-local-04.jpg" alt="Equipamiento del gimnasio WGYMADNSPORT Tocopilla" loading="lazy"></div>
+      <div class="galeria-item"><img src="fotos-gym/gym-local-05.jpg" alt="Sala de máquinas WGYMADNSPORT Tocopilla" loading="lazy"></div>
+      <div class="galeria-item"><img src="fotos-gym/gym-local-06.jpg" alt="Área de entrenamiento WGYMADNSPORT Tocopilla" loading="lazy"></div>
+      <div class="galeria-item"><img src="fotos-gym/gym-local-07.jpg" alt="Máquinas de musculación WGYMADNSPORT Tocopilla" loading="lazy"></div>
+      <div class="galeria-item"><img src="fotos-gym/gym-local-09.jpg" alt="Zona funcional WGYMADNSPORT Tocopilla" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HORARIOS ===== -->
+<section class="horarios" id="horarios">
+  <div class="contenedor">
+    <h2>Horarios de <span>Atención</span></h2>
+    <div class="linea-titulo"></div>
+    <div class="horarios-tabla">
+      <div class="horarios-fila"><span class="dia">Lunes a Jueves</span><span class="hora">08:00 - 23:30</span></div>
+      <div class="horarios-fila"><span class="dia">Viernes</span><span class="hora">09:00 - 23:30</span></div>
+      <div class="horarios-fila"><span class="dia">Sábados y Feriados</span><span class="hora">10:00 - 22:00</span></div>
+      <div class="horarios-fila"><span class="dia">Domingo</span><span class="hora">Cerrado</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROMOCIONES ===== -->
+<section class="promos" id="promociones">
+  <div class="contenedor">
+    <h2>Promociones <span>Destacadas</span></h2>
+    <div class="linea-titulo"></div>
+    <div class="promos-grid">
+      <div class="promo-card destacada">
+        <span class="badge">Más completo</span>
+        <h3>Plan Full Mensual</h3>
+        <div class="precio">$33.000<small>/mes</small></div>
+        <a href="#contacto" class="btn btn-rojo">Quiero este plan</a>
+      </div>
+      <div class="promo-card">
+        <h3>3 Veces por Semana</h3>
+        <div class="precio">$28.000<small>/mes</small></div>
+        <a href="#contacto" class="btn btn-rojo">Quiero este plan</a>
+      </div>
+      <div class="promo-card">
+        <h3>Estudiante / Profesor</h3>
+        <div class="precio">$28.000<small>/mes</small></div>
+        <a href="#contacto" class="btn btn-rojo">Quiero este plan</a>
+      </div>
+      <div class="promo-card">
+        <h3>Funcionario Público</h3>
+        <div class="precio">$28.000<small>/mes</small></div>
+        <a href="#contacto" class="btn btn-rojo">Quiero este plan</a>
+      </div>
+      <div class="promo-card">
+        <h3>Mensual por Turno</h3>
+        <div class="precio">$23.000<small>/mes</small></div>
+        <a href="#contacto" class="btn btn-rojo">Quiero este plan</a>
+      </div>
+      <div class="promo-card">
+        <h3>Full Mensual Tercera Edad</h3>
+        <div class="precio">$23.000<small>/mes</small></div>
+        <a href="#contacto" class="btn btn-rojo">Quiero este plan</a>
+      </div>
+      <div class="promo-card">
+        <h3>Plan Semanal</h3>
+        <div class="precio">$15.000<small>/sem</small></div>
+        <a href="#contacto" class="btn btn-rojo">Quiero este plan</a>
+      </div>
+      <div class="promo-card">
+        <h3>Pase Diario</h3>
+        <div class="precio">$4.000<small>/día</small></div>
+        <a href="#contacto" class="btn btn-rojo">Quiero este plan</a>
+      </div>
+    </div>
+    <p class="horarios-nota">* Se acepta todo medio de pago.</p>
+  </div>
+</section>
+
+<!-- ===== CONTACTO ===== -->
+<section class="contacto" id="contacto">
+  <div class="contenedor">
+    <h2>Contáctanos</h2>
+    <div class="linea-titulo"></div>
+    <div class="contacto-grid">
+      <div class="contacto-datos">
+        <div class="dato">
+          <div class="icono">📍</div>
+          <div>
+            <h4>Dirección</h4>
+            <p>Calle 21 de Mayo 1520, Tocopilla, Región de Antofagasta</p>
+          </div>
+        </div>
+        <div class="dato">
+          <div class="icono">📞</div>
+          <div>
+            <h4>WhatsApp (solo WhatsApp)</h4>
+            <a href="https://wa.me/56991540156" target="_blank" rel="noopener">+56 9 9154 0156</a>
+          </div>
+        </div>
+        <div class="dato">
+          <div class="icono">✉️</div>
+          <div>
+            <h4>Correo</h4>
+            <a href="mailto:wadnsporttocopilla@gmail.com">wadnsporttocopilla@gmail.com</a>
+          </div>
+        </div>
+        <div class="dato">
+          <div class="icono">🕒</div>
+          <div>
+            <h4>Atención</h4>
+            <p>Lunes a Domingo, revisa el horario detallado arriba</p>
+          </div>
+        </div>
+        <div class="redes">
+          <a href="https://www.instagram.com/wadnsport.tocopilla" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
+          <a href="https://www.facebook.com/share/1Cs1fQfYGA/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="Facebook">Facebook</a>
+          <a href="https://wa.me/56991540156" target="_blank" rel="noopener" aria-label="WhatsApp">WhatsApp</a>
+        </div>
+      </div>
+      <div class="mapa">
+        <iframe
+          src="https://www.google.com/maps?q=Calle+21+de+Mayo+1520,+Tocopilla,+Chile&output=embed"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación de WGYMADNSPORT en Tocopilla">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 <strong>WGYMADNSPORT</strong> Tocopilla. Todos los derechos reservados.
+</footer>
+
+<a href="https://wa.me/56991540156" class="flotante-whatsapp" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">💬</a>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('abierto');
+  });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => navLinks.classList.remove('abierto'));
+  });
+</script>
+
+</body>
+</html>
