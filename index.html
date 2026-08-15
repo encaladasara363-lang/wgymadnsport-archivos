@@ -57,6 +57,7 @@
   :root {
     --rojo: #e30613;
     --rojo-oscuro: #a40410;
+    --dorado: #d4af37;
     --negro: #0a0a0a;
     --negro-suave: #161616;
     --gris: #cfcfcf;
@@ -96,12 +97,25 @@
   h2 span { color: var(--rojo); }
 
   .linea-titulo {
-    width: 70px;
+    width: 90px;
     height: 4px;
-    background: var(--rojo);
+    background: linear-gradient(90deg, var(--rojo), var(--dorado));
     margin: 0 auto 40px;
     border-radius: 2px;
+    position: relative;
   }
+  .linea-titulo::before,
+  .linea-titulo::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--dorado));
+    transform: translateY(-50%);
+  }
+  .linea-titulo::before { right: 100%; margin-right: 8px; }
+  .linea-titulo::after { left: 100%; margin-left: 8px; transform: translateY(-50%) rotate(180deg); }
 
   /* ===== HEADER ===== */
   header {
@@ -110,6 +124,7 @@
     z-index: 1000;
     background: rgba(10,10,10,0.95);
     border-bottom: 2px solid var(--rojo);
+    box-shadow: 0 2px 0 var(--dorado);
     backdrop-filter: blur(6px);
   }
   .nav {
@@ -192,7 +207,19 @@
     text-transform: uppercase;
     font-size: 14px;
     margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
   }
+  .hero-contenido .pretitulo::before,
+  .hero-contenido .pretitulo::after {
+    content: "";
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--dorado));
+  }
+  .hero-contenido .pretitulo::after { background: linear-gradient(90deg, var(--dorado), transparent); }
   .hero-contenido h1 {
     font-size: clamp(36px, 7vw, 66px);
     font-weight: 900;
@@ -334,7 +361,14 @@
     transition: transform 0.2s, border-color 0.2s;
   }
   .promo-card:hover { transform: translateY(-8px); border-color: var(--rojo); }
-  .promo-card.destacada { border: 2px solid var(--rojo); box-shadow: 0 0 30px rgba(227,6,19,0.25); }
+  .promo-card.destacada { border: 2px solid var(--rojo); box-shadow: 0 0 30px rgba(227,6,19,0.25); position: relative; }
+  .promo-card.destacada::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 14px; right: 14px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--dorado), transparent);
+  }
   .badge {
     position: absolute;
     top: -14px;
@@ -425,6 +459,7 @@
     padding: 26px 20px;
     background: var(--negro);
     border-top: 2px solid var(--rojo);
+    box-shadow: 0 -2px 0 var(--dorado);
     color: var(--gris);
     font-size: 13px;
   }
