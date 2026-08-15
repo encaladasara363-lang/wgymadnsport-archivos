@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WGYMADNSPORT - Temporizador HIIT</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #0a0a0f;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  .marca {
+    text-align: center;
+    padding: 14px 10px 4px;
+    letter-spacing: 4px;
+    font-weight: 900;
+    font-size: clamp(20px, 4vw, 38px);
+    color: #ff9500;
+    text-shadow: 0 0 18px rgba(255,149,0,0.5);
+  }
+  .subtitulo {
+    text-align: center;
+    color: #888;
+    font-size: clamp(12px, 1.6vw, 16px);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+  }
+
+  .config {
+    max-width: 900px;
+    margin: 0 auto 10px;
+    background: #16161f;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    align-items: flex-end;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  }
+  .campo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 110px;
+  }
+  .campo label {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .campo .doble {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  input[type=number] {
+    width: 64px;
+    padding: 8px;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 8px;
+    border: 2px solid #333;
+    background: #0f0f16;
+    color: #fff;
+  }
+  input[type=number]:focus { outline: none; border-color: #ff9500; }
+  .campo .sep { color: #666; font-weight: bold; }
+
+  .botones-config {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: transform 0.1s, filter 0.15s;
+  }
+  button:active { transform: scale(0.95); }
+  button:hover { filter: brightness(1.15); }
+
+  .btn-grande {
+    padding: 12px 26px;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+  .btn-iniciar { background: #34c759; color: #08210f; }
+  .btn-pausar { background: #ff9500; color: #241200; }
+  .btn-reiniciar { background: #ff3b30; color: #240a08; }
+  .btn-pantalla { background: #3d3d55; color: #fff; }
+
+  .pantalla {
+    max-width: 1100px;
+    margin: 10px auto 20px;
+    background: radial-gradient(circle at 50% 30%, #1a1a24, #06060a 80%);
+    border-radius: 20px;
+    padding: 20px 20px 40px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid #1f1f2a;
+  }
+
+  .fase {
+    font-size: clamp(32px, 8vw, 90px);
+    font-weight: 900;
+    letter-spacing: 6px;
+    margin-bottom: 10px;
+    transition: color 0.3s;
+  }
+  .fase.trabajo { color: #34c759; text-shadow: 0 0 40px rgba(52,199,89,0.6); }
+  .fase.descanso { color: #0a84ff; text-shadow: 0 0 40px rgba(10,132,255,0.6); }
+  .fase.prepara { color: #ff9500; text-shadow: 0 0 40px rgba(255,149,0,0.6); }
+  .fase.fin { color: #ff3b30; text-shadow: 0 0 40px rgba(255,59,48,0.6); }
+
+  .reloj {
+    font-size: clamp(90px, 24vw, 320px);
+    font-weight: 900;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 4px;
+    margin: 10px 0;
+  }
+
+  .info {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .info .item {
+    font-size: clamp(16px, 2.4vw, 26px);
+    color: #ccc;
+    letter-spacing: 1px;
+  }
+  .info .item b {
+    font-size: clamp(24px, 3.4vw, 40px);
+    display: block;
+    color: #fff;
+  }
+
+  .barra-rondas {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 90%;
+  }
+  .punto-ronda {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #2a2a36;
+    border: 2px solid #444;
+  }
+  .punto-ronda.hecha { background: #34c759; border-color: #34c759; }
+  .punto-ronda.actual { background: #ff9500; border-color: #ff9500; box-shadow: 0 0 12px #ff9500; }
+
+  .controles {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 600px) {
+    .info { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="marca">WGYMADNSPORT</div>
+<div class="subtitulo">TEMPORIZADOR DE INTERVALOS HIIT</div>
+
+<div class="config" id="panelConfig">
+  <div class="campo">
+    <label>Trabajo (min:seg)</label>
+    <div class="doble">
+      <input type="number" id="trabajoMin" min="0" max="59" value="0">
+      <span class="sep">:</span>
+      <input type="number" id="trabajoSeg" min="0" max="59" value="40">
+    </div>
+  </div>
+  <div class="campo">
+    <label>Descanso (min:seg)</label>
+    <div class="doble">
+      <input type="number" id="descansoMin" min="0" max="59" value="0">
+      <span class="sep">:</span>
+      <input type="number" id="descansoSeg" min="0" max="59" value="20">
+    </div>
+  </div>
+  <div class="campo">
+    <label>Rondas</label>
+    <input type="number" id="rondas" min="1" max="50" value="8">
+  </div>
+  <div class="campo">
+    <label>Preparación (seg)</label>
+    <input type="number" id="preparacion" min="0" max="60" value="10">
+  </div>
+</div>
+
+<div class="pantalla">
+  <div class="fase prepara" id="faseTexto">LISTO PARA COMENZAR</div>
+  <div class="reloj" id="reloj">00:00</div>
+  <div class="info">
+    <div class="item">RONDA<b id="rondaActual">0 / 0</b></div>
+    <div class="item">SIGUIENTE<b id="siguienteFase">-</b></div>
+  </div>
+  <div class="barra-rondas" id="barraRondas"></div>
+</div>
+
+<div class="controles">
+  <button class="btn-grande btn-iniciar" id="btnIniciar">▶ Iniciar</button>
+  <button class="btn-grande btn-pausar" id="btnPausar">⏸ Pausar</button>
+  <button class="btn-grande btn-reiniciar" id="btnReiniciar">⟲ Reiniciar</button>
+  <button class="btn-grande btn-pantalla" id="btnPantalla">⛶ Pantalla completa</button>
+</div>
+
+<script>
+(function() {
+  // ---------- Audio (sintetizado, sin archivos externos) ----------
+  let audioCtx = null;
+  function getCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+
+  function tono(frecuencia, duracion, tipo, volumen, retardo) {
+    const ctx = getCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = tipo || 'sine';
+    osc.frequency.value = frecuencia;
+    const inicio = ctx.currentTime + (retardo || 0);
+    gain.gain.setValueAtTime(0, inicio);
+    gain.gain.linearRampToValueAtTime(volumen || 0.3, inicio + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, inicio + duracion);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(inicio);
+    osc.stop(inicio + duracion + 0.05);
+  }
+
+  // Beep corto de cuenta regresiva (3, 2, 1)
+  function sonidoTic() {
+    tono(880, 0.12, 'square', 0.25);
+  }
+
+  // Sonido tipo "silbato de atleta" ascendente al pasar a TRABAJO
+  function sonidoTrabajo() {
+    tono(600, 0.15, 'sawtooth', 0.35, 0);
+    tono(900, 0.18, 'sawtooth', 0.35, 0.12);
+    tono(1200, 0.25, 'sawtooth', 0.4, 0.26);
+  }
+
+  // Sonido grave y calmado al pasar a DESCANSO
+  function sonidoDescanso() {
+    tono(500, 0.3, 'sine', 0.3, 0);
+    tono(350, 0.35, 'sine', 0.3, 0.15);
+  }
+
+  // Fanfarria simple al terminar todas las rondas
+  function sonidoFin() {
+    [523, 659, 784, 1046].forEach((f, i) => tono(f, 0.35, 'triangle', 0.4, i * 0.18));
+  }
+
+  // ---------- Estado ----------
+  let estado = 'inactivo'; // inactivo | preparacion | trabajo | descanso | finalizado
+  let rondaActual = 0;
+  let totalRondas = 0;
+  let segundosRestantes = 0;
+  let intervaloId = null;
+  let pausado = false;
+  let ultimoTicMostrado = -1;
+
+  const el = {
+    faseTexto: document.getElementById('faseTexto'),
+    reloj: document.getElementById('reloj'),
+    rondaActualTxt: document.getElementById('rondaActual'),
+    siguienteFase: document.getElementById('siguienteFase'),
+    barraRondas: document.getElementById('barraRondas'),
+    btnIniciar: document.getElementById('btnIniciar'),
+    btnPausar: document.getElementById('btnPausar'),
+    btnReiniciar: document.getElementById('btnReiniciar'),
+    btnPantalla: document.getElementById('btnPantalla'),
+    panelConfig: document.getElementById('panelConfig'),
+  };
+
+  function leerConfig() {
+    const trabajoMin = parseInt(document.getElementById('trabajoMin').value) || 0;
+    const trabajoSeg = parseInt(document.getElementById('trabajoSeg').value) || 0;
+    const descansoMin = parseInt(document.getElementById('descansoMin').value) || 0;
+    const descansoSeg = parseInt(document.getElementById('descansoSeg').value) || 0;
+    const rondas = Math.max(1, parseInt(document.getElementById('rondas').value) || 1);
+    const preparacion = Math.max(0, parseInt(document.getElementById('preparacion').value) || 0);
+    return {
+      trabajo: trabajoMin * 60 + trabajoSeg,
+      descanso: descansoMin * 60 + descansoSeg,
+      rondas: rondas,
+      preparacion: preparacion,
+    };
+  }
+
+  function formatoTiempo(seg) {
+    const m = Math.floor(seg / 60);
+    const s = seg % 60;
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+
+  function pintarBarraRondas() {
+    el.barraRondas.innerHTML = '';
+    for (let i = 1; i <= totalRondas; i++) {
+      const p = document.createElement('div');
+      p.className = 'punto-ronda';
+      if (i < rondaActual) p.classList.add('hecha');
+      if (i === rondaActual && estado !== 'finalizado') p.classList.add('actual');
+      el.barraRondas.appendChild(p);
+    }
+  }
+
+  function actualizarPantalla() {
+    el.reloj.textContent = formatoTiempo(segundosRestantes);
+    el.rondaActualTxt.textContent = (estado === 'preparacion' ? '-' : rondaActual) + ' / ' + totalRondas;
+
+    el.faseTexto.classList.remove('trabajo', 'descanso', 'prepara', 'fin');
+    if (estado === 'preparacion') {
+      el.faseTexto.textContent = 'PREPÁRATE';
+      el.faseTexto.classList.add('prepara');
+      el.siguienteFase.textContent = 'TRABAJO';
+    } else if (estado === 'trabajo') {
+      el.faseTexto.textContent = 'TRABAJO';
+      el.faseTexto.classList.add('trabajo');
+      el.siguienteFase.textContent = (rondaActual >= totalRondas) ? 'FIN' : 'DESCANSO';
+    } else if (estado === 'descanso') {
+      el.faseTexto.textContent = 'DESCANSO';
+      el.faseTexto.classList.add('descanso');
+      el.siguienteFase.textContent = 'TRABAJO';
+    } else if (estado === 'finalizado') {
+      el.faseTexto.textContent = '¡ENTRENAMIENTO COMPLETADO!';
+      el.faseTexto.classList.add('fin');
+      el.siguienteFase.textContent = '-';
+    } else {
+      el.faseTexto.textContent = 'LISTO PARA COMENZAR';
+      el.faseTexto.classList.add('prepara');
+      el.siguienteFase.textContent = '-';
+    }
+    pintarBarraRondas();
+  }
+
+  function tick() {
+    if (pausado) return;
+
+    if (segundosRestantes <= 3 && segundosRestantes > 0 && ultimoTicMostrado !== segundosRestantes) {
+      sonidoTic();
+      ultimoTicMostrado = segundosRestantes;
+    }
+
+    if (segundosRestantes > 0) {
+      segundosRestantes--;
+      actualizarPantalla();
+      return;
+    }
+
+    avanzarFase();
+  }
+
+  function avanzarFase() {
+    const cfg = leerConfig();
+    ultimoTicMostrado = -1;
+
+    if (estado === 'preparacion') {
+      estado = 'trabajo';
+      rondaActual = 1;
+      segundosRestantes = cfg.trabajo;
+      sonidoTrabajo();
+    } else if (estado === 'trabajo') {
+      if (rondaActual >= totalRondas) {
+        finalizar();
+        return;
+      }
+      estado = 'descanso';
+      segundosRestantes = cfg.descanso;
+      sonidoDescanso();
+    } else if (estado === 'descanso') {
+      estado = 'trabajo';
+      rondaActual++;
+      segundosRestantes = cfg.trabajo;
+      sonidoTrabajo();
+    }
+    actualizarPantalla();
+  }
+
+  function finalizar() {
+    estado = 'finalizado';
+    segundosRestantes = 0;
+    detenerIntervalo();
+    sonidoFin();
+    actualizarPantalla();
+    el.btnIniciar.textContent = '▶ Iniciar';
+  }
+
+  function detenerIntervalo() {
+    if (intervaloId) {
+      clearInterval(intervaloId);
+      intervaloId = null;
+    }
+  }
+
+  function iniciar() {
+    if (estado === 'trabajo' || estado === 'descanso' || estado === 'preparacion') {
+      // reanudar si estaba pausado
+      pausado = false;
+      el.btnPausar.textContent = '⏸ Pausar';
+      if (!intervaloId) intervaloId = setInterval(tick, 1000);
+      return;
+    }
+
+    const cfg = leerConfig();
+    if (cfg.trabajo <= 0) {
+      alert('El tiempo de trabajo debe ser mayor a 0.');
+      return;
+    }
+    totalRondas = cfg.rondas;
+    rondaActual = 0;
+    pausado = false;
+    el.btnPausar.textContent = '⏸ Pausar';
+    el.panelConfig.style.opacity = '0.5';
+    el.panelConfig.style.pointerEvents = 'none';
+
+    if (cfg.preparacion > 0) {
+      estado = 'preparacion';
+      segundosRestantes = cfg.preparacion;
+    } else {
+      estado = 'trabajo';
+      rondaActual = 1;
+      segundosRestantes = cfg.trabajo;
+      sonidoTrabajo();
+    }
+    actualizarPantalla();
+    detenerIntervalo();
+    intervaloId = setInterval(tick, 1000);
+  }
+
+  function pausar() {
+    if (estado === 'inactivo' || estado === 'finalizado') return;
+    pausado = !pausado;
+    el.btnPausar.textContent = pausado ? '▶ Reanudar' : '⏸ Pausar';
+  }
+
+  function reiniciar() {
+    detenerIntervalo();
+    estado = 'inactivo';
+    pausado = false;
+    rondaActual = 0;
+    segundosRestantes = 0;
+    ultimoTicMostrado = -1;
+    el.btnPausar.textContent = '⏸ Pausar';
+    el.panelConfig.style.opacity = '1';
+    el.panelConfig.style.pointerEvents = 'auto';
+    const cfg = leerConfig();
+    totalRondas = cfg.rondas;
+    actualizarPantalla();
+  }
+
+  function alternarPantallaCompleta() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+
+  el.btnIniciar.addEventListener('click', iniciar);
+  el.btnPausar.addEventListener('click', pausar);
+  el.btnReiniciar.addEventListener('click', reiniciar);
+  el.btnPantalla.addEventListener('click', alternarPantallaCompleta);
+
+  // Inicializa vista con la configuración por defecto
+  reiniciar();
+})();
+</script>
+
+</body>
+</html>
