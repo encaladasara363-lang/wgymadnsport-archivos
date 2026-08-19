@@ -1,0 +1,1259 @@
+<title>WGYMADNSPORT · Socios y Rutinas</title>  
+<meta name="description" content="Acceso de socios, rutinas de entrenamiento y gestión de WGYMADNSPORT Tocopilla.">  
+<style>  
+:root{  
+ --negro:#0A0A0A;  
+ --surface:#161616;  
+ --surface-2:#1F1F1F;  
+ --card:#1c1c1c;  
+ --rojo:#E30613;  
+ --rojo-oscuro:#A40410;  
+ --dorado:#D4AF37;  
+ --dorado-tint:#332B10;  
+ --blanco:#FFFFFF;  
+ --gris:#CFCFCF;  
+ --gris-soft:#8C8C8C;  
+ --line:#2A2A2A;  
+ --good:#5CA85C;  
+ --good-tint:#16261A;  
+ --warn:#D4AF37;  
+ --warn-tint:#332B10;  
+ --danger:#E85C5C;  
+ --danger-tint:#331414;  
+ --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 20px -10px rgba(0,0,0,.7);  
+}  
+*{box-sizing:border-box;}  
+html{-webkit-text-size-adjust:100%;}  
+body{  
+ margin:0;  
+ background:var(--negro);  
+ color:var(--blanco);  
+ font-family:'Segoe UI', Arial, sans-serif;  
+ font-size:15px;  
+ line-height:1.5;  
+ -webkit-font-smoothing:antialiased;  
+}  
+h1,h2,h3{ font-weight:800; color:var(--blanco); text-transform:uppercase; letter-spacing:.02em; margin:0; }  
+.tabular{ font-variant-numeric: tabular-nums; }  
+button{ font-family:inherit; }  
+[hidden]{ display:none !important; }  
+  
+/* ===== GATE ===== */  
+.gate{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }  
+.gate-card{ width:100%; max-width:340px; text-align:center; }  
+.gate-logo{ width:72px; height:72px; border-radius:50%; object-fit:cover; border:2px solid var(--dorado); margin-bottom:14px; }  
+.gate-kicker{ font-size:12px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 10px; }  
+.gate-card h2{ font-size:22px; margin:0 0 8px; }  
+.gate-sub{ font-size:13px; color:var(--gris); margin:0 0 20px; font-weight:600; }  
+.gate-input{  
+ width:100%; box-sizing:border-box; background:var(--surface); border:1.5px solid var(--line);  
+ border-radius:10px; padding:14px 16px; font-size:16px; color:var(--blanco); text-align:center;  
+ letter-spacing:.05em; margin-bottom:12px; font-family:inherit;  
+}  
+.gate-input:focus{ outline:none; border-color:var(--rojo); }  
+.gate-btn{  
+ width:100%; background:var(--rojo); color:var(--blanco); border:none; border-radius:10px;  
+ padding:14px 16px; font-size:14px; font-weight:900; letter-spacing:.06em; text-transform:uppercase;  
+ font-family:inherit; cursor:pointer;  
+}  
+.gate-btn:active{ background:var(--rojo-oscuro); }  
+.gate-error{ color:var(--rojo); font-size:12.5px; font-weight:700; margin:14px 0 0; }  
+.gate-admin-link{ display:block; margin-top:22px; font-size:11.5px; color:var(--gris-soft); text-decoration:none; letter-spacing:.03em; }  
+  
+/* ===== SOCIO / ROUTINE VIEW ===== */  
+.wrap{ max-width:520px; margin:0 auto; padding-bottom:60px; }  
+header.masthead2{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%); border-bottom:3px solid var(--rojo); padding:22px 20px 18px; text-align:center; }  
+header.masthead2 .logo{ width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid var(--dorado); margin-bottom:10px; }  
+header.masthead2 .gymname{ font-size:13px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 4px; }  
+header.masthead2 h1{ font-size:26px; margin:0 0 6px; line-height:1.15; }  
+header.masthead2 h1 span{ color:var(--rojo); }  
+header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:600; }  
+.expiry-banner{ margin:14px 16px 0; background:rgba(212,175,55,.14); border:1.5px solid var(--dorado); border-radius:10px; padding:12px 14px; font-size:13px; font-weight:700; color:var(--dorado); text-align:center; line-height:1.4; }  
+.member-card{
+  margin:18px 16px 0;
+  background:linear-gradient(135deg, #161616 0%, #0A0A0A 60%, #1c1608 100%);
+  border:1.5px solid var(--dorado);
+  border-radius:18px;
+  padding:24px 22px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 30px -12px rgba(0,0,0,.6);
+}
+.member-card::before{
+  content:"";
+  position:absolute; top:-40px; right:-40px;
+  width:140px; height:140px; border-radius:50%;
+  background:radial-gradient(circle, rgba(212,175,55,.18), transparent 70%);
+}
+.mc-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.16em; color:var(--dorado); text-transform:uppercase; margin:0 0 10px; }
+.mc-name{ font-size:22px; font-weight:900; color:var(--blanco); text-transform:uppercase; letter-spacing:.02em; line-height:1.2; margin-bottom:4px; }
+.mc-plan{ font-size:13px; font-weight:700; color:var(--gris); margin-bottom:18px; }
+.mc-row{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-top:1px solid rgba(255,255,255,.08); font-size:13px; }
+.mc-row span{ color:var(--gris-soft); font-weight:600; }
+.mc-row b{ color:var(--blanco); font-weight:800; letter-spacing:.02em; }
+.mc-status{ margin-top:14px; }
+.routine-blocked{ text-align:center; color:var(--danger); font-weight:700; font-size:13px; line-height:1.5; margin:18px 0 0; }
+
+nav.days{ display:flex; gap:8px; overflow-x:auto; padding:16px 16px 4px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }  
+nav.days::-webkit-scrollbar{ display:none; }  
+nav.days button{ flex:0 0 auto; background:var(--surface); color:var(--gris); border:1.5px solid var(--line); border-radius:999px; padding:10px 16px; font-size:13px; font-weight:800; letter-spacing:.04em; cursor:pointer; white-space:nowrap; }  
+nav.days button.active{ background:var(--rojo); border-color:var(--rojo); color:var(--blanco); }  
+.progsel{ display:flex; gap:8px; padding:16px 16px 0; }
+.progbtn{ flex:1; background:var(--surface); color:var(--gris); border:1.5px solid var(--line); border-radius:10px; padding:11px 10px; font-size:12.5px; font-weight:800; letter-spacing:.02em; cursor:pointer; text-transform:uppercase; font-family:inherit; }
+.progbtn.active{ background:var(--dorado); border-color:var(--dorado); color:var(--negro); }
+
+main.daymain{ padding:8px 16px 0; }  
+.day-panel{ display:none; }  
+.day-panel.active{ display:block; }  
+.day-banner{ background:linear-gradient(120deg, var(--rojo-oscuro), var(--rojo)); border-radius:14px; padding:18px 20px; margin:10px 0 16px; }  
+.day-banner .num{ font-size:11px; font-weight:800; letter-spacing:.18em; color:rgba(255,255,255,.85); text-transform:uppercase; margin:0 0 4px; }  
+.day-banner h2{ font-size:22px; margin:0; }  
+.day-banner .focus{ font-size:13px; color:rgba(255,255,255,.9); margin:6px 0 0; font-weight:600; }  
+.warmup{ display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--dorado); border-radius:10px; padding:12px 14px; margin-bottom:16px; }  
+.warmup b{ display:block; color:var(--dorado); font-size:11px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:2px; }  
+.warmup span{ font-size:13.5px; color:var(--gris); font-weight:600; }  
+.exercise{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative; }  
+.exercise .badge{ position:absolute; top:-8px; left:-8px; width:26px; height:26px; border-radius:50%; background:var(--rojo); color:#fff; font-size:13px; font-weight:900; display:flex; align-items:center; justify-content:center; border:2px solid var(--negro); }  
+.exercise h3{ font-size:15px; margin:0 0 6px; line-height:1.25; }  
+.exercise .stats{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:6px; }  
+.exercise .stats span{ font-size:12.5px; font-weight:800; color:var(--rojo); background:rgba(227,6,19,.12); padding:3px 9px; border-radius:6px; letter-spacing:.02em; }  
+.exercise .tip{ font-size:12.5px; color:var(--gris-soft); font-style:italic; line-height:1.4; margin:0; }  
+.exercise .alt{ font-size:11.5px; color:var(--dorado); font-weight:700; margin:6px 0 0; }  
+.video-wrap{ margin:10px 0; }  
+.video-lbl{ display:block; font-size:10px; font-weight:800; color:var(--dorado); text-transform:uppercase; letter-spacing:.08em; margin-bottom:5px; }  
+.ex-video{ width:100%; max-height:420px; display:block; border-radius:10px; border:1px solid var(--line); background:#000; object-fit:cover; }  
+.cooldown{ background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px; margin:16px 0 4px; text-align:center; }  
+.cooldown b{ display:block; color:var(--dorado); font-size:11px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; }  
+.cooldown span{ font-size:13px; color:var(--gris); font-weight:600; }  
+.info-card{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:14px 16px 0; font-size:12.5px; color:var(--gris); line-height:1.55; }  
+.info-card b{ color:var(--dorado); }  
+footer.footer2{ text-align:center; padding:26px 20px 10px; margin-top:10px; border-top:1px solid var(--line); }  
+footer.footer2 .slogan{ font-size:13px; font-weight:800; color:var(--rojo); letter-spacing:.05em; margin:0 0 4px; }  
+footer.footer2 .name{ font-size:11px; font-weight:700; color:var(--gris-soft); letter-spacing:.12em; text-transform:uppercase; margin:0; }  
+  
+/* ===== ADMIN VIEW ===== */  
+.shell{ max-width:1180px; margin:0 auto; padding:28px 24px 80px; }  
+.masthead{ display:flex; align-items:center; gap:16px; margin-bottom:22px; }  
+.mark{ width:52px; height:52px; border-radius:50%; flex:none; overflow:hidden; border:2px solid var(--dorado); box-shadow:var(--shadow); }  
+.mark img{ width:100%; height:100%; object-fit:cover; }  
+.masthead h1{ font-size:21px; letter-spacing:.03em; }  
+.masthead h1 span{ color:var(--rojo); }  
+.masthead p{ margin:3px 0 0; color:var(--gris-soft); font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; }  
+.tabbar{ display:flex; gap:4px; padding:4px; margin-bottom:24px; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow-x:auto; }  
+.tabbtn{ appearance:none; border:none; background:transparent; cursor:pointer; padding:11px 18px; border-radius:10px; white-space:nowrap; font-weight:700; font-size:13.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--gris-soft); }  
+.tabbtn[aria-selected="true"]{ background:linear-gradient(135deg, var(--rojo), var(--rojo-oscuro)); color:var(--blanco); }  
+.panel2{ display:none; }  
+.panel2.active{ display:block; }  
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px; box-shadow:var(--shadow); }  
+.card + .card{ margin-top:18px; }  
+.card-head h2{ font-size:16px; letter-spacing:.03em; }  
+.card-head h2::before{ content:""; display:inline-block; width:4px; height:16px; background:var(--dorado); margin-right:9px; vertical-align:-2px; border-radius:2px; }  
+.card-sub{ color:var(--gris-soft); font-size:13px; margin:2px 0 16px; max-width:65ch; }  
+.twrap{ overflow-x:auto; border:1px solid var(--line); border-radius:12px; }  
+table{ width:100%; border-collapse:collapse; min-width:600px; }  
+thead th{ text-align:left; font-weight:700; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--gris-soft); background:var(--surface-2); padding:10px 12px; border-bottom:1px solid var(--line); position:sticky; top:0; }  
+tbody td{ padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:middle; }  
+tbody tr:last-child td{ border-bottom:none; }  
+tbody tr:hover{ background:var(--surface-2); }  
+td.num{ text-align:right; }  
+td[contenteditable]{ outline:none; border-radius:6px; }  
+#socios-tbody tr[data-local-filtered]{ display:none; }  
+td[contenteditable]:hover{ background:rgba(255,255,255,.03); }  
+td[contenteditable]:focus{ background:rgba(227,6,19,.08); box-shadow:inset 0 0 0 1.5px var(--rojo); }  
+input[type="text"]{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:var(--negro); border:1px solid var(--line); border-radius:8px; padding:8px 10px; width:100%; min-width:0; }  
+select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:var(--negro); border:1px solid var(--line); border-radius:8px; padding:8px 10px; width:100%; min-width:0; }  
+.addrow{ display:grid; grid-template-columns:1fr 1fr 1fr .8fr .8fr 1fr auto; gap:8px; padding:14px 16px; background:var(--surface-2); border-top:1px solid var(--line); }  
+.addrow label{ display:block; font-size:10px; color:var(--gris-soft); margin-bottom:3px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }  
+.addrow .btn{ align-self:end; }  
+@media (max-width:960px){ .addrow{ grid-template-columns:1fr 1fr; } }  
+.btn{ appearance:none; border:none; cursor:pointer; border-radius:10px; font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.03em; padding:11px 18px; }  
+.btn-primary{ background:linear-gradient(135deg, var(--rojo), var(--rojo-oscuro)); color:#fff; }  
+.iconbtn{ appearance:none; border:1px solid var(--line); background:var(--surface-2); color:var(--gris-soft); width:30px; height:30px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }  
+.iconbtn:hover{ color:var(--danger); border-color:var(--danger); }  
+.iconbtn svg{ width:15px; height:15px; }  
+.statrow{ display:flex; gap:14px; flex-wrap:wrap; margin-top:16px; }  
+.stat{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 16px; flex:1; min-width:150px; }  
+.stat .eyebrow{ display:block; margin-bottom:4px; font-weight:700; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--dorado); }  
+.stat .val{ font-weight:800; font-size:19px; }  
+.pill{ display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; padding:5px 11px; border-radius:999px; text-transform:uppercase; letter-spacing:.03em; white-space:nowrap; }  
+.pill.good{ background:var(--good-tint); color:var(--good); }  
+.pill.warn{ background:var(--warn-tint); color:var(--warn); }  
+.pill.danger{ background:var(--danger-tint); color:var(--danger); }  
+.pill .dot{ width:6px; height:6px; border-radius:50%; background:currentColor; }  
+.empty{ color:var(--gris-soft); font-size:13px; padding:18px; text-align:center; }  
+  
+.fab-admin{  
+ position:fixed; top:14px; right:14px; z-index:999;  
+ background:var(--rojo); color:#fff; border:none; border-radius:999px;  
+ padding:12px 18px; font-size:13px; font-weight:900; text-transform:uppercase;  
+ letter-spacing:.03em; cursor:pointer; box-shadow:0 4px 14px rgba(227,6,19,.5);  
+}  
+.fab-admin:active{ background:var(--rojo-oscuro); }  
+.hint2{ font-size:12px; color:var(--gris-soft); margin:10px 0 0; line-height:1.5; }  
+.hint2 b{ color:var(--dorado); }  
+</style>  
+  
+<div id="appRoot" artifact-local>
+<button type="button" id="fabAdminBtn" class="fab-admin">Gestión ⚙</button>  
+  
+<!-- ===================== GATE (default view) ===================== -->  
+<div id="gate" class="gate">  
+ <div class="gate-card">  
+ <img class="gate-logo" id="gateLogoImg" alt="WGYMADNSPORT">  
+ <p class="gate-kicker">WGYMADNSPORT Tocopilla</p>  
+ <h2>Acceso a tu rutina</h2>  
+ <p class="gate-sub">Ingresa tu nombre y apellido, como está registrado en el gimnasio</p>  
+ <input type="text" id="gateNombre" class="gate-input" placeholder="Nombre" autocomplete="off">  
+ <input type="text" id="gateApellido" class="gate-input" placeholder="Apellido" autocomplete="off">  
+ <button id="gateBtn" class="gate-btn">Entrar</button>  
+ <p id="gateError" class="gate-error" hidden>No encontramos ese nombre entre los socios registrados. Consulta en recepción.</p>  
+ <button type="button" id="gateAdminLink" class="gate-admin-link" style="background:none;border:none;cursor:pointer;">Acceso administrador</button>  
+ </div>  
+</div>  
+
+<!-- ===================== CARD VIEW (tarjeta virtual) ===================== -->
+<div id="cardView" class="wrap" hidden>
+ <header class="masthead2">
+ <img class="logo" id="cardLogoImg" alt="WGYMADNSPORT">
+ <p class="gymname">WGYMADNSPORT Tocopilla</p>
+ <h1>Tarjeta <span>Virtual</span></h1>
+ <p class="sub">tu acceso digital al gimnasio</p>
+ </header>
+ <div class="member-card" id="memberCard"></div>
+ <div id="routineAccess" style="padding:0 16px;"></div>
+ <footer class="footer2">
+ <p class="slogan">ENTRENA CON ACTITUD</p>
+ <p class="name">WGYMADNSPORT · Tocopilla</p>
+ <button type="button" id="cardAdminLink" style="background:none;border:none;cursor:pointer;color:var(--gris-soft);font-size:11px;margin-top:14px;text-decoration:underline;">Acceso administrador</button>
+ </footer>
+</div>
+
+<!-- ===================== SOCIO VIEW (rutina) ===================== -->  
+<div id="socioView" class="wrap" hidden>  
+ <header class="masthead2">  
+ <img class="logo" id="logoImg" alt="WGYMADNSPORT">  
+ <p class="gymname">WGYMADNSPORT Tocopilla</p>  
+ <h1>Rutina de <span>Principiantes</span> Diseñada para Mujeres</h1>  
+ <p class="sub">técnica correcta · progresa a tu ritmo</p>  
+ </header>  
+ <button type="button" id="backToCardLink" class="gate-admin-link" style="background:none;border:none;cursor:pointer;text-align:left;margin:14px 16px 0;">← Volver a mi tarjeta</button>
+ <div id="expiryBanner" class="expiry-banner" hidden></div>  
+ <div class="progsel" id="progSel">
+ <button type="button" class="progbtn active" data-prog="fullbody">Full Body 5 Días</button>
+ <button type="button" class="progbtn" data-prog="gluteos">Piernas y Glúteos</button>
+ </div>
+ <nav class="days" id="dayNav"></nav>  
+ <main class="daymain" id="dayContent"></main>  
+ <div class="info-card">  
+ <b>Cómo usar esta rutina:</b> descansa el tiempo indicado entre series, prioriza siempre la técnica antes que el peso, y bebe agua durante todo el entrenamiento. Si sientes dolor (no cansancio normal) o tienes dudas sobre algún movimiento, consulta a tu profesor en el gimnasio.  
+ </div>  
+ <footer class="footer2">  
+ <p class="slogan">ENTRENA CON ACTITUD</p>  
+ <p class="name">WGYMADNSPORT · Tocopilla</p>  
+ <button type="button" id="socioAdminLink" style="background:none;border:none;cursor:pointer;color:var(--gris-soft);font-size:11px;margin-top:14px;text-decoration:underline;">Acceso administrador</button>  
+ </footer>  
+</div>  
+  
+<!-- ===================== ADMIN VIEW (gestión) ===================== -->  
+<div id="adminView" class="shell" hidden>  
+ <div class="masthead">  
+ <div class="mark"><img id="adminLogoImg" alt="WGYMADNSPORT"></div>  
+ <div style="flex:1;">  
+ <h1>GYM <span>ADN</span> SPORT · GESTIÓN</h1>  
+ <p>Socios · Balance · Cierre de caja</p>  
+ </div>  
+ </div>  
+ <button type="button" id="backToGateLink" class="gate-admin-link" style="background:none;border:none;cursor:pointer;text-align:left;margin-bottom:14px;">← Volver a la pantalla de socio</button>  
+  
+ <nav class="tabbar" role="tablist">  
+ <button class="tabbtn" role="tab" data-tab="socios" aria-selected="true">Socios</button>  
+ <button class="tabbtn" role="tab" data-tab="balance" aria-selected="false">Balance</button>  
+ <button class="tabbtn" role="tab" data-tab="caja" aria-selected="false">Cierre de Caja</button>  
+ </nav>  
+  
+ <!-- TAB: SOCIOS -->  
+ <section class="panel2 active" id="panel-socios">  
+ <div class="card" style="border-color:var(--dorado);">  
+ <div class="card-head"><h2>+ Agregar socio nuevo</h2></div>  
+ <p class="card-sub">Completa los datos y presiona "Agregar" — queda disponible al instante en la tabla de abajo y en su rutina.</p>  
+ <div class="addrow" style="background:transparent;border:none;padding:0;">  
+ <div><label for="s-nombre">Nombre</label><input type="text" id="s-nombre" placeholder="Ej: Sara"></div>  
+ <div><label for="s-apellido">Apellido</label><input type="text" id="s-apellido" placeholder="Ej: Encalada"></div>  
+ <div><label for="s-rut">RUT</label><input type="text" id="s-rut" placeholder="Sin Rut"></div>  
+ <div><label for="s-plan">Plan</label><input type="text" id="s-plan" placeholder="Full Mensual"></div>  
+ <div><label for="s-monto">Monto</label><input type="text" id="s-monto" placeholder="33000"></div>  
+ <div><label for="s-venc">Vencimiento</label><input type="text" id="s-venc" placeholder="20-09-2026"></div>  
+ <div><label for="s-rutina">¿Tiene rutina?</label><select id="s-rutina"><option value="No">No</option><option value="Si">Sí</option></select></div>  
+ <button class="btn btn-primary" id="s-add">Agregar</button>  
+ </div>  
+ </div>  
+  
+ <div class="card">  
+ <div class="card-head"><h2>Registro de socios</h2></div>  
+ <p class="card-sub">Esta tabla es la fuente única de socios y controla el acceso a la rutina. Si agregas, editas o eliminas algo aquí, avísame por chat con los cambios para que yo actualice y publique la página — así queda igual para todos.</p>  
+ <input type="text" id="socio-search" placeholder="Buscar socio por nombre o apellido..." style="width:100%;margin-bottom:12px;background:var(--negro);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--blanco);font-family:inherit;">  
+ <div class="twrap">  
+ <table>  
+ <thead>  
+ <tr>  
+ <th>Nombre</th><th>Apellido</th><th>RUT</th><th>Plan</th>  
+ <th class="num">Monto</th><th>Vencimiento (DD-MM-AAAA)</th><th>Rutina</th><th>Estado</th><th style="width:44px;"></th>  
+ </tr>  
+ </thead>  
+ <tbody id="socios-tbody" artifact-sync>  
+<tr><td contenteditable="true">ALAN</td><td contenteditable="true">PEREIRA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ALAN</td><td contenteditable="true">RAMIREZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ALEJANDRO</td><td contenteditable="true">PARES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">07-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">AlEXANDER</td><td contenteditable="true">ONTANEDA</td><td contenteditable="true">Sin Rut</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ALEXIS</td><td contenteditable="true">ACUÑA</td><td contenteditable="true">13.795.169-k</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">21-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ALEXIS</td><td contenteditable="true">VARAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">14-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ALONSO</td><td contenteditable="true">ARAYA</td><td contenteditable="true">00.000.000-7</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">30-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ANA</td><td contenteditable="true">MARIA GONZALES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Tercera Edad</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">20-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ANDREA</td><td contenteditable="true">CUELLA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">03-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ANDREA</td><td contenteditable="true">VARAS</td><td contenteditable="true">16.613.967-8</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ANDRES</td><td contenteditable="true">PAEZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">13-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ANGEL</td><td contenteditable="true">GUTIERREZ</td><td contenteditable="true">28.910.930-7</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">14-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ANTONELLA</td><td contenteditable="true">LLANQUE</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">14-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ANTONIO</td><td contenteditable="true">PEREZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ANTONIO</td><td contenteditable="true">VALENCIA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">02-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ARACELY</td><td contenteditable="true">HERRERA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">19-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ARACELY</td><td contenteditable="true">PANIAGUA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">24-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ARON</td><td contenteditable="true">SOSSA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">22-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">BASTIAN</td><td contenteditable="true">PERALTA</td><td contenteditable="true">23.452.170-5</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">04-07-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">BASTIAN</td><td contenteditable="true">VERGARA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">BASTIAN</td><td contenteditable="true">ZAPATA</td><td contenteditable="true">20.886.781-4</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">07-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">BENJAMIN</td><td contenteditable="true">GODOY</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">23-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">BETSSY</td><td contenteditable="true">BRIONES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">12-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CAMILA</td><td contenteditable="true">CUELLA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">03-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CAMILA</td><td contenteditable="true">JUICA</td><td contenteditable="true">Sin Rut</td><td contenteditable="true"></td><td contenteditable="true" class="num">$0</td><td contenteditable="true">20-08-2027</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CAMILA</td><td contenteditable="true">PEÑA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">04-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CAMILO</td><td contenteditable="true">GALLEGILLOS</td><td contenteditable="true">20.400.051-1</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">16-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CAMILO</td><td contenteditable="true">JUICA</td><td contenteditable="true">18.231.164-2</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">04-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CARLA</td><td contenteditable="true">MORALES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">23-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CARLOS</td><td contenteditable="true">ARAYA</td><td contenteditable="true">15.012.248-1</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">28-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CAROLINA</td><td contenteditable="true">CARVAJAL</td><td contenteditable="true">15.011.544-2</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">21-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CAROLINA</td><td contenteditable="true">CUELLA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">31-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CHRISTIAN</td><td contenteditable="true">AROS</td><td contenteditable="true">21.501.105-4</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CLAUDIA</td><td contenteditable="true">RAMOS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">12-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CLAUDIA</td><td contenteditable="true">VILLEGAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CONSTANZA</td><td contenteditable="true">MARIN</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">04-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">CRISTOBAL</td><td contenteditable="true">PIZARRO</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">11-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">DANIEL</td><td contenteditable="true">CORTES</td><td contenteditable="true">18.518.448-K</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">15-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">DANIEL</td><td contenteditable="true">MARTINEZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">13-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">DANIELA</td><td contenteditable="true">CARVAJAL</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">DANIELA</td><td contenteditable="true">SALAZAR</td><td contenteditable="true">18.490.422-5</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">DARKO</td><td contenteditable="true">VICENCIO</td><td contenteditable="true">20.400.302-5</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">DEBORA</td><td contenteditable="true">GAJARDO</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">DIEGO</td><td contenteditable="true">SALAZAR</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">31-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">DONNA</td><td contenteditable="true">URIZAR</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">Edita</td><td contenteditable="true">Morales</td><td contenteditable="true">18.231.906-4</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">01-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">Eymilee</td><td contenteditable="true">Muñoz Sandis</td><td contenteditable="true">20-991-328-3</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">FAVIO</td><td contenteditable="true">CLAVELO</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">25-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">FERNANDA</td><td contenteditable="true">GUERRA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">07-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">FRANCCINI</td><td contenteditable="true">VILLANUEVA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">21-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">FRANCHESCA</td><td contenteditable="true">ALCAYAGA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">FRANCISCA</td><td contenteditable="true">ROJAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Plan Especial</td><td contenteditable="true" class="num">$20.000</td><td contenteditable="true">06-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">GABRIEL</td><td contenteditable="true">FERNANDEZ</td><td contenteditable="true">Sin Rut</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">11-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">GABRIEL</td><td contenteditable="true">PIÑOL</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">08-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">GABRIEL</td><td contenteditable="true">RUZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">24-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">GABRIELA</td><td contenteditable="true">VELARDE</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">24-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">GERARDO</td><td contenteditable="true">LEPE</td><td contenteditable="true">14.355.859-2</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">GERMAN</td><td contenteditable="true">PALMA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Plan Especial</td><td contenteditable="true" class="num">$20.000</td><td contenteditable="true">18-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">GISELLA</td><td contenteditable="true">CASTILLO</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">GLORIA</td><td contenteditable="true">LOPEZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">HECTOR</td><td contenteditable="true">CONTRERAS</td><td contenteditable="true">19.117.105-5</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">31-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">HERMAN</td><td contenteditable="true">BORQUEZ</td><td contenteditable="true">15.011.699-4</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">28-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">IAN</td><td contenteditable="true">GAETE</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">IDALBA</td><td contenteditable="true">MARTINEZ</td><td contenteditable="true">25.029.628-2</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">12-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">IGNACIA</td><td contenteditable="true">SANCHEZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">13-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">IVAN</td><td contenteditable="true">ESPIRITU</td><td contenteditable="true">00.000.000-5</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">08-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">IVAN</td><td contenteditable="true">POZHO</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JAIRO</td><td contenteditable="true">CONTRERAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">14-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JANET</td><td contenteditable="true">PERCA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JEAN</td><td contenteditable="true">PIER</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">16-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JENI</td><td contenteditable="true">GOMEZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">31-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JESICA</td><td contenteditable="true">ESCALERA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">30-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JHON</td><td contenteditable="true">ESPINOZA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JOAQUIN</td><td contenteditable="true">ALBALLAI</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">12-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JOFRE</td><td contenteditable="true">ZARUMA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">15-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JOHAN</td><td contenteditable="true">VALLE</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">31-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JORGE</td><td contenteditable="true">CONTRERAS</td><td contenteditable="true">21.412.572-2</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JOSE</td><td contenteditable="true">CHOCK</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JOSE</td><td contenteditable="true">RODRIGUEZ</td><td contenteditable="true">17.724.732-4</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">08-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JOSEFA</td><td contenteditable="true">ESCOBAR</td><td contenteditable="true">17.736.129-1</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">09-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JOSHUA</td><td contenteditable="true">ARANDA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JOSTIN</td><td contenteditable="true">ROSAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">11-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JUAN</td><td contenteditable="true">CACERES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">11-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JUAN</td><td contenteditable="true">ESCALONA</td><td contenteditable="true">18.214.303-3</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">JUAN</td><td contenteditable="true">REYES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">06-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">KATHERINE</td><td contenteditable="true">CARRASCO</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">28-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">KATHERINE</td><td contenteditable="true">GOMEZ</td><td contenteditable="true">13.742.708-7</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">13-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">KATHERINE</td><td contenteditable="true">IGLESIAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">KATHERINE</td><td contenteditable="true">RODRIGUEZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">07-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">KATHIA</td><td contenteditable="true">CEBEÑO</td><td contenteditable="true">22.767.241-2</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">09-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">KEVIN</td><td contenteditable="true">BONILLA</td><td contenteditable="true">19.822.514-2</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">KIMEN</td><td contenteditable="true">ARANDA</td><td contenteditable="true">12.937.891-3</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">23-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">KRYSHNA</td><td contenteditable="true">ARTEAGA</td><td contenteditable="true">21.920.620-8</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">09-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">LAURA</td><td contenteditable="true">VDRA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">06-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">LORETO</td><td contenteditable="true">VELIZ</td><td contenteditable="true">14.606.529-5</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">LUIS</td><td contenteditable="true">GARCIA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">12-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">LUIS</td><td contenteditable="true">RIOS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">06-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">LUISA</td><td contenteditable="true">HIDALGO</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">LUNA</td><td contenteditable="true">LOPEZ</td><td contenteditable="true">26.795.264-k</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">04-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">LUTJAN</td><td contenteditable="true">SORE</td><td contenteditable="true">23.230.244-5</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MANUEL</td><td contenteditable="true">DURAN</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">13-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MARIA</td><td contenteditable="true">HERRERA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">19-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MARIA</td><td contenteditable="true">JOSE OBREQUE</td><td contenteditable="true">19.496.534-6</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MARIA</td><td contenteditable="true">OSES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">11-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MARIA</td><td contenteditable="true">TORRES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MARIA</td><td contenteditable="true">ZEPEDA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Funcionario Público</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MARTINA</td><td contenteditable="true">ROJAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">07-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MAURA</td><td contenteditable="true">PALMA</td><td contenteditable="true">24-172.701-7</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">30-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MAURICIO</td><td contenteditable="true">ONTANEDA</td><td contenteditable="true">Sin Rut</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">04-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MAURICIO</td><td contenteditable="true">RAMIREZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">06-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MAURICIO</td><td contenteditable="true">URQUIETA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MAXIMILIANO</td><td contenteditable="true">CONTRERAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MAYORI</td><td contenteditable="true">RAMIREZ</td><td contenteditable="true">26.982.463-8</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">04-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MAYUMY</td><td contenteditable="true">MARTINEZ</td><td contenteditable="true">00.000.000-2</td><td contenteditable="true">Funcionario Público</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">04-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MICHEL</td><td contenteditable="true">QUINZACARA</td><td contenteditable="true">16.927.097-K</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">31-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MIGUEL</td><td contenteditable="true">MONSALVES</td><td contenteditable="true">10.729.410-4</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MIGUEL</td><td contenteditable="true">ROJAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">08-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MILAGROS</td><td contenteditable="true">LOPEZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MILAN</td><td contenteditable="true">CVITANIC</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">01-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MILTON</td><td contenteditable="true">FUENTES</td><td contenteditable="true">Sin Rut</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">20-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MIRKO</td><td contenteditable="true">SAN MARTIN</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">06-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">MONICA</td><td contenteditable="true">MONTEROS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">23-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">NELSON</td><td contenteditable="true">VARAS</td><td contenteditable="true">17.528.092-8</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">07-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">NICOLAS</td><td contenteditable="true">PACHECO</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">04-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">NINA</td><td contenteditable="true">HERRERA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">NINA</td><td contenteditable="true">SALAZAR</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">17-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">OBRAIN</td><td contenteditable="true">RAMIREZ</td><td contenteditable="true">Sin Rut</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">19-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">PABLO</td><td contenteditable="true">AGUILERA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">25-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">PAMELA</td><td contenteditable="true">LOPEZ</td><td contenteditable="true">14.577.814-k</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">PATRICIO</td><td contenteditable="true">CONTADOR</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Tercera Edad</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">PEDRO</td><td contenteditable="true">ALVAREZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">PEDRO</td><td contenteditable="true">OLIVARES</td><td contenteditable="true">00.000.000-4</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">RICARDO</td><td contenteditable="true">MAMANNI</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">30-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ROBERTO</td><td contenteditable="true">FIGUEROA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">04-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">RODRIGO</td><td contenteditable="true">CARMONA</td><td contenteditable="true">20.400.285-1</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">07-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">RODRIGO</td><td contenteditable="true">MOLINA</td><td contenteditable="true">22.150.537.9</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">RODRIGO</td><td contenteditable="true">PLAZA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">04-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ROSA</td><td contenteditable="true">LUCERO</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Tercera Edad</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">09-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">ROSALIA</td><td contenteditable="true">GENDARMIA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Plan Especial</td><td contenteditable="true" class="num">$25.000</td><td contenteditable="true">23-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">SAMUEL</td><td contenteditable="true">REES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">SARA</td><td contenteditable="true">CARVAJAL</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">22-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">SARA</td><td contenteditable="true">RAMOS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">12-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">SEBASTIAN</td><td contenteditable="true">MARIN</td><td contenteditable="true">19.215.031-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">22-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">Sebastian</td><td contenteditable="true">OLIVA</td><td contenteditable="true">00.000.000-1</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">15-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">SEBASTIAN</td><td contenteditable="true">RIVERA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">27-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">SERGIO</td><td contenteditable="true">GUAPA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">07-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">SONIA</td><td contenteditable="true">CUBA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">14-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">TANIA</td><td contenteditable="true">PULSEN</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">30-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">TOMAS</td><td contenteditable="true">CABALLERO</td><td contenteditable="true">10.336.793-3</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">02-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">TOMAZ</td><td contenteditable="true">VALENZUELA</td><td contenteditable="true">23.228.062-k</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">22-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">TOMISLAV</td><td contenteditable="true">CVITANIC</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">01-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">TRAYSI</td><td contenteditable="true">MUÑOZ</td><td contenteditable="true">13.173.041-1</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">20-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">VALENTINA</td><td contenteditable="true">ROJAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">VALERIA</td><td contenteditable="true">MACIAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">30-07-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">VERONICA</td><td contenteditable="true">SALAS</td><td contenteditable="true">20.126.542-8</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">02-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">VICTOR</td><td contenteditable="true">CORRY</td><td contenteditable="true">12.997.412-7</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">13-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">VICTOR</td><td contenteditable="true">MOLINA</td><td contenteditable="true">18.918.939-7</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">15-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">WENDY</td><td contenteditable="true">WAITA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">12-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">YAJAIRA</td><td contenteditable="true">PINEDA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+<tr><td contenteditable="true">YANCARLA</td><td contenteditable="true">SUAREZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
+ </tbody>  
+ </table>  
+ </div>  
+ <p class="hint2">Edita cualquier celda de la tabla haciendo clic directo sobre el texto. El estado (<b>Al día</b> / <b>Vence pronto</b> / <b>Vencido</b>) se calcula solo, más abajo.</p>  
+ <div class="statrow">  
+ <div class="stat"><span class="eyebrow">Socios al día</span><span class="val tabular" id="st-aldia">0</span></div>  
+ <div class="stat"><span class="eyebrow">Vencen pronto</span><span class="val tabular" id="st-pronto">0</span></div>  
+ <div class="stat"><span class="eyebrow">Vencidos</span><span class="val tabular" id="st-vencido">0</span></div>  
+ <div class="stat"><span class="eyebrow">Ingreso mensual esperado</span><span class="val tabular" id="st-ingreso">$0</span></div>  
+ </div>  
+ </div>  
+ </section>  
+  
+ <!-- TAB: BALANCE -->  
+ <section class="panel2" id="panel-balance">  
+ <div class="card">  
+ <div class="card-head"><h2>Gastos fijos mensuales</h2></div>  
+ <p class="card-sub">Gastos que pagas todos los meses, como el arriendo (que ya incluye gastos comunes).</p>  
+ <div class="twrap">  
+ <table>  
+ <thead><tr><th>Gasto</th><th class="num">Monto mensual</th><th style="width:44px;"></th></tr></thead>  
+ <tbody id="fixed-tbody"></tbody>  
+ </table>  
+ <div class="addrow" style="grid-template-columns:1.4fr 1fr auto;">  
+ <div><label for="fx-name">Nombre del gasto</label><input type="text" id="fx-name" placeholder="Ej: Arriendo"></div>  
+ <div><label for="fx-amount">Monto mensual</label><input type="text" id="fx-amount" placeholder="150000"></div>  
+ <button class="btn btn-primary" id="fx-add">Agregar</button>  
+ </div>  
+ </div>  
+ <div class="statrow"><div class="stat"><span class="eyebrow">Total gastos fijos / mes</span><span class="val tabular" id="fx-total">$0</span></div></div>  
+ </div>  
+ <div class="card">  
+ <div class="card-head"><h2>Gastos variables</h2></div>  
+ <p class="card-sub">Anota cada compra a medida que la haces.</p>  
+ <div class="addrow" style="grid-template-columns:1fr 1.4fr .8fr auto;">  
+ <div><label for="gv-date">Fecha</label><input type="text" id="gv-date" placeholder="19-08-2026"></div>  
+ <div><label for="gv-name">Descripción</label><input type="text" id="gv-name" placeholder="Ej: Insumos de aseo"></div>  
+ <div><label for="gv-amount">Monto</label><input type="text" id="gv-amount" placeholder="8000"></div>  
+ <button class="btn btn-primary" id="gv-add">Anotar</button>  
+ </div>  
+ <div id="gv-list" style="margin-top:14px;"></div>  
+ <div class="statrow"><div class="stat"><span class="eyebrow">Gastos variables este mes</span><span class="val tabular" id="gv-total">$0</span></div></div>  
+ </div>  
+ <div class="card">  
+ <div class="card-head"><h2>Total gastos del mes</h2></div>  
+ <div class="stat" style="text-align:center;"><span class="eyebrow">Fijos + variables de este mes</span><div class="val tabular" style="font-size:28px;" id="bal-total">$0</div></div>  
+ </div>  
+ </section>  
+  
+ <!-- TAB: CIERRE DE CAJA -->  
+ <section class="panel2" id="panel-caja">  
+ <div class="card">  
+ <div class="card-head"><h2>Cierre de caja del día</h2></div>  
+ <p class="card-sub">Al final del día, anota aquí los totales que ya sumaste. Las mensualidades de los socios no van aquí.</p>  
+ <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="c-date" placeholder="19-08-2026"></div>  
+ <div class="addrow" style="grid-template-columns:1fr 1fr 1fr;">  
+ <div><label for="c-efectivo">Efectivo</label><input type="text" id="c-efectivo" placeholder="0"></div>  
+ <div><label for="c-tarjeta">Tarjeta</label><input type="text" id="c-tarjeta" placeholder="0"></div>  
+ <div><label for="c-transferencia">Transferencia</label><input type="text" id="c-transferencia" placeholder="0"></div>  
+ </div>  
+ <div class="statrow"><div class="stat"><span class="eyebrow">Total del día</span><span class="val tabular" id="c-total">$0</span></div></div>  
+ <div style="margin-top:14px;"><button class="btn btn-primary" id="c-save">Guardar cierre del día</button></div>  
+ </div>  
+ <div class="card">  
+ <div class="card-head"><h2>Historial de cierres</h2></div>  
+ <div id="c-list"></div>  
+ <div class="statrow"><div class="stat"><span class="eyebrow">Ventas de este mes</span><span class="val tabular" id="c-mes-total">$0</span></div></div>  
+ </div>  
+ </section>  
+</div>  
+</div>
+  
+<script>  
+const LOGO_B64 = "assets/logo.jpg";  
+const SENTADILLA_VIDEO = "assets/sentadilla.mp4";  
+const EXTENSION_PIERNAS_VIDEO = "assets/extension_piernas.mp4";  
+const CURL_FEMORAL_VIDEO = "assets/curl_femoral.mp4";  
+const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
+</script>  
+<script>  
+(function(){  
+ "use strict";  
+  
+ /* ---------- shared helpers ---------- */  
+ /* Dates are entered and displayed as DD-MM-AAAA everywhere in this app. */  
+ function todayISO(){  
+ var d = new Date();  
+ return String(d.getDate()).padStart(2,"0") + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + d.getFullYear();  
+ }  
+ function parseDMY(str){  
+ if(!str) return null;  
+ var m = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(String(str).trim());  
+ if(!m) return null;  
+ var d = new Date(Number(m[3]), Number(m[2])-1, Number(m[1]));  
+ if(isNaN(d)) return null;  
+ return d;  
+ }  
+ function monthKeyDMY(str){  
+ var d = parseDMY(str);  
+ if(!d) return "";  
+ return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");  
+ }  
+ function fmtDateEs(dmy){  
+ var d = parseDMY(dmy);  
+ if(!d) return dmy || "";  
+ return d.toLocaleDateString("es-CL", {day:"numeric", month:"short", year:"numeric"});  
+ }  
+ function clp(n){  
+ n = Math.round(Number(n)||0);  
+ return "$" + n.toLocaleString("es-CL");  
+ }  
+ function parseMoney(str){  
+ var digits = String(str==null?"":str).replace(/[^\d]/g,"");  
+ return digits ? parseInt(digits,10) : 0;  
+ }  
+ function normName(s){  
+ return (s||"").toString().trim().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ");  
+ }  
+ function uid(){ return Math.random().toString(36).slice(2,10); }  
+  
+ /* Auto-inserts the dashes as you type digits into a DD-MM-AAAA field. */  
+ function digitsToDMY(digits){  
+ digits = digits.slice(0, 8);  
+ var out = digits.slice(0, 2);  
+ if(digits.length > 2) out += "-" + digits.slice(2, 4);  
+ if(digits.length > 4) out += "-" + digits.slice(4, 8);  
+ return out;  
+ }  
+ function attachDateFormatting(input){  
+ input.addEventListener("input", function(){  
+ var digits = input.value.replace(/[^\d]/g, "");  
+ input.value = digitsToDMY(digits);  
+ });  
+ }  
+ function attachDateFormattingContentEditable(td){  
+ td.addEventListener("input", function(){  
+ var digits = td.textContent.replace(/[^\d]/g, "");  
+ td.textContent = digitsToDMY(digits);  
+ var range = document.createRange();  
+ range.selectNodeContents(td);  
+ range.collapse(false);  
+ var sel = window.getSelection();  
+ sel.removeAllRanges();  
+ sel.addRange(range);  
+ });  
+ }  
+  
+ /* Auto-formats a money field with the $ sign and thousands separators  
+ as you type. */  
+ function attachMoneyFormatting(input){  
+ input.addEventListener("input", function(){  
+ var n = parseMoney(input.value);  
+ input.value = n ? clp(n) : "";  
+ });  
+ }  
+ function attachMoneyFormattingContentEditable(td){  
+ td.addEventListener("focusout", function(){  
+ td.textContent = clp(parseMoney(td.textContent));  
+ });  
+ }  
+  
+ document.getElementById("gateLogoImg").src = LOGO_B64;  
+ document.getElementById("logoImg").src = LOGO_B64;  
+ document.getElementById("adminLogoImg").src = LOGO_B64;  
+ document.getElementById("cardLogoImg").src = LOGO_B64;  
+  
+ /* =====================================================================  
+ SOCIOS — shared live table (artifact-sync region). The <tbody> markup  
+ itself IS the document: rows are read directly, never mirrored into a  
+ JS object for the synced region.  
+ ===================================================================== */  
+ var sociosTbody = document.getElementById("socios-tbody");  
+  
+ function socioRowData(tr){  
+ var tds = tr.children;  
+ return {  
+ tr: tr,  
+ nombre: tds[0] ? tds[0].textContent.trim() : "",  
+ apellido: tds[1] ? tds[1].textContent.trim() : "",  
+ rut: tds[2] ? tds[2].textContent.trim() : "",  
+ plan: tds[3] ? tds[3].textContent.trim() : "",  
+ monto: tds[4] ? parseMoney(tds[4].textContent) : 0,  
+ vencimiento: tds[5] ? tds[5].textContent.trim() : "",  
+ tieneRutina: tds[6] ? /^s/i.test(tds[6].textContent.trim()) : false  
+ };  
+ }  
+ function allSocios(){  
+ return Array.prototype.map.call(sociosTbody.children, socioRowData);  
+ }  
+ function estadoDe(vencimiento){  
+ var venc = parseDMY(vencimiento);  
+ if(!venc) return {cls:"good", txt:"Al día"};  
+ var hoy = parseDMY(todayISO());  
+ var diffDays = (venc - hoy) / 86400000;  
+ if(diffDays < 0) return {cls:"danger", txt:"Vencido"};  
+ if(diffDays <= 7) return {cls:"warn", txt:"Vence pronto"};  
+ return {cls:"good", txt:"Al día"};  
+ }  
+ function makeSocioRow(s){  
+ var tr = document.createElement("tr");  
+ ["nombre","apellido","rut","plan"].forEach(function(k){  
+ var td = document.createElement("td");  
+ td.contentEditable = "true";  
+ td.textContent = s[k] || "";  
+ tr.appendChild(td);  
+ });  
+ var tdMonto = document.createElement("td");  
+ tdMonto.contentEditable = "true";  
+ tdMonto.className = "num";  
+ tdMonto.textContent = clp(s.monto || 0);  
+ tr.appendChild(tdMonto);  
+ var tdVenc = document.createElement("td");  
+ tdVenc.contentEditable = "true";  
+ tdVenc.textContent = s.vencimiento || "";  
+ tr.appendChild(tdVenc);  
+ var tdRutina = document.createElement("td");  
+ tdRutina.contentEditable = "true";  
+ tdRutina.textContent = s.rutina || "No";  
+ tr.appendChild(tdRutina);  
+ var tdEstado = document.createElement("td");  
+ tdEstado.setAttribute("artifact-local", "");  
+ tdEstado.className = "estado-cell";  
+ tr.appendChild(tdEstado);  
+ var tdDel = document.createElement("td");  
+ var delBtn = document.createElement("button");  
+ delBtn.className = "iconbtn";  
+ delBtn.title = "Eliminar";  
+ delBtn.innerHTML = '✕';  
+ tdDel.appendChild(delBtn);  
+ tr.appendChild(tdDel);  
+ return tr;  
+ }  
+ function renderStatusColumn(){  
+ Array.prototype.forEach.call(sociosTbody.children, function(tr){  
+ var cell = tr.querySelector(".estado-cell");  
+ if(!cell) return;  
+ var s = socioRowData(tr);  
+ var est = estadoDe(s.vencimiento);  
+ var html = '<span class="pill '+est.cls+'"><span class="dot"></span>'+est.txt+'</span>';  
+ if(cell.innerHTML !== html) cell.innerHTML = html;  
+ });  
+ }  
+ /* Keeps the shared list alphabetical (by nombre, then apellido) as new  
+ socios are added — inserting one row is still a single gesture. */  
+ function repositionSocioRow(tr){  
+ var d = socioRowData(tr);  
+ var key = normName(d.nombre) + " " + normName(d.apellido);  
+ var rows = Array.prototype.slice.call(sociosTbody.children).filter(function(r){ return r !== tr; });  
+ var before = rows.find(function(existing){  
+ var ed = socioRowData(existing);  
+ var existingKey = normName(ed.nombre) + " " + normName(ed.apellido);  
+ return existingKey > key;  
+ });  
+ if(before) sociosTbody.insertBefore(tr, before);  
+ else sociosTbody.appendChild(tr);  
+ }  
+ function insertSocioSorted(tr){  
+ sociosTbody.appendChild(tr);  
+ repositionSocioRow(tr);  
+ }  
+ /* Reposition a row the moment its Nombre or Apellido cell is edited, so  
+ the list stays alphabetical without a manual re-sort. Also auto-formats  
+ the Monto cell ($ + thousands) once editing that cell finishes. */  
+ sociosTbody.addEventListener("focusout", function(e){  
+ var td = e.target;  
+ if(td.tagName !== "TD" || !td.isContentEditable) return;  
+ var tr = td.closest("tr");  
+ if(!tr) return;  
+ var colIndex = Array.prototype.indexOf.call(tr.children, td);  
+ if(colIndex === 0 || colIndex === 1) repositionSocioRow(tr);  
+ if(colIndex === 4) td.textContent = clp(parseMoney(td.textContent));  
+ });  
+ /* Auto-inserts the dashes as you type into the Vencimiento cell. */  
+ sociosTbody.addEventListener("input", function(e){  
+ var td = e.target;  
+ if(td.tagName !== "TD" || !td.isContentEditable) return;  
+ var tr = td.closest("tr");  
+ if(!tr) return;  
+ var colIndex = Array.prototype.indexOf.call(tr.children, td);  
+ if(colIndex !== 5) return;  
+ var digits = td.textContent.replace(/[^\d]/g, "");  
+ var formatted = digitsToDMY(digits);  
+ if(td.textContent === formatted) return;  
+ td.textContent = formatted;  
+ var range = document.createRange();  
+ range.selectNodeContents(td);  
+ range.collapse(false);  
+ var sel = window.getSelection();  
+ sel.removeAllRanges();  
+ sel.addRange(range);  
+ });  
+ /* Delegated delete handler — covers both the statically-embedded rows and  
+ rows added later via the Agregar button, all from this single gesture. */  
+ sociosTbody.addEventListener("click", function(e){  
+ var btn = e.target.closest(".iconbtn");  
+ if(!btn) return;  
+ var tr = btn.closest("tr");  
+ if(tr){ tr.remove(); renderEstadoOverlay(); }  
+ });  
+  
+ /* Search box: purely local display filter (data-local-* never syncs to  
+ other viewers), so typing here never touches the shared document. */  
+ document.getElementById("socio-search").addEventListener("input", function(e){  
+ var q = normName(e.target.value);  
+ Array.prototype.forEach.call(sociosTbody.children, function(tr){  
+ var s = socioRowData(tr);  
+ var match = !q || normName(s.nombre).indexOf(q) !== -1 || normName(s.apellido).indexOf(q) !== -1;  
+ if(match) tr.removeAttribute("data-local-filtered");  
+ else tr.setAttribute("data-local-filtered", "true");  
+ });  
+ });  
+  
+ attachMoneyFormatting(document.getElementById("s-monto"));  
+ attachDateFormatting(document.getElementById("s-venc"));  
+ document.getElementById("s-add").addEventListener("click", function(){  
+ var nombre = document.getElementById("s-nombre").value.trim();  
+ var apellido = document.getElementById("s-apellido").value.trim();  
+ if(!nombre || !apellido){ alert("Completa al menos nombre y apellido."); return; }  
+ var s = {  
+ nombre: nombre, apellido: apellido,  
+ rut: document.getElementById("s-rut").value.trim() || "Sin Rut",  
+ plan: document.getElementById("s-plan").value.trim(),  
+ monto: parseMoney(document.getElementById("s-monto").value),  
+ vencimiento: document.getElementById("s-venc").value.trim(),  
+ rutina: document.getElementById("s-rutina").value  
+ };  
+ insertSocioSorted(makeSocioRow(s));  
+ ["s-nombre","s-apellido","s-rut","s-plan","s-monto","s-venc"].forEach(function(id){ document.getElementById(id).value = ""; });
+ document.getElementById("s-rutina").value = "No";  
+ renderEstadoOverlay();  
+ });  
+  
+ /* Updates the local-only "Estado" pill in every row, plus the summary  
+ stats. Never touches the synced part of the tbody. */  
+ function renderEstadoOverlay(){  
+ renderStatusColumn();  
+ var socios = allSocios();  
+ var aldia=0, pronto=0, vencido=0, ingreso=0;  
+ socios.forEach(function(s){  
+ var est = estadoDe(s.vencimiento);  
+ if(est.cls==="good") aldia++; else if(est.cls==="warn") pronto++; else vencido++;  
+ ingreso += s.monto || 0;  
+ });  
+ document.getElementById("st-aldia").textContent = aldia;  
+ document.getElementById("st-pronto").textContent = pronto;  
+ document.getElementById("st-vencido").textContent = vencido;  
+ document.getElementById("st-ingreso").textContent = clp(ingreso);  
+ }  
+ function escapeHtml(s){  
+ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });  
+ }  
+  
+ /* Ignore mutations that are themselves just this function's own writes  
+ into the local .estado-cell pills, or every edit would re-trigger  
+ itself forever. */  
+ new MutationObserver(function(records){  
+ var relevant = records.some(function(rec){  
+ var node = rec.target.nodeType === 1 ? rec.target : rec.target.parentElement;  
+ return !(node && node.closest(".estado-cell"));  
+ });  
+ if(relevant) renderEstadoOverlay();  
+ }).observe(sociosTbody, {childList:true, characterData:true, subtree:true});  
+ setInterval(renderEstadoOverlay, 5 * 60 * 1000);  
+  
+ /* ---------- gate: find socio + check vencimiento (read-only) ---------- */  
+ var ACCESS_KEY = "wgym_rutina_access_nombre";  
+ function findSocio(nombre, apellido){  
+ var n = normName(nombre), a = normName(apellido);  
+ if(!n || !a) return null;  
+ return allSocios().find(function(s){ return normName(s.nombre)===n && normName(s.apellido)===a; }) || null;  
+ }  
+ function diasParaVencer(s){  
+ var venc = parseDMY(s.vencimiento);  
+ if(!venc) return 9999;  
+ var hoy = parseDMY(todayISO());  
+ return Math.round((venc - hoy) / 86400000);  
+ }  
+ var currentSocio = null;
+ function renderCard(s){
+ var est = estadoDe(s.vencimiento);
+ var dias = diasParaVencer(s);
+ document.getElementById("memberCard").innerHTML =
+ '<p class="mc-kicker">Socio WGYMADNSPORT</p>' +
+ '<div class="mc-name">'+escapeHtml(s.nombre)+' '+escapeHtml(s.apellido)+'</div>' +
+ '<div class="mc-plan">'+escapeHtml(s.plan||"Sin plan asignado")+'</div>' +
+ '<div class="mc-row"><span>Vencimiento</span><b>'+escapeHtml(s.vencimiento||"—")+'</b></div>' +
+ '<div class="mc-status"><span class="pill '+est.cls+'"><span class="dot"></span>'+est.txt+'</span></div>';
+ var access = document.getElementById("routineAccess");
+ if(!s.tieneRutina){
+ access.innerHTML = "";
+ } else if(dias >= 0){
+ access.innerHTML = '<button type="button" id="goRoutineBtn" class="gate-btn">Ver mi rutina →</button>';
+ document.getElementById("goRoutineBtn").addEventListener("click", function(){ showRoutine(); });
+ } else {
+ access.innerHTML = '<p class="routine-blocked">Tu plan está vencido, por eso tu rutina está bloqueada.<br>Renueva en recepción para volver a verla.</p>';
+ }
+ }
+ function unlockCardView(s){
+ currentSocio = s;
+ document.getElementById("gate").hidden = true;
+ document.getElementById("socioView").hidden = true;
+ document.getElementById("cardView").hidden = false;
+ renderCard(s);
+ }
+ function showRoutine(){
+ if(!currentSocio || !currentSocio.tieneRutina || diasParaVencer(currentSocio) < 0) return;
+ document.getElementById("cardView").hidden = true;
+ document.getElementById("socioView").hidden = false;
+ var dias = diasParaVencer(currentSocio);
+ var banner = document.getElementById("expiryBanner");
+ if(dias === 1){ banner.textContent = "⏰ Tu plan vence mañana. ¡No te olvides de renovar!"; banner.hidden = false; }
+ else if(dias === 0){ banner.textContent = "⏰ Tu plan vence hoy. ¡No te olvides de renovar!"; banner.hidden = false; }
+ else { banner.hidden = true; }
+ }
+ function tryLogin(nombre, apellido){
+ var socio = findSocio(nombre, apellido);
+ if(socio){
+ try{ localStorage.setItem(ACCESS_KEY, JSON.stringify({n:nombre, a:apellido})); }catch(e){}
+ unlockCardView(socio);
+ return true;
+ }
+ document.getElementById("gateError").hidden = false;
+ return false;
+ }
+
+ /* ---------- routing ---------- */
+ function showAdmin(){
+ document.getElementById("gate").hidden = true;
+ document.getElementById("cardView").hidden = true;
+ document.getElementById("socioView").hidden = true;
+ document.getElementById("adminView").hidden = false;
+ document.getElementById("fabAdminBtn").hidden = true;
+ renderEstadoOverlay();
+ }
+ function showGate(){
+ document.getElementById("adminView").hidden = true;
+ document.getElementById("cardView").hidden = true;
+ document.getElementById("socioView").hidden = true;
+ document.getElementById("gate").hidden = false;
+ document.getElementById("fabAdminBtn").hidden = false;
+ }
+ document.getElementById("fabAdminBtn").addEventListener("click", function(){
+ try{ history.replaceState(null, "", "#gestion"); }catch(e){}
+ showAdmin();
+ });
+ function initRoute(){
+ if(location.hash === "#gestion"){ showAdmin(); return; }
+ renderEstadoOverlay();
+ var stored = null;
+ try{ stored = JSON.parse(localStorage.getItem(ACCESS_KEY) || "null"); }catch(e){}
+ if(stored){
+ var socio = findSocio(stored.n, stored.a);
+ if(socio){ unlockCardView(socio); return; }
+ }
+ }
+ window.addEventListener("hashchange", function(){
+ if(location.hash === "#gestion"){ showAdmin(); }
+ });
+ document.getElementById("gateAdminLink").addEventListener("click", function(){
+ try{ history.replaceState(null, "", "#gestion"); }catch(e){}
+ showAdmin();
+ });
+ document.getElementById("socioAdminLink").addEventListener("click", function(){
+ try{ history.replaceState(null, "", "#gestion"); }catch(e){}
+ showAdmin();
+ });
+ document.getElementById("cardAdminLink").addEventListener("click", function(){
+ try{ history.replaceState(null, "", "#gestion"); }catch(e){}
+ showAdmin();
+ });
+ document.getElementById("backToCardLink").addEventListener("click", function(){
+ document.getElementById("socioView").hidden = true;
+ document.getElementById("cardView").hidden = false;
+ if(currentSocio) renderCard(currentSocio);
+ });  
+ document.getElementById("backToGateLink").addEventListener("click", function(){  
+ try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){}  
+ showGate();  
+ });  
+ document.getElementById("gateBtn").addEventListener("click", function(){  
+ tryLogin(document.getElementById("gateNombre").value, document.getElementById("gateApellido").value);  
+ });  
+ document.getElementById("gateApellido").addEventListener("keydown", function(e){  
+ if(e.key === "Enter") tryLogin(document.getElementById("gateNombre").value, document.getElementById("gateApellido").value);  
+ });  
+ document.getElementById("gateNombre").addEventListener("keydown", function(e){  
+ if(e.key === "Enter") document.getElementById("gateApellido").focus();  
+ });  
+  
+ /* =====================================================================  
+ ROUTINE CONTENT (read-only, rendered from a plain JS array — this is  
+ fine here because it lives OUTSIDE any artifact-sync region).  
+ ===================================================================== */  
+ var VIDEOS = { sentadilla: SENTADILLA_VIDEO, extension_piernas: EXTENSION_PIERNAS_VIDEO, curl_femoral: CURL_FEMORAL_VIDEO, cardio_trotadora: CARDIO_TROTADORA_VIDEO };  
+ var DAYS_GLUTEOS = [  
+ {  
+ weekday:"Rutina 1", title:"Piernas y Glúteos", focus:"Tren inferior",  
+ warmup:"Caminadora o bicicleta — 5 minutos",  
+ exercises:[  
+ {name:"Sentadilla con mancuerna", sets:"3 × 12", rest:"60 seg", video:"sentadilla",  
+ tip:"Sostén una mancuerna o kettlebell pegada al pecho; baja como si te sentaras en una silla, rodillas hacia afuera, y sube empujando con los talones.",  
+ alt:"¿Muy exigente? Practica primero sin peso, apoyada en una silla, tocando apenas con los glúteos."},  
+ {name:"Extensión de piernas en máquina", sets:"3 × 12-15", rest:"45 seg", video:"extension_piernas",  
+ tip:"Siéntate con la espalda apoyada, extiende las rodillas sin bloquearlas de golpe y baja controlado."},  
+ {name:"Curl femoral en máquina", sets:"3 × 12-15", rest:"45 seg", video:"curl_femoral",  
+ tip:"Dobla las rodillas llevando el rodillo hacia los glúteos, controla la vuelta sin soltar de golpe."},  
+ {name:"Zancadas con TRX", sets:"3 × 10 por pierna", rest:"60 seg",  
+ tip:"Sujétate de las correas TRX para mantener el equilibrio; paso largo al frente, baja la rodilla trasera casi al suelo y sube empujando con el talón delantero.",  
+ alt:"¿Muy exigente? Sostente con ambas manos y da pasos más cortos."},  
+ {name:"Elevación de talones de pie", sets:"3 × 15-20", rest:"45 seg",  
+ tip:"De pie, sube lo más alto posible apoyado en las puntas de los pies y baja controlado."}  
+ ],  
+ cooldown:"Estira cuádriceps, isquiotibiales y gemelos 20-30 seg por lado."  
+ },  
+ { weekday:"Rutina 2", empty:true },  
+ { weekday:"Rutina 3", empty:true },  
+ { weekday:"Rutina 4", empty:true },  
+ { weekday:"Rutina 5", empty:true }  
+ ];  
+
+ var DAYS_FULLBODY = [
+   {
+     weekday:"Lunes",
+     title:"Piernas y Glúteos",
+     focus:"Tren inferior",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Sentadilla con mancuerna", sets:"3 × 12", rest:"60 seg", equip:"mancuerna", video:"sentadilla",
+        tip:"Sostén una mancuerna o kettlebell pegada al pecho; baja como si te sentaras en una silla, rodillas hacia afuera, y sube empujando con los talones.",
+        alt:"¿Muy exigente? Practica primero sin peso, apoyada en una silla, tocando apenas con los glúteos."},
+       {name:"Extensión de piernas en máquina", sets:"3 × 12-15", rest:"45 seg", equip:"maquina", video:"extension_piernas",
+        tip:"Siéntate con la espalda apoyada, extiende las rodillas sin bloquearlas de golpe y baja controlado."},
+       {name:"Curl femoral en máquina", sets:"3 × 12-15", rest:"45 seg", equip:"maquina", video:"curl_femoral",
+        tip:"Dobla las rodillas llevando el rodillo hacia los glúteos, controla la vuelta sin soltar de golpe."},
+       {name:"Zancadas con TRX", sets:"3 × 10 por pierna", rest:"60 seg", equip:"trx",
+        tip:"Sujétate de las correas TRX para mantener el equilibrio; paso largo al frente, baja la rodilla trasera casi al suelo y sube empujando con el talón delantero.",
+        alt:"¿Muy exigente? Sostente con ambas manos y da pasos más cortos."},
+       {name:"Elevación de talones de pie", sets:"3 × 15-20", rest:"45 seg", equip:"cuerpo",
+        tip:"De pie, sube lo más alto posible apoyado en las puntas de los pies y baja controlado."},
+     ],
+     cooldown:"Estira cuádriceps, isquiotibiales y gemelos 20-30 seg por lado."
+   },
+   {
+     weekday:"Martes",
+     title:"Espalda y Bíceps",
+     focus:"Tracción superior",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Jalón al pecho en polea", sets:"3 × 10-12", rest:"60 seg", equip:"polea",
+        tip:"Tira la barra hacia el pecho llevando los codos hacia abajo, sin balancear el cuerpo."},
+       {name:"Remo sentado en polea", sets:"3 × 10-12", rest:"60 seg", equip:"polea",
+        tip:"Espalda recta, tira el agarre hacia el abdomen apretando los omóplatos, sin encorvarte."},
+       {name:"Bíceps en máquina", sets:"3 × 10-12", rest:"45 seg", equip:"maquina",
+        tip:"Codos apoyados; sube y baja controlado sin balancear el cuerpo para ayudarte con impulso."},
+       {name:"Curl de bíceps con mancuernas", sets:"3 × 10-12", rest:"45 seg", equip:"mancuerna",
+        tip:"Codos pegados al cuerpo; sube y baja sin balancear la espalda."},
+       {name:"Remo con mancuerna a una mano", sets:"3 × 10-12 por lado", rest:"60 seg", equip:"mancuerna",
+        tip:"Apoya una rodilla y una mano en el banco, espalda recta; tira la mancuerna hacia la cadera llevando el codo hacia atrás."},
+     ],
+     cooldown:"Estira espalda y brazos 20-30 seg por lado."
+   },
+   {
+     weekday:"Miércoles",
+     title:"Pecho y Tríceps",
+     focus:"Empuje superior",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Press de banca con mancuernas", sets:"3 × 10-12", rest:"60 seg", equip:"mancuerna",
+        tip:"Baja las mancuernas controlada hasta la altura del pecho y empuja sin bloquear los codos de golpe."},
+       {name:"Aperturas con mancuernas en banco", sets:"3 × 12-15", rest:"45 seg", equip:"mancuerna",
+        tip:"Acostado en el banco, codos ligeramente flexionados; abre y junta los brazos como abrazando un árbol."},
+       {name:"Extensión de tríceps en polea", sets:"3 × 12-15", rest:"45 seg", equip:"polea",
+        tip:"Codos pegados al cuerpo, empuja la barra hacia abajo sin mover los hombros."},
+       {name:"Press cerrado con mancuernas", sets:"3 × 10-12", rest:"60 seg", equip:"mancuerna",
+        tip:"Acostado en el banco, igual que el press de banca pero con los codos pegados al cuerpo; empuja las mancuernas hacia arriba sintiendo el trabajo en el tríceps."},
+     ],
+     cooldown:"Estira pecho y tríceps 20-30 seg por lado."
+   },
+   {
+     weekday:"Jueves",
+     title:"Hombros y Abdomen",
+     focus:"Estabilidad y core",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Press militar con mancuernas", sets:"3 × 10-12", rest:"60 seg", equip:"mancuerna",
+        tip:"Sentado, empuja las mancuernas hacia arriba sin arquear la espalda baja."},
+       {name:"Elevaciones laterales con mancuernas", sets:"3 × 12-15", rest:"45 seg", equip:"mancuerna",
+        tip:"Brazos casi rectos; sube hasta la altura de los hombros y baja controlado, sin impulso."},
+       {name:"Plancha abdominal", sets:"3 × 20-30 seg", rest:"45 seg", equip:"colchoneta",
+        tip:"Cuerpo alineado de la cabeza a los talones, aprieta el abdomen todo el tiempo.",
+        alt:"¿Muy exigente? Apóyate en las rodillas en vez de en los pies."},
+       {name:"Elevación de piernas acostada", sets:"3 × 12-15", rest:"45 seg", equip:"colchoneta",
+        tip:"Acostada boca arriba, manos bajo la cadera; sube las piernas rectas y baja controlado sin tocar el suelo.",
+        alt:"¿Muy exigente? Dobla un poco las rodillas para hacerlo más fácil."},
+     ],
+     cooldown:"Estira hombros y espalda baja 20-30 seg por lado."
+   },
+   {
+     weekday:"Viernes",
+     title:"Full Body y Cardio",
+     focus:"Repaso general de la semana",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Peso muerto con mancuernas", sets:"3 × 12", rest:"60 seg", equip:"mancuerna",
+        tip:"Mancuernas frente a los muslos, espalda recta; baja empujando la cadera hacia atrás y sube apretando los glúteos."},
+       {name:"Face pull en polea (cuerda)", sets:"3 × 12-15", rest:"45 seg", equip:"polea",
+        tip:"Tira la cuerda hacia la cara separando las manos, codos altos, apretando los omóplatos."},
+       {name:"Step-ups en step", sets:"3 × 10 por pierna", rest:"60 seg", equip:"step",
+        tip:"Sube completo al step apoyando todo el pie, sin impulsarte con la pierna de atrás.",
+        alt:"¿Muy exigente? Usa un escalón más bajo."},
+       {name:"Abdominales en colchoneta", sets:"3 × 15", rest:"45 seg", equip:"colchoneta",
+        tip:"Acostada, rodillas dobladas, manos cruzadas en el pecho; sube los hombros del suelo apretando el abdomen y baja controlado."},
+       {name:"Cardio en trotadora", sets:"10-15 minutos", rest:"—", equip:"trotadora", video:"cardio_trotadora",
+        tip:"Ritmo constante y cómodo, para activar el cuerpo completo y cerrar la semana."},
+     ],
+     cooldown:"Estiramiento general de cuerpo completo, 30 seg por grupo muscular."
+   },
+ ];
+ 
+  
+ var nav = document.getElementById("dayNav");
+ var content = document.getElementById("dayContent");
+ var PROGRAMS = { fullbody: DAYS_FULLBODY, gluteos: DAYS_GLUTEOS };
+ function renderProgram(key){
+ nav.innerHTML = "";
+ content.innerHTML = "";
+ PROGRAMS[key].forEach(function(day, i){
+ var btn = document.createElement("button");
+ btn.textContent = day.weekday;
+ btn.onclick = function(){ showDay(i); };
+ btn.id = "navbtn-" + i;
+ nav.appendChild(btn);
+
+ var panel = document.createElement("section");
+ panel.className = "day-panel";
+ panel.id = "panel-" + i;
+ if(day.empty){
+ panel.innerHTML =
+ '<div class="cooldown" style="margin-top:20px;padding:32px 18px;">' +
+ '<b>Próximamente</b>' +
+ '<span>Todavía no hay una rutina cargada aquí. Cuando esté lista, va a aparecer en este espacio.</span>' +
+ '</div>';
+ } else {
+ panel.innerHTML =
+ '<div class="day-banner"><p class="num">'+day.weekday+'</p><h2>'+day.title+'</h2><p class="focus">'+day.focus+'</p></div>' +
+ '<div class="warmup"><div><b>Calentamiento</b><span>'+day.warmup+'</span></div></div>' +
+ day.exercises.map(function(ex, idx){
+ return '<div class="exercise"><div class="badge">'+(idx+1)+'</div><div class="info">' +
+ '<h3>'+ex.name+'</h3>' +
+ '<div class="stats"><span>'+ex.sets+'</span><span>Descanso '+ex.rest+'</span></div>' +
+ (ex.video ? '<div class="video-wrap"><span class="video-lbl">Video de referencia</span><video class="ex-video" src="'+VIDEOS[ex.video]+'" controls muted loop playsinline preload="none"></video></div>' : '') +
+ '<p class="tip">'+ex.tip+'</p>' +
+ (ex.alt ? '<p class="alt">'+ex.alt+'</p>' : '') +
+ '</div></div>';
+ }).join('') +
+ '<div class="cooldown"><b>Estiramientos finales</b><span>'+day.cooldown+'</span></div>';
+ }
+ content.appendChild(panel);
+ });
+ showDay(0);
+ }
+ function showDay(i){
+ document.querySelectorAll(".day-panel").forEach(function(p){ p.classList.remove("active"); });
+ document.querySelectorAll("nav.days button").forEach(function(b){ b.classList.remove("active"); });
+ document.getElementById("panel-" + i).classList.add("active");
+ document.getElementById("navbtn-" + i).classList.add("active");
+ }
+ document.querySelectorAll("#progSel .progbtn").forEach(function(pbtn){
+ pbtn.addEventListener("click", function(){
+ document.querySelectorAll("#progSel .progbtn").forEach(function(b){ b.classList.remove("active"); });
+ pbtn.classList.add("active");
+ renderProgram(pbtn.getAttribute("data-prog"));
+ });
+ });
+ renderProgram("fullbody");  
+  
+ /* =====================================================================  
+ ADMIN: tabs, balance, cierre de caja — local per-browser (unsynced),  
+ same behaviour as the previous standalone Gestión page.  
+ ===================================================================== */  
+ var LOCAL_KEY = "wgym_admin_local_v1";  
+ function loadLocal(){  
+ try{ var raw = localStorage.getItem(LOCAL_KEY); if(raw) return JSON.parse(raw); }catch(e){}  
+ return { fixedCosts:[{id:uid(), name:"Arriendo (incluye gastos comunes)", amount:150000}], gastosVariables:[], cierres:[] };  
+ }  
+ function saveLocal(){ try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(local)); }catch(e){} }  
+ var local = loadLocal();  
+  
+ var tabbtns = Array.prototype.slice.call(document.querySelectorAll(".tabbtn"));  
+ tabbtns.forEach(function(btn){  
+ btn.addEventListener("click", function(){  
+ tabbtns.forEach(function(b){ b.setAttribute("aria-selected", b===btn ? "true":"false"); });  
+ document.querySelectorAll(".panel2").forEach(function(p){ p.classList.remove("active"); });  
+ document.getElementById("panel-" + btn.dataset.tab).classList.add("active");  
+ });  
+ });  
+  
+ function renderFixed(){  
+ var tbody = document.getElementById("fixed-tbody");  
+ tbody.innerHTML = "";  
+ if(local.fixedCosts.length===0){ tbody.innerHTML = '<tr><td colspan="3" class="empty">Sin gastos fijos registrados.</td></tr>'; }  
+ var total = 0;  
+ local.fixedCosts.forEach(function(fx){  
+ total += fx.amount;  
+ var tr = document.createElement("tr");  
+ tr.innerHTML = '<td>'+escapeHtml(fx.name)+'</td><td class="num">'+clp(fx.amount)+'</td><td></td>';  
+ var tdDel = tr.lastElementChild;  
+ var b = document.createElement("button"); b.className="iconbtn"; b.textContent="✕";  
+ b.addEventListener("click", function(){ local.fixedCosts = local.fixedCosts.filter(function(f){return f.id!==fx.id;}); saveLocal(); renderFixed(); });  
+ tdDel.appendChild(b);  
+ tbody.appendChild(tr);  
+ });  
+ document.getElementById("fx-total").textContent = clp(total);  
+ renderBalanceTotal();  
+ }  
+ attachMoneyFormatting(document.getElementById("fx-amount"));  
+ document.getElementById("fx-add").addEventListener("click", function(){  
+ var name = document.getElementById("fx-name").value.trim();  
+ var amount = parseMoney(document.getElementById("fx-amount").value);  
+ if(!name){ alert("Completa el nombre del gasto."); return; }  
+ local.fixedCosts.push({id:uid(), name:name, amount:amount});  
+ saveLocal();  
+ document.getElementById("fx-name").value=""; document.getElementById("fx-amount").value="";  
+ renderFixed();  
+ });  
+ function gastosVariablesMesTotal(){  
+ var mk = monthKeyDMY(todayISO());  
+ return local.gastosVariables.filter(function(g){ return monthKeyDMY(g.date)===mk; }).reduce(function(s,g){return s+g.amount;},0);  
+ }  
+ function renderGV(){  
+ var list = document.getElementById("gv-list");  
+ list.innerHTML = "";  
+ var sorted = local.gastosVariables.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });  
+ if(sorted.length===0){ list.innerHTML = '<div class="empty">Sin gastos variables registrados.</div>'; }  
+ sorted.forEach(function(g){  
+ var row = document.createElement("div");  
+ row.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line);";  
+ row.innerHTML = '<span>'+escapeHtml(g.name)+' · '+fmtDateEs(g.date)+'</span><span class="tabular">'+clp(g.amount)+'</span>';  
+ list.appendChild(row);  
+ });  
+ document.getElementById("gv-total").textContent = clp(gastosVariablesMesTotal());  
+ renderBalanceTotal();  
+ }  
+ attachDateFormatting(document.getElementById("gv-date"));  
+ attachMoneyFormatting(document.getElementById("gv-amount"));  
+ document.getElementById("gv-add").addEventListener("click", function(){  
+ var date = document.getElementById("gv-date").value.trim() || todayISO();  
+ var name = document.getElementById("gv-name").value.trim();  
+ var amount = parseMoney(document.getElementById("gv-amount").value);  
+ if(!name || !(amount>0)){ alert("Completa descripción y monto."); return; }  
+ local.gastosVariables.push({id:uid(), date:date, name:name, amount:amount});  
+ saveLocal();  
+ document.getElementById("gv-name").value=""; document.getElementById("gv-amount").value="";  
+ renderGV();  
+ });  
+ function renderBalanceTotal(){  
+ var totalFijos = local.fixedCosts.reduce(function(s,f){return s+f.amount;},0);  
+ document.getElementById("bal-total").textContent = clp(totalFijos + gastosVariablesMesTotal());  
+ }  
+  
+ attachDateFormatting(document.getElementById("c-date"));  
+ ["c-efectivo","c-tarjeta","c-transferencia"].forEach(function(id){ attachMoneyFormatting(document.getElementById(id)); });  
+ document.getElementById("c-save").addEventListener("click", function(){  
+ var date = document.getElementById("c-date").value.trim() || todayISO();  
+ var efectivo = parseMoney(document.getElementById("c-efectivo").value);  
+ var tarjeta = parseMoney(document.getElementById("c-tarjeta").value);  
+ var transferencia = parseMoney(document.getElementById("c-transferencia").value);  
+ var total = efectivo + tarjeta + transferencia;  
+ if(total<=0){ alert("Anota al menos un monto antes de guardar."); return; }  
+ local.cierres.push({id:uid(), date:date, total:total});  
+ saveLocal();  
+ ["c-efectivo","c-tarjeta","c-transferencia"].forEach(function(id){ document.getElementById(id).value=""; });  
+ renderCierres();  
+ });  
+ function renderCierres(){  
+ var list = document.getElementById("c-list");  
+ list.innerHTML = "";  
+ var sorted = local.cierres.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });  
+ if(sorted.length===0){ list.innerHTML = '<div class="empty">Sin cierres guardados.</div>'; }  
+ sorted.forEach(function(c){  
+ var row = document.createElement("div");  
+ row.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line);";  
+ row.innerHTML = '<span>'+fmtDateEs(c.date)+'</span><span class="tabular">'+clp(c.total)+'</span>';  
+ list.appendChild(row);  
+ });  
+ var mk = monthKeyDMY(todayISO());  
+ var mesTotal = local.cierres.filter(function(c){return monthKeyDMY(c.date)===mk;}).reduce(function(s,c){return s+c.total;},0);  
+ document.getElementById("c-mes-total").textContent = clp(mesTotal);  
+ }  
+  
+ renderFixed(); renderGV(); renderCierres();  
+  
+ /* ---------- go ---------- */  
+ initRoute();  
+})();  
+</script>  
