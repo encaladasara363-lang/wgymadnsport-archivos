@@ -194,47 +194,8 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 </style>  
   
 <div id="appRoot" artifact-local>
-<!-- ===================== ADMIN VIEW (gestión) ===================== -->  
-<div id="adminView" class="shell">  
- <div class="masthead">  
- <div class="mark"><img id="adminLogoImg" alt="WGYMADNSPORT"></div>  
- <div style="flex:1;">  
- <h1>GYM <span>ADN</span> SPORT · GESTIÓN</h1>  
- <p>Socios · Balance · Cierre de caja</p>  
- </div>  
- </div>  
-  
- <h2 style="margin-bottom:18px;color:var(--dorado);font-size:13px;letter-spacing:.1em;text-transform:uppercase;">Registro de Socios</h2>
-  
- <!-- TAB: SOCIOS -->  
- <section class="panel2 active" id="panel-socios">  
- <div class="card" style="border-color:var(--dorado);">  
- <div class="card-head"><h2>+ Agregar socio nuevo</h2></div>  
- <p class="card-sub">Completa los datos y presiona "Agregar" — queda disponible al instante en la tabla de abajo y en su rutina.</p>  
- <div class="addrow" style="background:transparent;border:none;padding:0;">  
- <div><label for="s-nombre">Nombre</label><input type="text" id="s-nombre" placeholder="Ej: Sara"></div>  
- <div><label for="s-apellido">Apellido</label><input type="text" id="s-apellido" placeholder="Ej: Encalada"></div>  
- <div><label for="s-rut">RUT</label><input type="text" id="s-rut" placeholder="Sin Rut"></div>  
- <div><label for="s-plan">Plan</label><input type="text" id="s-plan" placeholder="Full Mensual"></div>  
- <div><label for="s-monto">Monto</label><input type="text" id="s-monto" placeholder="33000"></div>  
- <div><label for="s-venc">Vencimiento</label><input type="text" id="s-venc" placeholder="20-09-2026"></div>  
- <div><label for="s-rutina">¿Tiene rutina?</label><select id="s-rutina"><option value="No">No</option><option value="Si">Sí</option></select></div>  
- <button class="btn btn-primary" id="s-add">Agregar</button>  
- </div>  
- </div>  
-  
- <div class="card">  
- <div class="card-head"><h2>Registro de socios</h2></div>  
- <p class="card-sub">Esta tabla es la fuente única de socios y controla el acceso a la rutina. Si agregas, editas o eliminas algo aquí, avísame por chat con los cambios para que yo actualice y publique la página — así queda igual para todos.</p>  
- <input type="text" id="socio-search" placeholder="Buscar socio por nombre o apellido..." style="width:100%;margin-bottom:12px;background:var(--negro);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--blanco);font-family:inherit;">  
- <div class="twrap">  
- <table>  
- <thead>  
- <tr>  
- <th>Nombre</th><th>Apellido</th><th>RUT</th><th>Plan</th>  
- <th class="num">Monto</th><th>Vencimiento (DD-MM-AAAA)</th><th>Rutina</th><th>Estado</th><th style="width:44px;"></th>  
- </tr>  
- </thead>  
+<div id="sociosDataStore" style="display:none" aria-hidden="true">
+<table>
  <tbody id="socios-tbody" artifact-sync>  
 <tr><td contenteditable="true">ALAN</td><td contenteditable="true">PEREIRA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
 <tr><td contenteditable="true">ALAN</td><td contenteditable="true">RAMIREZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
@@ -397,28 +358,42 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 <tr><td contenteditable="true">YAJAIRA</td><td contenteditable="true">PINEDA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
 <tr><td contenteditable="true">YANCARLA</td><td contenteditable="true">SUAREZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
  </tbody>  
- </table>  
- </div>  
- <p class="hint2">Edita cualquier celda de la tabla haciendo clic directo sobre el texto. El estado (<b>Al día</b> / <b>Vence pronto</b> / <b>Vencido</b>) se calcula solo, más abajo.</p>  
- <div class="statrow">  
- <div class="stat"><span class="eyebrow">Socios al día</span><span class="val tabular" id="st-aldia">0</span></div>  
- <div class="stat"><span class="eyebrow">Vencen pronto</span><span class="val tabular" id="st-pronto">0</span></div>  
- <div class="stat"><span class="eyebrow">Vencidos</span><span class="val tabular" id="st-vencido">0</span></div>  
- <div class="stat"><span class="eyebrow">Ingreso mensual esperado</span><span class="val tabular" id="st-ingreso">$0</span></div>  
- </div>  
- </div>  
- </section>  
-  
- <!-- TAB: BALANCE -->  
-</div>  
+</table>
 </div>
   
+<!-- ===================== GATE (default view) ===================== -->  
+<div id="gate" class="gate">  
+ <div class="gate-card">  
+ <img class="gate-logo" id="gateLogoImg" alt="WGYMADNSPORT">  
+ <p class="gate-kicker">WGYMADNSPORT Tocopilla</p>  
+ <h2>Acceso a tu tarjeta virtual</h2>
+ <p class="gate-sub">Ingresa tu nombre y apellido, como está registrado en el gimnasio</p>  
+ <input type="text" id="gateNombre" class="gate-input" placeholder="Nombre" autocomplete="off">  
+ <input type="text" id="gateApellido" class="gate-input" placeholder="Apellido" autocomplete="off">  
+ <button id="gateBtn" class="gate-btn">Entrar</button>  
+ <p id="gateError" class="gate-error" hidden>No encontramos ese nombre entre los socios registrados. Consulta en recepción.</p>  
+ </div>  
+</div>  
+
+<!-- ===================== CARD VIEW (tarjeta virtual) ===================== -->
+<div id="cardView" class="wrap" hidden>
+ <header class="masthead2">
+ <img class="logo" id="cardLogoImg" alt="WGYMADNSPORT">
+ <p class="gymname">WGYMADNSPORT Tocopilla</p>
+ <h1>Tarjeta <span>Virtual</span></h1>
+ <p class="sub">tu acceso digital al gimnasio</p>
+ </header>
+ <div class="member-card" id="memberCard"></div>
+ <footer class="footer2">
+ <p class="slogan">ENTRENA CON ACTITUD</p>
+ <p class="name">WGYMADNSPORT · Tocopilla</p>
+ </footer>
+</div>
+
+</div>
+
 <script>  
-const LOGO_B64 = "assets/logo.jpg";  
-const SENTADILLA_VIDEO = "assets/sentadilla.mp4";  
-const EXTENSION_PIERNAS_VIDEO = "assets/extension_piernas.mp4";  
-const CURL_FEMORAL_VIDEO = "assets/curl_femoral.mp4";  
-const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
+const LOGO_B64 = "assets/logo.jpg";
 </script>  
 <script>  
 (function(){  
@@ -438,72 +413,21 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  if(isNaN(d)) return null;  
  return d;  
  }  
- function monthKeyDMY(str){  
- var d = parseDMY(str);  
- if(!d) return "";  
- return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");  
- }  
- function fmtDateEs(dmy){  
- var d = parseDMY(dmy);  
- if(!d) return dmy || "";  
- return d.toLocaleDateString("es-CL", {day:"numeric", month:"short", year:"numeric"});  
- }  
- function clp(n){  
- n = Math.round(Number(n)||0);  
- return "$" + n.toLocaleString("es-CL");  
- }  
- function parseMoney(str){  
- var digits = String(str==null?"":str).replace(/[^\d]/g,"");  
- return digits ? parseInt(digits,10) : 0;  
- }  
- function normName(s){  
- return (s||"").toString().trim().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ");  
- }  
- function uid(){ return Math.random().toString(36).slice(2,10); }  
+ function clp(n){
+ n = Math.round(Number(n)||0);
+ return "$" + n.toLocaleString("es-CL");
+ }
+ function parseMoney(str){
+ var digits = String(str==null?"":str).replace(/[^\d]/g,"");
+ return digits ? parseInt(digits,10) : 0;
+ }
+ function normName(s){
+ return (s||"").toString().trim().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ");
+ }
+
+ document.getElementById("gateLogoImg").src = LOGO_B64;
+ document.getElementById("cardLogoImg").src = LOGO_B64;
   
- /* Auto-inserts the dashes as you type digits into a DD-MM-AAAA field. */  
- function digitsToDMY(digits){  
- digits = digits.slice(0, 8);  
- var out = digits.slice(0, 2);  
- if(digits.length > 2) out += "-" + digits.slice(2, 4);  
- if(digits.length > 4) out += "-" + digits.slice(4, 8);  
- return out;  
- }  
- function attachDateFormatting(input){  
- input.addEventListener("input", function(){  
- var digits = input.value.replace(/[^\d]/g, "");  
- input.value = digitsToDMY(digits);  
- });  
- }  
- function attachDateFormattingContentEditable(td){  
- td.addEventListener("input", function(){  
- var digits = td.textContent.replace(/[^\d]/g, "");  
- td.textContent = digitsToDMY(digits);  
- var range = document.createRange();  
- range.selectNodeContents(td);  
- range.collapse(false);  
- var sel = window.getSelection();  
- sel.removeAllRanges();  
- sel.addRange(range);  
- });  
- }  
-  
- /* Auto-formats a money field with the $ sign and thousands separators  
- as you type. */  
- function attachMoneyFormatting(input){  
- input.addEventListener("input", function(){  
- var n = parseMoney(input.value);  
- input.value = n ? clp(n) : "";  
- });  
- }  
- function attachMoneyFormattingContentEditable(td){  
- td.addEventListener("focusout", function(){  
- td.textContent = clp(parseMoney(td.textContent));  
- });  
- }  
-  
-   document.getElementById("adminLogoImg").src = LOGO_B64;  
-   
  /* =====================================================================  
  SOCIOS — shared live table (artifact-sync region). The <tbody> markup  
  itself IS the document: rows are read directly, never mirrored into a  
@@ -536,172 +460,68 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  if(diffDays <= 7) return {cls:"warn", txt:"Vence pronto"};  
  return {cls:"good", txt:"Al día"};  
  }  
- function makeSocioRow(s){  
- var tr = document.createElement("tr");  
- ["nombre","apellido","rut","plan"].forEach(function(k){  
- var td = document.createElement("td");  
- td.contentEditable = "true";  
- td.textContent = s[k] || "";  
- tr.appendChild(td);  
- });  
- var tdMonto = document.createElement("td");  
- tdMonto.contentEditable = "true";  
- tdMonto.className = "num";  
- tdMonto.textContent = clp(s.monto || 0);  
- tr.appendChild(tdMonto);  
- var tdVenc = document.createElement("td");  
- tdVenc.contentEditable = "true";  
- tdVenc.textContent = s.vencimiento || "";  
- tr.appendChild(tdVenc);  
- var tdRutina = document.createElement("td");  
- tdRutina.contentEditable = "true";  
- tdRutina.textContent = s.rutina || "No";  
- tr.appendChild(tdRutina);  
- var tdEstado = document.createElement("td");  
- tdEstado.setAttribute("artifact-local", "");  
- tdEstado.className = "estado-cell";  
- tr.appendChild(tdEstado);  
- var tdDel = document.createElement("td");  
- var delBtn = document.createElement("button");  
- delBtn.className = "iconbtn";  
- delBtn.title = "Eliminar";  
- delBtn.innerHTML = '✕';  
- tdDel.appendChild(delBtn);  
- tr.appendChild(tdDel);  
- return tr;  
- }  
- function renderStatusColumn(){  
- Array.prototype.forEach.call(sociosTbody.children, function(tr){  
- var cell = tr.querySelector(".estado-cell");  
- if(!cell) return;  
- var s = socioRowData(tr);  
- var est = estadoDe(s.vencimiento);  
- var html = '<span class="pill '+est.cls+'"><span class="dot"></span>'+est.txt+'</span>';  
- if(cell.innerHTML !== html) cell.innerHTML = html;  
- });  
- }  
- /* Keeps the shared list alphabetical (by nombre, then apellido) as new  
- socios are added — inserting one row is still a single gesture. */  
- function repositionSocioRow(tr){  
- var d = socioRowData(tr);  
- var key = normName(d.nombre) + " " + normName(d.apellido);  
- var rows = Array.prototype.slice.call(sociosTbody.children).filter(function(r){ return r !== tr; });  
- var before = rows.find(function(existing){  
- var ed = socioRowData(existing);  
- var existingKey = normName(ed.nombre) + " " + normName(ed.apellido);  
- return existingKey > key;  
- });  
- if(before) sociosTbody.insertBefore(tr, before);  
- else sociosTbody.appendChild(tr);  
- }  
- function insertSocioSorted(tr){  
- sociosTbody.appendChild(tr);  
- repositionSocioRow(tr);  
- }  
- /* Reposition a row the moment its Nombre or Apellido cell is edited, so  
- the list stays alphabetical without a manual re-sort. Also auto-formats  
- the Monto cell ($ + thousands) once editing that cell finishes. */  
- sociosTbody.addEventListener("focusout", function(e){  
- var td = e.target;  
- if(td.tagName !== "TD" || !td.isContentEditable) return;  
- var tr = td.closest("tr");  
- if(!tr) return;  
- var colIndex = Array.prototype.indexOf.call(tr.children, td);  
- if(colIndex === 0 || colIndex === 1) repositionSocioRow(tr);  
- if(colIndex === 4) td.textContent = clp(parseMoney(td.textContent));  
- });  
- /* Auto-inserts the dashes as you type into the Vencimiento cell. */  
- sociosTbody.addEventListener("input", function(e){  
- var td = e.target;  
- if(td.tagName !== "TD" || !td.isContentEditable) return;  
- var tr = td.closest("tr");  
- if(!tr) return;  
- var colIndex = Array.prototype.indexOf.call(tr.children, td);  
- if(colIndex !== 5) return;  
- var digits = td.textContent.replace(/[^\d]/g, "");  
- var formatted = digitsToDMY(digits);  
- if(td.textContent === formatted) return;  
- td.textContent = formatted;  
- var range = document.createRange();  
- range.selectNodeContents(td);  
- range.collapse(false);  
- var sel = window.getSelection();  
- sel.removeAllRanges();  
- sel.addRange(range);  
- });  
- /* Delegated delete handler — covers both the statically-embedded rows and  
- rows added later via the Agregar button, all from this single gesture. */  
- sociosTbody.addEventListener("click", function(e){  
- var btn = e.target.closest(".iconbtn");  
- if(!btn) return;  
- var tr = btn.closest("tr");  
- if(tr){ tr.remove(); renderEstadoOverlay(); }  
- });  
-  
- /* Search box: purely local display filter (data-local-* never syncs to  
- other viewers), so typing here never touches the shared document. */  
- document.getElementById("socio-search").addEventListener("input", function(e){  
- var q = normName(e.target.value);  
- Array.prototype.forEach.call(sociosTbody.children, function(tr){  
- var s = socioRowData(tr);  
- var match = !q || normName(s.nombre).indexOf(q) !== -1 || normName(s.apellido).indexOf(q) !== -1;  
- if(match) tr.removeAttribute("data-local-filtered");  
- else tr.setAttribute("data-local-filtered", "true");  
- });  
- });  
-  
- attachMoneyFormatting(document.getElementById("s-monto"));  
- attachDateFormatting(document.getElementById("s-venc"));  
- document.getElementById("s-add").addEventListener("click", function(){  
- var nombre = document.getElementById("s-nombre").value.trim();  
- var apellido = document.getElementById("s-apellido").value.trim();  
- if(!nombre || !apellido){ alert("Completa al menos nombre y apellido."); return; }  
- var s = {  
- nombre: nombre, apellido: apellido,  
- rut: document.getElementById("s-rut").value.trim() || "Sin Rut",  
- plan: document.getElementById("s-plan").value.trim(),  
- monto: parseMoney(document.getElementById("s-monto").value),  
- vencimiento: document.getElementById("s-venc").value.trim(),  
- rutina: document.getElementById("s-rutina").value  
- };  
- insertSocioSorted(makeSocioRow(s));  
- ["s-nombre","s-apellido","s-rut","s-plan","s-monto","s-venc"].forEach(function(id){ document.getElementById(id).value = ""; });
- document.getElementById("s-rutina").value = "No";  
- renderEstadoOverlay();  
- });  
-  
- /* Updates the local-only "Estado" pill in every row, plus the summary  
- stats. Never touches the synced part of the tbody. */  
- function renderEstadoOverlay(){  
- renderStatusColumn();  
- var socios = allSocios();  
- var aldia=0, pronto=0, vencido=0, ingreso=0;  
- socios.forEach(function(s){  
- var est = estadoDe(s.vencimiento);  
- if(est.cls==="good") aldia++; else if(est.cls==="warn") pronto++; else vencido++;  
- ingreso += s.monto || 0;  
- });  
- document.getElementById("st-aldia").textContent = aldia;  
- document.getElementById("st-pronto").textContent = pronto;  
- document.getElementById("st-vencido").textContent = vencido;  
- document.getElementById("st-ingreso").textContent = clp(ingreso);  
- }  
- function escapeHtml(s){  
- return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });  
- }  
-  
- /* Ignore mutations that are themselves just this function's own writes  
- into the local .estado-cell pills, or every edit would re-trigger  
- itself forever. */  
- new MutationObserver(function(records){  
- var relevant = records.some(function(rec){  
- var node = rec.target.nodeType === 1 ? rec.target : rec.target.parentElement;  
- return !(node && node.closest(".estado-cell"));  
- });  
- if(relevant) renderEstadoOverlay();  
- }).observe(sociosTbody, {childList:true, characterData:true, subtree:true});  
- setInterval(renderEstadoOverlay, 5 * 60 * 1000);  
-  
- renderEstadoOverlay();
+ function escapeHtml(s){
+ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+ }
+
+ /* ---------- gate: find socio (no vencimiento check — la tarjeta nunca bloquea) ---------- */
+ var ACCESS_KEY = "wgym_tarjeta_access_nombre";
+ function findSocio(nombre, apellido){
+ var n = normName(nombre), a = normName(apellido);
+ if(!n || !a) return null;
+ return allSocios().find(function(s){ return normName(s.nombre)===n && normName(s.apellido)===a; }) || null;
+ }
+ function diasParaVencer(s){
+ var venc = parseDMY(s.vencimiento);
+ if(!venc) return 9999;
+ var hoy = parseDMY(todayISO());
+ return Math.round((venc - hoy) / 86400000);
+ }
+ function renderCard(s){
+ var est = estadoDe(s.vencimiento);
+ document.getElementById("memberCard").innerHTML =
+ '<p class="mc-kicker">Socio WGYMADNSPORT</p>' +
+ '<div class="mc-name">'+escapeHtml(s.nombre)+' '+escapeHtml(s.apellido)+'</div>' +
+ '<div class="mc-plan">'+escapeHtml(s.plan||"Sin plan asignado")+'</div>' +
+ '<div class="mc-row"><span>Vencimiento</span><b>'+escapeHtml(s.vencimiento||"—")+'</b></div>' +
+ '<div class="mc-status"><span class="pill '+est.cls+'"><span class="dot"></span>'+est.txt+'</span></div>';
+ }
+ function unlockCardView(s){
+ document.getElementById("gate").hidden = true;
+ document.getElementById("cardView").hidden = false;
+ renderCard(s);
+ }
+ function tryLogin(nombre, apellido){
+ var socio = findSocio(nombre, apellido);
+ if(socio){
+ try{ localStorage.setItem(ACCESS_KEY, JSON.stringify({n:nombre, a:apellido})); }catch(e){}
+ unlockCardView(socio);
+ return true;
+ }
+ document.getElementById("gateError").hidden = false;
+ return false;
+ }
+
+ /* ---------- routing ---------- */
+ function initRoute(){
+ var stored = null;
+ try{ stored = JSON.parse(localStorage.getItem(ACCESS_KEY) || "null"); }catch(e){}
+ if(stored){
+ var socio = findSocio(stored.n, stored.a);
+ if(socio){ unlockCardView(socio); return; }
+ }
+ }
+ document.getElementById("gateBtn").addEventListener("click", function(){
+ tryLogin(document.getElementById("gateNombre").value, document.getElementById("gateApellido").value);
+ });
+ document.getElementById("gateApellido").addEventListener("keydown", function(e){
+ if(e.key === "Enter") tryLogin(document.getElementById("gateNombre").value, document.getElementById("gateApellido").value);
+ });
+ document.getElementById("gateNombre").addEventListener("keydown", function(e){
+ if(e.key === "Enter") document.getElementById("gateApellido").focus();
+ });
+
+ /* ---------- go ---------- */
+ initRoute();
 })();
 </script>  

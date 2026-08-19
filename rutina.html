@@ -194,47 +194,8 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 </style>  
   
 <div id="appRoot" artifact-local>
-<!-- ===================== ADMIN VIEW (gestión) ===================== -->  
-<div id="adminView" class="shell">  
- <div class="masthead">  
- <div class="mark"><img id="adminLogoImg" alt="WGYMADNSPORT"></div>  
- <div style="flex:1;">  
- <h1>GYM <span>ADN</span> SPORT · GESTIÓN</h1>  
- <p>Socios · Balance · Cierre de caja</p>  
- </div>  
- </div>  
-  
- <h2 style="margin-bottom:18px;color:var(--dorado);font-size:13px;letter-spacing:.1em;text-transform:uppercase;">Registro de Socios</h2>
-  
- <!-- TAB: SOCIOS -->  
- <section class="panel2 active" id="panel-socios">  
- <div class="card" style="border-color:var(--dorado);">  
- <div class="card-head"><h2>+ Agregar socio nuevo</h2></div>  
- <p class="card-sub">Completa los datos y presiona "Agregar" — queda disponible al instante en la tabla de abajo y en su rutina.</p>  
- <div class="addrow" style="background:transparent;border:none;padding:0;">  
- <div><label for="s-nombre">Nombre</label><input type="text" id="s-nombre" placeholder="Ej: Sara"></div>  
- <div><label for="s-apellido">Apellido</label><input type="text" id="s-apellido" placeholder="Ej: Encalada"></div>  
- <div><label for="s-rut">RUT</label><input type="text" id="s-rut" placeholder="Sin Rut"></div>  
- <div><label for="s-plan">Plan</label><input type="text" id="s-plan" placeholder="Full Mensual"></div>  
- <div><label for="s-monto">Monto</label><input type="text" id="s-monto" placeholder="33000"></div>  
- <div><label for="s-venc">Vencimiento</label><input type="text" id="s-venc" placeholder="20-09-2026"></div>  
- <div><label for="s-rutina">¿Tiene rutina?</label><select id="s-rutina"><option value="No">No</option><option value="Si">Sí</option></select></div>  
- <button class="btn btn-primary" id="s-add">Agregar</button>  
- </div>  
- </div>  
-  
- <div class="card">  
- <div class="card-head"><h2>Registro de socios</h2></div>  
- <p class="card-sub">Esta tabla es la fuente única de socios y controla el acceso a la rutina. Si agregas, editas o eliminas algo aquí, avísame por chat con los cambios para que yo actualice y publique la página — así queda igual para todos.</p>  
- <input type="text" id="socio-search" placeholder="Buscar socio por nombre o apellido..." style="width:100%;margin-bottom:12px;background:var(--negro);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--blanco);font-family:inherit;">  
- <div class="twrap">  
- <table>  
- <thead>  
- <tr>  
- <th>Nombre</th><th>Apellido</th><th>RUT</th><th>Plan</th>  
- <th class="num">Monto</th><th>Vencimiento (DD-MM-AAAA)</th><th>Rutina</th><th>Estado</th><th style="width:44px;"></th>  
- </tr>  
- </thead>  
+<div id="sociosDataStore" style="display:none" aria-hidden="true">
+<table>
  <tbody id="socios-tbody" artifact-sync>  
 <tr><td contenteditable="true">ALAN</td><td contenteditable="true">PEREIRA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Funcionario Publico</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
 <tr><td contenteditable="true">ALAN</td><td contenteditable="true">RAMIREZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">03-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
@@ -397,20 +358,48 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 <tr><td contenteditable="true">YAJAIRA</td><td contenteditable="true">PINEDA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
 <tr><td contenteditable="true">YANCARLA</td><td contenteditable="true">SUAREZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>  
  </tbody>  
- </table>  
- </div>  
- <p class="hint2">Edita cualquier celda de la tabla haciendo clic directo sobre el texto. El estado (<b>Al día</b> / <b>Vence pronto</b> / <b>Vencido</b>) se calcula solo, más abajo.</p>  
- <div class="statrow">  
- <div class="stat"><span class="eyebrow">Socios al día</span><span class="val tabular" id="st-aldia">0</span></div>  
- <div class="stat"><span class="eyebrow">Vencen pronto</span><span class="val tabular" id="st-pronto">0</span></div>  
- <div class="stat"><span class="eyebrow">Vencidos</span><span class="val tabular" id="st-vencido">0</span></div>  
- <div class="stat"><span class="eyebrow">Ingreso mensual esperado</span><span class="val tabular" id="st-ingreso">$0</span></div>  
- </div>  
- </div>  
- </section>  
+</table>
+</div>
   
- <!-- TAB: BALANCE -->  
+<!-- ===================== GATE (default view) ===================== -->  
+<div id="gate" class="gate">  
+ <div class="gate-card">  
+ <img class="gate-logo" id="gateLogoImg" alt="WGYMADNSPORT">  
+ <p class="gate-kicker">WGYMADNSPORT Tocopilla</p>  
+ <h2>Acceso a tu rutina</h2>  
+ <p class="gate-sub">Ingresa tu nombre y apellido, como está registrado en el gimnasio</p>  
+ <input type="text" id="gateNombre" class="gate-input" placeholder="Nombre" autocomplete="off">  
+ <input type="text" id="gateApellido" class="gate-input" placeholder="Apellido" autocomplete="off">  
+ <button id="gateBtn" class="gate-btn">Entrar</button>  
+ <p id="gateError" class="gate-error" hidden>No encontramos ese nombre, tu plan está vencido, o todavía no tienes rutina asignada. Consulta en recepción.</p>  
+ </div>  
 </div>  
+
+
+<!-- ===================== SOCIO VIEW (rutina) ===================== -->  
+<div id="socioView" class="wrap" hidden>  
+ <header class="masthead2">  
+ <img class="logo" id="logoImg" alt="WGYMADNSPORT">  
+ <p class="gymname">WGYMADNSPORT Tocopilla</p>  
+ <h1>Rutina de <span>Principiantes</span> Diseñada para Mujeres</h1>  
+ <p class="sub">técnica correcta · progresa a tu ritmo</p>  
+ </header>  
+ <div id="expiryBanner" class="expiry-banner" hidden></div>  
+ <div class="progsel" id="progSel">
+ <button type="button" class="progbtn active" data-prog="fullbody">Full Body 5 Días</button>
+ <button type="button" class="progbtn" data-prog="gluteos">Piernas y Glúteos</button>
+ </div>
+ <nav class="days" id="dayNav"></nav>  
+ <main class="daymain" id="dayContent"></main>  
+ <div class="info-card">  
+ <b>Cómo usar esta rutina:</b> descansa el tiempo indicado entre series, prioriza siempre la técnica antes que el peso, y bebe agua durante todo el entrenamiento. Si sientes dolor (no cansancio normal) o tienes dudas sobre algún movimiento, consulta a tu profesor en el gimnasio.  
+ </div>  
+ <footer class="footer2">  
+ <p class="slogan">ENTRENA CON ACTITUD</p>  
+ <p class="name">WGYMADNSPORT · Tocopilla</p>  
+ </footer>  
+</div>  
+  
 </div>
   
 <script>  
@@ -502,8 +491,9 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  });  
  }  
   
-   document.getElementById("adminLogoImg").src = LOGO_B64;  
-   
+ document.getElementById("gateLogoImg").src = LOGO_B64;
+ document.getElementById("logoImg").src = LOGO_B64;
+  
  /* =====================================================================  
  SOCIOS — shared live table (artifact-sync region). The <tbody> markup  
  itself IS the document: rows are read directly, never mirrored into a  
@@ -536,172 +526,250 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  if(diffDays <= 7) return {cls:"warn", txt:"Vence pronto"};  
  return {cls:"good", txt:"Al día"};  
  }  
- function makeSocioRow(s){  
- var tr = document.createElement("tr");  
- ["nombre","apellido","rut","plan"].forEach(function(k){  
- var td = document.createElement("td");  
- td.contentEditable = "true";  
- td.textContent = s[k] || "";  
- tr.appendChild(td);  
- });  
- var tdMonto = document.createElement("td");  
- tdMonto.contentEditable = "true";  
- tdMonto.className = "num";  
- tdMonto.textContent = clp(s.monto || 0);  
- tr.appendChild(tdMonto);  
- var tdVenc = document.createElement("td");  
- tdVenc.contentEditable = "true";  
- tdVenc.textContent = s.vencimiento || "";  
- tr.appendChild(tdVenc);  
- var tdRutina = document.createElement("td");  
- tdRutina.contentEditable = "true";  
- tdRutina.textContent = s.rutina || "No";  
- tr.appendChild(tdRutina);  
- var tdEstado = document.createElement("td");  
- tdEstado.setAttribute("artifact-local", "");  
- tdEstado.className = "estado-cell";  
- tr.appendChild(tdEstado);  
- var tdDel = document.createElement("td");  
- var delBtn = document.createElement("button");  
- delBtn.className = "iconbtn";  
- delBtn.title = "Eliminar";  
- delBtn.innerHTML = '✕';  
- tdDel.appendChild(delBtn);  
- tr.appendChild(tdDel);  
- return tr;  
- }  
- function renderStatusColumn(){  
- Array.prototype.forEach.call(sociosTbody.children, function(tr){  
- var cell = tr.querySelector(".estado-cell");  
- if(!cell) return;  
- var s = socioRowData(tr);  
- var est = estadoDe(s.vencimiento);  
- var html = '<span class="pill '+est.cls+'"><span class="dot"></span>'+est.txt+'</span>';  
- if(cell.innerHTML !== html) cell.innerHTML = html;  
- });  
- }  
- /* Keeps the shared list alphabetical (by nombre, then apellido) as new  
- socios are added — inserting one row is still a single gesture. */  
- function repositionSocioRow(tr){  
- var d = socioRowData(tr);  
- var key = normName(d.nombre) + " " + normName(d.apellido);  
- var rows = Array.prototype.slice.call(sociosTbody.children).filter(function(r){ return r !== tr; });  
- var before = rows.find(function(existing){  
- var ed = socioRowData(existing);  
- var existingKey = normName(ed.nombre) + " " + normName(ed.apellido);  
- return existingKey > key;  
- });  
- if(before) sociosTbody.insertBefore(tr, before);  
- else sociosTbody.appendChild(tr);  
- }  
- function insertSocioSorted(tr){  
- sociosTbody.appendChild(tr);  
- repositionSocioRow(tr);  
- }  
- /* Reposition a row the moment its Nombre or Apellido cell is edited, so  
- the list stays alphabetical without a manual re-sort. Also auto-formats  
- the Monto cell ($ + thousands) once editing that cell finishes. */  
- sociosTbody.addEventListener("focusout", function(e){  
- var td = e.target;  
- if(td.tagName !== "TD" || !td.isContentEditable) return;  
- var tr = td.closest("tr");  
- if(!tr) return;  
- var colIndex = Array.prototype.indexOf.call(tr.children, td);  
- if(colIndex === 0 || colIndex === 1) repositionSocioRow(tr);  
- if(colIndex === 4) td.textContent = clp(parseMoney(td.textContent));  
- });  
- /* Auto-inserts the dashes as you type into the Vencimiento cell. */  
- sociosTbody.addEventListener("input", function(e){  
- var td = e.target;  
- if(td.tagName !== "TD" || !td.isContentEditable) return;  
- var tr = td.closest("tr");  
- if(!tr) return;  
- var colIndex = Array.prototype.indexOf.call(tr.children, td);  
- if(colIndex !== 5) return;  
- var digits = td.textContent.replace(/[^\d]/g, "");  
- var formatted = digitsToDMY(digits);  
- if(td.textContent === formatted) return;  
- td.textContent = formatted;  
- var range = document.createRange();  
- range.selectNodeContents(td);  
- range.collapse(false);  
- var sel = window.getSelection();  
- sel.removeAllRanges();  
- sel.addRange(range);  
- });  
- /* Delegated delete handler — covers both the statically-embedded rows and  
- rows added later via the Agregar button, all from this single gesture. */  
- sociosTbody.addEventListener("click", function(e){  
- var btn = e.target.closest(".iconbtn");  
- if(!btn) return;  
- var tr = btn.closest("tr");  
- if(tr){ tr.remove(); renderEstadoOverlay(); }  
- });  
+ /* ---------- gate: find socio + check bloqueo (vencido o sin rutina asignada) ---------- */
+ var ACCESS_KEY = "wgym_rutina_access_nombre";
+ function findSocio(nombre, apellido){
+ var n = normName(nombre), a = normName(apellido);
+ if(!n || !a) return null;
+ return allSocios().find(function(s){ return normName(s.nombre)===n && normName(s.apellido)===a; }) || null;
+ }
+ function diasParaVencer(s){
+ var venc = parseDMY(s.vencimiento);
+ if(!venc) return 9999;
+ var hoy = parseDMY(todayISO());
+ return Math.round((venc - hoy) / 86400000);
+ }
+ function puedeVerRutina(s){
+ return !!s && !!s.tieneRutina && diasParaVencer(s) >= 0;
+ }
+ function unlockSocioView(s){
+ document.getElementById("gate").hidden = true;
+ document.getElementById("socioView").hidden = false;
+ var dias = diasParaVencer(s);
+ var banner = document.getElementById("expiryBanner");
+ if(dias === 1){ banner.textContent = "⏰ Tu plan vence mañana. ¡No te olvides de renovar!"; banner.hidden = false; }
+ else if(dias === 0){ banner.textContent = "⏰ Tu plan vence hoy. ¡No te olvides de renovar!"; banner.hidden = false; }
+ else { banner.hidden = true; }
+ }
+ function tryLogin(nombre, apellido){
+ var socio = findSocio(nombre, apellido);
+ if(puedeVerRutina(socio)){
+ try{ localStorage.setItem(ACCESS_KEY, JSON.stringify({n:nombre, a:apellido})); }catch(e){}
+ unlockSocioView(socio);
+ return true;
+ }
+ document.getElementById("gateError").hidden = false;
+ return false;
+ }
+
+ /* ---------- routing ---------- */
+ function initRoute(){
+ var stored = null;
+ try{ stored = JSON.parse(localStorage.getItem(ACCESS_KEY) || "null"); }catch(e){}
+ if(stored){
+ var socio = findSocio(stored.n, stored.a);
+ if(puedeVerRutina(socio)){ unlockSocioView(socio); return; }
+ }
+ }
+ document.getElementById("gateBtn").addEventListener("click", function(){
+ tryLogin(document.getElementById("gateNombre").value, document.getElementById("gateApellido").value);
+ });
+ document.getElementById("gateApellido").addEventListener("keydown", function(e){
+ if(e.key === "Enter") tryLogin(document.getElementById("gateNombre").value, document.getElementById("gateApellido").value);
+ });
+ document.getElementById("gateNombre").addEventListener("keydown", function(e){
+ if(e.key === "Enter") document.getElementById("gateApellido").focus();
+ });
+
+ /* =====================================================================
+ ROUTINE CONTENT (read-only, rendered from a plain JS array — this is  
+ fine here because it lives OUTSIDE any artifact-sync region).  
+ ===================================================================== */  
+ var VIDEOS = { sentadilla: SENTADILLA_VIDEO, extension_piernas: EXTENSION_PIERNAS_VIDEO, curl_femoral: CURL_FEMORAL_VIDEO, cardio_trotadora: CARDIO_TROTADORA_VIDEO };  
+ var DAYS_GLUTEOS = [  
+ {  
+ weekday:"Rutina 1", title:"Piernas y Glúteos", focus:"Tren inferior",  
+ warmup:"Caminadora o bicicleta — 5 minutos",  
+ exercises:[  
+ {name:"Sentadilla con mancuerna", sets:"3 × 12", rest:"60 seg", video:"sentadilla",  
+ tip:"Sostén una mancuerna o kettlebell pegada al pecho; baja como si te sentaras en una silla, rodillas hacia afuera, y sube empujando con los talones.",  
+ alt:"¿Muy exigente? Practica primero sin peso, apoyada en una silla, tocando apenas con los glúteos."},  
+ {name:"Extensión de piernas en máquina", sets:"3 × 12-15", rest:"45 seg", video:"extension_piernas",  
+ tip:"Siéntate con la espalda apoyada, extiende las rodillas sin bloquearlas de golpe y baja controlado."},  
+ {name:"Curl femoral en máquina", sets:"3 × 12-15", rest:"45 seg", video:"curl_femoral",  
+ tip:"Dobla las rodillas llevando el rodillo hacia los glúteos, controla la vuelta sin soltar de golpe."},  
+ {name:"Zancadas con TRX", sets:"3 × 10 por pierna", rest:"60 seg",  
+ tip:"Sujétate de las correas TRX para mantener el equilibrio; paso largo al frente, baja la rodilla trasera casi al suelo y sube empujando con el talón delantero.",  
+ alt:"¿Muy exigente? Sostente con ambas manos y da pasos más cortos."},  
+ {name:"Elevación de talones de pie", sets:"3 × 15-20", rest:"45 seg",  
+ tip:"De pie, sube lo más alto posible apoyado en las puntas de los pies y baja controlado."}  
+ ],  
+ cooldown:"Estira cuádriceps, isquiotibiales y gemelos 20-30 seg por lado."  
+ },  
+ { weekday:"Rutina 2", empty:true },  
+ { weekday:"Rutina 3", empty:true },  
+ { weekday:"Rutina 4", empty:true },  
+ { weekday:"Rutina 5", empty:true }  
+ ];  
+
+ var DAYS_FULLBODY = [
+   {
+     weekday:"Lunes",
+     title:"Piernas y Glúteos",
+     focus:"Tren inferior",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Sentadilla con mancuerna", sets:"3 × 12", rest:"60 seg", equip:"mancuerna", video:"sentadilla",
+        tip:"Sostén una mancuerna o kettlebell pegada al pecho; baja como si te sentaras en una silla, rodillas hacia afuera, y sube empujando con los talones.",
+        alt:"¿Muy exigente? Practica primero sin peso, apoyada en una silla, tocando apenas con los glúteos."},
+       {name:"Extensión de piernas en máquina", sets:"3 × 12-15", rest:"45 seg", equip:"maquina", video:"extension_piernas",
+        tip:"Siéntate con la espalda apoyada, extiende las rodillas sin bloquearlas de golpe y baja controlado."},
+       {name:"Curl femoral en máquina", sets:"3 × 12-15", rest:"45 seg", equip:"maquina", video:"curl_femoral",
+        tip:"Dobla las rodillas llevando el rodillo hacia los glúteos, controla la vuelta sin soltar de golpe."},
+       {name:"Zancadas con TRX", sets:"3 × 10 por pierna", rest:"60 seg", equip:"trx",
+        tip:"Sujétate de las correas TRX para mantener el equilibrio; paso largo al frente, baja la rodilla trasera casi al suelo y sube empujando con el talón delantero.",
+        alt:"¿Muy exigente? Sostente con ambas manos y da pasos más cortos."},
+       {name:"Elevación de talones de pie", sets:"3 × 15-20", rest:"45 seg", equip:"cuerpo",
+        tip:"De pie, sube lo más alto posible apoyado en las puntas de los pies y baja controlado."},
+     ],
+     cooldown:"Estira cuádriceps, isquiotibiales y gemelos 20-30 seg por lado."
+   },
+   {
+     weekday:"Martes",
+     title:"Espalda y Bíceps",
+     focus:"Tracción superior",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Jalón al pecho en polea", sets:"3 × 10-12", rest:"60 seg", equip:"polea",
+        tip:"Tira la barra hacia el pecho llevando los codos hacia abajo, sin balancear el cuerpo."},
+       {name:"Remo sentado en polea", sets:"3 × 10-12", rest:"60 seg", equip:"polea",
+        tip:"Espalda recta, tira el agarre hacia el abdomen apretando los omóplatos, sin encorvarte."},
+       {name:"Bíceps en máquina", sets:"3 × 10-12", rest:"45 seg", equip:"maquina",
+        tip:"Codos apoyados; sube y baja controlado sin balancear el cuerpo para ayudarte con impulso."},
+       {name:"Curl de bíceps con mancuernas", sets:"3 × 10-12", rest:"45 seg", equip:"mancuerna",
+        tip:"Codos pegados al cuerpo; sube y baja sin balancear la espalda."},
+       {name:"Remo con mancuerna a una mano", sets:"3 × 10-12 por lado", rest:"60 seg", equip:"mancuerna",
+        tip:"Apoya una rodilla y una mano en el banco, espalda recta; tira la mancuerna hacia la cadera llevando el codo hacia atrás."},
+     ],
+     cooldown:"Estira espalda y brazos 20-30 seg por lado."
+   },
+   {
+     weekday:"Miércoles",
+     title:"Pecho y Tríceps",
+     focus:"Empuje superior",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Press de banca con mancuernas", sets:"3 × 10-12", rest:"60 seg", equip:"mancuerna",
+        tip:"Baja las mancuernas controlada hasta la altura del pecho y empuja sin bloquear los codos de golpe."},
+       {name:"Aperturas con mancuernas en banco", sets:"3 × 12-15", rest:"45 seg", equip:"mancuerna",
+        tip:"Acostado en el banco, codos ligeramente flexionados; abre y junta los brazos como abrazando un árbol."},
+       {name:"Extensión de tríceps en polea", sets:"3 × 12-15", rest:"45 seg", equip:"polea",
+        tip:"Codos pegados al cuerpo, empuja la barra hacia abajo sin mover los hombros."},
+       {name:"Press cerrado con mancuernas", sets:"3 × 10-12", rest:"60 seg", equip:"mancuerna",
+        tip:"Acostado en el banco, igual que el press de banca pero con los codos pegados al cuerpo; empuja las mancuernas hacia arriba sintiendo el trabajo en el tríceps."},
+     ],
+     cooldown:"Estira pecho y tríceps 20-30 seg por lado."
+   },
+   {
+     weekday:"Jueves",
+     title:"Hombros y Abdomen",
+     focus:"Estabilidad y core",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Press militar con mancuernas", sets:"3 × 10-12", rest:"60 seg", equip:"mancuerna",
+        tip:"Sentado, empuja las mancuernas hacia arriba sin arquear la espalda baja."},
+       {name:"Elevaciones laterales con mancuernas", sets:"3 × 12-15", rest:"45 seg", equip:"mancuerna",
+        tip:"Brazos casi rectos; sube hasta la altura de los hombros y baja controlado, sin impulso."},
+       {name:"Plancha abdominal", sets:"3 × 20-30 seg", rest:"45 seg", equip:"colchoneta",
+        tip:"Cuerpo alineado de la cabeza a los talones, aprieta el abdomen todo el tiempo.",
+        alt:"¿Muy exigente? Apóyate en las rodillas en vez de en los pies."},
+       {name:"Elevación de piernas acostada", sets:"3 × 12-15", rest:"45 seg", equip:"colchoneta",
+        tip:"Acostada boca arriba, manos bajo la cadera; sube las piernas rectas y baja controlado sin tocar el suelo.",
+        alt:"¿Muy exigente? Dobla un poco las rodillas para hacerlo más fácil."},
+     ],
+     cooldown:"Estira hombros y espalda baja 20-30 seg por lado."
+   },
+   {
+     weekday:"Viernes",
+     title:"Full Body y Cardio",
+     focus:"Repaso general de la semana",
+     warmup:"Caminadora — 5 minutos",
+     exercises:[
+       {name:"Peso muerto con mancuernas", sets:"3 × 12", rest:"60 seg", equip:"mancuerna",
+        tip:"Mancuernas frente a los muslos, espalda recta; baja empujando la cadera hacia atrás y sube apretando los glúteos."},
+       {name:"Face pull en polea (cuerda)", sets:"3 × 12-15", rest:"45 seg", equip:"polea",
+        tip:"Tira la cuerda hacia la cara separando las manos, codos altos, apretando los omóplatos."},
+       {name:"Step-ups en step", sets:"3 × 10 por pierna", rest:"60 seg", equip:"step",
+        tip:"Sube completo al step apoyando todo el pie, sin impulsarte con la pierna de atrás.",
+        alt:"¿Muy exigente? Usa un escalón más bajo."},
+       {name:"Abdominales en colchoneta", sets:"3 × 15", rest:"45 seg", equip:"colchoneta",
+        tip:"Acostada, rodillas dobladas, manos cruzadas en el pecho; sube los hombros del suelo apretando el abdomen y baja controlado."},
+       {name:"Cardio en trotadora", sets:"10-15 minutos", rest:"—", equip:"trotadora", video:"cardio_trotadora",
+        tip:"Ritmo constante y cómodo, para activar el cuerpo completo y cerrar la semana."},
+     ],
+     cooldown:"Estiramiento general de cuerpo completo, 30 seg por grupo muscular."
+   },
+ ];
+ 
   
- /* Search box: purely local display filter (data-local-* never syncs to  
- other viewers), so typing here never touches the shared document. */  
- document.getElementById("socio-search").addEventListener("input", function(e){  
- var q = normName(e.target.value);  
- Array.prototype.forEach.call(sociosTbody.children, function(tr){  
- var s = socioRowData(tr);  
- var match = !q || normName(s.nombre).indexOf(q) !== -1 || normName(s.apellido).indexOf(q) !== -1;  
- if(match) tr.removeAttribute("data-local-filtered");  
- else tr.setAttribute("data-local-filtered", "true");  
- });  
- });  
+ var nav = document.getElementById("dayNav");
+ var content = document.getElementById("dayContent");
+ var PROGRAMS = { fullbody: DAYS_FULLBODY, gluteos: DAYS_GLUTEOS };
+ function renderProgram(key){
+ nav.innerHTML = "";
+ content.innerHTML = "";
+ PROGRAMS[key].forEach(function(day, i){
+ var btn = document.createElement("button");
+ btn.textContent = day.weekday;
+ btn.onclick = function(){ showDay(i); };
+ btn.id = "navbtn-" + i;
+ nav.appendChild(btn);
+
+ var panel = document.createElement("section");
+ panel.className = "day-panel";
+ panel.id = "panel-" + i;
+ if(day.empty){
+ panel.innerHTML =
+ '<div class="cooldown" style="margin-top:20px;padding:32px 18px;">' +
+ '<b>Próximamente</b>' +
+ '<span>Todavía no hay una rutina cargada aquí. Cuando esté lista, va a aparecer en este espacio.</span>' +
+ '</div>';
+ } else {
+ panel.innerHTML =
+ '<div class="day-banner"><p class="num">'+day.weekday+'</p><h2>'+day.title+'</h2><p class="focus">'+day.focus+'</p></div>' +
+ '<div class="warmup"><div><b>Calentamiento</b><span>'+day.warmup+'</span></div></div>' +
+ day.exercises.map(function(ex, idx){
+ return '<div class="exercise"><div class="badge">'+(idx+1)+'</div><div class="info">' +
+ '<h3>'+ex.name+'</h3>' +
+ '<div class="stats"><span>'+ex.sets+'</span><span>Descanso '+ex.rest+'</span></div>' +
+ (ex.video ? '<div class="video-wrap"><span class="video-lbl">Video de referencia</span><video class="ex-video" src="'+VIDEOS[ex.video]+'" controls muted loop playsinline preload="none"></video></div>' : '') +
+ '<p class="tip">'+ex.tip+'</p>' +
+ (ex.alt ? '<p class="alt">'+ex.alt+'</p>' : '') +
+ '</div></div>';
+ }).join('') +
+ '<div class="cooldown"><b>Estiramientos finales</b><span>'+day.cooldown+'</span></div>';
+ }
+ content.appendChild(panel);
+ });
+ showDay(0);
+ }
+ function showDay(i){
+ document.querySelectorAll(".day-panel").forEach(function(p){ p.classList.remove("active"); });
+ document.querySelectorAll("nav.days button").forEach(function(b){ b.classList.remove("active"); });
+ document.getElementById("panel-" + i).classList.add("active");
+ document.getElementById("navbtn-" + i).classList.add("active");
+ }
+ document.querySelectorAll("#progSel .progbtn").forEach(function(pbtn){
+ pbtn.addEventListener("click", function(){
+ document.querySelectorAll("#progSel .progbtn").forEach(function(b){ b.classList.remove("active"); });
+ pbtn.classList.add("active");
+ renderProgram(pbtn.getAttribute("data-prog"));
+ });
+ });
+ renderProgram("fullbody");  
   
- attachMoneyFormatting(document.getElementById("s-monto"));  
- attachDateFormatting(document.getElementById("s-venc"));  
- document.getElementById("s-add").addEventListener("click", function(){  
- var nombre = document.getElementById("s-nombre").value.trim();  
- var apellido = document.getElementById("s-apellido").value.trim();  
- if(!nombre || !apellido){ alert("Completa al menos nombre y apellido."); return; }  
- var s = {  
- nombre: nombre, apellido: apellido,  
- rut: document.getElementById("s-rut").value.trim() || "Sin Rut",  
- plan: document.getElementById("s-plan").value.trim(),  
- monto: parseMoney(document.getElementById("s-monto").value),  
- vencimiento: document.getElementById("s-venc").value.trim(),  
- rutina: document.getElementById("s-rutina").value  
- };  
- insertSocioSorted(makeSocioRow(s));  
- ["s-nombre","s-apellido","s-rut","s-plan","s-monto","s-venc"].forEach(function(id){ document.getElementById(id).value = ""; });
- document.getElementById("s-rutina").value = "No";  
- renderEstadoOverlay();  
- });  
   
- /* Updates the local-only "Estado" pill in every row, plus the summary  
- stats. Never touches the synced part of the tbody. */  
- function renderEstadoOverlay(){  
- renderStatusColumn();  
- var socios = allSocios();  
- var aldia=0, pronto=0, vencido=0, ingreso=0;  
- socios.forEach(function(s){  
- var est = estadoDe(s.vencimiento);  
- if(est.cls==="good") aldia++; else if(est.cls==="warn") pronto++; else vencido++;  
- ingreso += s.monto || 0;  
- });  
- document.getElementById("st-aldia").textContent = aldia;  
- document.getElementById("st-pronto").textContent = pronto;  
- document.getElementById("st-vencido").textContent = vencido;  
- document.getElementById("st-ingreso").textContent = clp(ingreso);  
- }  
- function escapeHtml(s){  
- return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });  
- }  
-  
- /* Ignore mutations that are themselves just this function's own writes  
- into the local .estado-cell pills, or every edit would re-trigger  
- itself forever. */  
- new MutationObserver(function(records){  
- var relevant = records.some(function(rec){  
- var node = rec.target.nodeType === 1 ? rec.target : rec.target.parentElement;  
- return !(node && node.closest(".estado-cell"));  
- });  
- if(relevant) renderEstadoOverlay();  
- }).observe(sociosTbody, {childList:true, characterData:true, subtree:true});  
- setInterval(renderEstadoOverlay, 5 * 60 * 1000);  
-  
- renderEstadoOverlay();
-})();
+ /* ---------- go ---------- */  
+ initRoute();  
+})();  
 </script>  
