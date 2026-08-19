@@ -265,11 +265,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  </div>  
  <button type="button" id="backToGateLink" class="gate-admin-link" style="background:none;border:none;cursor:pointer;text-align:left;margin-bottom:14px;">← Volver a la pantalla de socio</button>  
   
- <nav class="tabbar" role="tablist">  
- <button class="tabbtn" role="tab" data-tab="socios" aria-selected="true">Socios</button>  
- <button class="tabbtn" role="tab" data-tab="balance" aria-selected="false">Balance</button>  
- <button class="tabbtn" role="tab" data-tab="caja" aria-selected="false">Cierre de Caja</button>  
- </nav>  
+ <h2 style="margin-bottom:18px;color:var(--dorado);font-size:13px;letter-spacing:.1em;text-transform:uppercase;">Registro de Socios</h2>
   
  <!-- TAB: SOCIOS -->  
  <section class="panel2 active" id="panel-socios">  
@@ -475,61 +471,6 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  </section>  
   
  <!-- TAB: BALANCE -->  
- <section class="panel2" id="panel-balance">  
- <div class="card">  
- <div class="card-head"><h2>Gastos fijos mensuales</h2></div>  
- <p class="card-sub">Gastos que pagas todos los meses, como el arriendo (que ya incluye gastos comunes).</p>  
- <div class="twrap">  
- <table>  
- <thead><tr><th>Gasto</th><th class="num">Monto mensual</th><th style="width:44px;"></th></tr></thead>  
- <tbody id="fixed-tbody"></tbody>  
- </table>  
- <div class="addrow" style="grid-template-columns:1.4fr 1fr auto;">  
- <div><label for="fx-name">Nombre del gasto</label><input type="text" id="fx-name" placeholder="Ej: Arriendo"></div>  
- <div><label for="fx-amount">Monto mensual</label><input type="text" id="fx-amount" placeholder="150000"></div>  
- <button class="btn btn-primary" id="fx-add">Agregar</button>  
- </div>  
- </div>  
- <div class="statrow"><div class="stat"><span class="eyebrow">Total gastos fijos / mes</span><span class="val tabular" id="fx-total">$0</span></div></div>  
- </div>  
- <div class="card">  
- <div class="card-head"><h2>Gastos variables</h2></div>  
- <p class="card-sub">Anota cada compra a medida que la haces.</p>  
- <div class="addrow" style="grid-template-columns:1fr 1.4fr .8fr auto;">  
- <div><label for="gv-date">Fecha</label><input type="text" id="gv-date" placeholder="19-08-2026"></div>  
- <div><label for="gv-name">Descripción</label><input type="text" id="gv-name" placeholder="Ej: Insumos de aseo"></div>  
- <div><label for="gv-amount">Monto</label><input type="text" id="gv-amount" placeholder="8000"></div>  
- <button class="btn btn-primary" id="gv-add">Anotar</button>  
- </div>  
- <div id="gv-list" style="margin-top:14px;"></div>  
- <div class="statrow"><div class="stat"><span class="eyebrow">Gastos variables este mes</span><span class="val tabular" id="gv-total">$0</span></div></div>  
- </div>  
- <div class="card">  
- <div class="card-head"><h2>Total gastos del mes</h2></div>  
- <div class="stat" style="text-align:center;"><span class="eyebrow">Fijos + variables de este mes</span><div class="val tabular" style="font-size:28px;" id="bal-total">$0</div></div>  
- </div>  
- </section>  
-  
- <!-- TAB: CIERRE DE CAJA -->  
- <section class="panel2" id="panel-caja">  
- <div class="card">  
- <div class="card-head"><h2>Cierre de caja del día</h2></div>  
- <p class="card-sub">Al final del día, anota aquí los totales que ya sumaste. Las mensualidades de los socios no van aquí.</p>  
- <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="c-date" placeholder="19-08-2026"></div>  
- <div class="addrow" style="grid-template-columns:1fr 1fr 1fr;">  
- <div><label for="c-efectivo">Efectivo</label><input type="text" id="c-efectivo" placeholder="0"></div>  
- <div><label for="c-tarjeta">Tarjeta</label><input type="text" id="c-tarjeta" placeholder="0"></div>  
- <div><label for="c-transferencia">Transferencia</label><input type="text" id="c-transferencia" placeholder="0"></div>  
- </div>  
- <div class="statrow"><div class="stat"><span class="eyebrow">Total del día</span><span class="val tabular" id="c-total">$0</span></div></div>  
- <div style="margin-top:14px;"><button class="btn btn-primary" id="c-save">Guardar cierre del día</button></div>  
- </div>  
- <div class="card">  
- <div class="card-head"><h2>Historial de cierres</h2></div>  
- <div id="c-list"></div>  
- <div class="statrow"><div class="stat"><span class="eyebrow">Ventas de este mes</span><span class="val tabular" id="c-mes-total">$0</span></div></div>  
- </div>  
- </section>  
 </div>  
 </div>
   
@@ -1137,121 +1078,6 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  });
  renderProgram("fullbody");  
   
- /* =====================================================================  
- ADMIN: tabs, balance, cierre de caja — local per-browser (unsynced),  
- same behaviour as the previous standalone Gestión page.  
- ===================================================================== */  
- var LOCAL_KEY = "wgym_admin_local_v1";  
- function loadLocal(){  
- try{ var raw = localStorage.getItem(LOCAL_KEY); if(raw) return JSON.parse(raw); }catch(e){}  
- return { fixedCosts:[{id:uid(), name:"Arriendo (incluye gastos comunes)", amount:150000}], gastosVariables:[], cierres:[] };  
- }  
- function saveLocal(){ try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(local)); }catch(e){} }  
- var local = loadLocal();  
-  
- var tabbtns = Array.prototype.slice.call(document.querySelectorAll(".tabbtn"));  
- tabbtns.forEach(function(btn){  
- btn.addEventListener("click", function(){  
- tabbtns.forEach(function(b){ b.setAttribute("aria-selected", b===btn ? "true":"false"); });  
- document.querySelectorAll(".panel2").forEach(function(p){ p.classList.remove("active"); });  
- document.getElementById("panel-" + btn.dataset.tab).classList.add("active");  
- });  
- });  
-  
- function renderFixed(){  
- var tbody = document.getElementById("fixed-tbody");  
- tbody.innerHTML = "";  
- if(local.fixedCosts.length===0){ tbody.innerHTML = '<tr><td colspan="3" class="empty">Sin gastos fijos registrados.</td></tr>'; }  
- var total = 0;  
- local.fixedCosts.forEach(function(fx){  
- total += fx.amount;  
- var tr = document.createElement("tr");  
- tr.innerHTML = '<td>'+escapeHtml(fx.name)+'</td><td class="num">'+clp(fx.amount)+'</td><td></td>';  
- var tdDel = tr.lastElementChild;  
- var b = document.createElement("button"); b.className="iconbtn"; b.textContent="✕";  
- b.addEventListener("click", function(){ local.fixedCosts = local.fixedCosts.filter(function(f){return f.id!==fx.id;}); saveLocal(); renderFixed(); });  
- tdDel.appendChild(b);  
- tbody.appendChild(tr);  
- });  
- document.getElementById("fx-total").textContent = clp(total);  
- renderBalanceTotal();  
- }  
- attachMoneyFormatting(document.getElementById("fx-amount"));  
- document.getElementById("fx-add").addEventListener("click", function(){  
- var name = document.getElementById("fx-name").value.trim();  
- var amount = parseMoney(document.getElementById("fx-amount").value);  
- if(!name){ alert("Completa el nombre del gasto."); return; }  
- local.fixedCosts.push({id:uid(), name:name, amount:amount});  
- saveLocal();  
- document.getElementById("fx-name").value=""; document.getElementById("fx-amount").value="";  
- renderFixed();  
- });  
- function gastosVariablesMesTotal(){  
- var mk = monthKeyDMY(todayISO());  
- return local.gastosVariables.filter(function(g){ return monthKeyDMY(g.date)===mk; }).reduce(function(s,g){return s+g.amount;},0);  
- }  
- function renderGV(){  
- var list = document.getElementById("gv-list");  
- list.innerHTML = "";  
- var sorted = local.gastosVariables.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });  
- if(sorted.length===0){ list.innerHTML = '<div class="empty">Sin gastos variables registrados.</div>'; }  
- sorted.forEach(function(g){  
- var row = document.createElement("div");  
- row.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line);";  
- row.innerHTML = '<span>'+escapeHtml(g.name)+' · '+fmtDateEs(g.date)+'</span><span class="tabular">'+clp(g.amount)+'</span>';  
- list.appendChild(row);  
- });  
- document.getElementById("gv-total").textContent = clp(gastosVariablesMesTotal());  
- renderBalanceTotal();  
- }  
- attachDateFormatting(document.getElementById("gv-date"));  
- attachMoneyFormatting(document.getElementById("gv-amount"));  
- document.getElementById("gv-add").addEventListener("click", function(){  
- var date = document.getElementById("gv-date").value.trim() || todayISO();  
- var name = document.getElementById("gv-name").value.trim();  
- var amount = parseMoney(document.getElementById("gv-amount").value);  
- if(!name || !(amount>0)){ alert("Completa descripción y monto."); return; }  
- local.gastosVariables.push({id:uid(), date:date, name:name, amount:amount});  
- saveLocal();  
- document.getElementById("gv-name").value=""; document.getElementById("gv-amount").value="";  
- renderGV();  
- });  
- function renderBalanceTotal(){  
- var totalFijos = local.fixedCosts.reduce(function(s,f){return s+f.amount;},0);  
- document.getElementById("bal-total").textContent = clp(totalFijos + gastosVariablesMesTotal());  
- }  
-  
- attachDateFormatting(document.getElementById("c-date"));  
- ["c-efectivo","c-tarjeta","c-transferencia"].forEach(function(id){ attachMoneyFormatting(document.getElementById(id)); });  
- document.getElementById("c-save").addEventListener("click", function(){  
- var date = document.getElementById("c-date").value.trim() || todayISO();  
- var efectivo = parseMoney(document.getElementById("c-efectivo").value);  
- var tarjeta = parseMoney(document.getElementById("c-tarjeta").value);  
- var transferencia = parseMoney(document.getElementById("c-transferencia").value);  
- var total = efectivo + tarjeta + transferencia;  
- if(total<=0){ alert("Anota al menos un monto antes de guardar."); return; }  
- local.cierres.push({id:uid(), date:date, total:total});  
- saveLocal();  
- ["c-efectivo","c-tarjeta","c-transferencia"].forEach(function(id){ document.getElementById(id).value=""; });  
- renderCierres();  
- });  
- function renderCierres(){  
- var list = document.getElementById("c-list");  
- list.innerHTML = "";  
- var sorted = local.cierres.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });  
- if(sorted.length===0){ list.innerHTML = '<div class="empty">Sin cierres guardados.</div>'; }  
- sorted.forEach(function(c){  
- var row = document.createElement("div");  
- row.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line);";  
- row.innerHTML = '<span>'+fmtDateEs(c.date)+'</span><span class="tabular">'+clp(c.total)+'</span>';  
- list.appendChild(row);  
- });  
- var mk = monthKeyDMY(todayISO());  
- var mesTotal = local.cierres.filter(function(c){return monthKeyDMY(c.date)===mk;}).reduce(function(s,c){return s+c.total;},0);  
- document.getElementById("c-mes-total").textContent = clp(mesTotal);  
- }  
-  
- renderFixed(); renderGV(); renderCierres();  
   
  /* ---------- go ---------- */  
  initRoute();  
