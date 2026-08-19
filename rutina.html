@@ -527,7 +527,6 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  return {cls:"good", txt:"Al día"};  
  }  
  /* ---------- gate: find socio + check bloqueo (vencido o sin rutina asignada) ---------- */
- var ACCESS_KEY = "wgym_rutina_access_nombre";
  function findSocio(nombre, apellido){
  var n = normName(nombre), a = normName(apellido);
  if(!n || !a) return null;
@@ -554,7 +553,6 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  function tryLogin(nombre, apellido){
  var socio = findSocio(nombre, apellido);
  if(puedeVerRutina(socio)){
- try{ localStorage.setItem(ACCESS_KEY, JSON.stringify({n:nombre, a:apellido})); }catch(e){}
  unlockSocioView(socio);
  return true;
  }
@@ -564,12 +562,6 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
 
  /* ---------- routing ---------- */
  function initRoute(){
- var stored = null;
- try{ stored = JSON.parse(localStorage.getItem(ACCESS_KEY) || "null"); }catch(e){}
- if(stored){
- var socio = findSocio(stored.n, stored.a);
- if(puedeVerRutina(socio)){ unlockSocioView(socio); return; }
- }
  }
  document.getElementById("gateBtn").addEventListener("click", function(){
  tryLogin(document.getElementById("gateNombre").value, document.getElementById("gateApellido").value);
