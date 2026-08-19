@@ -217,14 +217,26 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div><label for="s-rut">RUT</label><input type="text" id="s-rut" placeholder="Sin Rut"></div>  
  <div><label for="s-plan">Plan</label><input type="text" id="s-plan" placeholder="Full Mensual"></div>  
  <div><label for="s-monto">Monto</label><input type="text" id="s-monto" placeholder="33000"></div>  
- <div><label for="s-venc">Vencimiento</label><input type="text" id="s-venc" placeholder="20-09-2026"></div>  
- <div><label for="s-rutina">¿Tiene rutina?</label><select id="s-rutina"><option value="No">No</option><option value="Si">Sí</option></select></div>  
- <button class="btn btn-primary" id="s-add">Agregar</button>  
- </div>  
- </div>  
-  
- <div class="card">  
- <div class="card-head"><h2>Registro de socios</h2></div>  
+ <div><label for="s-venc">Vencimiento</label><input type="date" id="s-venc"></div>
+ <div><label for="s-rutina">¿Tiene rutina?</label><select id="s-rutina"><option value="No">No</option><option value="Si">Sí</option></select></div>
+ <button class="btn btn-primary" id="s-add">Agregar</button>
+ </div>
+ </div>
+
+ <div class="card" style="border-color:var(--dorado);">
+ <div class="card-head"><h2>📅 Actualizar vencimiento (renovación)</h2></div>
+ <p class="card-sub">Escribe el nombre y apellido tal como están en la tabla, elige la nueva fecha en el calendario y presiona Guardar. Funciona aunque no tengas internet en ese momento — pero avísame por chat apenas tengas red, para que yo lo deje igual en la página pública de todos los socios.</p>
+ <div class="addrow" style="background:transparent;border:none;padding:0;">
+ <div><label for="qv-nombre">Nombre</label><input type="text" id="qv-nombre" placeholder="Ej: Alan"></div>
+ <div><label for="qv-apellido">Apellido</label><input type="text" id="qv-apellido" placeholder="Ej: Pereira"></div>
+ <div><label for="qv-fecha">Nueva fecha de vencimiento</label><input type="date" id="qv-fecha"></div>
+ <button class="btn btn-primary" id="qv-save">Guardar</button>
+ </div>
+ <p id="qv-msg" style="margin-top:10px;font-size:13px;font-weight:700;"></p>
+ </div>
+
+ <div class="card">
+ <div class="card-head"><h2>Registro de socios</h2></div>
  <p class="card-sub">Esta tabla es la fuente única de socios y controla el acceso a la rutina. Si agregas, editas o eliminas algo aquí, avísame por chat con los cambios para que yo actualice y publique la página — así queda igual para todos.</p>  
  <input type="text" id="socio-search" placeholder="Buscar socio por nombre o apellido..." style="width:100%;margin-bottom:12px;background:var(--negro);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--blanco);font-family:inherit;">  
  <div class="twrap">  
@@ -650,25 +662,64 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  });  
  });  
   
- attachMoneyFormatting(document.getElementById("s-monto"));  
- attachDateFormatting(document.getElementById("s-venc"));  
- document.getElementById("s-add").addEventListener("click", function(){  
- var nombre = document.getElementById("s-nombre").value.trim();  
- var apellido = document.getElementById("s-apellido").value.trim();  
- if(!nombre || !apellido){ alert("Completa al menos nombre y apellido."); return; }  
- var s = {  
- nombre: nombre, apellido: apellido,  
- rut: document.getElementById("s-rut").value.trim() || "Sin Rut",  
- plan: document.getElementById("s-plan").value.trim(),  
- monto: parseMoney(document.getElementById("s-monto").value),  
- vencimiento: document.getElementById("s-venc").value.trim(),  
- rutina: document.getElementById("s-rutina").value  
- };  
- insertSocioSorted(makeSocioRow(s));  
+ attachMoneyFormatting(document.getElementById("s-monto"));
+ function isoToDmy(iso){
+ if(!iso) return "";
+ var p = iso.split("-");
+ return p[2] + "-" + p[1] + "-" + p[0];
+ }
+ document.getElementById("s-add").addEventListener("click", function(){
+ var nombre = document.getElementById("s-nombre").value.trim();
+ var apellido = document.getElementById("s-apellido").value.trim();
+ if(!nombre || !apellido){ alert("Completa al menos nombre y apellido."); return; }
+ var s = {
+ nombre: nombre, apellido: apellido,
+ rut: document.getElementById("s-rut").value.trim() || "Sin Rut",
+ plan: document.getElementById("s-plan").value.trim(),
+ monto: parseMoney(document.getElementById("s-monto").value),
+ vencimiento: isoToDmy(document.getElementById("s-venc").value),
+ rutina: document.getElementById("s-rutina").value
+ };
+ insertSocioSorted(makeSocioRow(s));
  ["s-nombre","s-apellido","s-rut","s-plan","s-monto","s-venc"].forEach(function(id){ document.getElementById(id).value = ""; });
- document.getElementById("s-rutina").value = "No";  
- renderEstadoOverlay();  
- });  
+ document.getElementById("s-rutina").value = "No";
+ renderEstadoOverlay();
+ });
+
+ function findSocioTr(nombre, apellido){
+ var n = normName(nombre), a = normName(apellido);
+ var result = null;
+ Array.prototype.forEach.call(sociosTbody.children, function(tr){
+ var d = socioRowData(tr);
+ if(normName(d.nombre)===n && normName(d.apellido)===a) result = tr;
+ });
+ return result;
+ }
+ document.getElementById("qv-save").addEventListener("click", function(){
+ var nombre = document.getElementById("qv-nombre").value.trim();
+ var apellido = document.getElementById("qv-apellido").value.trim();
+ var iso = document.getElementById("qv-fecha").value;
+ var msg = document.getElementById("qv-msg");
+ if(!nombre || !apellido || !iso){
+ msg.textContent = "Completa nombre, apellido y la fecha.";
+ msg.style.color = "var(--rojo)";
+ return;
+ }
+ var tr = findSocioTr(nombre, apellido);
+ if(!tr){
+ msg.textContent = "No encontré a ese socio en la tabla — revisa cómo está escrito su nombre.";
+ msg.style.color = "var(--rojo)";
+ return;
+ }
+ var dmy = isoToDmy(iso);
+ tr.children[5].textContent = dmy;
+ renderEstadoOverlay();
+ msg.textContent = "Listo: " + nombre + " " + apellido + " ahora vence " + dmy + ".";
+ msg.style.color = "var(--dorado)";
+ document.getElementById("qv-nombre").value = "";
+ document.getElementById("qv-apellido").value = "";
+ document.getElementById("qv-fecha").value = "";
+ });
   
  /* Updates the local-only "Estado" pill in every row, plus the summary  
  stats. Never touches the synced part of the tbody. */  
