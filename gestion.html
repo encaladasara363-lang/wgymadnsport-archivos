@@ -471,66 +471,35 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <!-- TAB: CIERRE DE CAJA -->
  <section class="panel2" id="panel-caja">
  <div class="card" style="border-color:var(--dorado);">
- <div class="card-head"><h2>Ventas de mensualidades del día</h2></div>
- <p class="card-sub">Cada día que trabajes, anota el total que vendiste ese día en mensualidades (de cualquier plan). Se calcula solo tu 10% de ese día, y abajo se va sumando día a día para saber cuánto llevas juntado en el mes.</p>
- <div class="addrow" style="grid-template-columns:1fr 1fr auto;">
- <div><label for="vm-date">Fecha</label><input type="text" id="vm-date" placeholder="19-08-2026"></div>
- <div><label for="vm-total">Total vendido hoy en mensualidades</label><input type="text" id="vm-total" placeholder="0"></div>
- <button class="btn btn-primary" id="vm-save">Guardar día</button>
- </div>
- <div class="twrap" style="margin-top:14px;">
- <table>
- <thead><tr><th>Fecha</th><th class="num">Total del día</th><th class="num">Tu 10%</th><th style="width:44px;"></th></tr></thead>
- <tbody id="vm-tbody"></tbody>
- </table>
+ <div class="card-head"><h2>Cierre de Caja del Día</h2></div>
+ <p class="card-sub">Al final del día, anota cuánto vendiste de cada cosa. El total del día y tu 10% de las mensualidades se calculan solos, mientras vas escribiendo.</p>
+ <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="cz-date" placeholder="20-08-2026"></div>
+ <div class="addrow" style="grid-template-columns:repeat(3,1fr);">
+ <div><label for="cz-mensualidades">Mensualidades</label><input type="text" id="cz-mensualidades" placeholder="0"></div>
+ <div><label for="cz-snacks">Snacks Saludables</label><input type="text" id="cz-snacks" placeholder="0"></div>
+ <div><label for="cz-suplementos">Suplementos</label><input type="text" id="cz-suplementos" placeholder="0"></div>
+ <div><label for="cz-ropa">Ropa Deportiva</label><input type="text" id="cz-ropa" placeholder="0"></div>
+ <div><label for="cz-bebestibles">Bebestibles</label><input type="text" id="cz-bebestibles" placeholder="0"></div>
+ <div><label for="cz-pase">Pase Diario</label><input type="text" id="cz-pase" placeholder="0"></div>
  </div>
  <div class="statrow">
- <div class="stat"><span class="eyebrow">Vendido en mensualidades este mes</span><span class="val tabular" id="vm-mes-total">$0</span></div>
- <div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Acumulado de tu 10% este mes</span><span class="val tabular" id="vm-mes-sueldo">$0</span></div>
+ <div class="stat"><span class="eyebrow">Total vendido hoy</span><span class="val tabular" id="cz-total-dia">$0</span></div>
+ <div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Tu 10% de las mensualidades</span><span class="val tabular" id="cz-sueldo-dia">$0</span></div>
  </div>
- </div>
- <div class="card" style="border-color:var(--dorado);">
- <div class="card-head"><h2>Ventas del día por categoría</h2></div>
- <p class="card-sub">Anota cuánto vendiste hoy de cada cosa aparte de las mensualidades: snacks saludables, suplementos, ropa deportiva, bebestibles y pase diario.</p>
- <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="vc-date" placeholder="19-08-2026"></div>
- <div class="addrow" style="grid-template-columns:repeat(5,1fr);">
- <div><label for="vc-snacks">Snacks Saludables</label><input type="text" id="vc-snacks" placeholder="0"></div>
- <div><label for="vc-suplementos">Suplementos</label><input type="text" id="vc-suplementos" placeholder="0"></div>
- <div><label for="vc-ropa">Ropa Deportiva</label><input type="text" id="vc-ropa" placeholder="0"></div>
- <div><label for="vc-bebestibles">Bebestibles</label><input type="text" id="vc-bebestibles" placeholder="0"></div>
- <div><label for="vc-pase">Pase Diario</label><input type="text" id="vc-pase" placeholder="0"></div>
- </div>
- <div class="statrow"><div class="stat"><span class="eyebrow">Total vendido hoy</span><span class="val tabular" id="vc-total-dia">$0</span></div></div>
- <div style="margin-top:14px;"><button class="btn btn-primary" id="vc-save">Guardar ventas de hoy</button></div>
- </div>
- <div class="card">
- <div class="card-head"><h2>Historial de ventas por categoría</h2></div>
- <div id="vc-list"></div>
- <div class="statrow">
- <div class="stat"><span class="eyebrow">Snacks (mes)</span><span class="val tabular" id="vc-mes-snacks">$0</span></div>
- <div class="stat"><span class="eyebrow">Suplementos (mes)</span><span class="val tabular" id="vc-mes-suplementos">$0</span></div>
- <div class="stat"><span class="eyebrow">Ropa (mes)</span><span class="val tabular" id="vc-mes-ropa">$0</span></div>
- <div class="stat"><span class="eyebrow">Bebestibles (mes)</span><span class="val tabular" id="vc-mes-bebestibles">$0</span></div>
- <div class="stat"><span class="eyebrow">Pase Diario (mes)</span><span class="val tabular" id="vc-mes-pase">$0</span></div>
- </div>
- </div>
-
- <div class="card">
- <div class="card-head"><h2>Cierre de caja del día</h2></div>
- <p class="card-sub">Al final del día, anota aquí los totales que ya sumaste. Las mensualidades de los socios no van aquí.</p>
- <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="c-date" placeholder="19-08-2026"></div>
- <div class="addrow" style="grid-template-columns:1fr 1fr 1fr;">
- <div><label for="c-efectivo">Efectivo</label><input type="text" id="c-efectivo" placeholder="0"></div>
- <div><label for="c-tarjeta">Tarjeta</label><input type="text" id="c-tarjeta" placeholder="0"></div>
- <div><label for="c-transferencia">Transferencia</label><input type="text" id="c-transferencia" placeholder="0"></div>
- </div>
- <div class="statrow"><div class="stat"><span class="eyebrow">Total del día</span><span class="val tabular" id="c-total">$0</span></div></div>
- <div style="margin-top:14px;"><button class="btn btn-primary" id="c-save">Guardar cierre del día</button></div>
+ <div style="margin-top:14px;"><button class="btn btn-primary" id="cz-save">Guardar cierre del día</button></div>
  </div>
  <div class="card">
  <div class="card-head"><h2>Historial de cierres</h2></div>
- <div id="c-list"></div>
- <div class="statrow"><div class="stat"><span class="eyebrow">Ventas de este mes</span><span class="val tabular" id="c-mes-total">$0</span></div></div>
+ <div class="twrap">
+ <table>
+ <thead><tr><th>Fecha</th><th class="num">Mensualidades</th><th class="num">Productos</th><th class="num">Total día</th><th class="num">Tu 10%</th><th style="width:44px;"></th></tr></thead>
+ <tbody id="cz-tbody"></tbody>
+ </table>
+ </div>
+ <div class="statrow">
+ <div class="stat"><span class="eyebrow">Vendido este mes</span><span class="val tabular" id="cz-mes-total">$0</span></div>
+ <div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Acumulado de tu 10% este mes</span><span class="val tabular" id="cz-mes-sueldo">$0</span></div>
+ </div>
  </div>
  </section>
 </div>
@@ -982,140 +951,71 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  document.getElementById("bal-total").textContent = clp(totalFijos + gastosVariablesMesTotal());
  }
 
- attachDateFormatting(document.getElementById("c-date"));
- ["c-efectivo","c-tarjeta","c-transferencia"].forEach(function(id){ attachMoneyFormatting(document.getElementById(id)); });
- document.getElementById("c-save").addEventListener("click", function(){
- var date = document.getElementById("c-date").value.trim() || todayISO();
- var efectivo = parseMoney(document.getElementById("c-efectivo").value);
- var tarjeta = parseMoney(document.getElementById("c-tarjeta").value);
- var transferencia = parseMoney(document.getElementById("c-transferencia").value);
- var total = efectivo + tarjeta + transferencia;
- if(total<=0){ alert("Anota al menos un monto antes de guardar."); return; }
- local.cierres.push({id:uid(), date:date, total:total});
- saveLocal();
- ["c-efectivo","c-tarjeta","c-transferencia"].forEach(function(id){ document.getElementById(id).value=""; });
- renderCierres();
- });
- function renderCierres(){
- var list = document.getElementById("c-list");
- list.innerHTML = "";
- var sorted = local.cierres.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });
- if(sorted.length===0){ list.innerHTML = '<div class="empty">Sin cierres guardados.</div>'; }
- sorted.forEach(function(c){
- var row = document.createElement("div");
- row.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--line);";
- row.innerHTML = '<span>'+fmtDateEs(c.date)+'</span><span class="tabular">'+clp(c.total)+'</span>';
- list.appendChild(row);
- });
- var mk = monthKeyDMY(todayISO());
- var mesTotal = local.cierres.filter(function(c){return monthKeyDMY(c.date)===mk;}).reduce(function(s,c){return s+c.total;},0);
- document.getElementById("c-mes-total").textContent = clp(mesTotal);
- }
-
- var VC_CATEGORIAS = [
- {id:"snacks", label:"Snacks Saludables"},
- {id:"suplementos", label:"Suplementos"},
- {id:"ropa", label:"Ropa Deportiva"},
- {id:"bebestibles", label:"Bebestibles"},
- {id:"pase", label:"Pase Diario"}
- ];
- attachDateFormatting(document.getElementById("vc-date"));
- function vcTotalHoyInputs(){
- return VC_CATEGORIAS.reduce(function(s,c){ return s + parseMoney(document.getElementById("vc-"+c.id).value); }, 0);
- }
- VC_CATEGORIAS.forEach(function(c){
- var input = document.getElementById("vc-"+c.id);
- attachMoneyFormatting(input);
- input.addEventListener("input", function(){
- document.getElementById("vc-total-dia").textContent = clp(vcTotalHoyInputs());
- });
- });
- document.getElementById("vc-save").addEventListener("click", function(){
- var date = document.getElementById("vc-date").value.trim() || todayISO();
- var entry = {id:uid(), date:date};
+ var CZ_CAMPOS = ["mensualidades","snacks","suplementos","ropa","bebestibles","pase"];
+ attachDateFormatting(document.getElementById("cz-date"));
+ function czEnCurso(){
+ var vals = {};
  var total = 0;
- VC_CATEGORIAS.forEach(function(c){
- var amount = parseMoney(document.getElementById("vc-"+c.id).value);
- entry[c.id] = amount;
- total += amount;
+ CZ_CAMPOS.forEach(function(id){
+ var v = parseMoney(document.getElementById("cz-"+id).value);
+ vals[id] = v;
+ total += v;
  });
- if(total<=0){ alert("Anota al menos una venta antes de guardar."); return; }
- entry.total = total;
- local.ventasCategoria.push(entry);
- saveLocal();
- VC_CATEGORIAS.forEach(function(c){ document.getElementById("vc-"+c.id).value = ""; });
- document.getElementById("vc-date").value = "";
- document.getElementById("vc-total-dia").textContent = clp(0);
- renderVentasCategoria();
- });
- function renderVentasCategoria(){
- var list = document.getElementById("vc-list");
- list.innerHTML = "";
- var sorted = local.ventasCategoria.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });
- if(sorted.length===0){ list.innerHTML = '<div class="empty">Sin ventas registradas.</div>'; }
- sorted.forEach(function(v){
- var detalle = VC_CATEGORIAS.filter(function(c){ return v[c.id] > 0; })
- .map(function(c){ return c.label+": "+clp(v[c.id]); }).join(" · ");
- var row = document.createElement("div");
- row.style.cssText = "padding:8px 4px;border-bottom:1px solid var(--line);";
- row.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;"><span>'+fmtDateEs(v.date)+'</span><span class="tabular">'+clp(v.total)+'</span></div>' +
- (detalle ? '<div style="font-size:12px;color:var(--gris-soft);margin-top:2px;">'+escapeHtml(detalle)+'</div>' : '');
- list.appendChild(row);
- });
- var mk = monthKeyDMY(todayISO());
- var delMes = local.ventasCategoria.filter(function(v){ return monthKeyDMY(v.date)===mk; });
- VC_CATEGORIAS.forEach(function(c){
- var total = delMes.reduce(function(s,v){ return s + (v[c.id]||0); }, 0);
- document.getElementById("vc-mes-"+c.id).textContent = clp(total);
- });
+ return {vals:vals, total:total};
  }
-
- attachDateFormatting(document.getElementById("vm-date"));
- attachMoneyFormatting(document.getElementById("vm-total"));
- function vmMesGuardado(){
+ function czMesGuardado(){
  var mk = monthKeyDMY(todayISO());
- var delMes = local.ventasMensualidades.filter(function(v){ return monthKeyDMY(v.date)===mk; });
+ var delMes = local.cierres.filter(function(c){ return monthKeyDMY(c.date)===mk; });
  return {
- total: delMes.reduce(function(s,v){return s+v.total;},0),
- sueldo: delMes.reduce(function(s,v){return s+v.sueldo;},0)
+ total: delMes.reduce(function(s,c){return s+c.total;},0),
+ sueldo: delMes.reduce(function(s,c){return s+c.sueldo;},0)
  };
  }
  /* Refleja en vivo, mientras escribes, lo ya guardado este mes + lo que
- llevas tecleado hoy (todavía sin presionar Guardar día). */
- function updateVmStatsLive(){
- var guardado = vmMesGuardado();
- var enCurso = parseMoney(document.getElementById("vm-total").value);
- document.getElementById("vm-mes-total").textContent = clp(guardado.total + enCurso);
- document.getElementById("vm-mes-sueldo").textContent = clp(guardado.sueldo + Math.round(enCurso*0.10));
+ llevas tecleado hoy (todavía sin presionar Guardar). */
+ function updateCzStatsLive(){
+ var enCurso = czEnCurso();
+ document.getElementById("cz-total-dia").textContent = clp(enCurso.total);
+ document.getElementById("cz-sueldo-dia").textContent = clp(Math.round(enCurso.vals.mensualidades*0.10));
+ var guardado = czMesGuardado();
+ document.getElementById("cz-mes-total").textContent = clp(guardado.total + enCurso.total);
+ document.getElementById("cz-mes-sueldo").textContent = clp(guardado.sueldo + Math.round(enCurso.vals.mensualidades*0.10));
  }
- document.getElementById("vm-total").addEventListener("input", updateVmStatsLive);
- document.getElementById("vm-save").addEventListener("click", function(){
- var date = document.getElementById("vm-date").value.trim() || todayISO();
- var total = parseMoney(document.getElementById("vm-total").value);
- if(total<=0){ alert("Anota el total vendido hoy antes de guardar."); return; }
- local.ventasMensualidades.push({id:uid(), date:date, total:total, sueldo: Math.round(total*0.10)});
- saveLocal();
- document.getElementById("vm-date").value = "";
- document.getElementById("vm-total").value = "";
- renderVentasMensualidades();
+ CZ_CAMPOS.forEach(function(id){
+ var input = document.getElementById("cz-"+id);
+ attachMoneyFormatting(input);
+ input.addEventListener("input", updateCzStatsLive);
  });
- function renderVentasMensualidades(){
- var tbody = document.getElementById("vm-tbody");
+ document.getElementById("cz-save").addEventListener("click", function(){
+ var date = document.getElementById("cz-date").value.trim() || todayISO();
+ var enCurso = czEnCurso();
+ if(enCurso.total<=0){ alert("Anota al menos una venta antes de guardar."); return; }
+ var entry = {id:uid(), date:date, total:enCurso.total, sueldo: Math.round(enCurso.vals.mensualidades*0.10)};
+ CZ_CAMPOS.forEach(function(id){ entry[id] = enCurso.vals[id]; });
+ local.cierres.push(entry);
+ saveLocal();
+ CZ_CAMPOS.forEach(function(id){ document.getElementById("cz-"+id).value = ""; });
+ document.getElementById("cz-date").value = "";
+ renderCierres();
+ });
+ function renderCierres(){
+ var tbody = document.getElementById("cz-tbody");
  tbody.innerHTML = "";
- var sorted = local.ventasMensualidades.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });
- if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="4" class="empty">Sin días registrados.</td></tr>'; }
- sorted.forEach(function(v){
+ var sorted = local.cierres.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });
+ if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="6" class="empty">Sin cierres guardados.</td></tr>'; }
+ sorted.forEach(function(c){
+ var productos = (c.snacks||0)+(c.suplementos||0)+(c.ropa||0)+(c.bebestibles||0)+(c.pase||0);
  var tr = document.createElement("tr");
- tr.innerHTML = '<td>'+fmtDateEs(v.date)+'</td><td class="num">'+clp(v.total)+'</td><td class="num">'+clp(v.sueldo)+'</td><td></td>';
+ tr.innerHTML = '<td>'+fmtDateEs(c.date)+'</td><td class="num">'+clp(c.mensualidades||0)+'</td><td class="num">'+clp(productos)+'</td><td class="num">'+clp(c.total)+'</td><td class="num">'+clp(c.sueldo||0)+'</td><td></td>';
  var tdDel = tr.lastElementChild;
  var b = document.createElement("button"); b.className="iconbtn"; b.title="Eliminar"; b.textContent="✕";
- b.addEventListener("click", function(){ local.ventasMensualidades = local.ventasMensualidades.filter(function(x){return x.id!==v.id;}); saveLocal(); renderVentasMensualidades(); });
+ b.addEventListener("click", function(){ local.cierres = local.cierres.filter(function(x){return x.id!==c.id;}); saveLocal(); renderCierres(); });
  tdDel.appendChild(b);
  tbody.appendChild(tr);
  });
- updateVmStatsLive();
+ updateCzStatsLive();
  }
 
- renderFixed(); renderGV(); renderCierres(); renderVentasCategoria(); renderVentasMensualidades();
+ renderFixed(); renderGV(); renderCierres();
 })();
 </script>
