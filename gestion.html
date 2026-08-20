@@ -493,7 +493,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 
  <div class="card">
  <div class="card-head"><h2>Cierre de Caja del Día</h2></div>
- <p class="card-sub">Anota lo que vendiste hoy de cada cosa, aparte de las mensualidades. El total se calcula solo.</p>
+ <p class="card-sub">Anota lo que vendiste hoy de cada cosa, aparte de las mensualidades. Puedes guardar varias veces en el mismo día (cada venta por separado) y el "Total vendido hoy" se va sumando solo.</p>
  <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="cz-date" placeholder="20-08-2026"></div>
  <div class="addrow" style="grid-template-columns:repeat(5,1fr);">
  <div><label for="cz-snacks">Snacks Saludables</label><input type="text" id="cz-snacks" placeholder="0"></div>
@@ -1031,9 +1031,15 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var delMes = local.cierres.filter(function(c){ return monthKeyDMY(c.date)===mk; });
  return delMes.reduce(function(s,c){return s+c.total;},0);
  }
+ /* Suma todo lo ya guardado hoy (aunque hayas hecho varios "Guardar" en
+ el día), para que el total del día siga creciendo en vez de reiniciarse. */
+ function czHoyGuardado(){
+ var hoy = todayISO();
+ return local.cierres.filter(function(c){ return c.date===hoy; }).reduce(function(s,c){return s+c.total;},0);
+ }
  function updateCzStatsLive(){
  var enCurso = czEnCurso();
- document.getElementById("cz-total-dia").textContent = clp(enCurso.total);
+ document.getElementById("cz-total-dia").textContent = clp(czHoyGuardado() + enCurso.total);
  document.getElementById("cz-mes-total").textContent = clp(czMesGuardado() + enCurso.total);
  }
  CZ_CAMPOS.forEach(function(id){
