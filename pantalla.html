@@ -1,0 +1,183 @@
+<title>WGYMADNSPORT · Pantalla de Ingresos</title>
+<meta name="description" content="Pantalla en vivo de ingresos por tarjeta virtual, WGYMADNSPORT Tocopilla.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+ --negro:#0A0A0A;
+ --surface:#161616;
+ --surface-2:#1F1F1F;
+ --card:#1c1c1c;
+ --rojo:#E30613;
+ --rojo-oscuro:#A40410;
+ --dorado:#D4AF37;
+ --blanco:#FFFFFF;
+ --gris:#CFCFCF;
+ --gris-soft:#8C8C8C;
+ --line:#2A2A2A;
+}
+*{box-sizing:border-box;}
+body{
+ margin:0;
+ background:var(--negro);
+ color:var(--blanco);
+ font-family:'Segoe UI', Arial, sans-serif;
+ min-height:100vh;
+}
+header.top{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%); border-bottom:3px solid var(--rojo); padding:22px 20px; text-align:center; }
+header.top .logo{ width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--dorado); margin-bottom:8px; }
+header.top .gymname{ font-size:13px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 4px; }
+header.top h1{ font-size:22px; margin:0; font-weight:800; text-transform:uppercase; }
+header.top h1 span{ color:var(--rojo); }
+
+.wrap{ max-width:720px; margin:0 auto; padding:26px 20px 60px; }
+
+.hero{
+ background:linear-gradient(135deg, #161616 0%, #0A0A0A 60%, #1c1608 100%);
+ border:1.5px solid var(--dorado);
+ border-radius:20px;
+ padding:36px 28px;
+ text-align:center;
+ min-height:180px;
+ display:flex; flex-direction:column; align-items:center; justify-content:center;
+ transition:box-shadow .3s ease;
+}
+.hero.flash{ box-shadow:0 0 0 4px var(--rojo), 0 0 40px 6px rgba(227,6,19,.5); }
+.hero .kicker{ font-size:12px; font-weight:800; letter-spacing:.16em; color:var(--dorado); text-transform:uppercase; margin:0 0 12px; }
+.hero .name{ font-size:38px; font-weight:900; text-transform:uppercase; line-height:1.15; margin:0 0 8px; }
+.hero .time{ font-size:15px; color:var(--gris-soft); font-weight:600; }
+.hero .empty{ font-size:16px; color:var(--gris-soft); font-weight:600; }
+
+.feed-head{ display:flex; align-items:center; justify-content:space-between; margin:28px 0 10px; }
+.feed-head h2{ font-size:13px; font-weight:800; letter-spacing:.1em; color:var(--gris-soft); text-transform:uppercase; margin:0; }
+.feed-head .dot-status{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--gris-soft); font-weight:600; }
+.dot-live{ width:8px; height:8px; border-radius:50%; background:#5CA85C; }
+
+.feed-item{
+ display:flex; align-items:center; justify-content:space-between;
+ background:var(--card); border:1px solid var(--line); border-radius:12px;
+ padding:14px 16px; margin-bottom:8px;
+}
+.feed-item .fname{ font-weight:800; font-size:15px; letter-spacing:.01em; }
+.feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; }
+.feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:30px 0; }
+
+.setup-notice{
+ background:rgba(212,175,55,.1); border:1.5px solid var(--dorado); border-radius:12px;
+ padding:16px 18px; font-size:13px; color:var(--gris); line-height:1.6; margin-bottom:24px;
+}
+.setup-notice b{ color:var(--dorado); }
+</style>
+
+<header class="top">
+<img class="logo" id="topLogoImg" alt="WGYMADNSPORT">
+<p class="gymname">WGYMADNSPORT Tocopilla</p>
+<h1>Pantalla de <span>Ingresos</span></h1>
+</header>
+
+<div class="wrap">
+<div id="setupNotice" class="setup-notice" hidden>
+Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te lo pido cuando termines de publicar el Apps Script).
+</div>
+
+<div class="hero" id="hero">
+<p class="kicker">Último ingreso</p>
+<p class="empty" id="heroEmpty">Esperando el primer escaneo del día...</p>
+<p class="name" id="heroName" hidden></p>
+<p class="time" id="heroTime" hidden></p>
+</div>
+
+<div class="feed-head">
+<h2>Ingresos recientes</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="feed"></div>
+</div>
+
+<script>
+const LOGO_B64 = "assets/logo.jpg";
+/* Se completa con el link de "Implementar como app web" de Google Apps Script. */
+const CHECKIN_URL = "";
+</script>
+<script>
+(function(){
+"use strict";
+
+document.getElementById("topLogoImg").src = LOGO_B64;
+
+if(!CHECKIN_URL){
+ document.getElementById("setupNotice").hidden = false;
+ return;
+}
+
+function fmtTime(ts){
+ var d = new Date(ts);
+ return d.toLocaleTimeString("es-CL", {hour:"2-digit", minute:"2-digit"});
+}
+function escapeHtml(s){
+ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+}
+
+var seenKeys = {};
+var firstPoll = true;
+
+function keyOf(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
+
+function renderFeed(rows){
+ var feed = document.getElementById("feed");
+ if(rows.length===0){ feed.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>'; return; }
+ feed.innerHTML = rows.map(function(r){
+  return '<div class="feed-item"><span class="fname">'+escapeHtml(r.nombre)+' '+escapeHtml(r.apellido)+'</span><span class="ftime">'+fmtTime(r.ts)+'</span></div>';
+ }).join('');
+}
+
+function flashHero(r){
+ document.getElementById("heroEmpty").hidden = true;
+ var nameEl = document.getElementById("heroName");
+ var timeEl = document.getElementById("heroTime");
+ nameEl.hidden = false; timeEl.hidden = false;
+ nameEl.textContent = r.nombre + " " + r.apellido;
+ timeEl.textContent = fmtTime(r.ts);
+ var hero = document.getElementById("hero");
+ hero.classList.remove("flash");
+ void hero.offsetWidth;
+ hero.classList.add("flash");
+}
+
+function handleData(data){
+ var rows = data.rows || [];
+ if(rows.length > 0){
+  var newest = rows[0];
+  if(!firstPoll && !seenKeys[keyOf(newest)]){
+   flashHero(newest);
+  } else if(firstPoll){
+   document.getElementById("heroEmpty").hidden = true;
+   document.getElementById("heroName").hidden = false;
+   document.getElementById("heroTime").hidden = false;
+   document.getElementById("heroName").textContent = newest.nombre + " " + newest.apellido;
+   document.getElementById("heroTime").textContent = fmtTime(newest.ts);
+  }
+ }
+ rows.forEach(function(r){ seenKeys[keyOf(r)] = true; });
+ firstPoll = false;
+ renderFeed(rows);
+}
+
+var pollCounter = 0;
+function poll(){
+ pollCounter++;
+ var cb = "wgymCb" + pollCounter + "_" + Date.now();
+ window[cb] = function(data){
+  handleData(data);
+  delete window[cb];
+  script.remove();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+
+poll();
+setInterval(poll, 4000);
+})();
+</script>

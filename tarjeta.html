@@ -396,6 +396,8 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 
 <script>  
 const LOGO_B64 = "assets/logo.jpg";
+/* Se completa con el link de "Implementar como app web" de Google Apps Script. */
+const CHECKIN_URL = "";
 </script>  
 <script>  
 (function(){  
@@ -487,10 +489,18 @@ const LOGO_B64 = "assets/logo.jpg";
  '<div class="mc-row"><span>Vencimiento</span><b>'+escapeHtml(s.vencimiento||"—")+'</b></div>' +
  '<div class="mc-status"><span class="pill '+est.cls+'"><span class="dot"></span>'+est.txt+'</span></div>';
  }
+ function avisarIngreso(s){
+ if(!CHECKIN_URL) return;
+ try{
+ var img = new Image();
+ img.src = CHECKIN_URL + "?action=checkin&nombre=" + encodeURIComponent(s.nombre) + "&apellido=" + encodeURIComponent(s.apellido) + "&_=" + Date.now();
+ }catch(e){}
+ }
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
  renderCard(s);
+ avisarIngreso(s);
  }
  function tryLogin(nombre, apellido){
  var socio = findSocio(nombre, apellido);
