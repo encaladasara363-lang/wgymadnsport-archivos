@@ -471,35 +471,49 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <!-- TAB: CIERRE DE CAJA -->
  <section class="panel2" id="panel-caja">
  <div class="card" style="border-color:var(--dorado);">
+ <div class="card-head"><h2>Mensualidades del Día</h2></div>
+ <p class="card-sub">Cada día que trabajes, anota cuánto vendiste ese día en mensualidades. Tu 10% se calcula solo, mientras vas escribiendo.</p>
+ <div class="addrow" style="grid-template-columns:1fr 1fr auto;">
+ <div><label for="vm-date">Fecha</label><input type="text" id="vm-date" placeholder="20-08-2026"></div>
+ <div><label for="vm-total">Mensualidades vendidas hoy</label><input type="text" id="vm-total" placeholder="0"></div>
+ <button class="btn btn-primary" id="vm-save">Guardar día</button>
+ </div>
+ <div class="statrow"><div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Tu 10% de hoy</span><span class="val tabular" id="vm-sueldo-dia">$0</span></div></div>
+ <div class="twrap" style="margin-top:14px;">
+ <table>
+ <thead><tr><th>Fecha</th><th class="num">Mensualidades</th><th class="num">Tu 10%</th><th style="width:44px;"></th></tr></thead>
+ <tbody id="vm-tbody"></tbody>
+ </table>
+ </div>
+ <div class="statrow">
+ <div class="stat"><span class="eyebrow">Vendido en mensualidades este mes</span><span class="val tabular" id="vm-mes-total">$0</span></div>
+ <div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Acumulado de tu 10% este mes</span><span class="val tabular" id="vm-mes-sueldo">$0</span></div>
+ </div>
+ </div>
+
+ <div class="card">
  <div class="card-head"><h2>Cierre de Caja del Día</h2></div>
- <p class="card-sub">Al final del día, anota cuánto vendiste de cada cosa. El total del día y tu 10% de las mensualidades se calculan solos, mientras vas escribiendo.</p>
+ <p class="card-sub">Anota lo que vendiste hoy de cada cosa, aparte de las mensualidades. El total se calcula solo.</p>
  <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="cz-date" placeholder="20-08-2026"></div>
- <div class="addrow" style="grid-template-columns:repeat(3,1fr);">
- <div><label for="cz-mensualidades">Mensualidades</label><input type="text" id="cz-mensualidades" placeholder="0"></div>
+ <div class="addrow" style="grid-template-columns:repeat(5,1fr);">
  <div><label for="cz-snacks">Snacks Saludables</label><input type="text" id="cz-snacks" placeholder="0"></div>
  <div><label for="cz-suplementos">Suplementos</label><input type="text" id="cz-suplementos" placeholder="0"></div>
  <div><label for="cz-ropa">Ropa Deportiva</label><input type="text" id="cz-ropa" placeholder="0"></div>
  <div><label for="cz-bebestibles">Bebestibles</label><input type="text" id="cz-bebestibles" placeholder="0"></div>
  <div><label for="cz-pase">Pase Diario</label><input type="text" id="cz-pase" placeholder="0"></div>
  </div>
- <div class="statrow">
- <div class="stat"><span class="eyebrow">Total vendido hoy</span><span class="val tabular" id="cz-total-dia">$0</span></div>
- <div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Tu 10% de las mensualidades</span><span class="val tabular" id="cz-sueldo-dia">$0</span></div>
- </div>
+ <div class="statrow"><div class="stat"><span class="eyebrow">Total vendido hoy</span><span class="val tabular" id="cz-total-dia">$0</span></div></div>
  <div style="margin-top:14px;"><button class="btn btn-primary" id="cz-save">Guardar cierre del día</button></div>
  </div>
  <div class="card">
  <div class="card-head"><h2>Historial de cierres</h2></div>
  <div class="twrap">
  <table>
- <thead><tr><th>Fecha</th><th class="num">Mensualidades</th><th class="num">Productos</th><th class="num">Total día</th><th class="num">Tu 10%</th><th style="width:44px;"></th></tr></thead>
+ <thead><tr><th>Fecha</th><th class="num">Total día</th><th style="width:44px;"></th></tr></thead>
  <tbody id="cz-tbody"></tbody>
  </table>
  </div>
- <div class="statrow">
- <div class="stat"><span class="eyebrow">Vendido este mes</span><span class="val tabular" id="cz-mes-total">$0</span></div>
- <div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Acumulado de tu 10% este mes</span><span class="val tabular" id="cz-mes-sueldo">$0</span></div>
- </div>
+ <div class="statrow"><div class="stat"><span class="eyebrow">Vendido este mes</span><span class="val tabular" id="cz-mes-total">$0</span></div></div>
  </div>
  </section>
 </div>
@@ -951,7 +965,55 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  document.getElementById("bal-total").textContent = clp(totalFijos + gastosVariablesMesTotal());
  }
 
- var CZ_CAMPOS = ["mensualidades","snacks","suplementos","ropa","bebestibles","pase"];
+ /* ---- Mensualidades del día (con 10%) ---- */
+ attachDateFormatting(document.getElementById("vm-date"));
+ attachMoneyFormatting(document.getElementById("vm-total"));
+ function vmMesGuardado(){
+ var mk = monthKeyDMY(todayISO());
+ var delMes = local.ventasMensualidades.filter(function(v){ return monthKeyDMY(v.date)===mk; });
+ return {
+ total: delMes.reduce(function(s,v){return s+v.total;},0),
+ sueldo: delMes.reduce(function(s,v){return s+v.sueldo;},0)
+ };
+ }
+ function updateVmStatsLive(){
+ var enCurso = parseMoney(document.getElementById("vm-total").value);
+ var sueldoHoy = Math.round(enCurso*0.10);
+ document.getElementById("vm-sueldo-dia").textContent = clp(sueldoHoy);
+ var guardado = vmMesGuardado();
+ document.getElementById("vm-mes-total").textContent = clp(guardado.total + enCurso);
+ document.getElementById("vm-mes-sueldo").textContent = clp(guardado.sueldo + sueldoHoy);
+ }
+ document.getElementById("vm-total").addEventListener("input", updateVmStatsLive);
+ document.getElementById("vm-save").addEventListener("click", function(){
+ var date = document.getElementById("vm-date").value.trim() || todayISO();
+ var total = parseMoney(document.getElementById("vm-total").value);
+ if(total<=0){ alert("Anota las mensualidades vendidas hoy antes de guardar."); return; }
+ local.ventasMensualidades.push({id:uid(), date:date, total:total, sueldo: Math.round(total*0.10)});
+ saveLocal();
+ document.getElementById("vm-date").value = "";
+ document.getElementById("vm-total").value = "";
+ renderVentasMensualidades();
+ });
+ function renderVentasMensualidades(){
+ var tbody = document.getElementById("vm-tbody");
+ tbody.innerHTML = "";
+ var sorted = local.ventasMensualidades.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });
+ if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="4" class="empty">Sin días registrados.</td></tr>'; }
+ sorted.forEach(function(v){
+ var tr = document.createElement("tr");
+ tr.innerHTML = '<td>'+fmtDateEs(v.date)+'</td><td class="num">'+clp(v.total)+'</td><td class="num">'+clp(v.sueldo)+'</td><td></td>';
+ var tdDel = tr.lastElementChild;
+ var b = document.createElement("button"); b.className="iconbtn"; b.title="Eliminar"; b.textContent="✕";
+ b.addEventListener("click", function(){ local.ventasMensualidades = local.ventasMensualidades.filter(function(x){return x.id!==v.id;}); saveLocal(); renderVentasMensualidades(); });
+ tdDel.appendChild(b);
+ tbody.appendChild(tr);
+ });
+ updateVmStatsLive();
+ }
+
+ /* ---- Cierre de Caja del día: productos, sin 10% (eso es solo de mensualidades) ---- */
+ var CZ_CAMPOS = ["snacks","suplementos","ropa","bebestibles","pase"];
  attachDateFormatting(document.getElementById("cz-date"));
  function czEnCurso(){
  var vals = {};
@@ -966,20 +1028,12 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  function czMesGuardado(){
  var mk = monthKeyDMY(todayISO());
  var delMes = local.cierres.filter(function(c){ return monthKeyDMY(c.date)===mk; });
- return {
- total: delMes.reduce(function(s,c){return s+c.total;},0),
- sueldo: delMes.reduce(function(s,c){return s+c.sueldo;},0)
- };
+ return delMes.reduce(function(s,c){return s+c.total;},0);
  }
- /* Refleja en vivo, mientras escribes, lo ya guardado este mes + lo que
- llevas tecleado hoy (todavía sin presionar Guardar). */
  function updateCzStatsLive(){
  var enCurso = czEnCurso();
  document.getElementById("cz-total-dia").textContent = clp(enCurso.total);
- document.getElementById("cz-sueldo-dia").textContent = clp(Math.round(enCurso.vals.mensualidades*0.10));
- var guardado = czMesGuardado();
- document.getElementById("cz-mes-total").textContent = clp(guardado.total + enCurso.total);
- document.getElementById("cz-mes-sueldo").textContent = clp(guardado.sueldo + Math.round(enCurso.vals.mensualidades*0.10));
+ document.getElementById("cz-mes-total").textContent = clp(czMesGuardado() + enCurso.total);
  }
  CZ_CAMPOS.forEach(function(id){
  var input = document.getElementById("cz-"+id);
@@ -990,7 +1044,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var date = document.getElementById("cz-date").value.trim() || todayISO();
  var enCurso = czEnCurso();
  if(enCurso.total<=0){ alert("Anota al menos una venta antes de guardar."); return; }
- var entry = {id:uid(), date:date, total:enCurso.total, sueldo: Math.round(enCurso.vals.mensualidades*0.10)};
+ var entry = {id:uid(), date:date, total:enCurso.total};
  CZ_CAMPOS.forEach(function(id){ entry[id] = enCurso.vals[id]; });
  local.cierres.push(entry);
  saveLocal();
@@ -1002,11 +1056,10 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var tbody = document.getElementById("cz-tbody");
  tbody.innerHTML = "";
  var sorted = local.cierres.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });
- if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="6" class="empty">Sin cierres guardados.</td></tr>'; }
+ if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="3" class="empty">Sin cierres guardados.</td></tr>'; }
  sorted.forEach(function(c){
- var productos = (c.snacks||0)+(c.suplementos||0)+(c.ropa||0)+(c.bebestibles||0)+(c.pase||0);
  var tr = document.createElement("tr");
- tr.innerHTML = '<td>'+fmtDateEs(c.date)+'</td><td class="num">'+clp(c.mensualidades||0)+'</td><td class="num">'+clp(productos)+'</td><td class="num">'+clp(c.total)+'</td><td class="num">'+clp(c.sueldo||0)+'</td><td></td>';
+ tr.innerHTML = '<td>'+fmtDateEs(c.date)+'</td><td class="num">'+clp(c.total)+'</td><td></td>';
  var tdDel = tr.lastElementChild;
  var b = document.createElement("button"); b.className="iconbtn"; b.title="Eliminar"; b.textContent="✕";
  b.addEventListener("click", function(){ local.cierres = local.cierres.filter(function(x){return x.id!==c.id;}); saveLocal(); renderCierres(); });
@@ -1016,6 +1069,6 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  updateCzStatsLive();
  }
 
- renderFixed(); renderGV(); renderCierres();
+ renderFixed(); renderGV(); renderVentasMensualidades(); renderCierres();
 })();
 </script>
