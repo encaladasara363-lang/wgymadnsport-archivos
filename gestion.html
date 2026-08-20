@@ -514,6 +514,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  </table>
  </div>
  <div class="statrow"><div class="stat"><span class="eyebrow">Vendido este mes</span><span class="val tabular" id="cz-mes-total">$0</span></div></div>
+ <div style="margin-top:14px;"><button type="button" class="gate-admin-link" id="cz-clear" style="background:none;border:none;cursor:pointer;color:var(--gris-soft);font-size:12px;text-decoration:underline;">Vaciar todo el historial de cierres</button></div>
  </div>
  </section>
 </div>
@@ -1050,6 +1051,12 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  saveLocal();
  CZ_CAMPOS.forEach(function(id){ document.getElementById("cz-"+id).value = ""; });
  document.getElementById("cz-date").value = "";
+ renderCierres();
+ });
+ document.getElementById("cz-clear").addEventListener("click", function(){
+ if(!confirm("¿Borrar todo el historial de cierres de caja? Esto no se puede deshacer.")) return;
+ local.cierres = [];
+ saveLocal();
  renderCierres();
  });
  function renderCierres(){
