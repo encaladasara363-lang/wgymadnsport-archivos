@@ -1072,6 +1072,23 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
 
  attachDateFormatting(document.getElementById("vm-date"));
  attachMoneyFormatting(document.getElementById("vm-total"));
+ function vmMesGuardado(){
+ var mk = monthKeyDMY(todayISO());
+ var delMes = local.ventasMensualidades.filter(function(v){ return monthKeyDMY(v.date)===mk; });
+ return {
+ total: delMes.reduce(function(s,v){return s+v.total;},0),
+ sueldo: delMes.reduce(function(s,v){return s+v.sueldo;},0)
+ };
+ }
+ /* Refleja en vivo, mientras escribes, lo ya guardado este mes + lo que
+ llevas tecleado hoy (todavía sin presionar Guardar día). */
+ function updateVmStatsLive(){
+ var guardado = vmMesGuardado();
+ var enCurso = parseMoney(document.getElementById("vm-total").value);
+ document.getElementById("vm-mes-total").textContent = clp(guardado.total + enCurso);
+ document.getElementById("vm-mes-sueldo").textContent = clp(guardado.sueldo + Math.round(enCurso*0.10));
+ }
+ document.getElementById("vm-total").addEventListener("input", updateVmStatsLive);
  document.getElementById("vm-save").addEventListener("click", function(){
  var date = document.getElementById("vm-date").value.trim() || todayISO();
  var total = parseMoney(document.getElementById("vm-total").value);
@@ -1096,10 +1113,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  tdDel.appendChild(b);
  tbody.appendChild(tr);
  });
- var mk = monthKeyDMY(todayISO());
- var delMes = local.ventasMensualidades.filter(function(v){ return monthKeyDMY(v.date)===mk; });
- document.getElementById("vm-mes-total").textContent = clp(delMes.reduce(function(s,v){return s+v.total;},0));
- document.getElementById("vm-mes-sueldo").textContent = clp(delMes.reduce(function(s,v){return s+v.sueldo;},0));
+ updateVmStatsLive();
  }
 
  renderFixed(); renderGV(); renderCierres(); renderVentasCategoria(); renderVentasMensualidades();
