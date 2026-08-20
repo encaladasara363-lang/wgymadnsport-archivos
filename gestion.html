@@ -487,6 +487,32 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div id="c-list"></div>
  <div class="statrow"><div class="stat"><span class="eyebrow">Ventas de este mes</span><span class="val tabular" id="c-mes-total">$0</span></div></div>
  </div>
+
+ <div class="card" style="border-color:var(--dorado);">
+ <div class="card-head"><h2>Ventas del día por categoría</h2></div>
+ <p class="card-sub">Anota cuánto vendiste hoy de cada cosa aparte de las mensualidades: snacks saludables, suplementos, ropa deportiva, bebestibles y pase diario.</p>
+ <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="vc-date" placeholder="19-08-2026"></div>
+ <div class="addrow" style="grid-template-columns:repeat(5,1fr);">
+ <div><label for="vc-snacks">Snacks Saludables</label><input type="text" id="vc-snacks" placeholder="0"></div>
+ <div><label for="vc-suplementos">Suplementos</label><input type="text" id="vc-suplementos" placeholder="0"></div>
+ <div><label for="vc-ropa">Ropa Deportiva</label><input type="text" id="vc-ropa" placeholder="0"></div>
+ <div><label for="vc-bebestibles">Bebestibles</label><input type="text" id="vc-bebestibles" placeholder="0"></div>
+ <div><label for="vc-pase">Pase Diario</label><input type="text" id="vc-pase" placeholder="0"></div>
+ </div>
+ <div class="statrow"><div class="stat"><span class="eyebrow">Total vendido hoy</span><span class="val tabular" id="vc-total-dia">$0</span></div></div>
+ <div style="margin-top:14px;"><button class="btn btn-primary" id="vc-save">Guardar ventas de hoy</button></div>
+ </div>
+ <div class="card">
+ <div class="card-head"><h2>Historial de ventas por categoría</h2></div>
+ <div id="vc-list"></div>
+ <div class="statrow">
+ <div class="stat"><span class="eyebrow">Snacks (mes)</span><span class="val tabular" id="vc-mes-snacks">$0</span></div>
+ <div class="stat"><span class="eyebrow">Suplementos (mes)</span><span class="val tabular" id="vc-mes-suplementos">$0</span></div>
+ <div class="stat"><span class="eyebrow">Ropa (mes)</span><span class="val tabular" id="vc-mes-ropa">$0</span></div>
+ <div class="stat"><span class="eyebrow">Bebestibles (mes)</span><span class="val tabular" id="vc-mes-bebestibles">$0</span></div>
+ <div class="stat"><span class="eyebrow">Pase Diario (mes)</span><span class="val tabular" id="vc-mes-pase">$0</span></div>
+ </div>
+ </div>
  </section>
 </div>
 </div>
@@ -858,10 +884,11 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var LOCAL_KEY = "wgym_admin_local_v1";
  function loadLocal(){
  try{ var raw = localStorage.getItem(LOCAL_KEY); if(raw) return JSON.parse(raw); }catch(e){}
- return { fixedCosts:[{id:uid(), name:"Arriendo (incluye gastos comunes)", amount:150000}], gastosVariables:[], cierres:[] };
+ return { fixedCosts:[{id:uid(), name:"Arriendo (incluye gastos comunes)", amount:150000}], gastosVariables:[], cierres:[], ventasCategoria:[] };
  }
  function saveLocal(){ try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(local)); }catch(e){} }
  var local = loadLocal();
+ if(!local.ventasCategoria) local.ventasCategoria = [];
 
  var tabbtns = Array.prototype.slice.call(document.querySelectorAll(".tabbtn"));
  tabbtns.forEach(function(btn){
@@ -965,6 +992,64 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  document.getElementById("c-mes-total").textContent = clp(mesTotal);
  }
 
- renderFixed(); renderGV(); renderCierres();
+ var VC_CATEGORIAS = [
+ {id:"snacks", label:"Snacks Saludables"},
+ {id:"suplementos", label:"Suplementos"},
+ {id:"ropa", label:"Ropa Deportiva"},
+ {id:"bebestibles", label:"Bebestibles"},
+ {id:"pase", label:"Pase Diario"}
+ ];
+ attachDateFormatting(document.getElementById("vc-date"));
+ function vcTotalHoyInputs(){
+ return VC_CATEGORIAS.reduce(function(s,c){ return s + parseMoney(document.getElementById("vc-"+c.id).value); }, 0);
+ }
+ VC_CATEGORIAS.forEach(function(c){
+ var input = document.getElementById("vc-"+c.id);
+ attachMoneyFormatting(input);
+ input.addEventListener("input", function(){
+ document.getElementById("vc-total-dia").textContent = clp(vcTotalHoyInputs());
+ });
+ });
+ document.getElementById("vc-save").addEventListener("click", function(){
+ var date = document.getElementById("vc-date").value.trim() || todayISO();
+ var entry = {id:uid(), date:date};
+ var total = 0;
+ VC_CATEGORIAS.forEach(function(c){
+ var amount = parseMoney(document.getElementById("vc-"+c.id).value);
+ entry[c.id] = amount;
+ total += amount;
+ });
+ if(total<=0){ alert("Anota al menos una venta antes de guardar."); return; }
+ entry.total = total;
+ local.ventasCategoria.push(entry);
+ saveLocal();
+ VC_CATEGORIAS.forEach(function(c){ document.getElementById("vc-"+c.id).value = ""; });
+ document.getElementById("vc-date").value = "";
+ document.getElementById("vc-total-dia").textContent = clp(0);
+ renderVentasCategoria();
+ });
+ function renderVentasCategoria(){
+ var list = document.getElementById("vc-list");
+ list.innerHTML = "";
+ var sorted = local.ventasCategoria.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });
+ if(sorted.length===0){ list.innerHTML = '<div class="empty">Sin ventas registradas.</div>'; }
+ sorted.forEach(function(v){
+ var detalle = VC_CATEGORIAS.filter(function(c){ return v[c.id] > 0; })
+ .map(function(c){ return c.label+": "+clp(v[c.id]); }).join(" · ");
+ var row = document.createElement("div");
+ row.style.cssText = "padding:8px 4px;border-bottom:1px solid var(--line);";
+ row.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;"><span>'+fmtDateEs(v.date)+'</span><span class="tabular">'+clp(v.total)+'</span></div>' +
+ (detalle ? '<div style="font-size:12px;color:var(--gris-soft);margin-top:2px;">'+escapeHtml(detalle)+'</div>' : '');
+ list.appendChild(row);
+ });
+ var mk = monthKeyDMY(todayISO());
+ var delMes = local.ventasCategoria.filter(function(v){ return monthKeyDMY(v.date)===mk; });
+ VC_CATEGORIAS.forEach(function(c){
+ var total = delMes.reduce(function(s,v){ return s + (v[c.id]||0); }, 0);
+ document.getElementById("vc-mes-"+c.id).textContent = clp(total);
+ });
+ }
+
+ renderFixed(); renderGV(); renderCierres(); renderVentasCategoria();
 })();
 </script>
