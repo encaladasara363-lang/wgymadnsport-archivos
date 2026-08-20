@@ -216,7 +216,6 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <button class="tabbtn" role="tab" data-tab="socios" aria-selected="true">Socios</button>
  <button class="tabbtn" role="tab" data-tab="balance" aria-selected="false">Balance</button>
  <button class="tabbtn" role="tab" data-tab="caja" aria-selected="false">Cierre de Caja</button>
- <button class="tabbtn" role="tab" data-tab="rutinas" aria-selected="false">Rutinas</button>
  </nav>
 
  <!-- TAB: SOCIOS -->
@@ -520,19 +519,6 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="statrow"><div class="stat"><span class="eyebrow">Vendido este mes</span><span class="val tabular" id="cz-mes-total">$0</span></div></div>
  <div style="margin-top:14px;"><button type="button" class="gate-admin-link" id="cz-clear" style="background:none;border:none;cursor:pointer;color:var(--gris-soft);font-size:12px;text-decoration:underline;">Vaciar todo el historial de cierres</button></div>
  </div>
- </section>
-
- <!-- TAB: RUTINAS -->
- <section class="panel2" id="panel-rutinas">
- <div class="card" style="border-color:var(--dorado);">
- <div class="card-head"><h2>+ Crear rutina nueva</h2></div>
- <p class="card-sub">Ponle un nombre a la rutina (ej: "Tren Superior Mujeres"). Después le agregas los días, y a cada día sus ejercicios. Esto queda guardado en este navegador — cuando tengas una rutina lista, avísame por chat para dejarla activa para tus socios.</p>
- <div class="addrow" style="grid-template-columns:2fr auto;">
- <div><label for="rt-nombre">Nombre de la rutina</label><input type="text" id="rt-nombre" placeholder="Ej: Tren Superior Mujeres"></div>
- <button class="btn btn-primary" id="rt-add">Crear rutina</button>
- </div>
- </div>
- <div id="rt-list"></div>
  </section>
 </div>
 </div>
@@ -904,70 +890,12 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var LOCAL_KEY = "wgym_admin_local_v1";
  function loadLocal(){
  try{ var raw = localStorage.getItem(LOCAL_KEY); if(raw) return JSON.parse(raw); }catch(e){}
- return { fixedCosts:[{id:uid(), name:"Arriendo (incluye gastos comunes)", amount:150000}], gastosVariables:[], cierres:[], ventasCategoria:[], ventasMensualidades:[], rutinas:[] };
+ return { fixedCosts:[{id:uid(), name:"Arriendo (incluye gastos comunes)", amount:150000}], gastosVariables:[], cierres:[], ventasCategoria:[], ventasMensualidades:[] };
  }
  function saveLocal(){ try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(local)); }catch(e){} }
  var local = loadLocal();
  if(!local.ventasCategoria) local.ventasCategoria = [];
  if(!local.ventasMensualidades) local.ventasMensualidades = [];
- if(!local.rutinas) local.rutinas = [];
- function baseRutinaMujeres(){
- function ej(name, sets, rest, equip, video, tip, alt){
- var t = tip || "";
- if(alt) t += (t ? "\n\n" : "") + "Alternativa: " + alt;
- return {id:uid(), name:name, sets:sets, rest:rest, equip:equip, video:video||"", tip:t};
- }
- function dia(weekday, title, focus, warmup, cooldown, exercises){
- return {id:uid(), weekday:weekday, title:title, focus:focus, warmup:warmup, cooldown:cooldown, exercises:exercises};
- }
- return {
- id: uid(),
- nombre: "Rutina Principiantes Mujeres 5 Días",
- dias: [
- dia("Lunes","Piernas y Glúteos","Tren inferior","Caminadora — 5 minutos","Estira cuádriceps, isquiotibiales y gemelos 20-30 seg por lado.", [
- ej("Sentadilla con mancuerna","3 × 12","60 seg","mancuerna","sentadilla","Sostén una mancuerna o kettlebell pegada al pecho; baja como si te sentaras en una silla, rodillas hacia afuera, y sube empujando con los talones.","¿Muy exigente? Practica primero sin peso, apoyada en una silla, tocando apenas con los glúteos."),
- ej("Extensión de piernas en máquina","3 × 12-15","45 seg","maquina","extension_piernas","Siéntate con la espalda apoyada, extiende las rodillas sin bloquearlas de golpe y baja controlado."),
- ej("Curl femoral en máquina","3 × 12-15","45 seg","maquina","curl_femoral","Dobla las rodillas llevando el rodillo hacia los glúteos, controla la vuelta sin soltar de golpe."),
- ej("Zancadas con TRX","3 × 10 por pierna","60 seg","trx","","Sujétate de las correas TRX para mantener el equilibrio; paso largo al frente, baja la rodilla trasera casi al suelo y sube empujando con el talón delantero.","¿Muy exigente? Sostente con ambas manos y da pasos más cortos."),
- ej("Elevación de talones de pie","3 × 15-20","45 seg","cuerpo","","De pie, sube lo más alto posible apoyado en las puntas de los pies y baja controlado."),
- ej("Cardio en trotadora","10-15 minutos","—","trotadora","cardio_trotadora","Ritmo constante y cómodo, para cerrar el entrenamiento del día.")
- ]),
- dia("Martes","Espalda y Bíceps","Tracción superior","Caminadora — 5 minutos","Estira espalda y brazos 20-30 seg por lado.", [
- ej("Jalón al pecho en polea","3 × 10-12","60 seg","polea","","Tira la barra hacia el pecho llevando los codos hacia abajo, sin balancear el cuerpo."),
- ej("Remo sentado en polea","3 × 10-12","60 seg","polea","","Espalda recta, tira el agarre hacia el abdomen apretando los omóplatos, sin encorvarte."),
- ej("Bíceps en máquina","3 × 10-12","45 seg","maquina","","Codos apoyados; sube y baja controlado sin balancear el cuerpo para ayudarte con impulso."),
- ej("Curl de bíceps con mancuernas","3 × 10-12","45 seg","mancuerna","","Codos pegados al cuerpo; sube y baja sin balancear la espalda."),
- ej("Remo con mancuerna a una mano","3 × 10-12 por lado","60 seg","mancuerna","","Apoya una rodilla y una mano en el banco, espalda recta; tira la mancuerna hacia la cadera llevando el codo hacia atrás."),
- ej("Cardio en trotadora","10-15 minutos","—","trotadora","cardio_trotadora","Ritmo constante y cómodo, para cerrar el entrenamiento del día.")
- ]),
- dia("Miércoles","Pecho y Tríceps","Empuje superior","Caminadora — 5 minutos","Estira pecho y tríceps 20-30 seg por lado.", [
- ej("Press de banca con mancuernas","3 × 10-12","60 seg","mancuerna","","Baja las mancuernas controlada hasta la altura del pecho y empuja sin bloquear los codos de golpe."),
- ej("Aperturas con mancuernas en banco","3 × 12-15","45 seg","mancuerna","","Acostado en el banco, codos ligeramente flexionados; abre y junta los brazos como abrazando un árbol."),
- ej("Extensión de tríceps en polea","3 × 12-15","45 seg","polea","","Codos pegados al cuerpo, empuja la barra hacia abajo sin mover los hombros."),
- ej("Press cerrado con mancuernas","3 × 10-12","60 seg","mancuerna","","Acostado en el banco, igual que el press de banca pero con los codos pegados al cuerpo; empuja las mancuernas hacia arriba sintiendo el trabajo en el tríceps."),
- ej("Cardio en trotadora","10-15 minutos","—","trotadora","cardio_trotadora","Ritmo constante y cómodo, para cerrar el entrenamiento del día.")
- ]),
- dia("Jueves","Hombros y Abdomen","Estabilidad y core","Caminadora — 5 minutos","Estira hombros y espalda baja 20-30 seg por lado.", [
- ej("Press militar con mancuernas","3 × 10-12","60 seg","mancuerna","","Sentado, empuja las mancuernas hacia arriba sin arquear la espalda baja."),
- ej("Elevaciones laterales con mancuernas","3 × 12-15","45 seg","mancuerna","","Brazos casi rectos; sube hasta la altura de los hombros y baja controlado, sin impulso."),
- ej("Plancha abdominal","3 × 20-30 seg","45 seg","colchoneta","","Cuerpo alineado de la cabeza a los talones, aprieta el abdomen todo el tiempo.","¿Muy exigente? Apóyate en las rodillas en vez de en los pies."),
- ej("Elevación de piernas acostada","3 × 12-15","45 seg","colchoneta","","Acostada boca arriba, manos bajo la cadera; sube las piernas rectas y baja controlado sin tocar el suelo.","¿Muy exigente? Dobla un poco las rodillas para hacerlo más fácil."),
- ej("Cardio en trotadora","10-15 minutos","—","trotadora","cardio_trotadora","Ritmo constante y cómodo, para cerrar el entrenamiento del día.")
- ]),
- dia("Viernes","Full Body y Cardio","Repaso general de la semana","Caminadora — 5 minutos","Estiramiento general de cuerpo completo, 30 seg por grupo muscular.", [
- ej("Peso muerto con mancuernas","3 × 12","60 seg","mancuerna","","Mancuernas frente a los muslos, espalda recta; baja empujando la cadera hacia atrás y sube apretando los glúteos."),
- ej("Face pull en polea (cuerda)","3 × 12-15","45 seg","polea","","Tira la cuerda hacia la cara separando las manos, codos altos, apretando los omóplatos."),
- ej("Step-ups en step","3 × 10 por pierna","60 seg","step","","Sube completo al step apoyando todo el pie, sin impulsarte con la pierna de atrás.","¿Muy exigente? Usa un escalón más bajo."),
- ej("Abdominales en colchoneta","3 × 15","45 seg","colchoneta","","Acostada, rodillas dobladas, manos cruzadas en el pecho; sube los hombros del suelo apretando el abdomen y baja controlado."),
- ej("Cardio en trotadora","10-15 minutos","—","trotadora","cardio_trotadora","Ritmo constante y cómodo, para activar el cuerpo completo y cerrar la semana.")
- ])
- ]
- };
- }
- if(local.rutinas.length===0){
- local.rutinas.push(baseRutinaMujeres());
- saveLocal();
- }
 
  var tabbtns = Array.prototype.slice.call(document.querySelectorAll(".tabbtn"));
  tabbtns.forEach(function(btn){
@@ -1157,140 +1085,6 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  updateCzStatsLive();
  }
 
- /* ---- Rutinas: crear rutinas nuevas con sus días y ejercicios ---- */
- var RT_VIDEOS = [
- {id:"", label:"Sin video"},
- {id:"sentadilla", label:"Sentadilla"},
- {id:"extension_piernas", label:"Extensión de piernas"},
- {id:"curl_femoral", label:"Curl femoral"},
- {id:"cardio_trotadora", label:"Cardio trotadora"}
- ];
- function findRutina(id){ return local.rutinas.find(function(r){ return r.id===id; }) || null; }
- function findDia(rutina, diaId){ return rutina.dias.find(function(d){ return d.id===diaId; }) || null; }
- document.getElementById("rt-add").addEventListener("click", function(){
- var nombre = document.getElementById("rt-nombre").value.trim();
- if(!nombre){ alert("Ponle un nombre a la rutina."); return; }
- local.rutinas.push({id:uid(), nombre:nombre, dias:[]});
- saveLocal();
- document.getElementById("rt-nombre").value = "";
- renderRutinas();
- });
- document.getElementById("rt-list").addEventListener("click", function(e){
- var btn;
- if((btn = e.target.closest(".rt-del-rutina"))){
- if(!confirm("¿Eliminar esta rutina completa?")) return;
- local.rutinas = local.rutinas.filter(function(r){ return r.id!==btn.dataset.rtId; });
- saveLocal(); renderRutinas(); return;
- }
- if((btn = e.target.closest(".rt-dup-rutina"))){
- var original = findRutina(btn.dataset.rtId);
- if(!original) return;
- var copia = JSON.parse(JSON.stringify(original));
- copia.id = uid();
- copia.nombre = original.nombre + " (copia)";
- copia.dias.forEach(function(d){
- d.id = uid();
- d.exercises.forEach(function(ex){ ex.id = uid(); });
- });
- var idx = local.rutinas.indexOf(original);
- local.rutinas.splice(idx+1, 0, copia);
- saveLocal(); renderRutinas(); return;
- }
- if((btn = e.target.closest(".rt-del-dia"))){
- var rutina = findRutina(btn.dataset.rtId);
- if(rutina){ rutina.dias = rutina.dias.filter(function(d){ return d.id!==btn.dataset.diaId; }); saveLocal(); renderRutinas(); }
- return;
- }
- if((btn = e.target.closest(".rt-del-ejercicio"))){
- var rutina2 = findRutina(btn.dataset.rtId);
- var dia2 = rutina2 ? findDia(rutina2, btn.dataset.diaId) : null;
- if(dia2){ dia2.exercises = dia2.exercises.filter(function(ex){ return ex.id!==btn.dataset.exId; }); saveLocal(); renderRutinas(); }
- return;
- }
- if((btn = e.target.closest(".rt-add-dia"))){
- var rid = btn.dataset.rtId;
- var rutina3 = findRutina(rid);
- if(!rutina3) return;
- var weekday = document.getElementById("rt-dia-weekday-"+rid).value.trim();
- var title = document.getElementById("rt-dia-title-"+rid).value.trim();
- if(!weekday || !title){ alert("Completa al menos el día y el título."); return; }
- rutina3.dias.push({
- id:uid(), weekday:weekday, title:title,
- focus: document.getElementById("rt-dia-focus-"+rid).value.trim(),
- warmup: document.getElementById("rt-dia-warmup-"+rid).value.trim(),
- cooldown: document.getElementById("rt-dia-cooldown-"+rid).value.trim(),
- exercises:[]
- });
- saveLocal(); renderRutinas(); return;
- }
- if((btn = e.target.closest(".rt-add-ejercicio"))){
- var rid2 = btn.dataset.rtId, did2 = btn.dataset.diaId;
- var rutina4 = findRutina(rid2);
- var dia4 = rutina4 ? findDia(rutina4, did2) : null;
- if(!dia4) return;
- var name = document.getElementById("rt-ej-name-"+did2).value.trim();
- var sets = document.getElementById("rt-ej-sets-"+did2).value.trim();
- if(!name || !sets){ alert("Completa al menos el nombre y las series del ejercicio."); return; }
- dia4.exercises.push({
- id:uid(), name:name, sets:sets,
- rest: document.getElementById("rt-ej-rest-"+did2).value.trim(),
- equip: document.getElementById("rt-ej-equip-"+did2).value.trim(),
- video: document.getElementById("rt-ej-video-"+did2).value,
- tip: document.getElementById("rt-ej-tip-"+did2).value.trim()
- });
- saveLocal(); renderRutinas(); return;
- }
- });
- function renderRutinas(){
- var list = document.getElementById("rt-list");
- if(local.rutinas.length===0){ list.innerHTML = '<p class="card-sub" style="margin-top:14px;">Todavía no has creado ninguna rutina nueva.</p>'; return; }
- list.innerHTML = local.rutinas.map(function(r){
- var diasHtml = r.dias.map(function(d){
- var ejHtml = d.exercises.length===0
- ? '<p class="card-sub">Sin ejercicios todavía.</p>'
- : '<div class="twrap"><table><thead><tr><th>Ejercicio</th><th>Series</th><th>Descanso</th><th>Equipo</th><th>Video</th><th style="width:44px;"></th></tr></thead><tbody>' +
- d.exercises.map(function(ex){
- var videoLabel = (RT_VIDEOS.find(function(v){return v.id===ex.video;}) || {label:"Sin video"}).label;
- var row = '<tr><td>'+escapeHtml(ex.name)+'</td><td>'+escapeHtml(ex.sets)+'</td><td>'+escapeHtml(ex.rest)+'</td><td>'+escapeHtml(ex.equip)+'</td><td>'+escapeHtml(videoLabel)+'</td>' +
- '<td><button class="iconbtn rt-del-ejercicio" data-rt-id="'+r.id+'" data-dia-id="'+d.id+'" data-ex-id="'+ex.id+'" title="Eliminar">✕</button></td></tr>';
- if(ex.tip){ row += '<tr><td colspan="6" style="font-size:12px;color:var(--gris-soft);white-space:pre-line;padding-top:0;">'+escapeHtml(ex.tip)+'</td></tr>'; }
- return row;
- }).join('') + '</tbody></table></div>';
- var videoOptions = RT_VIDEOS.map(function(v){ return '<option value="'+v.id+'">'+escapeHtml(v.label)+'</option>'; }).join('');
- return '<div class="card" style="background:var(--surface-2);margin-top:12px;">' +
- '<div style="display:flex;align-items:center;justify-content:space-between;"><b>'+escapeHtml(d.weekday)+' — '+escapeHtml(d.title)+'</b>' +
- '<button class="iconbtn rt-del-dia" data-rt-id="'+r.id+'" data-dia-id="'+d.id+'" title="Eliminar día">✕</button></div>' +
- (d.focus ? '<p class="card-sub">Enfoque: '+escapeHtml(d.focus)+'</p>' : '') +
- ejHtml +
- '<div class="addrow" style="grid-template-columns:2fr .8fr .8fr 1fr 1.2fr 2fr auto;background:transparent;border:none;padding:10px 0 0;">' +
- '<div><label>Ejercicio</label><input type="text" id="rt-ej-name-'+d.id+'" placeholder="Ej: Sentadilla"></div>' +
- '<div><label>Series</label><input type="text" id="rt-ej-sets-'+d.id+'" placeholder="3 x 12"></div>' +
- '<div><label>Descanso</label><input type="text" id="rt-ej-rest-'+d.id+'" placeholder="45 seg"></div>' +
- '<div><label>Equipo</label><input type="text" id="rt-ej-equip-'+d.id+'" placeholder="mancuerna"></div>' +
- '<div><label>Video</label><select id="rt-ej-video-'+d.id+'">'+videoOptions+'</select></div>' +
- '<div><label>Consejo (opcional)</label><input type="text" id="rt-ej-tip-'+d.id+'" placeholder="Técnica correcta..."></div>' +
- '<button class="btn btn-primary rt-add-ejercicio" data-rt-id="'+r.id+'" data-dia-id="'+d.id+'">Agregar ejercicio</button>' +
- '</div>' +
- '</div>';
- }).join('');
- return '<div class="card" style="border-color:var(--dorado);margin-top:14px;">' +
- '<div class="card-head" style="display:flex;align-items:center;justify-content:space-between;gap:8px;"><h2>'+escapeHtml(r.nombre)+'</h2>' +
- '<span style="display:flex;gap:8px;flex:none;">' +
- '<button class="btn btn-primary rt-dup-rutina" data-rt-id="'+r.id+'" style="padding:8px 14px;font-size:11px;">Duplicar</button>' +
- '<button class="iconbtn rt-del-rutina" data-rt-id="'+r.id+'" title="Eliminar rutina">✕</button></span></div>' +
- diasHtml +
- '<div class="addrow" style="grid-template-columns:1fr 1fr 1fr 1.4fr auto;">' +
- '<div><label>Día (Ej: Lunes)</label><input type="text" id="rt-dia-weekday-'+r.id+'" placeholder="Lunes"></div>' +
- '<div><label>Título</label><input type="text" id="rt-dia-title-'+r.id+'" placeholder="Piernas y Glúteos"></div>' +
- '<div><label>Enfoque</label><input type="text" id="rt-dia-focus-'+r.id+'" placeholder="Tren inferior"></div>' +
- '<div><label>Calentamiento</label><input type="text" id="rt-dia-warmup-'+r.id+'" placeholder="Caminadora 5 min"></div>' +
- '<button class="btn btn-primary rt-add-dia" data-rt-id="'+r.id+'">+ Agregar día</button>' +
- '<div style="grid-column:1 / -1;"><label>Enfriamiento (opcional)</label><input type="text" id="rt-dia-cooldown-'+r.id+'" placeholder="Estira cuádriceps 20-30 seg"></div>' +
- '</div>' +
- '</div>';
- }).join('');
- }
-
- renderFixed(); renderGV(); renderVentasMensualidades(); renderCierres(); renderRutinas();
+ renderFixed(); renderGV(); renderVentasMensualidades(); renderCierres();
 })();
 </script>
