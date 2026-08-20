@@ -45,6 +45,10 @@ header.top h1 span{ color:var(--rojo); }
 .hero .kicker{ font-size:12px; font-weight:800; letter-spacing:.16em; color:var(--dorado); text-transform:uppercase; margin:0 0 12px; }
 .hero .name{ font-size:38px; font-weight:900; text-transform:uppercase; line-height:1.15; margin:0 0 8px; }
 .hero .time{ font-size:15px; color:var(--gris-soft); font-weight:600; }
+.hero .venc{ font-size:14px; font-weight:700; margin-top:10px; padding:5px 14px; border-radius:999px; display:inline-block; }
+.hero .venc.good{ color:#5CA85C; background:rgba(92,168,92,.12); }
+.hero .venc.warn{ color:var(--dorado); background:rgba(212,175,55,.12); }
+.hero .venc.danger{ color:#E85C5C; background:rgba(232,92,92,.12); }
 .hero .empty{ font-size:16px; color:var(--gris-soft); font-weight:600; }
 
 .feed-head{ display:flex; align-items:center; justify-content:space-between; margin:28px 0 10px; }
@@ -58,6 +62,11 @@ header.top h1 span{ color:var(--rojo); }
  padding:14px 16px; margin-bottom:8px;
 }
 .feed-item .fname{ font-weight:800; font-size:15px; letter-spacing:.01em; }
+.feed-item .finfo{ display:flex; align-items:baseline; gap:10px; }
+.feed-item .fvenc{ font-size:12px; font-weight:700; }
+.feed-item .fvenc.good{ color:#5CA85C; }
+.feed-item .fvenc.warn{ color:var(--dorado); }
+.feed-item .fvenc.danger{ color:#E85C5C; }
 .feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; }
 .feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:30px 0; }
 
@@ -84,6 +93,7 @@ Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te 
 <p class="empty" id="heroEmpty">Esperando el primer escaneo del día...</p>
 <p class="name" id="heroName" hidden></p>
 <p class="time" id="heroTime" hidden></p>
+<p class="venc" id="heroVenc" hidden></p>
 </div>
 
 <div class="feed-head">
@@ -116,6 +126,22 @@ function fmtTime(ts){
 function escapeHtml(s){
  return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
 }
+function parseDMY(str){
+ if(!str) return null;
+ var m = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(String(str).trim());
+ if(!m) return null;
+ var d = new Date(Number(m[3]), Number(m[2])-1, Number(m[1]));
+ return isNaN(d) ? null : d;
+}
+function estadoVenc(venc){
+ var d = parseDMY(venc);
+ if(!d) return null;
+ var hoy = new Date(); hoy.setHours(0,0,0,0);
+ var diffDays = Math.round((d - hoy) / 86400000);
+ if(diffDays < 0) return {cls:"danger", txt:"Vencido " + venc};
+ if(diffDays <= 7) return {cls:"warn", txt:"Vence " + venc};
+ return {cls:"good", txt:"Vence " + venc};
+}
 
 var seenKeys = {};
 var firstPoll = true;
@@ -126,17 +152,26 @@ function renderFeed(rows){
  var feed = document.getElementById("feed");
  if(rows.length===0){ feed.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>'; return; }
  feed.innerHTML = rows.map(function(r){
-  return '<div class="feed-item"><span class="fname">'+escapeHtml(r.nombre)+' '+escapeHtml(r.apellido)+'</span><span class="ftime">'+fmtTime(r.ts)+'</span></div>';
+  var est = estadoVenc(r.venc);
+  var vencHtml = est ? '<span class="fvenc '+est.cls+'">'+escapeHtml(est.txt)+'</span>' : '';
+  return '<div class="feed-item"><span class="finfo"><span class="fname">'+escapeHtml(r.nombre)+' '+escapeHtml(r.apellido)+'</span>'+vencHtml+'</span><span class="ftime">'+fmtTime(r.ts)+'</span></div>';
  }).join('');
 }
 
-function flashHero(r){
+function showHero(r){
  document.getElementById("heroEmpty").hidden = true;
  var nameEl = document.getElementById("heroName");
  var timeEl = document.getElementById("heroTime");
+ var vencEl = document.getElementById("heroVenc");
  nameEl.hidden = false; timeEl.hidden = false;
  nameEl.textContent = r.nombre + " " + r.apellido;
  timeEl.textContent = fmtTime(r.ts);
+ var est = estadoVenc(r.venc);
+ if(est){ vencEl.hidden = false; vencEl.textContent = est.txt; vencEl.className = "venc " + est.cls; }
+ else { vencEl.hidden = true; }
+}
+function flashHero(r){
+ showHero(r);
  var hero = document.getElementById("hero");
  hero.classList.remove("flash");
  void hero.offsetWidth;
@@ -150,11 +185,7 @@ function handleData(data){
   if(!firstPoll && !seenKeys[keyOf(newest)]){
    flashHero(newest);
   } else if(firstPoll){
-   document.getElementById("heroEmpty").hidden = true;
-   document.getElementById("heroName").hidden = false;
-   document.getElementById("heroTime").hidden = false;
-   document.getElementById("heroName").textContent = newest.nombre + " " + newest.apellido;
-   document.getElementById("heroTime").textContent = fmtTime(newest.ts);
+   showHero(newest);
   }
  }
  rows.forEach(function(r){ seenKeys[keyOf(r)] = true; });

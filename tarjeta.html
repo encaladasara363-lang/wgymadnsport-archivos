@@ -493,7 +493,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbxKkmaDtXtb-b--WUzp
  if(!CHECKIN_URL) return;
  try{
  var img = new Image();
- img.src = CHECKIN_URL + "?action=checkin&nombre=" + encodeURIComponent(s.nombre) + "&apellido=" + encodeURIComponent(s.apellido) + "&_=" + Date.now();
+ img.src = CHECKIN_URL + "?action=checkin&nombre=" + encodeURIComponent(s.nombre) + "&apellido=" + encodeURIComponent(s.apellido) + "&venc=" + encodeURIComponent(s.vencimiento||"") + "&_=" + Date.now();
  }catch(e){}
  }
  function unlockCardView(s){
