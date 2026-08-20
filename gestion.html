@@ -489,24 +489,6 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Acumulado de tu 10% este mes</span><span class="val tabular" id="vm-mes-sueldo">$0</span></div>
  </div>
  </div>
- <div class="card">
- <div class="card-head"><h2>Cierre de caja del día</h2></div>
- <p class="card-sub">Al final del día, anota aquí los totales que ya sumaste. Las mensualidades de los socios no van aquí.</p>
- <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="c-date" placeholder="19-08-2026"></div>
- <div class="addrow" style="grid-template-columns:1fr 1fr 1fr;">
- <div><label for="c-efectivo">Efectivo</label><input type="text" id="c-efectivo" placeholder="0"></div>
- <div><label for="c-tarjeta">Tarjeta</label><input type="text" id="c-tarjeta" placeholder="0"></div>
- <div><label for="c-transferencia">Transferencia</label><input type="text" id="c-transferencia" placeholder="0"></div>
- </div>
- <div class="statrow"><div class="stat"><span class="eyebrow">Total del día</span><span class="val tabular" id="c-total">$0</span></div></div>
- <div style="margin-top:14px;"><button class="btn btn-primary" id="c-save">Guardar cierre del día</button></div>
- </div>
- <div class="card">
- <div class="card-head"><h2>Historial de cierres</h2></div>
- <div id="c-list"></div>
- <div class="statrow"><div class="stat"><span class="eyebrow">Ventas de este mes</span><span class="val tabular" id="c-mes-total">$0</span></div></div>
- </div>
-
  <div class="card" style="border-color:var(--dorado);">
  <div class="card-head"><h2>Ventas del día por categoría</h2></div>
  <p class="card-sub">Anota cuánto vendiste hoy de cada cosa aparte de las mensualidades: snacks saludables, suplementos, ropa deportiva, bebestibles y pase diario.</p>
@@ -531,6 +513,24 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="stat"><span class="eyebrow">Bebestibles (mes)</span><span class="val tabular" id="vc-mes-bebestibles">$0</span></div>
  <div class="stat"><span class="eyebrow">Pase Diario (mes)</span><span class="val tabular" id="vc-mes-pase">$0</span></div>
  </div>
+ </div>
+
+ <div class="card">
+ <div class="card-head"><h2>Cierre de caja del día</h2></div>
+ <p class="card-sub">Al final del día, anota aquí los totales que ya sumaste. Las mensualidades de los socios no van aquí.</p>
+ <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="c-date" placeholder="19-08-2026"></div>
+ <div class="addrow" style="grid-template-columns:1fr 1fr 1fr;">
+ <div><label for="c-efectivo">Efectivo</label><input type="text" id="c-efectivo" placeholder="0"></div>
+ <div><label for="c-tarjeta">Tarjeta</label><input type="text" id="c-tarjeta" placeholder="0"></div>
+ <div><label for="c-transferencia">Transferencia</label><input type="text" id="c-transferencia" placeholder="0"></div>
+ </div>
+ <div class="statrow"><div class="stat"><span class="eyebrow">Total del día</span><span class="val tabular" id="c-total">$0</span></div></div>
+ <div style="margin-top:14px;"><button class="btn btn-primary" id="c-save">Guardar cierre del día</button></div>
+ </div>
+ <div class="card">
+ <div class="card-head"><h2>Historial de cierres</h2></div>
+ <div id="c-list"></div>
+ <div class="statrow"><div class="stat"><span class="eyebrow">Ventas de este mes</span><span class="val tabular" id="c-mes-total">$0</span></div></div>
  </div>
  </section>
 </div>
