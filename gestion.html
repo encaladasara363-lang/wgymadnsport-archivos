@@ -471,12 +471,22 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <!-- TAB: CIERRE DE CAJA -->
  <section class="panel2" id="panel-caja">
  <div class="card" style="border-color:var(--dorado);">
- <div class="card-head"><h2>Ingreso por mensualidades</h2></div>
- <p class="card-sub">Suma de la mensualidad de todos los socios inscritos (columna Monto de la tabla de Socios). De ahí sacas tu sueldo del mes: el 10%.</p>
+ <div class="card-head"><h2>Ventas de mensualidades del día</h2></div>
+ <p class="card-sub">Cada día que trabajes, anota el total que vendiste ese día en mensualidades (de cualquier plan). Se calcula solo tu 10% de ese día, y abajo se va sumando día a día para saber cuánto llevas juntado en el mes.</p>
+ <div class="addrow" style="grid-template-columns:1fr 1fr auto;">
+ <div><label for="vm-date">Fecha</label><input type="text" id="vm-date" placeholder="19-08-2026"></div>
+ <div><label for="vm-total">Total vendido hoy en mensualidades</label><input type="text" id="vm-total" placeholder="0"></div>
+ <button class="btn btn-primary" id="vm-save">Guardar día</button>
+ </div>
+ <div class="twrap" style="margin-top:14px;">
+ <table>
+ <thead><tr><th>Fecha</th><th class="num">Total del día</th><th class="num">Tu 10%</th><th style="width:44px;"></th></tr></thead>
+ <tbody id="vm-tbody"></tbody>
+ </table>
+ </div>
  <div class="statrow">
- <div class="stat"><span class="eyebrow">Total mensualidades</span><span class="val tabular" id="ing-total">$0</span></div>
- <div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Tu sueldo (10%)</span><span class="val tabular" id="ing-sueldo">$0</span></div>
- <div class="stat"><span class="eyebrow">Queda para gastos (90%)</span><span class="val tabular" id="ing-resto">$0</span></div>
+ <div class="stat"><span class="eyebrow">Vendido en mensualidades este mes</span><span class="val tabular" id="vm-mes-total">$0</span></div>
+ <div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Acumulado de tu 10% este mes</span><span class="val tabular" id="vm-mes-sueldo">$0</span></div>
  </div>
  </div>
  <div class="card">
@@ -868,12 +878,6 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  document.getElementById("st-pronto").textContent = pronto;
  document.getElementById("st-vencido").textContent = vencido;
  document.getElementById("st-ingreso").textContent = clp(ingreso);
- var ingTotalEl = document.getElementById("ing-total");
- if(ingTotalEl){
- ingTotalEl.textContent = clp(ingreso);
- document.getElementById("ing-sueldo").textContent = clp(ingreso * 0.10);
- document.getElementById("ing-resto").textContent = clp(ingreso * 0.90);
- }
  }
  function escapeHtml(s){  
  return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });  
@@ -899,11 +903,12 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var LOCAL_KEY = "wgym_admin_local_v1";
  function loadLocal(){
  try{ var raw = localStorage.getItem(LOCAL_KEY); if(raw) return JSON.parse(raw); }catch(e){}
- return { fixedCosts:[{id:uid(), name:"Arriendo (incluye gastos comunes)", amount:150000}], gastosVariables:[], cierres:[], ventasCategoria:[] };
+ return { fixedCosts:[{id:uid(), name:"Arriendo (incluye gastos comunes)", amount:150000}], gastosVariables:[], cierres:[], ventasCategoria:[], ventasMensualidades:[] };
  }
  function saveLocal(){ try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(local)); }catch(e){} }
  var local = loadLocal();
  if(!local.ventasCategoria) local.ventasCategoria = [];
+ if(!local.ventasMensualidades) local.ventasMensualidades = [];
 
  var tabbtns = Array.prototype.slice.call(document.querySelectorAll(".tabbtn"));
  tabbtns.forEach(function(btn){
@@ -1065,6 +1070,38 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  });
  }
 
- renderFixed(); renderGV(); renderCierres(); renderVentasCategoria();
+ attachDateFormatting(document.getElementById("vm-date"));
+ attachMoneyFormatting(document.getElementById("vm-total"));
+ document.getElementById("vm-save").addEventListener("click", function(){
+ var date = document.getElementById("vm-date").value.trim() || todayISO();
+ var total = parseMoney(document.getElementById("vm-total").value);
+ if(total<=0){ alert("Anota el total vendido hoy antes de guardar."); return; }
+ local.ventasMensualidades.push({id:uid(), date:date, total:total, sueldo: Math.round(total*0.10)});
+ saveLocal();
+ document.getElementById("vm-date").value = "";
+ document.getElementById("vm-total").value = "";
+ renderVentasMensualidades();
+ });
+ function renderVentasMensualidades(){
+ var tbody = document.getElementById("vm-tbody");
+ tbody.innerHTML = "";
+ var sorted = local.ventasMensualidades.slice().sort(function(a,b){ return (parseDMY(b.date)||0) - (parseDMY(a.date)||0); });
+ if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="4" class="empty">Sin días registrados.</td></tr>'; }
+ sorted.forEach(function(v){
+ var tr = document.createElement("tr");
+ tr.innerHTML = '<td>'+fmtDateEs(v.date)+'</td><td class="num">'+clp(v.total)+'</td><td class="num">'+clp(v.sueldo)+'</td><td></td>';
+ var tdDel = tr.lastElementChild;
+ var b = document.createElement("button"); b.className="iconbtn"; b.title="Eliminar"; b.textContent="✕";
+ b.addEventListener("click", function(){ local.ventasMensualidades = local.ventasMensualidades.filter(function(x){return x.id!==v.id;}); saveLocal(); renderVentasMensualidades(); });
+ tdDel.appendChild(b);
+ tbody.appendChild(tr);
+ });
+ var mk = monthKeyDMY(todayISO());
+ var delMes = local.ventasMensualidades.filter(function(v){ return monthKeyDMY(v.date)===mk; });
+ document.getElementById("vm-mes-total").textContent = clp(delMes.reduce(function(s,v){return s+v.total;},0));
+ document.getElementById("vm-mes-sueldo").textContent = clp(delMes.reduce(function(s,v){return s+v.sueldo;},0));
+ }
+
+ renderFixed(); renderGV(); renderCierres(); renderVentasCategoria(); renderVentasMensualidades();
 })();
 </script>
