@@ -612,7 +612,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
      focus:"Tren inferior",
      warmup:"Caminadora — 5 minutos",
      exercises:[
-       {name:"Cardio en trotadora", sets:"", rest:"", equip:"trotadora", video:"cardio_trotadora",
+       {name:"Calentamiento", sets:"8 minutos", rest:"", equip:"trotadora", video:"cardio_trotadora",
         tip:"Ritmo constante y cómodo, para activar el cuerpo antes de empezar."},
        {name:"Sentadilla con mancuerna", sets:"3 × 12", rest:"60 seg", equip:"mancuerna", video:"sentadilla",
         tip:"Sostén una mancuerna o kettlebell pegada al pecho; baja como si te sentaras en una silla, rodillas hacia afuera, y sube empujando con los talones.",
@@ -635,7 +635,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
      focus:"Tracción superior",
      warmup:"Caminadora — 5 minutos",
      exercises:[
-       {name:"Cardio en trotadora", sets:"", rest:"", equip:"trotadora", video:"cardio_trotadora",
+       {name:"Calentamiento", sets:"8 minutos", rest:"", equip:"trotadora", video:"cardio_trotadora",
         tip:"Ritmo constante y cómodo, para activar el cuerpo antes de empezar."},
        {name:"Jalón al pecho en polea", sets:"3 × 10-12", rest:"60 seg", equip:"polea",
         tip:"Tira la barra hacia el pecho llevando los codos hacia abajo, sin balancear el cuerpo."},
@@ -656,7 +656,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
      focus:"Empuje superior",
      warmup:"Caminadora — 5 minutos",
      exercises:[
-       {name:"Cardio en trotadora", sets:"", rest:"", equip:"trotadora", video:"cardio_trotadora",
+       {name:"Calentamiento", sets:"8 minutos", rest:"", equip:"trotadora", video:"cardio_trotadora",
         tip:"Ritmo constante y cómodo, para activar el cuerpo antes de empezar."},
        {name:"Press de banca con mancuernas", sets:"3 × 10-12", rest:"60 seg", equip:"mancuerna",
         tip:"Baja las mancuernas controlada hasta la altura del pecho y empuja sin bloquear los codos de golpe."},
@@ -675,7 +675,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
      focus:"Estabilidad y core",
      warmup:"Caminadora — 5 minutos",
      exercises:[
-       {name:"Cardio en trotadora", sets:"", rest:"", equip:"trotadora", video:"cardio_trotadora",
+       {name:"Calentamiento", sets:"8 minutos", rest:"", equip:"trotadora", video:"cardio_trotadora",
         tip:"Ritmo constante y cómodo, para activar el cuerpo antes de empezar."},
        {name:"Press militar con mancuernas", sets:"3 × 10-12", rest:"60 seg", equip:"mancuerna",
         tip:"Sentado, empuja las mancuernas hacia arriba sin arquear la espalda baja."},
@@ -696,7 +696,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
      focus:"Repaso general de la semana",
      warmup:"Caminadora — 5 minutos",
      exercises:[
-       {name:"Cardio en trotadora", sets:"", rest:"", equip:"trotadora", video:"cardio_trotadora",
+       {name:"Calentamiento", sets:"8 minutos", rest:"", equip:"trotadora", video:"cardio_trotadora",
         tip:"Ritmo constante y cómodo, para activar el cuerpo antes de empezar."},
        {name:"Peso muerto con mancuernas", sets:"3 × 12", rest:"60 seg", equip:"mancuerna",
         tip:"Mancuernas frente a los muslos, espalda recta; baja empujando la cadera hacia atrás y sube apretando los glúteos."},
@@ -738,11 +738,10 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  } else {
  panel.innerHTML =
  '<div class="day-banner"><p class="num">'+day.weekday+'</p><h2>'+day.title+'</h2><p class="focus">'+day.focus+'</p></div>' +
- '<div class="warmup"><div><b>Calentamiento</b><span>'+day.warmup+'</span></div></div>' +
  day.exercises.map(function(ex, idx){
  return '<div class="exercise"><div class="badge">'+(idx+1)+'</div><div class="info">' +
  '<h3>'+ex.name+'</h3>' +
- (ex.sets ? '<div class="stats"><span>'+ex.sets+'</span><span>Descanso '+ex.rest+'</span></div>' : '') +
+ (ex.sets ? '<div class="stats"><span>'+ex.sets+'</span>'+(ex.rest ? '<span>Descanso '+ex.rest+'</span>' : '')+'</div>' : '') +
  (ex.video ? '<div class="video-wrap"><span class="video-lbl">Video de referencia</span><video class="ex-video" src="'+VIDEOS[ex.video]+'" controls muted loop playsinline preload="none"></video></div>' : '') +
  '<p class="tip">'+ex.tip+'</p>' +
  (ex.alt ? '<p class="alt">'+ex.alt+'</p>' : '') +
