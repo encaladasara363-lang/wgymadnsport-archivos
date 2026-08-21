@@ -505,6 +505,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div><label for="cz-suplementos">Suplementos</label><input type="text" id="cz-suplementos" placeholder="0"></div>
  <div><label for="cz-ropa">Ropa Deportiva</label><input type="text" id="cz-ropa" placeholder="0"></div>
  <div><label for="cz-bebestibles">Bebestibles</label><input type="text" id="cz-bebestibles" placeholder="0"></div>
+<div><label for="cz-bebestible">Bebestible</label><input type="text" id="cz-bebestible" placeholder="0"></div>
  <div><label for="cz-pase">Pase Diario</label><input type="text" id="cz-pase" placeholder="0"></div>
  </div>
  <div class="statrow"><div class="stat"><span class="eyebrow">Total vendido hoy</span><span class="val tabular" id="cz-total-dia">$0</span></div></div>
@@ -1019,7 +1020,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  }
 
  /* ---- Cierre de Caja del día: productos, sin 10% (eso es solo de mensualidades) ---- */
- var CZ_CAMPOS = ["snacks","suplementos","ropa","bebestibles","pase"];
+ var CZ_CAMPOS = ["snacks","suplementos","ropa","bebestibles","bebestible","pase"];
  attachDateFormatting(document.getElementById("cz-date"));
  function czEnCurso(){
  var vals = {};
