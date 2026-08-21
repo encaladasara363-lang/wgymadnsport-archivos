@@ -298,7 +298,7 @@
 <script>
 const LOGO_SRC = "assets/logo.jpg";
 const WARMUP_VIDEOS = { trotadora: "assets/calentamiento_trotadora.mp4?v=1", bicicleta: "assets/calentamiento_bicicleta.mp4?v=1" };
-const COOLDOWN_VIDEO = "assets/estiramiento_final.mp4?v=2";
+const COOLDOWN_VIDEOS = { general: "assets/estiramiento_final.mp4?v=2", espalda_brazo: "assets/estiramiento_espalda_brazo.mp4?v=1" };
 const VIDEOS = { sentadilla: "assets/sentadilla.mp4?v=2", extension_piernas: "assets/extension_piernas.mp4?v=2", curl_femoral: "assets/curl_femoral.mp4?v=2", zancada_trx: "assets/zancada_trx.mp4?v=1", elevacion_talones: "assets/elevacion_talones.mp4?v=1", jalon_pecho: "assets/jalon_pecho.mp4?v=1", remo_sentado: "assets/remo_sentado.mp4?v=1", curl_biceps_scott: "assets/curl_biceps_scott.mp4?v=1", curl_biceps_mancuerna: "assets/curl_biceps_mancuerna.mp4?v=1", remo_una_mano: "assets/remo_una_mano.mp4?v=1" };
 
 document.getElementById('gateLogoImg').src = LOGO_SRC;
@@ -574,7 +574,8 @@ const DAYS = [
       {name:"Elevación de talones de pie", sets:"3 × 15-20", rest:"45 seg", equip:"cuerpo", video:"elevacion_talones",
        tip:"De pie, sube lo más alto posible apoyado en las puntas de los pies y baja controlado."},
     ],
-    cooldown:"Estira cuádriceps, isquiotibiales y gemelos 20-30 seg por lado."
+    cooldown:"Estira cuádriceps, isquiotibiales y gemelos 20-30 seg por lado.",
+    cooldownVideo:"general"
   },
   {
     weekday:"Martes",
@@ -594,7 +595,8 @@ const DAYS = [
       {name:"Remo con mancuerna a una mano", sets:"3 × 10-12 por lado", rest:"60 seg", equip:"mancuerna", video:"remo_una_mano",
        tip:"Apoya una rodilla y una mano en el banco, espalda recta; tira la mancuerna hacia la cadera llevando el codo hacia atrás."},
     ],
-    cooldown:"Estira espalda y brazos 20-30 seg por lado."
+    cooldown:"Estira espalda y brazos 20-30 seg por lado.",
+    cooldownVideo:"espalda_brazo"
   },
   {
     weekday:"Miércoles",
@@ -612,7 +614,8 @@ const DAYS = [
       {name:"Press cerrado con mancuernas", sets:"3 × 10-12", rest:"60 seg", equip:"mancuerna",
        tip:"Acostado en el banco, igual que el press de banca pero con los codos pegados al cuerpo; empuja las mancuernas hacia arriba sintiendo el trabajo en el tríceps."},
     ],
-    cooldown:"Estira pecho y tríceps 20-30 seg por lado."
+    cooldown:"Estira pecho y tríceps 20-30 seg por lado.",
+    cooldownVideo:"general"
   },
   {
     weekday:"Jueves",
@@ -631,7 +634,8 @@ const DAYS = [
        tip:"Acostada boca arriba, manos bajo la cadera; sube las piernas rectas y baja controlado sin tocar el suelo.",
        alt:"¿Muy exigente? Dobla un poco las rodillas para hacerlo más fácil."},
     ],
-    cooldown:"Estira hombros y espalda baja 20-30 seg por lado."
+    cooldown:"Estira hombros y espalda baja 20-30 seg por lado.",
+    cooldownVideo:"general"
   },
   {
     weekday:"Viernes",
@@ -652,7 +656,8 @@ const DAYS = [
       {name:"Bicicleta de spinning", sets:"10-15 minutos", rest:"—", equip:"bicicleta",
        tip:"Ritmo constante y cómodo, para activar el cuerpo completo y cerrar la semana."},
     ],
-    cooldown:"Estiramiento general de cuerpo completo, 30 seg por grupo muscular."
+    cooldown:"Estiramiento general de cuerpo completo, 30 seg por grupo muscular.",
+    cooldownVideo:"general"
   },
 ];
 
@@ -706,7 +711,7 @@ DAYS.forEach((day, i) => {
     </div>
     <div class="video-wrap">
       <span class="video-lbl">Video de referencia — estiramientos</span>
-      <video class="ex-video" src="${COOLDOWN_VIDEO}" controls muted loop playsinline></video>
+      <video class="ex-video" src="${COOLDOWN_VIDEOS[day.cooldownVideo]}" controls muted loop playsinline></video>
     </div>
   `;
   content.appendChild(panel);
