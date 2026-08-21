@@ -509,6 +509,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div><label for="cz-pase">Pase Diario</label><input type="text" id="cz-pase" placeholder="0"></div>
  </div>
  <div class="statrow"><div class="stat"><span class="eyebrow">Total vendido hoy</span><span class="val tabular" id="cz-total-dia">$0</span></div></div>
+ <div class="statrow" style="margin-top:16px;"><div class="stat" style="border-color:var(--rojo); background:rgba(227,6,19,.08); padding:18px; border-radius:12px;"><span class="eyebrow" style="color:var(--rojo); font-size:12px;">📊 TOTAL VENTAS DEL DÍA</span><span class="val tabular" id="total-ventas-dia" style="font-size:28px; color:var(--rojo); font-weight:900; margin-top:8px;">$0</span></div></div>
  <div style="margin-top:14px;"><button class="btn btn-primary" id="cz-save">Guardar cierre del día</button></div>
  </div>
  <div class="card">
@@ -991,7 +992,10 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  document.getElementById("vm-mes-total").textContent = clp(guardado.total + enCurso);
  document.getElementById("vm-mes-sueldo").textContent = clp(guardado.sueldo + sueldoHoy);
  }
- document.getElementById("vm-total").addEventListener("input", updateVmStatsLive);
+ document.getElementById("vm-total").addEventListener("input", function(){
+ updateVmStatsLive();
+ updateCzStatsLive();
+ });
  document.getElementById("vm-save").addEventListener("click", function(){
  var date = document.getElementById("vm-date").value.trim() || todayISO();
  var total = parseMoney(document.getElementById("vm-total").value);
@@ -1045,8 +1049,13 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  }
  function updateCzStatsLive(){
  var enCurso = czEnCurso();
- document.getElementById("cz-total-dia").textContent = clp(czHoyGuardado() + enCurso.total);
+ var totalProductos = czHoyGuardado() + enCurso.total;
+ document.getElementById("cz-total-dia").textContent = clp(totalProductos);
  document.getElementById("cz-mes-total").textContent = clp(czMesGuardado() + enCurso.total);
+
+ var totalMensualidades = parseMoney(document.getElementById("vm-total").value);
+ var totalVentasDia = totalMensualidades + totalProductos;
+ document.getElementById("total-ventas-dia").textContent = clp(totalVentasDia);
  }
  CZ_CAMPOS.forEach(function(id){
  var input = document.getElementById("cz-"+id);
