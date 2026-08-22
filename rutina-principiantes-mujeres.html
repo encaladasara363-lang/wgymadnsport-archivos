@@ -658,7 +658,9 @@ const DAYS = [
        tip:"Estira cuerpo completo con calma antes del cardio final."},
     ],
     cooldown:"Bicicleta de spinning — 10-15 minutos, ritmo constante y cómodo para cerrar la semana.",
-    cooldownVideo:"bicicleta_final"
+    cooldownVideo:"bicicleta_final",
+    cooldownTitle:"Cardio final",
+    cooldownLabel:"Video de referencia — cardio"
   },
 ];
 
@@ -707,11 +709,11 @@ DAYS.forEach((day, i) => {
       </div>
     `).join('')}
     <div class="cooldown">
-      <b>Estiramientos finales</b>
+      <b>${day.cooldownTitle || 'Estiramientos finales'}</b>
       <span>${day.cooldown}</span>
     </div>
     <div class="video-wrap">
-      <span class="video-lbl">Video de referencia — estiramientos</span>
+      <span class="video-lbl">${day.cooldownLabel || 'Video de referencia — estiramientos'}</span>
       <video class="ex-video" src="${COOLDOWN_VIDEOS[day.cooldownVideo]}" controls muted loop playsinline></video>
     </div>
   `;
