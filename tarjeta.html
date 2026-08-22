@@ -495,10 +495,16 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  }
  function avisarIngreso(s){
  if(!CHECKIN_URL) return;
+ var intentos = 0;
+ function intentar(){
+ intentos++;
  try{
  var img = new Image();
+ img.onerror = function(){ if(intentos < 3) setTimeout(intentar, 1500); };
  img.src = CHECKIN_URL + "?action=checkin&nombre=" + encodeURIComponent(s.nombre) + "&apellido=" + encodeURIComponent(s.apellido) + "&venc=" + encodeURIComponent(s.vencimiento||"") + "&_=" + Date.now();
- }catch(e){}
+ }catch(e){ if(intentos < 3) setTimeout(intentar, 1500); }
+ }
+ intentar();
  }
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
