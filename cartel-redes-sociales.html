@@ -31,7 +31,7 @@
     background:var(--paper); border-radius:18px; overflow:hidden;
     box-shadow:0 30px 60px -20px rgba(0,0,0,.35);
     display:flex; flex-direction:column; align-items:center;
-    padding:40px 56px 30px;
+    padding:40px 44px 30px;
   }
   .top-bar{position:absolute;top:0;left:0;right:0;height:16px;background:var(--ink);}
   .top-bar::after{content:"";position:absolute;left:0;top:0;height:16px;width:220px;background:var(--red);}
@@ -47,7 +47,7 @@
   .tag{
     margin-top:24px; background:var(--red); color:var(--paper);
     font-family:'Anton','Arial Black',Impact,sans-serif; font-weight:900;
-    font-size:62px; letter-spacing:.05em;
+    font-size:56px; letter-spacing:.05em;
     padding:12px 48px; transform:skewX(-6deg); box-shadow:9px 9px 0 var(--ink); flex-shrink:0;
   }
   .tag span{display:inline-block;transform:skewX(6deg);}
@@ -61,28 +61,28 @@
 
   .panels{
     margin-top:20px; width:100%;
-    display:grid; grid-template-columns:repeat(1,1fr);
-    gap:0px; justify-items:center;
+    display:grid; grid-template-columns:repeat(2,1fr);
+    gap:18px; justify-items:center;
   }
   .panel{display:flex;flex-direction:column;align-items:center;width:100%;}
 
   .net{
     display:flex;align-items:center;gap:10px;
     font-family:'Anton','Arial Black',Impact,sans-serif;font-weight:900;
-    font-size:40px;letter-spacing:.03em;color:var(--ink);
+    font-size:34px;letter-spacing:.03em;color:var(--ink);
     margin-bottom:12px;
   }
-  .net .dot{width:24px;height:24px;border-radius:6px;display:inline-block;}
+  .net .dot{width:20px;height:20px;border-radius:6px;display:inline-block;}
 
   .qr{
     background:var(--paper); border:4px solid var(--ink); border-radius:14px;
-    padding:16px; line-height:0;
+    padding:12px; line-height:0;
   }
-  .qr img{width:360px;height:360px;display:block;image-rendering:pixelated;}
+  .qr img{width:312px;height:312px;display:block;image-rendering:pixelated;}
 
   .handle{
     margin-top:12px; font-weight:800; letter-spacing:.04em;
-    font-size:27px; color:var(--ink); text-align:center; word-break:break-word;
+    font-size:23px; color:var(--ink); text-align:center; word-break:break-word;
   }
 
   .howto{
@@ -126,6 +126,11 @@
         <div class="net"><span class="dot" style="background:#E1306C"></span>Instagram</div>
         <div class="qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA4QAAAOEAQAAAADRNcKWAAAFwklEQVR4nO3dQXLmKAyAUWkqe/sGuf+x+gb2CZiFwZIQ7ump6nbo8GmR+m1jvworFQjQIu/G+c/LoAgiIiIiIiIiIiIiIiIiIiLidxKllFLymM5Wij0owzgGX9nuT21PHz1W6FVERERERETEmcTNpzD13qnq05lTVURE9IrPQbLzQ9VnQaOPLtWriIiIiIiIiJOINX/ZY4OtFFVV7X6JnLWxT2K2UlR3EftK/uhivYqIiIiIiIg4pdjNPZ0+xSnlqClOl9ikYaD/I/6ZQERERERERFxT/Hh8ooPLcv05dxHZ7iTo1PbnV2KFXkVEREREREScQXR5Tlc4XOTcr3vqnrYUR+NrKtvRntpl/qis0auIiIiIiIiIM4jP661+w5/8UdZbISIiIiIiIr4W13jOTzYLtPmoNj1V+l9iE1p+Buvhoyv0KiIiIiIiIuIMotscxy7rozwm4xtvdfl42jrHYrvbuW13VuhVRERERERExBnElroc8d7hH3S74aR2h0+PrHFttPkMijwHERERERER8b3w6UzIeHzu06U4W0x2whiPH8A57sbu3gq9ioiIiIiIiDiD6NZbqWyH6LVevC2cqmFFOteyqniZoz5vS89r4c7VeIVeRURERERERJxBDOvKQ2lxXT4eMhm9/nRb51yND7HaZFuTbilTe2eFXkVEREREREScSQyLwdPk1alq51vVIx/aCRCjOp6R1LZMXqlXEREREREREb9S7CuIu1ylq7Hp3hgV5KRyHYmFzNTnICIiIiIiIr4Ubv8crRNVVlSzi6+xERG5SnjCL7+JjtX2PBTuyBq9ioiIiIiIiDiD2OpzWj2NneKg8UG71JYAtfDlOiL9gRA541mhVxERERERERFnEN02f6MV5mljnTKewXrcSad7wLwVIiIiIiIi4nvxWFnjLy1Gm+NIrFwO38uvrdCriIiIiIiIiDOIw4MeHvdDHrV7ON4h1jW318hzEBEREREREV+LVod87m43P6uxSRv+hfC1OOFdq2u2XXha4xV6FREREREREXEGsdUht5RERKTf4U/dvRb+8kpxSk6PrGjZ9hNcolcRERERERER5xH1jnq518c292RPa7S9A1U/UwmPvav62ZU0r9OriIiIiIiIiF8rhv1zpC4pr2c3iD/owZaZizsHq4W9USPPfinnWyEiIiIiIiK+Gleek46xypU1Rc49ZDwSp6euX7s7Jav0m/JcsUKvIiIiIiIiIs4g3vsE+v3/bHTGhmi6muPRJoCWBfmtlfvtkVfoVURERERERMQZxH6fwLS4/PDtxtsBlvSufcD/Yl05IiIiIiIi4pvxYT/ttKo6RyUitgarWy/e6nj2fs6r9Mu0bJDoihV6FREREREREXEGMQzHiEi369/4qPI8+OM/dfzk1HPGcxARERERERHfi27aqTsBIh0IIeNjrPy7+Wn43gq9ioiIiIiIiDiD6NZbFbfh37Vy/OgXWPm15o8R3sixQq8iIiIiIiIiziDmMuIwqFMbdfds3kpiu9a4+xTneCIiIiIiIiJ+YZ5z+MvU5EjtaoSM57+C+hxERERERETEV6M8xWhgxtfsHDH3eRjASb/IcxARERERERHfivFwzJbWUXWLrh6SmLjUahu8Rp6DiIiIiIiI+FLc55Uf7mZ3QHmtUpZ7N5y2xXGJjW0X5O4DIY9aoVcRERERERERJxPrieX7feOsl3WIxs4m39II0Og08+788/blxXoVERERERER8cvEj8cntj1yemCL0CUe0hnuiXvgYoVeRURERERERPxbRF+fc6qmRVci4kuQ5R67aY3DG3P+j4iIiIiIiIjfT3TjOd1cVDu8qrj6nFrHc+6uXMfOt9L7MCy71PiGrNGriIiIiIiIiDOILc/J01MiYsd6xjmqcLan3E18ktMu88TXCr2KiIiIiIiIOIOov7bF3++Lc4VeRURERERERERERERERERERPxz8S+e9T2hLheEyQAAAABJRU5ErkJggg==" alt="QR Instagram"></div>
         <div class="handle">@wadnsport.tocopilla</div>
+      </div>
+      <div class="panel">
+        <div class="net"><span class="dot" style="background:#1877F2"></span>Facebook</div>
+        <div class="qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA4QAAAOEAQAAAADRNcKWAAAFkklEQVR4nO3dQXLeIAyAUamTvX2D3P9YuQE+gbowGCEgq8Zhysfib2wwb8pKIwusJu+268/LoAgiIiIiIiIiIiIiIiIiIiLi/ySKmVmf0znMzJKIWZpdhsfqEBv0uiE7rCoiIiIiIiLiCuJH/vdI7qa2f5m7d5ioXPnC5Dpdb757nWW+4aQ7rCoiIiIiIiLiYqLe7Xwuz5zA8fdUNadraselWlM5Yf4wqWy3qoiIiIiIiIi/Jn58361ymMidwOmzM/YMyZfXKfZcTtoOq4qIiIiIiIi4gjiPc2pmpgY7+V55W5X/KlGQxt5h22FVEREREREREVcQXZwzDU7sKcjRXHdjIm1pjp/gsDJuOOkOq4qIiIiIiIi4gjjfb/UPfvpJ2W+FiIiIiIiI+Fq78zmjVI7dP5eK+A1WbelNeZc1/enbDquKiIiIiIiIuILozruph+PUjvxXeoYf7b1wsE597OgmLZc7rCoiIiIiIiLiCmIT59QIJYn44wD7t1BdEJNysON/QsRDnIOIiIiIiIj4ZrvfW4V94GGDlbn3Vm5IKuNCO6z8lCfU70nfYVURERERERERVxCbrEt67qVZxqYZ7NNA4lM5IQPUzLLDqiIiIiIiIiKuIJY6ZJe7OV2epjkn8NlNfqk7DtBndO4t5f6OdX/tsKqIiIiIiIiIK4jNvvJQStN0hJ+Q6Anjps+Sz0FERERERER8rT35nLMpvin3Sq+v1OkuQ2u2nocCH9ljVRERERERERFXEGMZTlep07faEZ5otlW15TqSpyefg4iIiIiIiPhem76j8gGQtPXF9c3U4UuQ619d2OMCoB1WFREREREREXEFcXJ+jrUFOSIyjWnG33iQWeUPcQ4iIiIiIiLiWy2EOF1/E92EUMhfpvYVmEizm9yoQ0ZERERERER8vdWsSw1TRl+AGN9rApvxVitpe4lzEBEREREREd9qPi6p7ejil/FRgvUyZHZCh5t0h1VFREREREREXEHs65BlVrOTBiceH+P3Vl0GqL7pIs5BREREREREfKl9+IvyFSptL3MEFM5IlnAuTp2lSw81N3ZYVURERERERMQVxOYgHBnsCE+DZ/oETjdB+HHz7bCqiIiIiIiIiCuIsYBmtJF8XFBsXUVy+CDEOHgizkFERERERER8q/kIJWRxQqxSwxnpoptuvtpiHc8Oq4qIiIiIiIi4gtifWpyejjT4doOM74VeP3MKu7F2WFVERERERETEFcS7Djl/uLM0k+uUUGGce69TRA5zxcgqR5pMUDqaqXZYVURERERERMSVxMNM9RTJP585E6P6+byFutTFK2Zfqqrnc2NUwvOl6vM5rfheQ0RERERERNxTHBzkN9gpldrBTR1ymCpssOorf3ZYVURERERERMQVxFg3HD5KFSKe+kQIgPyzzczU5yAiIiIiIiL+lujOCSxFNSbizv/rT/3TZ3A5QDC5wbVSJ/91F/M8Q7ZYVURERERERMQVxPk+8C5jc7Sn4SSR8WOhoxlCPgcRERERERHxvWazVnvDITr+6aM7PycESnzfChEREREREfG3xPn3yr8Z16d8pumdekmcg4iIiIiIiPhuK/U5roBGYo2NPAfh5Fard+pxOn1rjtPRx9hhVRERERERERFXEOObqfCdhuknq/wE6ZtL36jPQURERERERHyzfXzfbT53o3eKJm+1Kvutyg6tU3Lep+7QqkNc22FVEREREREREdcW84nHnz6fU09LFpF8eHJ4Ig8uhyerniHHs9L/EREREREREfF/Fpvzc0KriZnDRJ98Tq7PcWkbbTI7zQT6DC5JnR1WFREREREREXEFcb7fyp+MnHxHOEmn/jXedS7t3nXqcxARERERERFfatrHOD/brh1WFREREREREREREREREREREfHn2l+SfDktIJkJmQAAAABJRU5ErkJggg==" alt="QR Facebook"></div>
+        <div class="handle">Wadnsport Tocopilla Gimnasio</div>
       </div>
     </div>
     <div class="howto">Abre la cámara de tu celular y <b>apunta al código</b></div>
