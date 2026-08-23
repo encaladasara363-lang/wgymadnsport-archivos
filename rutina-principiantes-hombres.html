@@ -711,7 +711,7 @@ DAYS.forEach((day, i) => {
     ${day.warmupVideo ? `
     <div class="video-wrap">
       <span class="video-lbl">Video de referencia — calentamiento</span>
-      <video class="ex-video" src="${WARMUP_VIDEOS[day.warmupVideo]}" controls muted loop playsinline></video>
+      <video class="ex-video" src="${WARMUP_VIDEOS[day.warmupVideo]}" controls loop playsinline></video>
     </div>` : ''}
     ${day.exercises.map((ex, idx) => `
       <div class="exercise">
@@ -722,7 +722,7 @@ DAYS.forEach((day, i) => {
           ${ex.video ? `
           <div class="video-wrap">
             <span class="video-lbl">Video de referencia</span>
-            <video class="ex-video" src="${VIDEOS[ex.video]}" controls muted loop playsinline></video>
+            <video class="ex-video" src="${VIDEOS[ex.video]}" controls loop playsinline></video>
           </div>` : ''}
           <p class="tip">${ex.tip}</p>
           ${ex.alt ? `<p class="alt">${ex.alt}</p>` : ''}
@@ -736,7 +736,7 @@ DAYS.forEach((day, i) => {
     ${day.cooldownVideo ? `
     <div class="video-wrap">
       <span class="video-lbl">${day.cooldownLabel || 'Video de referencia — estiramientos'}</span>
-      <video class="ex-video" src="${COOLDOWN_VIDEOS[day.cooldownVideo]}" controls muted loop playsinline></video>
+      <video class="ex-video" src="${COOLDOWN_VIDEOS[day.cooldownVideo]}" controls loop playsinline></video>
     </div>` : ''}
   `;
   content.appendChild(panel);
