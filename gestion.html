@@ -484,8 +484,8 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="card-head"><h2>Mensualidades del Día</h2></div>
  <p class="card-sub">Cada día que trabajes, anota cuánto vendiste ese día en mensualidades. Tu 10% se calcula solo, mientras vas escribiendo.</p>
  <div class="addrow" style="grid-template-columns:1fr 1fr auto;">
- <div><label for="vm-date">Fecha</label><input type="text" id="vm-date" placeholder="20-08-2026"></div>
- <div><label for="vm-total">Mensualidades vendidas hoy</label><input type="text" id="vm-total" placeholder="0"></div>
+ <div><label for="vm-date">Fecha</label><input type="text" id="vm-date" placeholder="20-08-2026" value="24-08-2026"></div>
+ <div><label for="vm-total">Mensualidades vendidas hoy</label><input type="text" id="vm-total" placeholder="0" value="99.000"></div>
  <button class="btn btn-primary" id="vm-save">Guardar día</button>
  </div>
  <div class="statrow"><div class="stat" style="border-color:var(--dorado);"><span class="eyebrow">Tu 10% de hoy</span><span class="val tabular" id="vm-sueldo-dia">$0</span></div></div>
@@ -507,12 +507,11 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div style="max-width:220px; margin-bottom:14px;"><label style="display:block;font-size:11px;color:var(--gris-soft);margin-bottom:4px;">Fecha</label><input type="text" id="cz-date" placeholder="20-08-2026" value="22-08-2026"></div>
  <div class="addrow cz-grid">
  <div><label for="cz-snacks">Snacks Saludables</label><input type="text" id="cz-snacks" placeholder="0"></div>
- <div><label for="cz-suplementos">Suplementos</label><input type="text" id="cz-suplementos" placeholder="0" value="7.000"></div>
+ <div><label for="cz-suplementos">Suplementos</label><input type="text" id="cz-suplementos" placeholder="0"></div>
  <div><label for="cz-ropa">Ropa Deportiva</label><input type="text" id="cz-ropa" placeholder="0"></div>
- <div><label for="cz-bebestible">Bebestible</label><input type="text" id="cz-bebestible" placeholder="0" value="3.000"></div>
- <div><label for="cz-pase">Pase Diario</label><input type="text" id="cz-pase" placeholder="0" value="16.000"></div>
- <div><label for="cz-semanal">Plan Semanal</label><input type="text" id="cz-semanal" placeholder="0" value="15.000"></div>
- <div><label for="cz-fullmensual">Plan Full Mensual</label><input type="text" id="cz-fullmensual" placeholder="0" value="99.000"></div>
+ <div><label for="cz-bebestible">Bebestible</label><input type="text" id="cz-bebestible" placeholder="0"></div>
+ <div><label for="cz-pase">Pase Diario</label><input type="text" id="cz-pase" placeholder="0"></div>
+ <div><label for="cz-semanal">Plan Semanal</label><input type="text" id="cz-semanal" placeholder="0"></div>
  </div>
  <div class="statrow"><div class="stat"><span class="eyebrow">Total vendido hoy</span><span class="val tabular" id="cz-total-dia">$0</span></div></div>
  <div class="statrow" style="margin-top:16px;"><div class="stat" style="border-color:var(--rojo); background:rgba(227,6,19,.08); padding:18px; border-radius:12px;"><span class="eyebrow" style="color:var(--rojo); font-size:12px;">📊 TOTAL VENTAS DEL DÍA</span><span class="val tabular" id="total-ventas-dia" style="font-size:28px; color:var(--rojo); font-weight:900; margin-top:8px;">$0</span></div></div>
@@ -1030,7 +1029,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  }
 
  /* ---- Cierre de Caja del día: productos, sin 10% (eso es solo de mensualidades) ---- */
- var CZ_CAMPOS = ["snacks","suplementos","ropa","bebestible","pase","semanal","fullmensual"];
+ var CZ_CAMPOS = ["snacks","suplementos","ropa","bebestible","pase","semanal"];
  attachDateFormatting(document.getElementById("cz-date"));
  function czEnCurso(){
  var vals = {};
