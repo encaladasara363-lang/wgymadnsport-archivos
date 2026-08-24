@@ -496,14 +496,30 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  }
  function avisarIngreso(s){
  if(!CHECKIN_URL) return;
+ /* Evita duplicados si la pagina se recarga o el socio toca dos veces. */
+ var marca = "wgym_checkin_" + s.nombre + "_" + s.apellido;
+ try{
+ var previo = Number(localStorage.getItem(marca) || 0);
+ if(Date.now() - previo < 60000) return;
+ localStorage.setItem(marca, String(Date.now()));
+ }catch(e){}
  var intentos = 0;
+ function armarUrl(){
+ return CHECKIN_URL + "?action=checkin&nombre=" + encodeURIComponent(s.nombre) + "&apellido=" + encodeURIComponent(s.apellido) + "&venc=" + encodeURIComponent(s.vencimiento||"") + "&_=" + Date.now();
+ }
+ function reintentar(){ if(intentos < 3) setTimeout(intentar, 1500); }
  function intentar(){
  intentos++;
  try{
+ if(window.fetch){
+ /* no-cors se resuelve si el servidor respondio; solo falla si no hubo red. */
+ fetch(armarUrl(), {mode:"no-cors", cache:"no-store"})["catch"](reintentar);
+ } else {
+ /* Navegadores antiguos: se envia una sola vez, sin reintento. */
  var img = new Image();
- img.onerror = function(){ if(intentos < 3) setTimeout(intentar, 1500); };
- img.src = CHECKIN_URL + "?action=checkin&nombre=" + encodeURIComponent(s.nombre) + "&apellido=" + encodeURIComponent(s.apellido) + "&venc=" + encodeURIComponent(s.vencimiento||"") + "&_=" + Date.now();
- }catch(e){ if(intentos < 3) setTimeout(intentar, 1500); }
+ img.src = armarUrl();
+ }
+ }catch(e){ reintentar(); }
  }
  intentar();
  }
