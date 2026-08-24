@@ -512,6 +512,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div><label for="cz-bebestible">Bebestible</label><input type="text" id="cz-bebestible" placeholder="0" value="3.000"></div>
  <div><label for="cz-pase">Pase Diario</label><input type="text" id="cz-pase" placeholder="0" value="16.000"></div>
  <div><label for="cz-semanal">Plan Semanal</label><input type="text" id="cz-semanal" placeholder="0" value="15.000"></div>
+ <div><label for="cz-fullmensual">Plan Full Mensual</label><input type="text" id="cz-fullmensual" placeholder="0" value="99.000"></div>
  </div>
  <div class="statrow"><div class="stat"><span class="eyebrow">Total vendido hoy</span><span class="val tabular" id="cz-total-dia">$0</span></div></div>
  <div class="statrow" style="margin-top:16px;"><div class="stat" style="border-color:var(--rojo); background:rgba(227,6,19,.08); padding:18px; border-radius:12px;"><span class="eyebrow" style="color:var(--rojo); font-size:12px;">📊 TOTAL VENTAS DEL DÍA</span><span class="val tabular" id="total-ventas-dia" style="font-size:28px; color:var(--rojo); font-weight:900; margin-top:8px;">$0</span></div></div>
@@ -1029,7 +1030,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  }
 
  /* ---- Cierre de Caja del día: productos, sin 10% (eso es solo de mensualidades) ---- */
- var CZ_CAMPOS = ["snacks","suplementos","ropa","bebestible","pase","semanal"];
+ var CZ_CAMPOS = ["snacks","suplementos","ropa","bebestible","pase","semanal","fullmensual"];
  attachDateFormatting(document.getElementById("cz-date"));
  function czEnCurso(){
  var vals = {};
