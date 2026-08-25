@@ -302,7 +302,8 @@ const COOLDOWN_VIDEOS = {
   estiramiento_pierna: "assets/estiramiento_pierna.mp4?v=2",
   estiramiento_pecho_triceps: "assets/estiramiento_pecho_triceps.mp4?v=2",
   estiramiento_espalda_biceps: "assets/estiramiento_espalda_biceps.mp4?v=1",
-  estiramiento_hombro_abdomen: "assets/estiramiento_hombro_abdomen_hombres.mp4?v=1"
+  estiramiento_hombro_abdomen: "assets/estiramiento_hombro_abdomen_hombres.mp4?v=1",
+  estiramiento_brazo_pecho: "assets/estiramiento_brazo_pecho_hombres.mp4?v=1"
 };
 const VIDEOS = {
   sentadilla_smith: "assets/sentadilla_smith.mp4?v=2",
@@ -326,7 +327,12 @@ const VIDEOS = {
   elevacion_frontal: "assets/elevacion_frontal_hombres.mp4?v=1",
   face_pull: "assets/face_pull_hombres.mp4?v=1",
   plancha_abdominal: "assets/plancha_abdominal_hombres.mp4?v=1",
-  elevacion_piernas: "assets/elevacion_piernas_hombres.mp4?v=1"
+  elevacion_piernas: "assets/elevacion_piernas_hombres.mp4?v=1",
+  press_cerrado_banca: "assets/press_cerrado_banca_hombres.mp4?v=1",
+  remo_mancuerna_una_mano: "assets/remo_mancuerna_una_mano_hombres.mp4?v=1",
+  curl_concentrado: "assets/curl_concentrado_hombres.mp4?v=1",
+  extension_triceps_nuca: "assets/extension_triceps_nuca_hombres.mp4?v=1",
+  abdominales_banca: "assets/abdominales_banca_hombres.mp4?v=1"
 };
 
 document.getElementById('gateLogoImg').src = LOGO_SRC;
@@ -688,18 +694,19 @@ const DAYS = [
     warmup:"Calentamiento en bicicleta — 8 minutos",
     warmupVideo:"bicicleta",
     exercises:[
-      {name:"Press cerrado en banca", sets:"4 × 10", rest:"75 seg", equip:"barra",
+      {name:"Press cerrado en banca con mancuernas", sets:"4 × 10", rest:"75 seg", equip:"mancuerna", video:"press_cerrado_banca",
        tip:"Agarre más angosto que el ancho de hombros, codos pegados al cuerpo al bajar la barra hacia el pecho, enfocado en tríceps."},
-      {name:"Remo con mancuerna a una mano", sets:"3 × 10-12 por lado", rest:"60 seg", equip:"mancuerna",
+      {name:"Remo con mancuerna a una mano", sets:"3 × 10-12 por lado", rest:"60 seg", equip:"mancuerna", video:"remo_mancuerna_una_mano",
        tip:"Apoya una rodilla y una mano en el banco, espalda recta; tira la mancuerna hacia la cadera llevando el codo hacia atrás."},
-      {name:"Curl concentrado con mancuerna", sets:"3 × 10-12 por lado", rest:"45 seg", equip:"mancuerna",
+      {name:"Curl concentrado con mancuerna", sets:"3 × 10-12 por lado", rest:"45 seg", equip:"mancuerna", video:"curl_concentrado",
        tip:"Codo apoyado en la cara interna del muslo, sube y baja controlado sin balancear el cuerpo."},
-      {name:"Extensión de tríceps tras nuca con mancuerna", sets:"3 × 12", rest:"45 seg", equip:"mancuerna",
+      {name:"Extensión de tríceps tras nuca con mancuerna", sets:"3 × 12", rest:"45 seg", equip:"mancuerna", video:"extension_triceps_nuca",
        tip:"Sostén la mancuerna con ambas manos detrás de la cabeza, codos apuntando al techo, baja controlado y sube extendiendo los brazos."},
-      {name:"Abdominales en máquina", sets:"3 × 15-20", rest:"45 seg", equip:"maquina",
+      {name:"Abdominales en banca", sets:"3 × 15-20", rest:"45 seg", equip:"banca", video:"abdominales_banca",
        tip:"Flexiona el tronco apretando el abdomen, sin tirar del cuello con los brazos."},
     ],
-    cooldown:"Estira brazos y pecho 20-30 seg por lado, para cerrar la semana."
+    cooldown:"Estira brazos y pecho 20-30 seg por lado, para cerrar la semana.",
+    cooldownVideo:"estiramiento_brazo_pecho"
   },
 ];
 
