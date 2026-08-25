@@ -13,55 +13,41 @@
 
   .hoja{
     position:relative;width:210mm;height:297mm;background:var(--paper);
-    margin:0 auto;padding:14mm 14mm 10mm;display:flex;flex-direction:column;
+    margin:0 auto;padding:13mm 14mm 9mm;display:flex;flex-direction:column;
   }
   .filo{position:absolute;top:0;left:0;right:0;height:2.4mm;background:var(--red);}
   .filo::after{content:"";position:absolute;right:0;top:0;height:2.4mm;width:70mm;background:var(--gold);}
 
   .cab{display:flex;align-items:center;gap:6mm;}
-  .logo{width:24mm;height:24mm;border-radius:50%;overflow:hidden;border:0.8mm solid var(--ink);flex-shrink:0;}
+  .logo{width:23mm;height:23mm;border-radius:50%;overflow:hidden;border:0.8mm solid var(--ink);flex-shrink:0;}
   .logo img{width:100%;height:100%;object-fit:cover;}
   .titulo{flex:1;}
-  .titulo h1{font-family:'Anton','Arial Black',Impact,sans-serif;font-size:11mm;line-height:1;color:var(--ink);}
+  .titulo h1{font-family:'Anton','Arial Black',Impact,sans-serif;font-size:10.5mm;line-height:1;color:var(--ink);}
   .titulo h1 span{color:var(--red);}
-  .titulo .marca{margin-top:1.6mm;font-weight:800;letter-spacing:.22em;font-size:3.2mm;color:var(--steel);}
+  .titulo .marca{margin-top:1.5mm;font-weight:800;letter-spacing:.22em;font-size:3.1mm;color:var(--steel);}
   .fecha{align-self:flex-end;text-align:right;}
-  .fecha b{display:block;font-size:3mm;color:var(--steel);letter-spacing:.2em;margin-bottom:1.8mm;font-weight:800;}
-  .fecha .campo{display:block;width:46mm;border-bottom:0.5mm solid var(--ink);height:7mm;}
+  .fecha b{display:block;font-size:3mm;color:var(--steel);letter-spacing:.2em;margin-bottom:1.6mm;font-weight:800;}
+  .fecha .campo{display:block;width:46mm;border-bottom:0.5mm solid var(--ink);height:6.5mm;}
 
-  .regla{height:0.9mm;background:var(--ink);margin:5mm 0 5mm;}
+  .regla{height:0.9mm;background:var(--ink);margin:4mm 0 4.5mm;}
 
-  .bloques{display:flex;flex-direction:column;gap:4.5mm;}
+  .bloques{display:flex;flex-direction:column;gap:5.4mm;}
   .bloque{display:flex;flex-direction:column;}
-  .encabezado{display:flex;align-items:center;gap:3mm;margin-bottom:3.2mm;}
-  .rombo{width:3.4mm;height:3.4mm;background:var(--red);transform:rotate(45deg);flex-shrink:0;}
+  .encabezado{display:flex;align-items:center;gap:3mm;margin-bottom:2.8mm;}
+  .rombo{width:3.2mm;height:3.2mm;background:var(--red);transform:rotate(45deg);flex-shrink:0;}
   .nombre{
     font-family:'Anton','Arial Black',Impact,sans-serif;
-    font-size:5.4mm;letter-spacing:.03em;color:var(--ink);white-space:nowrap;
+    font-size:5.2mm;letter-spacing:.03em;color:var(--ink);white-space:nowrap;
   }
   .guia{flex:1;height:0.4mm;background:var(--raya);}
   .tot{font-weight:800;letter-spacing:.2em;font-size:2.9mm;color:var(--steel);}
   .tot-caja{
-    width:34mm;height:8mm;border:0.6mm solid var(--ink);border-radius:1mm;
+    width:34mm;height:7.6mm;border:0.6mm solid var(--ink);border-radius:1mm;
     display:flex;align-items:center;padding-left:2.5mm;
-    font-family:'Anton','Arial Black',Impact,sans-serif;font-size:5mm;color:var(--red);
+    font-family:'Anton','Arial Black',Impact,sans-serif;font-size:4.8mm;color:var(--red);
   }
-  .raya{height:0.35mm;background:var(--raya);margin-bottom:7.4mm;}
+  .raya{height:0.35mm;background:var(--raya);margin-bottom:8mm;}
   .raya:last-child{margin-bottom:0;}
-
-  .granTotal{
-    margin-top:6mm;display:flex;align-items:center;gap:4mm;
-    border-top:1.2mm solid var(--red);padding-top:5mm;
-  }
-  .granTotal .gt-lab{
-    flex:1;font-family:'Anton','Arial Black',Impact,sans-serif;
-    font-size:9mm;letter-spacing:.02em;color:var(--red);
-  }
-  .granTotal .gt-box{
-    width:74mm;height:16mm;border:1.2mm solid var(--ink);border-radius:1.5mm;
-    display:flex;align-items:center;padding-left:5mm;
-    font-family:'Anton','Arial Black',Impact,sans-serif;font-size:8mm;color:var(--ink);
-  }
 
   .nota{
     margin-top:auto;padding-top:4mm;border-top:0.5mm solid var(--raya);
@@ -90,6 +76,17 @@
     <div class="regla"></div>
 
     <div class="bloques">
+      <div class="bloque">
+        <div class="encabezado">
+          <span class="rombo"></span>
+          <span class="nombre">MENSUALIDADES</span>
+          <span class="guia"></span>
+          <span class="tot">TOTAL</span><span class="tot-caja">$</span>
+        </div>
+        <div class="raya"></div>
+        <div class="raya"></div>
+        <div class="raya"></div>
+      </div>
       <div class="bloque">
         <div class="encabezado">
           <span class="rombo"></span>
@@ -158,14 +155,9 @@
       </div>
     </div>
 
-    <div class="granTotal">
-      <div class="gt-lab">TOTAL DEL DÍA</div>
-      <div class="gt-box">$</div>
-    </div>
-
     <div class="nota">
       <p>Anota cada venta en las líneas de su producto durante el día.<br>
-         En la noche suma cada uno, escribe el <b>TOTAL DEL DÍA</b> y pásalo al <b>Cierre de Caja</b>.</p>
+         En la noche suma cada fila, escribe su <b>TOTAL</b> y pásalos al <b>Cierre de Caja</b>.</p>
       <div class="firma"><b>WGYMADNSPORT</b>Tocopilla</div>
     </div>
   </div>
