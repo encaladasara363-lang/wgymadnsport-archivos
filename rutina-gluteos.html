@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rutina Intermedio Enfocada en Glúteos</title>
+<style>
+  :root{
+    --negro:#0A0A0A;
+    --negro-suave:#161616;
+    --negro-card:#1c1c1c;
+    --rojo:#E30613;
+    --rojo-oscuro:#A40410;
+    --dorado:#D4AF37;
+    --crema:#FFF7F0;
+    --blanco:#FFFFFF;
+    --gris:#cfcfcf;
+    --gris-tenue:#8a8a8a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--negro);
+    color:var(--blanco);
+    font-family:'Segoe UI', Arial, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .wrap{max-width:520px;margin:0 auto;padding-bottom:60px;}
+  header{
+    background:linear-gradient(180deg,#111 0%, var(--negro) 100%);
+    border-bottom:3px solid var(--rojo);
+    padding:22px 20px 18px;
+    text-align:center;
+    position:relative;
+  }
+  header .logo{
+    width:64px;height:64px;border-radius:50%;
+    object-fit:cover;border:2px solid var(--dorado);
+    margin-bottom:10px;
+  }
+  header .gymname{
+    font-size:13px;font-weight:800;letter-spacing:.14em;
+    color:var(--dorado);text-transform:uppercase;margin:0 0 4px;
+  }
+  header h1{
+    font-size:26px;font-weight:900;margin:0 0 6px;
+    letter-spacing:.01em;line-height:1.15;
+  }
+  header h1 span{color:var(--rojo);}
+  header .sub{
+    font-size:13px;color:var(--gris);margin:0;
+    font-weight:600;letter-spacing:.03em;
+  }
+  nav.days{
+    display:flex;gap:8px;overflow-x:auto;
+    padding:16px 16px 4px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  nav.days::-webkit-scrollbar{display:none;}
+  nav.days button{
+    flex:0 0 auto;
+    background:var(--negro-suave);
+    color:var(--gris);
+    border:1.5px solid #2a2a2a;
+    border-radius:999px;
+    padding:10px 16px;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.04em;
+    font-family:inherit;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:all .15s ease;
+  }
+  nav.days button.active{
+    background:var(--rojo);
+    border-color:var(--rojo);
+    color:var(--blanco);
+  }
+  main{padding:8px 16px 0;}
+  .day-panel{display:none;}
+  .day-panel.active{display:block;}
+  .day-banner{
+    background:linear-gradient(120deg, var(--rojo-oscuro), var(--rojo));
+    border-radius:14px;
+    padding:18px 20px;
+    margin:10px 0 16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .day-banner .num{
+    font-size:11px;font-weight:800;letter-spacing:.18em;
+    color:rgba(255,255,255,.85);text-transform:uppercase;margin:0 0 4px;
+  }
+  .day-banner h2{
+    font-size:22px;font-weight:900;margin:0;color:var(--blanco);
+    letter-spacing:.01em;
+  }
+  .day-banner .focus{
+    font-size:13px;color:rgba(255,255,255,.9);margin:6px 0 0;font-weight:600;
+  }
+  .warmup{
+    display:flex;align-items:center;gap:12px;
+    background:var(--negro-suave);
+    border:1px solid #262626;
+    border-left:4px solid var(--dorado);
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:12px;
+  }
+  .warmup .txt b{
+    display:block;color:var(--dorado);font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px;
+  }
+  .warmup .txt span{font-size:13.5px;color:var(--gris);font-weight:600;}
+  .exercise{
+    background:var(--negro-card);
+    border:1px solid #262626;
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:12px;
+    position:relative;
+  }
+  .exercise .badge{
+    position:absolute;top:-8px;left:-8px;
+    width:26px;height:26px;border-radius:50%;
+    background:var(--rojo);color:#fff;
+    font-size:13px;font-weight:900;
+    display:flex;align-items:center;justify-content:center;
+    border:2px solid var(--negro);
+  }
+  .gate{
+    position:fixed;inset:0;z-index:100;
+    background:var(--negro);
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;
+  }
+  .gate-card{ width:100%;max-width:340px;text-align:center; }
+  .gate-logo{
+    width:72px;height:72px;border-radius:50%;
+    object-fit:cover;border:2px solid var(--dorado);
+    margin-bottom:14px;
+  }
+  .gate-kicker{
+    font-size:12px;font-weight:800;letter-spacing:.14em;
+    color:var(--dorado);text-transform:uppercase;margin:0 0 10px;
+  }
+  .gate-card h2{ font-size:22px;font-weight:900;color:var(--blanco);margin:0 0 8px; }
+  .gate-sub{ font-size:13px;color:var(--gris);margin:0 0 20px;font-weight:600; }
+  .gate-input{
+    width:100%;box-sizing:border-box;
+    background:var(--negro-suave);
+    border:1.5px solid #2a2a2a;
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:16px;
+    color:var(--blanco);
+    text-align:center;
+    letter-spacing:.05em;
+    margin-bottom:12px;
+    font-family:inherit;
+  }
+  .gate-input:focus{outline:none;border-color:var(--rojo);}
+  .gate-btn{
+    width:100%;
+    background:var(--rojo);
+    color:var(--blanco);
+    border:none;border-radius:10px;
+    padding:14px 16px;
+    font-size:14px;font-weight:900;
+    letter-spacing:.06em;text-transform:uppercase;
+    font-family:inherit;
+    cursor:pointer;
+  }
+  .gate-btn:active{background:var(--rojo-oscuro);}
+  .gate-error{ display:none; color:var(--rojo); font-size:12.5px;font-weight:700; margin:14px 0 0; }
+  .gate-error.show{display:block;}
+  .expiry-banner{
+    margin:14px 16px 0;
+    background:rgba(212,175,55,.14);
+    border:1.5px solid var(--dorado);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--dorado);
+    text-align:center;
+    line-height:1.4;
+  }
+  .exercise .info{flex:1;min-width:0;}
+  .exercise .info h3{
+    font-size:15px;font-weight:900;margin:0 0 6px;
+    text-transform:uppercase;letter-spacing:.02em;color:var(--blanco);
+    line-height:1.25;
+  }
+  .exercise .stats{ display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px; }
+  .exercise .stats span{
+    font-size:12.5px;font-weight:800;color:var(--rojo);
+    background:rgba(227,6,19,.12);
+    padding:3px 9px;border-radius:6px;
+    letter-spacing:.02em;
+  }
+  .exercise .tip{ font-size:12.5px;color:var(--gris-tenue); font-style:italic;line-height:1.4;margin:0; }
+  .exercise .alt{ font-size:11.5px;color:var(--dorado); font-weight:700;margin:6px 0 0; }
+  .video-wrap{margin:10px 0;}
+  .video-lbl{
+    display:block;font-size:10px;font-weight:800;color:var(--dorado);
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;
+  }
+  .ex-video{
+    width:100%;max-height:420px;display:block;
+    border-radius:10px;border:1px solid #262626;
+    background:#000;object-fit:cover;
+  }
+  .cooldown{
+    background:var(--negro-suave);
+    border:1px solid #262626;
+    border-radius:10px;
+    padding:14px;
+    margin:16px 0 4px;
+    text-align:center;
+  }
+  .cooldown b{
+    display:block;color:var(--dorado);font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;
+  }
+  .cooldown span{font-size:13px;color:var(--gris);font-weight:600;}
+  .info-card{
+    background:var(--negro-suave);
+    border:1px solid #262626;
+    border-radius:12px;
+    padding:14px 16px;
+    margin:14px 16px 0;
+    font-size:12.5px;
+    color:var(--gris);
+    line-height:1.55;
+  }
+  .info-card b{color:var(--dorado);}
+  footer{
+    text-align:center;
+    padding:26px 20px 10px;
+    margin-top:10px;
+    border-top:1px solid #1e1e1e;
+  }
+  footer .slogan{
+    font-size:13px;font-weight:800;color:var(--rojo);
+    letter-spacing:.05em;margin:0 0 4px;
+  }
+  footer .name{
+    font-size:11px;font-weight:700;color:var(--gris-tenue);
+    letter-spacing:.12em;text-transform:uppercase;margin:0;
+  }
+</style>
+</head>
+<body>
+
+<div id="gateOverlay" class="gate">
+  <div class="gate-card">
+    <img class="gate-logo" id="gateLogoImg" alt="WGYMADNSPORT">
+    <p class="gate-kicker">WGYMADNSPORT Tocopilla</p>
+    <h2>Acceso a tu rutina</h2>
+    <p class="gate-sub">Ingresa tu nombre y apellido, como está registrado en el gimnasio</p>
+    <input type="text" id="gateNombre" class="gate-input" placeholder="Nombre" autocomplete="off">
+    <input type="text" id="gateApellido" class="gate-input" placeholder="Apellido" autocomplete="off">
+    <button id="gateBtn" class="gate-btn">Entrar</button>
+    <p id="gateError" class="gate-error">No encontramos ese nombre entre los socios vigentes. Consulta en recepción.</p>
+  </div>
+</div>
+
+<div class="wrap" id="mainContent" style="display:none;">
+
+  <header>
+    <img class="logo" id="logoImg" alt="WGYMADNSPORT">
+    <p class="gymname">WGYMADNSPORT Tocopilla</p>
+    <h1>Rutina Intermedio <span>Enfocada en Glúteos</span></h1>
+    <p class="sub">5 días · 3 días de glúteo y pierna + 2 de tren superior</p>
+  </header>
+
+  <div id="expiryBanner" class="expiry-banner" style="display:none;"></div>
+
+  <nav class="days" id="dayNav"></nav>
+
+  <main id="dayContent"></main>
+
+  <div class="info-card">
+    <b>Cómo usar esta rutina:</b> descansa el tiempo indicado entre series, prioriza siempre la técnica antes que el peso, y bebe agua durante todo el entrenamiento. Si sientes dolor (no cansancio normal) o tienes dudas sobre algún movimiento, consulta a tu profesor en el gimnasio.
+  </div>
+
+  <footer>
+    <p class="slogan">ENTRENA CON ACTITUD</p>
+    <p class="name">WGYMADNSPORT · Tocopilla</p>
+  </footer>
+
+</div>
+
+<script>
+const LOGO_SRC = "assets/logo.jpg";
+const WARMUP_VIDEOS = {};
+const COOLDOWN_VIDEOS = {};
+const VIDEOS = {};
+
+document.getElementById('gateLogoImg').src = LOGO_SRC;
+document.getElementById('logoImg').src = LOGO_SRC;
+
+const SOCIOS = [
+{n:"AKASH",a:"THADANI",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:28000,fv:46268},
+{n:"ALAN",a:"PEREIRA",rut:"00.000.000-0",plan:"Funcionario Publico",monto:28000,fv:46275},
+{n:"ALAN",a:"RAMIREZ",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"ALDO",a:"ENCINA",rut:"Sin Rut",plan:"Mensual Turno",monto:23000,fv:46269},
+{n:"ALEJANDRO",a:"PARES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46241},
+{n:"AlEXANDER",a:"ONTANEDA",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"ALEXIS",a:"ACUÑA",rut:"13.795.169-k",plan:"Full Mensual",monto:33000,fv:46255},
+{n:"ALEXIS",a:"VARAS",rut:"00.000.000-0",plan:"Funcionario Publico",monto:28000,fv:46248},
+{n:"ALONSO",a:"ARAYA",rut:"00.000.000-7",plan:"Tres Veces a La Semana",monto:23000,fv:46264},
+{n:"ANA",a:"MARIA GONZALEZ",rut:"00.000.000-0",plan:"Mensual Tercera Edad",monto:23000,fv:46285},
+{n:"ANDREA",a:"CUELLA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46237},
+{n:"ANDREA",a:"VARAS",rut:"16.613.967-8",plan:"Estudiante Profesor",monto:28000,fv:46244},
+{n:"ANDRES",a:"PAEZ",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46247},
+{n:"ANGEL",a:"GUTIERREZ",rut:"28.910.930-7",plan:"Full Mensual",monto:33000,fv:46279},
+{n:"ANTONELLA",a:"AGUIRRE",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46290},
+{n:"ANTONELLA",a:"LLANQUE",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46248},
+{n:"ANTONIO",a:"PEREZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46254},
+{n:"ANTONIO",a:"VALENCIA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46267},
+{n:"ARACELY",a:"HERRERA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46253},
+{n:"ARACELY",a:"PANIAGUA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46258},
+{n:"AARON",a:"SOZA",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46256},
+{n:"BASTIAN",a:"PERALTA",rut:"23.452.170-5",plan:"Estudiante Profesor",monto:28000,fv:46207},
+{n:"BASTIAN",a:"VERGARA",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46254},
+{n:"BASTIAN",a:"ZAPATA",rut:"20.886.781-4",plan:"Funcionario Publico",monto:28000,fv:46272},
+{n:"BENJAMIN",a:"GODOY",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46257},
+{n:"BETSY",a:"BRIONES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"CAMILA",a:"CUELLA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46237},
+{n:"CAMILA",a:"JUICA",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46464},
+{n:"CAMILA",a:"PEÑA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46269},
+{n:"CAMILO",a:"GALLEGILLOS",rut:"20.400.051-1",plan:"Full Mensual",monto:33000,fv:46250},
+{n:"CAMILO",a:"JUICA",rut:"18.231.164-2",plan:"Mensual Turno",monto:23000,fv:46269},
+{n:"CARLA",a:"MORALES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46257},
+{n:"CARLOS",a:"ARAYA",rut:"15.012.248-1",plan:"Full Mensual",monto:33000,fv:46262},
+{n:"CAROLINA",a:"CARVAJAL",rut:"15.011.544-2",plan:"Full Mensual",monto:33000,fv:46289},
+{n:"CAROLINA",a:"CUELLA",rut:"00.000.000-0",plan:"Funcionario Publico",monto:28000,fv:46265},
+{n:"CHRISTIAN",a:"AROS",rut:"21.501.105-4",plan:"Estudiante Profesor",monto:28000,fv:46254},
+{n:"CHRISTIAN",a:"CAMPOS",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46290},
+{n:"CLAUDIA",a:"RAMOS",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"CLAUDIA",a:"VILLEGAS",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46261},
+{n:"CONSTANZA",a:"MARIN",rut:"00.000.000-0",plan:"Funcionario Publico",monto:28000,fv:46238},
+{n:"CRISTOBAL",a:"PIZARRO",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46276},
+{n:"DANIEL",a:"CORTES",rut:"18.518.448-K",plan:"Mensual Turno",monto:23000,fv:46249},
+{n:"DANIEL",a:"MARTINEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46247},
+{n:"DANIELA",a:"CARVAJAL",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46268},
+{n:"DANIELA",a:"SALAZAR",rut:"18.490.422-5",plan:"Funcionario Publico",monto:28000,fv:46254},
+{n:"DARKO",a:"VICENCIO",rut:"20.400.302-5",plan:"Full Mensual",monto:33000,fv:46254},
+{n:"DEBORA",a:"GAJARDO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"DEMIAN",a:"ALVAREZ",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46289},
+{n:"DIEGO",a:"SALAZAR",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"DONNA",a:"URIZAR",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46275},
+{n:"Edita",a:"Morales",rut:"18.231.906-4",plan:"Estudiante Profesor",monto:28000,fv:46266},
+{n:"EINER",a:"JAIMES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46289},
+{n:"ELIZABETH",a:"LLIULLI",rut:"Sin Rut",plan:"Tres Veces a La Semana",monto:23000,fv:46285},
+{n:"EMYLY",a:"ADAOS",rut:"Sin Rut",plan:"Estudiante Profesor",monto:28000,fv:46286},
+{n:"EYMILEE",a:"MUÑOZ",rut:"20-991-328-3",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"FAVIO",a:"CLAVELO",rut:"00.000.000-0",plan:"Funcionario Publico",monto:28000,fv:46259},
+{n:"FERNANDA",a:"GUERRA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46272},
+{n:"FERNANDA",a:"MARTINEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46289},
+{n:"FRANCCINI",a:"VILLANUEVA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46255},
+{n:"FRANCHESCA",a:"ALCAYAGA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"FRANCISCA",a:"ROJAS",rut:"00.000.000-0",plan:"Plan Especial",monto:20000,fv:46240},
+{n:"GABRIEL",a:"FERNANDEZ",rut:"Sin Rut",plan:"Estudiante Profesor",monto:28000,fv:46276},
+{n:"GABRIEL",a:"PIÑOL",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46273},
+{n:"GABRIEL",a:"RUZ",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46258},
+{n:"GABRIELA",a:"VELARDE",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46266},
+{n:"GERARDO",a:"LEPE",rut:"14.355.859-2",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"GERMAN",a:"PALMA",rut:"00.000.000-0",plan:"Plan Especial",monto:20000,fv:46252},
+{n:"GISELA",a:"CASTILLO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"GLORIA",a:"LOPEZ",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46268},
+{n:"HECTOR",a:"CONTRERAS",rut:"19.117.105-5",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"HERMANN",a:"BORQUEZ",rut:"15.011.699-4",plan:"Mensual Turno",monto:23000,fv:46262},
+{n:"IAN",a:"GAETE",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46275},
+{n:"IDALBA",a:"MARTINEZ",rut:"25.029.628-2",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"IGNACIA",a:"SANCHEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46247},
+{n:"IVAN",a:"ESPIRITU",rut:"00.000.000-5",plan:"Mensual Turno",monto:23000,fv:46242},
+{n:"IVAN",a:"POZHO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"JAIRO",a:"CONTRERAS",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46248},
+{n:"JEAN",a:"PIERRE",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46289},
+{n:"JENI",a:"GOMEZ",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"JHON",a:"ESPINOZA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46285},
+{n:"JOAQUIN",a:"ALBAYAY",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46277},
+{n:"JOFRE",a:"ZARUMA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46249},
+{n:"JOHAN",a:"VALLE",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"JORGE",a:"CONTRERAS",rut:"21.412.572-2",plan:"Funcionario Publico",monto:28000,fv:46244},
+{n:"JOCKSHUA",a:"ARANDA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46261},
+{n:"JOSE",a:"CHOCK",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"JOSE",a:"RODRIGUEZ",rut:"17.724.732-4",plan:"Tres Veces a La Semana",monto:23000,fv:46242},
+{n:"JOSEFA",a:"ESCOBAR",rut:"17.736.129-1",plan:"Mensual Turno",monto:23000,fv:46274},
+{n:"JOSTIN",a:"ROSAS",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46276},
+{n:"JUAN",a:"CACERES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46276},
+{n:"JUAN",a:"ESCALONA",rut:"18.214.303-3",plan:"Estudiante Profesor",monto:28000,fv:46275},
+{n:"JUAN",a:"REYES",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46271},
+{n:"MILENKA",a:"CARRASCO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46262},
+{n:"KATHERINE",a:"GOMEZ",rut:"13.742.708-7",plan:"Full Mensual",monto:33000,fv:46247},
+{n:"KATHERINE",a:"IGLESIAS",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46275},
+{n:"KATHERINE",a:"RODRIGUEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46241},
+{n:"KATHIA",a:"CEBEÑO",rut:"22.767.241-2",plan:"Full Mensual",monto:33000,fv:46243},
+{n:"KEVIN",a:"BONILLA",rut:"19.822.514-2",plan:"Mensual Turno",monto:23000,fv:46254},
+{n:"KIMMEN",a:"ARANDA",rut:"12.937.891-3",plan:"Full Mensual",monto:33000,fv:46288},
+{n:"KRYSHNA",a:"ARTEAGA",rut:"21.920.620-8",plan:"Funcionario Publico",monto:28000,fv:46243},
+{n:"LAURA",a:"VERA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46271},
+{n:"LORETO",a:"VELIZ",rut:"14.606.529-5",plan:"Funcionario Publico",monto:28000,fv:46261},
+{n:"LUIS",a:"GARCIA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46277},
+{n:"LUIS",a:"RIOS",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46240},
+{n:"LUISA",a:"HIDALGO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"LUNA",a:"LOPEZ",rut:"26.795.264-k",plan:"Full Mensual",monto:33000,fv:46269},
+{n:"LUDJAN",a:"SORE",rut:"23.230.244-5",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"MANUEL",a:"DURAN",rut:"00.000.000-0",plan:"Funcionario Publico",monto:28000,fv:46247},
+{n:"MARIA",a:"HERRERA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46253},
+{n:"MARIA JOSE",a:"OBREQUE",rut:"19.496.534-6",plan:"Full Mensual",monto:33000,fv:46268},
+{n:"MARIA",a:"OSES",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46245},
+{n:"MARIA",a:"SEGOVIA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"MARIA",a:"TORRES",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46254},
+{n:"MARIA",a:"ZEPEDA",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46268},
+{n:"MARTINA",a:"ROJAS",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46272},
+{n:"MATIAS",a:"ABELLO",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46285},
+{n:"MAURA",a:"PALMA",rut:"24-172.701-7",plan:"Full Mensual",monto:33000,fv:46264},
+{n:"MAURICIO",a:"JUICA",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46619},
+{n:"MAURICIO",a:"ONTANEDA",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46269},
+{n:"MAURICIO",a:"RAMIREZ",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46271},
+{n:"MAURICIO",a:"URQUIETA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46261},
+{n:"MAXIMILIANO",a:"CONTRERAS",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"MAYORI",a:"RAMIREZ",rut:"26.982.463-8",plan:"Tres Veces a La Semana",monto:23000,fv:46269},
+{n:"MAYUMY",a:"MARTINEZ",rut:"00.000.000-2",plan:"Funcionario Público",monto:28000,fv:46269},
+{n:"MICHEL",a:"QUINZACARA",rut:"16.927.097-K",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"MIGUEL",a:"MONSALVES",rut:"10.729.410-4",plan:"Mensual Turno",monto:23000,fv:46261},
+{n:"MIGUEL",a:"ROJAS",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46242},
+{n:"MILAGROS",a:"LOPEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"MILAN",a:"CVITANIC",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46266},
+{n:"MILTON",a:"FUENTES",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46650},
+{n:"MIRKO",a:"SAN MARTIN",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46271},
+{n:"MONICA",a:"MONTEROS",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46257},
+{n:"NELSON",a:"VARAS",rut:"17.528.092-8",plan:"Full Mensual",monto:33000,fv:46272},
+{n:"NICOLAS",a:"PACHECO",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46269},
+{n:"NICOLE",a:"HERRERA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"NINA",a:"HERRERA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"NINA",a:"SALAZAR",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46251},
+{n:"OBRAIN",a:"RAMIREZ",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46284},
+{n:"PABLO",a:"AGUILERA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46259},
+{n:"PAMELA",a:"LOPEZ",rut:"14.577.814-k",plan:"Funcionario Publico",monto:28000,fv:46254},
+{n:"PATRICIO",a:"CONTADOR",rut:"00.000.000-0",plan:"Mensual Tercera Edad",monto:23000,fv:46261},
+{n:"PAUL",a:"TORO",rut:"Sin Rut",plan:"Mensual Turno",monto:23000,fv:46278},
+{n:"PEDRO",a:"ALVAREZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"PEDRO",a:"OLIVARES",rut:"00.000.000-4",plan:"Funcionario Publico",monto:28000,fv:46261},
+{n:"RICARDO",a:"MAMANNI",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46264},
+{n:"ROBERTO",a:"FIGUEROA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46269},
+{n:"RODRIGO",a:"CARMONA",rut:"20.400.285-1",plan:"Estudiante Profesor",monto:28000,fv:46285},
+{n:"RODRIGO",a:"MOLINA",rut:"22.150.537.9",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"RODRIGO",a:"PLAZA",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46269},
+{n:"ROSA",a:"LUCERO",rut:"00.000.000-0",plan:"Mensual Tercera Edad",monto:23000,fv:46274},
+{n:"ROSALIA",a:"GARMENDIA",rut:"00.000.000-0",plan:"Plan Especial",monto:20000,fv:46288},
+{n:"SAMUEL",a:"REES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"SARA",a:"CARVAJAL",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46256},
+{n:"SARAH",a:"RAMOS",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"SEBASTIAN",a:"MARIN",rut:"19.215.031-0",plan:"Mensual Turno",monto:23000,fv:46256},
+{n:"Sebastian",a:"OLIVA",rut:"00.000.000-1",plan:"Estudiante Profesor",monto:28000,fv:46249},
+{n:"SEBASTIAN",a:"RIVERA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46261},
+{n:"SERGIO",a:"GUAPA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46272},
+{n:"SONIA",a:"CUBA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46248},
+{n:"TANYA",a:"PAULSEN",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46264},
+{n:"TOMAS",a:"CABALLERO",rut:"10.336.793-3",plan:"Mensual Turno",monto:23000,fv:46267},
+{n:"TOMAZ",a:"VALENZUELA",rut:"23.228.062-k",plan:"Estudiante Profesor",monto:28000,fv:46256},
+{n:"TOMISLAV",a:"CVITANIC",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46266},
+{n:"TRAYSI",a:"MUÑOZ",rut:"13.173.041-1",plan:"Full Mensual",monto:33000,fv:46254},
+{n:"VALENTINA",a:"CUELLAR",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"VALERIA",a:"MACIAS",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46233},
+{n:"VERONICA",a:"SALAS",rut:"20.126.542-8",plan:"Estudiante Profesor",monto:28000,fv:46236},
+{n:"VICTOR",a:"CORRY",rut:"12.997.412-7",plan:"Full Mensual",monto:33000,fv:46278},
+{n:"VICTOR",a:"MOLINA",rut:"18.918.939-7",plan:"Full Mensual",monto:33000,fv:46249},
+{n:"WENDY",a:"HUAYTA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"YAJAIRA",a:"PINEDA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"YANETH",a:"PERCCA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"YESSICA",a:"ESCALERA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46264},
+{n:"JHANKARLA",a:"SUAREZ",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46275}
+];
+
+const ACCESS_KEY = "wgym_rutina_gluteos_access_nombre";
+
+function normName(s){
+  return (s || "").toString().trim().toUpperCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+function excelSerialToDate(serial){
+  return new Date((serial - 25569) * 86400000);
+}
+
+function todayAtMidnight(){
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function findSocio(nombre, apellido){
+  const n = normName(nombre), a = normName(apellido);
+  if (!n || !a) return null;
+  return SOCIOS.find(s => normName(s.n) === n && normName(s.a) === a) || null;
+}
+
+function daysUntilExpiry(socio){
+  const hoy = todayAtMidnight();
+  const venc = excelSerialToDate(socio.fv);
+  venc.setHours(0,0,0,0);
+  return Math.round((venc - hoy) / 86400000);
+}
+
+function showExpiryBanner(dias){
+  const el = document.getElementById('expiryBanner');
+  if (dias === 1) {
+    el.textContent = '⏰ Tu plan vence mañana. ¡No te olvides de renovar!';
+  } else if (dias === 0) {
+    el.textContent = '⏰ Tu plan vence hoy. ¡No te olvides de renovar!';
+  } else {
+    return;
+  }
+  el.style.display = 'block';
+}
+
+function unlockGate(socio){
+  document.getElementById('gateOverlay').style.display = 'none';
+  document.getElementById('mainContent').style.display = '';
+  const dias = daysUntilExpiry(socio);
+  showExpiryBanner(dias);
+}
+
+function tryLogin(nombre, apellido){
+  const socio = findSocio(nombre, apellido);
+  if (socio && daysUntilExpiry(socio) >= 0) {
+    try {
+      localStorage.setItem(ACCESS_KEY, JSON.stringify({n: nombre, a: apellido}));
+    } catch(e) {}
+    unlockGate(socio);
+    return true;
+  }
+  document.getElementById('gateError').classList.add('show');
+  return false;
+}
+
+(function initGate(){
+  let stored = null;
+  try { stored = JSON.parse(localStorage.getItem(ACCESS_KEY) || "null"); } catch(e) {}
+  if (stored) {
+    const socio = findSocio(stored.n, stored.a);
+    if (socio && daysUntilExpiry(socio) >= 0) { unlockGate(socio); return; }
+  }
+  document.getElementById('gateBtn').addEventListener('click', () => {
+    tryLogin(document.getElementById('gateNombre').value, document.getElementById('gateApellido').value);
+  });
+  document.getElementById('gateApellido').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryLogin(document.getElementById('gateNombre').value, document.getElementById('gateApellido').value);
+  });
+  document.getElementById('gateNombre').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('gateApellido').focus();
+  });
+})();
+
+const DAYS = [
+  {
+    weekday:"Lunes",
+    title:"Glúteos y Cuádriceps",
+    focus:"Empuje de pierna — fuerza",
+    warmup:"Calentamiento en trotadora — 8 minutos",
+    exercises:[
+      {name:"Sentadilla en máquina Smith", sets:"4 × 12", rest:"90 seg", equip:"smith",
+       tip:"Pies un poco adelantados y a la altura de los hombros. Baja hasta que el muslo quede paralelo al suelo, empujando con el talón.",
+       alt:"¿Muy exigente? Baja menos y sube el peso recién cuando controles el recorrido completo."},
+      {name:"Prensa de piernas (pies altos y anchos)", sets:"4 × 12", rest:"90 seg", equip:"maquina",
+       tip:"Los pies altos en la plataforma cargan más el glúteo. Baja controlado hasta 90° sin despegar la cadera del asiento."},
+      {name:"Zancada caminando con mancuernas", sets:"3 × 12 por pierna", rest:"75 seg", equip:"mancuerna",
+       tip:"Paso largo, tronco erguido, la rodilla de atrás baja casi al suelo. Empuja con el talón de la pierna de adelante.",
+       alt:"¿Te desequilibras? Hazlas en el mismo lugar, sin avanzar."},
+      {name:"Extensión de cuádriceps", sets:"3 × 15", rest:"60 seg", equip:"maquina",
+       tip:"Sube hasta estirar la rodilla, aprieta 1 segundo arriba y baja despacio sin soltar el peso de golpe."},
+      {name:"Patada de glúteo en polea", sets:"3 × 15 por pierna", rest:"60 seg", equip:"polea",
+       tip:"Tronco firme y abdomen apretado. Lleva la pierna atrás apretando el glúteo, sin arquear la espalda baja."},
+      {name:"Elevación de talones de pie", sets:"4 × 20", rest:"45 seg", equip:"maquina",
+       tip:"Sube lo más alto que puedas sobre la punta del pie y baja hasta sentir el estiramiento en la pantorrilla."},
+    ],
+    cooldown:"Estira cuádriceps, glúteo y flexores de cadera 30 seg por lado."
+  },
+  {
+    weekday:"Martes",
+    title:"Espalda y Bíceps",
+    focus:"Tren superior — tirón",
+    warmup:"Calentamiento en bicicleta — 8 minutos",
+    exercises:[
+      {name:"Jalón al pecho en polea", sets:"4 × 12", rest:"75 seg", equip:"polea",
+       tip:"Pecho arriba, tira la barra hacia la parte alta del pecho juntando los omóplatos. Sube controlado."},
+      {name:"Remo sentado en máquina", sets:"4 × 12", rest:"75 seg", equip:"maquina",
+       tip:"Espalda recta, tira llevando los codos hacia atrás pegados al cuerpo. No te vayas hacia atrás con el tronco."},
+      {name:"Remo con mancuerna a una mano", sets:"3 × 12 por lado", rest:"60 seg", equip:"mancuerna",
+       tip:"Apoya rodilla y mano en el banco. Tira la mancuerna hacia la cadera, no hacia el hombro."},
+      {name:"Curl de bíceps con barra Z", sets:"3 × 12", rest:"60 seg", equip:"barra",
+       tip:"Codos pegados al cuerpo y quietos. Sube apretando el bíceps y baja despacio."},
+      {name:"Curl martillo con mancuernas", sets:"3 × 12", rest:"45 seg", equip:"mancuerna",
+       tip:"Palmas enfrentadas todo el recorrido. Sin balancear el cuerpo."},
+      {name:"Plancha abdominal", sets:"3 × 30-40 seg", rest:"45 seg", equip:"colchoneta",
+       tip:"Cuerpo en línea recta de la cabeza a los talones, glúteo y abdomen apretados.",
+       alt:"¿Muy exigente? Apóyate en las rodillas."},
+    ],
+    cooldown:"Estira espalda, bíceps y hombros 30 seg por lado."
+  },
+  {
+    weekday:"Miércoles",
+    title:"Glúteos e Isquiotibiales",
+    focus:"Cadena posterior — el día más importante para el glúteo",
+    warmup:"Calentamiento en trotadora — 8 minutos",
+    exercises:[
+      {name:"Hip thrust con barra", sets:"4 × 12", rest:"90 seg", equip:"barra",
+       tip:"Espalda alta apoyada en el banco, mentón hacia el pecho. Sube empujando con los talones y aprieta el glúteo 2 segundos arriba.",
+       alt:"¿Recién empiezas? Hazlo sin barra, solo con el peso del cuerpo, hasta dominar el movimiento."},
+      {name:"Peso muerto rumano con barra", sets:"4 × 12", rest:"90 seg", equip:"barra",
+       tip:"Rodillas apenas flexionadas y fijas. Baja la barra pegada a las piernas empujando la cadera atrás, hasta sentir el isquiotibial.",
+       alt:"¿Te duele la espalda baja? Baja menos y usa menos peso: el rango lo manda el estiramiento, no el suelo."},
+      {name:"Curl femoral acostada", sets:"4 × 12", rest:"60 seg", equip:"maquina",
+       tip:"Cadera pegada al banco. Lleva los talones al glúteo y baja despacio, sin soltar."},
+      {name:"Puente de glúteo a una pierna", sets:"3 × 15 por pierna", rest:"45 seg", equip:"colchoneta",
+       tip:"Una pierna estirada, sube la cadera con el talón de la pierna apoyada. Arriba, la cadera debe quedar pareja."},
+      {name:"Abducción de cadera en máquina", sets:"4 × 20", rest:"45 seg", equip:"maquina",
+       tip:"Inclina el tronco un poco hacia adelante para tomar más glúteo. Abre apretando y cierra controlado."},
+      {name:"Buenos días con barra", sets:"3 × 12", rest:"60 seg", equip:"barra",
+       tip:"Barra en la espalda alta, espalda recta. Inclina el tronco desde la cadera y vuelve apretando el glúteo. Peso liviano."},
+    ],
+    cooldown:"Estira isquiotibiales, glúteo y espalda baja 30 seg por lado."
+  },
+  {
+    weekday:"Jueves",
+    title:"Pecho, Hombro y Tríceps",
+    focus:"Tren superior — empuje",
+    warmup:"Calentamiento en bicicleta — 8 minutos",
+    exercises:[
+      {name:"Press de banca con mancuernas", sets:"4 × 12", rest:"75 seg", equip:"mancuerna",
+       tip:"Baja las mancuernas hasta la altura del pecho, codos a unos 45° del cuerpo. Sube sin chocarlas."},
+      {name:"Press inclinado con mancuernas", sets:"3 × 12", rest:"75 seg", equip:"mancuerna",
+       tip:"Banco a 30-45°. Baja controlado y empuja hacia arriba y un poco adentro."},
+      {name:"Press militar con mancuernas", sets:"3 × 12", rest:"75 seg", equip:"mancuerna",
+       tip:"Core firme, empuja arriba sin arquear la espalda baja. Si te arqueas, baja el peso."},
+      {name:"Elevación lateral con mancuernas", sets:"3 × 15", rest:"45 seg", equip:"mancuerna",
+       tip:"Codos con leve flexión, sube hasta la altura del hombro. Sin impulso."},
+      {name:"Extensión de tríceps en polea", sets:"3 × 15", rest:"45 seg", equip:"polea",
+       tip:"Codos pegados al cuerpo y quietos. Estira abajo apretando el tríceps."},
+      {name:"Elevación de piernas colgada", sets:"3 × 12", rest:"45 seg", equip:"barra",
+       tip:"Sube las piernas sin balancearte y baja despacio.",
+       alt:"¿Muy exigente? Sube con las rodillas dobladas."},
+    ],
+    cooldown:"Estira pecho, hombros y tríceps 30 seg por lado."
+  },
+  {
+    weekday:"Viernes",
+    title:"Glúteos, Abductores y Cardio",
+    focus:"Volumen de glúteo + trabajo unilateral",
+    warmup:"Calentamiento en trotadora — 8 minutos",
+    exercises:[
+      {name:"Hip thrust en máquina o banco", sets:"4 × 15", rest:"75 seg", equip:"maquina",
+       tip:"Mismo movimiento del miércoles pero con más repeticiones y menos peso. Aprieta arriba en cada repetición."},
+      {name:"Sentadilla búlgara con mancuernas", sets:"3 × 12 por pierna", rest:"75 seg", equip:"mancuerna",
+       tip:"Pie de atrás sobre el banco. Inclina el tronco un poco adelante para cargar más el glúteo.",
+       alt:"¿Te desequilibras? Apóyate con una mano en el rack y usa una sola mancuerna."},
+      {name:"Step up al cajón con mancuernas", sets:"3 × 12 por pierna", rest:"60 seg", equip:"mancuerna",
+       tip:"Sube empujando solo con la pierna de arriba, sin tomar impulso con la de abajo. Baja controlado."},
+      {name:"Abducción de cadera en máquina", sets:"4 × 20", rest:"45 seg", equip:"maquina",
+       tip:"Últimas repeticiones lentas, aguantando 1 segundo abierta."},
+      {name:"Patada de glúteo en máquina", sets:"3 × 15 por pierna", rest:"45 seg", equip:"maquina",
+       tip:"Movimiento corto y apretado. La fuerza sale del glúteo, no de la espalda baja."},
+      {name:"Cardio en trotadora o escaladora", sets:"15 minutos", rest:"—", equip:"cardio",
+       tip:"Ritmo moderado, que puedas hablar pero con esfuerzo. Cierra la semana."},
+    ],
+    cooldown:"Estira glúteo, cadera y espalda baja 30 seg por lado."
+  },
+];
+
+const nav = document.getElementById('dayNav');
+const content = document.getElementById('dayContent');
+
+DAYS.forEach((day, i) => {
+  const btn = document.createElement('button');
+  btn.textContent = day.weekday;
+  btn.onclick = () => showDay(i);
+  btn.id = 'navbtn-' + i;
+  nav.appendChild(btn);
+
+  const panel = document.createElement('section');
+  panel.className = 'day-panel';
+  panel.id = 'panel-' + i;
+
+  panel.innerHTML = `
+    <div class="day-banner">
+      <p class="num">${day.weekday}</p>
+      <h2>${day.title}</h2>
+      <p class="focus">${day.focus}</p>
+    </div>
+    <div class="warmup">
+      <div class="txt"><b>Calentamiento</b><span>${day.warmup}</span></div>
+    </div>
+    ${day.warmupVideo ? `
+    <div class="video-wrap">
+      <span class="video-lbl">Video de referencia — calentamiento</span>
+      <video class="ex-video" src="${WARMUP_VIDEOS[day.warmupVideo]}" controls loop playsinline></video>
+    </div>` : ''}
+    ${day.exercises.map((ex, idx) => `
+      <div class="exercise">
+        <div class="badge">${idx+1}</div>
+        <div class="info">
+          <h3>${ex.name}</h3>
+          <div class="stats"><span>${ex.sets}</span><span>Descanso ${ex.rest}</span></div>
+          ${ex.video ? `
+          <div class="video-wrap">
+            <span class="video-lbl">Video de referencia</span>
+            <video class="ex-video" src="${VIDEOS[ex.video]}" controls loop playsinline></video>
+          </div>` : ''}
+          <p class="tip">${ex.tip}</p>
+          ${ex.alt ? `<p class="alt">${ex.alt}</p>` : ''}
+        </div>
+      </div>
+    `).join('')}
+    <div class="cooldown">
+      <b>${day.cooldownTitle || 'Estiramientos finales'}</b>
+      <span>${day.cooldown}</span>
+    </div>
+    ${day.cooldownVideo ? `
+    <div class="video-wrap">
+      <span class="video-lbl">${day.cooldownLabel || 'Video de referencia — estiramientos'}</span>
+      <video class="ex-video" src="${COOLDOWN_VIDEOS[day.cooldownVideo]}" controls loop playsinline></video>
+    </div>` : ''}
+  `;
+  content.appendChild(panel);
+});
+
+function showDay(i){
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav.days button').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + i).classList.add('active');
+  document.getElementById('navbtn-' + i).classList.add('active');
+}
+showDay(0);
+</script>
+</body>
+</html>
