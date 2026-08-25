@@ -301,7 +301,8 @@ const WARMUP_VIDEOS = { bicicleta: "assets/calentamiento_bicicleta_hombres.mp4?v
 const COOLDOWN_VIDEOS = {
   estiramiento_pierna: "assets/estiramiento_pierna.mp4?v=2",
   estiramiento_pecho_triceps: "assets/estiramiento_pecho_triceps.mp4?v=2",
-  estiramiento_espalda_biceps: "assets/estiramiento_espalda_biceps.mp4?v=1"
+  estiramiento_espalda_biceps: "assets/estiramiento_espalda_biceps.mp4?v=1",
+  estiramiento_hombro_abdomen: "assets/estiramiento_hombro_abdomen_hombres.mp4?v=1"
 };
 const VIDEOS = {
   sentadilla_smith: "assets/sentadilla_smith.mp4?v=2",
@@ -322,7 +323,10 @@ const VIDEOS = {
   press_militar: "assets/press_militar_hombres.mp4?v=1",
   curl_martillo: "assets/curl_martillo.mp4?v=1",
   elevacion_lateral: "assets/elevacion_lateral_hombres.mp4?v=1",
-  elevacion_frontal: "assets/elevacion_frontal_hombres.mp4?v=1", face_pull: "assets/face_pull_hombres.mp4?v=1"
+  elevacion_frontal: "assets/elevacion_frontal_hombres.mp4?v=1",
+  face_pull: "assets/face_pull_hombres.mp4?v=1",
+  plancha_abdominal: "assets/plancha_abdominal_hombres.mp4?v=1",
+  elevacion_piernas: "assets/elevacion_piernas_hombres.mp4?v=1"
 };
 
 document.getElementById('gateLogoImg').src = LOGO_SRC;
@@ -667,14 +671,15 @@ const DAYS = [
        tip:"Sujeta el disco con ambas manos, sube al frente hasta la altura de los hombros y baja controlado."},
       {name:"Face pull en polea (cuerda)", sets:"3 × 12-15", rest:"60 seg", equip:"polea", video:"face_pull",
        tip:"Tira la cuerda hacia la cara separando las manos, codos altos, apretando los omóplatos."},
-      {name:"Plancha abdominal", sets:"3 × 30-40 seg", rest:"45 seg", equip:"colchoneta",
+      {name:"Plancha abdominal", sets:"3 × 30-40 seg", rest:"45 seg", equip:"colchoneta", video:"plancha_abdominal",
        tip:"Cuerpo alineado de la cabeza a los talones, aprieta el abdomen todo el tiempo.",
        alt:"¿Muy exigente? Apóyate en las rodillas en vez de en los pies."},
-      {name:"Elevación de piernas colgado", sets:"3 × 10-15", rest:"60 seg", equip:"barra",
+      {name:"Elevación de piernas colgado", sets:"3 × 10-15", rest:"60 seg", equip:"barra", video:"elevacion_piernas",
        tip:"Colgado de la barra, sube las piernas controlado sin balancear el cuerpo, y baja despacio.",
        alt:"¿Muy exigente? Dobla las rodillas al subir en vez de mantener las piernas rectas."},
     ],
-    cooldown:"Estira hombros y abdomen 20-30 seg por zona."
+    cooldown:"Estira hombros y abdomen 20-30 seg por zona.",
+    cooldownVideo:"estiramiento_hombro_abdomen"
   },
   {
     weekday:"Viernes",
