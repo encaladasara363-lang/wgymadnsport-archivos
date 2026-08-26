@@ -911,6 +911,30 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var local = loadLocal();
  if(!local.ventasCategoria) local.ventasCategoria = [];
  if(!local.ventasMensualidades) local.ventasMensualidades = [];
+ if(!local.cierres) local.cierres = [];
+
+ /* Ventas que quedaron registradas desde el sistema. Cada una lleva un id
+    fijo: si ya esta guardada no se vuelve a agregar, aunque recargues la
+    pagina. Asi no se duplica ninguna venta. */
+ var VENTAS_CARGADAS = {
+ cierres: [
+ {id:"wgym-2026-08-25-cierre", date:"25-08-2026", total:28100,
+ snacks:10100, suplementos:0, ropa:0, bebestible:3000, pase:0, semanal:15000}
+ ],
+ mensualidades: [
+ {id:"wgym-2026-08-25-mens", date:"25-08-2026", total:150000, sueldo:15000}
+ ]
+ };
+ (function(){
+ var cambio = false;
+ VENTAS_CARGADAS.cierres.forEach(function(c){
+ if(!local.cierres.some(function(x){ return x.id===c.id; })){ local.cierres.push(c); cambio = true; }
+ });
+ VENTAS_CARGADAS.mensualidades.forEach(function(v){
+ if(!local.ventasMensualidades.some(function(x){ return x.id===v.id; })){ local.ventasMensualidades.push(v); cambio = true; }
+ });
+ if(cambio) saveLocal();
+ })();
 
  var tabbtns = Array.prototype.slice.call(document.querySelectorAll(".tabbtn"));
  tabbtns.forEach(function(btn){
