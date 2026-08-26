@@ -136,12 +136,6 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .panel .cuerpo{ padding:16px 18px 18px; }
 
 .barra{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
-.guardado{ display:flex; align-items:center; gap:7px; width:100%; font-size:13px;
- font-weight:600; color:var(--gris-soft); padding-top:2px; }
-.guardado .pg{ width:9px; height:9px; border-radius:50%; background:var(--gris-soft); flex:0 0 auto; }
-.guardado[data-g="ok"]{ color:var(--verde); } .guardado[data-g="ok"] .pg{ background:var(--verde); }
-.guardado[data-g="cargando"]{ color:var(--dorado); } .guardado[data-g="cargando"] .pg{ background:var(--dorado); }
-.guardado[data-g="malo"]{ color:var(--rojo-claro); } .guardado[data-g="malo"] .pg{ background:var(--rojo-claro); }
 .barra .campo{ flex:1; min-width:190px; }
 .barra input[type="text"], .barra select{ width:100%; background:var(--surface-2);
  border:1px solid var(--line); border-radius:10px; color:var(--blanco);
@@ -238,6 +232,11 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 
 <div class="wrap">
 
+<div class="aviso-lista" id="avisoLista" hidden>
+<p id="avisoTexto"></p>
+<button class="btn btn-oro" id="usarSitio">Usar la del sitio</button>
+<button class="btn btn-linea" id="seguirMia">Seguir con la mía</button>
+</div>
 
 <div class="hero" id="hero">
 <p class="kicker">Último ingreso</p>
@@ -288,7 +287,6 @@ Ver estado
 <button class="btn btn-linea" id="bCargar">
 <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 8l5-5 5 5M12 3v12"/></svg> Cargar respaldo</button>
 <input type="file" id="archivo" accept=".json,.csv,.txt,application/json,text/csv,text/plain" hidden>
-<span class="guardado" id="guardado" data-g="cargando"><span class="pg"></span><span id="guardadoTxt">Conectando con la planilla…</span></span>
 </div>
 <div class="tscroll">
 <table class="socios">
@@ -310,14 +308,189 @@ La <a href="pantalla.html">pantalla de ingresos</a> es la que va a la vista de l
 <script>
 const LOGO_B64 = "assets/logo.jpg";
 /* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
-/* Tu planilla de socios en Google: de aquí lee y aquí escribe. */
-const LISTA_URL = "https://script.google.com/macros/s/AKfycbz_P-2KuCZtyTWMOtcCpJXZw0vh1zKWK2fLrqtZ_PZjvL9haDHnPKQeNV7WdpnS7_68DA/exec";
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 /* Lista base publicada en el sitio. Si edito socios acá, sube este número
    y la página te ofrece traer la lista nueva sin pisar lo tuyo. */
 const LISTA_VERSION = 20260826;
-const LISTA_BASE = [];   /* la lista vive en la planilla, no acá */
-
+const LISTA_BASE = [
+{n:"AKASH",a:"THADANI",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-03"},
+{n:"ALAN",a:"PEREIRA",plan:"Funcionario Público",m:28000,v:"2026-09-10"},
+{n:"ALAN",a:"RAMIREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"ALDO",a:"ENCINA",plan:"Mensual Turno",m:23000,v:"2026-09-04"},
+{n:"ALEJANDRO",a:"PARES",plan:"Full Mensual",m:33000,v:"2026-08-07"},
+{n:"AlEXANDER",a:"ONTANEDA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"ALEXIS",a:"ACUÑA",plan:"Full Mensual",m:33000,v:"2026-09-25"},
+{n:"ALEXIS",a:"VARAS",plan:"Funcionario Público",m:28000,v:"2026-08-14"},
+{n:"ALONSO",a:"ARAYA",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-30"},
+{n:"ANA",a:"MARIA GONZALEZ",plan:"Mensual Tercera Edad",m:23000,v:"2026-09-20"},
+{n:"ANDREA",a:"CUELLA",plan:"Full Mensual",m:33000,v:"2026-08-03"},
+{n:"ANDREA",a:"VARAS",plan:"Estudiante Profesor",m:28000,v:"2026-08-10"},
+{n:"ANDRES",a:"PAEZ",plan:"Mensual Turno",m:23000,v:"2026-08-13"},
+{n:"ANGEL",a:"GUTIERREZ",plan:"Full Mensual",m:33000,v:"2026-09-14"},
+{n:"ANTONELLA",a:"AGUIRRE",plan:"Full Mensual",m:33000,v:"2026-09-25"},
+{n:"ANTONELLA",a:"LLANQUE",plan:"Full Mensual",m:33000,v:"2026-08-14"},
+{n:"ANTONIO",a:"PEREZ",plan:"Full Mensual",m:33000,v:"2026-08-20"},
+{n:"ANTONIO",a:"VALENCIA",plan:"Mensual Turno",m:23000,v:"2026-09-02"},
+{n:"ARACELY",a:"HERRERA",plan:"Mensual Turno",m:23000,v:"2026-08-19"},
+{n:"ARACELY",a:"PANIAGUA",plan:"Full Mensual",m:33000,v:"2026-08-24"},
+{n:"AARON",a:"SOZA",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-22"},
+{n:"BASTIAN",a:"PERALTA",plan:"Estudiante Profesor",m:28000,v:"2026-07-04"},
+{n:"BASTIAN",a:"VERGARA",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-20"},
+{n:"BASTIAN",a:"ZAPATA",plan:"Funcionario Público",m:28000,v:"2026-09-07"},
+{n:"BENJAMIN",a:"GODOY",plan:"Mensual Turno",m:23000,v:"2026-08-23"},
+{n:"BETSY",a:"BRIONES",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"CAMILA",a:"CUELLA",plan:"Full Mensual",m:33000,v:"2026-08-03"},
+{n:"CAMILA",a:"JUICA",plan:"Full Mensual",m:33000,v:"2027-03-18"},
+{n:"CAMILA",a:"PEÑA",plan:"Full Mensual",m:33000,v:"2026-09-04"},
+{n:"CAMILO",a:"GALLEGILLOS",plan:"Full Mensual",m:33000,v:"2026-08-16"},
+{n:"CAMILO",a:"JUICA",plan:"Mensual Turno",m:23000,v:"2026-09-04"},
+{n:"CARLA",a:"MORALES",plan:"Full Mensual",m:33000,v:"2026-08-23"},
+{n:"CARLOS",a:"ARAYA",plan:"Full Mensual",m:33000,v:"2026-08-28"},
+{n:"CAROLINA",a:"CARVAJAL",plan:"Full Mensual",m:33000,v:"2026-09-24"},
+{n:"CAROLINA",a:"CUELLA",plan:"Funcionario Público",m:28000,v:"2026-08-31"},
+{n:"CHRISTIAN",a:"AROS",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
+{n:"CHRISTIAN",a:"CAMPOS",plan:"Full Mensual",m:33000,v:"2026-09-25"},
+{n:"CLAUDIA",a:"RAMOS",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"CLAUDIA",a:"VILLEGAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-27"},
+{n:"CONSTANZA",a:"MARIN",plan:"Funcionario Público",m:28000,v:"2026-08-04"},
+{n:"CRISTOBAL",a:"PIZARRO",plan:"Estudiante Profesor",m:28000,v:"2026-09-11"},
+{n:"DANIEL",a:"CORTES",plan:"Mensual Turno",m:23000,v:"2026-08-15"},
+{n:"DANIEL",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-08-13"},
+{n:"DANIELA",a:"CARVAJAL",plan:"Full Mensual",m:33000,v:"2026-09-03"},
+{n:"DANIELA",a:"SALAZAR",plan:"Funcionario Público",m:28000,v:"2026-08-20"},
+{n:"DARKO",a:"VICENCIO",plan:"Full Mensual",m:33000,v:"2026-08-20"},
+{n:"DEBORA",a:"GAJARDO",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"DEMIAN",a:"ALVAREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-24"},
+{n:"DIEGO",a:"SALAZAR",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"DONNA",a:"URIZAR",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"Edita",a:"Morales",plan:"Estudiante Profesor",m:28000,v:"2026-09-01"},
+{n:"EINER",a:"JAIMES",plan:"Full Mensual",m:33000,v:"2026-09-24"},
+{n:"ELIZABETH",a:"LLIULLI",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-20"},
+{n:"EMYLY",a:"ADAOS",plan:"Estudiante Profesor",m:28000,v:"2026-09-21"},
+{n:"EYMILEE",a:"MUÑOZ",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"FAVIO",a:"CLAVELO",plan:"Funcionario Público",m:28000,v:"2026-08-25"},
+{n:"FERNANDA",a:"GUERRA",plan:"Estudiante Profesor",m:28000,v:"2026-09-07"},
+{n:"FERNANDA",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-09-24"},
+{n:"FRANCCINI",a:"VILLANUEVA",plan:"Full Mensual",m:33000,v:"2026-08-21"},
+{n:"FRANCHESCA",a:"ALCAYAGA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"FRANCISCA",a:"ROJAS",plan:"Plan Especial",m:20000,v:"2026-08-06"},
+{n:"GABRIEL",a:"FERNANDEZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-11"},
+{n:"GABRIEL",a:"MOLINA",plan:"Mensual Turno",m:23000,v:"2026-09-26"},
+{n:"GABRIEL",a:"PIÑOL",plan:"Mensual Turno",m:23000,v:"2026-09-08"},
+{n:"GABRIEL",a:"RUZ",plan:"Mensual Turno",m:23000,v:"2026-08-24"},
+{n:"GABRIELA",a:"VELARDE",plan:"Estudiante Profesor",m:28000,v:"2026-09-01"},
+{n:"GERARDO",a:"LEPE",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"GERMAN",a:"PALMA",plan:"Plan Especial",m:20000,v:"2026-08-18"},
+{n:"GISELA",a:"CASTILLO",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"GLORIA",a:"LOPEZ",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-03"},
+{n:"HECTOR",a:"CONTRERAS",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"HERMANN",a:"BORQUEZ",plan:"Mensual Turno",m:23000,v:"2026-08-28"},
+{n:"IAN",a:"GAETE",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"IDALBA",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"IGNACIA",a:"SANCHEZ",plan:"Full Mensual",m:33000,v:"2026-08-13"},
+{n:"IVAN",a:"ESPIRITU",plan:"Mensual Turno",m:23000,v:"2026-08-08"},
+{n:"IVAN",a:"POZHO",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"JAIRO",a:"CONTRERAS",plan:"Mensual Turno",m:23000,v:"2026-08-14"},
+{n:"JEAN",a:"PIERRE",plan:"Full Mensual",m:33000,v:"2026-09-24"},
+{n:"JENI",a:"GOMEZ",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"JHON",a:"ESPINOZA",plan:"Estudiante Profesor",m:28000,v:"2026-09-20"},
+{n:"JOAQUIN",a:"ALBAYAY",plan:"Estudiante Profesor",m:28000,v:"2026-09-12"},
+{n:"JOFRE",a:"ZARUMA",plan:"Full Mensual",m:33000,v:"2026-09-25"},
+{n:"JOHAN",a:"VALLE",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"JORGE",a:"CONTRERAS",plan:"Funcionario Público",m:28000,v:"2026-08-10"},
+{n:"JOCKSHUA",a:"ARANDA",plan:"Estudiante Profesor",m:28000,v:"2026-08-27"},
+{n:"JOSE",a:"CHOCK",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"JOSE",a:"RODRIGUEZ",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-08"},
+{n:"JOSEFA",a:"ESCOBAR",plan:"Mensual Turno",m:23000,v:"2026-09-09"},
+{n:"JOSTIN",a:"ROSAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-11"},
+{n:"JUAN",a:"CACERES",plan:"Full Mensual",m:33000,v:"2026-09-11"},
+{n:"JUAN",a:"ESCALONA",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"JUAN",a:"REYES",plan:"Mensual Turno",m:23000,v:"2026-09-06"},
+{n:"MILENKA",a:"CARRASCO",plan:"Full Mensual",m:33000,v:"2026-08-28"},
+{n:"KATHERINE",a:"GOMEZ",plan:"Full Mensual",m:33000,v:"2026-08-13"},
+{n:"KATHERINE",a:"IGLESIAS",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"KATHERINE",a:"RODRIGUEZ",plan:"Full Mensual",m:33000,v:"2026-08-07"},
+{n:"KATHIA",a:"CEBEÑO",plan:"Full Mensual",m:33000,v:"2026-08-09"},
+{n:"KEVIN",a:"BONILLA",plan:"Mensual Turno",m:23000,v:"2026-08-20"},
+{n:"KIMMEN",a:"ARANDA",plan:"Full Mensual",m:33000,v:"2026-09-23"},
+{n:"KRYSHNA",a:"ARTEAGA",plan:"Funcionario Público",m:28000,v:"2026-08-09"},
+{n:"LAURA",a:"VERA",plan:"Full Mensual",m:33000,v:"2026-09-06"},
+{n:"LORETO",a:"VELIZ",plan:"Funcionario Público",m:28000,v:"2026-08-27"},
+{n:"LUIS",a:"GARCIA",plan:"Estudiante Profesor",m:28000,v:"2026-09-12"},
+{n:"LUIS",a:"RIOS",plan:"Mensual Turno",m:23000,v:"2026-08-06"},
+{n:"LUISA",a:"HIDALGO",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"LUNA",a:"LOPEZ",plan:"Full Mensual",m:33000,v:"2026-09-04"},
+{n:"LUDJAN",a:"SORE",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"MANUEL",a:"DURAN",plan:"Funcionario Público",m:28000,v:"2026-08-13"},
+{n:"MARIA",a:"HERRERA",plan:"Mensual Turno",m:23000,v:"2026-08-19"},
+{n:"MARIA JOSE",a:"OBREQUE",plan:"Full Mensual",m:33000,v:"2026-09-03"},
+{n:"MARIA",a:"OSES",plan:"Estudiante Profesor",m:28000,v:"2026-08-11"},
+{n:"MARIA",a:"SEGOVIA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"MARIA",a:"TORRES",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-20"},
+{n:"MARIA",a:"ZEPEDA",plan:"Funcionario Público",m:28000,v:"2026-09-03"},
+{n:"MARTINA",a:"ROJAS",plan:"Estudiante Profesor",m:28000,v:"2026-09-07"},
+{n:"MATIAS",a:"ABELLO",plan:"Full Mensual",m:33000,v:"2026-09-20"},
+{n:"MAURA",a:"PALMA",plan:"Full Mensual",m:33000,v:"2026-08-30"},
+{n:"MAURICIO",a:"JUICA",plan:"Full Mensual",m:33000,v:"2027-08-20"},
+{n:"MAURICIO",a:"ONTANEDA",plan:"Full Mensual",m:33000,v:"2026-09-04"},
+{n:"MAURICIO",a:"RAMIREZ",plan:"Mensual Turno",m:23000,v:"2026-09-06"},
+{n:"MAURICIO",a:"URQUIETA",plan:"Mensual Turno",m:23000,v:"2026-08-27"},
+{n:"MAXIMILIANO",a:"CONTRERAS",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"MAYORI",a:"RAMIREZ",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-04"},
+{n:"MAYUMY",a:"MARTINEZ",plan:"Funcionario Público",m:28000,v:"2026-09-04"},
+{n:"MICHEL",a:"QUINZACARA",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"MIGUEL",a:"MONSALVES",plan:"Mensual Turno",m:23000,v:"2026-08-27"},
+{n:"MIGUEL",a:"ROJAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-08"},
+{n:"MILAGROS",a:"LOPEZ",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"MILAN",a:"CVITANIC",plan:"Estudiante Profesor",m:28000,v:"2026-09-01"},
+{n:"MILTON",a:"FUENTES",plan:"Full Mensual",m:33000,v:"2027-09-20"},
+{n:"MIRKO",a:"SAN MARTIN",plan:"Mensual Turno",m:23000,v:"2026-09-06"},
+{n:"MONICA",a:"MONTEROS",plan:"Full Mensual",m:33000,v:"2026-08-23"},
+{n:"NELSON",a:"VARAS",plan:"Full Mensual",m:33000,v:"2026-09-07"},
+{n:"NICOLAS",a:"PACHECO",plan:"Mensual Turno",m:23000,v:"2026-09-04"},
+{n:"NICOLE",a:"HERRERA",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"NINA",a:"HERRERA",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"NINA",a:"SALAZAR",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-17"},
+{n:"OBRAIN",a:"RAMIREZ",plan:"Full Mensual",m:33000,v:"2026-09-19"},
+{n:"PABLO",a:"AGUILERA",plan:"Estudiante Profesor",m:28000,v:"2026-08-25"},
+{n:"PAMELA",a:"LOPEZ",plan:"Funcionario Público",m:28000,v:"2026-08-20"},
+{n:"PAOLA",a:"FERRER",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
+{n:"PATRICIO",a:"CONTADOR",plan:"Mensual Tercera Edad",m:23000,v:"2026-08-27"},
+{n:"PAUL",a:"TORO",plan:"Mensual Turno",m:23000,v:"2026-09-13"},
+{n:"PEDRO",a:"ALVAREZ",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"PEDRO",a:"OLIVARES",plan:"Funcionario Público",m:28000,v:"2026-08-27"},
+{n:"RICARDO",a:"MAMANNI",plan:"Estudiante Profesor",m:28000,v:"2026-08-30"},
+{n:"ROBERTO",a:"FIGUEROA",plan:"Full Mensual",m:33000,v:"2026-09-04"},
+{n:"RODRIGO",a:"CARMONA",plan:"Estudiante Profesor",m:28000,v:"2026-09-20"},
+{n:"RODRIGO",a:"MOLINA",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"RODRIGO",a:"PLAZA",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-04"},
+{n:"ROSA",a:"LUCERO",plan:"Mensual Tercera Edad",m:23000,v:"2026-09-09"},
+{n:"ROSALIA",a:"GARMENDIA",plan:"Plan Especial",m:20000,v:"2026-09-23"},
+{n:"SAMUEL",a:"REES",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"SARA",a:"CARVAJAL",plan:"Mensual Turno",m:23000,v:"2026-08-22"},
+{n:"SARAH",a:"RAMOS",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"SEBASTIAN",a:"MARIN",plan:"Mensual Turno",m:23000,v:"2026-08-22"},
+{n:"Sebastian",a:"OLIVA",plan:"Estudiante Profesor",m:28000,v:"2026-08-15"},
+{n:"SEBASTIAN",a:"RIVERA",plan:"Estudiante Profesor",m:28000,v:"2026-08-27"},
+{n:"SERGIO",a:"GUAPA",plan:"Full Mensual",m:33000,v:"2026-09-07"},
+{n:"SONIA",a:"CUBA",plan:"Full Mensual",m:33000,v:"2026-08-14"},
+{n:"TANYA",a:"PAULSEN",plan:"Full Mensual",m:33000,v:"2026-08-30"},
+{n:"TOMAS",a:"CABALLERO",plan:"Mensual Turno",m:23000,v:"2026-09-02"},
+{n:"TOMAS",a:"VALENZUELA",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
+{n:"TOMISLAV",a:"CVITANIC",plan:"Full Mensual",m:33000,v:"2026-09-01"},
+{n:"TRAYSI",a:"MUÑOZ",plan:"Full Mensual",m:33000,v:"2026-08-20"},
+{n:"VALENTINA",a:"CUELLAR",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"VALERIA",a:"MACIAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-07-30"},
+{n:"VERONICA",a:"SALAS",plan:"Estudiante Profesor",m:28000,v:"2026-08-02"},
+{n:"VICTOR",a:"CORRY",plan:"Full Mensual",m:33000,v:"2026-09-13"},
+{n:"VICTOR",a:"MOLINA",plan:"Full Mensual",m:33000,v:"2026-08-15"},
+{n:"WENDY",a:"HUAYTA",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"YAJAIRA",a:"PINEDA",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"YANETH",a:"PERCCA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"YESSICA",a:"ESCALERA",plan:"Mensual Turno",m:23000,v:"2026-08-30"},
+{n:"JHANKARLA",a:"SUAREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"MARYORY",a:"RAMIREZ",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-04"}
+];
 </script>
 <script>
 (function(){
@@ -340,7 +513,8 @@ function copiaBase(){
 }
 var guardado = null;
 try{ guardado = JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){}
-var socios = (guardado && Array.isArray(guardado.socios)) ? guardado.socios : copiaBase();
+var socios = (guardado && Array.isArray(guardado.socios) && guardado.socios.length)
+ ? guardado.socios : copiaBase();
 var versionVista = (guardado && guardado.version) || LISTA_VERSION;
 
 function guardar(){
@@ -350,116 +524,25 @@ function guardar(){
   alert("No pude guardar en este equipo. Puede que el navegador esté en modo privado.");
  }
 }
-
-/* ── la planilla de Google ───────────────────────────────────────────── */
-var CLAVE_KEY = "wgym_clave_meson";
-
-function marcarGuardado(estado, texto){
- var el = document.getElementById("guardado");
- if(!el) return;
- el.setAttribute("data-g", estado);
- document.getElementById("guardadoTxt").textContent = texto;
-}
-function miClave(){
- var c = "";
- try{ c = localStorage.getItem(CLAVE_KEY) || ""; }catch(e){}
- if(!c){
-  c = prompt("Clave del mesón\n\nEs la que quedó escrita en el código de Google Apps Script.\nSe pide una sola vez en este equipo.");
-  if(!c) return "";
-  c = c.trim();
-  try{ localStorage.setItem(CLAVE_KEY, c); }catch(e){}
- }
- return c;
-}
-function olvidarClave(){
- try{ localStorage.removeItem(CLAVE_KEY); }catch(e){}
-}
-/* La planilla guarda DD-MM-AAAA; la página trabaja con AAAA-MM-DD. */
-function aCL(v){ var p = String(v||"").split("-"); return p.length===3 ? p[2]+"-"+p[1]+"-"+p[0] : ""; }
-function deCL(v){ var p = String(v||"").split("-"); return p.length===3 ? p[2]+"-"+p[1]+"-"+p[0] : ""; }
-
-/* Habla con la planilla. Como está en otro sitio, se pide con <script>. */
-function llamar(params, cuando){
- if(!LISTA_URL){ cuando(null); return; }
- var cb = "wgymCall_" + Date.now() + "_" + Math.floor(Math.random()*1000);
- var tag = document.createElement("script");
- var hecho = false;
- var corte = setTimeout(function(){ fin(null); }, 12000);
- function fin(datos){
-  if(hecho) return;
-  hecho = true;
-  clearTimeout(corte);
-  try{ delete window[cb]; }catch(e){}
-  if(tag.parentNode) tag.remove();
-  cuando(datos);
- }
- window[cb] = fin;
- tag.onerror = function(){ fin(null); };
- var partes = ["callback=" + cb, "_=" + Date.now()];
- for(var k in params){
-  if(Object.prototype.hasOwnProperty.call(params, k) && params[k] !== undefined){
-   partes.push(k + "=" + encodeURIComponent(params[k]));
-  }
- }
- tag.src = LISTA_URL + "?" + partes.join("&");
- document.body.appendChild(tag);
-}
-
-function traerDeLaPlanilla(){
- var clave = miClave();
- if(!clave){
-  marcarGuardado("malo", "Sin clave no puedo mostrarte la lista");
-  return;
- }
- marcarGuardado("cargando", "Conectando con la planilla…");
- llamar({ clave:clave }, function(d){
-  if(d && d.ok && d.socios && d.socios.length){
-   socios = d.socios.map(function(s, i){
-    return { id:"g"+i, n:s.n, a:s.a, plan:s.plan, m:s.m, v:deCL(s.v) };
-   });
-   guardar(); pintar();
-   marcarGuardado("ok", "Conectado a la planilla · " + socios.length + " socios");
-  }else if(d && d.error && String(d.error).indexOf("clave") > -1){
-   olvidarClave();
-   marcarGuardado("malo", "Clave incorrecta — recarga la página y ponla de nuevo");
-  }else{
-   marcarGuardado("malo", "Sin conexión a la planilla — los cambios no llegan al cliente");
-  }
- });
-}
-
-/* Manda un cambio a la planilla. Si no llega, avisa fuerte: el cliente
-   seguiría viendo la fecha vieja al escanear, que es justo lo que arreglamos. */
-function mandarALaPlanilla(accion, datos, listo){
- var clave = miClave();
- if(!clave){
-  marcarGuardado("malo", "Sin clave: el cambio quedó solo en este equipo");
-  if(listo) listo(false);
-  return;
- }
- marcarGuardado("cargando", "Guardando en la planilla…");
- datos.action = accion;
- datos.clave = clave;
- llamar(datos, function(d){
-  if(d && d.ok){
-   marcarGuardado("ok", "Guardado en la planilla · " + (d.socios ? d.socios.length : socios.length) + " socios");
-   if(listo) listo(true);
-   return;
-  }
-  if(d && d.error && String(d.error).indexOf("clave") > -1){
-   olvidarClave();
-   marcarGuardado("malo", "Clave incorrecta — vuelve a intentarlo");
-   alert("La clave del mesón no es la correcta.\n\nEs la que está escrita en el código de Apps Script, en la línea que dice CLAVE.\nHaz el cambio de nuevo y te la vuelvo a pedir.");
-  }else{
-   marcarGuardado("malo", "No llegó a la planilla — el cliente verá la fecha vieja");
-   alert("El cambio quedó guardado en este equipo, pero NO llegó a la planilla.\n\nEso significa que el cliente va a seguir viendo la fecha vieja al escanear.\nRevisa tu internet y vuelve a guardar el mismo socio.");
-  }
-  if(listo) listo(false);
- });
-}
-
 if(!guardado) guardar();
 
+/* Si el sitio trae una lista mas nueva, lo avisa sin pisar nada. */
+if(guardado && LISTA_VERSION > versionVista){
+ var av = document.getElementById("avisoLista");
+ av.hidden = false;
+ document.getElementById("avisoTexto").innerHTML =
+  "<b>El sitio tiene una lista actualizada</b> con " + LISTA_BASE.length +
+  " socios. La tuya, guardada en este equipo, tiene " + socios.length +
+  ". Si traes la del sitio, se reemplaza la tuya (descarga antes un respaldo si tienes cambios).";
+ document.getElementById("usarSitio").addEventListener("click", function(){
+  if(!confirm("Se reemplaza tu lista por la del sitio. ¿Seguimos?")) return;
+  socios = copiaBase(); versionVista = LISTA_VERSION;
+  guardar(); av.hidden = true; pintar();
+ });
+ document.getElementById("seguirMia").addEventListener("click", function(){
+  versionVista = LISTA_VERSION; guardar(); av.hidden = true;
+ });
+}
 
 /* ── fechas y estado ────────────────────────────────────────────────── */
 function hoyISO(){
@@ -815,7 +898,6 @@ function borrar(s){
  if(i > -1) socios.splice(i, 1);
  if(socioEnHero && socioEnHero.id === s.id) socioEnHero = null;
  guardar(); pintar();
- mandarALaPlanilla("borrar", { n:s.n, a:s.a });
 }
 
 /* ── ficha ──────────────────────────────────────────────────────────── */
@@ -901,7 +983,6 @@ function abrirFicha(s){
   var n = iN.value.trim().toUpperCase(), a = iA.value.trim().toUpperCase();
   if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe al menos el nombre."; iN.focus(); return; }
   if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
-  var antesN = nuevo ? "" : s.n, antesA = nuevo ? "" : s.a;
   if(nuevo){
    socios.push({ id:idNuevo(), n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value });
   }else{
@@ -909,10 +990,6 @@ function abrirFicha(s){
   }
   cerrar(); guardar(); pintar();
   if(socioEnHero && !nuevo && socioEnHero.id === s.id) mostrarHero(s.n+" "+s.a, null, s);
-  mandarALaPlanilla("guardar", {
-   n0: antesN || undefined, a0: antesA || undefined,
-   n: n, a: a, plan: sel.value, m: soloDigitos(iM.value), v: aCL(iV.value)
-  });
  }
  velo.querySelector("#fCancelar").addEventListener("click", cerrar);
  velo.querySelector("#fGuardar").addEventListener("click", aceptar);
@@ -1026,7 +1103,6 @@ function reloj(){
 reloj();
 setInterval(reloj, 20000);
 pintar();
-traerDeLaPlanilla();
 poll();
 setInterval(poll, 4000);
 })();
