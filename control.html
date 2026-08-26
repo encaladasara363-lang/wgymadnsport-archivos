@@ -513,11 +513,31 @@ function copiaBase(){
   return { id:"b"+i, n:s.n, a:s.a, plan:s.plan, m:s.m, v:s.v };
  });
 }
+/* Si una fecha quedó al revés (26-09-2026 en vez de 2026-09-26), la endereza.
+   Con el año en el lugar equivocado, todos los socios salían vencidos. */
+function arreglarFecha(v){
+ var s = String(v || "").trim();
+ var p = s.split("-");
+ if(p.length !== 3) return s;
+ if(p[0].length === 4) return s;                       /* ya está bien */
+ if(p[2].length === 4) return p[2] + "-" + p[1] + "-" + p[0];
+ return s;
+}
+function enderezar(lista){
+ var arreglados = 0;
+ lista.forEach(function(s){
+  var bueno = arreglarFecha(s.v);
+  if(bueno !== s.v){ s.v = bueno; arreglados++; }
+ });
+ return arreglados;
+}
+
 var guardado = null;
 try{ guardado = JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){}
 var socios = (guardado && Array.isArray(guardado.socios) && guardado.socios.length)
  ? guardado.socios : copiaBase();
 var versionVista = (guardado && guardado.version) || LISTA_VERSION;
+var seArreglaron = enderezar(socios);
 
 function guardar(){
  try{
@@ -526,7 +546,7 @@ function guardar(){
   alert("No pude guardar en este equipo. Puede que el navegador esté en modo privado.");
  }
 }
-if(!guardado) guardar();
+if(!guardado || seArreglaron) guardar();
 
 /* Si el sitio trae una lista mas nueva, lo avisa sin pisar nada. */
 if(guardado && LISTA_VERSION > versionVista){
@@ -1079,7 +1099,7 @@ archivo.addEventListener("change", function(){
   socios = leidos.map(function(s, i){
    return { id:s.id || ("c"+i+Date.now().toString(36)), n:String(s.n||"").trim(),
             a:String(s.a||"").trim(), plan:String(s.plan||PLANES[0]).trim(),
-            m:soloDigitos(s.m), v:String(s.v||"").trim() };
+            m:soloDigitos(s.m), v:arreglarFecha(s.v) };
   });
   archivo.value = ""; filtro = "";
   document.getElementById("qLista").value = "";
