@@ -116,7 +116,7 @@ Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te 
 
 <div class="feed-head">
 <h2>Ingresos recientes</h2>
-<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+<span class="dot-status"><span class="dot-live"></span> En vivo · <span id="origenLista">—</span></span>
 </div>
 <div id="feed"></div>
 </div>
@@ -347,25 +347,75 @@ function estadoVenc(venc){
 function sinTildes(s){
  return String(s==null?"":s).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
 }
-function serialHoy(){
- var h = new Date(); h.setHours(0,0,0,0);
- var base = new Date(1899,11,30); base.setHours(0,0,0,0);
- return Math.round((h - base) / 86400000);
-}
-function fechaDeSerial(fv){
+function isoDeSerial(fv){
  var base = new Date(1899,11,30); base.setHours(0,0,0,0);
  var d = new Date(base.getTime() + fv*86400000);
- return String(d.getDate()).padStart(2,"0") + "-" +
-        String(d.getMonth()+1).padStart(2,"0") + "-" + d.getFullYear();
+ return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") +
+        "-" + String(d.getDate()).padStart(2,"0");
 }
+function fechaCL(v){
+ if(!v) return "—";
+ var p = String(v).split("-");
+ return p[2] + "-" + p[1] + "-" + p[0];
+}
+function diasPara(v){
+ if(!v) return null;
+ var p = String(v).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2]); f.setHours(0,0,0,0);
+ if(isNaN(f)) return null;
+ var h = new Date(); h.setHours(0,0,0,0);
+ return Math.round((f - h) / 86400000);
+}
+
+/* La lista que manda es la del mesón (control.html), que se guarda en este
+   mismo navegador. Si esta pantalla corre en otro aparato, o todavía no se
+   ha abierto el mesón acá, usa la lista publicada en el sitio. */
+var CLAVE_MESON = "wgym_control_v1";
+var lista = [], listaDeDonde = "sitio", crudoAnterior = false;
+
+/* Devuelve true si la lista cambió desde la última vez. */
+function cargarLista(){
+ var crudo = null;
+ try{ crudo = localStorage.getItem(CLAVE_MESON); }catch(e){}
+ if(crudo === crudoAnterior && lista.length) return false;
+ crudoAnterior = crudo;
+ try{
+  var g = JSON.parse(crudo || "null");
+  if(g && Array.isArray(g.socios) && g.socios.length){
+   lista = g.socios.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:s.v }; });
+   listaDeDonde = "meson";
+   return true;
+  }
+ }catch(e){}
+ lista = SOCIOS.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:isoDeSerial(s.fv) }; });
+ listaDeDonde = "sitio";
+ return true;
+}
+cargarLista();
+/* Si agregas un socio en el mesón con esta pantalla abierta, se entera sola. */
+window.addEventListener("storage", function(ev){
+ if(ev.key !== CLAVE_MESON) return;
+ if(!cargarLista()) return;
+ pintarOrigen();
+ renderFeed(ultimasFilas);
+ if(ultimasFilas.length) showHero(ultimasFilas[0]);
+});
+
+function pintarOrigen(){
+ var el = document.getElementById("origenLista");
+ if(!el) return;
+ el.textContent = (listaDeDonde === "meson" ? "Lista del mesón" : "Lista del sitio") +
+                  " · " + lista.length + " socios";
+}
+
 /* Busca al socio por como venga escrito en el registro del QR. */
 function buscarSocio(nombre, apellido){
  var q = sinTildes(nombre + " " + apellido);
  if(!q) return null;
- var exacto = SOCIOS.filter(function(s){ return sinTildes(s.n + " " + s.a) === q; });
+ var exacto = lista.filter(function(s){ return sinTildes(s.n + " " + s.a) === q; });
  if(exacto.length === 1) return exacto[0];
  var partes = q.split(" ");
- var calzan = SOCIOS.filter(function(s){
+ var calzan = lista.filter(function(s){
   var completo = sinTildes(s.n + " " + s.a);
   return partes.every(function(p){ return completo.indexOf(p) > -1; });
  });
@@ -379,8 +429,12 @@ function veredictoDe(r){
            detalle: viejo ? viejo.txt : "Revísalo en la planilla",
            corto:"Sin ficha de socio", cls:"", plan:"" };
  }
- var dias = s.fv - serialHoy();
- var vence = fechaDeSerial(s.fv);
+ var dias = diasPara(s.v);
+ var vence = fechaCL(s.v);
+ if(dias === null){
+  return { v:"nadie", fallo:"Ficha sin fecha de vencimiento",
+           detalle:"Revísale la fecha en el mesón", corto:"Sin fecha", cls:"", plan:s.plan };
+ }
  if(dias < 0){
   return { v:"bad", fallo:"Acceso denegado · membresía vencida",
            detalle:"Venció el " + vence + " · hace " + Math.abs(dias) + (Math.abs(dias)===1?" día":" días"),
@@ -397,6 +451,7 @@ function veredictoDe(r){
 }
 
 var seenKeys = {};
+var ultimasFilas = [];
 var firstPoll = true;
 
 function keyOf(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
@@ -440,11 +495,15 @@ function flashHero(r){
 
 function handleData(data){
  var rows = data.rows || [];
+ ultimasFilas = rows;
+ var cambioLista = cargarLista();   /* por si agregaste un socio recién */
+ pintarOrigen();
  if(rows.length > 0){
   var newest = rows[0];
   if(!firstPoll && !seenKeys[keyOf(newest)]){
    flashHero(newest);
-  } else if(firstPoll){
+  } else if(firstPoll || cambioLista){
+   /* La lista cambió: recalcula el veredicto sin destellar de nuevo. */
    showHero(newest);
   }
  }
