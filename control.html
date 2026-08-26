@@ -1,0 +1,1109 @@
+<meta charset="utf-8">
+<title>WGYMADNSPORT · Control de Acceso</title>
+<meta name="description" content="Control de acceso y socios de WGYMADNSPORT Tocopilla.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+ --negro:#0A0A0A; --surface:#161616; --surface-2:#1F1F1F; --card:#1c1c1c;
+ --rojo:#E30613; --rojo-oscuro:#A40410; --dorado:#D4AF37;
+ --blanco:#FFFFFF; --gris:#CFCFCF; --gris-soft:#8C8C8C; --line:#2A2A2A;
+ --verde:#5CA85C; --verde-soft:rgba(92,168,92,.13);
+ --naranja:#D4AF37; --naranja-soft:rgba(212,175,55,.13);
+ --rojo-claro:#E85C5C; --rojo-soft:rgba(232,92,92,.13);
+}
+*{box-sizing:border-box;}
+body{ margin:0; background:var(--negro); color:var(--blanco);
+ font-family:'Segoe UI', Arial, sans-serif; min-height:100vh; }
+svg{ fill:none; stroke-linecap:round; stroke-linejoin:round; }
+:focus-visible{ outline:2px solid var(--rojo); outline-offset:2px; }
+[hidden]{ display:none !important; }
+
+header.top{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%);
+ border-bottom:3px solid var(--rojo); padding:18px 20px; text-align:center; }
+header.top .logo{ width:48px; height:48px; border-radius:50%; object-fit:cover;
+ border:2px solid var(--dorado); margin-bottom:6px; }
+header.top .gymname{ font-size:12px; font-weight:800; letter-spacing:.14em;
+ color:var(--dorado); text-transform:uppercase; margin:0 0 4px; }
+header.top h1{ font-size:21px; margin:0; font-weight:800; text-transform:uppercase; }
+header.top h1 span{ color:var(--rojo); }
+header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; margin:6px 0 0; }
+
+.wrap{ max-width:1080px; margin:0 auto; padding:22px 20px 70px; }
+
+.aviso-lista{ background:rgba(212,175,55,.1); border:1.5px solid var(--dorado);
+ border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--gris);
+ line-height:1.6; margin-bottom:20px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+.aviso-lista p{ margin:0; flex:1; min-width:230px; }
+.aviso-lista b{ color:var(--dorado); }
+
+/* ── Puerta ─────────────────────────────────────────────────────────── */
+.hero{ background:linear-gradient(135deg,#161616 0%, #0A0A0A 60%, #1c1608 100%);
+ border:1.5px solid var(--dorado); border-radius:20px; padding:30px 26px;
+ text-align:center; min-height:172px; display:flex; flex-direction:column;
+ align-items:center; justify-content:center; transition:box-shadow .3s ease; }
+.hero.flash{ box-shadow:0 0 0 4px var(--rojo), 0 0 40px 6px rgba(227,6,19,.5); }
+.hero .kicker{ font-size:12px; font-weight:800; letter-spacing:.16em;
+ color:var(--dorado); text-transform:uppercase; margin:0 0 12px; }
+.hero .fallo{ font-size:26px; font-weight:900; text-transform:uppercase;
+ letter-spacing:.02em; line-height:1.1; margin:0 0 10px; text-wrap:balance; }
+.hero .name{ font-size:36px; font-weight:900; text-transform:uppercase;
+ line-height:1.15; margin:0 0 8px; }
+.hero .time{ font-size:14.5px; color:var(--gris-soft); font-weight:600; }
+.hero .venc{ font-size:14px; font-weight:700; margin:10px 0 0; padding:5px 14px;
+ border-radius:999px; display:inline-block; }
+.hero .venc.good{ color:var(--verde); background:var(--verde-soft); }
+.hero .venc.warn{ color:var(--dorado); background:var(--naranja-soft); }
+.hero .venc.danger{ color:var(--rojo-claro); background:var(--rojo-soft); }
+.hero .plan{ font-size:13px; color:var(--gris-soft); font-weight:600; margin:8px 0 0; }
+.hero .empty{ font-size:16px; color:var(--gris-soft); font-weight:600; margin:0; }
+.hero .renovar{ margin-top:16px; }
+.hero[data-v="ok"]{ border-color:var(--verde); }
+.hero[data-v="ok"] .fallo{ color:var(--verde); }
+.hero[data-v="ok"].flash{ box-shadow:0 0 0 4px var(--verde), 0 0 40px 6px rgba(92,168,92,.45); }
+.hero[data-v="warn"]{ border-color:var(--dorado); }
+.hero[data-v="warn"] .fallo{ color:var(--dorado); }
+.hero[data-v="warn"].flash{ box-shadow:0 0 0 4px var(--dorado), 0 0 40px 6px rgba(212,175,55,.45); }
+.hero[data-v="bad"]{ border-color:var(--rojo-claro); }
+.hero[data-v="bad"] .fallo{ color:var(--rojo-claro); }
+.hero[data-v="bad"].flash{ box-shadow:0 0 0 4px var(--rojo), 0 0 40px 8px rgba(227,6,19,.55); }
+.hero[data-v="nadie"]{ border-color:var(--line); }
+.hero[data-v="nadie"] .fallo{ color:var(--gris-soft); font-size:20px; }
+
+.manual{ display:flex; gap:9px; flex-wrap:wrap; margin-top:14px; position:relative; }
+.manual input{ flex:1; min-width:200px; background:var(--surface); border:1px solid var(--line);
+ border-radius:10px; color:var(--blanco); font-size:16px; font-weight:600;
+ font-family:inherit; padding:13px 14px; }
+.manual input::placeholder{ color:var(--gris-soft); font-weight:500; }
+.sugerencias{ position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:30;
+ background:var(--surface-2); border:1px solid #3A3A3A; border-radius:12px;
+ max-height:260px; overflow-y:auto; list-style:none; margin:0; padding:0;
+ box-shadow:0 18px 40px -14px #000; }
+.sugerencias li{ display:flex; align-items:center; gap:10px; padding:11px 14px;
+ cursor:pointer; border-bottom:1px solid var(--line); }
+.sugerencias li:last-child{ border-bottom:none; }
+.sugerencias li:hover,.sugerencias li[aria-selected="true"]{ background:#2A2A2A; }
+.sugerencias .snom{ flex:1; font-weight:700; font-size:14.5px; }
+.sugerencias .spl{ font-size:12.5px; color:var(--gris-soft); }
+.punto{ width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+
+.feed-head{ display:flex; align-items:center; justify-content:space-between;
+ margin:26px 0 10px; gap:12px; flex-wrap:wrap; }
+.feed-head h2{ font-size:13px; font-weight:800; letter-spacing:.1em;
+ color:var(--gris-soft); text-transform:uppercase; margin:0; }
+.dot-status{ display:flex; align-items:center; gap:6px; font-size:12px;
+ color:var(--gris-soft); font-weight:600; }
+.dot-live{ width:8px; height:8px; border-radius:50%; background:var(--verde); }
+.dot-status[data-vivo="no"] .dot-live{ background:var(--rojo-claro); }
+.feed-item{ display:flex; align-items:center; justify-content:space-between; gap:10px;
+ background:var(--card); border:1px solid var(--line); border-radius:12px;
+ padding:13px 16px; margin-bottom:8px; width:100%; text-align:left;
+ font-family:inherit; color:inherit; cursor:pointer; }
+.feed-item:hover{ border-color:#3A3A3A; }
+.feed-item .finfo{ display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
+.feed-item .fname{ font-weight:800; font-size:15px; }
+.feed-item .fvenc{ font-size:12px; font-weight:700; }
+.feed-item .fvenc.good{ color:var(--verde); }
+.feed-item .fvenc.warn{ color:var(--dorado); }
+.feed-item .fvenc.danger{ color:var(--rojo-claro); }
+.feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; flex:0 0 auto; }
+.feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:26px 0; }
+
+/* ── Indicadores ────────────────────────────────────────────────────── */
+.kpis{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:26px 0 18px; }
+.kpi{ background:var(--card); border:1px solid var(--line); border-radius:12px;
+ padding:13px 14px 14px; text-align:left; cursor:pointer; font-family:inherit;
+ color:inherit; width:100%; border-left:3px solid var(--line); }
+.kpi:hover{ border-color:#3A3A3A; }
+.kpi[aria-pressed="true"]{ border-color:var(--rojo); }
+.kpi .klbl{ font-size:11px; font-weight:800; letter-spacing:.12em;
+ text-transform:uppercase; color:var(--gris-soft); display:block; }
+.kpi .kval{ font-size:29px; font-weight:900; line-height:1.1; margin-top:7px; }
+.kpi .ksub{ font-size:11.5px; color:var(--gris-soft); margin-top:4px; }
+.kpi.t{ border-left-color:var(--gris-soft); }
+.kpi.a{ border-left-color:var(--verde); } .kpi.a .kval{ color:var(--verde); }
+.kpi.p{ border-left-color:var(--dorado); } .kpi.p .kval{ color:var(--dorado); }
+.kpi.v{ border-left-color:var(--rojo-claro); } .kpi.v .kval{ color:var(--rojo-claro); }
+.kpi.r{ border-left-color:var(--dorado); cursor:default; }
+.kpi.r .kval{ color:var(--dorado); font-size:23px; }
+
+/* ── Lista ──────────────────────────────────────────────────────────── */
+.panel{ background:var(--surface); border:1px solid var(--line); border-radius:16px;
+ overflow:hidden; }
+.panel > h2{ font-size:13px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+ color:var(--gris); margin:0; padding:14px 18px; border-bottom:1px solid var(--line);
+ background:#131313; display:flex; align-items:center; gap:10px; }
+.panel > h2 .der{ margin-left:auto; color:var(--gris-soft); font-size:12px; letter-spacing:.06em; }
+.panel .cuerpo{ padding:16px 18px 18px; }
+
+.barra{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+.barra .campo{ flex:1; min-width:190px; }
+.barra input[type="text"], .barra select{ width:100%; background:var(--surface-2);
+ border:1px solid var(--line); border-radius:10px; color:var(--blanco);
+ font-family:inherit; font-size:15px; font-weight:600; padding:11px 13px; }
+.barra select{ width:auto; text-transform:uppercase; font-size:13px; letter-spacing:.05em; }
+.btn{ border:none; border-radius:10px; cursor:pointer; padding:11px 16px;
+ font-family:inherit; font-weight:800; font-size:13px; text-transform:uppercase;
+ letter-spacing:.08em; display:inline-flex; align-items:center; gap:7px; }
+.btn svg{ width:15px; height:15px; stroke-width:2.2; }
+.btn-rojo{ background:var(--rojo); color:#fff; } .btn-rojo svg{ stroke:#fff; }
+.btn-oro{ background:var(--dorado); color:#14140F; } .btn-oro svg{ stroke:#14140F; }
+.btn-linea{ background:transparent; color:var(--gris); border:1px solid var(--line); }
+.btn-linea svg{ stroke:var(--gris); }
+.btn-linea:hover{ color:#fff; border-color:#3A3A3A; }
+.btn:hover{ filter:brightness(1.12); }
+
+.tscroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+table.socios{ width:100%; min-width:730px; border-collapse:collapse; }
+table.socios th{ text-align:left; font-size:11px; font-weight:800; letter-spacing:.12em;
+ text-transform:uppercase; color:var(--gris-soft); padding:0 12px 10px 0;
+ border-bottom:1px solid var(--line); white-space:nowrap; }
+table.socios td{ padding:10px 12px 10px 0; border-bottom:1px solid var(--line);
+ font-size:14.5px; vertical-align:middle; }
+table.socios tr:last-child td{ border-bottom:none; }
+table.socios td.nom{ font-weight:700; white-space:nowrap; }
+table.socios td.plan{ color:var(--gris-soft); font-size:13px; white-space:nowrap; }
+table.socios th.mon, table.socios td.mon{ text-align:right; padding-right:18px;
+ white-space:nowrap; font-variant-numeric:tabular-nums; }
+table.socios td.fec{ white-space:nowrap; font-variant-numeric:tabular-nums; }
+table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
+.pill{ display:inline-flex; align-items:center; gap:6px; border-radius:999px;
+ padding:4px 11px; font-size:11.5px; font-weight:800; text-transform:uppercase;
+ letter-spacing:.06em; white-space:nowrap; border:1px solid; }
+.pill[data-e="aldia"]{ color:var(--verde); border-color:var(--verde); background:var(--verde-soft); }
+.pill[data-e="porvencer"]{ color:var(--dorado); border-color:var(--dorado); background:var(--naranja-soft); }
+.pill[data-e="vencido"]{ color:var(--rojo-claro); border-color:var(--rojo-claro); background:var(--rojo-soft); }
+.pill .punto{ width:7px; height:7px; }
+.dias{ display:block; font-size:11px; color:var(--gris-soft); margin-top:3px; }
+.iconbtn{ background:none; border:1px solid transparent; border-radius:8px;
+ cursor:pointer; padding:6px 7px; line-height:0; }
+.iconbtn svg{ width:16px; height:16px; stroke:var(--gris-soft); stroke-width:2; }
+.iconbtn:hover{ background:var(--surface-2); border-color:var(--line); }
+.iconbtn:hover svg{ stroke:#fff; }
+.iconbtn.borrar:hover{ border-color:var(--rojo-claro); }
+.iconbtn.borrar:hover svg{ stroke:var(--rojo-claro); }
+.sinnada{ padding:32px 6px; text-align:center; color:var(--gris-soft); font-size:14px; }
+
+/* ── Ficha ──────────────────────────────────────────────────────────── */
+.velo{ position:fixed; inset:0; background:rgba(0,0,0,.78); display:grid;
+ place-items:center; padding:18px; z-index:60; }
+.ficha{ background:var(--surface); border:1px solid #3A3A3A; border-radius:16px;
+ width:100%; max-width:460px; max-height:92vh; overflow-y:auto;
+ box-shadow:0 26px 60px -20px #000; }
+.ficha h3{ font-size:19px; font-weight:900; margin:0; padding:18px 20px 15px;
+ border-bottom:1px solid var(--line); text-transform:uppercase; }
+.ficha .campos{ padding:18px 20px; display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+.ficha label{ display:flex; flex-direction:column; gap:6px; }
+.ficha label.ancho{ grid-column:1 / -1; }
+.ficha label span{ font-size:11px; font-weight:800; letter-spacing:.12em;
+ text-transform:uppercase; color:var(--gris-soft); }
+.ficha input, .ficha select{ background:var(--surface-2); border:1px solid var(--line);
+ border-radius:10px; color:var(--blanco); font-family:inherit; font-size:15px;
+ font-weight:600; padding:11px 12px; width:100%; }
+.ficha .rapidos{ grid-column:1 / -1; display:flex; gap:7px; flex-wrap:wrap; }
+.ficha .rapidos button{ background:var(--surface-2); border:1px solid var(--line);
+ border-radius:999px; color:var(--gris); font-family:inherit; font-size:12px;
+ font-weight:700; padding:7px 13px; cursor:pointer; text-transform:uppercase;
+ letter-spacing:.05em; }
+.ficha .rapidos button:hover{ color:#fff; border-color:var(--dorado); }
+.ficha .aviso{ grid-column:1 / -1; color:var(--rojo-claro); font-size:13.5px; margin:0; }
+.ficha .pie{ display:flex; gap:9px; justify-content:flex-end; padding:0 20px 20px;
+ flex-wrap:wrap; }
+
+.nota{ margin-top:26px; padding-top:16px; border-top:1px solid var(--line);
+ font-size:12.5px; color:var(--gris-soft); line-height:1.65; }
+.nota b{ color:var(--gris); }
+.nota a{ color:var(--dorado); }
+
+@media (max-width:900px){ .kpis{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width:560px){
+ .kpis{ grid-template-columns:repeat(2,1fr); }
+ .hero .name{ font-size:28px; } .hero .fallo{ font-size:20px; }
+ .ficha .campos{ grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce){ *{ transition:none !important; animation:none !important; } }
+</style>
+
+<header class="top">
+<img class="logo" id="topLogo" alt="WGYMADNSPORT">
+<p class="gymname">WGYMADNSPORT Tocopilla</p>
+<h1>Control de <span>Acceso</span></h1>
+<p class="reloj" id="reloj">—</p>
+</header>
+
+<div class="wrap">
+
+<div class="aviso-lista" id="avisoLista" hidden>
+<p id="avisoTexto"></p>
+<button class="btn btn-oro" id="usarSitio">Usar la del sitio</button>
+<button class="btn btn-linea" id="seguirMia">Seguir con la mía</button>
+</div>
+
+<div class="hero" id="hero">
+<p class="kicker">Último ingreso</p>
+<p class="empty" id="heroEmpty">Esperando el primer escaneo del día…</p>
+<p class="fallo" id="heroFallo" hidden></p>
+<p class="name" id="heroName" hidden></p>
+<p class="time" id="heroTime" hidden></p>
+<p class="venc" id="heroVenc" hidden></p>
+<p class="plan" id="heroPlan" hidden></p>
+<div class="renovar" hidden id="heroAcc">
+<button class="btn btn-oro" id="heroEditar">Renovar / editar ficha</button>
+</div>
+</div>
+
+<div class="manual">
+<input id="qPuerta" type="text" autocomplete="off" spellcheck="false"
+ placeholder="¿No alcanzó a escanear? Busca su nombre aquí…" aria-label="Buscar socio a mano">
+<button class="btn btn-rojo" id="bEntrar">
+<svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+Ver estado
+</button>
+</div>
+
+<div class="feed-head">
+<h2>Ingresos recientes</h2>
+<span class="dot-status" id="estadoVivo" data-vivo="si"><span class="dot-live"></span> <span id="estadoVivoTxt">Conectando…</span></span>
+</div>
+<div id="feed"></div>
+
+<section class="kpis" id="kpis"></section>
+
+<div class="panel">
+<h2>Socios del gimnasio <span class="der" id="conteo">—</span></h2>
+<div class="cuerpo">
+<div class="barra">
+<div class="campo"><input id="qLista" type="text" autocomplete="off" placeholder="Buscar por nombre o apellido…" aria-label="Buscar socio"></div>
+<select id="orden" aria-label="Ordenar">
+<option value="venc">Por vencimiento</option>
+<option value="nombre">Por nombre</option>
+<option value="plan">Por plan</option>
+</select>
+<button class="btn btn-rojo" id="bNuevo">
+<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Nuevo socio</button>
+<button class="btn btn-oro" id="bRespaldo">
+<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar respaldo</button>
+<button class="btn btn-linea" id="bPlanilla">
+<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg> Planilla Excel</button>
+<button class="btn btn-linea" id="bCargar">
+<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 8l5-5 5 5M12 3v12"/></svg> Cargar respaldo</button>
+<input type="file" id="archivo" accept=".json,.csv,.txt,application/json,text/csv,text/plain" hidden>
+</div>
+<div class="tscroll">
+<table class="socios">
+<thead><tr><th>Nombre</th><th>Apellido</th><th>Plan</th><th class="mon">Monto</th><th>Vence</th><th>Estado</th><th></th></tr></thead>
+<tbody id="tabla"></tbody>
+</table>
+</div>
+</div>
+</div>
+
+<p class="nota">
+<b>Los clientes siguen entrando con el mismo QR de siempre.</b> Esta página escucha ese mismo registro, así que no hay que cambiar nada en la puerta.<br>
+<b>Tu lista se guarda en este equipo.</b> Si abres esta página en otro teléfono o computador, ese parte con la lista del sitio. Para pasar la tuya, descarga el respaldo acá y cárgalo allá.<br>
+La <a href="pantalla.html">pantalla de ingresos</a> es la que va a la vista de los clientes.
+</p>
+
+</div>
+
+<script>
+const LOGO_B64 = "assets/logo.jpg";
+/* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
+const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
+/* Lista base publicada en el sitio. Si edito socios acá, sube este número
+   y la página te ofrece traer la lista nueva sin pisar lo tuyo. */
+const LISTA_VERSION = 20260826;
+const LISTA_BASE = [
+{n:"AKASH",a:"THADANI",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-03"},
+{n:"ALAN",a:"PEREIRA",plan:"Funcionario Público",m:28000,v:"2026-09-10"},
+{n:"ALAN",a:"RAMIREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"ALDO",a:"ENCINA",plan:"Mensual Turno",m:23000,v:"2026-09-04"},
+{n:"ALEJANDRO",a:"PARES",plan:"Full Mensual",m:33000,v:"2026-08-07"},
+{n:"AlEXANDER",a:"ONTANEDA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"ALEXIS",a:"ACUÑA",plan:"Full Mensual",m:33000,v:"2026-09-25"},
+{n:"ALEXIS",a:"VARAS",plan:"Funcionario Público",m:28000,v:"2026-08-14"},
+{n:"ALONSO",a:"ARAYA",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-30"},
+{n:"ANA",a:"MARIA GONZALEZ",plan:"Mensual Tercera Edad",m:23000,v:"2026-09-20"},
+{n:"ANDREA",a:"CUELLA",plan:"Full Mensual",m:33000,v:"2026-08-03"},
+{n:"ANDREA",a:"VARAS",plan:"Estudiante Profesor",m:28000,v:"2026-08-10"},
+{n:"ANDRES",a:"PAEZ",plan:"Mensual Turno",m:23000,v:"2026-08-13"},
+{n:"ANGEL",a:"GUTIERREZ",plan:"Full Mensual",m:33000,v:"2026-09-14"},
+{n:"ANTONELLA",a:"AGUIRRE",plan:"Full Mensual",m:33000,v:"2026-09-25"},
+{n:"ANTONELLA",a:"LLANQUE",plan:"Full Mensual",m:33000,v:"2026-08-14"},
+{n:"ANTONIO",a:"PEREZ",plan:"Full Mensual",m:33000,v:"2026-08-20"},
+{n:"ANTONIO",a:"VALENCIA",plan:"Mensual Turno",m:23000,v:"2026-09-02"},
+{n:"ARACELY",a:"HERRERA",plan:"Mensual Turno",m:23000,v:"2026-08-19"},
+{n:"ARACELY",a:"PANIAGUA",plan:"Full Mensual",m:33000,v:"2026-08-24"},
+{n:"AARON",a:"SOZA",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-22"},
+{n:"BASTIAN",a:"PERALTA",plan:"Estudiante Profesor",m:28000,v:"2026-07-04"},
+{n:"BASTIAN",a:"VERGARA",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-20"},
+{n:"BASTIAN",a:"ZAPATA",plan:"Funcionario Público",m:28000,v:"2026-09-07"},
+{n:"BENJAMIN",a:"GODOY",plan:"Mensual Turno",m:23000,v:"2026-08-23"},
+{n:"BETSY",a:"BRIONES",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"CAMILA",a:"CUELLA",plan:"Full Mensual",m:33000,v:"2026-08-03"},
+{n:"CAMILA",a:"JUICA",plan:"Full Mensual",m:33000,v:"2027-03-18"},
+{n:"CAMILA",a:"PEÑA",plan:"Full Mensual",m:33000,v:"2026-09-04"},
+{n:"CAMILO",a:"GALLEGILLOS",plan:"Full Mensual",m:33000,v:"2026-08-16"},
+{n:"CAMILO",a:"JUICA",plan:"Mensual Turno",m:23000,v:"2026-09-04"},
+{n:"CARLA",a:"MORALES",plan:"Full Mensual",m:33000,v:"2026-08-23"},
+{n:"CARLOS",a:"ARAYA",plan:"Full Mensual",m:33000,v:"2026-08-28"},
+{n:"CAROLINA",a:"CARVAJAL",plan:"Full Mensual",m:33000,v:"2026-09-24"},
+{n:"CAROLINA",a:"CUELLA",plan:"Funcionario Público",m:28000,v:"2026-08-31"},
+{n:"CHRISTIAN",a:"AROS",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
+{n:"CHRISTIAN",a:"CAMPOS",plan:"Full Mensual",m:33000,v:"2026-09-25"},
+{n:"CLAUDIA",a:"RAMOS",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"CLAUDIA",a:"VILLEGAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-27"},
+{n:"CONSTANZA",a:"MARIN",plan:"Funcionario Público",m:28000,v:"2026-08-04"},
+{n:"CRISTOBAL",a:"PIZARRO",plan:"Estudiante Profesor",m:28000,v:"2026-09-11"},
+{n:"DANIEL",a:"CORTES",plan:"Mensual Turno",m:23000,v:"2026-08-15"},
+{n:"DANIEL",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-08-13"},
+{n:"DANIELA",a:"CARVAJAL",plan:"Full Mensual",m:33000,v:"2026-09-03"},
+{n:"DANIELA",a:"SALAZAR",plan:"Funcionario Público",m:28000,v:"2026-08-20"},
+{n:"DARKO",a:"VICENCIO",plan:"Full Mensual",m:33000,v:"2026-08-20"},
+{n:"DEBORA",a:"GAJARDO",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"DEMIAN",a:"ALVAREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-24"},
+{n:"DIEGO",a:"SALAZAR",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"DONNA",a:"URIZAR",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"Edita",a:"Morales",plan:"Estudiante Profesor",m:28000,v:"2026-09-01"},
+{n:"EINER",a:"JAIMES",plan:"Full Mensual",m:33000,v:"2026-09-24"},
+{n:"ELIZABETH",a:"LLIULLI",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-20"},
+{n:"EMYLY",a:"ADAOS",plan:"Estudiante Profesor",m:28000,v:"2026-09-21"},
+{n:"EYMILEE",a:"MUÑOZ",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"FAVIO",a:"CLAVELO",plan:"Funcionario Público",m:28000,v:"2026-08-25"},
+{n:"FERNANDA",a:"GUERRA",plan:"Estudiante Profesor",m:28000,v:"2026-09-07"},
+{n:"FERNANDA",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-09-24"},
+{n:"FRANCCINI",a:"VILLANUEVA",plan:"Full Mensual",m:33000,v:"2026-08-21"},
+{n:"FRANCHESCA",a:"ALCAYAGA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"FRANCISCA",a:"ROJAS",plan:"Plan Especial",m:20000,v:"2026-08-06"},
+{n:"GABRIEL",a:"FERNANDEZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-11"},
+{n:"GABRIEL",a:"MOLINA",plan:"Mensual Turno",m:23000,v:"2026-09-26"},
+{n:"GABRIEL",a:"PIÑOL",plan:"Mensual Turno",m:23000,v:"2026-09-08"},
+{n:"GABRIEL",a:"RUZ",plan:"Mensual Turno",m:23000,v:"2026-08-24"},
+{n:"GABRIELA",a:"VELARDE",plan:"Estudiante Profesor",m:28000,v:"2026-09-01"},
+{n:"GERARDO",a:"LEPE",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"GERMAN",a:"PALMA",plan:"Plan Especial",m:20000,v:"2026-08-18"},
+{n:"GISELA",a:"CASTILLO",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"GLORIA",a:"LOPEZ",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-03"},
+{n:"HECTOR",a:"CONTRERAS",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"HERMANN",a:"BORQUEZ",plan:"Mensual Turno",m:23000,v:"2026-08-28"},
+{n:"IAN",a:"GAETE",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"IDALBA",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"IGNACIA",a:"SANCHEZ",plan:"Full Mensual",m:33000,v:"2026-08-13"},
+{n:"IVAN",a:"ESPIRITU",plan:"Mensual Turno",m:23000,v:"2026-08-08"},
+{n:"IVAN",a:"POZHO",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"JAIRO",a:"CONTRERAS",plan:"Mensual Turno",m:23000,v:"2026-08-14"},
+{n:"JEAN",a:"PIERRE",plan:"Full Mensual",m:33000,v:"2026-09-24"},
+{n:"JENI",a:"GOMEZ",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"JHON",a:"ESPINOZA",plan:"Estudiante Profesor",m:28000,v:"2026-09-20"},
+{n:"JOAQUIN",a:"ALBAYAY",plan:"Estudiante Profesor",m:28000,v:"2026-09-12"},
+{n:"JOFRE",a:"ZARUMA",plan:"Full Mensual",m:33000,v:"2026-08-15"},
+{n:"JOHAN",a:"VALLE",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"JORGE",a:"CONTRERAS",plan:"Funcionario Público",m:28000,v:"2026-08-10"},
+{n:"JOCKSHUA",a:"ARANDA",plan:"Estudiante Profesor",m:28000,v:"2026-08-27"},
+{n:"JOSE",a:"CHOCK",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"JOSE",a:"RODRIGUEZ",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-08"},
+{n:"JOSEFA",a:"ESCOBAR",plan:"Mensual Turno",m:23000,v:"2026-09-09"},
+{n:"JOSTIN",a:"ROSAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-11"},
+{n:"JUAN",a:"CACERES",plan:"Full Mensual",m:33000,v:"2026-09-11"},
+{n:"JUAN",a:"ESCALONA",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"JUAN",a:"REYES",plan:"Mensual Turno",m:23000,v:"2026-09-06"},
+{n:"MILENKA",a:"CARRASCO",plan:"Full Mensual",m:33000,v:"2026-08-28"},
+{n:"KATHERINE",a:"GOMEZ",plan:"Full Mensual",m:33000,v:"2026-08-13"},
+{n:"KATHERINE",a:"IGLESIAS",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"KATHERINE",a:"RODRIGUEZ",plan:"Full Mensual",m:33000,v:"2026-08-07"},
+{n:"KATHIA",a:"CEBEÑO",plan:"Full Mensual",m:33000,v:"2026-08-09"},
+{n:"KEVIN",a:"BONILLA",plan:"Mensual Turno",m:23000,v:"2026-08-20"},
+{n:"KIMMEN",a:"ARANDA",plan:"Full Mensual",m:33000,v:"2026-09-23"},
+{n:"KRYSHNA",a:"ARTEAGA",plan:"Funcionario Público",m:28000,v:"2026-08-09"},
+{n:"LAURA",a:"VERA",plan:"Full Mensual",m:33000,v:"2026-09-06"},
+{n:"LORETO",a:"VELIZ",plan:"Funcionario Público",m:28000,v:"2026-08-27"},
+{n:"LUIS",a:"GARCIA",plan:"Estudiante Profesor",m:28000,v:"2026-09-12"},
+{n:"LUIS",a:"RIOS",plan:"Mensual Turno",m:23000,v:"2026-08-06"},
+{n:"LUISA",a:"HIDALGO",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"LUNA",a:"LOPEZ",plan:"Full Mensual",m:33000,v:"2026-09-04"},
+{n:"LUDJAN",a:"SORE",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"MANUEL",a:"DURAN",plan:"Funcionario Público",m:28000,v:"2026-08-13"},
+{n:"MARIA",a:"HERRERA",plan:"Mensual Turno",m:23000,v:"2026-08-19"},
+{n:"MARIA JOSE",a:"OBREQUE",plan:"Full Mensual",m:33000,v:"2026-09-03"},
+{n:"MARIA",a:"OSES",plan:"Estudiante Profesor",m:28000,v:"2026-08-11"},
+{n:"MARIA",a:"SEGOVIA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"MARIA",a:"TORRES",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-20"},
+{n:"MARIA",a:"ZEPEDA",plan:"Funcionario Público",m:28000,v:"2026-09-03"},
+{n:"MARTINA",a:"ROJAS",plan:"Estudiante Profesor",m:28000,v:"2026-09-07"},
+{n:"MATIAS",a:"ABELLO",plan:"Full Mensual",m:33000,v:"2026-09-20"},
+{n:"MAURA",a:"PALMA",plan:"Full Mensual",m:33000,v:"2026-08-30"},
+{n:"MAURICIO",a:"JUICA",plan:"Full Mensual",m:33000,v:"2027-08-20"},
+{n:"MAURICIO",a:"ONTANEDA",plan:"Full Mensual",m:33000,v:"2026-09-04"},
+{n:"MAURICIO",a:"RAMIREZ",plan:"Mensual Turno",m:23000,v:"2026-09-06"},
+{n:"MAURICIO",a:"URQUIETA",plan:"Mensual Turno",m:23000,v:"2026-08-27"},
+{n:"MAXIMILIANO",a:"CONTRERAS",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"MAYORI",a:"RAMIREZ",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-04"},
+{n:"MAYUMY",a:"MARTINEZ",plan:"Funcionario Público",m:28000,v:"2026-09-04"},
+{n:"MICHEL",a:"QUINZACARA",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
+{n:"MIGUEL",a:"MONSALVES",plan:"Mensual Turno",m:23000,v:"2026-08-27"},
+{n:"MIGUEL",a:"ROJAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-08"},
+{n:"MILAGROS",a:"LOPEZ",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"MILAN",a:"CVITANIC",plan:"Estudiante Profesor",m:28000,v:"2026-09-01"},
+{n:"MILTON",a:"FUENTES",plan:"Full Mensual",m:33000,v:"2027-09-20"},
+{n:"MIRKO",a:"SAN MARTIN",plan:"Mensual Turno",m:23000,v:"2026-09-06"},
+{n:"MONICA",a:"MONTEROS",plan:"Full Mensual",m:33000,v:"2026-08-23"},
+{n:"NELSON",a:"VARAS",plan:"Full Mensual",m:33000,v:"2026-09-07"},
+{n:"NICOLAS",a:"PACHECO",plan:"Mensual Turno",m:23000,v:"2026-09-04"},
+{n:"NICOLE",a:"HERRERA",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"NINA",a:"HERRERA",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"NINA",a:"SALAZAR",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-17"},
+{n:"OBRAIN",a:"RAMIREZ",plan:"Full Mensual",m:33000,v:"2026-09-19"},
+{n:"PABLO",a:"AGUILERA",plan:"Estudiante Profesor",m:28000,v:"2026-08-25"},
+{n:"PAMELA",a:"LOPEZ",plan:"Funcionario Público",m:28000,v:"2026-08-20"},
+{n:"PAOLA",a:"FERRER",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
+{n:"PATRICIO",a:"CONTADOR",plan:"Mensual Tercera Edad",m:23000,v:"2026-08-27"},
+{n:"PAUL",a:"TORO",plan:"Mensual Turno",m:23000,v:"2026-09-13"},
+{n:"PEDRO",a:"ALVAREZ",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"PEDRO",a:"OLIVARES",plan:"Funcionario Público",m:28000,v:"2026-08-27"},
+{n:"RICARDO",a:"MAMANNI",plan:"Estudiante Profesor",m:28000,v:"2026-08-30"},
+{n:"ROBERTO",a:"FIGUEROA",plan:"Full Mensual",m:33000,v:"2026-09-04"},
+{n:"RODRIGO",a:"CARMONA",plan:"Estudiante Profesor",m:28000,v:"2026-09-20"},
+{n:"RODRIGO",a:"MOLINA",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"RODRIGO",a:"PLAZA",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-04"},
+{n:"ROSA",a:"LUCERO",plan:"Mensual Tercera Edad",m:23000,v:"2026-09-09"},
+{n:"ROSALIA",a:"GARMENDIA",plan:"Plan Especial",m:20000,v:"2026-09-23"},
+{n:"SAMUEL",a:"REES",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"SARA",a:"CARVAJAL",plan:"Mensual Turno",m:23000,v:"2026-08-22"},
+{n:"SARAH",a:"RAMOS",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"SEBASTIAN",a:"MARIN",plan:"Mensual Turno",m:23000,v:"2026-08-22"},
+{n:"Sebastian",a:"OLIVA",plan:"Estudiante Profesor",m:28000,v:"2026-08-15"},
+{n:"SEBASTIAN",a:"RIVERA",plan:"Estudiante Profesor",m:28000,v:"2026-08-27"},
+{n:"SERGIO",a:"GUAPA",plan:"Full Mensual",m:33000,v:"2026-09-07"},
+{n:"SONIA",a:"CUBA",plan:"Full Mensual",m:33000,v:"2026-08-14"},
+{n:"TANYA",a:"PAULSEN",plan:"Full Mensual",m:33000,v:"2026-08-30"},
+{n:"TOMAS",a:"CABALLERO",plan:"Mensual Turno",m:23000,v:"2026-09-02"},
+{n:"TOMAS",a:"VALENZUELA",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
+{n:"TOMISLAV",a:"CVITANIC",plan:"Full Mensual",m:33000,v:"2026-09-01"},
+{n:"TRAYSI",a:"MUÑOZ",plan:"Full Mensual",m:33000,v:"2026-08-20"},
+{n:"VALENTINA",a:"CUELLAR",plan:"Estudiante Profesor",m:28000,v:"2026-09-03"},
+{n:"VALERIA",a:"MACIAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-07-30"},
+{n:"VERONICA",a:"SALAS",plan:"Estudiante Profesor",m:28000,v:"2026-08-02"},
+{n:"VICTOR",a:"CORRY",plan:"Full Mensual",m:33000,v:"2026-09-13"},
+{n:"VICTOR",a:"MOLINA",plan:"Full Mensual",m:33000,v:"2026-08-15"},
+{n:"WENDY",a:"HUAYTA",plan:"Full Mensual",m:33000,v:"2026-09-12"},
+{n:"YAJAIRA",a:"PINEDA",plan:"Full Mensual",m:33000,v:"2026-09-10"},
+{n:"YANETH",a:"PERCCA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
+{n:"YESSICA",a:"ESCALERA",plan:"Mensual Turno",m:23000,v:"2026-08-30"},
+{n:"JHANKARLA",a:"SUAREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
+{n:"MARYORY",a:"RAMIREZ",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-04"}
+];
+</script>
+<script>
+(function(){
+"use strict";
+
+var KEY = "wgym_control_v1";
+var PLANES = ["Full Mensual","Mensual Turno","Tres Veces a La Semana",
+ "Estudiante Profesor","Funcionario Público","Mensual Tercera Edad","Plan Especial"];
+var PRECIO = { "Full Mensual":33000, "Mensual Turno":23000, "Tres Veces a La Semana":28000,
+ "Estudiante Profesor":28000, "Funcionario Público":28000, "Mensual Tercera Edad":23000,
+ "Plan Especial":20000 };
+
+document.getElementById("topLogo").src = LOGO_B64;
+
+/* ── guardado en este equipo ────────────────────────────────────────── */
+function copiaBase(){
+ return LISTA_BASE.map(function(s, i){
+  return { id:"b"+i, n:s.n, a:s.a, plan:s.plan, m:s.m, v:s.v };
+ });
+}
+var guardado = null;
+try{ guardado = JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){}
+var socios = (guardado && Array.isArray(guardado.socios) && guardado.socios.length)
+ ? guardado.socios : copiaBase();
+var versionVista = (guardado && guardado.version) || LISTA_VERSION;
+
+function guardar(){
+ try{
+  localStorage.setItem(KEY, JSON.stringify({ version:versionVista, socios:socios }));
+ }catch(e){
+  alert("No pude guardar en este equipo. Puede que el navegador esté en modo privado.");
+ }
+}
+if(!guardado) guardar();
+
+/* Si el sitio trae una lista mas nueva, lo avisa sin pisar nada. */
+if(guardado && LISTA_VERSION > versionVista){
+ var av = document.getElementById("avisoLista");
+ av.hidden = false;
+ document.getElementById("avisoTexto").innerHTML =
+  "<b>El sitio tiene una lista actualizada</b> con " + LISTA_BASE.length +
+  " socios. La tuya, guardada en este equipo, tiene " + socios.length +
+  ". Si traes la del sitio, se reemplaza la tuya (descarga antes un respaldo si tienes cambios).";
+ document.getElementById("usarSitio").addEventListener("click", function(){
+  if(!confirm("Se reemplaza tu lista por la del sitio. ¿Seguimos?")) return;
+  socios = copiaBase(); versionVista = LISTA_VERSION;
+  guardar(); av.hidden = true; pintar();
+ });
+ document.getElementById("seguirMia").addEventListener("click", function(){
+  versionVista = LISTA_VERSION; guardar(); av.hidden = true;
+ });
+}
+
+/* ── fechas y estado ────────────────────────────────────────────────── */
+function hoyISO(){
+ var d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function diasPara(v){
+ if(!v) return null;
+ var p = String(v).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2]); f.setHours(0,0,0,0);
+ if(isNaN(f)) return null;
+ var h = new Date(); h.setHours(0,0,0,0);
+ return Math.round((f - h) / 86400000);
+}
+function estadoDe(s){
+ var d = diasPara(s.v);
+ if(d === null || d < 0) return "vencido";
+ return d <= 5 ? "porvencer" : "aldia";
+}
+var NOMBRE_ESTADO = { aldia:"Al día", porvencer:"Por vencer", vencido:"Vencido" };
+var COLOR_ESTADO = { aldia:"var(--verde)", porvencer:"var(--dorado)", vencido:"var(--rojo-claro)" };
+var CLASE_ESTADO = { aldia:"good", porvencer:"warn", vencido:"danger" };
+function textoDias(s){
+ var d = diasPara(s.v);
+ if(d === null) return "sin fecha";
+ if(d < 0) return "venció hace " + Math.abs(d) + (Math.abs(d)===1 ? " día" : " días");
+ if(d === 0) return "vence hoy";
+ return "quedan " + d + (d===1 ? " día" : " días");
+}
+function fechaCL(v){
+ if(!v) return "—";
+ var p = String(v).split("-");
+ return p[2]+"-"+p[1]+"-"+p[0];
+}
+function clp(n){
+ var v = Math.round(n || 0);
+ return (v < 0 ? "-$" : "$") + Math.abs(v).toLocaleString("es-CL");
+}
+function soloDigitos(s){ var d = String(s==null?"":s).replace(/[^\d]/g,""); return d ? parseInt(d,10) : 0; }
+function sinTildes(s){
+ return String(s==null?"":s).toUpperCase().normalize("NFD")
+  .replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
+}
+function escapeHtml(s){
+ return String(s==null?"":s).replace(/[&<>"']/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+}
+function idNuevo(){ return "s"+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function fmtHora(ts){
+ var d = new Date(ts);
+ return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+}
+
+/* ── buscar socios ──────────────────────────────────────────────────── */
+function calzan(txt){
+ var q = sinTildes(txt);
+ if(!q) return [];
+ var partes = q.split(" ");
+ return socios.filter(function(s){
+  var completo = sinTildes(s.n + " " + s.a);
+  return partes.every(function(p){ return completo.indexOf(p) > -1; });
+ });
+}
+function socioDelRegistro(nombre, apellido){
+ var q = sinTildes(nombre + " " + apellido);
+ if(!q) return null;
+ var exacto = socios.filter(function(s){ return sinTildes(s.n+" "+s.a) === q; });
+ if(exacto.length === 1) return exacto[0];
+ var lista = calzan(q);
+ return lista.length === 1 ? lista[0] : null;
+}
+
+/* ── veredicto ──────────────────────────────────────────────────────── */
+function veredicto(s){
+ if(!s) return { v:"nadie", fallo:"No está en la lista de socios",
+  detalle:"Revísalo abajo o agrégalo como socio nuevo", corto:"Sin ficha de socio", cls:"", plan:"" };
+ var e = estadoDe(s);
+ var d = diasPara(s.v);
+ if(e === "vencido") return { v:"bad", fallo:"Acceso denegado · membresía vencida",
+  detalle:"Venció el "+fechaCL(s.v)+" · hace "+Math.abs(diasPara(s.v))+(Math.abs(diasPara(s.v))===1?" día":" días"),
+  corto:null, cls:"danger", plan:s.plan };
+ if(e === "porvencer") return { v:"warn", fallo:"Pasa, pero avísale",
+  detalle: d === 0 ? "Vence hoy" : "Vence el "+fechaCL(s.v)+" · quedan "+d+(d===1?" día":" días"),
+  corto:null, cls:"warn", plan:s.plan };
+ return { v:"ok", fallo:"Acceso permitido",
+  detalle:"Vence el "+fechaCL(s.v)+" · quedan "+d+" días", corto:null, cls:"good", plan:s.plan };
+}
+
+var socioEnHero = null;
+
+function mostrarHero(nombre, ts, s, cuantos){
+ var d = veredicto(s);
+ if(!s && cuantos) d.fallo = "Hay " + cuantos + " socios con ese nombre";
+ if(!s && cuantos) d.detalle = "Elige cuál es en la lista de abajo";
+ socioEnHero = s || null;
+
+ document.getElementById("heroEmpty").hidden = true;
+ document.getElementById("hero").setAttribute("data-v", d.v);
+ var f = document.getElementById("heroFallo"); f.hidden = false; f.textContent = d.fallo;
+ var n = document.getElementById("heroName"); n.hidden = false; n.textContent = nombre;
+ var t = document.getElementById("heroTime");
+ if(ts){ t.hidden = false; t.textContent = fmtHora(ts); } else { t.hidden = true; }
+ var ve = document.getElementById("heroVenc");
+ if(d.detalle){ ve.hidden = false; ve.textContent = d.detalle; ve.className = "venc " + d.cls; }
+ else { ve.hidden = true; }
+ var pl = document.getElementById("heroPlan");
+ if(d.plan){ pl.hidden = false; pl.textContent = d.plan; } else { pl.hidden = true; }
+ document.getElementById("heroAcc").hidden = !s;
+}
+function destellar(){
+ var h = document.getElementById("hero");
+ h.classList.remove("flash");
+ void h.offsetWidth;
+ h.classList.add("flash");
+}
+document.getElementById("heroEditar").addEventListener("click", function(){
+ if(socioEnHero) abrirFicha(socioEnHero);
+});
+
+/* ── busqueda a mano ────────────────────────────────────────────────── */
+var qPuerta = document.getElementById("qPuerta");
+var cajaSug = null, marcado = -1, cierreDemorado = null;
+
+function cerrarSug(){ if(cajaSug){ cajaSug.remove(); cajaSug = null; } marcado = -1; }
+function verSug(){
+ clearTimeout(cierreDemorado);
+ cerrarSug();
+ var lista = calzan(qPuerta.value).slice(0, 8);
+ if(!lista.length) return;
+ cajaSug = document.createElement("ul");
+ cajaSug.className = "sugerencias";
+ lista.forEach(function(s){
+  var li = document.createElement("li");
+  li.innerHTML = '<span class="punto" style="background:'+COLOR_ESTADO[estadoDe(s)]+'"></span>'+
+   '<span class="snom"></span><span class="spl"></span>';
+  li.querySelector(".snom").textContent = s.n + " " + s.a;
+  li.querySelector(".spl").textContent = s.plan;
+  li.addEventListener("mousedown", function(ev){ ev.preventDefault(); elegir(s); });
+  cajaSug.appendChild(li);
+ });
+ qPuerta.parentNode.appendChild(cajaSug);
+}
+function moverMarca(paso){
+ if(!cajaSug) return;
+ var items = cajaSug.children;
+ marcado = (marcado + paso + items.length) % items.length;
+ Array.prototype.forEach.call(items, function(li, i){
+  li.setAttribute("aria-selected", i === marcado ? "true" : "false");
+ });
+}
+function elegir(s){
+ cerrarSug(); qPuerta.value = "";
+ mostrarHero(s.n + " " + s.a, null, s);
+ destellar();
+}
+function buscarAMano(){
+ var lista = calzan(qPuerta.value);
+ if(!lista.length){ mostrarHero(qPuerta.value.trim() || "—", null, null); return; }
+ if(lista.length > 1){
+  mostrarHero(qPuerta.value.trim(), null, null, lista.length);
+  verSug(); qPuerta.focus(); return;
+ }
+ elegir(lista[0]);
+}
+qPuerta.addEventListener("input", verSug);
+qPuerta.addEventListener("blur", function(){ cierreDemorado = setTimeout(cerrarSug, 120); });
+qPuerta.addEventListener("keydown", function(ev){
+ if(ev.key === "ArrowDown"){ ev.preventDefault(); moverMarca(1); }
+ else if(ev.key === "ArrowUp"){ ev.preventDefault(); moverMarca(-1); }
+ else if(ev.key === "Escape"){ cerrarSug(); }
+ else if(ev.key === "Enter"){
+  ev.preventDefault();
+  if(cajaSug && marcado > -1){ elegir(calzan(qPuerta.value)[marcado]); }
+  else buscarAMano();
+ }
+});
+document.getElementById("bEntrar").addEventListener("click", buscarAMano);
+
+/* ── el QR de siempre: escucha el registro en vivo ──────────────────── */
+var vistos = {}, primeraVuelta = true, filas = [];
+function llaveDe(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
+
+function pintarFeed(){
+ var cont = document.getElementById("feed");
+ cont.innerHTML = "";
+ if(!filas.length){
+  cont.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>';
+  return;
+ }
+ filas.forEach(function(r){
+  var s = socioDelRegistro(r.nombre, r.apellido);
+  var d = veredicto(s);
+  var nota = d.corto || d.detalle;
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "feed-item";
+  b.innerHTML = '<span class="finfo"><span class="punto" style="background:'+
+   (s ? COLOR_ESTADO[estadoDe(s)] : "var(--gris-soft)")+'"></span>'+
+   '<span class="fname">'+escapeHtml(r.nombre+" "+r.apellido)+'</span>'+
+   (nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '')+
+   '</span><span class="ftime">'+fmtHora(r.ts)+'</span>';
+  b.addEventListener("click", function(){
+   mostrarHero(r.nombre+" "+r.apellido, r.ts, s);
+   window.scrollTo({ top:0, behavior:"smooth" });
+  });
+  cont.appendChild(b);
+ });
+}
+
+function llegaronDatos(data){
+ filas = data.rows || [];
+ if(filas.length){
+  var ultima = filas[0];
+  var s = socioDelRegistro(ultima.nombre, ultima.apellido);
+  if(!primeraVuelta && !vistos[llaveDe(ultima)]){
+   mostrarHero(ultima.nombre+" "+ultima.apellido, ultima.ts, s);
+   destellar();
+  }else if(primeraVuelta){
+   mostrarHero(ultima.nombre+" "+ultima.apellido, ultima.ts, s);
+  }
+ }
+ filas.forEach(function(r){ vistos[llaveDe(r)] = true; });
+ primeraVuelta = false;
+ pintarFeed();
+ vivo("si", "En vivo");
+}
+function vivo(estado, txt){
+ document.getElementById("estadoVivo").setAttribute("data-vivo", estado);
+ document.getElementById("estadoVivoTxt").textContent = txt;
+}
+
+var nPoll = 0;
+function poll(){
+ if(!CHECKIN_URL){ vivo("no", "Sin conexión al QR"); return; }
+ nPoll++;
+ var cb = "wgymCb" + nPoll + "_" + Date.now();
+ var tag = document.createElement("script");
+ var fallo = setTimeout(function(){ vivo("no", "Reintentando…"); }, 9000);
+ window[cb] = function(data){
+  clearTimeout(fallo);
+  try{ llegaronDatos(data); }catch(e){}
+  delete window[cb]; tag.remove();
+ };
+ tag.src = CHECKIN_URL + "?callback=" + cb + "&_=" + Date.now();
+ tag.onerror = function(){
+  clearTimeout(fallo); vivo("no", "Sin conexión al QR");
+  delete window[cb]; tag.remove();
+ };
+ document.body.appendChild(tag);
+}
+
+/* ── indicadores ────────────────────────────────────────────────────── */
+var filtro = "";
+
+function pintarKpis(){
+ var c = { aldia:0, porvencer:0, vencido:0 }, recauda = 0;
+ socios.forEach(function(s){
+  var e = estadoDe(s); c[e]++;
+  if(e !== "vencido") recauda += (s.m || 0);
+ });
+ var defs = [
+  { k:"", cls:"t", lbl:"Total de socios", val:socios.length, sub:"en la lista completa" },
+  { k:"aldia", cls:"a", lbl:"Al día", val:c.aldia, sub:"más de 5 días por delante" },
+  { k:"porvencer", cls:"p", lbl:"Por vencer", val:c.porvencer, sub:"5 días o menos · avísales" },
+  { k:"vencido", cls:"v", lbl:"Vencidos", val:c.vencido, sub:"no pueden entrar" },
+  { k:"", cls:"r", lbl:"Recaudación proyectada", val:clp(recauda), sub:"si renuevan los vigentes", fijo:true }
+ ];
+ var cont = document.getElementById("kpis");
+ cont.innerHTML = "";
+ defs.forEach(function(t){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "kpi " + t.cls;
+  b.setAttribute("aria-pressed", (!t.fijo && t.k && t.k === filtro) ? "true" : "false");
+  b.innerHTML = '<span class="klbl"></span><div class="kval"></div><div class="ksub"></div>';
+  b.querySelector(".klbl").textContent = t.lbl;
+  b.querySelector(".kval").textContent = t.val;
+  b.querySelector(".ksub").textContent = t.sub;
+  if(t.fijo){ b.setAttribute("aria-disabled","true"); }
+  else{
+   b.addEventListener("click", function(){
+    filtro = (filtro === t.k) ? "" : t.k;
+    pintarKpis(); pintarTabla();
+   });
+  }
+  cont.appendChild(b);
+ });
+}
+
+/* ── tabla ──────────────────────────────────────────────────────────── */
+var PESO = { vencido:0, porvencer:1, aldia:2 };
+function visibles(){
+ var q = sinTildes(document.getElementById("qLista").value);
+ var partes = q ? q.split(" ") : [];
+ var lista = socios.filter(function(s){
+  if(filtro && estadoDe(s) !== filtro) return false;
+  if(!partes.length) return true;
+  var completo = sinTildes(s.n + " " + s.a);
+  return partes.every(function(p){ return completo.indexOf(p) > -1; });
+ });
+ var modo = document.getElementById("orden").value;
+ lista.sort(function(x, y){
+  if(modo === "nombre") return (x.n+x.a).localeCompare(y.n+y.a, "es");
+  if(modo === "plan"){
+   var pc = String(x.plan).localeCompare(String(y.plan), "es");
+   return pc || (x.n+x.a).localeCompare(y.n+y.a, "es");
+  }
+  var d = PESO[estadoDe(x)] - PESO[estadoDe(y)];
+  return d || String(x.v).localeCompare(String(y.v));
+ });
+ return lista;
+}
+function pintarTabla(){
+ var lista = visibles();
+ var tb = document.getElementById("tabla");
+ tb.innerHTML = "";
+ document.getElementById("conteo").textContent =
+  lista.length === socios.length ? socios.length + " socios"
+                                 : lista.length + " de " + socios.length;
+ if(!lista.length){
+  var tr = document.createElement("tr");
+  var td = document.createElement("td");
+  td.colSpan = 7; td.className = "sinnada";
+  td.textContent = socios.length ? "Ningún socio calza con lo que buscas."
+                                 : "La lista está vacía. Agrega el primero con «Nuevo socio».";
+  tr.appendChild(td); tb.appendChild(tr); return;
+ }
+ lista.forEach(function(s){
+  var e = estadoDe(s);
+  var tr = document.createElement("tr");
+  tr.innerHTML =
+   '<td class="nom"></td><td class="nom"></td><td class="plan"></td>'+
+   '<td class="mon"></td><td class="fec"></td>'+
+   '<td><span class="pill" data-e="'+e+'"><span class="punto" style="background:'+COLOR_ESTADO[e]+'"></span>'+
+   '<span class="et"></span></span><span class="dias"></span></td>'+
+   '<td class="acc">'+
+   '<button class="iconbtn editar" title="Editar socio" aria-label="Editar socio">'+
+   '<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>'+
+   '<button class="iconbtn borrar" title="Eliminar socio" aria-label="Eliminar socio">'+
+   '<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg></button>'+
+   '</td>';
+  var c = tr.children;
+  c[0].textContent = s.n; c[1].textContent = s.a; c[2].textContent = s.plan;
+  c[3].textContent = clp(s.m); c[4].textContent = fechaCL(s.v);
+  tr.querySelector(".et").textContent = NOMBRE_ESTADO[e];
+  tr.querySelector(".dias").textContent = textoDias(s);
+  tr.querySelector(".editar").addEventListener("click", function(){ abrirFicha(s); });
+  tr.querySelector(".borrar").addEventListener("click", function(){ borrar(s); });
+  tb.appendChild(tr);
+ });
+}
+function borrar(s){
+ if(!confirm("¿Eliminar a " + s.n + " " + s.a + " de la lista? No se puede deshacer.")) return;
+ var i = socios.findIndex(function(x){ return x.id === s.id; });
+ if(i > -1) socios.splice(i, 1);
+ if(socioEnHero && socioEnHero.id === s.id) socioEnHero = null;
+ guardar(); pintar();
+}
+
+/* ── ficha ──────────────────────────────────────────────────────────── */
+var velo = null;
+function abrirFicha(s){
+ if(velo) return;
+ var nuevo = !s;
+ var d = nuevo ? { n:"", a:"", plan:PLANES[0], m:PRECIO[PLANES[0]], v:hoyISO() } : s;
+ var opciones = PLANES.slice();
+ if(d.plan && opciones.indexOf(d.plan) === -1) opciones.unshift(d.plan);
+
+ velo = document.createElement("div");
+ velo.className = "velo";
+ velo.innerHTML =
+  '<div class="ficha" role="dialog" aria-modal="true" aria-label="Ficha del socio">'+
+  '<h3></h3><div class="campos">'+
+  '<label><span>Nombre</span><input id="fN" type="text" autocomplete="off"></label>'+
+  '<label><span>Apellido</span><input id="fA" type="text" autocomplete="off"></label>'+
+  '<label class="ancho"><span>Plan</span><select id="fPlan"></select></label>'+
+  '<label><span>Monto</span><input id="fM" type="text" inputmode="numeric"></label>'+
+  '<label><span>Vence</span><input id="fV" type="date"></label>'+
+  '<div class="rapidos">'+
+  '<button type="button" data-mas="30">+30 días</button>'+
+  '<button type="button" data-mas="15">+15 días</button>'+
+  '<button type="button" data-mas="7">+7 días</button>'+
+  '<button type="button" data-desde="hoy">Un mes desde hoy</button>'+
+  '</div><p class="aviso" id="fAviso"></p></div>'+
+  '<div class="pie"><button class="btn btn-linea" id="fCancelar">Cancelar</button>'+
+  '<button class="btn btn-rojo" id="fGuardar">Guardar</button></div></div>';
+ document.body.appendChild(velo);
+
+ velo.querySelector("h3").textContent = nuevo ? "Nuevo socio" : "Editar a " + d.n + " " + d.a;
+ var sel = velo.querySelector("#fPlan");
+ opciones.forEach(function(p){
+  var o = document.createElement("option");
+  o.value = p; o.textContent = p;
+  if(p === d.plan) o.selected = true;
+  sel.appendChild(o);
+ });
+ var iN = velo.querySelector("#fN"), iA = velo.querySelector("#fA");
+ var iM = velo.querySelector("#fM"), iV = velo.querySelector("#fV");
+ iN.value = d.n; iA.value = d.a; iV.value = d.v || hoyISO();
+ iM.value = "$" + (d.m || 0).toLocaleString("es-CL");
+
+ function pintaMonto(){
+  var n = soloDigitos(iM.value);
+  iM.value = n ? "$" + n.toLocaleString("es-CL") : "";
+ }
+ iM.addEventListener("input", pintaMonto);
+ iM.addEventListener("blur", pintaMonto);
+ sel.addEventListener("change", function(){
+  if(PRECIO[sel.value]) iM.value = "$" + PRECIO[sel.value].toLocaleString("es-CL");
+ });
+
+ velo.querySelectorAll(".rapidos button").forEach(function(b){
+  b.addEventListener("click", function(){
+   var base;
+   if(b.dataset.desde === "hoy"){ base = new Date(); }
+   else{
+    var p = (iV.value || hoyISO()).split("-");
+    base = new Date(+p[0], +p[1]-1, +p[2]);
+    /* Si ya venció, la renovación se cuenta desde hoy, no desde la fecha vieja. */
+    var h = new Date(); h.setHours(0,0,0,0);
+    if(base < h) base = h;
+    base.setDate(base.getDate() + parseInt(b.dataset.mas, 10));
+   }
+   if(b.dataset.desde === "hoy") base.setDate(base.getDate() + 30);
+   iV.value = base.getFullYear()+"-"+String(base.getMonth()+1).padStart(2,"0")+
+              "-"+String(base.getDate()).padStart(2,"0");
+  });
+ });
+
+ function cerrar(){
+  if(!velo) return;
+  velo.remove(); velo = null;
+  document.removeEventListener("keydown", teclas);
+ }
+ function teclas(ev){
+  if(ev.key === "Escape") cerrar();
+  if(ev.key === "Enter" && ev.target.tagName === "INPUT") aceptar();
+ }
+ function aceptar(){
+  var n = iN.value.trim().toUpperCase(), a = iA.value.trim().toUpperCase();
+  if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe al menos el nombre."; iN.focus(); return; }
+  if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
+  if(nuevo){
+   socios.push({ id:idNuevo(), n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value });
+  }else{
+   s.n = n; s.a = a; s.plan = sel.value; s.m = soloDigitos(iM.value); s.v = iV.value;
+  }
+  cerrar(); guardar(); pintar();
+  if(socioEnHero && !nuevo && socioEnHero.id === s.id) mostrarHero(s.n+" "+s.a, null, s);
+ }
+ velo.querySelector("#fCancelar").addEventListener("click", cerrar);
+ velo.querySelector("#fGuardar").addEventListener("click", aceptar);
+ velo.addEventListener("mousedown", function(ev){ if(ev.target === velo) cerrar(); });
+ document.addEventListener("keydown", teclas);
+ iN.focus();
+}
+document.getElementById("bNuevo").addEventListener("click", function(){ abrirFicha(null); });
+
+/* ── respaldo ───────────────────────────────────────────────────────── */
+function bajar(nombre, texto, tipo){
+ var blob = new Blob([texto], { type: tipo + ";charset=utf-8" });
+ var url = URL.createObjectURL(blob);
+ var a = document.createElement("a");
+ a.href = url; a.download = nombre;
+ document.body.appendChild(a); a.click(); a.remove();
+ setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+}
+function celda(v){
+ var s = String(v==null?"":v);
+ return /[";\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+document.getElementById("bRespaldo").addEventListener("click", function(){
+ bajar("socios-wgymadnsport-"+hoyISO()+".json",
+  JSON.stringify({ gimnasio:"WGYMADNSPORT Tocopilla", generado:new Date().toISOString(),
+                   socios:socios }, null, 1),
+  "application/json");
+});
+document.getElementById("bPlanilla").addEventListener("click", function(){
+ var L = [["Nombre","Apellido","Plan","Monto","Vence","Estado"].join(";")];
+ socios.forEach(function(s){
+  L.push([s.n, s.a, s.plan, s.m||0, fechaCL(s.v), NOMBRE_ESTADO[estadoDe(s)]].map(celda).join(";"));
+ });
+ bajar("socios-wgymadnsport-"+hoyISO()+".csv", "﻿"+L.join("\r\n")+"\r\n", "text/csv");
+});
+
+var archivo = document.getElementById("archivo");
+document.getElementById("bCargar").addEventListener("click", function(){ archivo.click(); });
+
+function filasCSV(texto){
+ var filas = [], campo = "", fila = [], dentro = false;
+ texto = texto.replace(/^﻿/, "");
+ for(var i = 0; i < texto.length; i++){
+  var c = texto[i];
+  if(dentro){
+   if(c === '"' && texto[i+1] === '"'){ campo += '"'; i++; }
+   else if(c === '"'){ dentro = false; }
+   else campo += c;
+  }else if(c === '"'){ dentro = true; }
+  else if(c === ";"){ fila.push(campo); campo = ""; }
+  else if(c === "\n"){ fila.push(campo); filas.push(fila); fila = []; campo = ""; }
+  else if(c !== "\r"){ campo += c; }
+ }
+ if(campo !== "" || fila.length){ fila.push(campo); filas.push(fila); }
+ return filas.filter(function(f){ return f.some(function(x){ return x.trim() !== ""; }); });
+}
+function deCSV(texto){
+ var f = filasCSV(texto);
+ if(f.length < 2) return null;
+ if(sinTildes(f[0][0]).indexOf("NOMBRE") === -1) return null;
+ return f.slice(1).map(function(r){
+  var v = String(r[4]||"").trim().split("-");
+  return { id:idNuevo(), n:String(r[0]||"").trim(), a:String(r[1]||"").trim(),
+           plan:String(r[2]||"").trim() || PLANES[0], m:soloDigitos(r[3]),
+           v: v.length === 3 ? v[2]+"-"+v[1]+"-"+v[0] : "" };
+ });
+}
+archivo.addEventListener("change", function(){
+ var f = archivo.files && archivo.files[0];
+ if(!f) return;
+ var lector = new FileReader();
+ lector.onload = function(){
+  var texto = String(lector.result || ""), leidos = null;
+  try{
+   var o = JSON.parse(texto);
+   if(o && Array.isArray(o.socios)) leidos = o.socios;
+   else if(Array.isArray(o)) leidos = o;
+  }catch(e){ leidos = deCSV(texto); }
+  if(!leidos || !leidos.length){
+   alert("Ese archivo no trae socios que pueda leer.\n\nUsa el respaldo .json que bajaste de esta misma página, o la planilla .csv.");
+   archivo.value = ""; return;
+  }
+  if(!confirm("El archivo trae " + leidos.length + " socios.\nAhora tienes " + socios.length +
+              ".\n\nSe reemplaza la lista completa. ¿Seguimos?")){ archivo.value = ""; return; }
+  socios = leidos.map(function(s, i){
+   return { id:s.id || ("c"+i+Date.now().toString(36)), n:String(s.n||"").trim(),
+            a:String(s.a||"").trim(), plan:String(s.plan||PLANES[0]).trim(),
+            m:soloDigitos(s.m), v:String(s.v||"").trim() };
+  });
+  archivo.value = ""; filtro = "";
+  document.getElementById("qLista").value = "";
+  guardar(); pintar();
+  alert("Listo: quedaron " + socios.length + " socios.");
+ };
+ lector.readAsText(f, "utf-8");
+});
+
+/* ── arranque ───────────────────────────────────────────────────────── */
+document.getElementById("qLista").addEventListener("input", pintarTabla);
+document.getElementById("orden").addEventListener("change", pintarTabla);
+
+function pintar(){ pintarKpis(); pintarTabla(); pintarFeed(); }
+
+function reloj(){
+ var d = new Date();
+ var s = d.toLocaleDateString("es-CL", { weekday:"long", day:"numeric", month:"long" });
+ document.getElementById("reloj").textContent =
+  s.charAt(0).toUpperCase() + s.slice(1) + " · " +
+  String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")+" hrs";
+}
+reloj();
+setInterval(reloj, 20000);
+pintar();
+poll();
+setInterval(poll, 4000);
+})();
+</script>
