@@ -303,7 +303,8 @@ const WARMUP_VIDEOS = {
 const COOLDOWN_VIDEOS = {};
 const VIDEOS = {
   sentadilla_smith: "assets/sentadilla_smith_gluteos.mp4?v=1",
-  peso_muerto_rumano: "assets/peso_muerto_rumano_gluteos.mp4?v=1"
+  peso_muerto_rumano: "assets/peso_muerto_rumano_gluteos.mp4?v=1",
+  extension_gluteos: "assets/extension_gluteos_maquina.mp4?v=1"
 };
 
 document.getElementById('gateLogoImg').src = LOGO_SRC;
@@ -571,7 +572,7 @@ function tryLogin(nombre, apellido){
 const DAYS = [
   {
     weekday:"Lunes",
-    title:"Glúteos y Cuádriceps",
+    title:"Glúteos y Femorales",
     focus:"Empuje de pierna — fuerza",
     warmup:"Zancada en TRX — 3 × 12 repeticiones por pierna",
     warmupVideo:"zancada_trx",
@@ -582,9 +583,9 @@ const DAYS = [
       {name:"Peso muerto rumano", sets:"3 × 12", rest:"90 seg", equip:"barra", video:"peso_muerto_rumano",
        tip:"Rodillas apenas flexionadas y fijas. Baja la barra pegada a las piernas empujando la cadera atrás, hasta sentir el estiramiento en el isquiotibial. Sube apretando el glúteo.",
        alt:"¿Te molesta la espalda baja? Baja menos y usa menos peso: el rango lo manda el estiramiento, no el suelo."},
-      {name:"Zancada caminando con mancuernas", sets:"3 × 12 por pierna", rest:"75 seg", equip:"mancuerna",
-       tip:"Paso largo, tronco erguido, la rodilla de atrás baja casi al suelo. Empuja con el talón de la pierna de adelante.",
-       alt:"¿Te desequilibras? Hazlas en el mismo lugar, sin avanzar."},
+      {name:"Extensión de glúteos en máquina", sets:"4 × 12 por pierna", rest:"75 seg", equip:"maquina", video:"extension_gluteos",
+       tip:"Apoya el antebrazo y el pecho firmes en la máquina. Empuja con el talón hacia atrás y arriba apretando el glúteo, sin arquear la espalda baja. Baja controlado.",
+       alt:"¿Sientes la espalda? Baja el peso y acorta el recorrido: el movimiento sale de la cadera, no de la columna."},
       {name:"Extensión de cuádriceps", sets:"3 × 15", rest:"60 seg", equip:"maquina",
        tip:"Sube hasta estirar la rodilla, aprieta 1 segundo arriba y baja despacio sin soltar el peso de golpe."},
       {name:"Elevación de talones de pie", sets:"4 × 20", rest:"45 seg", equip:"maquina",
