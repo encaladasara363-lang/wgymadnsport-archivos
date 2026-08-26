@@ -455,7 +455,7 @@ const SOCIOS = [
 {n:"MARIA",a:"ZEPEDA",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46268},
 {n:"MARIA JOSE",a:"OBREQUE",rut:"19.496.534-6",plan:"Full Mensual",monto:33000,fv:46268},
 {n:"MARTINA",a:"ROJAS",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46272},
-{n:"MARYORY",a:"RAMIREZ",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:28000,fv:46269},
+{n:"MARYORY",a:"RAMIREZ",rut:"26.982.463-8",plan:"Tres Veces a La Semana",monto:28000,fv:46269},
 {n:"MATIAS",a:"ABELLO",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46285},
 {n:"MAURA",a:"PALMA",rut:"24-172.701-7",plan:"Full Mensual",monto:33000,fv:46264},
 {n:"MAURICIO",a:"JUICA",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46619},
@@ -463,7 +463,6 @@ const SOCIOS = [
 {n:"MAURICIO",a:"RAMIREZ",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46271},
 {n:"MAURICIO",a:"URQUIETA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46261},
 {n:"MAXIMILIANO",a:"CONTRERAS",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46268},
-{n:"MAYORI",a:"RAMIREZ",rut:"26.982.463-8",plan:"Tres Veces a La Semana",monto:23000,fv:46269},
 {n:"MAYUMY",a:"MARTINEZ",rut:"00.000.000-2",plan:"Funcionario Público",monto:28000,fv:46269},
 {n:"MICHEL",a:"QUINZACARA",rut:"16.927.097-K",plan:"Mensual Turno",monto:23000,fv:46265},
 {n:"MIGUEL",a:"MONSALVES",rut:"10.729.410-4",plan:"Mensual Turno",monto:23000,fv:46261},
@@ -516,7 +515,6 @@ const SOCIOS = [
 {n:"YAJAIRA",a:"PINEDA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
 {n:"YANETH",a:"PERCCA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
 {n:"YESSICA",a:"ESCALERA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46264},
-{n:"YHOANA",a:"VEGA",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:28000,fv:46291},
 {n:"YOHANNA",a:"VEGA",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:28000,fv:46291}
 ];
 
@@ -574,7 +572,15 @@ function findSocio(nombre, apellido){
     if (d < mejorD){ mejorD = d; mejor = s; empate = false; }
     else if (d === mejorD){ empate = true; }
   });
-  return (mejor && mejorD <= margen(q) && !empate) ? mejor : null;
+  if (mejor && mejorD <= margen(q) && !empate) return mejor;
+  /* Último intento: si el apellido calza exacto y hay un solo socio con ese
+     apellido, basta con que el nombre se le parezca. */
+  const mismoApellido = SOCIOS.filter(s => normName(s.a) === a);
+  if (mismoApellido.length === 1 &&
+      distanciaNombre(claveNombre(nombre), claveNombre(mismoApellido[0].n)) <= 3){
+    return mismoApellido[0];
+  }
+  return null;
 }
 
 function daysUntilExpiry(socio){
