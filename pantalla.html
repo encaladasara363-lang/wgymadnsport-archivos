@@ -123,189 +123,8 @@ Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te 
 
 <script>
 const LOGO_B64 = "assets/logo.jpg";
-/* Se completa con el link de "Implementar como app web" de Google Apps Script. */
-/* La lista de socios: la misma que usan las rutinas y la planilla de gestión.
-   Con ella la pantalla decide sola si el que llegó puede pasar. */
-const SOCIOS = [
-{n:"AKASH",a:"THADANI",plan:"Tres Veces a La Semana",fv:46268},
-{n:"ALAN",a:"PEREIRA",plan:"Funcionario Publico",fv:46275},
-{n:"ALAN",a:"RAMIREZ",plan:"Estudiante Profesor",fv:46268},
-{n:"ALDO",a:"ENCINA",plan:"Mensual Turno",fv:46269},
-{n:"ALEJANDRO",a:"PARES",plan:"Full Mensual",fv:46241},
-{n:"AlEXANDER",a:"ONTANEDA",plan:"Full Mensual",fv:46261},
-{n:"ALEXIS",a:"ACUÑA",plan:"Full Mensual",fv:46290},
-{n:"ALEXIS",a:"VARAS",plan:"Funcionario Publico",fv:46248},
-{n:"ALONSO",a:"ARAYA",plan:"Tres Veces a La Semana",fv:46264},
-{n:"ANA",a:"MARIA GONZALEZ",plan:"Mensual Tercera Edad",fv:46285},
-{n:"ANDREA",a:"CUELLA",plan:"Full Mensual",fv:46237},
-{n:"ANDREA",a:"VARAS",plan:"Estudiante Profesor",fv:46244},
-{n:"ANDRES",a:"PAEZ",plan:"Mensual Turno",fv:46247},
-{n:"ANGEL",a:"GUTIERREZ",plan:"Full Mensual",fv:46279},
-{n:"ANTONELLA",a:"AGUIRRE",plan:"Full Mensual",fv:46290},
-{n:"ANTONELLA",a:"LLANQUE",plan:"Full Mensual",fv:46248},
-{n:"ANTONIO",a:"PEREZ",plan:"Full Mensual",fv:46254},
-{n:"ANTONIO",a:"VALENCIA",plan:"Mensual Turno",fv:46267},
-{n:"ARACELY",a:"HERRERA",plan:"Mensual Turno",fv:46253},
-{n:"ARACELY",a:"PANIAGUA",plan:"Full Mensual",fv:46258},
-{n:"AARON",a:"SOZA",plan:"Tres Veces a La Semana",fv:46287},
-{n:"BASTIAN",a:"PERALTA",plan:"Estudiante Profesor",fv:46207},
-{n:"BASTIAN",a:"VERGARA",plan:"Tres Veces a La Semana",fv:46254},
-{n:"BASTIAN",a:"ZAPATA",plan:"Funcionario Publico",fv:46272},
-{n:"BENJAMIN",a:"GODOY",plan:"Mensual Turno",fv:46257},
-{n:"BETSY",a:"BRIONES",plan:"Full Mensual",fv:46277},
-{n:"CAMILA",a:"CUELLA",plan:"Full Mensual",fv:46237},
-{n:"CAMILA",a:"JUICA",plan:"Full Mensual",fv:46464},
-{n:"CAMILA",a:"PEÑA",plan:"Full Mensual",fv:46269},
-{n:"CAMILO",a:"GALLEGILLOS",plan:"Full Mensual",fv:46250},
-{n:"CAMILO",a:"JUICA",plan:"Mensual Turno",fv:46269},
-{n:"CARLA",a:"MORALES",plan:"Full Mensual",fv:46257},
-{n:"CARLOS",a:"ARAYA",plan:"Full Mensual",fv:46262},
-{n:"CAROLINA",a:"CARVAJAL",plan:"Full Mensual",fv:46289},
-{n:"CAROLINA",a:"CUELLA",plan:"Funcionario Publico",fv:46265},
-{n:"CHRISTIAN",a:"AROS",plan:"Estudiante Profesor",fv:46290},
-{n:"CHRISTIAN",a:"CAMPOS",plan:"Full Mensual",fv:46290},
-{n:"CLAUDIA",a:"RAMOS",plan:"Full Mensual",fv:46277},
-{n:"CLAUDIA",a:"VILLEGAS",plan:"Tres Veces a La Semana",fv:46261},
-{n:"CONSTANZA",a:"MARIN",plan:"Funcionario Publico",fv:46238},
-{n:"CRISTOBAL",a:"PIZARRO",plan:"Estudiante Profesor",fv:46276},
-{n:"DANIEL",a:"CORTES",plan:"Mensual Turno",fv:46249},
-{n:"DANIEL",a:"MARTINEZ",plan:"Full Mensual",fv:46247},
-{n:"DANIELA",a:"CARVAJAL",plan:"Full Mensual",fv:46268},
-{n:"DANIELA",a:"SALAZAR",plan:"Funcionario Publico",fv:46254},
-{n:"DARKO",a:"VICENCIO",plan:"Full Mensual",fv:46254},
-{n:"DEBORA",a:"GAJARDO",plan:"Full Mensual",fv:46261},
-{n:"DEMIAN",a:"ALVAREZ",plan:"Estudiante Profesor",fv:46289},
-{n:"DIEGO",a:"SALAZAR",plan:"Mensual Turno",fv:46265},
-{n:"DONNA",a:"URIZAR",plan:"Estudiante Profesor",fv:46275},
-{n:"Edita",a:"Morales",plan:"Estudiante Profesor",fv:46266},
-{n:"EINER",a:"JAIMES",plan:"Full Mensual",fv:46289},
-{n:"ELIZABETH",a:"LLIULLI",plan:"Tres Veces a La Semana",fv:46285},
-{n:"EMYLY",a:"ADAOS",plan:"Estudiante Profesor",fv:46286},
-{n:"EYMILEE",a:"MUÑOZ",plan:"Full Mensual",fv:46275},
-{n:"FAVIO",a:"CLAVELO",plan:"Funcionario Publico",fv:46259},
-{n:"FERNANDA",a:"GUERRA",plan:"Estudiante Profesor",fv:46272},
-{n:"FERNANDA",a:"MARTINEZ",plan:"Full Mensual",fv:46289},
-{n:"FRANCCINI",a:"VILLANUEVA",plan:"Full Mensual",fv:46255},
-{n:"FRANCHESCA",a:"ALCAYAGA",plan:"Full Mensual",fv:46261},
-{n:"FRANCISCA",a:"ROJAS",plan:"Plan Especial",fv:46240},
-{n:"GABRIEL",a:"FERNANDEZ",plan:"Estudiante Profesor",fv:46276},
-{n:"GABRIEL",a:"MOLINA",plan:"Mensual Turno",fv:46291},
-{n:"GABRIEL",a:"PIÑOL",plan:"Mensual Turno",fv:46273},
-{n:"GABRIEL",a:"RUZ",plan:"Mensual Turno",fv:46258},
-{n:"GABRIELA",a:"VELARDE",plan:"Estudiante Profesor",fv:46266},
-{n:"GERARDO",a:"LEPE",plan:"Full Mensual",fv:46275},
-{n:"GERMAN",a:"PALMA",plan:"Plan Especial",fv:46252},
-{n:"GISELA",a:"CASTILLO",plan:"Full Mensual",fv:46275},
-{n:"GLORIA",a:"LOPEZ",plan:"Tres Veces a La Semana",fv:46268},
-{n:"HECTOR",a:"CONTRERAS",plan:"Mensual Turno",fv:46265},
-{n:"HERMANN",a:"BORQUEZ",plan:"Mensual Turno",fv:46262},
-{n:"IAN",a:"GAETE",plan:"Estudiante Profesor",fv:46275},
-{n:"IDALBA",a:"MARTINEZ",plan:"Full Mensual",fv:46277},
-{n:"IGNACIA",a:"SANCHEZ",plan:"Full Mensual",fv:46247},
-{n:"IVAN",a:"ESPIRITU",plan:"Mensual Turno",fv:46242},
-{n:"IVAN",a:"POZHO",plan:"Full Mensual",fv:46275},
-{n:"JAIRO",a:"CONTRERAS",plan:"Mensual Turno",fv:46248},
-{n:"JEAN",a:"PIERRE",plan:"Full Mensual",fv:46289},
-{n:"JENI",a:"GOMEZ",plan:"Mensual Turno",fv:46265},
-{n:"JHON",a:"ESPINOZA",plan:"Estudiante Profesor",fv:46285},
-{n:"JOAQUIN",a:"ALBAYAY",plan:"Estudiante Profesor",fv:46277},
-{n:"JOFRE",a:"ZARUMA",plan:"Full Mensual",fv:46290},
-{n:"JOHAN",a:"VALLE",plan:"Mensual Turno",fv:46265},
-{n:"JORGE",a:"CONTRERAS",plan:"Funcionario Publico",fv:46244},
-{n:"JOCKSHUA",a:"ARANDA",plan:"Estudiante Profesor",fv:46261},
-{n:"JOSE",a:"CHOCK",plan:"Full Mensual",fv:46275},
-{n:"JOSE",a:"RODRIGUEZ",plan:"Tres Veces a La Semana",fv:46242},
-{n:"JOSEFA",a:"ESCOBAR",plan:"Mensual Turno",fv:46274},
-{n:"JOSTIN",a:"ROSAS",plan:"Tres Veces a La Semana",fv:46276},
-{n:"JUAN",a:"CACERES",plan:"Full Mensual",fv:46276},
-{n:"JUAN",a:"ESCALONA",plan:"Estudiante Profesor",fv:46275},
-{n:"JUAN",a:"REYES",plan:"Mensual Turno",fv:46271},
-{n:"MILENKA",a:"CARRASCO",plan:"Full Mensual",fv:46262},
-{n:"KATHERINE",a:"GOMEZ",plan:"Full Mensual",fv:46247},
-{n:"KATHERINE",a:"IGLESIAS",plan:"Estudiante Profesor",fv:46275},
-{n:"KATHERINE",a:"RODRIGUEZ",plan:"Full Mensual",fv:46241},
-{n:"KATHIA",a:"CEBEÑO",plan:"Full Mensual",fv:46243},
-{n:"KEVIN",a:"BONILLA",plan:"Mensual Turno",fv:46254},
-{n:"KIMMEN",a:"ARANDA",plan:"Full Mensual",fv:46288},
-{n:"KRYSHNA",a:"ARTEAGA",plan:"Funcionario Publico",fv:46243},
-{n:"LAURA",a:"VERA",plan:"Full Mensual",fv:46271},
-{n:"LORETO",a:"VELIZ",plan:"Funcionario Publico",fv:46261},
-{n:"LUIS",a:"GARCIA",plan:"Estudiante Profesor",fv:46277},
-{n:"LUIS",a:"RIOS",plan:"Mensual Turno",fv:46240},
-{n:"LUISA",a:"HIDALGO",plan:"Full Mensual",fv:46275},
-{n:"LUNA",a:"LOPEZ",plan:"Full Mensual",fv:46269},
-{n:"LUDJAN",a:"SORE",plan:"Estudiante Profesor",fv:46268},
-{n:"MANUEL",a:"DURAN",plan:"Funcionario Publico",fv:46247},
-{n:"MARIA",a:"HERRERA",plan:"Mensual Turno",fv:46253},
-{n:"MARIA JOSE",a:"OBREQUE",plan:"Full Mensual",fv:46268},
-{n:"MARIA",a:"OSES",plan:"Estudiante Profesor",fv:46245},
-{n:"MARIA",a:"SEGOVIA",plan:"Full Mensual",fv:46261},
-{n:"MARIA",a:"TORRES",plan:"Tres Veces a La Semana",fv:46254},
-{n:"MARIA",a:"ZEPEDA",plan:"Funcionario Público",fv:46268},
-{n:"MARTINA",a:"ROJAS",plan:"Estudiante Profesor",fv:46272},
-{n:"MATIAS",a:"ABELLO",plan:"Full Mensual",fv:46285},
-{n:"MAURA",a:"PALMA",plan:"Full Mensual",fv:46264},
-{n:"MAURICIO",a:"JUICA",plan:"Full Mensual",fv:46619},
-{n:"MAURICIO",a:"ONTANEDA",plan:"Full Mensual",fv:46269},
-{n:"MAURICIO",a:"RAMIREZ",plan:"Mensual Turno",fv:46271},
-{n:"MAURICIO",a:"URQUIETA",plan:"Mensual Turno",fv:46261},
-{n:"MAXIMILIANO",a:"CONTRERAS",plan:"Estudiante Profesor",fv:46268},
-{n:"MAYORI",a:"RAMIREZ",plan:"Tres Veces a La Semana",fv:46269},
-{n:"MAYUMY",a:"MARTINEZ",plan:"Funcionario Público",fv:46269},
-{n:"MICHEL",a:"QUINZACARA",plan:"Mensual Turno",fv:46265},
-{n:"MIGUEL",a:"MONSALVES",plan:"Mensual Turno",fv:46261},
-{n:"MIGUEL",a:"ROJAS",plan:"Tres Veces a La Semana",fv:46242},
-{n:"MILAGROS",a:"LOPEZ",plan:"Full Mensual",fv:46261},
-{n:"MILAN",a:"CVITANIC",plan:"Estudiante Profesor",fv:46266},
-{n:"MILTON",a:"FUENTES",plan:"Full Mensual",fv:46650},
-{n:"MIRKO",a:"SAN MARTIN",plan:"Mensual Turno",fv:46271},
-{n:"MONICA",a:"MONTEROS",plan:"Full Mensual",fv:46257},
-{n:"NELSON",a:"VARAS",plan:"Full Mensual",fv:46272},
-{n:"NICOLAS",a:"PACHECO",plan:"Mensual Turno",fv:46269},
-{n:"NICOLE",a:"HERRERA",plan:"Full Mensual",fv:46275},
-{n:"NINA",a:"HERRERA",plan:"Full Mensual",fv:46275},
-{n:"NINA",a:"SALAZAR",plan:"Tres Veces a La Semana",fv:46251},
-{n:"OBRAIN",a:"RAMIREZ",plan:"Full Mensual",fv:46284},
-{n:"PABLO",a:"AGUILERA",plan:"Estudiante Profesor",fv:46259},
-{n:"PAMELA",a:"LOPEZ",plan:"Funcionario Publico",fv:46254},
-{n:"PAOLA",a:"FERRER",plan:"Estudiante Profesor",fv:46290},
-{n:"PATRICIO",a:"CONTADOR",plan:"Mensual Tercera Edad",fv:46261},
-{n:"PAUL",a:"TORO",plan:"Mensual Turno",fv:46278},
-{n:"PEDRO",a:"ALVAREZ",plan:"Full Mensual",fv:46275},
-{n:"PEDRO",a:"OLIVARES",plan:"Funcionario Publico",fv:46261},
-{n:"RICARDO",a:"MAMANNI",plan:"Estudiante Profesor",fv:46264},
-{n:"ROBERTO",a:"FIGUEROA",plan:"Full Mensual",fv:46269},
-{n:"RODRIGO",a:"CARMONA",plan:"Estudiante Profesor",fv:46285},
-{n:"RODRIGO",a:"MOLINA",plan:"Estudiante Profesor",fv:46268},
-{n:"RODRIGO",a:"PLAZA",plan:"Tres Veces a La Semana",fv:46269},
-{n:"ROSA",a:"LUCERO",plan:"Mensual Tercera Edad",fv:46274},
-{n:"ROSALIA",a:"GARMENDIA",plan:"Plan Especial",fv:46288},
-{n:"SAMUEL",a:"REES",plan:"Full Mensual",fv:46275},
-{n:"SARA",a:"CARVAJAL",plan:"Mensual Turno",fv:46256},
-{n:"SARAH",a:"RAMOS",plan:"Full Mensual",fv:46277},
-{n:"SEBASTIAN",a:"MARIN",plan:"Mensual Turno",fv:46256},
-{n:"Sebastian",a:"OLIVA",plan:"Estudiante Profesor",fv:46249},
-{n:"SEBASTIAN",a:"RIVERA",plan:"Estudiante Profesor",fv:46261},
-{n:"SERGIO",a:"GUAPA",plan:"Full Mensual",fv:46272},
-{n:"SONIA",a:"CUBA",plan:"Full Mensual",fv:46248},
-{n:"TANYA",a:"PAULSEN",plan:"Full Mensual",fv:46264},
-{n:"TOMAS",a:"CABALLERO",plan:"Mensual Turno",fv:46267},
-{n:"TOMAS",a:"VALENZUELA",plan:"Estudiante Profesor",fv:46290},
-{n:"TOMISLAV",a:"CVITANIC",plan:"Full Mensual",fv:46266},
-{n:"TRAYSI",a:"MUÑOZ",plan:"Full Mensual",fv:46254},
-{n:"VALENTINA",a:"CUELLAR",plan:"Estudiante Profesor",fv:46268},
-{n:"VALERIA",a:"MACIAS",plan:"Tres Veces a La Semana",fv:46233},
-{n:"VERONICA",a:"SALAS",plan:"Estudiante Profesor",fv:46236},
-{n:"VICTOR",a:"CORRY",plan:"Full Mensual",fv:46278},
-{n:"VICTOR",a:"MOLINA",plan:"Full Mensual",fv:46249},
-{n:"WENDY",a:"HUAYTA",plan:"Full Mensual",fv:46277},
-{n:"YAJAIRA",a:"PINEDA",plan:"Full Mensual",fv:46275},
-{n:"YANETH",a:"PERCCA",plan:"Full Mensual",fv:46261},
-{n:"YESSICA",a:"ESCALERA",plan:"Mensual Turno",fv:46264},
-{n:"JHANKARLA",a:"SUAREZ",plan:"Estudiante Profesor",fv:46275},
-{n:"MARYORY",a:"RAMIREZ",plan:"Tres Veces a La Semana",fv:46269}
-];
-
+/* Tu planilla de socios. La pantalla NO lleva la lista: pregunta por cada
+   persona que llega, una por una. */
 const LISTA_URL = "https://script.google.com/macros/s/AKfycbz_P-2KuCZtyTWMOtcCpJXZw0vh1zKWK2fLrqtZ_PZjvL9haDHnPKQeNV7WdpnS7_68DA/exec";
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 </script>
@@ -313,226 +132,115 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
 (function(){
 "use strict";
 
-document.getElementById("topLogoImg").src = LOGO_B64;
-
-if(!CHECKIN_URL){
- document.getElementById("setupNotice").hidden = false;
- return;
-}
-
-function fmtTime(ts){
- var d = new Date(ts);
- return d.toLocaleTimeString("es-CL", {hour:"2-digit", minute:"2-digit"});
+/* ── nombres ─────────────────────────────────────────────────────────── */
+function sinTildes(s){
+ return String(s == null ? "" : s).toUpperCase().normalize("NFD")
+  .replace(/[̀-ͯ]/g, "").replace(/\s+/g, " ").trim();
 }
 function escapeHtml(s){
- return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
 }
-function parseDMY(str){
- if(!str) return null;
- var m = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(String(str).trim());
- if(!m) return null;
- var d = new Date(Number(m[3]), Number(m[2])-1, Number(m[1]));
- return isNaN(d) ? null : d;
+function fmtHora(ts){
+ var d = new Date(ts);
+ return d.toLocaleTimeString("es-CL", { hour:"2-digit", minute:"2-digit" });
 }
-function estadoVenc(venc){
- var d = parseDMY(venc);
- if(!d) return null;
- var hoy = new Date(); hoy.setHours(0,0,0,0);
- var diffDays = Math.round((d - hoy) / 86400000);
- if(diffDays < 0) return {cls:"danger", txt:"Vencido " + venc};
- if(diffDays <= 7) return {cls:"warn", txt:"Vence " + venc};
- return {cls:"good", txt:"Vence " + venc};
-}
-
-/* ── ¿quién llegó y puede pasar? ───────────────────────────────────── */
-function sinTildes(s){
- return String(s==null?"":s).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
-}
-function isoDeSerial(fv){
- var base = new Date(1899,11,30); base.setHours(0,0,0,0);
- var d = new Date(base.getTime() + fv*86400000);
- return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") +
-        "-" + String(d.getDate()).padStart(2,"0");
-}
-function fechaCL(v){
- if(!v) return "—";
- var p = String(v).split("-");
- return p[2] + "-" + p[1] + "-" + p[0];
-}
+function fechaCL(v){ return String(v || ""); }
 function diasPara(v){
- if(!v) return null;
- var p = String(v).split("-");
- var f = new Date(+p[0], +p[1]-1, +p[2]); f.setHours(0,0,0,0);
+ var p = String(v || "").split("-");
+ if(p.length !== 3) return null;
+ var f = new Date(+p[2], +p[1]-1, +p[0]);
+ f.setHours(0,0,0,0);
  if(isNaN(f)) return null;
  var h = new Date(); h.setHours(0,0,0,0);
  return Math.round((f - h) / 86400000);
 }
 
-/* La lista que manda es la del mesón (control.html), que se guarda en este
-   mismo navegador. Si esta pantalla corre en otro aparato, o todavía no se
-   ha abierto el mesón acá, usa la lista publicada en el sitio. */
-var CLAVE_MESON = "wgym_control_v1";
-var lista = [], listaDeDonde = "sitio", crudoAnterior = false;
-var listaNube = null, selloNube = "";
+/* ── le pregunta a la planilla por una sola persona ───────────────────── */
+var cache = {}, pidiendo = {}, conectado = false;
 
-/* Fecha DD-MM-AAAA (como viene de la planilla) a AAAA-MM-DD. */
-function deCL(v){
- var p = String(v || "").split("-");
- return p.length === 3 ? p[2] + "-" + p[1] + "-" + p[0] : "";
-}
-
-/* Devuelve true si la lista cambió desde la última vez.
-   Manda la planilla de Google; si no contesta, la del mesón; si no, la del sitio. */
-function cargarLista(){
- if(listaNube && listaNube.length){
-  if(selloNube === crudoAnterior && lista.length) return false;
-  crudoAnterior = selloNube;
-  lista = listaNube.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:deCL(s.v) }; });
-  listaDeDonde = "planilla";
-  return true;
- }
- var crudo = null;
- try{ crudo = localStorage.getItem(CLAVE_MESON); }catch(e){}
- if(crudo === crudoAnterior && lista.length) return false;
- crudoAnterior = crudo;
- try{
-  var g = JSON.parse(crudo || "null");
-  if(g && Array.isArray(g.socios) && g.socios.length){
-   lista = g.socios.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:s.v }; });
-   listaDeDonde = "meson";
-   return true;
-  }
- }catch(e){}
- lista = SOCIOS.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:isoDeSerial(s.fv) }; });
- listaDeDonde = "sitio";
- return true;
-}
-
-/* Trae la lista de la planilla cada tanto. */
-var pidiendoLista = false;
-function pedirLista(){
- if(!LISTA_URL || pidiendoLista) return;
- pidiendoLista = true;
- var cb = "wgymLista_" + Date.now();
+function consultarSocio(nombre, apellido, cuando){
+ var k = sinTildes(nombre) + "|" + sinTildes(apellido);
+ var g = cache[k];
+ if(g && (Date.now() - g.cuando) < 90000){ cuando(g.socio, true); return; }
+ if(pidiendo[k]){ pidiendo[k].push(cuando); return; }   /* ya se está preguntando: espera */
+ pidiendo[k] = [cuando];
+ var cb = "wgymYo_" + Date.now() + "_" + Math.floor(Math.random()*1000);
  var tag = document.createElement("script");
- var corte = setTimeout(function(){ fin(null); }, 9000);
- function fin(datos){
-  if(!pidiendoLista) return;
+ var hecho = false;
+ var corte = setTimeout(function(){ fin(null); }, 10000);
+ function fin(d){
+  if(hecho) return;
+  hecho = true;
   clearTimeout(corte);
-  pidiendoLista = false;
+  var avisar = pidiendo[k] || [];
+  delete pidiendo[k];
   try{ delete window[cb]; }catch(e){}
   if(tag.parentNode) tag.remove();
-  if(datos && datos.ok && datos.socios && datos.socios.length){
-   listaNube = datos.socios;
-   selloNube = JSON.stringify(datos.socios.length) + "|" +
-               datos.socios.map(function(s){ return s.v; }).join(",");
-   if(cargarLista()){
-    pintarOrigen();
-    renderFeed(ultimasFilas);
-    if(ultimasFilas.length) showHero(ultimasFilas[0]);
-   }
+  var socio, sabemos;
+  if(d && d.ok){
+   conectado = true;
+   socio = d.existe ? { n:d.socio.n, a:d.socio.a, plan:d.socio.plan, v:d.socio.v } : null;
+   sabemos = true;
+   cache[k] = { socio:socio, cuando:Date.now() };
+  }else{
+   conectado = false;
+   socio = g ? g.socio : null;
+   sabemos = !!g;
   }
+  pintarConexion();
+  /* Le contesta a todos los que preguntaron por esta persona. */
+  for(var i = 0; i < avisar.length; i++) avisar[i](socio, sabemos);
  }
  window[cb] = fin;
  tag.onerror = function(){ fin(null); };
- tag.src = LISTA_URL + "?callback=" + cb + "&_=" + Date.now();
+ tag.src = LISTA_URL + "?action=consultar&callback=" + cb +
+           "&n=" + encodeURIComponent(nombre) + "&a=" + encodeURIComponent(apellido) +
+           "&_=" + Date.now();
  document.body.appendChild(tag);
 }
-cargarLista();
-/* Si agregas un socio en el mesón con esta pantalla abierta, se entera sola. */
-window.addEventListener("storage", function(ev){
- if(ev.key !== CLAVE_MESON) return;
- if(!cargarLista()) return;
- pintarOrigen();
- renderFeed(ultimasFilas);
- if(ultimasFilas.length) showHero(ultimasFilas[0]);
-});
-
-function pintarOrigen(){
+function pintarConexion(){
  var el = document.getElementById("origenLista");
- if(!el) return;
- var de = listaDeDonde === "planilla" ? "Lista de la planilla"
-        : listaDeDonde === "meson"    ? "Lista del mesón"
-        :                               "Lista del sitio";
- el.textContent = de + " · " + lista.length + " socios";
+ if(el) el.textContent = conectado ? "conectado a la planilla" : "sin conexión a la planilla";
 }
 
-/* Busca al socio por como venga escrito en el registro del QR. */
-function buscarSocio(nombre, apellido){
- var q = sinTildes(nombre + " " + apellido);
- if(!q) return null;
- var exacto = lista.filter(function(s){ return sinTildes(s.n + " " + s.a) === q; });
- if(exacto.length === 1) return exacto[0];
- var partes = q.split(" ");
- var calzan = lista.filter(function(s){
-  var completo = sinTildes(s.n + " " + s.a);
-  return partes.every(function(p){ return completo.indexOf(p) > -1; });
- });
- return calzan.length === 1 ? calzan[0] : null;   /* si hay dudas, no inventa */
-}
-function veredictoDe(r){
- var s = buscarSocio(r.nombre, r.apellido);
- if(!s){
-  var viejo = estadoVenc(r.venc);
-  return { v:"nadie", fallo:"No está en la lista de socios",
-           detalle: viejo ? viejo.txt : "Revísalo en la planilla",
-           corto:"Sin ficha de socio", cls:"", plan:"" };
- }
+/* ── ¿puede pasar? ───────────────────────────────────────────────────── */
+function veredicto(s, sabemos){
+ if(!sabemos) return { v:"nadie", fallo:"No pude verificar",
+  detalle:"Revísalo en el mesón", corto:"Sin conexión", cls:"", plan:"" };
+ if(!s) return { v:"nadie", fallo:"No está en la lista de socios",
+  detalle:"Agrégalo en el mesón", corto:"Sin ficha de socio", cls:"", plan:"" };
  var dias = diasPara(s.v);
- var vence = fechaCL(s.v);
- if(dias === null){
-  return { v:"nadie", fallo:"Ficha sin fecha de vencimiento",
-           detalle:"Revísale la fecha en el mesón", corto:"Sin fecha", cls:"", plan:s.plan };
- }
- if(dias < 0){
-  return { v:"bad", fallo:"Acceso denegado · membresía vencida",
-           detalle:"Venció el " + vence + " · hace " + Math.abs(dias) + (Math.abs(dias)===1?" día":" días"),
-           corto:null, cls:"danger", plan:s.plan };
- }
- if(dias <= 5){
-  return { v:"warn", fallo:"Pasa, pero avísale",
-           detalle: dias === 0 ? "Vence hoy" : "Vence el " + vence + " · quedan " + dias + (dias===1?" día":" días"),
-           corto:null, cls:"warn", plan:s.plan };
- }
+ if(dias === null) return { v:"nadie", fallo:"Ficha sin fecha de vencimiento",
+  detalle:"Revísale la fecha en el mesón", corto:"Sin fecha", cls:"", plan:s.plan };
+ if(dias < 0) return { v:"bad", fallo:"Acceso denegado · membresía vencida",
+  detalle:"Venció el " + fechaCL(s.v) + " · hace " + Math.abs(dias) + (Math.abs(dias)===1?" día":" días"),
+  corto:null, cls:"danger", plan:s.plan };
+ if(dias <= 5) return { v:"warn", fallo:"Pasa, pero avísale",
+  detalle: dias === 0 ? "Vence hoy" : "Vence el " + fechaCL(s.v) + " · quedan " + dias + (dias===1?" día":" días"),
+  corto:null, cls:"warn", plan:s.plan };
  return { v:"ok", fallo:"Acceso permitido",
-          detalle:"Vence el " + vence + " · quedan " + dias + " días",
-          corto:null, cls:"good", plan:s.plan };
+  detalle:"Vence el " + fechaCL(s.v) + " · quedan " + dias + " días",
+  corto:null, cls:"good", plan:s.plan };
 }
 
-var seenKeys = {};
-var ultimasFilas = [];
-var firstPoll = true;
-
-function keyOf(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
-
-function renderFeed(rows){
- var feed = document.getElementById("feed");
- if(rows.length===0){ feed.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>'; return; }
- feed.innerHTML = rows.map(function(r){
-  var d = veredictoDe(r);
-  var nota = d.corto || d.detalle;
-  var vencHtml = nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '';
-  return '<div class="feed-item"><span class="finfo"><span class="fname">'+escapeHtml(r.nombre)+' '+escapeHtml(r.apellido)+'</span>'+vencHtml+'</span><span class="ftime">'+fmtTime(r.ts)+'</span></div>';
- }).join('');
-}
-
+/* ── el recuadro grande ──────────────────────────────────────────────── */
 function showHero(r){
+ consultarSocio(r.nombre, r.apellido, function(s, sabemos){ pintarHero(r, s, sabemos); });
+}
+function pintarHero(r, s, sabemos){
+ var d = veredicto(s, sabemos);
  document.getElementById("heroEmpty").hidden = true;
- var falloEl = document.getElementById("heroFallo");
- var nameEl  = document.getElementById("heroName");
- var timeEl  = document.getElementById("heroTime");
- var vencEl  = document.getElementById("heroVenc");
- var planEl  = document.getElementById("heroPlan");
- var d = veredictoDe(r);
-
  document.getElementById("hero").setAttribute("data-v", d.v);
- falloEl.hidden = false; falloEl.textContent = d.fallo;
- nameEl.hidden = false;  nameEl.textContent = r.nombre + " " + r.apellido;
- timeEl.hidden = false;  timeEl.textContent = fmtTime(r.ts);
- if(d.detalle){ vencEl.hidden = false; vencEl.textContent = d.detalle; vencEl.className = "venc " + d.cls; }
- else { vencEl.hidden = true; }
- if(d.plan){ planEl.hidden = false; planEl.textContent = d.plan; }
- else { planEl.hidden = true; }
+ var f = document.getElementById("heroFallo"); f.hidden = false; f.textContent = d.fallo;
+ var n = document.getElementById("heroName"); n.hidden = false;
+ n.textContent = r.nombre + " " + r.apellido;
+ var t = document.getElementById("heroTime"); t.hidden = false; t.textContent = fmtHora(r.ts);
+ var ve = document.getElementById("heroVenc");
+ if(d.detalle){ ve.hidden = false; ve.textContent = d.detalle; ve.className = "venc " + d.cls; }
+ else { ve.hidden = true; }
+ var pl = document.getElementById("heroPlan");
+ if(d.plan){ pl.hidden = false; pl.textContent = d.plan; } else { pl.hidden = true; }
 }
 function flashHero(r){
  showHero(r);
@@ -542,44 +250,75 @@ function flashHero(r){
  hero.classList.add("flash");
 }
 
+/* ── los ingresos recientes ──────────────────────────────────────────── */
+var ultimasFilas = [];
+
+function renderFeed(rows){
+ var feed = document.getElementById("feed");
+ if(!rows.length){
+  feed.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>';
+  return;
+ }
+ feed.innerHTML = "";
+ rows.forEach(function(r){
+  var div = document.createElement("div");
+  div.className = "feed-item";
+  div.innerHTML = '<span class="finfo"><span class="fname">' +
+   escapeHtml(r.nombre + " " + r.apellido) + '</span><span class="fvenc"></span></span>' +
+   '<span class="ftime">' + fmtHora(r.ts) + '</span>';
+  feed.appendChild(div);
+  consultarSocio(r.nombre, r.apellido, function(s, sabemos){
+   var d = veredicto(s, sabemos);
+   var nota = div.querySelector(".fvenc");
+   nota.textContent = d.corto || d.detalle;
+   nota.className = "fvenc " + d.cls;
+  });
+ });
+}
+
+/* ── el registro en vivo del QR (el mismo de siempre) ─────────────────── */
+var vistos = {}, primeraVuelta = true;
+function llaveDe(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
+
 function handleData(data){
  var rows = data.rows || [];
  ultimasFilas = rows;
- var cambioLista = cargarLista();   /* por si agregaste un socio recién */
- pintarOrigen();
- if(rows.length > 0){
-  var newest = rows[0];
-  if(!firstPoll && !seenKeys[keyOf(newest)]){
-   flashHero(newest);
-   pedirLista();   /* alguien acaba de llegar: refresca por si lo renovaron recién */
-  } else if(firstPoll || cambioLista){
-   /* La lista cambió: recalcula el veredicto sin destellar de nuevo. */
-   showHero(newest);
+ if(rows.length){
+  var ultima = rows[0];
+  if(!primeraVuelta && !vistos[llaveDe(ultima)]){
+   /* llegó alguien nuevo: pregunta de nuevo por si lo renovaron recién */
+   delete cache[sinTildes(ultima.nombre) + "|" + sinTildes(ultima.apellido)];
+   flashHero(ultima);
+  }else if(primeraVuelta){
+   showHero(ultima);
   }
  }
- rows.forEach(function(r){ seenKeys[keyOf(r)] = true; });
- firstPoll = false;
+ rows.forEach(function(r){ vistos[llaveDe(r)] = true; });
+ primeraVuelta = false;
  renderFeed(rows);
 }
 
-var pollCounter = 0;
+var nPoll = 0;
 function poll(){
- pollCounter++;
- var cb = "wgymCb" + pollCounter + "_" + Date.now();
+ if(!CHECKIN_URL) return;
+ nPoll++;
+ var cb = "wgymCb" + nPoll + "_" + Date.now();
+ var tag = document.createElement("script");
  window[cb] = function(data){
-  handleData(data);
+  try{ handleData(data); }catch(e){}
   delete window[cb];
-  script.remove();
+  tag.remove();
  };
- var script = document.createElement("script");
- script.src = CHECKIN_URL + "?callback=" + cb + "&_=" + Date.now();
- script.onerror = function(){ delete window[cb]; script.remove(); };
- document.body.appendChild(script);
+ tag.src = CHECKIN_URL + "?callback=" + cb + "&_=" + Date.now();
+ tag.onerror = function(){ delete window[cb]; tag.remove(); };
+ document.body.appendChild(tag);
 }
 
-pedirLista();
-setInterval(pedirLista, 60000);
+document.getElementById("topLogoImg").src = LOGO_B64;
+pintarConexion();
 poll();
 setInterval(poll, 4000);
+/* Cada tanto olvida lo guardado, para tomar las renovaciones del mesón. */
+setInterval(function(){ cache = {}; renderFeed(ultimasFilas); }, 90000);
 })();
 </script>
