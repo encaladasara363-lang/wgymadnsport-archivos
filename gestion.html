@@ -918,8 +918,8 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
     pagina. Asi no se duplica ninguna venta. */
  var VENTAS_CARGADAS = {
  cierres: [
- {id:"wgym-2026-08-25-cierre", date:"25-08-2026", total:28100,
- snacks:10100, suplementos:0, ropa:0, bebestible:3000, pase:0, semanal:15000}
+ {id:"wgym-2026-08-25-cierre", date:"25-08-2026", total:36100,
+ snacks:10100, suplementos:0, ropa:0, bebestible:3000, pase:8000, semanal:15000}
  ],
  mensualidades: [
  {id:"wgym-2026-08-25-mens", date:"25-08-2026", total:150000, sueldo:15000}
@@ -927,12 +927,18 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  };
  (function(){
  var cambio = false;
- VENTAS_CARGADAS.cierres.forEach(function(c){
- if(!local.cierres.some(function(x){ return x.id===c.id; })){ local.cierres.push(c); cambio = true; }
- });
- VENTAS_CARGADAS.mensualidades.forEach(function(v){
- if(!local.ventasMensualidades.some(function(x){ return x.id===v.id; })){ local.ventasMensualidades.push(v); cambio = true; }
- });
+ function sincronizar(lista, entrada){
+ for(var i=0; i<lista.length; i++){
+ if(lista[i].id === entrada.id){
+ /* Ya estaba: se reemplaza solo si cambio algun monto. */
+ if(JSON.stringify(lista[i]) !== JSON.stringify(entrada)){ lista[i] = entrada; cambio = true; }
+ return;
+ }
+ }
+ lista.push(entrada); cambio = true;
+ }
+ VENTAS_CARGADAS.cierres.forEach(function(c){ sincronizar(local.cierres, c); });
+ VENTAS_CARGADAS.mensualidades.forEach(function(v){ sincronizar(local.ventasMensualidades, v); });
  if(cambio) saveLocal();
  })();
 
