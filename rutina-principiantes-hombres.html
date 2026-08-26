@@ -538,10 +538,43 @@ function todayAtMidnight(){
   return d;
 }
 
+/* Compara nombres aunque vengan mal escritos: cuenta cuántas letras hay que
+   cambiar para pasar de uno al otro. Así "YOHAANNA" encuentra a "YOHANNA". */
+function distanciaNombre(a, b){
+  if (a === b) return 0;
+  const la = a.length, lb = b.length;
+  if (Math.abs(la - lb) > 4) return 99;
+  const fila = [];
+  for (let j = 0; j <= lb; j++) fila[j] = j;
+  for (let i = 1; i <= la; i++){
+    let ant = fila[0];
+    fila[0] = i;
+    for (let j = 1; j <= lb; j++){
+      const tmp = fila[j];
+      fila[j] = Math.min(fila[j] + 1, fila[j-1] + 1,
+                         ant + (a.charAt(i-1) === b.charAt(j-1) ? 0 : 1));
+      ant = tmp;
+    }
+  }
+  return fila[lb];
+}
+function claveNombre(s){ return normName(s).replace(/\s+/g, ""); }
+function margen(q){ return q.length <= 8 ? 1 : (q.length <= 14 ? 2 : 3); }
+
 function findSocio(nombre, apellido){
   const n = normName(nombre), a = normName(apellido);
   if (!n || !a) return null;
-  return SOCIOS.find(s => normName(s.n) === n && normName(s.a) === a) || null;
+  const exacto = SOCIOS.find(s => normName(s.n) === n && normName(s.a) === a);
+  if (exacto) return exacto;
+  /* Si no calza tal cual, el más parecido — salvo que haya dos igual de parecidos. */
+  const q = claveNombre(nombre + apellido);
+  let mejor = null, mejorD = 99, empate = false;
+  SOCIOS.forEach(s => {
+    const d = distanciaNombre(q, claveNombre(s.n + s.a));
+    if (d < mejorD){ mejorD = d; mejor = s; empate = false; }
+    else if (d === mejorD){ empate = true; }
+  });
+  return (mejor && mejorD <= margen(q) && !empate) ? mejor : null;
 }
 
 function daysUntilExpiry(socio){

@@ -487,10 +487,46 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  }
 
  /* ---------- gate: find socio (no vencimiento check — la tarjeta nunca bloquea) ---------- */
+ /* Compara nombres aunque vengan mal escritos: cuenta cuántas letras hay que
+    cambiar para pasar de uno al otro. Así "YOHAANNA" encuentra a "YOHANNA". */
+ function distanciaNombre(a, b){
+   if(a === b) return 0;
+   var la = a.length, lb = b.length;
+   if(Math.abs(la - lb) > 4) return 99;
+   var fila = [], i, j;
+   for(j = 0; j <= lb; j++) fila[j] = j;
+   for(i = 1; i <= la; i++){
+     var ant = fila[0];
+     fila[0] = i;
+     for(j = 1; j <= lb; j++){
+       var tmp = fila[j];
+       fila[j] = Math.min(fila[j] + 1, fila[j-1] + 1,
+                          ant + (a.charAt(i-1) === b.charAt(j-1) ? 0 : 1));
+       ant = tmp;
+     }
+   }
+   return fila[lb];
+ }
+ function claveNombre(s){ return normName(s).replace(/\s+/g, ""); }
+ /* Cuántas letras de diferencia se le perdonan según el largo del nombre. */
+ function margen(q){ return q.length <= 8 ? 1 : (q.length <= 14 ? 2 : 3); }
  function findSocio(nombre, apellido){
  var n = normName(nombre), a = normName(apellido);
  if(!n || !a) return null;
- return allSocios().find(function(s){ return normName(s.nombre)===n && normName(s.apellido)===a; }) || null;
+ var lista = allSocios();
+ var q = claveNombre(nombre + apellido);
+ /* Primero, escrito tal cual. */
+ var exacto = lista.filter(function(s){ return normName(s.nombre)===n && normName(s.apellido)===a; });
+ if(exacto.length) return exacto[0];
+ /* Si no, el más parecido, siempre que no haya dos igual de parecidos. */
+ var mejor = null, mejorD = 99, empate = false;
+ lista.forEach(function(s){
+ var d = distanciaNombre(q, claveNombre(s.nombre + s.apellido));
+ if(d < mejorD){ mejorD = d; mejor = s; empate = false; }
+ else if(d === mejorD){ empate = true; }
+ });
+ if(mejor && mejorD <= margen(q) && !empate) return mejor;
+ return null;
  }
  function diasParaVencer(s){
  var venc = parseDMY(s.vencimiento);
