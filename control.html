@@ -648,13 +648,54 @@ function calzan(txt){
   return partes.every(function(p){ return completo.indexOf(p) > -1; });
  });
 }
+/* Compara nombres aunque vengan mal escritos: cuenta cuántas letras hay que
+   cambiar para pasar de uno al otro. Así "YOHAANNA" encuentra a "YOHANNA". */
+function distanciaNombre(a, b){
+ if(a === b) return 0;
+ var la = a.length, lb = b.length;
+ if(Math.abs(la - lb) > 4) return 99;
+ var fila = [], i, j;
+ for(j = 0; j <= lb; j++) fila[j] = j;
+ for(i = 1; i <= la; i++){
+  var ant = fila[0];
+  fila[0] = i;
+  for(j = 1; j <= lb; j++){
+   var tmp = fila[j];
+   fila[j] = Math.min(fila[j] + 1, fila[j-1] + 1,
+                      ant + (a.charAt(i-1) === b.charAt(j-1) ? 0 : 1));
+   ant = tmp;
+  }
+ }
+ return fila[lb];
+}
+function claveNombre(s){ return sinTildes(s).replace(/\s+/g, ""); }
+function margen(q){ return q.length <= 8 ? 1 : (q.length <= 14 ? 2 : 3); }
+
+/* Quién llegó, según el nombre que quedó registrado en el QR. */
 function socioDelRegistro(nombre, apellido){
  var q = sinTildes(nombre + " " + apellido);
  if(!q) return null;
  var exacto = socios.filter(function(s){ return sinTildes(s.n+" "+s.a) === q; });
  if(exacto.length === 1) return exacto[0];
  var lista = calzan(q);
- return lista.length === 1 ? lista[0] : null;
+ if(lista.length === 1) return lista[0];
+ /* Si vino mal escrito, el más parecido — salvo que haya dos igual de parecidos. */
+ var k = claveNombre(nombre + apellido);
+ var mejor = null, mejorD = 99, empate = false;
+ socios.forEach(function(s){
+  var d = distanciaNombre(k, claveNombre(s.n + s.a));
+  if(d < mejorD){ mejorD = d; mejor = s; empate = false; }
+  else if(d === mejorD){ empate = true; }
+ });
+ if(mejor && mejorD <= margen(k) && !empate) return mejor;
+ /* Último intento: apellido exacto y un solo socio con ese apellido. */
+ var ap = sinTildes(apellido);
+ var mismoApellido = socios.filter(function(s){ return sinTildes(s.a) === ap; });
+ if(mismoApellido.length === 1 &&
+    distanciaNombre(claveNombre(nombre), claveNombre(mismoApellido[0].n)) <= 3){
+  return mismoApellido[0];
+ }
+ return null;
 }
 
 /* ── veredicto ──────────────────────────────────────────────────────── */
@@ -744,7 +785,14 @@ function elegir(s){
 }
 function buscarAMano(){
  var lista = calzan(qPuerta.value);
- if(!lista.length){ mostrarHero(qPuerta.value.trim() || "—", null, null); return; }
+ if(!lista.length){
+  /* Nada por texto: prueba por parecido antes de rendirse. */
+  var partes = qPuerta.value.trim().split(/\s+/);
+  var s = socioDelRegistro(partes[0] || "", partes.slice(1).join(" "));
+  if(s){ elegir(s); return; }
+  mostrarHero(qPuerta.value.trim() || "—", null, null);
+  return;
+ }
  if(lista.length > 1){
   mostrarHero(qPuerta.value.trim(), null, null, lista.length);
   verSug(); qPuerta.focus(); return;
