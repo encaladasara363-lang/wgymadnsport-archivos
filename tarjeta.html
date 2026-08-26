@@ -93,6 +93,18 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .mc-row span{ color:var(--gris-soft); font-weight:600; }
 .mc-row b{ color:var(--blanco); font-weight:800; letter-spacing:.02em; }
 .mc-status{ margin-top:14px; }
+.mc-veredicto{ border-radius:14px; padding:20px 18px; margin-bottom:18px; text-align:center;
+ border:2px solid; }
+.mc-veredicto .vfallo{ font-size:20px; font-weight:900; text-transform:uppercase;
+ letter-spacing:.02em; line-height:1.15; margin:0; text-wrap:balance; }
+.mc-veredicto .vdet{ font-size:13.5px; font-weight:700; margin:9px 0 0; }
+.mc-veredicto[data-v="ok"]{ border-color:#5CA85C; background:rgba(92,168,92,.12); }
+.mc-veredicto[data-v="ok"] .vfallo{ color:#5CA85C; }
+.mc-veredicto[data-v="warn"]{ border-color:var(--dorado); background:rgba(212,175,55,.12); }
+.mc-veredicto[data-v="warn"] .vfallo{ color:var(--dorado); }
+.mc-veredicto[data-v="bad"]{ border-color:#E85C5C; background:rgba(232,92,92,.12); }
+.mc-veredicto[data-v="bad"] .vfallo{ color:#E85C5C; }
+.mc-veredicto .vdet{ color:var(--gris); }
 .routine-blocked{ text-align:center; color:var(--danger); font-weight:700; font-size:13px; line-height:1.5; margin:18px 0 0; }
 
 nav.days{ display:flex; gap:8px; overflow-x:auto; padding:16px 16px 4px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }  
@@ -539,9 +551,32 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  var hoy = parseDMY(todayISO());
  return Math.round((venc - hoy) / 86400000);
  }
+ /* El mismo aviso que ve el mesón, para que el socio sepa al tiro cómo está
+ y cuándo le toca pagar. Sin botón de renovar: eso es solo del gimnasio. */
+ function veredictoSocio(s){
+ var d = diasParaVencer(s);
+ var venc = s.vencimiento || "—";
+ if(!s.vencimiento) return { v:"warn", fallo:"Consulta en recepción",
+ det:"Tu ficha no tiene fecha de vencimiento" };
+ if(d < 0) return { v:"bad", fallo:"Membresía vencida",
+ det:"Venció el " + venc + " · hace " + Math.abs(d) + (Math.abs(d)===1?" día":" días") +
+ ". Pasa a renovar en recepción." };
+ if(d === 0) return { v:"warn", fallo:"Pasa, pero avísale",
+ det:"Tu mensualidad vence hoy. Acuérdate de renovar." };
+ if(d <= 5) return { v:"warn", fallo:"Pasa, pero avísale",
+ det:"Vence el " + venc + " · queda" + (d===1?" 1 día":"n " + d + " días") +
+ ". Acuérdate de renovar." };
+ return { v:"ok", fallo:"Acceso permitido",
+ det:"Vence el " + venc + " · quedan " + d + " días" };
+ }
  function renderCard(s){
  var est = estadoDe(s.vencimiento);
+ var w = veredictoSocio(s);
  document.getElementById("memberCard").innerHTML =
+ '<div class="mc-veredicto" data-v="'+w.v+'">' +
+ '<p class="vfallo">'+escapeHtml(w.fallo)+'</p>' +
+ '<p class="vdet">'+escapeHtml(w.det)+'</p>' +
+ '</div>' +
  '<p class="mc-kicker">Socio WGYMADNSPORT</p>' +
  '<div class="mc-name">'+escapeHtml(s.nombre)+' '+escapeHtml(s.apellido)+'</div>' +
  '<div class="mc-plan">'+escapeHtml(s.plan||"Sin plan asignado")+'</div>' +
