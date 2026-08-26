@@ -136,6 +136,12 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .panel .cuerpo{ padding:16px 18px 18px; }
 
 .barra{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+.guardado{ display:flex; align-items:center; gap:7px; width:100%; font-size:13px;
+ font-weight:600; color:var(--gris-soft); padding-top:2px; }
+.guardado .pg{ width:9px; height:9px; border-radius:50%; background:var(--gris-soft); flex:0 0 auto; }
+.guardado[data-g="ok"]{ color:var(--verde); } .guardado[data-g="ok"] .pg{ background:var(--verde); }
+.guardado[data-g="cargando"]{ color:var(--dorado); } .guardado[data-g="cargando"] .pg{ background:var(--dorado); }
+.guardado[data-g="malo"]{ color:var(--rojo-claro); } .guardado[data-g="malo"] .pg{ background:var(--rojo-claro); }
 .barra .campo{ flex:1; min-width:190px; }
 .barra input[type="text"], .barra select{ width:100%; background:var(--surface-2);
  border:1px solid var(--line); border-radius:10px; color:var(--blanco);
@@ -287,6 +293,7 @@ Ver estado
 <button class="btn btn-linea" id="bCargar">
 <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 8l5-5 5 5M12 3v12"/></svg> Cargar respaldo</button>
 <input type="file" id="archivo" accept=".json,.csv,.txt,application/json,text/csv,text/plain" hidden>
+<span class="guardado" id="guardado" data-g="cargando"><span class="pg"></span><span id="guardadoTxt">Conectando con la planilla…</span></span>
 </div>
 <div class="tscroll">
 <table class="socios">
@@ -308,6 +315,8 @@ La <a href="pantalla.html">pantalla de ingresos</a> es la que va a la vista de l
 <script>
 const LOGO_B64 = "assets/logo.jpg";
 /* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
+/* Tu planilla de socios en Google: de aquí lee y aquí escribe. */
+const LISTA_URL = "https://script.google.com/macros/s/AKfycbz_P-2KuCZtyTWMOtcCpJXZw0vh1zKWK2fLrqtZ_PZjvL9haDHnPKQeNV7WdpnS7_68DA/exec";
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 /* Lista base publicada en el sitio. Si edito socios acá, sube este número
    y la página te ofrece traer la lista nueva sin pisar lo tuyo. */
@@ -524,6 +533,106 @@ function guardar(){
   alert("No pude guardar en este equipo. Puede que el navegador esté en modo privado.");
  }
 }
+
+/* ── la planilla de Google ───────────────────────────────────────────── */
+var CLAVE_KEY = "wgym_clave_meson";
+
+function marcarGuardado(estado, texto){
+ var el = document.getElementById("guardado");
+ if(!el) return;
+ el.setAttribute("data-g", estado);
+ document.getElementById("guardadoTxt").textContent = texto;
+}
+function miClave(){
+ var c = "";
+ try{ c = localStorage.getItem(CLAVE_KEY) || ""; }catch(e){}
+ if(!c){
+  c = prompt("Clave del mesón\n\nEs la que quedó escrita en el código de Google Apps Script.\nSe pide una sola vez en este equipo.");
+  if(!c) return "";
+  c = c.trim();
+  try{ localStorage.setItem(CLAVE_KEY, c); }catch(e){}
+ }
+ return c;
+}
+function olvidarClave(){
+ try{ localStorage.removeItem(CLAVE_KEY); }catch(e){}
+}
+/* La planilla guarda DD-MM-AAAA; la página trabaja con AAAA-MM-DD. */
+function aCL(v){ var p = String(v||"").split("-"); return p.length===3 ? p[2]+"-"+p[1]+"-"+p[0] : ""; }
+function deCL(v){ var p = String(v||"").split("-"); return p.length===3 ? p[2]+"-"+p[1]+"-"+p[0] : ""; }
+
+/* Habla con la planilla. Como está en otro sitio, se pide con <script>. */
+function llamar(params, cuando){
+ if(!LISTA_URL){ cuando(null); return; }
+ var cb = "wgymCall_" + Date.now() + "_" + Math.floor(Math.random()*1000);
+ var tag = document.createElement("script");
+ var hecho = false;
+ var corte = setTimeout(function(){ fin(null); }, 12000);
+ function fin(datos){
+  if(hecho) return;
+  hecho = true;
+  clearTimeout(corte);
+  try{ delete window[cb]; }catch(e){}
+  if(tag.parentNode) tag.remove();
+  cuando(datos);
+ }
+ window[cb] = fin;
+ tag.onerror = function(){ fin(null); };
+ var partes = ["callback=" + cb, "_=" + Date.now()];
+ for(var k in params){
+  if(Object.prototype.hasOwnProperty.call(params, k) && params[k] !== undefined){
+   partes.push(k + "=" + encodeURIComponent(params[k]));
+  }
+ }
+ tag.src = LISTA_URL + "?" + partes.join("&");
+ document.body.appendChild(tag);
+}
+
+function traerDeLaPlanilla(){
+ marcarGuardado("cargando", "Conectando con la planilla…");
+ llamar({}, function(d){
+  if(d && d.ok && d.socios && d.socios.length){
+   socios = d.socios.map(function(s, i){
+    return { id:"g"+i, n:s.n, a:s.a, plan:s.plan, m:s.m, v:deCL(s.v) };
+   });
+   guardar(); pintar();
+   marcarGuardado("ok", "Conectado a la planilla · " + socios.length + " socios");
+  }else{
+   marcarGuardado("malo", "Sin conexión a la planilla — los cambios no llegan al cliente");
+  }
+ });
+}
+
+/* Manda un cambio a la planilla. Si no llega, avisa fuerte: el cliente
+   seguiría viendo la fecha vieja al escanear, que es justo lo que arreglamos. */
+function mandarALaPlanilla(accion, datos, listo){
+ var clave = miClave();
+ if(!clave){
+  marcarGuardado("malo", "Sin clave: el cambio quedó solo en este equipo");
+  if(listo) listo(false);
+  return;
+ }
+ marcarGuardado("cargando", "Guardando en la planilla…");
+ datos.action = accion;
+ datos.clave = clave;
+ llamar(datos, function(d){
+  if(d && d.ok){
+   marcarGuardado("ok", "Guardado en la planilla · " + (d.socios ? d.socios.length : socios.length) + " socios");
+   if(listo) listo(true);
+   return;
+  }
+  if(d && d.error && String(d.error).indexOf("clave") > -1){
+   olvidarClave();
+   marcarGuardado("malo", "Clave incorrecta — vuelve a intentarlo");
+   alert("La clave del mesón no es la correcta.\n\nEs la que está escrita en el código de Apps Script, en la línea que dice CLAVE.\nHaz el cambio de nuevo y te la vuelvo a pedir.");
+  }else{
+   marcarGuardado("malo", "No llegó a la planilla — el cliente verá la fecha vieja");
+   alert("El cambio quedó guardado en este equipo, pero NO llegó a la planilla.\n\nEso significa que el cliente va a seguir viendo la fecha vieja al escanear.\nRevisa tu internet y vuelve a guardar el mismo socio.");
+  }
+  if(listo) listo(false);
+ });
+}
+
 if(!guardado) guardar();
 
 /* Si el sitio trae una lista mas nueva, lo avisa sin pisar nada. */
@@ -898,6 +1007,7 @@ function borrar(s){
  if(i > -1) socios.splice(i, 1);
  if(socioEnHero && socioEnHero.id === s.id) socioEnHero = null;
  guardar(); pintar();
+ mandarALaPlanilla("borrar", { n:s.n, a:s.a });
 }
 
 /* ── ficha ──────────────────────────────────────────────────────────── */
@@ -983,6 +1093,7 @@ function abrirFicha(s){
   var n = iN.value.trim().toUpperCase(), a = iA.value.trim().toUpperCase();
   if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe al menos el nombre."; iN.focus(); return; }
   if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
+  var antesN = nuevo ? "" : s.n, antesA = nuevo ? "" : s.a;
   if(nuevo){
    socios.push({ id:idNuevo(), n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value });
   }else{
@@ -990,6 +1101,10 @@ function abrirFicha(s){
   }
   cerrar(); guardar(); pintar();
   if(socioEnHero && !nuevo && socioEnHero.id === s.id) mostrarHero(s.n+" "+s.a, null, s);
+  mandarALaPlanilla("guardar", {
+   n0: antesN || undefined, a0: antesA || undefined,
+   n: n, a: a, plan: sel.value, m: soloDigitos(iM.value), v: aCL(iV.value)
+  });
  }
  velo.querySelector("#fCancelar").addEventListener("click", cerrar);
  velo.querySelector("#fGuardar").addEventListener("click", aceptar);
@@ -1103,6 +1218,7 @@ function reloj(){
 reloj();
 setInterval(reloj, 20000);
 pintar();
+traerDeLaPlanilla();
 poll();
 setInterval(poll, 4000);
 })();

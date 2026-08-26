@@ -413,6 +413,9 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 <script>  
 const LOGO_B64 = "assets/logo.jpg";
 /* Se completa con el link de "Implementar como app web" de Google Apps Script. */
+/* La lista de socios en vivo, desde tu planilla de Google.
+   Si no contesta, la página usa la lista publicada más abajo. */
+const LISTA_URL = "https://script.google.com/macros/s/AKfycbz_P-2KuCZtyTWMOtcCpJXZw0vh1zKWK2fLrqtZ_PZjvL9haDHnPKQeNV7WdpnS7_68DA/exec";
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 </script>  
 <script>  
@@ -468,9 +471,37 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  tieneRutina: tds[6] ? /^s/i.test(tds[6].textContent.trim()) : false
  };
  }
- function allSocios(){  
+ var listaNube = null, nubeLista = false, esperando = null;
+ function allSocios(){
+ if(listaNube){
+ return listaNube.map(function(s){
+ return { tr:null, nombre:s.n, apellido:s.a, rut:"", plan:s.plan,
+ monto:s.m, vencimiento:s.v, tieneRutina:true };
+ });
+ }
  return Array.prototype.map.call(sociosTbody.children, socioRowData);  
- }  
+ }
+ /* Pide la lista al arrancar. Si Google no contesta en 7 segundos,
+ sigue con la lista publicada en la página: la puerta nunca se queda muerta. */
+ function pedirLista(){
+ if(!LISTA_URL){ nubeLista = true; return; }
+ var cb = "wgymLista_" + Date.now();
+ var tag = document.createElement("script");
+ var corte = setTimeout(function(){ terminar(null); }, 7000);
+ function terminar(datos){
+ if(nubeLista) return;
+ clearTimeout(corte);
+ if(datos && datos.ok && datos.socios && datos.socios.length) listaNube = datos.socios;
+ nubeLista = true;
+ try{ delete window[cb]; }catch(e){}
+ if(tag.parentNode) tag.remove();
+ if(esperando){ var q = esperando; esperando = null; tryLogin(q.n, q.a); }
+ }
+ window[cb] = terminar;
+ tag.onerror = function(){ terminar(null); };
+ tag.src = LISTA_URL + "?callback=" + cb + "&_=" + Date.now();
+ document.body.appendChild(tag);
+ }
  function estadoDe(vencimiento){  
  var venc = parseDMY(vencimiento);  
  if(!venc) return {cls:"good", txt:"Al día"};  
@@ -541,8 +572,19 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  avisarIngreso(s);
  }
  function tryLogin(nombre, apellido){
+ var boton = document.getElementById("gateBtn");
+ if(!nubeLista){
+ /* Todavía viene la lista: no lo rechaces antes de tiempo. */
+ esperando = { n:nombre, a:apellido };
+ boton.textContent = "Un momento...";
+ boton.disabled = true;
+ return false;
+ }
+ boton.textContent = "Entrar";
+ boton.disabled = false;
  var socio = findSocio(nombre, apellido);
  if(socio){
+ document.getElementById("gateError").hidden = true;
  unlockCardView(socio);
  return true;
  }
@@ -565,5 +607,6 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
 
  /* ---------- go ---------- */
  initRoute();
+ pedirLista();
 })();
 </script>  

@@ -306,6 +306,7 @@ const SOCIOS = [
 {n:"MARYORY",a:"RAMIREZ",plan:"Tres Veces a La Semana",fv:46269}
 ];
 
+const LISTA_URL = "https://script.google.com/macros/s/AKfycbz_P-2KuCZtyTWMOtcCpJXZw0vh1zKWK2fLrqtZ_PZjvL9haDHnPKQeNV7WdpnS7_68DA/exec";
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 </script>
 <script>
@@ -372,9 +373,24 @@ function diasPara(v){
    ha abierto el mesón acá, usa la lista publicada en el sitio. */
 var CLAVE_MESON = "wgym_control_v1";
 var lista = [], listaDeDonde = "sitio", crudoAnterior = false;
+var listaNube = null, selloNube = "";
 
-/* Devuelve true si la lista cambió desde la última vez. */
+/* Fecha DD-MM-AAAA (como viene de la planilla) a AAAA-MM-DD. */
+function deCL(v){
+ var p = String(v || "").split("-");
+ return p.length === 3 ? p[2] + "-" + p[1] + "-" + p[0] : "";
+}
+
+/* Devuelve true si la lista cambió desde la última vez.
+   Manda la planilla de Google; si no contesta, la del mesón; si no, la del sitio. */
 function cargarLista(){
+ if(listaNube && listaNube.length){
+  if(selloNube === crudoAnterior && lista.length) return false;
+  crudoAnterior = selloNube;
+  lista = listaNube.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:deCL(s.v) }; });
+  listaDeDonde = "planilla";
+  return true;
+ }
  var crudo = null;
  try{ crudo = localStorage.getItem(CLAVE_MESON); }catch(e){}
  if(crudo === crudoAnterior && lista.length) return false;
@@ -391,6 +407,37 @@ function cargarLista(){
  listaDeDonde = "sitio";
  return true;
 }
+
+/* Trae la lista de la planilla cada tanto. */
+var pidiendoLista = false;
+function pedirLista(){
+ if(!LISTA_URL || pidiendoLista) return;
+ pidiendoLista = true;
+ var cb = "wgymLista_" + Date.now();
+ var tag = document.createElement("script");
+ var corte = setTimeout(function(){ fin(null); }, 9000);
+ function fin(datos){
+  if(!pidiendoLista) return;
+  clearTimeout(corte);
+  pidiendoLista = false;
+  try{ delete window[cb]; }catch(e){}
+  if(tag.parentNode) tag.remove();
+  if(datos && datos.ok && datos.socios && datos.socios.length){
+   listaNube = datos.socios;
+   selloNube = JSON.stringify(datos.socios.length) + "|" +
+               datos.socios.map(function(s){ return s.v; }).join(",");
+   if(cargarLista()){
+    pintarOrigen();
+    renderFeed(ultimasFilas);
+    if(ultimasFilas.length) showHero(ultimasFilas[0]);
+   }
+  }
+ }
+ window[cb] = fin;
+ tag.onerror = function(){ fin(null); };
+ tag.src = LISTA_URL + "?callback=" + cb + "&_=" + Date.now();
+ document.body.appendChild(tag);
+}
 cargarLista();
 /* Si agregas un socio en el mesón con esta pantalla abierta, se entera sola. */
 window.addEventListener("storage", function(ev){
@@ -404,8 +451,10 @@ window.addEventListener("storage", function(ev){
 function pintarOrigen(){
  var el = document.getElementById("origenLista");
  if(!el) return;
- el.textContent = (listaDeDonde === "meson" ? "Lista del mesón" : "Lista del sitio") +
-                  " · " + lista.length + " socios";
+ var de = listaDeDonde === "planilla" ? "Lista de la planilla"
+        : listaDeDonde === "meson"    ? "Lista del mesón"
+        :                               "Lista del sitio";
+ el.textContent = de + " · " + lista.length + " socios";
 }
 
 /* Busca al socio por como venga escrito en el registro del QR. */
@@ -502,6 +551,7 @@ function handleData(data){
   var newest = rows[0];
   if(!firstPoll && !seenKeys[keyOf(newest)]){
    flashHero(newest);
+   pedirLista();   /* alguien acaba de llegar: refresca por si lo renovaron recién */
   } else if(firstPoll || cambioLista){
    /* La lista cambió: recalcula el veredicto sin destellar de nuevo. */
    showHero(newest);
@@ -527,6 +577,8 @@ function poll(){
  document.body.appendChild(script);
 }
 
+pedirLista();
+setInterval(pedirLista, 60000);
 poll();
 setInterval(poll, 4000);
 })();
