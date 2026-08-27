@@ -528,7 +528,13 @@ function normName(s){
 }
 
 function excelSerialToDate(serial){
-  return new Date((serial - 25569) * 86400000);
+  /* El número cuenta los días desde el 30-12-1899. Hay que armar la fecha en
+     hora de Chile: si se arma en hora universal se corre un día para atrás y
+     al socio le cierra la rutina el día antes de que se le venza. */
+  const d = new Date(1899, 11, 30);
+  d.setDate(d.getDate() + serial);
+  d.setHours(0, 0, 0, 0);
+  return d;
 }
 
 function todayAtMidnight(){
