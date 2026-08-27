@@ -205,6 +205,9 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
  font-weight:700; padding:7px 13px; cursor:pointer; text-transform:uppercase;
  letter-spacing:.05em; }
 .ficha .rapidos button:hover{ color:#fff; border-color:var(--dorado); }
+.ficha .rapidos button.rap-oro{ background:var(--dorado); color:#151515;
+ border-color:var(--dorado); font-weight:800; }
+.ficha .rapidos button.rap-oro:hover{ color:#151515; filter:brightness(1.08); }
 .ficha .aviso{ grid-column:1 / -1; color:var(--rojo-claro); font-size:13.5px; margin:0; }
 .ficha .pie{ display:flex; gap:9px; justify-content:flex-end; padding:0 20px 20px;
  flex-wrap:wrap; }
@@ -359,7 +362,7 @@ const LISTA_BASE = [
 {n:"DANIEL",a:"CORTES",plan:"Mensual Turno",m:23000,v:"2026-08-15"},
 {n:"DANIEL",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-08-13"},
 {n:"DANIELA",a:"CARVAJAL",plan:"Full Mensual",m:33000,v:"2026-09-03"},
-{n:"DANIELA",a:"SALAZAR",plan:"Funcionario Público",m:28000,v:"2026-09-25"},
+{n:"DANIELA",a:"SALAZAR",plan:"Funcionario Público",m:28000,v:"2026-09-26"},
 {n:"DARKO",a:"VICENCIO",plan:"Full Mensual",m:33000,v:"2026-08-20"},
 {n:"DEBORA",a:"GAJARDO",plan:"Full Mensual",m:33000,v:"2026-08-27"},
 {n:"DEMIAN",a:"ALVAREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-24"},
@@ -1013,10 +1016,11 @@ function abrirFicha(s){
   '<label><span>Monto</span><input id="fM" type="text" inputmode="numeric"></label>'+
   '<label><span>Vence</span><input id="fV" type="date"></label>'+
   '<div class="rapidos">'+
-  '<button type="button" data-mas="30">+30 días</button>'+
-  '<button type="button" data-mas="15">+15 días</button>'+
-  '<button type="button" data-mas="7">+7 días</button>'+
-  '<button type="button" data-desde="hoy">Un mes desde hoy</button>'+
+  '<button type="button" class="rap-oro" data-meses="1">Renovar hoy (un mes)</button>'+
+  '<button type="button" data-meses="3">3 meses desde hoy</button>'+
+  '<button type="button" data-mas="15">+15 días desde hoy</button>'+
+  '<button type="button" data-mas="7">+7 días desde hoy</button>'+
+  '<button type="button" data-desde="venc" data-meses="1">Un mes desde el vencimiento</button>'+
   '</div><p class="aviso" id="fAviso"></p></div>'+
   '<div class="pie"><button class="btn btn-linea" id="fCancelar">Cancelar</button>'+
   '<button class="btn btn-rojo" id="fGuardar">Guardar</button></div></div>';
@@ -1045,19 +1049,28 @@ function abrirFicha(s){
   if(PRECIO[sel.value]) iM.value = "$" + PRECIO[sel.value].toLocaleString("es-CL");
  });
 
+ /* Un mes de verdad, no 30 días: 26 de agosto pasa a ser 26 de septiembre.
+    Si el día no existe en el mes siguiente (31 de enero) se queda en el último. */
+ function sumarMeses(base, meses){
+  var dia = base.getDate();
+  var f = new Date(base.getFullYear(), base.getMonth() + meses, 1);
+  var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
+  f.setDate(Math.min(dia, ultimo));
+  return f;
+ }
  velo.querySelectorAll(".rapidos button").forEach(function(b){
   b.addEventListener("click", function(){
-   var base;
-   if(b.dataset.desde === "hoy"){ base = new Date(); }
-   else{
-    var p = (iV.value || hoyISO()).split("-");
-    base = new Date(+p[0], +p[1]-1, +p[2]);
-    /* Si ya venció, la renovación se cuenta desde hoy, no desde la fecha vieja. */
-    var h = new Date(); h.setHours(0,0,0,0);
-    if(base < h) base = h;
-    base.setDate(base.getDate() + parseInt(b.dataset.mas, 10));
+   /* La renovación corre desde el día que el socio paga, o sea hoy.
+      El único botón que parte de la fecha vieja es el de "desde el vencimiento",
+      para el que paga antes de que se le acabe y no quiere perder los días. */
+   var base = new Date(); base.setHours(0,0,0,0);
+   if(b.dataset.desde === "venc" && iV.value){
+    var p = iV.value.split("-");
+    var venc = new Date(+p[0], +p[1]-1, +p[2]);
+    if(venc > base) base = venc;
    }
-   if(b.dataset.desde === "hoy") base.setDate(base.getDate() + 30);
+   if(b.dataset.meses) base = sumarMeses(base, parseInt(b.dataset.meses, 10));
+   else base.setDate(base.getDate() + parseInt(b.dataset.mas, 10));
    iV.value = base.getFullYear()+"-"+String(base.getMonth()+1).padStart(2,"0")+
               "-"+String(base.getDate()).padStart(2,"0");
   });
