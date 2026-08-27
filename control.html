@@ -1016,11 +1016,10 @@ function abrirFicha(s){
   '<label><span>Monto</span><input id="fM" type="text" inputmode="numeric"></label>'+
   '<label><span>Vence</span><input id="fV" type="date"></label>'+
   '<div class="rapidos">'+
-  '<button type="button" class="rap-oro" data-meses="1">Renovar hoy (un mes)</button>'+
-  '<button type="button" data-meses="3">3 meses desde hoy</button>'+
-  '<button type="button" data-mas="15">+15 días desde hoy</button>'+
-  '<button type="button" data-mas="7">+7 días desde hoy</button>'+
-  '<button type="button" data-desde="venc" data-meses="1">Un mes desde el vencimiento</button>'+
+  '<button type="button" class="rap-oro" data-meses="1">Renovar un mes</button>'+
+  '<button type="button" data-meses="3">Renovar 3 meses</button>'+
+  '<button type="button" data-mas="15">+15 días</button>'+
+  '<button type="button" data-mas="7">+7 días</button>'+
   '</div><p class="aviso" id="fAviso"></p></div>'+
   '<div class="pie"><button class="btn btn-linea" id="fCancelar">Cancelar</button>'+
   '<button class="btn btn-rojo" id="fGuardar">Guardar</button></div></div>';
@@ -1058,17 +1057,22 @@ function abrirFicha(s){
   f.setDate(Math.min(dia, ultimo));
   return f;
  }
+ /* Desde dónde se cuenta la renovación, en una sola regla:
+
+    - Si el socio está atrasado (ya se le venció), se cuenta desde HOY,
+      que es el día que pagó. Vencía el 25 y paga el 26 -> el próximo 26.
+    - Si paga adelantado (todavía no se le vence), se le respeta su fecha
+      aunque haya pagado varios días antes. Vencía el 28 -> el próximo 28. */
+ function desdeCuando(){
+  var hoy = new Date(); hoy.setHours(0,0,0,0);
+  if(!iV.value) return hoy;
+  var p = iV.value.split("-");
+  var venc = new Date(+p[0], +p[1]-1, +p[2]);
+  return venc > hoy ? venc : hoy;
+ }
  velo.querySelectorAll(".rapidos button").forEach(function(b){
   b.addEventListener("click", function(){
-   /* La renovación corre desde el día que el socio paga, o sea hoy.
-      El único botón que parte de la fecha vieja es el de "desde el vencimiento",
-      para el que paga antes de que se le acabe y no quiere perder los días. */
-   var base = new Date(); base.setHours(0,0,0,0);
-   if(b.dataset.desde === "venc" && iV.value){
-    var p = iV.value.split("-");
-    var venc = new Date(+p[0], +p[1]-1, +p[2]);
-    if(venc > base) base = venc;
-   }
+   var base = desdeCuando();
    if(b.dataset.meses) base = sumarMeses(base, parseInt(b.dataset.meses, 10));
    else base.setDate(base.getDate() + parseInt(b.dataset.mas, 10));
    iV.value = base.getFullYear()+"-"+String(base.getMonth()+1).padStart(2,"0")+
