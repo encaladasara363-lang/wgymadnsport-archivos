@@ -54,6 +54,12 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .hero .venc.good{ color:var(--verde); background:var(--verde-soft); }
 .hero .venc.warn{ color:var(--dorado); background:var(--naranja-soft); }
 .hero .venc.danger{ color:var(--rojo-claro); background:var(--rojo-soft); }
+.hero .turno{ margin-top:8px; font-size:14px; font-weight:800; letter-spacing:.02em;
+ display:inline-block; padding:6px 13px; border-radius:999px; border:1px solid; }
+.hero .turno[data-t="ok"]{ color:var(--verde); border-color:var(--verde);
+ background:rgba(92,168,92,.12); }
+.hero .turno[data-t="tope"]{ color:var(--dorado); border-color:var(--dorado);
+ background:rgba(212,175,55,.14); }
 .hero .plan{ font-size:13px; color:var(--gris-soft); font-weight:600; margin:8px 0 0; }
 .hero .empty{ font-size:16px; color:var(--gris-soft); font-weight:600; margin:0; }
 .hero .renovar{ margin-top:16px; }
@@ -105,6 +111,11 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .feed-item .fvenc.good{ color:var(--verde); }
 .feed-item .fvenc.warn{ color:var(--dorado); }
 .feed-item .fvenc.danger{ color:var(--rojo-claro); }
+.feed-item .fturno{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
+ border:1px solid; white-space:nowrap; }
+.feed-item .fturno[data-t="ok"]{ color:var(--verde); border-color:rgba(92,168,92,.5); }
+.feed-item .fturno[data-t="tope"]{ color:var(--dorado); border-color:rgba(212,175,55,.6);
+ background:rgba(212,175,55,.12); }
 .feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; flex:0 0 auto; }
 .feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:26px 0; }
 
@@ -199,6 +210,19 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 .ficha input, .ficha select{ background:var(--surface-2); border:1px solid var(--line);
  border-radius:10px; color:var(--blanco); font-family:inherit; font-size:15px;
  font-weight:600; padding:11px 12px; width:100%; }
+.ficha .turno-caja{ grid-column:1 / -1; display:flex; align-items:center; gap:12px;
+ flex-wrap:wrap; justify-content:space-between;
+ border:1px solid var(--dorado); background:rgba(212,175,55,.08);
+ border-radius:10px; padding:11px 13px; }
+.ficha .tc-lbl{ display:block; font-size:11px; font-weight:800; letter-spacing:.1em;
+ text-transform:uppercase; color:var(--dorado); }
+.ficha .tc-sub{ display:block; margin-top:3px; font-size:12.5px; color:var(--gris-soft); }
+.ficha .tc-ctrl{ display:flex; align-items:center; gap:10px; }
+.ficha .tc-ctrl button{ width:34px; height:34px; border-radius:8px; cursor:pointer;
+ background:var(--surface-2); border:1px solid var(--line); color:var(--blanco);
+ font-size:19px; font-weight:800; line-height:1; }
+.ficha .tc-ctrl button:hover{ border-color:var(--dorado); }
+.ficha .tc-ctrl b{ min-width:52px; text-align:center; font-size:22px; font-weight:900; }
 .ficha .rapidos{ grid-column:1 / -1; display:flex; gap:7px; flex-wrap:wrap; }
 .ficha .rapidos button{ background:var(--surface-2); border:1px solid var(--line);
  border-radius:999px; color:var(--gris); font-family:inherit; font-size:12px;
@@ -248,6 +272,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <p class="name" id="heroName" hidden></p>
 <p class="time" id="heroTime" hidden></p>
 <p class="venc" id="heroVenc" hidden></p>
+<p class="turno" id="heroTurno" hidden></p>
 <p class="plan" id="heroPlan" hidden></p>
 <div class="renovar" hidden id="heroAcc">
 <button class="btn btn-oro" id="heroEditar">Renovar / editar ficha</button>
@@ -593,6 +618,97 @@ if(guardado && LISTA_VERSION > versionVista){
  });
 }
 
+/* ── plan por turno: cuantos dias vino en el mes ────────────────────────
+   El socio por turno trabaja afuera y su plan le da 14 dias de gimnasio al
+   mes, no un mes corrido. Aca se lleva la cuenta de los dias distintos en
+   que entro: dos escaneos el mismo dia cuentan uno solo. */
+var DIAS_TURNO = 14;
+var CLAVE_ASIS = "wgym_asistencia_v1";
+var asistencia = {};
+try{ asistencia = JSON.parse(localStorage.getItem(CLAVE_ASIS) || "{}") || {}; }catch(e){}
+
+function guardarAsistencia(){
+ try{ localStorage.setItem(CLAVE_ASIS, JSON.stringify(asistencia)); }catch(e){}
+}
+function llaveSocio(s){ return (s.n + "|" + s.a).toUpperCase(); }
+function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
+
+/* Un mes hacia atras desde el vencimiento, con el mismo criterio que usa el
+   boton de renovar: si el dia no existe en el mes anterior, queda en el ultimo. */
+function mesAtras(iso){
+ var p = String(iso).split("-");
+ var dia = +p[2];
+ var f = new Date(+p[0], +p[1] - 2, 1);
+ var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
+ f.setDate(Math.min(dia, ultimo));
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+}
+/* El periodo que se esta pagando ahora: del vencimiento anterior al de hoy. */
+function cicloTurno(s){
+ if(!s || !s.v) return null;
+ return { ini: mesAtras(s.v), fin: s.v };
+}
+function diasUsados(s){
+ var c = cicloTurno(s);
+ if(!c) return 0;
+ var dias = asistencia[llaveSocio(s)] || {};
+ var n = 0;
+ for(var d in dias){
+  if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
+  if(d > c.ini && d <= c.fin) n++;
+ }
+ return n;
+}
+function marcarDia(s, iso){
+ if(!esTurno(s)) return false;
+ var k = llaveSocio(s);
+ if(!asistencia[k]) asistencia[k] = {};
+ if(asistencia[k][iso]) return false;
+ asistencia[k][iso] = 1;
+ guardarAsistencia();
+ return true;
+}
+function corregirDias(s, cuanto){
+ var c = cicloTurno(s);
+ if(!c) return;
+ var k = llaveSocio(s);
+ if(!asistencia[k]) asistencia[k] = {};
+ if(cuanto > 0){
+  /* Suma el primer dia libre del ciclo, empezando por hoy hacia atras. */
+  var d = hoyISO();
+  if(d > c.fin) d = c.fin;
+  for(var i = 0; i < 40; i++){
+   if(d <= c.ini) break;
+   if(!asistencia[k][d]){ asistencia[k][d] = 1; break; }
+   d = sumarDias(d, -1);
+  }
+ }else{
+  /* Borra el dia mas nuevo del ciclo. */
+  var dentro = [];
+  for(var x in asistencia[k]){
+   if(Object.prototype.hasOwnProperty.call(asistencia[k], x) && x > c.ini && x <= c.fin) dentro.push(x);
+  }
+  dentro.sort();
+  if(dentro.length) delete asistencia[k][dentro[dentro.length - 1]];
+ }
+ guardarAsistencia();
+}
+function sumarDias(iso, n){
+ var p = String(iso).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2] + n);
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+}
+/* El texto que ve el meson: "dia 9 de 14" o el aviso de que ya se paso. */
+function notaTurno(s){
+ if(!esTurno(s) || !s.v) return null;
+ var n = diasUsados(s);
+ if(n > DIAS_TURNO) return { pasado:true, n:n,
+  txt:"Ya usó sus " + DIAS_TURNO + " días · lleva " + n };
+ if(n === DIAS_TURNO) return { pasado:true, n:n,
+  txt:"Este es su día " + DIAS_TURNO + " de " + DIAS_TURNO + " · el último del plan" };
+ return { pasado:false, n:n, txt:"Turno · día " + (n || 0) + " de " + DIAS_TURNO };
+}
+
 /* ── fechas y estado ────────────────────────────────────────────────── */
 function hoyISO(){
  var d = new Date();
@@ -740,6 +856,12 @@ function mostrarHero(nombre, ts, s, cuantos){
  var ve = document.getElementById("heroVenc");
  if(d.detalle){ ve.hidden = false; ve.textContent = d.detalle; ve.className = "venc " + d.cls; }
  else { ve.hidden = true; }
+ var tu = document.getElementById("heroTurno");
+ var nt = s ? notaTurno(s) : null;
+ if(nt){
+  tu.hidden = false; tu.textContent = nt.txt;
+  tu.setAttribute("data-t", nt.pasado ? "tope" : "ok");
+ } else { tu.hidden = true; }
  var pl = document.getElementById("heroPlan");
  if(d.plan){ pl.hidden = false; pl.textContent = d.plan; } else { pl.hidden = true; }
  document.getElementById("heroAcc").hidden = !s;
@@ -786,6 +908,8 @@ function moverMarca(paso){
  });
 }
 function elegir(s){
+ /* Si entro sin alcanzar a escanear, el dia se cuenta igual. */
+ if(marcarDia(s, hoyISO())) pintarTabla();
  cerrarSug(); qPuerta.value = "";
  mostrarHero(s.n + " " + s.a, null, s);
  destellar();
@@ -823,6 +947,12 @@ document.getElementById("bEntrar").addEventListener("click", buscarAMano);
 /* ── el QR de siempre: escucha el registro en vivo ──────────────────── */
 var vistos = {}, primeraVuelta = true, filas = [];
 function llaveDe(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
+/* La hora del registro viene del QR; aca solo interesa el dia. */
+function diaDelTs(ts){
+ var d = ts ? new Date(ts) : new Date();
+ if(isNaN(d)) d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
 
 function pintarFeed(){
  var cont = document.getElementById("feed");
@@ -841,6 +971,8 @@ function pintarFeed(){
    (s ? COLOR_ESTADO[estadoDe(s)] : "var(--gris-soft)")+'"></span>'+
    '<span class="fname">'+escapeHtml(r.nombre+" "+r.apellido)+'</span>'+
    (nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '')+
+   (function(){ var nt = notaTurno(s);
+    return nt ? '<span class="fturno" data-t="'+(nt.pasado?"tope":"ok")+'">'+escapeHtml(nt.txt)+'</span>' : ''; })()+
    '</span><span class="ftime">'+fmtHora(r.ts)+'</span>';
   b.addEventListener("click", function(){
    mostrarHero(r.nombre+" "+r.apellido, r.ts, s);
@@ -862,6 +994,14 @@ function llegaronDatos(data){
    mostrarHero(ultima.nombre+" "+ultima.apellido, ultima.ts, s);
   }
  }
+ /* Cada escaneo le suma el dia al socio por turno. El mismo dia repetido no
+    suma de nuevo, y solo se anota si el ingreso es de hoy o de dias pasados. */
+ var seAnoto = false;
+ filas.forEach(function(r){
+  var sr = socioDelRegistro(r.nombre, r.apellido);
+  if(sr && marcarDia(sr, diaDelTs(r.ts))) seAnoto = true;
+ });
+ if(seAnoto) pintarTabla();
  filas.forEach(function(r){ vistos[llaveDe(r)] = true; });
  primeraVuelta = false;
  pintarFeed();
@@ -1018,6 +1158,12 @@ function abrirFicha(s){
   '<label class="ancho"><span>Plan</span><select id="fPlan"></select></label>'+
   '<label><span>Monto</span><input id="fM" type="text" inputmode="numeric"></label>'+
   '<label><span>Vence</span><input id="fV" type="date"></label>'+
+  '<div class="turno-caja" id="fTurnoCaja" hidden>'+
+  '<div class="tc-txt"><span class="tc-lbl">Días usados este mes</span>'+
+  '<span class="tc-sub" id="fTurnoSub"></span></div>'+
+  '<div class="tc-ctrl"><button type="button" id="fTurnoMenos" aria-label="Quitar un día">−</button>'+
+  '<b id="fTurnoNum">0</b>'+
+  '<button type="button" id="fTurnoMas" aria-label="Sumar un día">+</button></div></div>'+
   '<div class="rapidos">'+
   '<button type="button" class="rap-oro" data-meses="1">Renovar un mes</button>'+
   '<button type="button" data-meses="3">Renovar 3 meses</button>'+
@@ -1073,6 +1219,37 @@ function abrirFicha(s){
   var venc = new Date(+p[0], +p[1]-1, +p[2]);
   return venc > hoy ? venc : hoy;
  }
+ /* El contador solo aparece cuando el plan es por turno. Si cambian el plan
+    o el vencimiento en la misma ficha, se actualiza al tiro. */
+ var cajaTurno = velo.querySelector("#fTurnoCaja");
+ function pintarTurnoFicha(){
+  var falso = { n: iN.value.trim().toUpperCase() || d.n,
+                a: iA.value.trim().toUpperCase() || d.a,
+                plan: sel.value, v: iV.value };
+  if(!esTurno(falso) || nuevo || !falso.v){ cajaTurno.hidden = true; return; }
+  cajaTurno.hidden = false;
+  var n = diasUsados(falso);
+  velo.querySelector("#fTurnoNum").textContent = n;
+  var c = cicloTurno(falso);
+  velo.querySelector("#fTurnoSub").textContent =
+   n > DIAS_TURNO ? "Se pasó por " + (n - DIAS_TURNO) + (n - DIAS_TURNO === 1 ? " día" : " días") +
+                    " · del " + fechaCL(c.ini) + " al " + fechaCL(c.fin)
+                  : "Le quedan " + (DIAS_TURNO - n) + " de " + DIAS_TURNO +
+                    " · del " + fechaCL(c.ini) + " al " + fechaCL(c.fin);
+ }
+ function tocarTurno(cuanto){
+  var falso = { n: iN.value.trim().toUpperCase() || d.n,
+                a: iA.value.trim().toUpperCase() || d.a,
+                plan: sel.value, v: iV.value };
+  corregirDias(falso, cuanto);
+  pintarTurnoFicha(); pintar();
+ }
+ velo.querySelector("#fTurnoMenos").addEventListener("click", function(){ tocarTurno(-1); });
+ velo.querySelector("#fTurnoMas").addEventListener("click", function(){ tocarTurno(1); });
+ sel.addEventListener("change", pintarTurnoFicha);
+ iV.addEventListener("change", pintarTurnoFicha);
+ pintarTurnoFicha();
+
  velo.querySelectorAll(".rapidos button").forEach(function(b){
   b.addEventListener("click", function(){
    var base = desdeCuando();

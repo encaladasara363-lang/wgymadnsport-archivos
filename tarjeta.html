@@ -105,6 +105,10 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .mc-veredicto[data-v="bad"]{ border-color:#E85C5C; background:rgba(232,92,92,.12); }
 .mc-veredicto[data-v="bad"] .vfallo{ color:#E85C5C; }
 .mc-veredicto .vdet{ color:var(--gris); }
+.mc-veredicto .vturno{ font-size:12.5px; font-weight:800; margin:11px 0 0;
+ padding-top:10px; border-top:1px solid rgba(255,255,255,.14); }
+.mc-veredicto .vturno[data-t="ok"]{ color:var(--gris); }
+.mc-veredicto .vturno[data-t="tope"]{ color:var(--dorado); }
 .routine-blocked{ text-align:center; color:var(--danger); font-weight:700; font-size:13px; line-height:1.5; margin:18px 0 0; }
 
 nav.days{ display:flex; gap:8px; overflow-x:auto; padding:16px 16px 4px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }  
@@ -549,6 +553,66 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  }
  return null;
  }
+ /* El plan por turno da 14 días de gimnasio al mes, no un mes corrido.
+    El celular del socio se acuerda de los días en que abrió su tarjeta con
+    el QR, que es justo cuando entra. La cuenta buena la lleva el mostrador;
+    esta es para que el socio sepa cómo va. */
+ var DIAS_TURNO = 14;
+ var CLAVE_DIAS = "wgym_dias_v1";
+ function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
+ function llaveDe(s){ return (s.nombre + "|" + s.apellido).toUpperCase(); }
+ function leerDias(){
+ try{ return JSON.parse(localStorage.getItem(CLAVE_DIAS) || "{}") || {}; }catch(e){ return {}; }
+ }
+ function isoDeHoy(){
+ var d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+ }
+ /* Un mes antes del vencimiento: el comienzo del período que está pagando. */
+ function inicioCiclo(s){
+ var v = parseDMY(s.vencimiento);
+ if(!v) return null;
+ var dia = v.getDate();
+ var f = new Date(v.getFullYear(), v.getMonth() - 1, 1);
+ var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
+ f.setDate(Math.min(dia, ultimo));
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+ }
+ function finCiclo(s){
+ var v = parseDMY(s.vencimiento);
+ if(!v) return null;
+ return v.getFullYear()+"-"+String(v.getMonth()+1).padStart(2,"0")+"-"+String(v.getDate()).padStart(2,"0");
+ }
+ function anotarDia(s){
+ if(!esTurno(s)) return;
+ try{
+ var todo = leerDias(), k = llaveDe(s);
+ if(!todo[k]) todo[k] = {};
+ todo[k][isoDeHoy()] = 1;
+ localStorage.setItem(CLAVE_DIAS, JSON.stringify(todo));
+ }catch(e){}
+ }
+ function diasUsados(s){
+ var ini = inicioCiclo(s), fin = finCiclo(s);
+ if(!ini || !fin) return 0;
+ var dias = leerDias()[llaveDe(s)] || {}, n = 0;
+ for(var d in dias){
+ if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
+ if(d > ini && d <= fin) n++;
+ }
+ return n;
+ }
+ function textoTurno(s){
+ if(!esTurno(s) || !s.vencimiento) return null;
+ var n = diasUsados(s);
+ if(n > DIAS_TURNO) return { tope:true,
+ txt:"Ya usaste tus " + DIAS_TURNO + " días de este mes · llevas " + n + ". Consulta en recepción." };
+ if(n >= DIAS_TURNO) return { tope:true,
+ txt:"Este es tu día " + DIAS_TURNO + " de " + DIAS_TURNO + ", el último de tu plan." };
+ return { tope:false,
+ txt:"Día " + n + " de " + DIAS_TURNO + " de tu plan por turno · te quedan " + (DIAS_TURNO - n) + "." };
+ }
+
  function diasParaVencer(s){
  var venc = parseDMY(s.vencimiento);
  if(!venc) return 9999;
@@ -580,6 +644,8 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  '<div class="mc-veredicto" data-v="'+w.v+'">' +
  '<p class="vfallo">'+escapeHtml(w.fallo)+'</p>' +
  '<p class="vdet">'+escapeHtml(w.det)+'</p>' +
+ (function(){ var tn = textoTurno(s);
+ return tn ? '<p class="vturno" data-t="'+(tn.tope?"tope":"ok")+'">'+escapeHtml(tn.txt)+'</p>' : ''; })() +
  '</div>' +
  '<p class="mc-kicker">Socio WGYMADNSPORT</p>' +
  '<div class="mc-name">'+escapeHtml(s.nombre)+' '+escapeHtml(s.apellido)+'</div>' +
@@ -619,6 +685,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
+ anotarDia(s);
  renderCard(s);
  avisarIngreso(s);
  }
