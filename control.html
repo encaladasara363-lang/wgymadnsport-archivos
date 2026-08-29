@@ -647,11 +647,14 @@ if(guardado && LISTA_VERSION > versionVista){
  }
 }
 
-/* ── plan por turno: cuantos dias vino en el mes ────────────────────────
-   El socio por turno trabaja afuera y su plan le da 14 dias de gimnasio al
-   mes, no un mes corrido. Aca se lleva la cuenta de los dias distintos en
-   que entro: dos escaneos el mismo dia cuentan uno solo. */
+/* ── planes con dias contados ───────────────────────────────────────────
+   Hay dos planes que no dan el mes corrido sino una cantidad de dias:
+     · por turno, 14 dias dentro del mes que esta pagando;
+     · tres veces a la semana, 3 dias dentro de la semana, de lunes a domingo.
+   Aca se lleva la cuenta de los dias distintos en que entro: dos escaneos el
+   mismo dia cuentan uno solo. */
 var DIAS_TURNO = 14;
+var DIAS_SEMANA = 3;
 var CLAVE_ASIS = "wgym_asistencia_v1";
 var asistencia = {};
 try{ asistencia = JSON.parse(localStorage.getItem(CLAVE_ASIS) || "{}") || {}; }catch(e){}
@@ -661,6 +664,16 @@ function guardarAsistencia(){
 }
 function llaveSocio(s){ return (s.n + "|" + s.a).toUpperCase(); }
 function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
+function esSemanal(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
+
+/* El lunes de la semana en que cae esa fecha. En Chile la semana parte el
+   lunes, y getDay() cuenta el domingo como 0. */
+function lunesDe(iso){
+ var p = String(iso).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2]);
+ f.setDate(f.getDate() - ((f.getDay() + 6) % 7));
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+}
 
 /* Un mes hacia atras desde el vencimiento, con el mismo criterio que usa el
    boton de renovar: si el dia no existe en el mes anterior, queda en el ultimo. */
@@ -672,13 +685,24 @@ function mesAtras(iso){
  f.setDate(Math.min(dia, ultimo));
  return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
 }
-/* El periodo que se esta pagando ahora: del vencimiento anterior al de hoy. */
-function cicloTurno(s){
- if(!s || !s.v) return null;
- return { ini: mesAtras(s.v), fin: s.v };
+/* Cuantos dias le tocan y dentro de que periodo se cuentan. El turno se
+   cuenta contra el mes que esta pagando; el de tres veces, contra la semana
+   corrida, porque su plan se le renueva cada lunes. */
+function reglaDe(s){
+ if(esTurno(s)){
+  if(!s || !s.v) return null;
+  return { tope:DIAS_TURNO, ini:mesAtras(s.v), fin:s.v,
+           nombre:"Turno", cuando:"este mes" };
+ }
+ if(esSemanal(s)){
+  var lun = lunesDe(hoyISO());
+  return { tope:DIAS_SEMANA, ini:sumarDias(lun, -1), fin:sumarDias(lun, 6),
+           nombre:"3 por semana", cuando:"esta semana" };
+ }
+ return null;
 }
 function diasUsados(s){
- var c = cicloTurno(s);
+ var c = reglaDe(s);
  if(!c) return 0;
  var dias = asistencia[llaveSocio(s)] || {};
  var n = 0;
@@ -689,7 +713,7 @@ function diasUsados(s){
  return n;
 }
 function marcarDia(s, iso){
- if(!esTurno(s)) return false;
+ if(!esTurno(s) && !esSemanal(s)) return false;
  var k = llaveSocio(s);
  if(!asistencia[k]) asistencia[k] = {};
  if(asistencia[k][iso]) return false;
@@ -698,7 +722,7 @@ function marcarDia(s, iso){
  return true;
 }
 function corregirDias(s, cuanto){
- var c = cicloTurno(s);
+ var c = reglaDe(s);
  if(!c) return;
  var k = llaveSocio(s);
  if(!asistencia[k]) asistencia[k] = {};
@@ -727,15 +751,18 @@ function sumarDias(iso, n){
  var f = new Date(+p[0], +p[1]-1, +p[2] + n);
  return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
 }
-/* El texto que ve el meson: "dia 9 de 14" o el aviso de que ya se paso. */
+/* El texto que ve el meson: "dia 9 de 14" o el aviso de que ya se paso.
+   Es solo para que ella lo sepa: el socio igual entra, ella decide. */
 function notaTurno(s){
- if(!esTurno(s) || !s.v) return null;
+ var c = reglaDe(s);
+ if(!c) return null;
  var n = diasUsados(s);
- if(n > DIAS_TURNO) return { pasado:true, n:n,
-  txt:"Ya usó sus " + DIAS_TURNO + " días · lleva " + n };
- if(n === DIAS_TURNO) return { pasado:true, n:n,
-  txt:"Este es su día " + DIAS_TURNO + " de " + DIAS_TURNO + " · el último del plan" };
- return { pasado:false, n:n, txt:"Turno · día " + (n || 0) + " de " + DIAS_TURNO };
+ if(n > c.tope) return { pasado:true, n:n,
+  txt:"Ya usó sus " + c.tope + " días de " + c.cuando + " · lleva " + n };
+ if(n === c.tope) return { pasado:true, n:n,
+  txt:"Este es su día " + c.tope + " de " + c.tope + " · el último de " + c.cuando };
+ return { pasado:false, n:n,
+  txt:c.nombre + " · día " + (n || 0) + " de " + c.tope + " " + c.cuando };
 }
 
 /* ── fechas y estado ────────────────────────────────────────────────── */
@@ -1188,7 +1215,7 @@ function abrirFicha(s){
   '<label><span>Monto</span><input id="fM" type="text" inputmode="numeric"></label>'+
   '<label><span>Vence</span><input id="fV" type="date"></label>'+
   '<div class="turno-caja" id="fTurnoCaja" hidden>'+
-  '<div class="tc-txt"><span class="tc-lbl">Días usados este mes</span>'+
+  '<div class="tc-txt"><span class="tc-lbl" id="fTurnoLbl">Días usados</span>'+
   '<span class="tc-sub" id="fTurnoSub"></span></div>'+
   '<div class="tc-ctrl"><button type="button" id="fTurnoMenos" aria-label="Quitar un día">−</button>'+
   '<b id="fTurnoNum">0</b>'+
@@ -1248,23 +1275,27 @@ function abrirFicha(s){
   var venc = new Date(+p[0], +p[1]-1, +p[2]);
   return venc > hoy ? venc : hoy;
  }
- /* El contador solo aparece cuando el plan es por turno. Si cambian el plan
-    o el vencimiento en la misma ficha, se actualiza al tiro. */
+ /* El contador solo aparece en los planes de dias contados: por turno y tres
+    veces a la semana. Si cambian el plan o el vencimiento en la misma ficha,
+    se actualiza al tiro. */
  var cajaTurno = velo.querySelector("#fTurnoCaja");
  function pintarTurnoFicha(){
   var falso = { n: iN.value.trim().toUpperCase() || d.n,
                 a: iA.value.trim().toUpperCase() || d.a,
                 plan: sel.value, v: iV.value };
-  if(!esTurno(falso) || nuevo || !falso.v){ cajaTurno.hidden = true; return; }
+  var c = nuevo ? null : reglaDe(falso);
+  if(!c){ cajaTurno.hidden = true; return; }
   cajaTurno.hidden = false;
   var n = diasUsados(falso);
   velo.querySelector("#fTurnoNum").textContent = n;
-  var c = cicloTurno(falso);
+  velo.querySelector("#fTurnoLbl").textContent = "Días usados " + c.cuando;
+  /* El primer dia del periodo es el siguiente al de corte, que no se cuenta. */
+  var desde = sumarDias(c.ini, 1);
   velo.querySelector("#fTurnoSub").textContent =
-   n > DIAS_TURNO ? "Se pasó por " + (n - DIAS_TURNO) + (n - DIAS_TURNO === 1 ? " día" : " días") +
-                    " · del " + fechaCL(c.ini) + " al " + fechaCL(c.fin)
-                  : "Le quedan " + (DIAS_TURNO - n) + " de " + DIAS_TURNO +
-                    " · del " + fechaCL(c.ini) + " al " + fechaCL(c.fin);
+   n > c.tope ? "Se pasó por " + (n - c.tope) + (n - c.tope === 1 ? " día" : " días") +
+                " · del " + fechaCL(desde) + " al " + fechaCL(c.fin)
+              : "Le quedan " + (c.tope - n) + " de " + c.tope +
+                " · del " + fechaCL(desde) + " al " + fechaCL(c.fin);
  }
  function tocarTurno(cuanto){
   var falso = { n: iN.value.trim().toUpperCase() || d.n,

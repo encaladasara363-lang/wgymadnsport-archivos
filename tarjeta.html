@@ -558,8 +558,10 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
     el QR, que es justo cuando entra. La cuenta buena la lleva el mostrador;
     esta es para que el socio sepa cómo va. */
  var DIAS_TURNO = 14;
+ var DIAS_SEMANA = 3;
  var CLAVE_DIAS = "wgym_dias_v1";
  function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
+ function esSemanal(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
  function llaveDe(s){ return (s.nombre + "|" + s.apellido).toUpperCase(); }
  function leerDias(){
  try{ return JSON.parse(localStorage.getItem(CLAVE_DIAS) || "{}") || {}; }catch(e){ return {}; }
@@ -568,23 +570,35 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  var d = new Date();
  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
  }
- /* Un mes antes del vencimiento: el comienzo del período que está pagando. */
- function inicioCiclo(s){
+ function aISO(f){
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+ }
+ /* Cuántos días trae el plan y dentro de qué período se cuentan: el de turno
+    contra el mes que está pagando, el de tres veces contra la semana corrida,
+    de lunes a domingo. */
+ function reglaDe(s){
+ if(esTurno(s)){
  var v = parseDMY(s.vencimiento);
  if(!v) return null;
  var dia = v.getDate();
  var f = new Date(v.getFullYear(), v.getMonth() - 1, 1);
  var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
  f.setDate(Math.min(dia, ultimo));
- return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+ return { tope:DIAS_TURNO, ini:aISO(f), fin:aISO(v),
+ cuando:"este mes", suPlan:"tu plan por turno" };
  }
- function finCiclo(s){
- var v = parseDMY(s.vencimiento);
- if(!v) return null;
- return v.getFullYear()+"-"+String(v.getMonth()+1).padStart(2,"0")+"-"+String(v.getDate()).padStart(2,"0");
+ if(esSemanal(s)){
+ var h = new Date(); h.setHours(0,0,0,0);
+ var lun = new Date(h); lun.setDate(lun.getDate() - ((lun.getDay() + 6) % 7));
+ var corte = new Date(lun); corte.setDate(corte.getDate() - 1);
+ var dom = new Date(lun); dom.setDate(dom.getDate() + 6);
+ return { tope:DIAS_SEMANA, ini:aISO(corte), fin:aISO(dom),
+ cuando:"esta semana", suPlan:"tu plan de 3 veces por semana" };
+ }
+ return null;
  }
  function anotarDia(s){
- if(!esTurno(s)) return;
+ if(!esTurno(s) && !esSemanal(s)) return;
  try{
  var todo = leerDias(), k = llaveDe(s);
  if(!todo[k]) todo[k] = {};
@@ -593,24 +607,25 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  }catch(e){}
  }
  function diasUsados(s){
- var ini = inicioCiclo(s), fin = finCiclo(s);
- if(!ini || !fin) return 0;
+ var c = reglaDe(s);
+ if(!c) return 0;
  var dias = leerDias()[llaveDe(s)] || {}, n = 0;
  for(var d in dias){
  if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
- if(d > ini && d <= fin) n++;
+ if(d > c.ini && d <= c.fin) n++;
  }
  return n;
  }
  function textoTurno(s){
- if(!esTurno(s) || !s.vencimiento) return null;
+ var c = reglaDe(s);
+ if(!c) return null;
  var n = diasUsados(s);
- if(n > DIAS_TURNO) return { tope:true,
- txt:"Ya usaste tus " + DIAS_TURNO + " días de este mes · llevas " + n + ". Consulta en recepción." };
- if(n >= DIAS_TURNO) return { tope:true,
- txt:"Este es tu día " + DIAS_TURNO + " de " + DIAS_TURNO + ", el último de tu plan." };
+ if(n > c.tope) return { tope:true,
+ txt:"Ya usaste tus " + c.tope + " días de " + c.cuando + " · llevas " + n + ". Consulta en recepción." };
+ if(n >= c.tope) return { tope:true,
+ txt:"Este es tu día " + c.tope + " de " + c.tope + ", el último de " + c.cuando + "." };
  return { tope:false,
- txt:"Día " + n + " de " + DIAS_TURNO + " de tu plan por turno · te quedan " + (DIAS_TURNO - n) + "." };
+ txt:"Día " + n + " de " + c.tope + " de " + c.suPlan + " · te quedan " + (c.tope - n) + " " + c.cuando + "." };
  }
 
  function diasParaVencer(s){
