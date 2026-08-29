@@ -415,9 +415,9 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <img class="gate-logo" id="gateLogoImg" alt="WGYMADNSPORT">  
  <p class="gate-kicker">WGYMADNSPORT Tocopilla</p>  
  <h2>Acceso a tu tarjeta virtual</h2>
- <p class="gate-sub">Ingresa tu nombre y apellido, como está registrado en el gimnasio</p>  
- <input type="text" id="gateNombre" class="gate-input" placeholder="Nombre" autocomplete="off">  
- <input type="text" id="gateApellido" class="gate-input" placeholder="Apellido" autocomplete="off">  
+ <p class="gate-sub">Escribe tu nombre y apellido juntos, como está registrado en el gimnasio</p>  
+ <input type="text" id="gateNombre" class="gate-input" placeholder="Ej: Claudia Villegas"
+ autocomplete="off" autocapitalize="words" enterkeyhint="go" aria-label="Tu nombre y apellido">  
  <button id="gateBtn" class="gate-btn">Entrar</button>  
  <p id="gateError" class="gate-error" hidden>No encontramos ese nombre entre los socios registrados. Consulta en recepción.</p>  
  </div>  
@@ -538,6 +538,21 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  function claveNombre(s){ return normName(s).replace(/\s+/g, ""); }
  /* Cuántas letras de diferencia se le perdonan según el largo del nombre. */
  function margen(q){ return q.length <= 8 ? 1 : (q.length <= 14 ? 2 : 3); }
+ /* El socio escribe todo junto en un solo casillero, así que hay que adivinar
+    dónde termina el nombre y empieza el apellido. Se prueban todos los cortes,
+    porque los hay compuestos de los dos lados: ANA MARIA GONZALEZ tiene el
+    nombre corto y el apellido largo, y MARIA JOSE OBREQUE al revés. */
+ function findSocioJunto(texto){
+ var palabras = String(texto || "").trim().split(/\s+/).filter(Boolean);
+ if(!palabras.length) return null;
+ if(palabras.length === 1) return findSocio(palabras[0], palabras[0]);
+ for(var i = 1; i < palabras.length; i++){
+ var s = findSocio(palabras.slice(0, i).join(" "), palabras.slice(i).join(" "));
+ if(s) return s;
+ }
+ /* Nada calzó cortándolo: se prueba el texto completo contra nombre+apellido. */
+ return findSocio(palabras[0], palabras.slice(1).join(" "));
+ }
  function findSocio(nombre, apellido){
  var n = normName(nombre), a = normName(apellido);
  if(!n || !a) return null;
@@ -750,8 +765,8 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  renderCard(s);
  avisarIngreso(s);
  }
- function tryLogin(nombre, apellido){
- var socio = findSocio(nombre, apellido);
+ function tryLogin(texto){
+ var socio = findSocioJunto(texto);
  if(socio){
  unlockCardView(socio);
  return true;
@@ -763,14 +778,16 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  /* ---------- routing ---------- */
  function initRoute(){
  }
+ var cajaNombre = document.getElementById("gateNombre");
  document.getElementById("gateBtn").addEventListener("click", function(){
- tryLogin(document.getElementById("gateNombre").value, document.getElementById("gateApellido").value);
+ tryLogin(cajaNombre.value);
  });
- document.getElementById("gateApellido").addEventListener("keydown", function(e){
- if(e.key === "Enter") tryLogin(document.getElementById("gateNombre").value, document.getElementById("gateApellido").value);
+ cajaNombre.addEventListener("keydown", function(e){
+ if(e.key === "Enter"){ e.preventDefault(); tryLogin(cajaNombre.value); }
  });
- document.getElementById("gateNombre").addEventListener("keydown", function(e){
- if(e.key === "Enter") document.getElementById("gateApellido").focus();
+ /* Si se equivocó, el aviso se va apenas empieza a corregir. */
+ cajaNombre.addEventListener("input", function(){
+ document.getElementById("gateError").hidden = true;
  });
 
  /* ---------- go ---------- */
