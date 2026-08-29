@@ -343,7 +343,7 @@ const LOGO_B64 = "assets/logo.jpg";
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 /* Lista base publicada en el sitio. Si edito socios acá, sube este número
    y la página te ofrece traer la lista nueva sin pisar lo tuyo. */
-const LISTA_VERSION = 2026082908;
+const LISTA_VERSION = 2026082909;
 const LISTA_BASE = [
 {n:"AARON",a:"SOZA",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-22"},
 {n:"AKASH",a:"THADANI",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-03"},
@@ -355,7 +355,7 @@ const LISTA_BASE = [
 {n:"ALEXIS",a:"ACUÑA",plan:"Full Mensual",m:33000,v:"2026-09-25"},
 {n:"ALEXIS",a:"VARAS",plan:"Funcionario Público",m:28000,v:"2026-08-14"},
 {n:"ALONSO",a:"ARAYA",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-30"},
-{n:"AMBER",a:"TORRES",plan:"Plan Semanal",m:15000,v:"2026-09-05"},
+{n:"AMBER",a:"TORRES",plan:"Plan Semanal",m:15000,v:"2026-09-07"},
 {n:"ANA",a:"MARIA GONZALEZ",plan:"Mensual Tercera Edad",m:23000,v:"2026-09-24"},
 {n:"ANDREA",a:"CUELLA",plan:"Full Mensual",m:33000,v:"2026-08-03"},
 {n:"ANDREA",a:"VARAS",plan:"Estudiante Profesor",m:28000,v:"2026-08-10"},
@@ -426,7 +426,7 @@ const LISTA_BASE = [
 {n:"IVAN",a:"ESPIRITU",plan:"Mensual Turno",m:23000,v:"2026-08-08"},
 {n:"IVAN",a:"POZHO",plan:"Full Mensual",m:33000,v:"2026-09-10"},
 {n:"JAIRO",a:"CONTRERAS",plan:"Mensual Turno",m:23000,v:"2026-08-14"},
-{n:"JAVIERA",a:"CARRASCO",plan:"Plan Semanal",m:15000,v:"2026-09-05"},
+{n:"JAVIERA",a:"CARRASCO",plan:"Plan Semanal",m:15000,v:"2026-09-07"},
 {n:"JEAN",a:"PIERRE",plan:"Full Mensual",m:33000,v:"2026-09-24"},
 {n:"JENNY",a:"GOMEZ",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
 {n:"JHANKARLA",a:"SUAREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
@@ -1361,12 +1361,12 @@ function abrirFicha(s){
     el gimnasio cierra ese dia y no seria justo cobrarselo. Se le suman dias
     hasta juntar los que corresponden, saltandose los domingos. */
  function esSemanalPlan(nombre){ return /semanal/i.test(nombre || ""); }
- /* Cuenta dias de gimnasio abierto, saltandose los domingos. Si el socio parte
-    hoy, el dia de hoy es el primero de los siete; si esta renovando adelantado,
-    su ultimo dia ya lo tiene pagado, asi que la cuenta parte al dia siguiente. */
- function sumarDiasAbiertos(base, cuantos, cuentaElPrimero){
+ /* Cuenta dias de gimnasio abierto, saltandose los domingos. La cuenta parte al
+    dia siguiente del pago: el dia en que paga entra igual, asi que le quedan
+    siete dias mas por delante. */
+ function sumarDiasAbiertos(base, cuantos){
   var f = new Date(base);
-  var puestos = (cuentaElPrimero && f.getDay() !== 0) ? 1 : 0;
+  var puestos = 0;
   while(puestos < cuantos){
    f.setDate(f.getDate() + 1);
    if(f.getDay() !== 0) puestos++;   /* 0 es domingo: no cuenta */
@@ -1377,11 +1377,7 @@ function abrirFicha(s){
   b.addEventListener("click", function(){
    var base = desdeCuando();
    if(b.dataset.meses) base = sumarMeses(base, parseInt(b.dataset.meses, 10));
-   else if(esSemanalPlan(sel.value)){
-    var hoy0 = new Date(); hoy0.setHours(0,0,0,0);
-    base = sumarDiasAbiertos(base, parseInt(b.dataset.mas, 10),
-                             base.getTime() === hoy0.getTime());
-   }
+   else if(esSemanalPlan(sel.value)) base = sumarDiasAbiertos(base, parseInt(b.dataset.mas, 10));
    else base.setDate(base.getDate() + parseInt(b.dataset.mas, 10));
    iV.value = base.getFullYear()+"-"+String(base.getMonth()+1).padStart(2,"0")+
               "-"+String(base.getDate()).padStart(2,"0");
