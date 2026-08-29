@@ -105,10 +105,19 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .mc-veredicto[data-v="bad"]{ border-color:#E85C5C; background:rgba(232,92,92,.12); }
 .mc-veredicto[data-v="bad"] .vfallo{ color:#E85C5C; }
 .mc-veredicto .vdet{ color:var(--gris); }
-.mc-veredicto .vturno{ font-size:12.5px; font-weight:800; margin:11px 0 0;
+.mc-veredicto .vturno{ font-size:14px; font-weight:800; margin:11px 0 0;
  padding-top:10px; border-top:1px solid rgba(255,255,255,.14); }
 .mc-veredicto .vturno[data-t="ok"]{ color:var(--gris); }
 .mc-veredicto .vturno[data-t="tope"]{ color:var(--dorado); }
+/* La barrita de los dias del mes: llena lo usado, el resto es lo que le queda. */
+.mc-veredicto .vbarra{ height:9px; border-radius:5px; margin:9px 0 0;
+ background:rgba(255,255,255,.14); overflow:hidden; }
+.mc-veredicto .vbarra i{ display:block; height:100%; border-radius:5px;
+ background:var(--dorado); }
+.mc-veredicto .vturno[data-t="tope"] + .vbarra i{ background:#E85C5C; }
+.mc-veredicto .vfavor{ font-size:12.5px; font-weight:600; line-height:1.5;
+ color:var(--gris); margin:8px 0 0; }
+.mc-veredicto .vfavor b{ color:var(--dorado); }
 .routine-blocked{ text-align:center; color:var(--danger); font-weight:700; font-size:13px; line-height:1.5; margin:18px 0 0; }
 
 nav.days{ display:flex; gap:8px; overflow-x:auto; padding:16px 16px 4px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }  
@@ -559,6 +568,9 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
     esta es para que el socio sepa cómo va. */
  var DIAS_TURNO = 14;
  var DIAS_SEMANA = 3;
+ /* Tres por semana por cuatro semanas. Es el tope que vale: si una semana
+    viene menos, esos días le quedan a favor para las siguientes. */
+ var DIAS_MES_3X = 12;
  var CLAVE_DIAS = "wgym_dias_v1";
  function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
  function esSemanal(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
@@ -585,24 +597,23 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
  f.setDate(Math.min(dia, ultimo));
  return { tope:DIAS_TURNO, ini:aISO(f), fin:aISO(v),
- cuando:"este mes", suPlan:"tu plan por turno", mes:null };
+ cuando:"este mes", suPlan:"tu plan por turno", semana:null };
  }
  if(esSemanal(s)){
  var h = new Date(); h.setHours(0,0,0,0);
  var lun = new Date(h); lun.setDate(lun.getDate() - ((lun.getDay() + 6) % 7));
  var corte = new Date(lun); corte.setDate(corte.getDate() - 1);
  var dom = new Date(lun); dom.setDate(dom.getDate() + 6);
- /* El mes que pagó, para poder decirle cuántos días lleva en total. */
- var v = parseDMY(s.vencimiento), mes = null;
- if(v){
+ /* Los 12 días se cuentan contra el mes que pagó, no contra la semana. */
+ var v = parseDMY(s.vencimiento);
+ if(!v) return null;
  var dia = v.getDate();
  var im = new Date(v.getFullYear(), v.getMonth() - 1, 1);
  var ultimo = new Date(im.getFullYear(), im.getMonth() + 1, 0).getDate();
  im.setDate(Math.min(dia, ultimo));
- mes = { ini:aISO(im), fin:aISO(v) };
- }
- return { tope:DIAS_SEMANA, ini:aISO(corte), fin:aISO(dom),
- cuando:"esta semana", suPlan:"tu plan de 3 veces por semana", mes:mes };
+ return { tope:DIAS_MES_3X, ini:aISO(im), fin:aISO(v),
+ cuando:"este mes", suPlan:"tu plan de 3 veces por semana",
+ semana:{ ini:aISO(corte), fin:aISO(dom), tope:DIAS_SEMANA } };
  }
  return null;
  }
@@ -631,13 +642,31 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  var c = reglaDe(s);
  if(!c) return null;
  var n = diasUsados(s);
- var cola = c.mes ? " Llevas " + contarEntre(s, c.mes.ini, c.mes.fin) + " en el mes que pagaste." : "";
- if(n > c.tope) return { tope:true,
- txt:"Ya usaste tus " + c.tope + " días de " + c.cuando + " · llevas " + n + "." + cola + " Consulta en recepción." };
- if(n >= c.tope) return { tope:true,
- txt:"Este es tu día " + c.tope + " de " + c.tope + ", el último de " + c.cuando + "." + cola };
- return { tope:false,
- txt:"Día " + n + " de " + c.tope + " de " + c.suPlan + " · te quedan " + (c.tope - n) + " " + c.cuando + "." + cola };
+ var quedan = Math.max(0, c.tope - n);
+ var r = { tope:false, n:n, total:c.tope, quedan:quedan,
+ pct:Math.min(100, Math.round(n / c.tope * 100)), favor:"" };
+
+ if(n > c.tope){
+ r.tope = true;
+ r.txt = "Ya usaste tus " + c.tope + " días de " + c.cuando + " · llevas " + n + ".";
+ r.favor = "Consulta en recepción.";
+ return r;
+ }
+ if(n === c.tope){
+ r.tope = true;
+ r.txt = "Este es tu día " + c.tope + " de " + c.tope + ", el último de " + c.cuando + ".";
+ return r;
+ }
+ r.txt = "Día " + n + " de " + c.tope + " de " + c.suPlan + " · te quedan " + quedan + " " + c.cuando + ".";
+ /* Lo que le importa al socio: que los días que no usó no se le pierden. */
+ if(c.semana){
+ var sem = contarEntre(s, c.semana.ini, c.semana.fin);
+ r.favor = "Esta semana llevas <b>" + sem + " de " + c.semana.tope + "</b>. " +
+ (sem < c.semana.tope
+ ? "Los días que no uses no se pierden: te quedan a favor y los puedes recuperar las próximas semanas."
+ : "Lo que vale son los " + c.tope + " días del mes, así que si te quedan, los puedes usar igual.");
+ }
+ return r;
  }
 
  function diasParaVencer(s){
@@ -672,7 +701,11 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  '<p class="vfallo">'+escapeHtml(w.fallo)+'</p>' +
  '<p class="vdet">'+escapeHtml(w.det)+'</p>' +
  (function(){ var tn = textoTurno(s);
- return tn ? '<p class="vturno" data-t="'+(tn.tope?"tope":"ok")+'">'+escapeHtml(tn.txt)+'</p>' : ''; })() +
+ if(!tn) return '';
+ return '<p class="vturno" data-t="'+(tn.tope?"tope":"ok")+'">'+escapeHtml(tn.txt)+'</p>'+
+ '<div class="vbarra" role="img" aria-label="Llevas '+tn.n+' de '+tn.total+' días">'+
+ '<i style="width:'+tn.pct+'%"></i></div>'+
+ (tn.favor ? '<p class="vfavor">'+tn.favor+'</p>' : ''); })() +
  '</div>' +
  '<p class="mc-kicker">Socio WGYMADNSPORT</p>' +
  '<div class="mc-name">'+escapeHtml(s.nombre)+' '+escapeHtml(s.apellido)+'</div>' +

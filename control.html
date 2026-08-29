@@ -655,6 +655,10 @@ if(guardado && LISTA_VERSION > versionVista){
    mismo dia cuentan uno solo. */
 var DIAS_TURNO = 14;
 var DIAS_SEMANA = 3;
+/* Tres por semana por cuatro semanas: los dias que trae el plan en el mes.
+   El tope que vale es este, no el de la semana: si una semana viene menos,
+   esos dias le quedan a favor y los puede usar en las semanas siguientes. */
+var DIAS_MES_3X = 12;
 var CLAVE_ASIS = "wgym_asistencia_v1";
 var asistencia = {};
 try{ asistencia = JSON.parse(localStorage.getItem(CLAVE_ASIS) || "{}") || {}; }catch(e){}
@@ -685,23 +689,25 @@ function mesAtras(iso){
  f.setDate(Math.min(dia, ultimo));
  return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
 }
-/* Cuantos dias le tocan y dentro de que periodo se cuentan.
-   Los dos planes se PAGAN por mes; lo que cambia es como se reparten los dias:
-     · el de turno da 14 dias para gastar en todo el mes que esta pagando;
-     · el de tres veces da 3 dias por semana, de lunes a domingo, asi que la
-       cuenta que dice si se paso o no es la de la semana corrida.
-   Ademas del tope, al de tres veces se le muestra cuantos dias lleva en el mes
-   completo que pago, que es el numero que sirve para comparar planes. */
+/* Cuantos dias le tocan y dentro de que periodo se cuentan. Los dos planes se
+   pagan por mes y los dos se cuentan contra el mes que esta pagando:
+     · el de turno trae 14 dias;
+     · el de tres veces trae 12, que son sus 3 por semana por cuatro semanas.
+   Al de tres veces se le lleva ademas la cuenta de la semana corrida, pero
+   solo como guia: si una semana viene una vez, las otras dos no se pierden,
+   le quedan a favor dentro de los 12 del mes. */
 function reglaDe(s){
  if(esTurno(s)){
   if(!s || !s.v) return null;
   return { tope:DIAS_TURNO, ini:mesAtras(s.v), fin:s.v,
-           nombre:"Turno", cuando:"este mes", conMes:false };
+           nombre:"Turno", cuando:"este mes", semana:null };
  }
  if(esSemanal(s)){
+  if(!s || !s.v) return null;
   var lun = lunesDe(hoyISO());
-  return { tope:DIAS_SEMANA, ini:sumarDias(lun, -1), fin:sumarDias(lun, 6),
-           nombre:"3 por semana", cuando:"esta semana", conMes:true };
+  return { tope:DIAS_MES_3X, ini:mesAtras(s.v), fin:s.v,
+           nombre:"3 por semana", cuando:"este mes",
+           semana:{ ini:sumarDias(lun, -1), fin:sumarDias(lun, 6), tope:DIAS_SEMANA } };
  }
  return null;
 }
@@ -718,11 +724,10 @@ function diasUsados(s){
  var c = reglaDe(s);
  return c ? contarEntre(s, c.ini, c.fin) : 0;
 }
-/* Los dias que lleva dentro del mes que pago, sin importar como se repartan
-   entre las semanas. */
-function diasDelMesPagado(s){
- if(!s || !s.v) return null;
- return contarEntre(s, mesAtras(s.v), s.v);
+/* Los dias que lleva en la semana corrida, para el plan de tres veces. */
+function diasDeLaSemana(s){
+ var c = reglaDe(s);
+ return (c && c.semana) ? contarEntre(s, c.semana.ini, c.semana.fin) : null;
 }
 function marcarDia(s, iso){
  if(!esTurno(s) && !esSemanal(s)) return false;
@@ -769,10 +774,10 @@ function notaTurno(s){
  var c = reglaDe(s);
  if(!c) return null;
  var n = diasUsados(s);
- /* Al de tres veces se le agrega el total del mes que pago, para saber si
-    en el mes completo se paso o solo movio los dias de una semana a otra. */
- var mes = c.conMes ? diasDelMesPagado(s) : null;
- var cola = mes === null ? "" : " · " + mes + " en el mes";
+ /* Al de tres veces se le agrega cuantos lleva en la semana, para que ella vea
+    de una si esta viniendo parejo o si junto varios dias seguidos. */
+ var sem = diasDeLaSemana(s);
+ var cola = sem === null ? "" : " · " + sem + " esta semana";
  if(n > c.tope) return { pasado:true, n:n,
   txt:"Ya usó sus " + c.tope + " días de " + c.cuando + " · lleva " + n + cola };
  if(n === c.tope) return { pasado:true, n:n,
@@ -1307,12 +1312,12 @@ function abrirFicha(s){
   velo.querySelector("#fTurnoLbl").textContent = "Días usados " + c.cuando;
   /* El primer dia del periodo es el siguiente al de corte, que no se cuenta. */
   var desde = sumarDias(c.ini, 1);
-  var mes = c.conMes ? diasDelMesPagado(falso) : null;
+  var sem = diasDeLaSemana(falso);
   velo.querySelector("#fTurnoSub").textContent =
    (n > c.tope ? "Se pasó por " + (n - c.tope) + (n - c.tope === 1 ? " día" : " días")
                : "Le quedan " + (c.tope - n) + " de " + c.tope) +
    " · del " + fechaCL(desde) + " al " + fechaCL(c.fin) +
-   (mes === null ? "" : " · lleva " + mes + (mes === 1 ? " día" : " días") + " en el mes que pagó");
+   (sem === null ? "" : " · esta semana lleva " + sem + " de " + c.semana.tope);
  }
  function tocarTurno(cuanto){
   var falso = { n: iN.value.trim().toUpperCase() || d.n,
