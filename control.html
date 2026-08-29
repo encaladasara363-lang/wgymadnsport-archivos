@@ -1231,8 +1231,8 @@ function abrirFicha(s){
  velo.innerHTML =
   '<div class="ficha" role="dialog" aria-modal="true" aria-label="Ficha del socio">'+
   '<h3></h3><div class="campos">'+
-  '<label><span>Nombre</span><input id="fN" type="text" autocomplete="off"></label>'+
-  '<label><span>Apellido</span><input id="fA" type="text" autocomplete="off"></label>'+
+  '<label class="ancho"><span>Nombre y apellido</span>'+
+  '<input id="fN" type="text" autocomplete="off"></label>'+
   '<label class="ancho"><span>Plan</span><select id="fPlan"></select></label>'+
   '<label><span>Monto</span><input id="fM" type="text" inputmode="numeric"></label>'+
   '<label><span>Vence</span><input id="fV" type="date"></label>'+
@@ -1260,9 +1260,23 @@ function abrirFicha(s){
   if(p === d.plan) o.selected = true;
   sel.appendChild(o);
  });
- var iN = velo.querySelector("#fN"), iA = velo.querySelector("#fA");
+ var iN = velo.querySelector("#fN");
  var iM = velo.querySelector("#fM"), iV = velo.querySelector("#fV");
- iN.value = d.n; iA.value = d.a; iV.value = d.v || hoyISO();
+ iN.value = ((d.n || "") + " " + (d.a || "")).trim();
+ iV.value = d.v || hoyISO();
+
+ /* Se escribe todo junto, pero adentro se sigue guardando el nombre por un
+    lado y el apellido por otro. La primera palabra es el nombre y el resto
+    el apellido; si al socio no se le cambio el nombre, se respeta como
+    estaba partido para no descuadrar a los que ya tienen dos nombres. */
+ function partirNombre(texto){
+  var partes = String(texto || "").trim().toUpperCase().split(/\s+/).filter(Boolean);
+  if(!partes.length) return { n:"", a:"" };
+  var comoEstaba = ((d.n || "") + " " + (d.a || "")).trim().toUpperCase();
+  if(!nuevo && partes.join(" ") === comoEstaba) return { n:d.n, a:d.a };
+  if(partes.length === 1) return { n:partes[0], a:"" };
+  return { n:partes[0], a:partes.slice(1).join(" ") };
+ }
  iM.value = "$" + (d.m || 0).toLocaleString("es-CL");
 
  function pintaMonto(){
@@ -1302,9 +1316,8 @@ function abrirFicha(s){
     se actualiza al tiro. */
  var cajaTurno = velo.querySelector("#fTurnoCaja");
  function pintarTurnoFicha(){
-  var falso = { n: iN.value.trim().toUpperCase() || d.n,
-                a: iA.value.trim().toUpperCase() || d.a,
-                plan: sel.value, v: iV.value };
+  var p = partirNombre(iN.value);
+  var falso = { n: p.n || d.n, a: p.a || d.a, plan: sel.value, v: iV.value };
   var c = nuevo ? null : reglaDe(falso);
   if(!c){ cajaTurno.hidden = true; return; }
   cajaTurno.hidden = false;
@@ -1321,9 +1334,8 @@ function abrirFicha(s){
    (sem === null ? "" : " · esta semana lleva " + sem + " de " + c.semana.tope);
  }
  function tocarTurno(cuanto){
-  var falso = { n: iN.value.trim().toUpperCase() || d.n,
-                a: iA.value.trim().toUpperCase() || d.a,
-                plan: sel.value, v: iV.value };
+  var p = partirNombre(iN.value);
+  var falso = { n: p.n || d.n, a: p.a || d.a, plan: sel.value, v: iV.value };
   corregirDias(falso, cuanto);
   pintarTurnoFicha(); pintar();
  }
@@ -1373,8 +1385,8 @@ function abrirFicha(s){
   if(ev.key === "Enter" && ev.target.tagName === "INPUT") aceptar();
  }
  function aceptar(){
-  var n = iN.value.trim().toUpperCase(), a = iA.value.trim().toUpperCase();
-  if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe al menos el nombre."; iN.focus(); return; }
+  var p = partirNombre(iN.value), n = p.n, a = p.a;
+  if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe el nombre y el apellido."; iN.focus(); return; }
   if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
   if(nuevo){
    socios.push({ id:idNuevo(), n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value });
