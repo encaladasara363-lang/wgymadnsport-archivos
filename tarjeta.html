@@ -553,7 +553,12 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  var s = findSocio(palabras.slice(0, i).join(" "), palabras.slice(i).join(" "));
  if(s) return s;
  }
- /* Nada calzó cortándolo: se prueba el texto completo contra nombre+apellido. */
+ /* Hay gente que lo escribe al revés, primero el apellido. Se prueba también
+    así antes de decirle que no está. */
+ for(var j = 1; j < palabras.length; j++){
+ var r = findSocio(palabras.slice(j).join(" "), palabras.slice(0, j).join(" "));
+ if(r) return r;
+ }
  return findSocio(palabras[0], palabras.slice(1).join(" "));
  }
  function findSocio(nombre, apellido){
