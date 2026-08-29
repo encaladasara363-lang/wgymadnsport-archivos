@@ -341,7 +341,7 @@ const LOGO_B64 = "assets/logo.jpg";
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 /* Lista base publicada en el sitio. Si edito socios acá, sube este número
    y la página te ofrece traer la lista nueva sin pisar lo tuyo. */
-const LISTA_VERSION = 20260826;
+const LISTA_VERSION = 20260829;
 const LISTA_BASE = [
 {n:"AARON",a:"SOZA",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-22"},
 {n:"AKASH",a:"THADANI",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-03"},
@@ -588,7 +588,10 @@ var guardado = null;
 try{ guardado = JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){}
 var socios = (guardado && Array.isArray(guardado.socios) && guardado.socios.length)
  ? guardado.socios : copiaBase();
-var versionVista = (guardado && guardado.version) || LISTA_VERSION;
+/* Sin numero de version, la copia guardada es de antes de que existiera el
+   aviso: hay que tratarla como vieja. Si se le pone la version de hoy, el
+   equipo cree que esta al dia para siempre y nunca trae las renovaciones. */
+var versionVista = (guardado && typeof guardado.version === "number") ? guardado.version : 0;
 var seArreglaron = enderezar(socios);
 
 function guardar(){
@@ -600,22 +603,48 @@ function guardar(){
 }
 if(!guardado || seArreglaron) guardar();
 
-/* Si el sitio trae una lista mas nueva, lo avisa sin pisar nada. */
+/* Cuando el sitio trae una lista mas nueva, se juntan las dos en vez de
+   reemplazar una por otra: de cada socio queda la fecha mas adelantada, se
+   agregan los socios nuevos, y no se pierde ninguna renovacion hecha en este
+   mismo equipo. Antes esto no pasaba y en el meson el socio salia vencido
+   aunque en su celular apareciera al dia. */
+function juntarConElSitio(){
+ var mios = {};
+ socios.forEach(function(s){ mios[(s.n + "|" + s.a).toUpperCase()] = s; });
+ var nuevos = 0, corridos = 0;
+ LISTA_BASE.forEach(function(b, i){
+  var m = mios[(b.n + "|" + b.a).toUpperCase()];
+  if(!m){
+   socios.push({ id:"s"+i+"_"+Date.now().toString(36), n:b.n, a:b.a, plan:b.plan, m:b.m, v:b.v });
+   nuevos++;
+   return;
+  }
+  /* Las fechas van en aaaa-mm-dd, asi que la mas grande es la mas adelante. */
+  if(fechaValida(b.v) && (!fechaValida(m.v) || b.v > m.v)){ m.v = b.v; corridos++; }
+  if(!m.plan) m.plan = b.plan;
+  if(!m.m) m.m = b.m;
+ });
+ return { nuevos:nuevos, corridos:corridos };
+}
 if(guardado && LISTA_VERSION > versionVista){
- var av = document.getElementById("avisoLista");
- av.hidden = false;
- document.getElementById("avisoTexto").innerHTML =
-  "<b>El sitio tiene una lista actualizada</b> con " + LISTA_BASE.length +
-  " socios. La tuya, guardada en este equipo, tiene " + socios.length +
-  ". Si traes la del sitio, se reemplaza la tuya (descarga antes un respaldo si tienes cambios).";
- document.getElementById("usarSitio").addEventListener("click", function(){
-  if(!confirm("Se reemplaza tu lista por la del sitio. ¿Seguimos?")) return;
-  socios = copiaBase(); versionVista = LISTA_VERSION;
-  guardar(); av.hidden = true; pintar();
- });
- document.getElementById("seguirMia").addEventListener("click", function(){
-  versionVista = LISTA_VERSION; guardar(); av.hidden = true;
- });
+ var traido = juntarConElSitio();
+ versionVista = LISTA_VERSION;
+ guardar();
+ if(traido.nuevos || traido.corridos){
+  var av = document.getElementById("avisoLista");
+  av.hidden = false;
+  var partes = [];
+  if(traido.corridos) partes.push("<b>" + traido.corridos +
+   (traido.corridos === 1 ? " socio</b> con su fecha al día" : " socios</b> con su fecha al día"));
+  if(traido.nuevos) partes.push("<b>" + traido.nuevos +
+   (traido.nuevos === 1 ? " socio nuevo</b>" : " socios nuevos</b>"));
+  document.getElementById("avisoTexto").innerHTML =
+   "Se actualizó la lista de este equipo con " + partes.join(" y ") +
+   ". No se borró nada de lo que renovaste acá.";
+  document.getElementById("usarSitio").hidden = true;
+  document.getElementById("seguirMia").textContent = "Entendido";
+  document.getElementById("seguirMia").addEventListener("click", function(){ av.hidden = true; });
+ }
 }
 
 /* ── plan por turno: cuantos dias vino en el mes ────────────────────────
