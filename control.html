@@ -1246,7 +1246,7 @@ function abrirFicha(s){
   '<button type="button" class="rap-oro" data-meses="1">Renovar un mes</button>'+
   '<button type="button" data-meses="3">Renovar 3 meses</button>'+
   '<button type="button" data-mas="15">+15 días</button>'+
-  '<button type="button" data-mas="7">+7 días</button>'+
+  '<button type="button" id="fMas7" data-mas="7">+7 días</button>'+
   '</div><p class="aviso" id="fAviso"></p></div>'+
   '<div class="pie"><button class="btn btn-linea" id="fCancelar">Cancelar</button>'+
   '<button class="btn btn-rojo" id="fGuardar">Guardar</button></div></div>';
@@ -1329,14 +1329,34 @@ function abrirFicha(s){
  }
  velo.querySelector("#fTurnoMenos").addEventListener("click", function(){ tocarTurno(-1); });
  velo.querySelector("#fTurnoMas").addEventListener("click", function(){ tocarTurno(1); });
- sel.addEventListener("change", pintarTurnoFicha);
+ /* Para que se note que en el plan semanal el domingo no se descuenta. */
+ var bMas7 = velo.querySelector("#fMas7");
+ function pintarBoton7(){
+  bMas7.textContent = esSemanalPlan(sel.value) ? "+7 días sin domingo" : "+7 días";
+ }
+ sel.addEventListener("change", function(){ pintarTurnoFicha(); pintarBoton7(); });
  iV.addEventListener("change", pintarTurnoFicha);
  pintarTurnoFicha();
+ pintarBoton7();
 
+ /* El plan semanal trae pocos dias, asi que los domingos no se le descuentan:
+    el gimnasio cierra ese dia y no seria justo cobrarselo. Se le suman dias
+    hasta juntar los que corresponden, saltandose los domingos. */
+ function esSemanalPlan(nombre){ return /semanal/i.test(nombre || ""); }
+ function sumarDiasAbiertos(base, cuantos){
+  var f = new Date(base);
+  var puestos = 0;
+  while(puestos < cuantos){
+   f.setDate(f.getDate() + 1);
+   if(f.getDay() !== 0) puestos++;   /* 0 es domingo: no cuenta */
+  }
+  return f;
+ }
  velo.querySelectorAll(".rapidos button").forEach(function(b){
   b.addEventListener("click", function(){
    var base = desdeCuando();
    if(b.dataset.meses) base = sumarMeses(base, parseInt(b.dataset.meses, 10));
+   else if(esSemanalPlan(sel.value)) base = sumarDiasAbiertos(base, parseInt(b.dataset.mas, 10));
    else base.setDate(base.getDate() + parseInt(b.dataset.mas, 10));
    iV.value = base.getFullYear()+"-"+String(base.getMonth()+1).padStart(2,"0")+
               "-"+String(base.getDate()).padStart(2,"0");
