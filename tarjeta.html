@@ -573,9 +573,9 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  function aISO(f){
  return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
  }
- /* Cuántos días trae el plan y dentro de qué período se cuentan: el de turno
-    contra el mes que está pagando, el de tres veces contra la semana corrida,
-    de lunes a domingo. */
+ /* Los dos planes se pagan por mes; lo que cambia es cómo se reparten los
+    días: el de turno da 14 para todo el mes que está pagando, y el de tres
+    veces da 3 por semana, de lunes a domingo. */
  function reglaDe(s){
  if(esTurno(s)){
  var v = parseDMY(s.vencimiento);
@@ -585,15 +585,24 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
  f.setDate(Math.min(dia, ultimo));
  return { tope:DIAS_TURNO, ini:aISO(f), fin:aISO(v),
- cuando:"este mes", suPlan:"tu plan por turno" };
+ cuando:"este mes", suPlan:"tu plan por turno", mes:null };
  }
  if(esSemanal(s)){
  var h = new Date(); h.setHours(0,0,0,0);
  var lun = new Date(h); lun.setDate(lun.getDate() - ((lun.getDay() + 6) % 7));
  var corte = new Date(lun); corte.setDate(corte.getDate() - 1);
  var dom = new Date(lun); dom.setDate(dom.getDate() + 6);
+ /* El mes que pagó, para poder decirle cuántos días lleva en total. */
+ var v = parseDMY(s.vencimiento), mes = null;
+ if(v){
+ var dia = v.getDate();
+ var im = new Date(v.getFullYear(), v.getMonth() - 1, 1);
+ var ultimo = new Date(im.getFullYear(), im.getMonth() + 1, 0).getDate();
+ im.setDate(Math.min(dia, ultimo));
+ mes = { ini:aISO(im), fin:aISO(v) };
+ }
  return { tope:DIAS_SEMANA, ini:aISO(corte), fin:aISO(dom),
- cuando:"esta semana", suPlan:"tu plan de 3 veces por semana" };
+ cuando:"esta semana", suPlan:"tu plan de 3 veces por semana", mes:mes };
  }
  return null;
  }
@@ -606,26 +615,29 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  localStorage.setItem(CLAVE_DIAS, JSON.stringify(todo));
  }catch(e){}
  }
- function diasUsados(s){
- var c = reglaDe(s);
- if(!c) return 0;
+ function contarEntre(s, ini, fin){
  var dias = leerDias()[llaveDe(s)] || {}, n = 0;
  for(var d in dias){
  if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
- if(d > c.ini && d <= c.fin) n++;
+ if(d > ini && d <= fin) n++;
  }
  return n;
+ }
+ function diasUsados(s){
+ var c = reglaDe(s);
+ return c ? contarEntre(s, c.ini, c.fin) : 0;
  }
  function textoTurno(s){
  var c = reglaDe(s);
  if(!c) return null;
  var n = diasUsados(s);
+ var cola = c.mes ? " Llevas " + contarEntre(s, c.mes.ini, c.mes.fin) + " en el mes que pagaste." : "";
  if(n > c.tope) return { tope:true,
- txt:"Ya usaste tus " + c.tope + " días de " + c.cuando + " · llevas " + n + ". Consulta en recepción." };
+ txt:"Ya usaste tus " + c.tope + " días de " + c.cuando + " · llevas " + n + "." + cola + " Consulta en recepción." };
  if(n >= c.tope) return { tope:true,
- txt:"Este es tu día " + c.tope + " de " + c.tope + ", el último de " + c.cuando + "." };
+ txt:"Este es tu día " + c.tope + " de " + c.tope + ", el último de " + c.cuando + "." + cola };
  return { tope:false,
- txt:"Día " + n + " de " + c.tope + " de " + c.suPlan + " · te quedan " + (c.tope - n) + " " + c.cuando + "." };
+ txt:"Día " + n + " de " + c.tope + " de " + c.suPlan + " · te quedan " + (c.tope - n) + " " + c.cuando + "." + cola };
  }
 
  function diasParaVencer(s){

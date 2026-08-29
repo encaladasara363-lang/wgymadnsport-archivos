@@ -685,32 +685,44 @@ function mesAtras(iso){
  f.setDate(Math.min(dia, ultimo));
  return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
 }
-/* Cuantos dias le tocan y dentro de que periodo se cuentan. El turno se
-   cuenta contra el mes que esta pagando; el de tres veces, contra la semana
-   corrida, porque su plan se le renueva cada lunes. */
+/* Cuantos dias le tocan y dentro de que periodo se cuentan.
+   Los dos planes se PAGAN por mes; lo que cambia es como se reparten los dias:
+     · el de turno da 14 dias para gastar en todo el mes que esta pagando;
+     · el de tres veces da 3 dias por semana, de lunes a domingo, asi que la
+       cuenta que dice si se paso o no es la de la semana corrida.
+   Ademas del tope, al de tres veces se le muestra cuantos dias lleva en el mes
+   completo que pago, que es el numero que sirve para comparar planes. */
 function reglaDe(s){
  if(esTurno(s)){
   if(!s || !s.v) return null;
   return { tope:DIAS_TURNO, ini:mesAtras(s.v), fin:s.v,
-           nombre:"Turno", cuando:"este mes" };
+           nombre:"Turno", cuando:"este mes", conMes:false };
  }
  if(esSemanal(s)){
   var lun = lunesDe(hoyISO());
   return { tope:DIAS_SEMANA, ini:sumarDias(lun, -1), fin:sumarDias(lun, 6),
-           nombre:"3 por semana", cuando:"esta semana" };
+           nombre:"3 por semana", cuando:"esta semana", conMes:true };
  }
  return null;
 }
-function diasUsados(s){
- var c = reglaDe(s);
- if(!c) return 0;
+function contarEntre(s, ini, fin){
  var dias = asistencia[llaveSocio(s)] || {};
  var n = 0;
  for(var d in dias){
   if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
-  if(d > c.ini && d <= c.fin) n++;
+  if(d > ini && d <= fin) n++;
  }
  return n;
+}
+function diasUsados(s){
+ var c = reglaDe(s);
+ return c ? contarEntre(s, c.ini, c.fin) : 0;
+}
+/* Los dias que lleva dentro del mes que pago, sin importar como se repartan
+   entre las semanas. */
+function diasDelMesPagado(s){
+ if(!s || !s.v) return null;
+ return contarEntre(s, mesAtras(s.v), s.v);
 }
 function marcarDia(s, iso){
  if(!esTurno(s) && !esSemanal(s)) return false;
@@ -757,12 +769,16 @@ function notaTurno(s){
  var c = reglaDe(s);
  if(!c) return null;
  var n = diasUsados(s);
+ /* Al de tres veces se le agrega el total del mes que pago, para saber si
+    en el mes completo se paso o solo movio los dias de una semana a otra. */
+ var mes = c.conMes ? diasDelMesPagado(s) : null;
+ var cola = mes === null ? "" : " · " + mes + " en el mes";
  if(n > c.tope) return { pasado:true, n:n,
-  txt:"Ya usó sus " + c.tope + " días de " + c.cuando + " · lleva " + n };
+  txt:"Ya usó sus " + c.tope + " días de " + c.cuando + " · lleva " + n + cola };
  if(n === c.tope) return { pasado:true, n:n,
-  txt:"Este es su día " + c.tope + " de " + c.tope + " · el último de " + c.cuando };
+  txt:"Este es su día " + c.tope + " de " + c.tope + " de " + c.cuando + cola };
  return { pasado:false, n:n,
-  txt:c.nombre + " · día " + (n || 0) + " de " + c.tope + " " + c.cuando };
+  txt:c.nombre + " · día " + (n || 0) + " de " + c.tope + " " + c.cuando + cola };
 }
 
 /* ── fechas y estado ────────────────────────────────────────────────── */
@@ -1291,11 +1307,12 @@ function abrirFicha(s){
   velo.querySelector("#fTurnoLbl").textContent = "Días usados " + c.cuando;
   /* El primer dia del periodo es el siguiente al de corte, que no se cuenta. */
   var desde = sumarDias(c.ini, 1);
+  var mes = c.conMes ? diasDelMesPagado(falso) : null;
   velo.querySelector("#fTurnoSub").textContent =
-   n > c.tope ? "Se pasó por " + (n - c.tope) + (n - c.tope === 1 ? " día" : " días") +
-                " · del " + fechaCL(desde) + " al " + fechaCL(c.fin)
-              : "Le quedan " + (c.tope - n) + " de " + c.tope +
-                " · del " + fechaCL(desde) + " al " + fechaCL(c.fin);
+   (n > c.tope ? "Se pasó por " + (n - c.tope) + (n - c.tope === 1 ? " día" : " días")
+               : "Le quedan " + (c.tope - n) + " de " + c.tope) +
+   " · del " + fechaCL(desde) + " al " + fechaCL(c.fin) +
+   (mes === null ? "" : " · lleva " + mes + (mes === 1 ? " día" : " días") + " en el mes que pagó");
  }
  function tocarTurno(cuanto){
   var falso = { n: iN.value.trim().toUpperCase() || d.n,
