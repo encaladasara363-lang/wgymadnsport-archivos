@@ -341,7 +341,7 @@ const LOGO_B64 = "assets/logo.jpg";
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 /* Lista base publicada en el sitio. Si edito socios acá, sube este número
    y la página te ofrece traer la lista nueva sin pisar lo tuyo. */
-const LISTA_VERSION = 2026082902;
+const LISTA_VERSION = 2026082903;
 const LISTA_BASE = [
 {n:"AARON",a:"SOZA",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-22"},
 {n:"AKASH",a:"THADANI",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-03"},
@@ -376,6 +376,7 @@ const LISTA_BASE = [
 {n:"CAMILO",a:"JUICA",plan:"Mensual Turno",m:23000,v:"2026-09-04"},
 {n:"CARLA",a:"MORALES",plan:"Full Mensual",m:33000,v:"2026-08-23"},
 {n:"CARLOS",a:"ARAYA",plan:"Full Mensual",m:33000,v:"2026-08-28"},
+{n:"CLAUDIO",a:"BUSTAMANTE",plan:"Plan Semanal",m:15000,v:"2026-09-05"},
 {n:"CAROLINA",a:"CARVAJAL",plan:"Full Mensual",m:33000,v:"2026-09-24"},
 {n:"CAROLINA",a:"CUELLA",plan:"Funcionario Público",m:28000,v:"2026-08-31"},
 {n:"CHRISTIAN",a:"AROS",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
@@ -532,10 +533,10 @@ const LISTA_BASE = [
 
 var KEY = "wgym_control_v1";
 var PLANES = ["Full Mensual","Mensual Turno","Tres Veces a La Semana",
- "Estudiante Profesor","Funcionario Público","Mensual Tercera Edad","Plan Especial"];
+ "Estudiante Profesor","Funcionario Público","Mensual Tercera Edad","Plan Especial","Plan Semanal"];
 var PRECIO = { "Full Mensual":33000, "Mensual Turno":23000, "Tres Veces a La Semana":28000,
  "Estudiante Profesor":28000, "Funcionario Público":28000, "Mensual Tercera Edad":23000,
- "Plan Especial":20000 };
+ "Plan Especial":20000, "Plan Semanal":15000 };
 
 document.getElementById("topLogo").src = LOGO_B64;
 
