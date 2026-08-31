@@ -5,87 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0A0A0A">
 <meta name="robots" content="noindex">
-<title>Apps de entrenamiento · WGYMADNSPORT</title>
+<title>Entra con tu QR · WGYMADNSPORT</title>
 <link rel="apple-touch-icon" href="assets/logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;600;700&display=swap">
 <style>
-:root{
-  --negro:#0A0A0A; --card:#1C1C1C; --linea:#2C2C2C;
-  --rojo:#E30613; --rojo-vivo:#FF2130; --dorado:#D4AF37;
-  --blanco:#fff; --gris:#CFCFCF; --gris-tenue:#8A8A8A;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--negro);color:var(--blanco);
-  font-family:'Barlow','Segoe UI',Arial,sans-serif;font-size:17px;line-height:1.45}
-.envase{max-width:560px;margin:0 auto;padding:34px 18px 46px;text-align:center}
-.marca{width:104px;height:104px;border-radius:50%;margin:0 auto 20px;display:block;
+:root{--negro:#0A0A0A;--card:#1C1C1C;--linea:#2C2C2C;--rojo:#E30613;
+      --rojo-vivo:#FF2130;--dorado:#D4AF37;--gris:#CFCFCF;--gris-tenue:#8A8A8A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--negro);color:#fff;font-family:'Barlow','Segoe UI',Arial,sans-serif;
+  font-size:17px;line-height:1.5}
+.envase{max-width:520px;margin:0 auto;padding:46px 22px;text-align:center}
+.marca{width:112px;height:112px;border-radius:50%;margin:0 auto 22px;display:block;
   border:3px solid var(--dorado);object-fit:cover;background:#fff;
   box-shadow:0 0 0 7px rgba(212,175,55,.12)}
 .kicker{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
-  letter-spacing:.2em;font-size:13px;color:var(--gris-tenue);margin-bottom:12px}
-h1{font-family:'Anton',Impact,sans-serif;font-size:31px;line-height:1.05;
-  text-transform:uppercase;margin-bottom:12px}
+  letter-spacing:.2em;font-size:13px;color:var(--gris-tenue);margin-bottom:14px}
+h1{font-family:'Anton',Impact,sans-serif;font-size:32px;line-height:1.05;
+  text-transform:uppercase;margin-bottom:18px}
 h1 span{color:var(--rojo-vivo)}
-.baja{color:var(--gris);font-size:16.5px;line-height:1.5;margin-bottom:28px}
-.apps{display:flex;flex-direction:column;gap:12px;margin-bottom:30px}
-a.app{
-  display:flex;align-items:center;gap:15px;text-align:left;text-decoration:none;
-  background:var(--card);border:1.5px solid var(--linea);border-radius:15px;
-  padding:17px 16px;color:var(--blanco);transition:border-color .15s,transform .07s;
-}
-a.app:active{transform:scale(.99)}
-a.app:hover{border-color:var(--rojo)}
-a.app .ico{width:50px;height:50px;border-radius:13px;flex:0 0 auto;display:grid;
-  place-items:center;background:#141414;border:1.5px solid var(--linea);font-size:24px}
-a.app .txt{flex:1;min-width:0}
-a.app .txt b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:21px;text-transform:uppercase;letter-spacing:.03em;line-height:1.12}
-a.app .txt small{display:block;color:var(--gris-tenue);font-size:15px;margin-top:3px}
-a.app .flecha{color:var(--rojo-vivo);font-size:24px;flex:0 0 auto}
-.nota{border-top:1px solid var(--linea);padding-top:22px;text-align:left;
-  font-size:15.5px;line-height:1.55;color:var(--gris-tenue)}
-.nota b{color:var(--gris)}
-.firma{margin-top:26px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+p{color:var(--gris);font-size:17px;margin-bottom:16px}
+.caja{background:var(--card);border:1.5px solid var(--linea);border-radius:15px;
+  padding:22px 20px;margin:26px 0 0;text-align:left}
+.caja .paso{display:flex;gap:13px;align-items:flex-start;margin-bottom:15px}
+.caja .paso:last-child{margin-bottom:0}
+.caja .n{width:30px;height:30px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
+  background:var(--rojo);color:#fff;font-family:'Anton',Impact,sans-serif;font-size:15px}
+.caja .t{flex:1;font-size:16.5px;color:var(--gris);line-height:1.45}
+.caja .t b{color:#fff}
+.firma{margin-top:30px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
   text-transform:uppercase;letter-spacing:.16em;font-size:12.5px;color:var(--gris-tenue)}
 </style>
 </head>
 <body>
 <div class="envase">
-
   <img class="marca" src="assets/logo.jpg" alt="WGYMADNSPORT Tocopilla">
   <p class="kicker">WGYMADNSPORT · Tocopilla</p>
-  <h1>APPS DE <span>ENTRENAMIENTO</span></h1>
-  <p class="baja">
-    Cada rutina tiene su propia app. A cada socio se le entrega
-    <b>solo la que le toca</b>, con su código QR.
-  </p>
+  <h1>ENTRA CON <span>TU QR</span></h1>
+  <p>Cada rutina tiene su propia app. La tuya se abre escaneando
+     el código que te entregan en el gimnasio.</p>
 
-  <div class="apps">
-    <a class="app" href="entrenar-mujeres.html">
-      <span class="ico">👩</span>
-      <span class="txt"><b>Rutina Mujeres</b><small>Principiantes · 5 días</small></span>
-      <span class="flecha">›</span>
-    </a>
-    <a class="app" href="entrenar-hombres.html">
-      <span class="ico">👨</span>
-      <span class="txt"><b>Rutina Hombres</b><small>Principiantes · 5 días</small></span>
-      <span class="flecha">›</span>
-    </a>
-    <a class="app" href="entrenar-gluteos.html">
-      <span class="ico">🍑</span>
-      <span class="txt"><b>Rutina Glúteos</b><small>Glúteos y piernas · 5 días</small></span>
-      <span class="flecha">›</span>
-    </a>
-  </div>
-
-  <div class="nota">
-    <p><b>Esta página es para el mesón, no para repartirla.</b> Los socios entran
-       directo a su rutina escaneando el QR que les corresponde, y ahí no ven
-       las otras.</p>
-    <p style="margin-top:12px">Los tres carteles con los códigos QR están en
-       <b>qr-app-mujeres</b>, <b>qr-app-hombres</b> y <b>qr-app-gluteos</b>.</p>
+  <div class="caja">
+    <div class="paso"><span class="n">1</span>
+      <span class="t">Pide en el mesón el <b>QR de tu rutina</b>.</span></div>
+    <div class="paso"><span class="n">2</span>
+      <span class="t">Abre la <b>cámara de tu celular</b> y apúntale al código.</span></div>
+    <div class="paso"><span class="n">3</span>
+      <span class="t">Escribe tu <b>nombre y apellido</b> y ya estás adentro.</span></div>
   </div>
 
   <p class="firma">Solo para socios con la mensualidad al día</p>
