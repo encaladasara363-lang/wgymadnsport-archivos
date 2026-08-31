@@ -122,6 +122,9 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .feed-item .fturno[data-t="ok"]{ color:var(--verde); border-color:rgba(92,168,92,.5); }
 .feed-item .fturno[data-t="tope"]{ color:var(--dorado); border-color:rgba(212,175,55,.6);
  background:rgba(212,175,55,.12); }
+.feed-item .fveces{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
+ border:1px solid rgba(212,175,55,.6); color:var(--dorado); background:rgba(212,175,55,.12);
+ white-space:nowrap; }
 .feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; flex:0 0 auto; }
 .feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:26px 0; }
 
@@ -1086,6 +1089,35 @@ function diaDelTs(ts){
  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 
+/* Un socio puede escanear varias veces el mismo dia: entra en la manana, se
+   le queda algo y vuelve, o entrena dos veces. Antes su nombre aparecia una
+   vez por escaneo y la lista se llenaba de repetidos. Ahora cada persona
+   ocupa un solo renglon por dia, con la hora de la ultima vez y un aviso de
+   cuantas veces vino. Los escaneos se siguen guardando todos: esto es solo
+   como se muestran. */
+function juntarRepetidos(lista){
+ var porLlave = {}, orden = [];
+ lista.forEach(function(r){
+  var k = sinTildes(r.nombre) + "|" + sinTildes(r.apellido) + "|" + diaDelTs(r.ts);
+  var g = porLlave[k];
+  if(!g){
+   porLlave[k] = { nombre:r.nombre, apellido:r.apellido, ts:r.ts,
+                   primera:r.ts, veces:1, dia:diaDelTs(r.ts) };
+   orden.push(k);
+   return;
+  }
+  g.veces++;
+  if(r.ts > g.ts) g.ts = r.ts;              /* la mas reciente manda */
+  if(r.ts < g.primera) g.primera = r.ts;    /* y se guarda la primera */
+ });
+ return orden.map(function(k){ return porLlave[k]; });
+}
+function textoVeces(g){
+ if(g.veces < 2) return "";
+ var cuando = (g.dia === hoyISO()) ? " hoy" : "";
+ return g.veces + "ª vez" + cuando + " · desde " + fmtHora(g.primera);
+}
+
 function pintarFeed(){
  var cont = document.getElementById("feed");
  cont.innerHTML = "";
@@ -1093,7 +1125,7 @@ function pintarFeed(){
   cont.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>';
   return;
  }
- filas.forEach(function(r){
+ juntarRepetidos(filas).forEach(function(r){
   var s = socioDelRegistro(r.nombre, r.apellido);
   var d = veredicto(s);
   var nota = d.corto || d.detalle;
@@ -1105,6 +1137,7 @@ function pintarFeed(){
    (nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '')+
    (function(){ var nt = notaTurno(s);
     return nt ? '<span class="fturno" data-t="'+(nt.pasado?"tope":"ok")+'">'+escapeHtml(nt.txt)+'</span>' : ''; })()+
+   (r.veces > 1 ? '<span class="fveces">'+escapeHtml(textoVeces(r))+'</span>' : '')+
    '</span><span class="ftime">'+fmtHora(r.ts)+'</span>';
   b.addEventListener("click", function(){
    mostrarHero(r.nombre+" "+r.apellido, r.ts, s);
