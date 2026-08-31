@@ -225,7 +225,7 @@ const SOCIOS = [
 {n:"JUAN",a:"CACERES",plan:"Full Mensual",fv:46276},
 {n:"JUAN",a:"ESCALONA",plan:"Estudiante Profesor",fv:46275},
 {n:"JUAN",a:"REYES",plan:"Mensual Turno",fv:46271},
-{n:"KATHERINE",a:"GOMEZ",plan:"Full Mensual",fv:46247},
+{n:"KATHERINE",a:"GOMEZ",plan:"Full Mensual",fv:46295},
 {n:"KATHERINE",a:"IGLESIAS",plan:"Estudiante Profesor",fv:46275},
 {n:"KATHERINE",a:"RODRIGUEZ",plan:"Full Mensual",fv:46241},
 {n:"KATHIA",a:"CEBEÑO",plan:"Full Mensual",fv:46243},
@@ -368,12 +368,27 @@ function fechaCL(v){
  var p = String(v).split("-");
  return p[2] + "-" + p[1] + "-" + p[0];
 }
-function diasPara(v){
+/* Al plan semanal no se le cuenta el domingo: el gimnasio cierra ese dia. Si
+   le quedan siete fechas por delante y una es domingo, de gimnasio le quedan
+   seis. Los demas planes siguen contando dias corridos, tal cual estaban. */
+function esPlanSemanal(nombre){ return /semanal/i.test(nombre || ""); }
+function diasAbiertos(desde, hasta){
+ var f = new Date(desde), n = 0;
+ while(f < hasta){
+  f.setDate(f.getDate() + 1);
+  if(f.getDay() !== 0) n++;   /* 0 es domingo: no cuenta */
+ }
+ return n;
+}
+function diasPara(v, plan){
  if(!v) return null;
  var p = String(v).split("-");
  var f = new Date(+p[0], +p[1]-1, +p[2]); f.setHours(0,0,0,0);
  if(isNaN(f)) return null;
  var h = new Date(); h.setHours(0,0,0,0);
+ /* Vencido o venciendo hoy se sigue contando en dias corridos: ahi lo que
+    importa es hace cuanto fue, no cuantos dias de gimnasio le quedan. */
+ if(f > h && esPlanSemanal(plan)) return diasAbiertos(h, f);
  return Math.round((f - h) / 86400000);
 }
 
@@ -439,7 +454,7 @@ function veredictoDe(r){
            detalle: viejo ? viejo.txt : "Revísalo en la planilla",
            corto:"Sin ficha de socio", cls:"", plan:"" };
  }
- var dias = diasPara(s.v);
+ var dias = diasPara(s.v, s.plan);
  var vence = fechaCL(s.v);
  if(dias === null){
   return { v:"nadie", fallo:"Ficha sin fecha de vencimiento",

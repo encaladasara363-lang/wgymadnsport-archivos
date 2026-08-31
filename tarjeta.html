@@ -323,7 +323,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 <tr><td contenteditable="true">JUAN</td><td contenteditable="true">CACERES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">11-09-2026</td><td contenteditable="true">Sí</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>
 <tr><td contenteditable="true">JUAN</td><td contenteditable="true">ESCALONA</td><td contenteditable="true">18.214.303-3</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">Sí</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>
 <tr><td contenteditable="true">JUAN</td><td contenteditable="true">REYES</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Mensual Turno</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">06-09-2026</td><td contenteditable="true">Sí</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>
-<tr><td contenteditable="true">KATHERINE</td><td contenteditable="true">GOMEZ</td><td contenteditable="true">13.742.708-7</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">13-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>
+<tr><td contenteditable="true">KATHERINE</td><td contenteditable="true">GOMEZ</td><td contenteditable="true">13.742.708-7</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">30-09-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>
 <tr><td contenteditable="true">KATHERINE</td><td contenteditable="true">IGLESIAS</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Estudiante Profesor</td><td contenteditable="true" class="num">$28.000</td><td contenteditable="true">10-09-2026</td><td contenteditable="true">Sí</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>
 <tr><td contenteditable="true">KATHERINE</td><td contenteditable="true">RODRIGUEZ</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">07-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>
 <tr><td contenteditable="true">KATHIA</td><td contenteditable="true">CEBEÑO</td><td contenteditable="true">22.767.241-2</td><td contenteditable="true">Full Mensual</td><td contenteditable="true" class="num">$33.000</td><td contenteditable="true">09-08-2026</td><td contenteditable="true">No</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>
@@ -698,10 +698,25 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  return r;
  }
 
+ /* Al plan semanal no se le cuenta el domingo: el gimnasio cierra ese dia. Si
+    le quedan siete fechas por delante y una es domingo, de gimnasio le quedan
+    seis. Los demas planes siguen contando dias corridos, tal cual estaban. */
+ function esPlanSemanal(nombre){ return /semanal/i.test(nombre || ""); }
+ function diasAbiertos(desde, hasta){
+ var f = new Date(desde), n = 0;
+ while(f < hasta){
+  f.setDate(f.getDate() + 1);
+  if(f.getDay() !== 0) n++;   /* 0 es domingo: no cuenta */
+ }
+ return n;
+ }
  function diasParaVencer(s){
  var venc = parseDMY(s.vencimiento);
  if(!venc) return 9999;
  var hoy = parseDMY(todayISO());
+ /* Vencido o venciendo hoy se sigue contando en dias corridos: ahi lo que
+    importa es hace cuanto fue, no cuantos dias de gimnasio le quedan. */
+ if(venc > hoy && esPlanSemanal(s.plan)) return diasAbiertos(hoy, venc);
  return Math.round((venc - hoy) / 86400000);
  }
  /* El mismo aviso que ve el mesón, para que el socio sepa al tiro cómo está
