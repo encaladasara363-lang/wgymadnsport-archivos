@@ -372,9 +372,19 @@ def manifest(clave, cfg):
         "orientation": "portrait",
         "background_color": "#0A0A0A",
         "theme_color": "#0A0A0A",
+        # Los iconos tienen que medir EXACTAMENTE lo que dice "sizes": el
+        # telefono compara, y si no calza descarta el icono y dibuja una
+        # letra en su lugar. Antes apuntaban al logo, que mide 1092, y por
+        # eso al instalar la app salia una W negra en vez del logo.
         "icons": [
-            {"src": "assets/logo.jpg", "sizes": "512x512", "type": "image/jpeg", "purpose": "any"},
-            {"src": "assets/logo.jpg", "sizes": "192x192", "type": "image/jpeg", "purpose": "any"},
+            {"src": "assets/icono-192.png", "sizes": "192x192",
+             "type": "image/png", "purpose": "any"},
+            {"src": "assets/icono-512.png", "sizes": "512x512",
+             "type": "image/png", "purpose": "any"},
+            # Android le recorta las esquinas al icono; el "maskable" trae el
+            # logo mas chico y centrado para que ese recorte no lo muerda.
+            {"src": "assets/icono-maskable-512.png", "sizes": "512x512",
+             "type": "image/png", "purpose": "maskable"},
         ],
     }, ensure_ascii=False, indent=2) + "\n"
 
