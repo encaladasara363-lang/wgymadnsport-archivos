@@ -16,21 +16,22 @@ BASE = "qr-rutina-mujeres.html"       # el cartel que sirve de molde
 
 CARTELES = {
     "mujeres": {
-        "titulo": "QR App Rutina Mujeres",
-        "h1": 'MI RUTINA<br><span>MUJERES</span>',
-        "sub": "APP · ANOTA TUS PESOS",
+        "titulo": "QR Rutina Principiante Mujeres",
+        "h1": 'RUTINA PRINCIPIANTE<br><span>MUJERES</span>',
+        "sub": "5 DÍAS · ANOTA TUS PESOS",
     },
     "hombres": {
-        "titulo": "QR App Rutina Hombres",
-        "h1": 'MI RUTINA<br><span>HOMBRES</span>',
-        "sub": "APP · ANOTA TUS PESOS",
+        "titulo": "QR Rutina Intermedio Hombres",
+        "h1": 'RUTINA INTERMEDIO<br><span>HOMBRES</span>',
+        "sub": "5 DÍAS · ANOTA TUS PESOS",
     },
     "gluteos": {
-        "titulo": "QR App Rutina Glúteos",
-        "h1": 'MI RUTINA<br><span>GLÚTEOS</span>',
-        "sub": "APP · ANOTA TUS PESOS",
+        "titulo": "QR Rutina Enfocada en Glúteos",
+        "h1": 'RUTINA ENFOCADA EN<br><span>GLÚTEOS</span>',
+        "sub": "5 DÍAS · ANOTA TUS PESOS",
     },
 }
+
 
 
 def dias_de(clave):

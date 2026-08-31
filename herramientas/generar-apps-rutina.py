@@ -22,29 +22,38 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RUTINAS = {
     "mujeres": {
         "archivo": "rutina-principiantes-mujeres.html",
-        "titulo":  "Rutina Mujeres",
+        "titulo":  "Rutina Principiante Mujeres · 5 días",
         "corto":   "Rutina Mujeres",
-        "marca1":  "RUTINA",
+        # El titulo largo va en la portada, donde hay espacio; en la barra de
+        # arriba, que es angosta y comparte sitio con los botones, va el corto.
+        "marca1":  "RUTINA PRINCIPIANTE",
         "marca2":  "MUJERES",
-        "bajada":  "Principiantes · 5 días",
+        "barra1":  "RUTINA",
+        "barra2":  "MUJERES",
+        "bajada":  "5 días · con videos",
     },
     "hombres": {
         "archivo": "rutina-principiantes-hombres.html",
-        "titulo":  "Rutina Hombres",
+        "titulo":  "Rutina Intermedio Hombres · 5 días",
         "corto":   "Rutina Hombres",
-        "marca1":  "RUTINA",
+        "marca1":  "RUTINA INTERMEDIO",
         "marca2":  "HOMBRES",
-        "bajada":  "Principiantes · 5 días",
+        "barra1":  "RUTINA",
+        "barra2":  "HOMBRES",
+        "bajada":  "5 días · con videos",
     },
     "gluteos": {
         "archivo": "rutina-gluteos.html",
-        "titulo":  "Rutina Glúteos",
+        "titulo":  "Rutina Enfocada en Glúteos · 5 días",
         "corto":   "Rutina Glúteos",
-        "marca1":  "RUTINA",
+        "marca1":  "RUTINA ENFOCADA EN",
         "marca2":  "GLÚTEOS",
-        "bajada":  "Glúteos y piernas · 5 días",
+        "barra1":  "RUTINA",
+        "barra2":  "GLÚTEOS",
+        "bajada":  "5 días · con videos",
     },
 }
+
 
 
 def leer(nombre):
@@ -260,7 +269,7 @@ def una_app(clave, cfg, base, socios):
     uno("<h2>MI <span>ENTRENAMIENTO</span></h2>",
         "<h2>%s <span>%s</span></h2>" % (cfg["marca1"], cfg["marca2"]))
     uno("<h1>MI <span>ENTRENAMIENTO</span></h1>",
-        "<h1>%s <span>%s</span></h1>" % (cfg["marca1"], cfg["marca2"]))
+        "<h1>%s <span>%s</span></h1>" % (cfg["barra1"], cfg["barra2"]))
     uno('<p class="baja">Tu rutina, tus pesos y tu progreso.<br>Escribe tu nombre para empezar.</p>',
         '<p class="baja">%s<br>Escribe tu nombre y apellido para entrar.</p>' % cfg["bajada"])
     uno('content="App de entrenamiento para socios de WGYMADNSPORT Tocopilla: '
