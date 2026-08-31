@@ -161,6 +161,18 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   line-height:1.45;color:var(--crema)}
 .avisovence b{color:var(--dorado)}
 
+/* En el mesón o en un teléfono prestado, la app entra sola como el último
+   socio que la usó. Este botón deja a la vista cómo cambiarse, en vez de
+   esconderlo en un iconito de arriba. */
+.otrosocio{
+  display:block;width:100%;margin-top:6px;background:none;border:none;cursor:pointer;
+  color:var(--gris-tenue);font-family:'Barlow',sans-serif;font-size:15.5px;
+  line-height:1.5;padding:14px 8px;text-align:center;
+}
+.otrosocio b{color:var(--gris)}
+.otrosocio span{color:var(--rojo-vivo);font-weight:700;text-decoration:underline;
+  text-underline-offset:3px}
+
 /* ── Pantalla de entrenamiento ────────────────────────────────────────── */
 .barra{
   position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;
@@ -366,6 +378,10 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
       <span class="etq">Elige el día que vas a entrenar</span>
       <div class="dias" id="listaDias"></div>
     </div>
+
+    <button class="otrosocio" id="bOtroSocio">
+      ¿No eres <b id="quienEs">—</b>? <span>Cambiar de socio</span>
+    </button>
   </main>
 
   <!-- ══ ENTRENAMIENTO ════════════════════════════════════════════════ -->
@@ -772,17 +788,46 @@ var NOMBRE_PLANO  = { mujeres:"Principiantes Mujeres",
                       hombres:"Principiantes Hombres",
                       gluteos:"Glúteos" };
 
-/* ═══ Lo que se guarda en el teléfono del socio ═════════════════════════ */
+/* ═══ Lo que se guarda en el teléfono ══════════════════════════════════
+   En el mesón, o si dos socios se prestan el mismo teléfono, entra más de
+   una persona al mismo aparato. Por eso los entrenamientos NO se guardan
+   todos juntos: cada socio tiene su propia ficha, guardada bajo su nombre,
+   y al entrar se abre la suya y solo la suya. */
 var KEY = "wgym_entrena_hombres_v1";
 function leerGuardado(){
  try{ var o = JSON.parse(localStorage.getItem(KEY)); if(o && typeof o === "object") return o; }
  catch(e){}
  return {};
 }
-var D = leerGuardado();
-if(!Array.isArray(D.sesiones)) D.sesiones = [];
-D.rutina = "hombres";   /* esta app trae una sola rutina */
-function guardar(){ try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){} }
+var TODO = leerGuardado();
+if(!TODO.gente || typeof TODO.gente !== "object") TODO.gente = {};
+
+/* La primera versión guardaba un solo entrenamiento para todo el teléfono,
+   sin separar por socio: al que entraba después le aparecían los kilos del
+   anterior. Lo que haya quedado guardado así se le devuelve a su dueño. */
+if(Array.isArray(TODO.sesiones) || TODO.actual){
+ var duenoViejo = TODO.socio || "";
+ if(duenoViejo){
+  TODO.gente[duenoViejo] = { sesiones: TODO.sesiones || [], actual: TODO.actual };
+ }
+ delete TODO.sesiones; delete TODO.actual;
+}
+
+/* D es la ficha del socio que está adentro en este momento. */
+var D = { sesiones: [] };
+function fichaDe(nombre){
+ var f = TODO.gente[nombre];
+ if(!f || typeof f !== "object") f = TODO.gente[nombre] = {};
+ if(!Array.isArray(f.sesiones)) f.sesiones = [];
+ return f;
+}
+function usarSocio(nombre){
+ TODO.socio = nombre;          /* el último que entró, para no repreguntar */
+ D = fichaDe(nombre);
+ D.socio = nombre;
+ D.rutina = "hombres";   /* esta app trae una sola rutina */
+}
+function guardar(){ try{ localStorage.setItem(KEY, JSON.stringify(TODO)); }catch(e){} }
 
 
 /* ═══ Los socios ════════════════════════════════════════════════════════
@@ -1219,7 +1264,7 @@ function entrar(){
                  fechaVence(s) + "</b>.<br>Pasa a renovar en recepción y vuelves a entrar.";
   av.hidden = false; return;
  }
- D.socio = s.n + " " + s.a;
+ usarSocio(s.n + " " + s.a);
  D.avisoVence = (dias <= 3) ? { dias:dias, fecha:fechaVence(s) } : null;
  guardar();
  abrirInicio();
@@ -1228,9 +1273,12 @@ $("bEntrar").addEventListener("click", entrar);
 $("iNombre").addEventListener("keydown", function(e){ if(e.key === "Enter") entrar(); });
 $("iNombre").addEventListener("input", function(){ $("avisoIngreso").hidden = true; });
 
+$("bOtroSocio").addEventListener("click", function(){ $("bSalir").click(); });
 $("bSalir").addEventListener("click", function(){
- /* Solo se olvida de quién es; los entrenamientos anotados quedan. */
- delete D.socio; guardar();
+ /* Solo se olvida de quién entró; la ficha de cada socio queda guardada,
+    así el que vuelva encuentra sus kilos donde los dejó. */
+ delete TODO.socio; guardar();
+ D = { sesiones: [] };
  $("iNombre").value = "";
  mostrar("p-ingreso");
 });
@@ -1247,6 +1295,7 @@ function abrirInicio(){
      (D.avisoVence.dias === 1 ? " · mañana" : " · en " + D.avisoVence.dias + " días") +
      ". Acuérdate de renovar.";
  }else{ av.hidden = true; }
+ $("quienEs").textContent = D.socio || "";
  pintarDias();
  pintarMarcas();
  pintarSeguir();
@@ -1710,15 +1759,16 @@ document.addEventListener("visibilitychange", function(){
 
 /* Al volver a abrir la app se comprueba de nuevo el vencimiento: si se le
    venció el plan desde la última vez, no sigue entrando con el permiso viejo. */
-if(D.socio){
- var suyo = buscarPorNombreCompleto(D.socio);
+if(TODO.socio){
+ var suyo = buscarPorNombreCompleto(TODO.socio);
  if(suyo && diasHastaVencer(suyo) >= 0){
+  usarSocio(TODO.socio);
   var dv = diasHastaVencer(suyo);
   D.avisoVence = (dv <= 3) ? { dias:dv, fecha:fechaVence(suyo) } : null;
-  $("iNombre").value = D.socio;
+  $("iNombre").value = TODO.socio;
   abrirInicio();
  }else{
-  $("iNombre").value = D.socio;
+  $("iNombre").value = TODO.socio;
   mostrar("p-ingreso");
   if(suyo){
    $("avisoIngreso").innerHTML = "<b>" + limpio(suyo.n + " " + suyo.a) +

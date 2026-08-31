@@ -211,7 +211,7 @@ ENTRAR_NUEVO = '''function entrar(){
                  fechaVence(s) + "</b>.<br>Pasa a renovar en recepción y vuelves a entrar.";
   av.hidden = false; return;
  }
- D.socio = s.n + " " + s.a;
+ usarSocio(s.n + " " + s.a);
  D.avisoVence = (dias <= 3) ? { dias:dias, fecha:fechaVence(s) } : null;
  guardar();
  abrirInicio();
@@ -219,15 +219,16 @@ ENTRAR_NUEVO = '''function entrar(){
 
 ARRANQUE_NUEVO = '''/* Al volver a abrir la app se comprueba de nuevo el vencimiento: si se le
    venció el plan desde la última vez, no sigue entrando con el permiso viejo. */
-if(D.socio){
- var suyo = buscarPorNombreCompleto(D.socio);
+if(TODO.socio){
+ var suyo = buscarPorNombreCompleto(TODO.socio);
  if(suyo && diasHastaVencer(suyo) >= 0){
+  usarSocio(TODO.socio);
   var dv = diasHastaVencer(suyo);
   D.avisoVence = (dv <= 3) ? { dias:dv, fecha:fechaVence(suyo) } : null;
-  $("iNombre").value = D.socio;
+  $("iNombre").value = TODO.socio;
   abrirInicio();
  }else{
-  $("iNombre").value = D.socio;
+  $("iNombre").value = TODO.socio;
   mostrar("p-ingreso");
   if(suyo){
    $("avisoIngreso").innerHTML = "<b>" + limpio(suyo.n + " " + suyo.a) +
@@ -320,8 +321,8 @@ def una_app(clave, cfg, base, socios):
     viejo_entrar = re.search(r"function entrar\(\)\{.*?\n\}\n", s, re.S)
     assert viejo_entrar, "no encontré entrar()"
     s = s.replace(viejo_entrar.group(0), ENTRAR_NUEVO + "\n")
-    uno("if(D.socio){\n $(\"iNombre\").value = D.socio;\n abrirInicio();\n}else{",
-        ARRANQUE_NUEVO)
+    uno("if(TODO.socio){\n usarSocio(TODO.socio);\n $(\"iNombre\").value = TODO.socio;"
+        "\n abrirInicio();\n}else{", ARRANQUE_NUEVO)
 
     # ── el aviso de "te vence pronto" en la pantalla de inicio
     uno(' $("hQuien").textContent = D.socio || "";',
