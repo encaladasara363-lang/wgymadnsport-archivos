@@ -1,7 +1,13 @@
 <meta charset="utf-8">
 <title>WGYMADNSPORT · Control de Acceso</title>
 <meta name="description" content="Control de acceso y socios de WGYMADNSPORT Tocopilla.">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="manifest" href="control.webmanifest">
+<link rel="apple-touch-icon" href="assets/logo.jpg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Mesón WGYM">
 <style>
 :root{
  --negro:#0A0A0A; --surface:#161616; --surface-2:#1F1F1F; --card:#1c1c1c;
@@ -793,6 +799,30 @@ function notaTurno(s){
  return { pasado:false, n:n,
   txt:c.nombre + " · día " + (n || 0) + " de " + c.tope + " " + c.cuando + cola };
 }
+
+/* ── que la pantalla del mesón no se apague sola ──────────────────────
+   Entre un socio y el siguiente pasan minutos, y si la tablet se bloquea
+   hay que desbloquearla en cada ingreso. Esto le pide al aparato mantener
+   la pantalla despierta mientras la página esté abierta. Si el navegador
+   no lo permite, no pasa nada: sigue funcionando igual que siempre. */
+var velaPantalla = null;
+function mantenerDespierta(){
+ try{
+  if(!("wakeLock" in navigator) || document.hidden) return;
+  if(velaPantalla) return;
+  navigator.wakeLock.request("screen").then(function(v){
+   velaPantalla = v;
+   v.addEventListener("release", function(){ velaPantalla = null; });
+  }).catch(function(){ velaPantalla = null; });
+ }catch(e){ velaPantalla = null; }
+}
+/* Al volver a la página hay que pedirla de nuevo: el sistema la suelta sola
+   cuando uno se cambia de aplicación o bloquea el aparato. */
+document.addEventListener("visibilitychange", function(){
+ if(!document.hidden) mantenerDespierta();
+});
+document.addEventListener("pointerdown", mantenerDespierta, true);
+mantenerDespierta();
 
 /* ── fechas y estado ────────────────────────────────────────────────── */
 function hoyISO(){
