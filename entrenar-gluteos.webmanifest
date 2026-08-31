@@ -1,0 +1,26 @@
+{
+  "name": "Rutina Glúteos · WGYMADNSPORT",
+  "short_name": "Rutina Glúteos",
+  "description": "Rutina Glúteos de WGYMADNSPORT Tocopilla.",
+  "lang": "es-CL",
+  "start_url": "entrenar-gluteos.html",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "icons": [
+    {
+      "src": "assets/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}

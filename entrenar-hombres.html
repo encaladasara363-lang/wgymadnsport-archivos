@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="description" content="Rutina Hombres de WGYMADNSPORT Tocopilla: sigue tu rutina, anota tus pesos y repeticiones y mira cómo progresas.">
+<title>Rutina Hombres · WGYMADNSPORT</title>
+
+<!-- Para que al agregarla a la pantalla de inicio se vea como una app -->
+<link rel="manifest" href="entrenar-hombres.webmanifest">
+<link rel="apple-touch-icon" href="assets/logo.jpg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Rutina Hombres">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap">
+
+<style>
+/* ── La paleta es la misma de la página web y de las rutinas: negro, rojo
+      E30613 y dorado D4AF37. Nada nuevo, para que se vea de la casa. ───── */
+:root{
+  --negro:#0A0A0A; --negro-suave:#141414; --negro-card:#1C1C1C; --linea:#2C2C2C;
+  --rojo:#E30613; --rojo-vivo:#FF2130; --rojo-oscuro:#A40410;
+  --dorado:#D4AF37; --crema:#FFF7F0;
+  --blanco:#FFFFFF; --gris:#CFCFCF; --gris-tenue:#8A8A8A;
+  --verde:#43C48D;
+  --alto:72px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--negro);color:var(--blanco)}
+body{
+  font-family:'Barlow','Segoe UI',Arial,sans-serif;
+  font-size:17px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  padding-bottom:env(safe-area-inset-bottom);
+  overscroll-behavior-y:contain;
+}
+.envase{max-width:560px;margin:0 auto;min-height:100vh;position:relative}
+.tit{font-family:'Anton',Impact,sans-serif;letter-spacing:.01em;line-height:1;text-transform:uppercase}
+.etq{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+     letter-spacing:.14em;font-size:14px;color:var(--gris-tenue)}
+.num{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+/* ── Cabecera ─────────────────────────────────────────────────────────── */
+header{
+  display:flex;align-items:center;gap:13px;padding:14px 16px;
+  background:linear-gradient(180deg,#151515 0%,var(--negro) 100%);
+  border-bottom:3px solid var(--rojo);position:sticky;top:0;z-index:30;
+  padding-top:calc(14px + env(safe-area-inset-top));
+}
+header .logo{width:46px;height:46px;border-radius:50%;flex:0 0 auto;
+  border:2px solid var(--dorado);object-fit:cover;background:#fff}
+header .quien{flex:1;min-width:0}
+header .quien h1{font-family:'Anton',Impact,sans-serif;font-size:19px;line-height:1;
+  text-transform:uppercase;letter-spacing:.01em}
+header .quien h1 span{color:var(--rojo-vivo)}
+header .quien p{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13.5px;
+  text-transform:uppercase;letter-spacing:.16em;color:var(--gris-tenue);margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{
+  flex:0 0 auto;background:none;border:1px solid var(--linea);border-radius:10px;
+  color:var(--gris);padding:9px 11px;cursor:pointer;font-size:15px;line-height:1;
+}
+.iconbtn:active{transform:scale(.95)}
+
+main{padding:18px 16px 40px}
+
+/* ── Botones ──────────────────────────────────────────────────────────── */
+.btn{
+  display:block;width:100%;border:none;border-radius:13px;cursor:pointer;
+  padding:17px 18px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:18px;text-transform:uppercase;letter-spacing:.12em;
+  transition:filter .15s,transform .07s;
+}
+.btn:active{transform:scale(.98)}
+.btn-rojo{background:var(--rojo);color:#fff}
+.btn-oro{background:var(--dorado);color:#14140F}
+.btn-linea{background:transparent;color:var(--gris);border:1.5px solid var(--linea)}
+.btn-verde{background:var(--verde);color:#08301F}
+.btn:disabled{opacity:.45;cursor:default}
+
+/* ── Ingreso ──────────────────────────────────────────────────────────── */
+.ingreso{padding:34px 20px 40px;text-align:center}
+.ingreso .marca{width:104px;height:104px;border-radius:50%;margin:0 auto 20px;
+  border:3px solid var(--dorado);object-fit:cover;background:#fff;display:block;
+  box-shadow:0 0 0 7px rgba(212,175,55,.12)}
+.ingreso h2{font-family:'Anton',Impact,sans-serif;font-size:31px;line-height:1.02;
+  text-transform:uppercase;margin-bottom:11px}
+.ingreso h2 span{color:var(--rojo-vivo)}
+.ingreso p.baja{color:var(--gris);font-size:16.5px;line-height:1.5;margin-bottom:26px}
+label.campo{display:block;text-align:left;margin-bottom:16px}
+label.campo > span{display:block;margin-bottom:9px}
+input[type=text]{
+  width:100%;background:var(--negro-card);border:1.5px solid var(--linea);
+  border-radius:12px;color:var(--blanco);font:600 19px/1.2 'Barlow',sans-serif;
+  padding:16px 15px;
+}
+input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
+.aviso{margin-top:14px;font-size:15.5px;color:var(--dorado);line-height:1.5}
+
+/* ── Tarjetas de día ──────────────────────────────────────────────────── */
+.seccion{margin-bottom:26px}
+.seccion > .etq{margin-bottom:11px;display:block}
+.dias{display:flex;flex-direction:column;gap:11px}
+.dia{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  background:var(--negro-card);border:1.5px solid var(--linea);border-radius:14px;
+  padding:15px 15px;color:var(--blanco);transition:border-color .15s,transform .07s;
+}
+.dia:active{transform:scale(.99)}
+.dia[data-hecho="si"]{border-color:var(--verde)}
+.dia .n{
+  width:46px;height:46px;border-radius:12px;flex:0 0 auto;display:grid;place-items:center;
+  background:var(--negro-suave);border:1.5px solid var(--linea);
+  font-family:'Anton',Impact,sans-serif;font-size:19px;color:var(--gris-tenue);
+}
+.dia[data-hecho="si"] .n{background:rgba(67,196,141,.14);border-color:var(--verde);color:var(--verde)}
+.dia .txt{flex:1;min-width:0}
+.dia .txt b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:19px;text-transform:uppercase;letter-spacing:.03em;line-height:1.15}
+.dia .txt small{display:block;color:var(--gris-tenue);font-size:15px;margin-top:3px}
+.dia .flecha{color:var(--rojo-vivo);font-size:22px;flex:0 0 auto}
+
+/* ── Selector de rutina ───────────────────────────────────────────────── */
+.rutinas{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.rutinas button{
+  min-width:0;background:var(--negro-card);border:1.5px solid var(--linea);border-radius:12px;
+  color:var(--gris);padding:12px 6px;cursor:pointer;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;
+  text-transform:uppercase;letter-spacing:.04em;line-height:1.15;
+}
+.rutinas button small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.09em;
+  color:var(--gris-tenue);margin-top:3px}
+.rutinas button[aria-pressed="true"] small{color:rgba(255,255,255,.75)}
+.rutinas button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo);color:#fff}
+
+/* ── Resumen de arriba ────────────────────────────────────────────────── */
+.marcas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--linea);
+  border:1px solid var(--linea);border-radius:13px;overflow:hidden;margin-bottom:24px}
+.marcas .m{background:var(--negro-card);padding:14px 8px 15px;text-align:center;min-width:0}
+.marcas .m .v{font-family:'Anton',Impact,sans-serif;font-size:25px;line-height:1;
+  color:var(--dorado);font-variant-numeric:tabular-nums}
+.marcas .m .d{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12.5px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--gris-tenue);margin-top:6px;
+  overflow-wrap:break-word}
+
+/* ── Continuar sesión ─────────────────────────────────────────────────── */
+.seguir{
+  background:linear-gradient(120deg,rgba(227,6,19,.18),rgba(212,175,55,.10));
+  border:1.5px solid var(--rojo);border-radius:14px;padding:15px 16px;margin-bottom:22px;
+}
+.seguir p{font-size:16px;color:var(--crema);margin-bottom:12px;line-height:1.45}
+.seguir p b{color:#fff}
+
+/* Aviso de que se le viene el vencimiento encima. */
+.avisovence{background:rgba(212,175,55,.13);border:1.5px solid var(--dorado);
+  border-radius:12px;padding:13px 15px;margin-bottom:20px;font-size:16px;
+  line-height:1.45;color:var(--crema)}
+.avisovence b{color:var(--dorado)}
+
+/* ── Pantalla de entrenamiento ────────────────────────────────────────── */
+.barra{
+  position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;
+  background:var(--negro-suave);border-bottom:1.5px solid var(--linea);padding:12px 14px;
+  padding-top:calc(12px + env(safe-area-inset-top));
+}
+.barra .paso{flex:1;min-width:0}
+.barra .paso b{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14.5px;
+  text-transform:uppercase;letter-spacing:.09em;color:var(--gris-tenue);display:block;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.barra .paso .pista{height:5px;border-radius:3px;background:#252525;margin-top:7px;overflow:hidden}
+.barra .paso .pista i{display:block;height:100%;background:var(--rojo);border-radius:3px;
+  transition:width .35s cubic-bezier(.2,.8,.3,1)}
+.barra .reloj{flex:0 0 auto;text-align:right;line-height:1}
+.barra .reloj .cual{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:600;
+  font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--gris-tenue);
+  margin-bottom:4px}
+.barra .reloj b{font-family:'Anton',Impact,sans-serif;font-size:21px;color:var(--dorado);
+  font-variant-numeric:tabular-nums;font-weight:400}
+
+.ej{padding:18px 16px 130px}
+.ej h2{font-family:'Anton',Impact,sans-serif;font-size:26px;line-height:1.08;
+  text-transform:uppercase;margin-bottom:9px}
+.ej .meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:15px}
+.ej .meta span{
+  background:var(--negro-card);border:1px solid var(--linea);border-radius:999px;
+  padding:6px 12px;font-family:'Barlow Condensed',sans-serif;font-weight:600;
+  font-size:14.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--gris);
+}
+.ej video{width:100%;border-radius:14px;background:#000;border:1.5px solid var(--linea);
+  display:block;margin-bottom:15px;aspect-ratio:16/10;object-fit:cover}
+.consejo{background:var(--negro-card);border-left:4px solid var(--dorado);border-radius:0 12px 12px 0;
+  padding:13px 15px;margin-bottom:13px;font-size:16px;line-height:1.5;color:var(--crema)}
+.consejo b{color:var(--dorado);display:block;margin-bottom:4px;
+  font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:13.5px}
+.consejo.alterna{border-left-color:var(--rojo)}
+.consejo.alterna b{color:var(--rojo-vivo)}
+
+.vezpasada{background:rgba(212,175,55,.10);border:1px solid rgba(212,175,55,.35);
+  border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:16px;color:var(--crema)}
+.vezpasada b{color:var(--dorado)}
+
+/* ── Las series: una fila por serie ───────────────────────────────────── */
+.series{display:flex;flex-direction:column;gap:9px;margin-bottom:8px}
+.serie{
+  display:grid;grid-template-columns:38px 1fr 1fr 58px;align-items:center;gap:9px;
+  background:var(--negro-card);border:1.5px solid var(--linea);border-radius:13px;padding:10px 11px;
+}
+.serie[data-hecha="si"]{border-color:var(--verde);background:rgba(67,196,141,.09)}
+.serie .idx{font-family:'Anton',Impact,sans-serif;font-size:19px;color:var(--gris-tenue);text-align:center}
+.serie[data-hecha="si"] .idx{color:var(--verde)}
+.campito{position:relative}
+.campito input{
+  width:100%;background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:10px;
+  color:#fff;font:700 21px/1 'Barlow',sans-serif;padding:13px 10px 13px 11px;text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.campito input:focus-visible{outline:2px solid var(--rojo);outline-offset:1px}
+.campito input::placeholder{color:#4A4A4A;font-weight:600}
+.tick{
+  width:100%;height:48px;border-radius:11px;border:1.5px solid var(--linea);
+  background:var(--negro-suave);color:var(--gris-tenue);font-size:23px;line-height:1;
+  cursor:pointer;display:grid;place-items:center;
+}
+.serie[data-hecha="si"] .tick{background:var(--verde);border-color:var(--verde);color:#08301F}
+.cabseries{display:grid;grid-template-columns:38px 1fr 1fr 58px;gap:9px;
+  padding:0 11px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:12.5px;text-transform:uppercase;letter-spacing:.11em;color:var(--gris-tenue);text-align:center}
+.sinpeso{font-size:15.5px;color:var(--gris-tenue);margin-top:2px;line-height:1.45}
+
+/* ── Pie fijo con navegación ──────────────────────────────────────────── */
+.pie{
+  position:fixed;left:0;right:0;bottom:0;z-index:25;
+  background:linear-gradient(180deg,rgba(10,10,10,.55),var(--negro) 32%);
+  border-top:1.5px solid var(--linea);padding:12px 16px;
+  padding-bottom:calc(12px + env(safe-area-inset-bottom));
+  display:flex;gap:10px;max-width:560px;margin:0 auto;
+}
+.pie .btn{flex:1}
+.pie .btn.chico{flex:0 0 92px}
+
+/* ── Descanso ─────────────────────────────────────────────────────────── */
+.descanso{
+  position:fixed;inset:0;z-index:60;background:#080808;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:30px 22px;text-align:center;
+}
+.descanso .etq{color:var(--dorado);margin-bottom:6px}
+.descanso .cuenta{font-family:'Anton',Impact,sans-serif;font-size:96px;line-height:1;
+  color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.descanso .aro{width:186px;height:186px;margin:14px 0 20px;position:relative}
+.descanso .aro svg{width:100%;height:100%;transform:rotate(-90deg)}
+.descanso .aro circle{fill:none;stroke-width:9;stroke-linecap:round}
+.descanso .aro .fondo{stroke:#232323}
+.descanso .aro .barra{stroke:var(--rojo);transition:stroke-dashoffset 1s linear}
+/* Cuando el descanso se acabó todo se pone verde y la cuenta empieza a
+   latir, para que se note aunque el socio esté mirando para otro lado. */
+.descanso[data-e="listo"] .etq{color:var(--verde)}
+.descanso[data-e="listo"] .aro .barra{stroke:var(--verde)}
+.descanso[data-e="listo"] .cuenta{color:var(--verde);font-size:64px;animation:late 1s ease-in-out infinite}
+@keyframes late{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.75}}
+.descanso .aro .centro{position:absolute;inset:0;display:grid;place-items:center}
+.descanso .sigue{font-size:17px;color:var(--gris);line-height:1.45;max-width:30ch}
+.descanso .sigue b{color:#fff}
+.descanso .acc{display:flex;gap:10px;width:100%;max-width:340px;margin-top:22px}
+.descanso .acc .btn{flex:1}
+
+/* ── Final ────────────────────────────────────────────────────────────── */
+.final{padding:32px 20px 44px;text-align:center}
+.final .sello{font-size:60px;line-height:1;margin-bottom:14px}
+.final h2{font-family:'Anton',Impact,sans-serif;font-size:33px;line-height:1.05;
+  text-transform:uppercase;margin-bottom:10px}
+.final h2 span{color:var(--verde)}
+.final p.baja{color:var(--gris);font-size:17px;line-height:1.5;margin-bottom:24px}
+.resumen{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--linea);
+  border:1px solid var(--linea);border-radius:14px;overflow:hidden;margin-bottom:26px}
+.resumen .r{background:var(--negro-card);padding:17px 14px 18px}
+.resumen .r .v{font-family:'Anton',Impact,sans-serif;font-size:29px;line-height:1;
+  color:var(--dorado);font-variant-numeric:tabular-nums}
+.resumen .r .d{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13.5px;
+  text-transform:uppercase;letter-spacing:.09em;color:var(--gris-tenue);margin-top:7px}
+
+/* ── Progreso ─────────────────────────────────────────────────────────── */
+.hist{display:flex;flex-direction:column;gap:10px}
+.hsesion{background:var(--negro-card);border:1.5px solid var(--linea);border-radius:13px;padding:14px 15px}
+.hsesion .arriba{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.hsesion b{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;
+  text-transform:uppercase;letter-spacing:.03em}
+.hsesion .cuando{font-size:15px;color:var(--gris-tenue);white-space:nowrap}
+.hsesion .abajo{margin-top:8px;font-size:15.5px;color:var(--gris);font-variant-numeric:tabular-nums}
+.hsesion .abajo em{font-style:normal;color:var(--dorado);font-weight:600}
+.marca-ej{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:11px 2px;border-bottom:1px solid var(--linea);font-size:16px}
+.marca-ej:last-child{border-bottom:none}
+.marca-ej .p{font-family:'Anton',Impact,sans-serif;color:var(--dorado);font-size:19px;
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+.vacio{padding:34px 12px;text-align:center;color:var(--gris-tenue);font-size:16px;line-height:1.5}
+
+.pestanas{display:flex;gap:8px;margin-bottom:20px}
+.pestanas button{
+  flex:1;background:var(--negro-card);border:1.5px solid var(--linea);border-radius:11px;
+  color:var(--gris-tenue);padding:12px 8px;cursor:pointer;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;
+  text-transform:uppercase;letter-spacing:.08em;
+}
+.pestanas button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo);color:#fff}
+
+@media (max-width:360px){
+  .serie{grid-template-columns:30px 1fr 1fr 50px;gap:7px}
+  .cabseries{grid-template-columns:30px 1fr 1fr 50px;gap:7px}
+  .campito input{font-size:19px;padding:12px 8px}
+  .descanso .cuenta{font-size:78px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="envase">
+
+  <!-- ══ INGRESO ══════════════════════════════════════════════════════ -->
+  <section id="p-ingreso" class="ingreso">
+    <img class="marca" src="assets/logo.jpg" alt="WGYMADNSPORT Tocopilla">
+    <h2>RUTINA <span>HOMBRES</span></h2>
+    <p class="baja">Principiantes · 5 días<br>Escribe tu nombre y apellido para entrar.</p>
+    <label class="campo">
+      <span class="etq">Nombre y apellido</span>
+      <input id="iNombre" type="text" autocomplete="name" autocapitalize="words"
+             enterkeyhint="go" spellcheck="false">
+    </label>
+    <button class="btn btn-rojo" id="bEntrar">Entrar</button>
+    <p class="aviso" id="avisoIngreso" hidden></p>
+    <p class="baja" style="margin:22px 0 0;font-size:15px;color:var(--gris-tenue)">
+      Todo lo que anotes se guarda en <b>tu propio teléfono</b>. Nadie más lo ve.
+    </p>
+  </section>
+
+  <!-- ══ INICIO ═══════════════════════════════════════════════════════ -->
+  <header id="cabecera" hidden>
+    <img class="logo" src="assets/logo.jpg" alt="">
+    <div class="quien">
+      <h1>RUTINA <span>HOMBRES</span></h1>
+      <p id="hQuien">—</p>
+    </div>
+    <button class="iconbtn" id="bProgreso" title="Ver mi progreso" aria-label="Ver mi progreso">📈</button>
+    <button class="iconbtn" id="bSalir" title="Salir" aria-label="Salir">⏻</button>
+  </header>
+
+  <main id="p-inicio" hidden>
+    <p class="avisovence" id="avisoVence" hidden></p>
+    <div class="marcas">
+      <div class="m"><div class="v num" id="mSesiones">0</div><div class="d">Entrenamientos</div></div>
+      <div class="m"><div class="v num" id="mSemana">0</div><div class="d">Esta semana</div></div>
+      <div class="m"><div class="v num" id="mRacha">0</div><div class="d">Semanas seguidas</div></div>
+    </div>
+
+    <div class="seguir" id="cajaSeguir" hidden>
+      <p id="txtSeguir">—</p>
+      <button class="btn btn-oro" id="bSeguir">Seguir donde iba</button>
+    </div>
+
+    <div class="seccion">
+      <span class="etq">Elige el día que vas a entrenar</span>
+      <div class="dias" id="listaDias"></div>
+    </div>
+  </main>
+
+  <!-- ══ ENTRENAMIENTO ════════════════════════════════════════════════ -->
+  <section id="p-entreno" hidden>
+    <div class="barra">
+      <button class="iconbtn" id="bCerrarEntreno" aria-label="Volver">✕</button>
+      <div class="paso">
+        <b id="txtPaso">—</b>
+        <div class="pista"><i id="pistaAvance" style="width:0%"></i></div>
+      </div>
+      <div class="reloj">
+        <span class="cual">Llevas</span>
+        <b class="num" id="relojSesion">0:00</b>
+      </div>
+    </div>
+
+    <div class="ej" id="cuerpoEj"></div>
+
+    <div class="pie">
+      <button class="btn btn-linea chico" id="bAntes">‹</button>
+      <button class="btn btn-rojo" id="bDespues">Siguiente</button>
+    </div>
+  </section>
+
+  <!-- ══ DESCANSO ═════════════════════════════════════════════════════ -->
+  <div class="descanso" id="veloDescanso" hidden>
+    <span class="etq" id="etqDescanso">Descansa</span>
+    <div class="aro">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <circle class="fondo" cx="100" cy="100" r="88"></circle>
+        <circle class="barra" id="aroBarra" cx="100" cy="100" r="88"
+                stroke-dasharray="552.9" stroke-dashoffset="0"></circle>
+      </svg>
+      <div class="centro"><div class="cuenta num" id="cuentaDescanso">60</div></div>
+    </div>
+    <p class="sigue" id="sigueDescanso">—</p>
+    <div class="acc">
+      <button class="btn btn-linea" id="bMasDescanso">+20 seg</button>
+      <button class="btn btn-oro" id="bSaltarDescanso">Ya estoy</button>
+    </div>
+  </div>
+
+  <!-- ══ FINAL ════════════════════════════════════════════════════════ -->
+  <section id="p-final" class="final" hidden>
+    <div class="sello">💪</div>
+    <h2>ENTRENAMIENTO <span>TERMINADO</span></h2>
+    <p class="baja" id="txtFinal">—</p>
+    <div class="resumen">
+      <div class="r"><div class="v num" id="fTiempo">—</div><div class="d">De entrenamiento</div></div>
+      <div class="r"><div class="v num" id="fSeries">0</div><div class="d">Series completadas</div></div>
+      <div class="r"><div class="v num" id="fVolumen">0</div><div class="d">Kilos levantados</div></div>
+      <div class="r"><div class="v num" id="fRecords">0</div><div class="d">Récords nuevos</div></div>
+    </div>
+    <button class="btn btn-rojo" id="bVolverInicio" style="margin-bottom:10px">Volver al inicio</button>
+    <button class="btn btn-linea" id="bVerProgreso">Ver mi progreso</button>
+  </section>
+
+  <!-- ══ PROGRESO ═════════════════════════════════════════════════════ -->
+  <main id="p-progreso" hidden>
+    <div class="pestanas">
+      <button id="tabSesiones" aria-pressed="true">Mis entrenamientos</button>
+      <button id="tabMarcas" aria-pressed="false">Mis récords</button>
+    </div>
+    <div id="cuerpoProgreso"></div>
+    <button class="btn btn-linea" id="bCerrarProgreso" style="margin-top:22px">Volver</button>
+  </main>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ═══ Las rutinas ═══════════════════════════════════════════════════════
+   Copia de los ejercicios de rutina-principiantes-mujeres.html,
+   rutina-principiantes-hombres.html y rutina-gluteos.html. Esta app solo
+   los lee: las rutinas mismas se siguen editando en sus propias páginas. */
+var RUTINAS = {
+ "hombres": {
+  "DAYS": [
+   {
+    "weekday": "Lunes",
+    "title": "Piernas",
+    "focus": "Tren inferior — único día de piernas",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "trotadora",
+    "exercises": [
+     {
+      "name": "Sentadilla en Smith",
+      "sets": "4 × 10-12",
+      "rest": "90 seg",
+      "equip": "maquina",
+      "video": "sentadilla_smith",
+      "tip": "Pies un poco adelantados de la barra, baja controlado hasta que los muslos queden paralelos al piso y sube empujando con los talones."
+     },
+     {
+      "name": "Prensa de piernas",
+      "sets": "3 × 12",
+      "rest": "75 seg",
+      "equip": "maquina",
+      "video": "prensa_pierna",
+      "tip": "Pies a la altura de los hombros sobre la plataforma, baja sin despegar la espalda del respaldo y sin bloquear las rodillas al subir."
+     },
+     {
+      "name": "Extensión de cuádriceps en máquina",
+      "sets": "3 × 12-15",
+      "rest": "60 seg",
+      "equip": "maquina",
+      "video": "extension_cuadriceps",
+      "tip": "Espalda apoyada, extiende las rodillas sin impulso y baja controlado sin soltar de golpe."
+     },
+     {
+      "name": "Curl femoral a un pie en máquina",
+      "sets": "3 × 10-12 por pierna",
+      "rest": "60 seg",
+      "equip": "maquina",
+      "video": "curl_femoral",
+      "tip": "Trabaja una pierna a la vez, flexiona llevando el talón hacia el glúteo y vuelve controlado, sin balancear la cadera."
+     },
+     {
+      "name": "Máquina de aductores",
+      "sets": "3 × 15",
+      "rest": "45 seg",
+      "equip": "maquina",
+      "video": "aductores",
+      "tip": "Cierra las piernas contra las almohadillas de forma controlada, sin usar impulso brusco."
+     },
+     {
+      "name": "Elevación de talones en máquina",
+      "sets": "4 × 15-20",
+      "rest": "45 seg",
+      "equip": "maquina",
+      "video": "pantorrillas",
+      "tip": "Sube lo más alto posible en la punta de los pies, mantén 1 segundo arriba y baja controlado (pantorrillas)."
+     }
+    ],
+    "cooldown": "Estira cuádriceps, isquiotibiales, aductores y gemelos 20-30 seg por lado.",
+    "cooldownVideo": "estiramiento_pierna"
+   },
+   {
+    "weekday": "Martes",
+    "title": "Pecho y Tríceps",
+    "focus": "Empuje superior",
+    "warmup": "Calentamiento en bicicleta — 8 minutos",
+    "warmupVideo": "bicicleta",
+    "exercises": [
+     {
+      "name": "Press de banca con barra",
+      "sets": "4 × 8-10",
+      "rest": "90 seg",
+      "equip": "barra",
+      "video": "press_banca",
+      "tip": "Escápulas apretadas contra el banco, baja la barra controlada hasta rozar el pecho y sube sin rebotar."
+     },
+     {
+      "name": "Press inclinado con mancuernas",
+      "sets": "3 × 10-12",
+      "rest": "75 seg",
+      "equip": "mancuerna",
+      "video": "press_inclinado",
+      "tip": "Banco a 30-45°, baja las mancuernas a los lados del pecho y sube sin chocarlas de golpe arriba."
+     },
+     {
+      "name": "Aperturas en polea (cruce)",
+      "sets": "3 × 12-15",
+      "rest": "60 seg",
+      "equip": "polea",
+      "video": "aperturas_polea",
+      "tip": "Codos con leve flexión fija, junta las manos al frente del pecho en un arco amplio y controlado."
+     },
+     {
+      "name": "Fondos en máquina asistida",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "maquina",
+      "video": "fondos_maquina",
+      "tip": "Tronco levemente inclinado adelante, baja hasta sentir el estiramiento en el pecho y sube sin bloquear los codos de golpe.",
+      "alt": "¿Muy exigente? Sube la asistencia de la máquina para que ayude más peso."
+     },
+     {
+      "name": "Extensión de tríceps en polea",
+      "sets": "3 × 12-15",
+      "rest": "45 seg",
+      "equip": "polea",
+      "video": "extension_triceps_polea",
+      "tip": "Codos pegados al cuerpo, extiende hacia abajo sin balancear la espalda y controla la vuelta."
+     }
+    ],
+    "cooldown": "Estira pecho y tríceps 20-30 seg por lado.",
+    "cooldownVideo": "estiramiento_pecho_triceps"
+   },
+   {
+    "weekday": "Miércoles",
+    "title": "Espalda y Bíceps",
+    "focus": "Tracción superior",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "trotadora",
+    "exercises": [
+     {
+      "name": "Jalón al pecho en polea",
+      "sets": "4 × 10-12",
+      "rest": "75 seg",
+      "equip": "polea",
+      "video": "jalon_pecho_polea",
+      "tip": "Tira la barra hacia el pecho llevando los codos hacia abajo, sin balancear el cuerpo hacia atrás."
+     },
+     {
+      "name": "Remo bajo en máquina Hammer",
+      "sets": "3 × 10-12",
+      "rest": "75 seg",
+      "equip": "maquina",
+      "video": "remo_maquina",
+      "tip": "Pecho apoyado o espalda recta según la máquina, tira hacia el abdomen apretando los omóplatos."
+     },
+     {
+      "name": "Remo con barra",
+      "sets": "3 × 10",
+      "rest": "75 seg",
+      "equip": "barra",
+      "video": "remo_barra",
+      "tip": "Tronco inclinado hacia adelante, espalda recta; tira la barra hacia el abdomen sin usar impulso de las piernas."
+     },
+     {
+      "name": "Curl de bíceps con barra Z",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "barra",
+      "video": "curl_biceps_barra_z",
+      "tip": "Codos pegados al cuerpo, sube y baja controlado sin balancear la espalda para ayudarte con impulso."
+     },
+     {
+      "name": "Curl martillo con mancuernas",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "curl_martillo",
+      "tip": "Palmas enfrentadas (agarre neutro), sube y baja controlado sin girar la muñeca."
+     }
+    ],
+    "cooldown": "Estira espalda y bíceps 20-30 seg por lado.",
+    "cooldownVideo": "estiramiento_espalda_biceps"
+   },
+   {
+    "weekday": "Jueves",
+    "title": "Hombros y Abdomen",
+    "focus": "Empuje superior + core",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "trotadora",
+    "exercises": [
+     {
+      "name": "Press militar con mancuernas",
+      "sets": "4 × 10",
+      "rest": "75 seg",
+      "equip": "mancuerna",
+      "video": "press_militar",
+      "tip": "Sentado o de pie con el core firme, empuja las mancuernas hacia arriba sin arquear demasiado la espalda baja."
+     },
+     {
+      "name": "Elevación lateral con mancuernas",
+      "sets": "3 × 12-15",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "elevacion_lateral",
+      "tip": "Codos con leve flexión, sube hasta la altura de los hombros y baja controlado sin usar impulso."
+     },
+     {
+      "name": "Elevación frontal con disco",
+      "sets": "3 × 12",
+      "rest": "60 seg",
+      "equip": "disco",
+      "video": "elevacion_frontal",
+      "tip": "Sujeta el disco con ambas manos, sube al frente hasta la altura de los hombros y baja controlado."
+     },
+     {
+      "name": "Face pull en polea (cuerda)",
+      "sets": "3 × 12-15",
+      "rest": "60 seg",
+      "equip": "polea",
+      "video": "face_pull",
+      "tip": "Tira la cuerda hacia la cara separando las manos, codos altos, apretando los omóplatos."
+     },
+     {
+      "name": "Plancha abdominal",
+      "sets": "3 × 30-40 seg",
+      "rest": "45 seg",
+      "equip": "colchoneta",
+      "video": "plancha_abdominal",
+      "tip": "Cuerpo alineado de la cabeza a los talones, aprieta el abdomen todo el tiempo.",
+      "alt": "¿Muy exigente? Apóyate en las rodillas en vez de en los pies."
+     },
+     {
+      "name": "Elevación de piernas colgado",
+      "sets": "3 × 10-15",
+      "rest": "60 seg",
+      "equip": "barra",
+      "video": "elevacion_piernas",
+      "tip": "Colgado de la barra, sube las piernas controlado sin balancear el cuerpo, y baja despacio.",
+      "alt": "¿Muy exigente? Dobla las rodillas al subir en vez de mantener las piernas rectas."
+     }
+    ],
+    "cooldown": "Estira hombros y abdomen 20-30 seg por zona.",
+    "cooldownVideo": "estiramiento_hombro_abdomen"
+   },
+   {
+    "weekday": "Viernes",
+    "title": "Brazos y Pecho Complementario",
+    "focus": "Cierre de semana — tren superior",
+    "warmup": "Calentamiento en bicicleta — 8 minutos",
+    "warmupVideo": "bicicleta",
+    "exercises": [
+     {
+      "name": "Press cerrado en banca con mancuernas",
+      "sets": "4 × 10",
+      "rest": "75 seg",
+      "equip": "mancuerna",
+      "video": "press_cerrado_banca",
+      "tip": "Agarre más angosto que el ancho de hombros, codos pegados al cuerpo al bajar la barra hacia el pecho, enfocado en tríceps."
+     },
+     {
+      "name": "Remo con mancuerna a una mano",
+      "sets": "3 × 10-12 por lado",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "remo_mancuerna_una_mano",
+      "tip": "Apoya una rodilla y una mano en el banco, espalda recta; tira la mancuerna hacia la cadera llevando el codo hacia atrás."
+     },
+     {
+      "name": "Curl concentrado con mancuerna",
+      "sets": "3 × 10-12 por lado",
+      "rest": "45 seg",
+      "equip": "mancuerna",
+      "video": "curl_concentrado",
+      "tip": "Codo apoyado en la cara interna del muslo, sube y baja controlado sin balancear el cuerpo."
+     },
+     {
+      "name": "Extensión de tríceps tras nuca con mancuerna",
+      "sets": "3 × 12",
+      "rest": "45 seg",
+      "equip": "mancuerna",
+      "video": "extension_triceps_nuca",
+      "tip": "Sostén la mancuerna con ambas manos detrás de la cabeza, codos apuntando al techo, baja controlado y sube extendiendo los brazos."
+     },
+     {
+      "name": "Abdominales en banca",
+      "sets": "3 × 15-20",
+      "rest": "45 seg",
+      "equip": "banca",
+      "video": "abdominales_banca",
+      "tip": "Flexiona el tronco apretando el abdomen, sin tirar del cuello con los brazos."
+     }
+    ],
+    "cooldown": "Estira brazos y pecho 20-30 seg por lado, para cerrar la semana.",
+    "cooldownVideo": "estiramiento_brazo_pecho"
+   }
+  ],
+  "VIDEOS": {
+   "sentadilla_smith": "assets/sentadilla_smith.mp4?v=2",
+   "prensa_pierna": "assets/prensa_pierna.mp4?v=2",
+   "extension_cuadriceps": "assets/extension_cuadriceps.mp4?v=2",
+   "curl_femoral": "assets/curl_femoral.mp4?v=2",
+   "aductores": "assets/aductores.mp4?v=2",
+   "pantorrillas": "assets/pantorrillas.mp4?v=2",
+   "press_banca": "assets/press_banca.mp4?v=2",
+   "press_inclinado": "assets/press_inclinado.mp4?v=2",
+   "aperturas_polea": "assets/aperturas_polea.mp4?v=2",
+   "fondos_maquina": "assets/fondos_maquina.mp4?v=2",
+   "extension_triceps_polea": "assets/extension_triceps_polea.mp4?v=2",
+   "jalon_pecho_polea": "assets/jalon_pecho_polea.mp4?v=2",
+   "remo_maquina": "assets/remo_maquina.mp4?v=2",
+   "remo_barra": "assets/remo_barra.mp4?v=2",
+   "curl_biceps_barra_z": "assets/curl_biceps_barra_z.mp4?v=2",
+   "press_militar": "assets/press_militar_hombres.mp4?v=1",
+   "curl_martillo": "assets/curl_martillo.mp4?v=1",
+   "elevacion_lateral": "assets/elevacion_lateral_hombres.mp4?v=1",
+   "elevacion_frontal": "assets/elevacion_frontal_hombres.mp4?v=1",
+   "face_pull": "assets/face_pull_hombres.mp4?v=1",
+   "plancha_abdominal": "assets/plancha_abdominal_hombres.mp4?v=1",
+   "elevacion_piernas": "assets/elevacion_piernas_hombres.mp4?v=1",
+   "press_cerrado_banca": "assets/press_cerrado_banca_hombres.mp4?v=1",
+   "remo_mancuerna_una_mano": "assets/remo_mancuerna_una_mano_hombres.mp4?v=1",
+   "curl_concentrado": "assets/curl_concentrado_hombres.mp4?v=1",
+   "extension_triceps_nuca": "assets/extension_triceps_nuca_hombres.mp4?v=1",
+   "abdominales_banca": "assets/abdominales_banca_hombres.mp4?v=1"
+  },
+  "WARMUP": {
+   "bicicleta": "assets/calentamiento_bicicleta_hombres.mp4?v=2",
+   "trotadora": "assets/calentamiento_trotadora_hombres.mp4?v=2"
+  },
+  "COOLDOWN": {
+   "estiramiento_pierna": "assets/estiramiento_pierna.mp4?v=2",
+   "estiramiento_pecho_triceps": "assets/estiramiento_pecho_triceps.mp4?v=2",
+   "estiramiento_espalda_biceps": "assets/estiramiento_espalda_biceps.mp4?v=1",
+   "estiramiento_hombro_abdomen": "assets/estiramiento_hombro_abdomen_hombres.mp4?v=1",
+   "estiramiento_brazo_pecho": "assets/estiramiento_brazo_pecho_hombres.mp4?v=1"
+  }
+ }
+};
+
+var ORDEN = ["hombres"];
+var NOMBRE_RUTINA = { mujeres:"Mujeres<small>Principiantes</small>",
+                      hombres:"Hombres<small>Principiantes</small>",
+                      gluteos:"Glúteos<small>Avanzado</small>" };
+var NOMBRE_PLANO  = { mujeres:"Principiantes Mujeres",
+                      hombres:"Principiantes Hombres",
+                      gluteos:"Glúteos" };
+
+/* ═══ Lo que se guarda en el teléfono del socio ═════════════════════════ */
+var KEY = "wgym_entrena_hombres_v1";
+function leerGuardado(){
+ try{ var o = JSON.parse(localStorage.getItem(KEY)); if(o && typeof o === "object") return o; }
+ catch(e){}
+ return {};
+}
+var D = leerGuardado();
+if(!Array.isArray(D.sesiones)) D.sesiones = [];
+D.rutina = "hombres";   /* esta app trae una sola rutina */
+function guardar(){ try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){} }
+
+
+/* ═══ Los socios ════════════════════════════════════════════════════════
+   Copia de la lista del mesón (control.html). Se mantiene con el mismo
+   formato de una línea por socio que los demás archivos, para que una
+   renovación se pueda cambiar igual en todos. */
+var SOCIOS = [
+{n:"AARON",a:"SOZA",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46287},
+{n:"AKASH",a:"THADANI",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:28000,fv:46268},
+{n:"ALAN",a:"PEREIRA",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46275},
+{n:"ALAN",a:"RAMIREZ",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"ALDO",a:"ENCINA",rut:"Sin Rut",plan:"Mensual Turno",monto:23000,fv:46269},
+{n:"ALEJANDRO",a:"PARES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46241},
+{n:"AlEXANDER",a:"ONTANEDA",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"ALEXIS",a:"ACUÑA",rut:"13.795.169-k",plan:"Full Mensual",monto:33000,fv:46290},
+{n:"ALEXIS",a:"VARAS",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46248},
+{n:"ALONSO",a:"ARAYA",rut:"00.000.000-7",plan:"Tres Veces a La Semana",monto:23000,fv:46264},
+{n:"AMBER",a:"TORRES",rut:"00.000.000-0",plan:"Plan Semanal",monto:15000,fv:46272},
+{n:"ANA",a:"MARIA GONZALEZ",rut:"00.000.000-0",plan:"Mensual Tercera Edad",monto:23000,fv:46289},
+{n:"ANDREA",a:"CUELLA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46237},
+{n:"ANDREA",a:"VARAS",rut:"16.613.967-8",plan:"Estudiante Profesor",monto:28000,fv:46244},
+{n:"ANDRES",a:"PAEZ",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46247},
+{n:"ANGEL",a:"GUTIERREZ",rut:"28.910.930-7",plan:"Full Mensual",monto:33000,fv:46279},
+{n:"ANTONELLA",a:"AGUIRRE",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46290},
+{n:"ANTONELLA",a:"LLANQUE",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46248},
+{n:"ANTONIO",a:"PEREZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46254},
+{n:"ANTONIO",a:"VALENCIA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46267},
+{n:"ARACELY",a:"HERRERA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46253},
+{n:"ARACELY",a:"PANIAGUA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46258},
+{n:"BASTIAN",a:"PERALTA",rut:"23.452.170-5",plan:"Estudiante Profesor",monto:28000,fv:46207},
+{n:"BASTIAN",a:"VERGARA",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46254},
+{n:"BASTIAN",a:"ZAPATA",rut:"20.886.781-4",plan:"Funcionario Público",monto:28000,fv:46272},
+{n:"BENJAMIN",a:"GODOY",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46257},
+{n:"BETSY",a:"BRIONES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"CAMILA",a:"CUELLA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46237},
+{n:"CAMILA",a:"JUICA",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46464},
+{n:"CAMILA",a:"PEÑA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46269},
+{n:"CAMILO",a:"GALLEGILLOS",rut:"20.400.051-1",plan:"Full Mensual",monto:33000,fv:46250},
+{n:"CAMILO",a:"JUICA",rut:"18.231.164-2",plan:"Mensual Turno",monto:23000,fv:46269},
+{n:"CARLA",a:"MORALES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46257},
+{n:"CARLOS",a:"ARAYA",rut:"15.012.248-1",plan:"Full Mensual",monto:33000,fv:46262},
+{n:"CLAUDIO",a:"BUSTAMANTE",rut:"00.000.000-0",plan:"Plan Semanal",monto:15000,fv:46272},
+{n:"CAROLINA",a:"CARVAJAL",rut:"15.011.544-2",plan:"Full Mensual",monto:33000,fv:46289},
+{n:"CAROLINA",a:"CUELLA",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46265},
+{n:"CHRISTIAN",a:"AROS",rut:"21.501.105-4",plan:"Estudiante Profesor",monto:28000,fv:46290},
+{n:"CHRISTIAN",a:"CAMPOS",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46290},
+{n:"CLAUDIA",a:"RAMOS",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"CLAUDIA",a:"VILLEGAS",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46293},
+{n:"CONSTANZA",a:"MARIN",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46238},
+{n:"CRISTOBAL",a:"PIZARRO",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46276},
+{n:"DANIEL",a:"CORTEZ",rut:"18.518.448-K",plan:"Mensual Turno",monto:23000,fv:46292},
+{n:"DANIEL",a:"MARTINEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46247},
+{n:"DANIELA",a:"CARVAJAL",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46268},
+{n:"DANIELA",a:"SALAZAR",rut:"18.490.422-5",plan:"Funcionario Público",monto:28000,fv:46291},
+{n:"DARKO",a:"VICENCIO",rut:"20.400.302-5",plan:"Full Mensual",monto:33000,fv:46286},
+{n:"DEBORA",a:"GAJARDO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"DEMIAN",a:"ALVAREZ",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46289},
+{n:"DIEGO",a:"SALAZAR",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"DONNA",a:"URIZAR",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46279},
+{n:"Edita",a:"Morales",rut:"18.231.906-4",plan:"Estudiante Profesor",monto:28000,fv:46266},
+{n:"EINER",a:"JAIMES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46289},
+{n:"ELIZABETH",a:"LLIULLI",rut:"Sin Rut",plan:"Tres Veces a La Semana",monto:23000,fv:46285},
+{n:"EMYLY",a:"ADAOS",rut:"Sin Rut",plan:"Estudiante Profesor",monto:28000,fv:46286},
+{n:"EYMILEE",a:"MUÑOZ",rut:"20-991-328-3",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"FAVIO",a:"CLAVELO",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46259},
+{n:"FERNANDA",a:"GUERRA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46272},
+{n:"FERNANDA",a:"MARTINEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46289},
+{n:"FRANCCINI",a:"VILLANUEVA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46255},
+{n:"FRANCHESCA",a:"ALCAYAGA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"FRANCISCA",a:"ROJAS",rut:"00.000.000-0",plan:"Plan Especial",monto:20000,fv:46240},
+{n:"GABRIEL",a:"FERNANDEZ",rut:"Sin Rut",plan:"Estudiante Profesor",monto:28000,fv:46276},
+{n:"GABRIEL",a:"MOLINA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46291},
+{n:"GABRIEL",a:"PIÑOL",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46273},
+{n:"GABRIEL",a:"RUZ",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46258},
+{n:"GABRIELA",a:"VELARDE",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46266},
+{n:"GERARDO",a:"LEPE",rut:"14.355.859-2",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"GERMAN",a:"PALMA",rut:"00.000.000-0",plan:"Plan Especial",monto:20000,fv:46252},
+{n:"GISELA",a:"CASTILLO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"GLORIA",a:"LOPEZ",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46268},
+{n:"HECTOR",a:"CONTRERAS",rut:"19.117.105-5",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"HELMUT",a:"NIEDMANN",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46294},
+{n:"HERMANN",a:"BORQUEZ",rut:"15.011.699-4",plan:"Mensual Turno",monto:23000,fv:46293},
+{n:"IAN",a:"GAETE",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46275},
+{n:"IDALBA",a:"MARTINEZ",rut:"25.029.628-2",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"IGNACIA",a:"SANCHEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46247},
+{n:"IVAN",a:"ESPIRITU",rut:"00.000.000-5",plan:"Mensual Turno",monto:23000,fv:46242},
+{n:"IVAN",a:"POZHO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"JAIRO",a:"CONTRERAS",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46248},
+{n:"JAVIERA",a:"CARRASCO",rut:"00.000.000-0",plan:"Plan Semanal",monto:15000,fv:46272},
+{n:"JEAN",a:"PIERRE",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46289},
+{n:"JENNY",a:"GOMEZ",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"JHANKARLA",a:"SUAREZ",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46275},
+{n:"JHON",a:"ESPINOZA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46285},
+{n:"JOAQUIN",a:"ALBAYAY",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46277},
+{n:"JOCKSHUA",a:"ARANDA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46292},
+{n:"JOFRE",a:"ZARUMA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46291},
+{n:"JOHAN",a:"VALLE",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"JORGE",a:"CONTRERAS",rut:"21.412.572-2",plan:"Funcionario Público",monto:28000,fv:46244},
+{n:"JOSE",a:"CHOCK",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"JOSE",a:"RODRIGUEZ",rut:"17.724.732-4",plan:"Tres Veces a La Semana",monto:23000,fv:46242},
+{n:"JOSEFA",a:"ESCOBAR",rut:"17.736.129-1",plan:"Mensual Turno",monto:23000,fv:46274},
+{n:"JOSTIN",a:"ROSAS",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46276},
+{n:"JUAN",a:"CACERES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46276},
+{n:"JUAN",a:"ESCALONA",rut:"18.214.303-3",plan:"Estudiante Profesor",monto:28000,fv:46275},
+{n:"JUAN",a:"REYES",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46271},
+{n:"KATHERINE",a:"GOMEZ",rut:"13.742.708-7",plan:"Full Mensual",monto:33000,fv:46295},
+{n:"KATHERINE",a:"IGLESIAS",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46275},
+{n:"KATHERINE",a:"RODRIGUEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46241},
+{n:"KATHIA",a:"CEBEÑO",rut:"22.767.241-2",plan:"Full Mensual",monto:33000,fv:46243},
+{n:"KEVIN",a:"BONILLA",rut:"19.822.514-2",plan:"Mensual Turno",monto:23000,fv:46254},
+{n:"KIMMEN",a:"ARANDA",rut:"12.937.891-3",plan:"Full Mensual",monto:33000,fv:46288},
+{n:"KRYSHNA",a:"ARTEAGA",rut:"21.920.620-8",plan:"Funcionario Público",monto:28000,fv:46243},
+{n:"LAURA",a:"VERA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46271},
+{n:"LORETO",a:"VELIZ",rut:"14.606.529-5",plan:"Funcionario Público",monto:28000,fv:46292},
+{n:"LUDJAN",a:"SORE",rut:"23.230.244-5",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"LUIS",a:"GARCIA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46277},
+{n:"LUIS",a:"RIOS",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46240},
+{n:"LUISA",a:"HIDALGO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"LUNA",a:"LOPEZ",rut:"26.795.264-k",plan:"Full Mensual",monto:33000,fv:46269},
+{n:"MANUEL",a:"DURAN",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46247},
+{n:"MARGARITA",a:"RODRIGUEZ",rut:"00.000.000-0",plan:"Plan Semanal",monto:15000,fv:46272},
+{n:"MARIA",a:"HERRERA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46253},
+{n:"MARIA",a:"OSES",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46245},
+{n:"MARIA",a:"SEGOVIA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"MARIA",a:"TORRES",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46254},
+{n:"MARIA",a:"ZEPEDA",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46268},
+{n:"MARIA JOSE",a:"OBREQUE",rut:"19.496.534-6",plan:"Full Mensual",monto:33000,fv:46268},
+{n:"MARTINA",a:"ROJAS",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46272},
+{n:"MARYORY",a:"RAMIREZ",rut:"26.982.463-8",plan:"Tres Veces a La Semana",monto:28000,fv:46269},
+{n:"MATIAS",a:"ABELLO",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46285},
+{n:"MATIAS",a:"FLORES",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46294},
+{n:"MAURA",a:"PALMA",rut:"24-172.701-7",plan:"Full Mensual",monto:33000,fv:46264},
+{n:"MAURICIO",a:"JUICA",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46619},
+{n:"MAURICIO",a:"ONTANEDA",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46269},
+{n:"MAURICIO",a:"RAMIREZ",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46271},
+{n:"MAURICIO",a:"URQUIETA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46261},
+{n:"MAXIMILIANO",a:"CONTRERAS",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"MAYUMY",a:"MARTINEZ",rut:"00.000.000-2",plan:"Funcionario Público",monto:28000,fv:46269},
+{n:"MICHEL",a:"QUINZACARA",rut:"16.927.097-K",plan:"Mensual Turno",monto:23000,fv:46265},
+{n:"MIGUEL",a:"MONSALVES",rut:"10.729.410-4",plan:"Mensual Turno",monto:23000,fv:46261},
+{n:"MIGUEL",a:"ROJAS",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46242},
+{n:"MILAGROS",a:"LOPEZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"MILAN",a:"CVITANIC",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46266},
+{n:"MILENKA",a:"CARRASCO",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46293},
+{n:"MILTON",a:"FUENTES",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46650},
+{n:"MIRKO",a:"SAN MARTIN",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46271},
+{n:"MONICA",a:"MONTEROS",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46257},
+{n:"NELSON",a:"VARAS",rut:"17.528.092-8",plan:"Full Mensual",monto:33000,fv:46272},
+{n:"NICOLAS",a:"PACHECO",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46269},
+{n:"NICOLE",a:"HERRERA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"NINA",a:"HERRERA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"NINA",a:"SALAZAR",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46251},
+{n:"OBRAIN",a:"RAMIREZ",rut:"Sin Rut",plan:"Full Mensual",monto:33000,fv:46284},
+{n:"PABLO",a:"AGUILERA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46259},
+{n:"PAMELA",a:"LOPEZ",rut:"14.577.814-k",plan:"Funcionario Público",monto:28000,fv:46254},
+{n:"PAOLA",a:"FERRER",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46290},
+{n:"PATRICIO",a:"CONTADOR",rut:"00.000.000-0",plan:"Mensual Tercera Edad",monto:23000,fv:46293},
+{n:"PAUL",a:"TORO",rut:"Sin Rut",plan:"Mensual Turno",monto:23000,fv:46278},
+{n:"PEDRO",a:"ALVAREZ",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"PEDRO",a:"OLIVARES",rut:"00.000.000-4",plan:"Funcionario Público",monto:28000,fv:46261},
+{n:"RICARDO",a:"MAMANNI",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46264},
+{n:"ROBERTO",a:"FIGUEROA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46269},
+{n:"RODRIGO",a:"CARMONA",rut:"20.400.285-1",plan:"Estudiante Profesor",monto:28000,fv:46285},
+{n:"RODRIGO",a:"MOLINA",rut:"22.150.537.9",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"RODRIGO",a:"PLAZA",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46269},
+{n:"ROSA",a:"LUCERO",rut:"00.000.000-0",plan:"Mensual Tercera Edad",monto:23000,fv:46274},
+{n:"ROSALIA",a:"GARMENDIA",rut:"00.000.000-0",plan:"Plan Especial",monto:20000,fv:46288},
+{n:"SAMUEL",a:"REES",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"SARA",a:"CARVAJAL",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46295},
+{n:"SARAH",a:"RAMOS",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"SEBASTIAN",a:"MARIN",rut:"19.215.031-0",plan:"Mensual Turno",monto:23000,fv:46256},
+{n:"Sebastian",a:"OLIVA",rut:"00.000.000-1",plan:"Estudiante Profesor",monto:28000,fv:46249},
+{n:"SEBASTIAN",a:"RIVERA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46261},
+{n:"SERGIO",a:"GUAPA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46272},
+{n:"SONIA",a:"CUBA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46248},
+{n:"TANYA",a:"PAULSEN",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46264},
+{n:"TOMAS",a:"CABALLERO",rut:"10.336.793-3",plan:"Mensual Turno",monto:23000,fv:46267},
+{n:"TOMAS",a:"VALENZUELA",rut:"23.228.062-k",plan:"Estudiante Profesor",monto:28000,fv:46290},
+{n:"TOMISLAV",a:"CVITANIC",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46266},
+{n:"TRAYSI",a:"MUÑOZ",rut:"13.173.041-1",plan:"Full Mensual",monto:33000,fv:46254},
+{n:"VALENTINA",a:"CUELLAR",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46268},
+{n:"VALERIA",a:"MACIAS",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:23000,fv:46233},
+{n:"VERONICA",a:"SALAS",rut:"20.126.542-8",plan:"Estudiante Profesor",monto:28000,fv:46236},
+{n:"VICTOR",a:"CORRY",rut:"12.997.412-7",plan:"Full Mensual",monto:33000,fv:46278},
+{n:"VICTOR",a:"MOLINA",rut:"18.918.939-7",plan:"Full Mensual",monto:33000,fv:46292},
+{n:"WENDY",a:"HUAYTA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46277},
+{n:"YAJAIRA",a:"PINEDA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46275},
+{n:"YANETH",a:"PERCCA",rut:"00.000.000-0",plan:"Full Mensual",monto:33000,fv:46261},
+{n:"YESSICA",a:"ESCALERA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46264},
+{n:"YOHANNA",a:"VEGA",rut:"00.000.000-0",plan:"Tres Veces a La Semana",monto:28000,fv:46291},
+{n:"ALFREDO",a:"VENEGAS",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46291},
+{n:"VICTORIA",a:"BEROIZA",rut:"00.000.000-0",plan:"Estudiante Profesor",monto:28000,fv:46292},
+{n:"DIEGO",a:"CLARK",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46292},
+{n:"JAIME",a:"VEGA",rut:"00.000.000-0",plan:"Mensual Turno",monto:23000,fv:46279}
+];
+
+/* ═══ El portón ═════════════════════════════════════════════════════════
+   Reconoce al socio aunque escriba con faltas de ortografía o al revés, y
+   solo lo deja pasar si tiene el plan al día. */
+function normName(s){
+ return (s || "").toString().trim().toUpperCase()
+  .normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ");
+}
+function claveNombre(s){ return normName(s).replace(/\s+/g, ""); }
+function margen(q){ return q.length <= 8 ? 1 : (q.length <= 14 ? 2 : 3); }
+function distanciaNombre(a, b){
+ if(a === b) return 0;
+ var la = a.length, lb = b.length;
+ if(Math.abs(la - lb) > 4) return 99;
+ var fila = [];
+ for(var j = 0; j <= lb; j++) fila[j] = j;
+ for(var i = 1; i <= la; i++){
+  var ant = fila[0];
+  fila[0] = i;
+  for(var k = 1; k <= lb; k++){
+   var tmp = fila[k];
+   fila[k] = Math.min(fila[k] + 1, fila[k-1] + 1,
+                      ant + (a.charAt(i-1) === b.charAt(k-1) ? 0 : 1));
+   ant = tmp;
+  }
+ }
+ return fila[lb];
+}
+/* El número de vencimiento cuenta los días desde el 30-12-1899. La fecha se
+   arma en hora de Chile: en hora universal se corre un día para atrás y al
+   socio se le cerraría la app el día antes de que se le venza. */
+function fechaDeSerial(serial){
+ var d = new Date(1899, 11, 30);
+ d.setDate(d.getDate() + serial);
+ d.setHours(0, 0, 0, 0);
+ return d;
+}
+function diasHastaVencer(s){
+ var hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+ return Math.round((fechaDeSerial(s.fv) - hoy) / 86400000);
+}
+function fechaVence(s){
+ var d = fechaDeSerial(s.fv);
+ return String(d.getDate()).padStart(2,"0") + "-" +
+        String(d.getMonth()+1).padStart(2,"0") + "-" + d.getFullYear();
+}
+function buscarSocio(nombre, apellido){
+ var n = normName(nombre), a = normName(apellido);
+ if(!n || !a) return null;
+ var exacto = null;
+ SOCIOS.forEach(function(s){
+  if(!exacto && normName(s.n) === n && normName(s.a) === a) exacto = s;
+ });
+ if(exacto) return exacto;
+ /* Si no calza tal cual, el más parecido — salvo que haya dos igual de
+    parecidos, porque ahí no se sabe cuál es y es mejor no adivinar. */
+ var q = claveNombre(nombre + apellido);
+ var mejor = null, mejorD = 99, empate = false;
+ SOCIOS.forEach(function(s){
+  var d = distanciaNombre(q, claveNombre(s.n + s.a));
+  if(d < mejorD){ mejorD = d; mejor = s; empate = false; }
+  else if(d === mejorD){ empate = true; }
+ });
+ if(mejor && mejorD <= margen(q) && !empate) return mejor;
+ /* Último intento: si el apellido calza exacto y hay un solo socio con ese
+    apellido, basta con que el nombre se le parezca. */
+ var mismoApellido = SOCIOS.filter(function(s){ return normName(s.a) === a; });
+ if(mismoApellido.length === 1 &&
+    distanciaNombre(claveNombre(nombre), claveNombre(mismoApellido[0].n)) <= 3){
+  return mismoApellido[0];
+ }
+ return null;
+}
+/* En la app se escribe todo junto en un solo casillero, así que hay que
+   probar dónde termina el nombre y empieza el apellido. */
+function buscarPorNombreCompleto(texto){
+ var p = String(texto || "").trim().split(/\s+/).filter(Boolean);
+ if(!p.length) return null;
+ if(p.length === 1) return buscarSocio(p[0], p[0]);
+ for(var i = 1; i < p.length; i++){
+  var s = buscarSocio(p.slice(0, i).join(" "), p.slice(i).join(" "));
+  if(s) return s;
+ }
+ /* Hay gente que lo escribe al revés, primero el apellido. */
+ for(var j = 1; j < p.length; j++){
+  var r = buscarSocio(p.slice(j).join(" "), p.slice(0, j).join(" "));
+  if(r) return r;
+ }
+ return buscarSocio(p[0], p.slice(1).join(" "));
+}
+
+/* ═══ Ayudantes ════════════════════════════════════════════════════════ */
+var $ = function(id){ return document.getElementById(id); };
+
+/* "3 × 12-15" son 3 series de 12 a 15. Lo que no calce con ese molde
+   ("15 minutos", "30 seg por grupo muscular") queda como una sola serie
+   con el texto entero, que para eso está escrito así. */
+function leerSeries(txt){
+ var m = String(txt == null ? "" : txt).match(/^\s*(\d+)\s*[×xX]\s*(.+?)\s*$/);
+ if(m) return { cuantas: Math.min(parseInt(m[1], 10), 12), reps: m[2] };
+ return { cuantas: 1, reps: String(txt == null ? "" : txt).trim() || "—" };
+}
+/* "60 seg" son 60 segundos; "2 min", 120. El guión largo es sin descanso. */
+function leerDescanso(txt){
+ var s = String(txt == null ? "" : txt);
+ var seg = s.match(/(\d+)\s*seg/i); if(seg) return parseInt(seg[1], 10);
+ var min = s.match(/(\d+)\s*min/i); if(min) return parseInt(min[1], 10) * 60;
+ return 0;
+}
+/* Colchoneta, cuerpo, TRX y cardio se hacen con el peso del cuerpo: pedirle
+   kilos ahí solo confunde. */
+function llevaPeso(ex){ return !/^(colchoneta|cuerpo|cardio|trx)$/i.test(ex.equip || ""); }
+
+function hoyISO(){
+ var d = new Date();
+ return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" +
+        String(d.getDate()).padStart(2,"0");
+}
+/* El lunes de la semana a la que pertenece una fecha: sirve para contar
+   cuántas veces vino esta semana y cuántas semanas seguidas lleva. */
+function lunesDe(iso){
+ var p = String(iso).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2]);
+ f.setDate(f.getDate() - ((f.getDay() + 6) % 7));
+ return f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-" +
+        String(f.getDate()).padStart(2,"0");
+}
+function reloj(seg){
+ seg = Math.max(0, Math.round(seg));
+ var h = Math.floor(seg/3600), m = Math.floor((seg%3600)/60), s = seg%60;
+ return (h ? h + ":" + String(m).padStart(2,"0") : m) + ":" + String(s).padStart(2,"0");
+}
+function miles(n){ return Math.round(n).toLocaleString("es-CL"); }
+function limpio(t){
+ return String(t == null ? "" : t).replace(/[&<>"']/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+ });
+}
+function fechaCorta(iso){
+ var p = String(iso).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2]);
+ return f.toLocaleDateString("es-CL", { weekday:"short", day:"numeric", month:"short" })
+         .replace(/\./g, "");
+}
+
+/* El pitido lo hace el propio navegador, sin depender de ningún archivo de
+   sonido. Pero los teléfonos solo dejan sonar si el permiso quedó pedido
+   mientras el dedo estaba encima de la pantalla: si uno lo pide recién
+   cuando el reloj llega a cero, el aparato lo bloquea y no se oye nada.
+   Por eso el sonido se despierta en el primer toque y queda listo. */
+var sonido = null;
+function despertarSonido(){
+ try{
+  var A = window.AudioContext || window.webkitAudioContext;
+  if(!A) return;
+  if(!sonido) sonido = new A();
+  if(sonido.state === "suspended") sonido.resume();
+ }catch(e){}
+}
+document.addEventListener("pointerdown", despertarSonido, true);
+document.addEventListener("touchstart", despertarSonido, true);
+
+/* Tres pitidos seguidos, el último más agudo: en un gimnasio con música
+   uno solo se pierde. Además el teléfono vibra, que es lo que de verdad
+   se nota cuando lo tienes en el bolsillo. */
+function pitar(){
+ despertarSonido();
+ try{
+  if(sonido && sonido.state === "running"){
+   var t0 = sonido.currentTime;
+   for(var i = 0; i < 3; i++){
+    var o = sonido.createOscillator(), g = sonido.createGain();
+    o.type = "sine";
+    o.frequency.value = (i === 2) ? 1245 : 880;
+    var t = t0 + i * 0.30;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.38, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + (i === 2 ? 0.42 : 0.22));
+    o.connect(g); g.connect(sonido.destination);
+    o.start(t); o.stop(t + 0.45);
+   }
+  }
+ }catch(e){}
+ try{ if(navigator.vibrate) navigator.vibrate([220, 120, 220, 120, 380]); }catch(e){}
+}
+
+/* ═══ Historial: lo que hizo la vez pasada y sus récords ════════════════ */
+function ultimaVezDe(nombre){
+ for(var i = D.sesiones.length - 1; i >= 0; i--){
+  var lista = D.sesiones[i].ejercicios || [];
+  for(var j = 0; j < lista.length; j++){
+   if(lista[j].nombre !== nombre) continue;
+   var hechas = (lista[j].series || []).filter(function(s){ return s.hecha; });
+   if(hechas.length) return { fecha:D.sesiones[i].fecha, series:hechas };
+  }
+ }
+ return null;
+}
+function recordDe(nombre){
+ var mejor = 0;
+ D.sesiones.forEach(function(se){
+  (se.ejercicios || []).forEach(function(e){
+   if(e.nombre !== nombre) return;
+   (e.series || []).forEach(function(s){
+    if(s.hecha && +s.kg > mejor) mejor = +s.kg;
+   });
+  });
+ });
+ return mejor;
+}
+
+/* ═══ Pantallas ════════════════════════════════════════════════════════ */
+var PANTALLAS = ["p-ingreso","p-inicio","p-entreno","p-final","p-progreso"];
+function mostrar(cual){
+ PANTALLAS.forEach(function(id){ $(id).hidden = (id !== cual); });
+ $("cabecera").hidden = (cual === "p-ingreso" || cual === "p-entreno");
+ window.scrollTo(0, 0);
+}
+
+/* ═══ Ingreso ══════════════════════════════════════════════════════════ */
+function entrar(){
+ var t = $("iNombre").value.trim().replace(/\s+/g, " ");
+ var av = $("avisoIngreso");
+ if(t.length < 3){
+  av.textContent = "Escribe tu nombre y tu apellido.";
+  av.hidden = false; $("iNombre").focus(); return;
+ }
+ var s = buscarPorNombreCompleto(t);
+ if(!s){
+  av.innerHTML = "No encontramos ese nombre entre los socios. " +
+                 "Revisa cómo lo escribiste o consulta en recepción.";
+  av.hidden = false; return;
+ }
+ var dias = diasHastaVencer(s);
+ if(dias < 0){
+  /* Al vencido no se le abre, pero se le dice por qué y desde cuándo: es
+     mucho más útil que un "no te encontramos" que no explica nada. */
+  av.innerHTML = "<b>" + limpio(s.n + " " + s.a) + "</b>, tu plan venció el <b>" +
+                 fechaVence(s) + "</b>.<br>Pasa a renovar en recepción y vuelves a entrar.";
+  av.hidden = false; return;
+ }
+ D.socio = s.n + " " + s.a;
+ D.avisoVence = (dias <= 3) ? { dias:dias, fecha:fechaVence(s) } : null;
+ guardar();
+ abrirInicio();
+}
+$("bEntrar").addEventListener("click", entrar);
+$("iNombre").addEventListener("keydown", function(e){ if(e.key === "Enter") entrar(); });
+$("iNombre").addEventListener("input", function(){ $("avisoIngreso").hidden = true; });
+
+$("bSalir").addEventListener("click", function(){
+ /* Solo se olvida de quién es; los entrenamientos anotados quedan. */
+ delete D.socio; guardar();
+ $("iNombre").value = "";
+ mostrar("p-ingreso");
+});
+
+/* ═══ Inicio ═══════════════════════════════════════════════════════════ */
+function abrirInicio(){
+ $("hQuien").textContent = D.socio || "";
+ var av = $("avisoVence");
+ if(D.avisoVence){
+  av.hidden = false;
+  av.innerHTML = D.avisoVence.dias === 0
+   ? "Tu plan <b>vence hoy</b>. Pasa a renovar en recepción."
+   : "Tu plan vence el <b>" + D.avisoVence.fecha + "</b>" +
+     (D.avisoVence.dias === 1 ? " · mañana" : " · en " + D.avisoVence.dias + " días") +
+     ". Acuérdate de renovar.";
+ }else{ av.hidden = true; }
+ pintarDias();
+ pintarMarcas();
+ pintarSeguir();
+ mostrar("p-inicio");
+}
+
+/* Los días que ya entrenó esta semana salen marcados en verde, para que no
+   tenga que acordarse de memoria de cuáles lleva. */
+function diasHechosEstaSemana(){
+ var lunes = lunesDe(hoyISO());
+ var hechos = {};
+ D.sesiones.forEach(function(s){
+  if(s.rutina === D.rutina && lunesDe(s.fecha) === lunes) hechos[s.dia] = true;
+ });
+ return hechos;
+}
+
+function pintarDias(){
+ var hechos = diasHechosEstaSemana();
+ var dias = RUTINAS[D.rutina].DAYS;
+ var cont = $("listaDias");
+ cont.innerHTML = "";
+ dias.forEach(function(d, i){
+  var b = document.createElement("button");
+  b.type = "button";
+  b.className = "dia";
+  b.setAttribute("data-hecho", hechos[i] ? "si" : "no");
+  b.innerHTML =
+   '<span class="n">' + (hechos[i] ? "✓" : (i + 1)) + '</span>' +
+   '<span class="txt"><b></b><small></small></span>' +
+   '<span class="flecha">›</span>';
+  b.querySelector("b").textContent = d.title;
+  b.querySelector("small").textContent =
+   d.weekday + " · " + d.exercises.length + " ejercicios" +
+   (hechos[i] ? " · ya lo hiciste esta semana" : "");
+  b.addEventListener("click", function(){ empezarDia(i); });
+  cont.appendChild(b);
+ });
+}
+
+function pintarMarcas(){
+ $("mSesiones").textContent = D.sesiones.length;
+ var lunes = lunesDe(hoyISO());
+ $("mSemana").textContent = D.sesiones.filter(function(s){
+  return lunesDe(s.fecha) === lunes;
+ }).length;
+
+ /* Semanas seguidas: se cuenta hacia atrás desde esta semana. Si todavía no
+    entrena esta semana no se le corta la racha, se mira desde la anterior. */
+ var semanas = {};
+ D.sesiones.forEach(function(s){ semanas[lunesDe(s.fecha)] = true; });
+ function menosSemanas(iso, n){
+  var p = iso.split("-");
+  var f = new Date(+p[0], +p[1]-1, +p[2] - 7*n);
+  return f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-" +
+         String(f.getDate()).padStart(2,"0");
+ }
+ var arranque = semanas[lunes] ? 0 : 1;
+ var racha = 0;
+ for(var k = arranque; k < 260; k++){
+  if(!semanas[menosSemanas(lunes, k)]) break;
+  racha++;
+ }
+ $("mRacha").textContent = racha;
+}
+
+function pintarSeguir(){
+ var a = D.actual;
+ var caja = $("cajaSeguir");
+ if(!a || !RUTINAS[a.rutina] || !RUTINAS[a.rutina].DAYS[a.dia]){ caja.hidden = true; return; }
+ var dia = RUTINAS[a.rutina].DAYS[a.dia];
+ var hechas = 0, total = 0;
+ (a.ejercicios || []).forEach(function(e){
+  (e.series || []).forEach(function(s){ total++; if(s.hecha) hechas++; });
+ });
+ caja.hidden = false;
+ $("txtSeguir").innerHTML =
+  "Dejaste un entrenamiento a medias: <b>" + limpio(dia.title) + "</b>" +
+  " (" + NOMBRE_PLANO[a.rutina] + ")<br>Llevabas " + hechas + " de " + total + " series.";
+}
+$("bSeguir").addEventListener("click", function(){
+ if(D.actual) abrirEntreno();
+});
+
+/* ═══ El entrenamiento ═════════════════════════════════════════════════ */
+var iEj = 0;            /* en qué ejercicio va */
+var ticTac = null;      /* el reloj de la sesión */
+
+/* Arma la sesión vacía del día, con una fila por serie y los kilos de la
+   vez pasada ya escritos: casi siempre va a repetir el mismo peso, así que
+   se los dejamos puestos y solo corrige si cambió. */
+function armarSesion(rutina, dia){
+ var d = RUTINAS[rutina].DAYS[dia];
+ return {
+  rutina: rutina,
+  dia: dia,
+  fecha: hoyISO(),
+  inicio: Date.now(),
+  ejercicios: d.exercises.map(function(ex){
+   var s = leerSeries(ex.sets);
+   var antes = ultimaVezDe(ex.name);
+   return {
+    nombre: ex.name,
+    series: Array.from({ length: s.cuantas }, function(_, i){
+     var v = antes && antes.series[i] ? antes.series[i] : (antes ? antes.series[antes.series.length-1] : null);
+     return { kg: v ? v.kg : "", reps: v ? v.reps : "", hecha: false };
+    })
+   };
+  })
+ };
+}
+
+function empezarDia(dia){
+ if(D.actual && D.actual.dia === dia && D.actual.rutina === D.rutina){
+  abrirEntreno();
+  return;
+ }
+ D.actual = armarSesion(D.rutina, dia);
+ iEj = 0;
+ guardar();
+ abrirEntreno();
+}
+
+function abrirEntreno(){
+ var a = D.actual;
+ if(!a){ abrirInicio(); return; }
+ D.rutina = a.rutina;
+ /* Se abre en el primer ejercicio que le falte, no siempre en el primero. */
+ iEj = 0;
+ for(var i = 0; i < a.ejercicios.length; i++){
+  if(a.ejercicios[i].series.some(function(s){ return !s.hecha; })){ iEj = i; break; }
+  iEj = i;
+ }
+ mostrar("p-entreno");
+ pintarEjercicio();
+ arrancarReloj();
+}
+
+function arrancarReloj(){
+ clearInterval(ticTac);
+ function pinta(){
+  if(!D.actual) return;
+  $("relojSesion").textContent = reloj((Date.now() - D.actual.inicio) / 1000);
+ }
+ pinta();
+ ticTac = setInterval(pinta, 1000);
+}
+
+function pintarEjercicio(){
+ var a = D.actual;
+ var dia = RUTINAS[a.rutina].DAYS[a.dia];
+ var ex = dia.exercises[iEj];
+ var mio = a.ejercicios[iEj];
+ var s = leerSeries(ex.sets);
+ var conPeso = llevaPeso(ex);
+
+ $("txtPaso").textContent = (iEj + 1) + " de " + dia.exercises.length + " · " + dia.title;
+ $("pistaAvance").style.width = ((iEj) / dia.exercises.length * 100) + "%";
+
+ var video = RUTINAS[a.rutina].VIDEOS[ex.video];
+ var antes = ultimaVezDe(ex.name);
+ var record = recordDe(ex.name);
+
+ var h = "";
+ h += '<h2>' + limpio(ex.name) + '</h2>';
+ h += '<div class="meta">' +
+        '<span>' + limpio(ex.sets) + '</span>' +
+        '<span>Descanso ' + limpio(ex.rest) + '</span>' +
+        (ex.equip ? '<span>' + limpio(ex.equip) + '</span>' : '') +
+      '</div>';
+ if(video) h += '<video src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
+ if(ex.tip)  h += '<div class="consejo"><b>Cómo se hace</b>' + limpio(ex.tip) + '</div>';
+ if(ex.alt)  h += '<div class="consejo alterna"><b>Si te cuesta</b>' + limpio(ex.alt) + '</div>';
+
+ if(antes){
+  var resumen = antes.series.map(function(x){
+   return (conPeso && x.kg ? x.kg + " kg × " : "") + (x.reps || "—");
+  }).join(" · ");
+  h += '<div class="vezpasada">La vez pasada (' + fechaCorta(antes.fecha) + '): <b>' +
+       limpio(resumen) + '</b>' +
+       (conPeso && record ? '<br>Tu récord en este ejercicio: <b>' + record + ' kg</b>' : '') +
+       '</div>';
+ }
+
+ h += '<div class="cabseries"><span>#</span>' +
+      (conPeso ? '<span>Peso · kg</span>' : '<span>Sin peso</span>') +
+      '<span>Reps</span><span>Listo</span></div>';
+ h += '<div class="series" id="filasSeries"></div>';
+ if(!conPeso) h += '<p class="sinpeso">Este ejercicio es con el peso de tu cuerpo, ' +
+                   'así que no lleva kilos. Anota solo las repeticiones.</p>';
+ h += '<p class="sinpeso" style="margin-top:12px">Objetivo de hoy: <b>' +
+      limpio(s.reps) + '</b> por serie.</p>';
+
+ $("cuerpoEj").innerHTML = h;
+
+ var cont = $("filasSeries");
+ mio.series.forEach(function(se, i){
+  var fila = document.createElement("div");
+  fila.className = "serie";
+  fila.setAttribute("data-hecha", se.hecha ? "si" : "no");
+  fila.innerHTML =
+   '<span class="idx">' + (i + 1) + '</span>' +
+   '<span class="campito"><input type="text" inputmode="decimal" ' +
+     (conPeso ? '' : 'disabled ') + 'aria-label="Peso en kilos de la serie ' + (i+1) + '"></span>' +
+   '<span class="campito"><input type="text" inputmode="numeric" ' +
+     'aria-label="Repeticiones de la serie ' + (i+1) + '"></span>' +
+   '<button class="tick" type="button" aria-label="Marcar serie ' + (i+1) + ' como hecha">✓</button>';
+
+  var iKg = fila.children[1].querySelector("input");
+  var iRp = fila.children[2].querySelector("input");
+  iKg.value = conPeso ? (se.kg || "") : "";
+  iRp.value = se.reps || "";
+  if(!conPeso) iKg.placeholder = "—";
+  else iKg.placeholder = "0";
+  iRp.placeholder = s.reps.replace(/[^\d-]/g, "").split("-")[0] || "0";
+
+  iKg.addEventListener("input", function(){ se.kg = iKg.value.replace(",", "."); guardar(); });
+  iRp.addEventListener("input", function(){ se.reps = iRp.value; guardar(); });
+
+  fila.querySelector(".tick").addEventListener("click", function(){
+   se.hecha = !se.hecha;
+   if(se.hecha){
+    /* Si marcó sin escribir nada, se le pone el objetivo del día para que
+       no quede la serie vacía en el historial. */
+    if(!se.reps){ se.reps = iRp.placeholder; iRp.value = se.reps; }
+    if(conPeso && !se.kg && iKg.placeholder !== "0"){ se.kg = iKg.placeholder; iKg.value = se.kg; }
+   }
+   fila.setAttribute("data-hecha", se.hecha ? "si" : "no");
+   guardar();
+   if(se.hecha) trasMarcar(i);
+  });
+  cont.appendChild(fila);
+ });
+
+ var ultimo = (iEj === dia.exercises.length - 1);
+ $("bDespues").textContent = ultimo ? "Terminar" : "Siguiente";
+ $("bDespues").className = "btn " + (ultimo ? "btn-verde" : "btn-rojo");
+ $("bAntes").disabled = (iEj === 0);
+}
+
+/* ═══ Descanso entre series ════════════════════════════════════════════ */
+var cuentaAtras = null, volverSolo = null;
+var VUELTA = 2 * Math.PI * 88;   /* el largo del aro del reloj */
+
+/* Al marcar una serie arranca el descanso, salvo que haya sido la última
+   serie del último ejercicio: ahí ya no queda nada que esperar. */
+function trasMarcar(iSerie){
+ var a = D.actual;
+ var dia = RUTINAS[a.rutina].DAYS[a.dia];
+ var ex = dia.exercises[iEj];
+ var mio = a.ejercicios[iEj];
+ var seg = leerDescanso(ex.rest);
+
+ var quedanAqui = mio.series.some(function(s){ return !s.hecha; });
+ var esFinal = !quedanAqui && iEj === dia.exercises.length - 1;
+ if(esFinal || !seg) return;
+
+ var sigue = quedanAqui
+  ? "Después viene la <b>serie " + (iSerie + 2 <= mio.series.length ? iSerie + 2 : mio.series.length) +
+    " de " + mio.series.length + "</b> de " + limpio(ex.name) + "."
+  : "Terminaste este ejercicio. Después viene <b>" +
+    limpio(dia.exercises[iEj + 1].name) + "</b>.";
+ abrirDescanso(seg, sigue);
+}
+
+function abrirDescanso(seg, textoSigue){
+ var velo = $("veloDescanso");
+ var quedan = seg, total = seg;
+ clearTimeout(volverSolo);
+ velo.setAttribute("data-e", "contando");
+ $("etqDescanso").textContent = "Descansa";
+ $("bMasDescanso").hidden = false;
+ $("bSaltarDescanso").textContent = "Ya estoy";
+ $("sigueDescanso").innerHTML = textoSigue;
+ velo.hidden = false;
+
+ function pinta(){
+  $("cuentaDescanso").textContent = quedan;
+  $("aroBarra").style.strokeDashoffset = VUELTA * (1 - quedan / total);
+ }
+ $("aroBarra").setAttribute("stroke-dasharray", VUELTA);
+ pinta();
+
+ clearInterval(cuentaAtras);
+ cuentaAtras = setInterval(function(){
+  quedan--;
+  if(quedan <= 0){ seAcabo(); return; }
+  pinta();
+ }, 1000);
+
+ /* Antes el aviso desaparecía solo en el mismo instante en que sonaba, así
+    que si no alcanzabas a oírlo no quedaba nada que mirar. Ahora se pone
+    verde y se queda esperando, para que lo veas aunque estés de espaldas. */
+ function seAcabo(){
+  clearInterval(cuentaAtras); cuentaAtras = null;
+  velo.setAttribute("data-e", "listo");
+  $("etqDescanso").textContent = "Se acabó el descanso";
+  $("cuentaDescanso").textContent = "¡YA!";
+  $("aroBarra").style.strokeDashoffset = 0;
+  $("bMasDescanso").hidden = true;
+  $("bSaltarDescanso").textContent = "Seguir";
+  pitar();
+  /* Si lo deja abierto porque está en plena serie, se cierra solo. */
+  volverSolo = setTimeout(cerrarDescanso, 12000);
+ }
+
+ $("bMasDescanso").onclick = function(){ quedan += 20; total = Math.max(total, quedan); pinta(); };
+ $("bSaltarDescanso").onclick = cerrarDescanso;
+}
+function cerrarDescanso(){
+ clearInterval(cuentaAtras); cuentaAtras = null;
+ clearTimeout(volverSolo); volverSolo = null;
+ $("veloDescanso").hidden = true;
+}
+
+/* ═══ Moverse entre ejercicios ═════════════════════════════════════════ */
+$("bAntes").addEventListener("click", function(){
+ if(iEj > 0){ iEj--; pintarEjercicio(); window.scrollTo(0,0); }
+});
+$("bDespues").addEventListener("click", function(){
+ var dia = RUTINAS[D.actual.rutina].DAYS[D.actual.dia];
+ if(iEj < dia.exercises.length - 1){
+  iEj++; pintarEjercicio(); window.scrollTo(0,0);
+ }else{
+  terminar();
+ }
+});
+$("bCerrarEntreno").addEventListener("click", function(){
+ /* Se guarda a medias: el botón de arriba dice "seguir donde iba". */
+ cerrarDescanso();
+ clearInterval(ticTac);
+ guardar();
+ abrirInicio();
+});
+
+/* ═══ Terminar ═════════════════════════════════════════════════════════ */
+function terminar(){
+ var a = D.actual;
+ if(!a) return;
+ cerrarDescanso();
+ clearInterval(ticTac);
+
+ /* Los récords se miran ANTES de guardar la sesión, si no se compararía
+    contra sí misma y nunca habría récord nuevo. */
+ var records = 0;
+ a.ejercicios.forEach(function(e){
+  var antes = recordDe(e.nombre);
+  var ahora = 0;
+  (e.series || []).forEach(function(s){ if(s.hecha && +s.kg > ahora) ahora = +s.kg; });
+  if(ahora > 0 && ahora > antes) records++;
+ });
+
+ var series = 0, volumen = 0;
+ a.ejercicios.forEach(function(e){
+  (e.series || []).forEach(function(s){
+   if(!s.hecha) return;
+   series++;
+   var kg = parseFloat(String(s.kg).replace(",", ".")) || 0;
+   var reps = parseInt(String(s.reps).replace(/[^\d]/g, ""), 10) || 0;
+   volumen += kg * reps;
+  });
+ });
+
+ var seg = Math.round((Date.now() - a.inicio) / 1000);
+ a.fin = Date.now();
+ a.seg = seg;
+ a.series = series;
+ a.volumen = Math.round(volumen);
+
+ if(series > 0){
+  D.sesiones.push(a);
+  if(D.sesiones.length > 400) D.sesiones = D.sesiones.slice(-400);
+ }
+ delete D.actual;
+ guardar();
+
+ var dia = RUTINAS[a.rutina].DAYS[a.dia];
+ $("txtFinal").innerHTML = series
+  ? "Terminaste <b>" + limpio(dia.title) + "</b>. Queda anotado."
+  : "No alcanzaste a marcar ninguna serie, así que no se guardó nada.";
+ $("fTiempo").textContent  = reloj(seg);
+ $("fSeries").textContent  = series;
+ $("fVolumen").textContent = miles(volumen);
+ $("fRecords").textContent = records;
+ mostrar("p-final");
+}
+$("bVolverInicio").addEventListener("click", abrirInicio);
+$("bVerProgreso").addEventListener("click", function(){ abrirProgreso("sesiones"); });
+
+/* ═══ Progreso ═════════════════════════════════════════════════════════ */
+var pestanaProgreso = "sesiones";
+function abrirProgreso(cual){
+ pestanaProgreso = cual || pestanaProgreso;
+ $("tabSesiones").setAttribute("aria-pressed", pestanaProgreso === "sesiones" ? "true" : "false");
+ $("tabMarcas").setAttribute("aria-pressed", pestanaProgreso === "marcas" ? "true" : "false");
+ $("cuerpoProgreso").innerHTML =
+  pestanaProgreso === "sesiones" ? htmlSesiones() : htmlMarcas();
+ mostrar("p-progreso");
+}
+$("bProgreso").addEventListener("click", function(){ abrirProgreso("sesiones"); });
+$("tabSesiones").addEventListener("click", function(){ abrirProgreso("sesiones"); });
+$("tabMarcas").addEventListener("click", function(){ abrirProgreso("marcas"); });
+$("bCerrarProgreso").addEventListener("click", abrirInicio);
+
+function htmlSesiones(){
+ if(!D.sesiones.length){
+  return '<p class="vacio">Todavía no has terminado ningún entrenamiento.<br>' +
+         'Cuando termines el primero va a aparecer acá.</p>';
+ }
+ var h = '<div class="hist">';
+ D.sesiones.slice().reverse().slice(0, 60).forEach(function(s){
+  var dia = RUTINAS[s.rutina] && RUTINAS[s.rutina].DAYS[s.dia];
+  h += '<div class="hsesion">' +
+        '<div class="arriba"><b>' + limpio(dia ? dia.title : "Entrenamiento") + '</b>' +
+        '<span class="cuando">' + fechaCorta(s.fecha) + '</span></div>' +
+        '<div class="abajo"><em>' + (s.series || 0) + '</em> series · ' +
+        '<em>' + miles(s.volumen || 0) + '</em> kg levantados · ' +
+        reloj(s.seg || 0) + '</div>' +
+       '</div>';
+ });
+ return h + '</div>';
+}
+
+function htmlMarcas(){
+ /* El mejor peso de cada ejercicio, del más pesado al más liviano. */
+ var mejores = {};
+ D.sesiones.forEach(function(se){
+  (se.ejercicios || []).forEach(function(e){
+   (e.series || []).forEach(function(s){
+    if(!s.hecha) return;
+    var kg = parseFloat(String(s.kg).replace(",", ".")) || 0;
+    if(kg <= 0) return;
+    if(!mejores[e.nombre] || kg > mejores[e.nombre].kg){
+     mejores[e.nombre] = { kg:kg, reps:s.reps, fecha:se.fecha };
+    }
+   });
+  });
+ });
+ var lista = Object.keys(mejores).sort(function(a, b){ return mejores[b].kg - mejores[a].kg; });
+ if(!lista.length){
+  return '<p class="vacio">Acá van a salir tus récords: el peso más alto que ' +
+         'hayas levantado en cada ejercicio.<br>Anota tus kilos mientras entrenas y ' +
+         'aparecen solos.</p>';
+ }
+ var h = '<div class="hsesion">';
+ lista.forEach(function(n){
+  var m = mejores[n];
+  h += '<div class="marca-ej"><span>' + limpio(n) +
+       '<br><small style="color:var(--gris-tenue);font-size:14px">' +
+       limpio(m.reps || "") + ' reps · ' + fechaCorta(m.fecha) + '</small></span>' +
+       '<span class="p">' + m.kg + ' kg</span></div>';
+ });
+ return h + '</div>';
+}
+
+/* ═══ Arranque ═════════════════════════════════════════════════════════ */
+/* Si cierra la app en pleno descanso, al volver no se queda el velo pegado. */
+document.addEventListener("visibilitychange", function(){
+ if(document.hidden) cerrarDescanso();
+});
+
+/* Al volver a abrir la app se comprueba de nuevo el vencimiento: si se le
+   venció el plan desde la última vez, no sigue entrando con el permiso viejo. */
+if(D.socio){
+ var suyo = buscarPorNombreCompleto(D.socio);
+ if(suyo && diasHastaVencer(suyo) >= 0){
+  var dv = diasHastaVencer(suyo);
+  D.avisoVence = (dv <= 3) ? { dias:dv, fecha:fechaVence(suyo) } : null;
+  $("iNombre").value = D.socio;
+  abrirInicio();
+ }else{
+  $("iNombre").value = D.socio;
+  mostrar("p-ingreso");
+  if(suyo){
+   $("avisoIngreso").innerHTML = "<b>" + limpio(suyo.n + " " + suyo.a) +
+    "</b>, tu plan venció el <b>" + fechaVence(suyo) +
+    "</b>.<br>Pasa a renovar en recepción y vuelves a entrar.";
+   $("avisoIngreso").hidden = false;
+  }
+ }
+}else{
+ mostrar("p-ingreso");
+ setTimeout(function(){ try{ $("iNombre").focus(); }catch(e){} }, 250);
+}
+
+})();
+</script>
+
+</body>
+</html>
