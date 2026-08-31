@@ -186,6 +186,11 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   margin-bottom:4px}
 .barra .reloj b{font-family:'Anton',Impact,sans-serif;font-size:21px;color:var(--dorado);
   font-variant-numeric:tabular-nums;font-weight:400}
+/* Mientras descansa, el reloj de arriba muestra la cuenta hacia atrás en
+   rojo. Así el tiempo de descanso se ve siempre, aunque haya cerrado el
+   aviso grande o esté mirando la lista de series. */
+.barra .reloj.desc .cual{color:var(--rojo-vivo)}
+.barra .reloj.desc b{color:var(--rojo-vivo)}
 
 .ej{padding:18px 16px 130px}
 .ej h2{font-family:'Anton',Impact,sans-serif;font-size:26px;line-height:1.08;
@@ -236,6 +241,16 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   padding:0 11px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
   font-size:12.5px;text-transform:uppercase;letter-spacing:.11em;color:var(--gris-tenue);text-align:center}
 .sinpeso{font-size:15.5px;color:var(--gris-tenue);margin-top:2px;line-height:1.45}
+/* Para tomarse el descanso sin tener que marcar una serie: sirve cuando se
+   equivocó, cuando repite una serie o cuando solo quiere el reloj. */
+.descansar{
+  display:block;width:100%;margin-top:12px;cursor:pointer;
+  background:var(--negro-card);border:1.5px solid var(--linea);border-radius:12px;
+  color:var(--gris);padding:14px 12px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;
+  text-transform:uppercase;letter-spacing:.1em;
+}
+.descansar:active{transform:scale(.99)}
 
 /* ── Pie fijo con navegación ──────────────────────────────────────────── */
 .pie{
@@ -390,9 +405,13 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
         <b id="txtPaso">—</b>
         <div class="pista"><i id="pistaAvance" style="width:0%"></i></div>
       </div>
-      <div class="reloj">
+      <div class="reloj" id="cajaLlevas">
         <span class="cual">Llevas</span>
         <b class="num" id="relojSesion">0:00</b>
+      </div>
+      <div class="reloj desc" id="cajaDescanso" hidden>
+        <span class="cual">Descanso</span>
+        <b class="num" id="cuentaBarra">0:00</b>
       </div>
     </div>
 
@@ -1730,6 +1749,9 @@ function pintarEjercicio(){
       (conPeso ? '<span>Peso · kg</span>' : '<span>Sin peso</span>') +
       '<span>Reps</span><span>Listo</span></div>';
  h += '<div class="series" id="filasSeries"></div>';
+ var segDesc = leerDescanso(ex.rest);
+ if(segDesc) h += '<button class="descansar" id="bDescansar" type="button">' +
+                  '⏱ Descansar ' + segDesc + ' seg</button>';
  if(!conPeso) h += '<p class="sinpeso">Este ejercicio es con el peso de tu cuerpo, ' +
                    'así que no lleva kilos. Anota solo las repeticiones.</p>';
  h += '<p class="sinpeso" style="margin-top:12px">Objetivo de hoy: <b>' +
@@ -1774,6 +1796,11 @@ function pintarEjercicio(){
    if(se.hecha) trasMarcar(i);
   });
   cont.appendChild(fila);
+ });
+
+ var bD = $("bDescansar");
+ if(bD) bD.addEventListener("click", function(){
+  abrirDescanso(segDesc, "Cuando termine, sigue con <b>" + limpio(ex.name) + "</b>.");
  });
 
  var ultimo = (iEj === dia.exercises.length - 1);
@@ -1821,7 +1848,10 @@ function abrirDescanso(seg, textoSigue){
  function pinta(){
   $("cuentaDescanso").textContent = quedan;
   $("aroBarra").style.strokeDashoffset = VUELTA * (1 - quedan / total);
+  $("cuentaBarra").textContent = reloj(quedan);
  }
+ $("cajaLlevas").hidden = true;
+ $("cajaDescanso").hidden = false;
  $("aroBarra").setAttribute("stroke-dasharray", VUELTA);
  pinta();
 
@@ -1843,6 +1873,7 @@ function abrirDescanso(seg, textoSigue){
   $("aroBarra").style.strokeDashoffset = 0;
   $("bMasDescanso").hidden = true;
   $("bSaltarDescanso").textContent = "Seguir";
+  $("cuentaBarra").textContent = "¡YA!";
   pitar();
   /* Si lo deja abierto porque está en plena serie, se cierra solo. */
   volverSolo = setTimeout(cerrarDescanso, 12000);
@@ -1855,6 +1886,8 @@ function cerrarDescanso(){
  clearInterval(cuentaAtras); cuentaAtras = null;
  clearTimeout(volverSolo); volverSolo = null;
  $("veloDescanso").hidden = true;
+ $("cajaDescanso").hidden = true;
+ $("cajaLlevas").hidden = false;
 }
 
 /* ═══ Moverse entre ejercicios ═════════════════════════════════════════ */
