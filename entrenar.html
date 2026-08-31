@@ -168,8 +168,12 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 .barra .paso .pista{height:5px;border-radius:3px;background:#252525;margin-top:7px;overflow:hidden}
 .barra .paso .pista i{display:block;height:100%;background:var(--rojo);border-radius:3px;
   transition:width .35s cubic-bezier(.2,.8,.3,1)}
-.barra .reloj{font-family:'Anton',Impact,sans-serif;font-size:20px;color:var(--dorado);
-  font-variant-numeric:tabular-nums;flex:0 0 auto}
+.barra .reloj{flex:0 0 auto;text-align:right;line-height:1}
+.barra .reloj .cual{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:600;
+  font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--gris-tenue);
+  margin-bottom:4px}
+.barra .reloj b{font-family:'Anton',Impact,sans-serif;font-size:21px;color:var(--dorado);
+  font-variant-numeric:tabular-nums;font-weight:400}
 
 .ej{padding:18px 16px 130px}
 .ej h2{font-family:'Anton',Impact,sans-serif;font-size:26px;line-height:1.08;
@@ -246,6 +250,12 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 .descanso .aro circle{fill:none;stroke-width:9;stroke-linecap:round}
 .descanso .aro .fondo{stroke:#232323}
 .descanso .aro .barra{stroke:var(--rojo);transition:stroke-dashoffset 1s linear}
+/* Cuando el descanso se acabó todo se pone verde y la cuenta empieza a
+   latir, para que se note aunque el socio esté mirando para otro lado. */
+.descanso[data-e="listo"] .etq{color:var(--verde)}
+.descanso[data-e="listo"] .aro .barra{stroke:var(--verde)}
+.descanso[data-e="listo"] .cuenta{color:var(--verde);font-size:64px;animation:late 1s ease-in-out infinite}
+@keyframes late{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.75}}
 .descanso .aro .centro{position:absolute;inset:0;display:grid;place-items:center}
 .descanso .sigue{font-size:17px;color:var(--gris);line-height:1.45;max-width:30ch}
 .descanso .sigue b{color:#fff}
@@ -364,7 +374,10 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
         <b id="txtPaso">—</b>
         <div class="pista"><i id="pistaAvance" style="width:0%"></i></div>
       </div>
-      <div class="reloj num" id="relojSesion">00:00</div>
+      <div class="reloj">
+        <span class="cual">Llevas</span>
+        <b class="num" id="relojSesion">0:00</b>
+      </div>
     </div>
 
     <div class="ej" id="cuerpoEj"></div>
@@ -377,7 +390,7 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 
   <!-- ══ DESCANSO ═════════════════════════════════════════════════════ -->
   <div class="descanso" id="veloDescanso" hidden>
-    <span class="etq">Descansa</span>
+    <span class="etq" id="etqDescanso">Descansa</span>
     <div class="aro">
       <svg viewBox="0 0 200 200" aria-hidden="true">
         <circle class="fondo" cx="100" cy="100" r="88"></circle>
@@ -1362,23 +1375,45 @@ function fechaCorta(iso){
          .replace(/\./g, "");
 }
 
-/* Un pitido corto al terminar el descanso, hecho por el propio navegador
-   para no depender de ningún archivo de sonido. */
-function pitar(){
+/* El pitido lo hace el propio navegador, sin depender de ningún archivo de
+   sonido. Pero los teléfonos solo dejan sonar si el permiso quedó pedido
+   mientras el dedo estaba encima de la pantalla: si uno lo pide recién
+   cuando el reloj llega a cero, el aparato lo bloquea y no se oye nada.
+   Por eso el sonido se despierta en el primer toque y queda listo. */
+var sonido = null;
+function despertarSonido(){
  try{
   var A = window.AudioContext || window.webkitAudioContext;
   if(!A) return;
-  var ctx = new A();
-  var o = ctx.createOscillator(), g = ctx.createGain();
-  o.type = "sine"; o.frequency.value = 880;
-  g.gain.setValueAtTime(0.0001, ctx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
-  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.45);
-  o.connect(g); g.connect(ctx.destination);
-  o.start(); o.stop(ctx.currentTime + 0.5);
-  setTimeout(function(){ try{ ctx.close(); }catch(e){} }, 900);
+  if(!sonido) sonido = new A();
+  if(sonido.state === "suspended") sonido.resume();
  }catch(e){}
- try{ if(navigator.vibrate) navigator.vibrate([160, 90, 160]); }catch(e){}
+}
+document.addEventListener("pointerdown", despertarSonido, true);
+document.addEventListener("touchstart", despertarSonido, true);
+
+/* Tres pitidos seguidos, el último más agudo: en un gimnasio con música
+   uno solo se pierde. Además el teléfono vibra, que es lo que de verdad
+   se nota cuando lo tienes en el bolsillo. */
+function pitar(){
+ despertarSonido();
+ try{
+  if(sonido && sonido.state === "running"){
+   var t0 = sonido.currentTime;
+   for(var i = 0; i < 3; i++){
+    var o = sonido.createOscillator(), g = sonido.createGain();
+    o.type = "sine";
+    o.frequency.value = (i === 2) ? 1245 : 880;
+    var t = t0 + i * 0.30;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.38, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + (i === 2 ? 0.42 : 0.22));
+    o.connect(g); g.connect(sonido.destination);
+    o.start(t); o.stop(t + 0.45);
+   }
+  }
+ }catch(e){}
+ try{ if(navigator.vibrate) navigator.vibrate([220, 120, 220, 120, 380]); }catch(e){}
 }
 
 /* ═══ Historial: lo que hizo la vez pasada y sus récords ════════════════ */
@@ -1699,7 +1734,7 @@ function pintarEjercicio(){
 }
 
 /* ═══ Descanso entre series ════════════════════════════════════════════ */
-var cuentaAtras = null;
+var cuentaAtras = null, volverSolo = null;
 var VUELTA = 2 * Math.PI * 88;   /* el largo del aro del reloj */
 
 /* Al marcar una serie arranca el descanso, salvo que haya sido la última
@@ -1726,6 +1761,11 @@ function trasMarcar(iSerie){
 function abrirDescanso(seg, textoSigue){
  var velo = $("veloDescanso");
  var quedan = seg, total = seg;
+ clearTimeout(volverSolo);
+ velo.setAttribute("data-e", "contando");
+ $("etqDescanso").textContent = "Descansa";
+ $("bMasDescanso").hidden = false;
+ $("bSaltarDescanso").textContent = "Ya estoy";
  $("sigueDescanso").innerHTML = textoSigue;
  velo.hidden = false;
 
@@ -1739,15 +1779,32 @@ function abrirDescanso(seg, textoSigue){
  clearInterval(cuentaAtras);
  cuentaAtras = setInterval(function(){
   quedan--;
-  if(quedan <= 0){ cerrarDescanso(); pitar(); return; }
+  if(quedan <= 0){ seAcabo(); return; }
   pinta();
  }, 1000);
+
+ /* Antes el aviso desaparecía solo en el mismo instante en que sonaba, así
+    que si no alcanzabas a oírlo no quedaba nada que mirar. Ahora se pone
+    verde y se queda esperando, para que lo veas aunque estés de espaldas. */
+ function seAcabo(){
+  clearInterval(cuentaAtras); cuentaAtras = null;
+  velo.setAttribute("data-e", "listo");
+  $("etqDescanso").textContent = "Se acabó el descanso";
+  $("cuentaDescanso").textContent = "¡YA!";
+  $("aroBarra").style.strokeDashoffset = 0;
+  $("bMasDescanso").hidden = true;
+  $("bSaltarDescanso").textContent = "Seguir";
+  pitar();
+  /* Si lo deja abierto porque está en plena serie, se cierra solo. */
+  volverSolo = setTimeout(cerrarDescanso, 12000);
+ }
 
  $("bMasDescanso").onclick = function(){ quedan += 20; total = Math.max(total, quedan); pinta(); };
  $("bSaltarDescanso").onclick = cerrarDescanso;
 }
 function cerrarDescanso(){
  clearInterval(cuentaAtras); cuentaAtras = null;
+ clearTimeout(volverSolo); volverSolo = null;
  $("veloDescanso").hidden = true;
 }
 
