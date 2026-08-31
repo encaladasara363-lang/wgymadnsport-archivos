@@ -262,10 +262,10 @@ def una_app(clave, cfg, base, socios):
     # ── nombre de la app en la pestaña, en el icono y en el encabezado
     uno("<title>Mi Entrenamiento · WGYMADNSPORT</title>",
         "<title>%s · WGYMADNSPORT</title>" % cfg["titulo"])
-    uno('<link rel="manifest" href="entrenar.webmanifest">',
-        '<link rel="manifest" href="entrenar-%s.webmanifest">' % clave)
+    uno('<link rel="manifest" href="entrenar.webmanifest?v=3">',
+        '<link rel="manifest" href="entrenar-%s.webmanifest?v=3">' % clave)
     uno('<meta name="apple-mobile-web-app-title" content="Mi Entrenamiento">',
-        '<meta name="apple-mobile-web-app-title" content="%s">' % cfg["corto"])
+        '<meta name="apple-mobile-web-app-title" content="%s">' % cfg["corto"].upper())
     uno("<h2>MI <span>ENTRENAMIENTO</span></h2>",
         "<h2>%s <span>%s</span></h2>" % (cfg["marca1"], cfg["marca2"]))
     uno("<h1>MI <span>ENTRENAMIENTO</span></h1>",
@@ -362,8 +362,10 @@ def una_app(clave, cfg, base, socios):
 
 def manifest(clave, cfg):
     return json.dumps({
-        "name": cfg["titulo"] + " · WGYMADNSPORT",
-        "short_name": cfg["corto"],
+        # En mayusculas porque asi lo pidio la duena: es como se lee debajo
+        # del icono en la pantalla de inicio del telefono.
+        "name": (cfg["titulo"].split(" · ")[0] + " · WGYMADNSPORT").upper(),
+        "short_name": cfg["corto"].upper(),
         "description": cfg["titulo"] + " de WGYMADNSPORT Tocopilla.",
         "lang": "es-CL",
         "start_url": "entrenar-%s.html" % clave,
@@ -376,17 +378,20 @@ def manifest(clave, cfg):
         # telefono compara, y si no calza descarta el icono y dibuja una
         # letra en su lugar. Antes apuntaban al logo, que mide 1092, y por
         # eso al instalar la app salia una W negra en vez del logo.
+        # Los iconos llevan margen a proposito: el telefono les recorta las
+        # esquinas y sin margen ese recorte se come el borde del logo, que es
+        # justo donde dice TOCOPILLA. El ?v= al final obliga al telefono a
+        # bajarlos de nuevo en vez de reusar los que ya tenia guardados.
         "icons": [
-            {"src": "assets/icono-192.png", "sizes": "192x192",
+            {"src": "assets/icono-192.png?v=3", "sizes": "192x192",
              "type": "image/png", "purpose": "any"},
-            {"src": "assets/icono-512.png", "sizes": "512x512",
+            {"src": "assets/icono-512.png?v=3", "sizes": "512x512",
              "type": "image/png", "purpose": "any"},
-            # Android le recorta las esquinas al icono; el "maskable" trae el
-            # logo mas chico y centrado para que ese recorte no lo muerda.
-            {"src": "assets/icono-maskable-512.png", "sizes": "512x512",
+            {"src": "assets/icono-maskable-192.png?v=3", "sizes": "192x192",
              "type": "image/png", "purpose": "maskable"},
-        ],
-    }, ensure_ascii=False, indent=2) + "\n"
+            {"src": "assets/icono-maskable-512.png?v=3", "sizes": "512x512",
+             "type": "image/png", "purpose": "maskable"},
+        ],    }, ensure_ascii=False, indent=2) + "\n"
 
 
 def main():

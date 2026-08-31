@@ -1,9 +1,9 @@
 {
-  "name": "RUTINA PRINCIPIANTE MUJERES · WGYMADNSPORT",
-  "short_name": "RUTINA MUJERES",
-  "description": "Rutina Principiante Mujeres · 5 días de WGYMADNSPORT Tocopilla.",
+  "name": "TARJETA VIRTUAL WGYMADNSPORT",
+  "short_name": "TARJETA VIRTUAL",
+  "description": "Tu tarjeta de socio de WGYMADNSPORT Tocopilla: tu plan, tu vencimiento y tu acceso.",
   "lang": "es-CL",
-  "start_url": "entrenar-mujeres.html",
+  "start_url": "tarjeta.html",
   "scope": ".",
   "display": "standalone",
   "orientation": "portrait",
