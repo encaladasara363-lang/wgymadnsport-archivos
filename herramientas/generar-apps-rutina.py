@@ -269,7 +269,7 @@ def una_app(clave, cfg, base, socios):
     uno("<h2>MI <span>ENTRENAMIENTO</span></h2>",
         "<h2>%s <span>%s</span></h2>" % (cfg["marca1"], cfg["marca2"]))
     uno("<h1>MI <span>ENTRENAMIENTO</span></h1>",
-        "<h1>%s <span>%s</span></h1>" % (cfg["barra1"], cfg["barra2"]))
+        "<h1>%s <span>%s</span></h1>" % (cfg["marca1"], cfg["marca2"]))
     uno('<p class="baja">Tu rutina, tus pesos y tu progreso.<br>Escribe tu nombre para empezar.</p>',
         '<p class="baja">%s<br>Escribe tu nombre y apellido para entrar.</p>' % cfg["bajada"])
     uno('content="App de entrenamiento para socios de WGYMADNSPORT Tocopilla: '
