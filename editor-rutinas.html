@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Taller privado de WGYMADNSPORT Tocopilla para armar rutinas: dias, ejercicios, videos y consejos.">
+<title>EDICIÓN DE RUTINAS · WGYMADNSPORT</title>
+
+<!-- Para que al agregarla a la pantalla de inicio se vea como una app -->
+<link rel="manifest" href="editor-rutinas.webmanifest?v=1">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icono-180.png?v=3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="EDICIÓN DE RUTINAS">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap">
+
+<style>
+/* ── Misma paleta de la pagina web y de las apps de rutina: negro, rojo
+      E30613 y dorado D4AF37. Nada nuevo, para que se vea de la casa. ───── */
+:root{
+  --negro:#0A0A0A; --negro-suave:#141414; --negro-card:#1C1C1C; --linea:#2C2C2C;
+  --rojo:#E30613; --rojo-vivo:#FF2130; --rojo-oscuro:#A40410;
+  --dorado:#D4AF37; --crema:#FFF7F0;
+  --blanco:#FFFFFF; --gris:#CFCFCF; --gris-tenue:#8A8A8A;
+  --verde:#43C48D;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--negro);color:var(--blanco)}
+body{
+  font-family:'Barlow','Segoe UI',Arial,sans-serif;
+  font-size:17px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  padding-bottom:env(safe-area-inset-bottom);
+  overscroll-behavior-y:contain;
+}
+.envase{max-width:640px;margin:0 auto;min-height:100vh;position:relative}
+.tit{font-family:'Anton',Impact,sans-serif;letter-spacing:.01em;line-height:1;text-transform:uppercase}
+.etq{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
+     letter-spacing:.14em;font-size:13.5px;color:var(--gris-tenue)}
+.num{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+/* ── Cabecera ─────────────────────────────────────────────────────────── */
+header{
+  display:flex;align-items:center;gap:11px;padding:13px 14px;
+  background:linear-gradient(180deg,#151515 0%,var(--negro) 100%);
+  border-bottom:3px solid var(--dorado);position:sticky;top:0;z-index:30;
+  padding-top:calc(14px + env(safe-area-inset-top));
+}
+header .logo{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
+  border:2px solid var(--dorado);object-fit:cover;background:#fff}
+header .quien{flex:1;min-width:0}
+/* El titulo de arriba puede ser largo; se deja en dos lineas como maximo
+   para que no empuje el boton de volver fuera de la pantalla. */
+header .quien h1{font-family:'Anton',Impact,sans-serif;font-size:17px;line-height:1.1;
+  text-transform:uppercase;letter-spacing:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+header .quien h1 span{color:var(--dorado)}
+header .quien p{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;
+  text-transform:uppercase;letter-spacing:.16em;color:var(--gris-tenue);margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{
+  flex:0 0 auto;background:none;border:1px solid var(--linea);border-radius:10px;
+  color:var(--gris);padding:9px 11px;cursor:pointer;font-size:14px;line-height:1;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.iconbtn:active{transform:scale(.95)}
+
+/* Cintillo que recuerda que esto es solo para la administracion */
+.cintillo{
+  background:rgba(212,175,55,.11);border-bottom:1px solid rgba(212,175,55,.3);
+  color:var(--dorado);font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  text-transform:uppercase;letter-spacing:.14em;font-size:12.5px;
+  padding:8px 14px;text-align:center;
+}
+
+main{padding:18px 16px 60px}
+
+/* ── Botones ──────────────────────────────────────────────────────────── */
+.btn{
+  display:block;width:100%;border:none;border-radius:13px;cursor:pointer;
+  padding:16px 18px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:18px;text-transform:uppercase;letter-spacing:.12em;
+  transition:filter .15s,transform .07s;margin-bottom:11px;
+}
+.btn:active{transform:scale(.98)}
+.btn-rojo{background:var(--rojo);color:#fff}
+.btn-oro{background:var(--dorado);color:#14140F}
+.btn-linea{background:transparent;color:var(--gris);border:1.5px solid var(--linea)}
+.btn-verde{background:var(--verde);color:#08301F}
+.btn-peligro{background:transparent;color:#FF6A73;border:1.5px solid rgba(255,106,115,.4)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.chico{padding:12px 14px;font-size:15.5px;margin-bottom:0}
+
+/* ── Campos ───────────────────────────────────────────────────────────── */
+label.campo{display:block;margin-bottom:15px}
+label.campo > span.etq{display:block;margin-bottom:7px}
+label.campo .pista{display:block;color:var(--gris-tenue);font-size:14px;margin-top:6px;line-height:1.4}
+input[type=text],textarea,select{
+  width:100%;background:var(--negro-card);border:1.5px solid var(--linea);
+  border-radius:12px;color:var(--blanco);font:600 17px/1.35 'Barlow',sans-serif;
+  padding:14px 14px;-webkit-appearance:none;appearance:none;
+}
+textarea{min-height:96px;resize:vertical;font-weight:400}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--gris) 50%),linear-gradient(135deg,var(--gris) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 22px,calc(100% - 14px) 22px;
+  background-size:6px 6px,6px 6px;background-repeat:no-repeat;padding-right:42px}
+input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:2px solid var(--dorado);outline-offset:2px}
+/* Cuando una etiqueta ocupa dos lineas y la otra una, los dos campos
+   igual quedan parejos abajo. */
+.fila2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.fila2 > label.campo{display:flex;flex-direction:column}
+.fila2 > label.campo > input{margin-top:auto}
+
+/* ── Tarjetas ─────────────────────────────────────────────────────────── */
+.seccion{margin-bottom:26px}
+.seccion > .etq{margin-bottom:11px;display:block}
+.pila{display:flex;flex-direction:column;gap:11px}
+.tarjeta{
+  background:var(--negro-card);border:1.5px solid var(--linea);border-radius:14px;
+  padding:14px;
+}
+.item{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:var(--negro-card);border:1.5px solid var(--linea);border-radius:14px;
+  padding:13px 13px;color:var(--blanco);
+}
+.item .n{
+  width:44px;height:44px;border-radius:12px;flex:0 0 auto;display:grid;place-items:center;
+  background:var(--negro-suave);border:1.5px solid var(--linea);
+  font-family:'Anton',Impact,sans-serif;font-size:18px;color:var(--dorado);
+}
+.item .cuerpo{flex:1;min-width:0;cursor:pointer}
+.item .cuerpo h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18.5px;
+  text-transform:uppercase;letter-spacing:.03em;line-height:1.15}
+.item .cuerpo p{color:var(--gris-tenue);font-size:14.5px;margin-top:3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .mover{display:flex;flex-direction:column;gap:5px;flex:0 0 auto}
+.mini{
+  background:var(--negro-suave);border:1px solid var(--linea);border-radius:8px;
+  color:var(--gris);width:34px;height:26px;font-size:13px;cursor:pointer;line-height:1;
+  display:grid;place-items:center;
+}
+.mini:active{transform:scale(.94)}
+.mini.borrar{color:#FF6A73;border-color:rgba(255,106,115,.35);width:34px;height:34px;font-size:15px}
+.vacio{
+  border:1.5px dashed var(--linea);border-radius:14px;padding:26px 18px;text-align:center;
+  color:var(--gris-tenue);font-size:15.5px;line-height:1.5;
+}
+
+/* ── Video elegido ────────────────────────────────────────────────────── */
+.videobox{
+  background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:14px;
+  padding:12px;margin-bottom:15px;
+}
+.videobox video{width:100%;border-radius:10px;background:#000;display:block;margin-bottom:10px}
+.videobox .nombre{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--dorado);margin-bottom:9px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.videobox .botones{display:grid;grid-template-columns:1fr auto;gap:9px}
+
+/* ── Modal para elegir video ──────────────────────────────────────────── */
+.velo{position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:60;display:flex;
+  align-items:flex-end;justify-content:center;padding:0}
+.hoja{
+  width:100%;max-width:640px;max-height:92vh;background:var(--negro-suave);
+  border-top:3px solid var(--dorado);border-radius:18px 18px 0 0;display:flex;
+  flex-direction:column;overflow:hidden;
+}
+.hoja .barra{display:flex;align-items:center;gap:10px;padding:14px;border-bottom:1px solid var(--linea)}
+.hoja .barra h2{font-family:'Anton',Impact,sans-serif;font-size:19px;text-transform:uppercase;flex:1}
+.pestanas{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--linea)}
+.pestanas button{
+  background:none;border:none;border-bottom:3px solid transparent;color:var(--gris-tenue);
+  padding:13px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;
+  text-transform:uppercase;letter-spacing:.1em;cursor:pointer;
+}
+.pestanas button[aria-selected="true"]{color:var(--dorado);border-bottom-color:var(--dorado)}
+.hoja .adentro{overflow-y:auto;padding:14px;flex:1;-webkit-overflow-scrolling:touch}
+.buscador{margin-bottom:12px}
+.listavideos{display:flex;flex-direction:column;gap:8px}
+.listavideos button{
+  display:flex;align-items:center;gap:11px;text-align:left;width:100%;
+  background:var(--negro-card);border:1.5px solid var(--linea);border-radius:12px;
+  padding:12px;color:var(--blanco);cursor:pointer;font:600 16px/1.25 'Barlow',sans-serif;
+}
+.listavideos button:active{border-color:var(--dorado)}
+.listavideos .marca{width:34px;height:34px;border-radius:9px;flex:0 0 auto;display:grid;
+  place-items:center;background:var(--negro-suave);border:1px solid var(--linea);font-size:14px}
+.listavideos .txt{flex:1;min-width:0}
+.listavideos .txt small{display:block;color:var(--gris-tenue);font-size:13px;margin-top:2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── Vista previa (como lo veran los socios) ──────────────────────────── */
+.previo{background:var(--negro);border:1.5px solid var(--linea);border-radius:16px;overflow:hidden}
+.previo .portada{padding:24px 18px;text-align:center;border-bottom:1px solid var(--linea)}
+.previo .portada img{width:88px;height:88px;border-radius:50%;border:3px solid var(--dorado);
+  object-fit:cover;background:#fff;margin:0 auto 15px;display:block}
+.previo .portada h2{font-family:'Anton',Impact,sans-serif;font-size:26px;line-height:1.05;
+  text-transform:uppercase}
+.previo .portada h2 span{color:var(--rojo-vivo)}
+.previo .portada p{color:var(--gris);font-size:15.5px;margin-top:9px;line-height:1.5}
+.previo .cuerpo{padding:16px}
+.previo .diaprev{background:var(--negro-card);border:1.5px solid var(--linea);border-radius:14px;
+  padding:14px;margin-bottom:11px}
+.previo .diaprev h3{font-family:'Anton',Impact,sans-serif;font-size:18px;text-transform:uppercase}
+.previo .diaprev .sub{color:var(--dorado);font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;font-size:13px;margin-top:2px}
+.previo .paso{border-top:1px solid var(--linea);padding-top:11px;margin-top:11px}
+.previo .paso b{display:block;font-size:16.5px;font-weight:700}
+.previo .paso .datos{color:var(--gris-tenue);font-size:14px;margin-top:2px}
+.previo .paso .consejo{color:var(--gris);font-size:14.5px;margin-top:6px;line-height:1.45}
+.previo .paso video{width:100%;border-radius:10px;background:#000;margin-top:9px;display:block}
+.previo .paso.calen b{color:var(--dorado)}
+.previo .paso .sinvideo{color:#FF6A73;font-size:13.5px;margin-top:6px}
+
+/* ── Avisos ───────────────────────────────────────────────────────────── */
+.aviso{
+  background:rgba(212,175,55,.09);border:1px solid rgba(212,175,55,.28);border-radius:12px;
+  padding:13px 14px;color:var(--crema);font-size:15px;line-height:1.5;margin-bottom:16px;
+}
+.aviso b{color:var(--dorado)}
+.aviso.rojo{background:rgba(227,6,19,.1);border-color:rgba(227,6,19,.35)}
+.guardado{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:80;
+  background:var(--verde);color:#08301F;font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:14.5px;
+  padding:11px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s;
+  box-shadow:0 8px 24px rgba(0,0,0,.55);
+}
+.guardado.ver{opacity:1}
+</style>
+</head>
+<body>
+<div class="envase">
+
+<header>
+  <img class="logo" src="assets/logo.jpg" alt="WGYMADNSPORT">
+  <div class="quien">
+    <h1 id="tituloBarra">EDICIÓN DE <span>RUTINAS</span></h1>
+    <p id="subBarra">WGYMADNSPORT TOCOPILLA</p>
+  </div>
+  <button class="iconbtn" id="bVolver" hidden>‹ Volver</button>
+</header>
+
+<div class="cintillo">Taller privado · solo para la administración</div>
+
+<main>
+
+  <!-- ═══ 1. Lista de rutinas ═══════════════════════════════════════════ -->
+  <section id="pLista">
+    <div class="aviso">
+      Acá arma sus rutinas con calma: los días, los ejercicios, los consejos y
+      los videos. Todo se guarda solo en este teléfono o computador.
+      <b>Cuando la tenga lista, apriete «Enviar a Claude»</b> y me manda el
+      archivo para convertirla en app con su QR.
+    </div>
+
+    <div class="seccion">
+      <span class="etq">Mis rutinas</span>
+      <div class="pila" id="listaRutinas"></div>
+    </div>
+
+    <button class="btn btn-rojo" id="bNueva">+ Nueva rutina desde cero</button>
+    <button class="btn btn-linea" id="bCopiar">Copiar una rutina que ya tengo</button>
+  </section>
+
+  <!-- ═══ 2. Una rutina ═════════════════════════════════════════════════ -->
+  <section id="pRutina" hidden>
+    <div class="seccion">
+      <span class="etq">Nombre de la rutina</span>
+      <label class="campo">
+        <span class="etq">Título completo</span>
+        <input type="text" id="cTitulo" placeholder="RUTINA PRINCIPIANTE MUJERES 5 DÍAS">
+        <span class="pista">Es el que se lee al abrir la app y arriba en la barra.</span>
+      </label>
+      <label class="campo">
+        <span class="etq">Nombre corto</span>
+        <input type="text" id="cCorto" placeholder="RUTINA MUJERES">
+        <span class="pista">El que aparece bajo el ícono cuando la instalan en el teléfono.</span>
+      </label>
+      <label class="campo">
+        <span class="etq">Frase de presentación</span>
+        <textarea id="cBajada" placeholder="Cinco días de entrenamiento con video en cada ejercicio."></textarea>
+      </label>
+    </div>
+
+    <div class="seccion">
+      <span class="etq">Días de entrenamiento</span>
+      <div class="pila" id="listaDias"></div>
+      <button class="btn btn-oro" id="bNuevoDia" style="margin-top:11px">+ Agregar un día</button>
+    </div>
+
+    <div class="seccion">
+      <span class="etq">Cuando esté lista</span>
+      <button class="btn btn-linea" id="bPrevio">Ver como la verán los socios</button>
+      <button class="btn btn-verde" id="bEnviar">Enviar a Claude (con los videos)</button>
+      <button class="btn btn-linea" id="bEnviarTexto">Enviar solo el texto (sin videos)</button>
+    </div>
+
+    <div class="seccion">
+      <button class="btn btn-peligro" id="bBorrarRutina">Borrar esta rutina</button>
+    </div>
+  </section>
+
+  <!-- ═══ 3. Un día ═════════════════════════════════════════════════════ -->
+  <section id="pDia" hidden>
+    <div class="seccion">
+      <div class="fila2">
+        <label class="campo">
+          <span class="etq">Día</span>
+          <input type="text" id="dWeekday" placeholder="Lunes">
+        </label>
+        <label class="campo">
+          <span class="etq">Enfoque</span>
+          <input type="text" id="dFocus" placeholder="Tren inferior">
+        </label>
+      </div>
+      <label class="campo">
+        <span class="etq">Qué se trabaja</span>
+        <input type="text" id="dTitle" placeholder="Piernas y Glúteos">
+      </label>
+    </div>
+
+    <div class="seccion">
+      <span class="etq">Calentamiento (primer paso del día)</span>
+      <label class="campo">
+        <span class="etq">Texto</span>
+        <input type="text" id="dWarmup" placeholder="Calentamiento en trotadora — 8 minutos">
+      </label>
+      <div id="cajaVideoWarmup"></div>
+    </div>
+
+    <div class="seccion">
+      <span class="etq">Ejercicios</span>
+      <div class="pila" id="listaEjercicios"></div>
+      <button class="btn btn-oro" id="bNuevoEjercicio" style="margin-top:11px">+ Agregar un ejercicio</button>
+    </div>
+
+    <div class="seccion">
+      <span class="etq">Cierre del día (opcional)</span>
+      <div class="aviso">
+        Déjelo en blanco si el día termina en el último ejercicio. Si le pone un
+        nombre acá, aparece como un paso más al final.
+      </div>
+      <label class="campo">
+        <span class="etq">Nombre del cierre</span>
+        <input type="text" id="dCierreTitulo" placeholder="Cardio final">
+      </label>
+      <label class="campo">
+        <span class="etq">Qué hacer</span>
+        <textarea id="dCierreTexto" placeholder="Bicicleta 10-15 minutos, ritmo cómodo."></textarea>
+      </label>
+      <div id="cajaVideoCierre"></div>
+    </div>
+
+    <div class="seccion">
+      <button class="btn btn-peligro" id="bBorrarDia">Borrar este día</button>
+    </div>
+  </section>
+
+  <!-- ═══ 4. Un ejercicio ═══════════════════════════════════════════════ -->
+  <section id="pEjercicio" hidden>
+    <div class="seccion">
+      <label class="campo">
+        <span class="etq">Nombre del ejercicio</span>
+        <input type="text" id="eNombre" placeholder="Sentadilla con mancuerna">
+      </label>
+      <div class="fila2">
+        <label class="campo">
+          <span class="etq">Series y repeticiones</span>
+          <input type="text" id="eSets" placeholder="3 × 12">
+        </label>
+        <label class="campo">
+          <span class="etq">Descanso</span>
+          <input type="text" id="eRest" placeholder="60 seg">
+        </label>
+      </div>
+      <label class="campo">
+        <span class="etq">¿Con qué se hace?</span>
+        <select id="eEquip">
+          <option value="mancuerna">Mancuerna</option>
+          <option value="maquina">Máquina</option>
+          <option value="polea">Polea</option>
+          <option value="barra">Barra</option>
+          <option value="disco">Disco</option>
+          <option value="smith">Máquina Smith</option>
+          <option value="banca">Banca</option>
+          <option value="step">Step</option>
+          <option value="colchoneta">Colchoneta</option>
+          <option value="cuerpo">Peso del cuerpo</option>
+          <option value="trx">TRX</option>
+          <option value="cardio">Cardio</option>
+        </select>
+        <span class="pista" id="pistaEquip"></span>
+      </label>
+    </div>
+
+    <div class="seccion">
+      <span class="etq">Video del ejercicio</span>
+      <div id="cajaVideoEjercicio"></div>
+    </div>
+
+    <div class="seccion">
+      <label class="campo">
+        <span class="etq">Consejo (cómo hacerlo bien)</span>
+        <textarea id="eTip" placeholder="Baja como si te sentaras en una silla, rodillas hacia afuera…"></textarea>
+      </label>
+      <label class="campo">
+        <span class="etq">Si le cuesta (opcional)</span>
+        <textarea id="eAlt" placeholder="¿Muy exigente? Practica primero sin peso, apoyada en una silla."></textarea>
+      </label>
+    </div>
+
+    <div class="seccion">
+      <button class="btn btn-peligro" id="bBorrarEjercicio">Borrar este ejercicio</button>
+    </div>
+  </section>
+
+  <!-- ═══ 5. Vista previa ═══════════════════════════════════════════════ -->
+  <section id="pPrevio" hidden>
+    <div class="aviso">
+      Así se va a ver la rutina en la app de sus socios. Es solo para mirar:
+      acá no se edita nada.
+    </div>
+    <div class="previo" id="cajaPrevio"></div>
+  </section>
+
+</main>
+</div>
+
+<!-- ═══ Hoja para elegir el video ═══════════════════════════════════════ -->
+<div class="velo" id="velo" hidden>
+  <div class="hoja">
+    <div class="barra">
+      <h2>Elegir video</h2>
+      <button class="iconbtn" id="bCerrarVelo">Cerrar</button>
+    </div>
+    <div class="pestanas" role="tablist">
+      <button role="tab" id="tabGym" aria-selected="true">Videos del gimnasio</button>
+      <button role="tab" id="tabMios" aria-selected="false">Videos míos</button>
+    </div>
+    <div class="adentro">
+      <div id="panelGym">
+        <label class="campo buscador">
+          <input type="text" id="buscarVideo" placeholder="Buscar: sentadilla, remo, polea…">
+        </label>
+        <div class="listavideos" id="listaGym"></div>
+      </div>
+      <div id="panelMios" hidden>
+        <div class="aviso">
+          Grabe el ejercicio con su teléfono y súbalo acá. El video queda
+          guardado en este aparato y viaja dentro del archivo que me manda.
+        </div>
+        <button class="btn btn-oro" id="bSubirVideo">+ Subir un video mío</button>
+        <input type="file" id="archivoVideo" accept="video/*" hidden>
+        <div class="listavideos" id="listaMios"></div>
+      </div>
+      <button class="btn btn-linea" id="bSinVideo" style="margin-top:16px">Dejar sin video</button>
+    </div>
+  </div>
+</div>
+
+<div class="guardado" id="avisoGuardado">Guardado</div>
+
+<script>
+"use strict";
+
+/* ═══════════════════════════════════════════════════════════════════════
+   EDICIÓN DE RUTINAS — el taller privado de la administración.
+
+   Acá se arman las rutinas: días, ejercicios, consejos y videos. No toca
+   nada de lo que ya está publicado; todo vive en este aparato (localStorage
+   para el texto, IndexedDB para los videos propios, que pesan demasiado
+   para localStorage). Cuando la rutina queda lista, el botón "Enviar a
+   Claude" arma un archivo con todo adentro para convertirla en app con QR.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+var LLAVE = "wgym_editor_rutinas_v1";
+
+/* ── Los videos que ya están en el gimnasio (carpeta assets) ─────────── */
+var BIBLIOTECA = ("abdominales_banca_hombres abdominales_colchoneta abduccion_gluteos aductores "+
+"apertura_mancuerna aperturas_polea calentamiento_bicicleta calentamiento_bicicleta_hombres "+
+"calentamiento_trotadora calentamiento_trotadora_hombres cardio_trotadora curl_biceps_barra_z "+
+"curl_biceps_mancuerna curl_biceps_scott curl_concentrado_hombres curl_femoral curl_femoral_mujer "+
+"curl_femorales_acostada curl_martillo elevacion_frontal_hombres elevacion_lateral "+
+"elevacion_lateral_hombres elevacion_piernas elevacion_piernas_hombres elevacion_talones "+
+"estiramiento_brazo_pecho_hombres estiramiento_espalda_biceps estiramiento_espalda_brazo "+
+"estiramiento_final estiramiento_hombro_abdomen_hombres estiramiento_hombro_espalda "+
+"estiramiento_pecho_triceps estiramiento_pecho_triceps_mujer estiramiento_pierna "+
+"extension_cuadriceps extension_gluteos_maquina extension_piernas extension_triceps "+
+"extension_triceps_nuca_hombres extension_triceps_polea face_pull face_pull_hombres "+
+"femoral_un_pie fondos_maquina jalon_pecho jalon_pecho_polea pantorrillas peso_muerto_kettlebell "+
+"peso_muerto_rumano_gluteos plancha_abdominal plancha_abdominal_hombres prensa_pierna press_banca "+
+"press_banca_mancuernas press_banca_mancuernas_mujer press_cerrado_banca_hombres "+
+"press_cerrado_disco press_inclinado press_militar press_militar_hombres remo_barra "+
+"remo_mancuerna_una_mano_hombres remo_maquina remo_sentado remo_una_mano sentadilla "+
+"sentadilla_smith sentadilla_smith_gluteos step_up zancada_trx zancada_trx_gluteos").split(" ");
+
+/* El nombre del archivo puesto bonito, para que se lea en la lista. */
+function nombreBonito(archivo){
+ var t = archivo.replace(/_/g, " ");
+ var cola = "";
+ if(/ hombres$/.test(t)){ t = t.replace(/ hombres$/, ""); cola = " (versión hombres)"; }
+ else if(/ mujer$/.test(t)){ t = t.replace(/ mujer$/, ""); cola = " (versión mujeres)"; }
+ else if(/ gluteos$/.test(t)){ t = t.replace(/ gluteos$/, ""); cola = " (versión glúteos)"; }
+ t = t.charAt(0).toUpperCase() + t.slice(1);
+ return t + cola;
+}
+
+var BASES = {
+ "mujeres": {
+  "titulo": "RUTINA PRINCIPIANTE MUJERES 5 DÍAS",
+  "corto": "RUTINA MUJERES",
+  "bajada": "5 días · con videos",
+  "dias": [
+   {
+    "weekday": "Lunes",
+    "title": "Piernas y Glúteos",
+    "focus": "Tren inferior",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "lib:calentamiento_trotadora",
+    "exercises": [
+     {
+      "name": "Sentadilla con mancuerna",
+      "sets": "3 × 12",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "lib:sentadilla",
+      "tip": "Sostén una mancuerna o kettlebell pegada al pecho; baja como si te sentaras en una silla, rodillas hacia afuera, y sube empujando con los talones.",
+      "alt": "¿Muy exigente? Practica primero sin peso, apoyada en una silla, tocando apenas con los glúteos."
+     },
+     {
+      "name": "Extensión de piernas en máquina",
+      "sets": "3 × 12-15",
+      "rest": "45 seg",
+      "equip": "maquina",
+      "video": "lib:extension_piernas",
+      "tip": "Siéntate con la espalda apoyada, extiende las rodillas sin bloquearlas de golpe y baja controlado.",
+      "alt": ""
+     },
+     {
+      "name": "Curl femoral en máquina",
+      "sets": "3 × 12-15",
+      "rest": "45 seg",
+      "equip": "maquina",
+      "video": "lib:curl_femoral_mujer",
+      "tip": "Dobla las rodillas llevando el rodillo hacia los glúteos, controla la vuelta sin soltar de golpe.",
+      "alt": ""
+     },
+     {
+      "name": "Zancadas con TRX",
+      "sets": "3 × 10 por pierna",
+      "rest": "60 seg",
+      "equip": "trx",
+      "video": "lib:zancada_trx",
+      "tip": "Sujétate de las correas TRX para mantener el equilibrio; paso largo al frente, baja la rodilla trasera casi al suelo y sube empujando con el talón delantero.",
+      "alt": "¿Muy exigente? Sostente con ambas manos y da pasos más cortos."
+     },
+     {
+      "name": "Elevación de talones de pie",
+      "sets": "3 × 15-20",
+      "rest": "45 seg",
+      "equip": "cuerpo",
+      "video": "lib:elevacion_talones",
+      "tip": "De pie, sube lo más alto posible apoyado en las puntas de los pies y baja controlado.",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Martes",
+    "title": "Espalda y Bíceps",
+    "focus": "Tracción superior",
+    "warmup": "Calentamiento 8 minutos en bicicleta",
+    "warmupVideo": "lib:calentamiento_bicicleta",
+    "exercises": [
+     {
+      "name": "Jalón al pecho en polea",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "polea",
+      "video": "lib:jalon_pecho",
+      "tip": "Tira la barra hacia el pecho llevando los codos hacia abajo, sin balancear el cuerpo.",
+      "alt": ""
+     },
+     {
+      "name": "Remo sentado en polea",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "polea",
+      "video": "lib:remo_sentado",
+      "tip": "Espalda recta, tira el agarre hacia el abdomen apretando los omóplatos, sin encorvarte.",
+      "alt": ""
+     },
+     {
+      "name": "Curl de bíceps en banco Scott",
+      "sets": "3 × 10-12",
+      "rest": "45 seg",
+      "equip": "maquina",
+      "video": "lib:curl_biceps_scott",
+      "tip": "Codos apoyados; sube y baja controlado sin balancear el cuerpo para ayudarte con impulso.",
+      "alt": ""
+     },
+     {
+      "name": "Curl de bíceps con mancuernas",
+      "sets": "3 × 10-12",
+      "rest": "45 seg",
+      "equip": "mancuerna",
+      "video": "lib:curl_biceps_mancuerna",
+      "tip": "Codos pegados al cuerpo; sube y baja sin balancear la espalda.",
+      "alt": ""
+     },
+     {
+      "name": "Remo con mancuerna a una mano",
+      "sets": "3 × 10-12 por lado",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "lib:remo_una_mano",
+      "tip": "Apoya una rodilla y una mano en el banco, espalda recta; tira la mancuerna hacia la cadera llevando el codo hacia atrás.",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Miércoles",
+    "title": "Pecho y Tríceps",
+    "focus": "Empuje superior",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "lib:calentamiento_trotadora",
+    "exercises": [
+     {
+      "name": "Press de banca con mancuernas",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "lib:press_banca_mancuernas_mujer",
+      "tip": "Baja las mancuernas controlada hasta la altura del pecho y empuja sin bloquear los codos de golpe.",
+      "alt": ""
+     },
+     {
+      "name": "Aperturas con mancuernas en banco",
+      "sets": "3 × 12-15",
+      "rest": "45 seg",
+      "equip": "mancuerna",
+      "video": "lib:apertura_mancuerna",
+      "tip": "Acostado en el banco, codos ligeramente flexionados; abre y junta los brazos como abrazando un árbol.",
+      "alt": ""
+     },
+     {
+      "name": "Extensión de tríceps en polea",
+      "sets": "3 × 12-15",
+      "rest": "45 seg",
+      "equip": "polea",
+      "video": "lib:extension_triceps",
+      "tip": "Codos pegados al cuerpo, empuja la barra hacia abajo sin mover los hombros.",
+      "alt": ""
+     },
+     {
+      "name": "Press cerrado con disco",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "lib:press_cerrado_disco",
+      "tip": "Acostado en el banco, igual que el press de banca pero con los codos pegados al cuerpo; empuja las mancuernas hacia arriba sintiendo el trabajo en el tríceps.",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Jueves",
+    "title": "Hombros y Abdomen",
+    "focus": "Estabilidad y core",
+    "warmup": "Calentamiento con bicicleta — 8 minutos",
+    "warmupVideo": "lib:calentamiento_bicicleta",
+    "exercises": [
+     {
+      "name": "Press militar con mancuernas",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "lib:press_militar",
+      "tip": "Sentado, empuja las mancuernas hacia arriba sin arquear la espalda baja.",
+      "alt": ""
+     },
+     {
+      "name": "Elevaciones laterales con mancuernas",
+      "sets": "3 × 12-15",
+      "rest": "45 seg",
+      "equip": "mancuerna",
+      "video": "lib:elevacion_lateral",
+      "tip": "Brazos casi rectos; sube hasta la altura de los hombros y baja controlado, sin impulso.",
+      "alt": ""
+     },
+     {
+      "name": "Plancha abdominal",
+      "sets": "3 × 20-30 seg",
+      "rest": "45 seg",
+      "equip": "colchoneta",
+      "video": "lib:plancha_abdominal",
+      "tip": "Cuerpo alineado de la cabeza a los talones, aprieta el abdomen todo el tiempo.",
+      "alt": "¿Muy exigente? Apóyate en las rodillas en vez de en los pies."
+     },
+     {
+      "name": "Elevación de piernas acostada",
+      "sets": "3 × 12-15",
+      "rest": "45 seg",
+      "equip": "colchoneta",
+      "video": "lib:elevacion_piernas",
+      "tip": "Acostada boca arriba, manos bajo la cadera; sube las piernas rectas y baja controlado sin tocar el suelo.",
+      "alt": "¿Muy exigente? Dobla un poco las rodillas para hacerlo más fácil."
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Viernes",
+    "title": "Full Body y Cardio",
+    "focus": "Repaso general de la semana",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "lib:calentamiento_trotadora",
+    "exercises": [
+     {
+      "name": "Peso muerto con kettlebell",
+      "sets": "3 × 12",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "lib:peso_muerto_kettlebell",
+      "tip": "Kettlebell frente a los muslos, espalda recta; baja empujando la cadera hacia atrás y sube apretando los glúteos.",
+      "alt": ""
+     },
+     {
+      "name": "Face pull en polea (cuerda)",
+      "sets": "3 × 12-15",
+      "rest": "45 seg",
+      "equip": "polea",
+      "video": "lib:face_pull",
+      "tip": "Tira la cuerda hacia la cara separando las manos, codos altos, apretando los omóplatos.",
+      "alt": ""
+     },
+     {
+      "name": "Step-ups en step",
+      "sets": "3 × 10 por pierna",
+      "rest": "60 seg",
+      "equip": "step",
+      "video": "lib:step_up",
+      "tip": "Sube completo al step apoyando todo el pie, sin impulsarte con la pierna de atrás.",
+      "alt": "¿Muy exigente? Usa un escalón más bajo."
+     },
+     {
+      "name": "Abdominales en colchoneta",
+      "sets": "3 × 15",
+      "rest": "45 seg",
+      "equip": "colchoneta",
+      "video": "lib:abdominales_colchoneta",
+      "tip": "Acostada, rodillas dobladas, manos cruzadas en el pecho; sube los hombros del suelo apretando el abdomen y baja controlado.",
+      "alt": ""
+     },
+     {
+      "name": "Estiramiento general",
+      "sets": "30 seg por grupo muscular",
+      "rest": "—",
+      "equip": "colchoneta",
+      "video": "lib:estiramiento_final",
+      "tip": "Estira cuerpo completo con calma antes del cardio final.",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "Cardio final",
+    "cooldown": "Bicicleta de spinning — 10-15 minutos, ritmo constante y cómodo para cerrar la semana.",
+    "cooldownVideo": "lib:calentamiento_bicicleta"
+   }
+  ]
+ },
+ "hombres": {
+  "titulo": "RUTINA INTERMEDIO HOMBRES 5 DÍAS",
+  "corto": "RUTINA HOMBRES",
+  "bajada": "5 días · con videos",
+  "dias": [
+   {
+    "weekday": "Lunes",
+    "title": "Piernas",
+    "focus": "Tren inferior — único día de piernas",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "lib:calentamiento_trotadora_hombres",
+    "exercises": [
+     {
+      "name": "Sentadilla en Smith",
+      "sets": "4 × 10-12",
+      "rest": "90 seg",
+      "equip": "maquina",
+      "video": "lib:sentadilla_smith",
+      "tip": "Pies un poco adelantados de la barra, baja controlado hasta que los muslos queden paralelos al piso y sube empujando con los talones.",
+      "alt": ""
+     },
+     {
+      "name": "Prensa de piernas",
+      "sets": "3 × 12",
+      "rest": "75 seg",
+      "equip": "maquina",
+      "video": "lib:prensa_pierna",
+      "tip": "Pies a la altura de los hombros sobre la plataforma, baja sin despegar la espalda del respaldo y sin bloquear las rodillas al subir.",
+      "alt": ""
+     },
+     {
+      "name": "Extensión de cuádriceps en máquina",
+      "sets": "3 × 12-15",
+      "rest": "60 seg",
+      "equip": "maquina",
+      "video": "lib:extension_cuadriceps",
+      "tip": "Espalda apoyada, extiende las rodillas sin impulso y baja controlado sin soltar de golpe.",
+      "alt": ""
+     },
+     {
+      "name": "Curl femoral a un pie en máquina",
+      "sets": "3 × 10-12 por pierna",
+      "rest": "60 seg",
+      "equip": "maquina",
+      "video": "lib:curl_femoral",
+      "tip": "Trabaja una pierna a la vez, flexiona llevando el talón hacia el glúteo y vuelve controlado, sin balancear la cadera.",
+      "alt": ""
+     },
+     {
+      "name": "Máquina de aductores",
+      "sets": "3 × 15",
+      "rest": "45 seg",
+      "equip": "maquina",
+      "video": "lib:aductores",
+      "tip": "Cierra las piernas contra las almohadillas de forma controlada, sin usar impulso brusco.",
+      "alt": ""
+     },
+     {
+      "name": "Elevación de talones en máquina",
+      "sets": "4 × 15-20",
+      "rest": "45 seg",
+      "equip": "maquina",
+      "video": "lib:pantorrillas",
+      "tip": "Sube lo más alto posible en la punta de los pies, mantén 1 segundo arriba y baja controlado (pantorrillas).",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Martes",
+    "title": "Pecho y Tríceps",
+    "focus": "Empuje superior",
+    "warmup": "Calentamiento en bicicleta — 8 minutos",
+    "warmupVideo": "lib:calentamiento_bicicleta_hombres",
+    "exercises": [
+     {
+      "name": "Press de banca con barra",
+      "sets": "4 × 8-10",
+      "rest": "90 seg",
+      "equip": "barra",
+      "video": "lib:press_banca",
+      "tip": "Escápulas apretadas contra el banco, baja la barra controlada hasta rozar el pecho y sube sin rebotar.",
+      "alt": ""
+     },
+     {
+      "name": "Press inclinado con mancuernas",
+      "sets": "3 × 10-12",
+      "rest": "75 seg",
+      "equip": "mancuerna",
+      "video": "lib:press_inclinado",
+      "tip": "Banco a 30-45°, baja las mancuernas a los lados del pecho y sube sin chocarlas de golpe arriba.",
+      "alt": ""
+     },
+     {
+      "name": "Aperturas en polea (cruce)",
+      "sets": "3 × 12-15",
+      "rest": "60 seg",
+      "equip": "polea",
+      "video": "lib:aperturas_polea",
+      "tip": "Codos con leve flexión fija, junta las manos al frente del pecho en un arco amplio y controlado.",
+      "alt": ""
+     },
+     {
+      "name": "Fondos en máquina asistida",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "maquina",
+      "video": "lib:fondos_maquina",
+      "tip": "Tronco levemente inclinado adelante, baja hasta sentir el estiramiento en el pecho y sube sin bloquear los codos de golpe.",
+      "alt": "¿Muy exigente? Sube la asistencia de la máquina para que ayude más peso."
+     },
+     {
+      "name": "Extensión de tríceps en polea",
+      "sets": "3 × 12-15",
+      "rest": "45 seg",
+      "equip": "polea",
+      "video": "lib:extension_triceps_polea",
+      "tip": "Codos pegados al cuerpo, extiende hacia abajo sin balancear la espalda y controla la vuelta.",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Miércoles",
+    "title": "Espalda y Bíceps",
+    "focus": "Tracción superior",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "lib:calentamiento_trotadora_hombres",
+    "exercises": [
+     {
+      "name": "Jalón al pecho en polea",
+      "sets": "4 × 10-12",
+      "rest": "75 seg",
+      "equip": "polea",
+      "video": "lib:jalon_pecho_polea",
+      "tip": "Tira la barra hacia el pecho llevando los codos hacia abajo, sin balancear el cuerpo hacia atrás.",
+      "alt": ""
+     },
+     {
+      "name": "Remo bajo en máquina Hammer",
+      "sets": "3 × 10-12",
+      "rest": "75 seg",
+      "equip": "maquina",
+      "video": "lib:remo_maquina",
+      "tip": "Pecho apoyado o espalda recta según la máquina, tira hacia el abdomen apretando los omóplatos.",
+      "alt": ""
+     },
+     {
+      "name": "Remo con barra",
+      "sets": "3 × 10",
+      "rest": "75 seg",
+      "equip": "barra",
+      "video": "lib:remo_barra",
+      "tip": "Tronco inclinado hacia adelante, espalda recta; tira la barra hacia el abdomen sin usar impulso de las piernas.",
+      "alt": ""
+     },
+     {
+      "name": "Curl de bíceps con barra Z",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "barra",
+      "video": "lib:curl_biceps_barra_z",
+      "tip": "Codos pegados al cuerpo, sube y baja controlado sin balancear la espalda para ayudarte con impulso.",
+      "alt": ""
+     },
+     {
+      "name": "Curl martillo con mancuernas",
+      "sets": "3 × 10-12",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "lib:curl_martillo",
+      "tip": "Palmas enfrentadas (agarre neutro), sube y baja controlado sin girar la muñeca.",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Jueves",
+    "title": "Hombros y Abdomen",
+    "focus": "Empuje superior + core",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "lib:calentamiento_trotadora_hombres",
+    "exercises": [
+     {
+      "name": "Press militar con mancuernas",
+      "sets": "4 × 10",
+      "rest": "75 seg",
+      "equip": "mancuerna",
+      "video": "lib:press_militar_hombres",
+      "tip": "Sentado o de pie con el core firme, empuja las mancuernas hacia arriba sin arquear demasiado la espalda baja.",
+      "alt": ""
+     },
+     {
+      "name": "Elevación lateral con mancuernas",
+      "sets": "3 × 12-15",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "lib:elevacion_lateral_hombres",
+      "tip": "Codos con leve flexión, sube hasta la altura de los hombros y baja controlado sin usar impulso.",
+      "alt": ""
+     },
+     {
+      "name": "Elevación frontal con disco",
+      "sets": "3 × 12",
+      "rest": "60 seg",
+      "equip": "disco",
+      "video": "lib:elevacion_frontal_hombres",
+      "tip": "Sujeta el disco con ambas manos, sube al frente hasta la altura de los hombros y baja controlado.",
+      "alt": ""
+     },
+     {
+      "name": "Face pull en polea (cuerda)",
+      "sets": "3 × 12-15",
+      "rest": "60 seg",
+      "equip": "polea",
+      "video": "lib:face_pull_hombres",
+      "tip": "Tira la cuerda hacia la cara separando las manos, codos altos, apretando los omóplatos.",
+      "alt": ""
+     },
+     {
+      "name": "Plancha abdominal",
+      "sets": "3 × 30-40 seg",
+      "rest": "45 seg",
+      "equip": "colchoneta",
+      "video": "lib:plancha_abdominal_hombres",
+      "tip": "Cuerpo alineado de la cabeza a los talones, aprieta el abdomen todo el tiempo.",
+      "alt": "¿Muy exigente? Apóyate en las rodillas en vez de en los pies."
+     },
+     {
+      "name": "Elevación de piernas colgado",
+      "sets": "3 × 10-15",
+      "rest": "60 seg",
+      "equip": "barra",
+      "video": "lib:elevacion_piernas_hombres",
+      "tip": "Colgado de la barra, sube las piernas controlado sin balancear el cuerpo, y baja despacio.",
+      "alt": "¿Muy exigente? Dobla las rodillas al subir en vez de mantener las piernas rectas."
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Viernes",
+    "title": "Brazos y Pecho Complementario",
+    "focus": "Cierre de semana — tren superior",
+    "warmup": "Calentamiento en bicicleta — 8 minutos",
+    "warmupVideo": "lib:calentamiento_bicicleta_hombres",
+    "exercises": [
+     {
+      "name": "Press cerrado en banca con mancuernas",
+      "sets": "4 × 10",
+      "rest": "75 seg",
+      "equip": "mancuerna",
+      "video": "lib:press_cerrado_banca_hombres",
+      "tip": "Agarre más angosto que el ancho de hombros, codos pegados al cuerpo al bajar la barra hacia el pecho, enfocado en tríceps.",
+      "alt": ""
+     },
+     {
+      "name": "Remo con mancuerna a una mano",
+      "sets": "3 × 10-12 por lado",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "lib:remo_mancuerna_una_mano_hombres",
+      "tip": "Apoya una rodilla y una mano en el banco, espalda recta; tira la mancuerna hacia la cadera llevando el codo hacia atrás.",
+      "alt": ""
+     },
+     {
+      "name": "Curl concentrado con mancuerna",
+      "sets": "3 × 10-12 por lado",
+      "rest": "45 seg",
+      "equip": "mancuerna",
+      "video": "lib:curl_concentrado_hombres",
+      "tip": "Codo apoyado en la cara interna del muslo, sube y baja controlado sin balancear el cuerpo.",
+      "alt": ""
+     },
+     {
+      "name": "Extensión de tríceps tras nuca con mancuerna",
+      "sets": "3 × 12",
+      "rest": "45 seg",
+      "equip": "mancuerna",
+      "video": "lib:extension_triceps_nuca_hombres",
+      "tip": "Sostén la mancuerna con ambas manos detrás de la cabeza, codos apuntando al techo, baja controlado y sube extendiendo los brazos.",
+      "alt": ""
+     },
+     {
+      "name": "Abdominales en banca",
+      "sets": "3 × 15-20",
+      "rest": "45 seg",
+      "equip": "banca",
+      "video": "lib:abdominales_banca_hombres",
+      "tip": "Flexiona el tronco apretando el abdomen, sin tirar del cuello con los brazos.",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   }
+  ]
+ },
+ "gluteos": {
+  "titulo": "RUTINA ENFOCADA EN GLÚTEOS 5 DÍAS",
+  "corto": "RUTINA GLÚTEOS",
+  "bajada": "5 días · con videos",
+  "dias": [
+   {
+    "weekday": "Lunes",
+    "title": "Glúteos y Femorales",
+    "focus": "Empuje de pierna — fuerza",
+    "warmup": "Zancada en TRX — 3 × 12 repeticiones por pierna",
+    "warmupVideo": "lib:zancada_trx_gluteos",
+    "exercises": [
+     {
+      "name": "Sentadilla en máquina Smith",
+      "sets": "3 × 15",
+      "rest": "90 seg",
+      "equip": "smith",
+      "video": "lib:sentadilla_smith_gluteos",
+      "tip": "Pies un poco adelantados y a la altura de los hombros. Baja hasta que el muslo quede paralelo al suelo, empujando con el talón.",
+      "alt": "¿Muy exigente? Baja menos y sube el peso recién cuando controles el recorrido completo."
+     },
+     {
+      "name": "Peso muerto rumano",
+      "sets": "3 × 12",
+      "rest": "90 seg",
+      "equip": "barra",
+      "video": "lib:peso_muerto_rumano_gluteos",
+      "tip": "Rodillas apenas flexionadas y fijas. Baja la barra pegada a las piernas empujando la cadera atrás, hasta sentir el estiramiento en el isquiotibial. Sube apretando el glúteo.",
+      "alt": "¿Te molesta la espalda baja? Baja menos y usa menos peso: el rango lo manda el estiramiento, no el suelo."
+     },
+     {
+      "name": "Extensión de glúteos en máquina",
+      "sets": "4 × 12 por pierna",
+      "rest": "75 seg",
+      "equip": "maquina",
+      "video": "lib:extension_gluteos_maquina",
+      "tip": "Apoya el antebrazo y el pecho firmes en la máquina. Empuja con el talón hacia atrás y arriba apretando el glúteo, sin arquear la espalda baja. Baja controlado.",
+      "alt": "¿Sientes la espalda? Baja el peso y acorta el recorrido: el movimiento sale de la cadera, no de la columna."
+     },
+     {
+      "name": "Abducción para glúteos",
+      "sets": "4 × 12 por pierna",
+      "rest": "60 seg",
+      "equip": "maquina",
+      "video": "lib:abduccion_gluteos",
+      "tip": "Apóyate firme en la máquina y abre la pierna apretando el glúteo. Movimiento controlado, sin tirones ni impulso con la cadera.",
+      "alt": "¿Sientes la espalda baja? Baja el peso y acorta el recorrido."
+     },
+     {
+      "name": "Femoral a un pie",
+      "sets": "3 × 12 por pierna",
+      "rest": "45 seg",
+      "equip": "maquina",
+      "video": "lib:femoral_un_pie",
+      "tip": "Apóyate firme en la máquina y lleva el talón hacia el glúteo apretando el femoral. Baja despacio, sin soltar el peso de golpe.",
+      "alt": "Cuida no arquear la espalda baja: si se te va la cadera, baja el peso."
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Martes",
+    "title": "Espalda y Bíceps",
+    "focus": "Tren superior — tirón",
+    "warmup": "Calentamiento en bicicleta — 8 minutos",
+    "warmupVideo": "",
+    "exercises": [
+     {
+      "name": "Jalón al pecho en polea",
+      "sets": "4 × 12",
+      "rest": "75 seg",
+      "equip": "polea",
+      "video": "",
+      "tip": "Pecho arriba, tira la barra hacia la parte alta del pecho juntando los omóplatos. Sube controlado.",
+      "alt": ""
+     },
+     {
+      "name": "Remo sentado en máquina",
+      "sets": "4 × 12",
+      "rest": "75 seg",
+      "equip": "maquina",
+      "video": "",
+      "tip": "Espalda recta, tira llevando los codos hacia atrás pegados al cuerpo. No te vayas hacia atrás con el tronco.",
+      "alt": ""
+     },
+     {
+      "name": "Remo con mancuerna a una mano",
+      "sets": "3 × 12 por lado",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "",
+      "tip": "Apoya rodilla y mano en el banco. Tira la mancuerna hacia la cadera, no hacia el hombro.",
+      "alt": ""
+     },
+     {
+      "name": "Curl de bíceps con barra Z",
+      "sets": "3 × 12",
+      "rest": "60 seg",
+      "equip": "barra",
+      "video": "",
+      "tip": "Codos pegados al cuerpo y quietos. Sube apretando el bíceps y baja despacio.",
+      "alt": ""
+     },
+     {
+      "name": "Plancha abdominal",
+      "sets": "3 × 30-40 seg",
+      "rest": "45 seg",
+      "equip": "colchoneta",
+      "video": "",
+      "tip": "Cuerpo en línea recta de la cabeza a los talones, glúteo y abdomen apretados.",
+      "alt": "¿Muy exigente? Apóyate en las rodillas."
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Miércoles",
+    "title": "Glúteos e Isquiotibiales",
+    "focus": "Cadena posterior — el día más importante para el glúteo",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "",
+    "exercises": [
+     {
+      "name": "Hip thrust con barra",
+      "sets": "4 × 12",
+      "rest": "90 seg",
+      "equip": "barra",
+      "video": "",
+      "tip": "Espalda alta apoyada en el banco, mentón hacia el pecho. Sube empujando con los talones y aprieta el glúteo 2 segundos arriba.",
+      "alt": "¿Recién empiezas? Hazlo sin barra, solo con el peso del cuerpo, hasta dominar el movimiento."
+     },
+     {
+      "name": "Peso muerto rumano con barra",
+      "sets": "4 × 12",
+      "rest": "90 seg",
+      "equip": "barra",
+      "video": "",
+      "tip": "Rodillas apenas flexionadas y fijas. Baja la barra pegada a las piernas empujando la cadera atrás, hasta sentir el isquiotibial.",
+      "alt": "¿Te molesta la espalda baja? Baja menos y usa menos peso: el rango lo manda el estiramiento, no el suelo."
+     },
+     {
+      "name": "Curl femoral acostada",
+      "sets": "4 × 12",
+      "rest": "60 seg",
+      "equip": "maquina",
+      "video": "",
+      "tip": "Cadera pegada al banco. Lleva los talones al glúteo y baja despacio, sin soltar.",
+      "alt": ""
+     },
+     {
+      "name": "Puente de glúteo a una pierna",
+      "sets": "3 × 15 por pierna",
+      "rest": "45 seg",
+      "equip": "colchoneta",
+      "video": "",
+      "tip": "Una pierna estirada, sube la cadera con el talón de la pierna apoyada. Arriba, la cadera debe quedar pareja.",
+      "alt": ""
+     },
+     {
+      "name": "Abducción de cadera en máquina",
+      "sets": "4 × 20",
+      "rest": "45 seg",
+      "equip": "maquina",
+      "video": "",
+      "tip": "Inclina el tronco un poco hacia adelante para tomar más glúteo. Abre apretando y cierra controlado.",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Jueves",
+    "title": "Pecho, Hombro y Tríceps",
+    "focus": "Tren superior — empuje",
+    "warmup": "Calentamiento en bicicleta — 8 minutos",
+    "warmupVideo": "",
+    "exercises": [
+     {
+      "name": "Press de banca con mancuernas",
+      "sets": "4 × 12",
+      "rest": "75 seg",
+      "equip": "mancuerna",
+      "video": "",
+      "tip": "Baja las mancuernas hasta la altura del pecho, codos a unos 45° del cuerpo. Sube sin chocarlas.",
+      "alt": ""
+     },
+     {
+      "name": "Press militar con mancuernas",
+      "sets": "3 × 12",
+      "rest": "75 seg",
+      "equip": "mancuerna",
+      "video": "",
+      "tip": "Core firme, empuja arriba sin arquear la espalda baja. Si te arqueas, baja el peso.",
+      "alt": ""
+     },
+     {
+      "name": "Elevación lateral con mancuernas",
+      "sets": "3 × 15",
+      "rest": "45 seg",
+      "equip": "mancuerna",
+      "video": "",
+      "tip": "Codos con leve flexión, sube hasta la altura del hombro. Sin impulso.",
+      "alt": ""
+     },
+     {
+      "name": "Extensión de tríceps en polea",
+      "sets": "3 × 15",
+      "rest": "45 seg",
+      "equip": "polea",
+      "video": "",
+      "tip": "Codos pegados al cuerpo y quietos. Estira abajo apretando el tríceps.",
+      "alt": ""
+     },
+     {
+      "name": "Elevación de piernas colgada",
+      "sets": "3 × 12",
+      "rest": "45 seg",
+      "equip": "barra",
+      "video": "",
+      "tip": "Sube las piernas sin balancearte y baja despacio.",
+      "alt": "¿Muy exigente? Sube con las rodillas dobladas."
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   },
+   {
+    "weekday": "Viernes",
+    "title": "Glúteos, Unilateral y Cardio",
+    "focus": "Glúteo pierna por pierna + cierre de semana",
+    "warmup": "Calentamiento en trotadora — 8 minutos",
+    "warmupVideo": "",
+    "exercises": [
+     {
+      "name": "Sentadilla búlgara con mancuernas",
+      "sets": "3 × 12 por pierna",
+      "rest": "75 seg",
+      "equip": "mancuerna",
+      "video": "",
+      "tip": "Pie de atrás sobre el banco. Inclina el tronco un poco adelante para cargar más el glúteo.",
+      "alt": "¿Te desequilibras? Apóyate con una mano en el rack y usa una sola mancuerna."
+     },
+     {
+      "name": "Step up al cajón con mancuernas",
+      "sets": "3 × 12 por pierna",
+      "rest": "60 seg",
+      "equip": "mancuerna",
+      "video": "",
+      "tip": "Sube empujando solo con la pierna de arriba, sin tomar impulso con la de abajo. Baja controlado.",
+      "alt": ""
+     },
+     {
+      "name": "Patada de glúteo en polea",
+      "sets": "3 × 15 por pierna",
+      "rest": "45 seg",
+      "equip": "polea",
+      "video": "",
+      "tip": "Tronco firme y abdomen apretado. Lleva la pierna atrás apretando el glúteo, sin arquear la espalda baja.",
+      "alt": ""
+     },
+     {
+      "name": "Buenos días con barra",
+      "sets": "3 × 12",
+      "rest": "60 seg",
+      "equip": "barra",
+      "video": "",
+      "tip": "Barra en la espalda alta, espalda recta. Inclina el tronco desde la cadera y vuelve apretando el glúteo. Peso liviano.",
+      "alt": ""
+     },
+     {
+      "name": "Cardio en trotadora o escaladora",
+      "sets": "15 minutos",
+      "rest": "—",
+      "equip": "cardio",
+      "video": "",
+      "tip": "Ritmo moderado, que puedas hablar pero con esfuerzo. Cierra la semana.",
+      "alt": ""
+     }
+    ],
+    "cooldownTitle": "",
+    "cooldown": "",
+    "cooldownVideo": ""
+   }
+  ]
+ }
+};
+
+/* ── Guardar y leer lo escrito ───────────────────────────────────────── */
+var DATOS = { rutinas: [] };
+try{
+ var crudo = localStorage.getItem(LLAVE);
+ if(crudo){
+  var leido = JSON.parse(crudo);
+  if(leido && Array.isArray(leido.rutinas)) DATOS = leido;
+ }
+}catch(e){}
+
+var temporizadorAviso = null;
+function guardar(){
+ try{ localStorage.setItem(LLAVE, JSON.stringify(DATOS)); }catch(e){}
+ var a = document.getElementById("avisoGuardado");
+ a.classList.add("ver");
+ clearTimeout(temporizadorAviso);
+ temporizadorAviso = setTimeout(function(){ a.classList.remove("ver"); }, 1100);
+}
+
+function nuevoId(pre){
+ return pre + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+function escaparHtml(t){
+ return String(t == null ? "" : t)
+  .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+function sinTildes(t){
+ return String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+}
+function pesoBonito(bytes){
+ if(bytes < 1024) return bytes + " B";
+ if(bytes < 1024*1024) return Math.round(bytes/1024) + " KB";
+ return (bytes/1024/1024).toFixed(1).replace(".",",") + " MB";
+}
+
+/* ── Los videos propios viven en IndexedDB: pesan mucho ──────────────── */
+var BD = null;
+function abrirBD(luego){
+ if(BD) return luego(BD);
+ try{
+  var p = indexedDB.open("wgym-editor-videos", 1);
+  p.onupgradeneeded = function(e){
+   var d = e.target.result;
+   if(!d.objectStoreNames.contains("videos")) d.createObjectStore("videos", { keyPath:"id" });
+  };
+  p.onsuccess = function(){ BD = p.result; luego(BD); };
+  p.onerror = function(){ luego(null); };
+ }catch(e){ luego(null); }
+}
+function ponerVideo(ficha, luego){
+ abrirBD(function(d){
+  if(!d) return luego(false);
+  try{
+   var t = d.transaction("videos", "readwrite");
+   t.objectStore("videos").put(ficha);
+   t.oncomplete = function(){ luego(true); };
+   t.onerror = function(){ luego(false); };
+  }catch(e){ luego(false); }
+ });
+}
+function sacarVideo(id, luego){
+ abrirBD(function(d){
+  if(!d) return luego(null);
+  try{
+   var p = d.transaction("videos", "readonly").objectStore("videos").get(id);
+   p.onsuccess = function(){ luego(p.result || null); };
+   p.onerror = function(){ luego(null); };
+  }catch(e){ luego(null); }
+ });
+}
+function borrarVideo(id, luego){
+ abrirBD(function(d){
+  if(!d) return luego();
+  try{
+   var t = d.transaction("videos", "readwrite");
+   t.objectStore("videos").delete(id);
+   t.oncomplete = function(){ luego(); };
+   t.onerror = function(){ luego(); };
+  }catch(e){ luego(); }
+ });
+}
+function todosLosVideos(luego){
+ abrirBD(function(d){
+  if(!d) return luego([]);
+  try{
+   var p = d.transaction("videos", "readonly").objectStore("videos").getAll();
+   p.onsuccess = function(){ luego(p.result || []); };
+   p.onerror = function(){ luego([]); };
+  }catch(e){ luego([]); }
+ });
+}
+
+/* Las direcciones de los videos propios se guardan en memoria mientras dura
+   la visita, para no crear una nueva cada vez que se dibuja la pantalla. */
+var DIRECCIONES = {};
+function direccionDe(ref, luego){
+ if(!ref) return luego(null);
+ if(ref.indexOf("lib:") === 0) return luego("assets/" + ref.slice(4) + ".mp4");
+ if(ref.indexOf("mio:") !== 0) return luego(null);
+ var id = ref.slice(4);
+ if(DIRECCIONES[id]) return luego(DIRECCIONES[id]);
+ sacarVideo(id, function(f){
+  if(!f || !f.blob) return luego(null);
+  DIRECCIONES[id] = URL.createObjectURL(f.blob);
+  luego(DIRECCIONES[id]);
+ });
+}
+function tituloDeVideo(ref, luego){
+ if(!ref) return luego("Sin video");
+ if(ref.indexOf("lib:") === 0) return luego(nombreBonito(ref.slice(4)));
+ sacarVideo(ref.slice(4), function(f){
+  luego(f ? f.nombre : "Video que ya no está");
+ });
+}
+
+
+/* ── Navegación entre pantallas ──────────────────────────────────────── */
+var PANTALLAS = ["pLista","pRutina","pDia","pEjercicio","pPrevio"];
+var CAMINO = [];              /* la pila del botón Volver */
+var rutinaAbierta = null;     /* índice dentro de DATOS.rutinas */
+var diaAbierto = null;        /* índice dentro de la rutina */
+var ejercicioAbierto = null;  /* índice dentro del día */
+
+function $(id){ return document.getElementById(id); }
+
+function mostrar(cual, titulo, sub){
+ PANTALLAS.forEach(function(p){ $(p).hidden = (p !== cual); });
+ $("tituloBarra").innerHTML = titulo;
+ $("subBarra").textContent = sub || "WGYMADNSPORT TOCOPILLA";
+ $("bVolver").hidden = (CAMINO.length === 0);
+ window.scrollTo(0, 0);
+}
+function ir(dibujar){
+ CAMINO.push(dibujar);
+ dibujar();
+}
+function volver(){
+ CAMINO.pop();
+ var anterior = CAMINO[CAMINO.length - 1];
+ if(anterior) anterior(); else verLista();
+}
+$("bVolver").addEventListener("click", volver);
+
+function rutinaActual(){ return DATOS.rutinas[rutinaAbierta]; }
+function diaActual(){ var r = rutinaActual(); return r && r.dias[diaAbierto]; }
+function ejercicioActual(){ var d = diaActual(); return d && d.exercises[ejercicioAbierto]; }
+
+/* ── Pantalla 1: la lista de rutinas ─────────────────────────────────── */
+function verLista(){
+ CAMINO = [];
+ mostrar("pLista", 'EDICIÓN DE <span>RUTINAS</span>', "WGYMADNSPORT TOCOPILLA");
+ var caja = $("listaRutinas");
+ if(!DATOS.rutinas.length){
+  caja.innerHTML = '<div class="vacio">Todavía no hay ninguna rutina acá.<br>' +
+   'Empiece con una nueva, o copie una de las que ya tiene y cámbiele lo que quiera.</div>';
+  return;
+ }
+ caja.innerHTML = DATOS.rutinas.map(function(r, i){
+  var cuantos = r.dias.length;
+  var ejs = r.dias.reduce(function(s,d){ return s + d.exercises.length; }, 0);
+  return '<div class="item">' +
+   '<div class="n">' + (i+1) + '</div>' +
+   '<div class="cuerpo" data-abrir="' + i + '">' +
+     '<h3>' + escaparHtml(r.titulo || "Rutina sin nombre") + '</h3>' +
+     '<p>' + cuantos + (cuantos === 1 ? ' día' : ' días') + ' · ' +
+             ejs + (ejs === 1 ? ' ejercicio' : ' ejercicios') + '</p>' +
+   '</div>' +
+   '<button class="mini borrar" data-borrar="' + i + '" title="Borrar">✕</button>' +
+  '</div>';
+ }).join("");
+}
+
+$("listaRutinas").addEventListener("click", function(e){
+ var abrir = e.target.closest("[data-abrir]");
+ if(abrir){ rutinaAbierta = +abrir.dataset.abrir; ir(verRutina); return; }
+ var borrar = e.target.closest("[data-borrar]");
+ if(borrar){
+  var i = +borrar.dataset.borrar;
+  var r = DATOS.rutinas[i];
+  if(confirm('¿Borrar "' + (r.titulo || "esta rutina") + '"? No se puede recuperar.')){
+   DATOS.rutinas.splice(i, 1);
+   guardar(); verLista();
+  }
+ }
+});
+
+$("bNueva").addEventListener("click", function(){
+ DATOS.rutinas.push({
+  id: nuevoId("r"), titulo: "", corto: "", bajada: "5 días · con videos",
+  dias: [], creada: new Date().toISOString()
+ });
+ guardar();
+ rutinaAbierta = DATOS.rutinas.length - 1;
+ ir(verRutina);
+});
+
+$("bCopiar").addEventListener("click", function(){
+ var opciones = Object.keys(BASES);
+ var texto = "¿Cuál quiere copiar?\n\n";
+ opciones.forEach(function(k, i){ texto += (i+1) + ") " + BASES[k].titulo + "\n"; });
+ texto += "\nEscriba el número:";
+ var elegido = prompt(texto, "1");
+ if(!elegido) return;
+ var n = parseInt(elegido, 10);
+ if(!(n >= 1 && n <= opciones.length)) return;
+ var base = BASES[opciones[n-1]];
+ var copia = JSON.parse(JSON.stringify(base));
+ copia.id = nuevoId("r");
+ copia.titulo = copia.titulo + " (copia)";
+ copia.creada = new Date().toISOString();
+ DATOS.rutinas.push(copia);
+ guardar();
+ rutinaAbierta = DATOS.rutinas.length - 1;
+ ir(verRutina);
+});
+
+/* ── Pantalla 2: una rutina ──────────────────────────────────────────── */
+function verRutina(){
+ var r = rutinaActual();
+ if(!r) return verLista();
+ mostrar("pRutina", escaparHtml(r.titulo || "RUTINA SIN NOMBRE"), "Editando la rutina");
+ $("cTitulo").value = r.titulo || "";
+ $("cCorto").value  = r.corto || "";
+ $("cBajada").value = r.bajada || "";
+ pintarDias();
+}
+
+function pintarDias(){
+ var r = rutinaActual();
+ var caja = $("listaDias");
+ if(!r.dias.length){
+  caja.innerHTML = '<div class="vacio">Sin días todavía.<br>Agregue el primero acá abajo.</div>';
+  return;
+ }
+ caja.innerHTML = r.dias.map(function(d, i){
+  var cuantos = d.exercises.length;
+  return '<div class="item">' +
+   '<div class="n">' + (i+1) + '</div>' +
+   '<div class="cuerpo" data-dia="' + i + '">' +
+     '<h3>' + escaparHtml(d.weekday || "Día " + (i+1)) + ' · ' +
+              escaparHtml(d.title || "sin nombre") + '</h3>' +
+     '<p>' + cuantos + (cuantos === 1 ? ' ejercicio' : ' ejercicios') +
+             (d.warmup ? ' · con calentamiento' : '') + '</p>' +
+   '</div>' +
+   '<div class="mover">' +
+     '<button class="mini" data-subir="' + i + '" title="Subir">▲</button>' +
+     '<button class="mini" data-bajar="' + i + '" title="Bajar">▼</button>' +
+   '</div>' +
+  '</div>';
+ }).join("");
+}
+
+function moverEn(lista, i, paso){
+ var j = i + paso;
+ if(j < 0 || j >= lista.length) return false;
+ var x = lista[i]; lista[i] = lista[j]; lista[j] = x;
+ return true;
+}
+
+$("listaDias").addEventListener("click", function(e){
+ var r = rutinaActual();
+ var abrir = e.target.closest("[data-dia]");
+ if(abrir){ diaAbierto = +abrir.dataset.dia; ir(verDia); return; }
+ var s = e.target.closest("[data-subir]");
+ if(s && moverEn(r.dias, +s.dataset.subir, -1)){ guardar(); pintarDias(); return; }
+ var b = e.target.closest("[data-bajar]");
+ if(b && moverEn(r.dias, +b.dataset.bajar, 1)){ guardar(); pintarDias(); }
+});
+
+function atarCampo(id, leer){
+ $(id).addEventListener("input", function(){ leer(this.value); guardar(); });
+}
+atarCampo("cTitulo", function(v){ rutinaActual().titulo = v; $("tituloBarra").textContent = v || "RUTINA SIN NOMBRE"; });
+atarCampo("cCorto",  function(v){ rutinaActual().corto = v; });
+atarCampo("cBajada", function(v){ rutinaActual().bajada = v; });
+
+$("bNuevoDia").addEventListener("click", function(){
+ var r = rutinaActual();
+ r.dias.push({
+  weekday:"", title:"", focus:"", warmup:"", warmupVideo:"",
+  exercises:[], cooldownTitle:"", cooldown:"", cooldownVideo:""
+ });
+ guardar();
+ diaAbierto = r.dias.length - 1;
+ ir(verDia);
+});
+
+$("bBorrarRutina").addEventListener("click", function(){
+ var r = rutinaActual();
+ if(!confirm('¿Borrar "' + (r.titulo || "esta rutina") + '"? No se puede recuperar.')) return;
+ DATOS.rutinas.splice(rutinaAbierta, 1);
+ guardar();
+ verLista();
+});
+
+
+/* ── Pantalla 3: un día ──────────────────────────────────────────────── */
+function verDia(){
+ var d = diaActual();
+ if(!d) return volver();
+ mostrar("pDia",
+  escaparHtml(d.weekday || "DÍA " + (diaAbierto+1)),
+  (rutinaActual().titulo || "Rutina sin nombre"));
+ $("dWeekday").value      = d.weekday || "";
+ $("dFocus").value        = d.focus || "";
+ $("dTitle").value        = d.title || "";
+ $("dWarmup").value       = d.warmup || "";
+ $("dCierreTitulo").value = d.cooldownTitle || "";
+ $("dCierreTexto").value  = d.cooldown || "";
+ pintarCajaVideo("cajaVideoWarmup", d.warmupVideo, "Video del calentamiento",
+   function(ref){ diaActual().warmupVideo = ref; guardar(); verDia(); });
+ pintarCajaVideo("cajaVideoCierre", d.cooldownVideo, "Video del cierre",
+   function(ref){ diaActual().cooldownVideo = ref; guardar(); verDia(); });
+ pintarEjercicios();
+}
+
+atarCampo("dWeekday",      function(v){ diaActual().weekday = v; $("tituloBarra").textContent = v || "DÍA"; });
+atarCampo("dFocus",        function(v){ diaActual().focus = v; });
+atarCampo("dTitle",        function(v){ diaActual().title = v; });
+atarCampo("dWarmup",       function(v){ diaActual().warmup = v; });
+atarCampo("dCierreTitulo", function(v){ diaActual().cooldownTitle = v; });
+atarCampo("dCierreTexto",  function(v){ diaActual().cooldown = v; });
+
+function pintarEjercicios(){
+ var d = diaActual();
+ var caja = $("listaEjercicios");
+ if(!d.exercises.length){
+  caja.innerHTML = '<div class="vacio">Sin ejercicios todavía.</div>';
+  return;
+ }
+ caja.innerHTML = d.exercises.map(function(ex, i){
+  return '<div class="item">' +
+   '<div class="n">' + (i+1) + '</div>' +
+   '<div class="cuerpo" data-ej="' + i + '">' +
+     '<h3>' + escaparHtml(ex.name || "Ejercicio sin nombre") + '</h3>' +
+     '<p>' + escaparHtml([ex.sets, ex.rest, ex.video ? "con video" : "SIN VIDEO"]
+              .filter(Boolean).join(" · ")) + '</p>' +
+   '</div>' +
+   '<div class="mover">' +
+     '<button class="mini" data-esubir="' + i + '" title="Subir">▲</button>' +
+     '<button class="mini" data-ebajar="' + i + '" title="Bajar">▼</button>' +
+   '</div>' +
+  '</div>';
+ }).join("");
+}
+
+$("listaEjercicios").addEventListener("click", function(e){
+ var d = diaActual();
+ var abrir = e.target.closest("[data-ej]");
+ if(abrir){ ejercicioAbierto = +abrir.dataset.ej; ir(verEjercicio); return; }
+ var s = e.target.closest("[data-esubir]");
+ if(s && moverEn(d.exercises, +s.dataset.esubir, -1)){ guardar(); pintarEjercicios(); return; }
+ var b = e.target.closest("[data-ebajar]");
+ if(b && moverEn(d.exercises, +b.dataset.ebajar, 1)){ guardar(); pintarEjercicios(); }
+});
+
+$("bNuevoEjercicio").addEventListener("click", function(){
+ var d = diaActual();
+ d.exercises.push({ name:"", sets:"3 × 12", rest:"60 seg", equip:"mancuerna",
+                    video:"", tip:"", alt:"" });
+ guardar();
+ ejercicioAbierto = d.exercises.length - 1;
+ ir(verEjercicio);
+});
+
+$("bBorrarDia").addEventListener("click", function(){
+ var d = diaActual();
+ if(!confirm('¿Borrar el día "' + (d.weekday || "sin nombre") + '" con todos sus ejercicios?')) return;
+ rutinaActual().dias.splice(diaAbierto, 1);
+ guardar();
+ volver();
+});
+
+/* ── Pantalla 4: un ejercicio ────────────────────────────────────────── */
+var SIN_PESO = /^(colchoneta|cuerpo|cardio|trx)$/i;
+
+function verEjercicio(){
+ var ex = ejercicioActual();
+ if(!ex) return volver();
+ mostrar("pEjercicio",
+  escaparHtml(ex.name || "EJERCICIO NUEVO"),
+  (diaActual().weekday || "Día") + " · ejercicio " + (ejercicioAbierto + 1));
+ $("eNombre").value = ex.name || "";
+ $("eSets").value   = ex.sets || "";
+ $("eRest").value   = ex.rest || "";
+ $("eEquip").value  = ex.equip || "mancuerna";
+ $("eTip").value    = ex.tip || "";
+ $("eAlt").value    = ex.alt || "";
+ avisarPeso();
+ pintarCajaVideo("cajaVideoEjercicio", ex.video, "Video del ejercicio",
+   function(ref){ ejercicioActual().video = ref; guardar(); verEjercicio(); });
+}
+
+function avisarPeso(){
+ $("pistaEquip").textContent = SIN_PESO.test($("eEquip").value)
+  ? "Con esto la app no le va a pedir kilos al socio, solo las repeticiones."
+  : "La app le va a pedir al socio los kilos y las repeticiones de cada serie.";
+}
+
+atarCampo("eNombre", function(v){ ejercicioActual().name = v; $("tituloBarra").textContent = v || "EJERCICIO NUEVO"; });
+atarCampo("eSets",   function(v){ ejercicioActual().sets = v; });
+atarCampo("eRest",   function(v){ ejercicioActual().rest = v; });
+atarCampo("eTip",    function(v){ ejercicioActual().tip = v; });
+atarCampo("eAlt",    function(v){ ejercicioActual().alt = v; });
+$("eEquip").addEventListener("change", function(){
+ ejercicioActual().equip = this.value; avisarPeso(); guardar();
+});
+
+$("bBorrarEjercicio").addEventListener("click", function(){
+ var ex = ejercicioActual();
+ if(!confirm('¿Borrar "' + (ex.name || "este ejercicio") + '"?')) return;
+ diaActual().exercises.splice(ejercicioAbierto, 1);
+ guardar();
+ volver();
+});
+
+/* ── La caja que muestra el video elegido ────────────────────────────── */
+function pintarCajaVideo(idCaja, ref, etiqueta, alElegir){
+ var caja = $(idCaja);
+ caja.innerHTML = '<div class="videobox"><div class="nombre">Cargando…</div></div>';
+ tituloDeVideo(ref, function(titulo){
+  direccionDe(ref, function(url){
+   var html = '<div class="videobox">';
+   if(url){
+    html += '<video src="' + escaparHtml(url) + '" controls playsinline preload="metadata"></video>';
+   }
+   html += '<div class="nombre">' + escaparHtml(ref ? titulo : "Sin video") + '</div>';
+   html += '<div class="botones">' +
+     '<button class="btn btn-linea chico" data-elegir>' +
+       (ref ? "Cambiar el video" : "Elegir un video") + '</button>' +
+     (ref ? '<button class="mini borrar" data-quitar title="Quitar">✕</button>' : '') +
+    '</div></div>';
+   caja.innerHTML = html;
+   var e = caja.querySelector("[data-elegir]");
+   if(e) e.addEventListener("click", function(){ abrirElector(alElegir, etiqueta); });
+   var q = caja.querySelector("[data-quitar]");
+   if(q) q.addEventListener("click", function(){ alElegir(""); });
+  });
+ });
+}
+
+/* ── La hoja para elegir el video ────────────────────────────────────── */
+var alElegirVideo = null;
+
+function abrirElector(alElegir, etiqueta){
+ alElegirVideo = alElegir;
+ $("velo").querySelector(".barra h2").textContent = etiqueta || "Elegir video";
+ $("velo").hidden = false;
+ document.body.style.overflow = "hidden";
+ pestana("gym");
+}
+function cerrarElector(){
+ $("velo").hidden = true;
+ document.body.style.overflow = "";
+ alElegirVideo = null;
+}
+$("bCerrarVelo").addEventListener("click", cerrarElector);
+$("velo").addEventListener("click", function(e){ if(e.target === this) cerrarElector(); });
+$("bSinVideo").addEventListener("click", function(){
+ var f = alElegirVideo; cerrarElector(); if(f) f("");
+});
+
+function pestana(cual){
+ var gym = (cual === "gym");
+ $("tabGym").setAttribute("aria-selected", gym ? "true" : "false");
+ $("tabMios").setAttribute("aria-selected", gym ? "false" : "true");
+ $("panelGym").hidden = !gym;
+ $("panelMios").hidden = gym;
+ if(gym) pintarBiblioteca($("buscarVideo").value); else pintarMisVideos();
+}
+$("tabGym").addEventListener("click", function(){ pestana("gym"); });
+$("tabMios").addEventListener("click", function(){ pestana("mios"); });
+
+function pintarBiblioteca(filtro){
+ var f = sinTildes(filtro || "").trim();
+ var lista = BIBLIOTECA.filter(function(a){
+  if(!f) return true;
+  return sinTildes(a.replace(/_/g," ")).indexOf(f) >= 0;
+ });
+ var caja = $("listaGym");
+ if(!lista.length){
+  caja.innerHTML = '<div class="vacio">No hay ningún video con ese nombre.</div>';
+  return;
+ }
+ caja.innerHTML = lista.map(function(a){
+  return '<button data-lib="' + escaparHtml(a) + '">' +
+   '<span class="marca">▶</span>' +
+   '<span class="txt">' + escaparHtml(nombreBonito(a)) +
+     '<small>' + escaparHtml(a) + '.mp4</small></span></button>';
+ }).join("");
+}
+$("buscarVideo").addEventListener("input", function(){ pintarBiblioteca(this.value); });
+$("listaGym").addEventListener("click", function(e){
+ var b = e.target.closest("[data-lib]");
+ if(!b) return;
+ var f = alElegirVideo;
+ cerrarElector();
+ if(f) f("lib:" + b.dataset.lib);
+});
+
+function pintarMisVideos(){
+ todosLosVideos(function(fichas){
+  var caja = $("listaMios");
+  if(!fichas.length){
+   caja.innerHTML = '<div class="vacio" style="margin-top:12px">Todavía no ha subido ningún video suyo.</div>';
+   return;
+  }
+  fichas.sort(function(a,b){ return (b.subido||"").localeCompare(a.subido||""); });
+  caja.innerHTML = '<div style="height:12px"></div>' + fichas.map(function(f){
+   return '<button data-mio="' + escaparHtml(f.id) + '">' +
+    '<span class="marca">▶</span>' +
+    '<span class="txt">' + escaparHtml(f.nombre) +
+      '<small>' + pesoBonito(f.peso || 0) + '</small></span>' +
+    '<span class="mini borrar" data-borrarmio="' + escaparHtml(f.id) + '">✕</span></button>';
+  }).join("");
+ });
+}
+$("listaMios").addEventListener("click", function(e){
+ var quitar = e.target.closest("[data-borrarmio]");
+ if(quitar){
+  e.stopPropagation();
+  var id = quitar.dataset.borrarmio;
+  if(!confirm("¿Borrar este video del teléfono? Los ejercicios que lo usaban quedan sin video.")) return;
+  borrarVideo(id, function(){
+   if(DIRECCIONES[id]){ URL.revokeObjectURL(DIRECCIONES[id]); delete DIRECCIONES[id]; }
+   olvidarRef("mio:" + id);
+   pintarMisVideos();
+  });
+  return;
+ }
+ var b = e.target.closest("[data-mio]");
+ if(!b) return;
+ var f = alElegirVideo;
+ cerrarElector();
+ if(f) f("mio:" + b.dataset.mio);
+});
+
+/* Si se borra un video, se saca de todos los ejercicios que lo usaban. */
+function olvidarRef(ref){
+ DATOS.rutinas.forEach(function(r){
+  r.dias.forEach(function(d){
+   if(d.warmupVideo === ref) d.warmupVideo = "";
+   if(d.cooldownVideo === ref) d.cooldownVideo = "";
+   d.exercises.forEach(function(ex){ if(ex.video === ref) ex.video = ""; });
+  });
+ });
+ guardar();
+}
+
+$("bSubirVideo").addEventListener("click", function(){ $("archivoVideo").click(); });
+$("archivoVideo").addEventListener("change", function(){
+ var archivo = this.files && this.files[0];
+ this.value = "";
+ if(!archivo) return;
+ var ficha = {
+  id: nuevoId("v"), nombre: archivo.name || "video.mp4",
+  tipo: archivo.type || "video/mp4", peso: archivo.size || 0,
+  subido: new Date().toISOString(), blob: archivo
+ };
+ ponerVideo(ficha, function(bien){
+  if(!bien){
+   alert("No se pudo guardar el video en este aparato. Puede que esté muy pesado o que no quede espacio.");
+   return;
+  }
+  pintarMisVideos();
+  var f = alElegirVideo;
+  cerrarElector();
+  if(f) f("mio:" + ficha.id);
+ });
+});
+
+
+/* ── Pantalla 5: cómo la verán los socios ────────────────────────────── */
+function pasosDelDia(d){
+ var p = [];
+ if(d.warmup) p.push({ clase:"calen", nombre:"Calentamiento", texto:d.warmup, video:d.warmupVideo });
+ d.exercises.forEach(function(ex){
+  p.push({ clase:"", nombre:ex.name || "Ejercicio sin nombre",
+           datos:[ex.sets, ex.rest, ex.equip].filter(Boolean).join(" · "),
+           texto:ex.tip, extra:ex.alt, video:ex.video });
+ });
+ if(d.cooldownTitle) p.push({ clase:"calen", nombre:d.cooldownTitle, texto:d.cooldown, video:d.cooldownVideo });
+ return p;
+}
+
+function verPrevio(){
+ var r = rutinaActual();
+ mostrar("pPrevio", "VISTA <span>PREVIA</span>", r.titulo || "Rutina sin nombre");
+ var html = '<div class="portada">' +
+   '<img src="assets/logo.jpg" alt="WGYMADNSPORT">' +
+   '<h2>' + escaparHtml(r.titulo || "RUTINA SIN NOMBRE") + '</h2>' +
+   '<p>' + escaparHtml(r.bajada || "") + '</p>' +
+  '</div><div class="cuerpo">';
+
+ if(!r.dias.length){
+  html += '<div class="vacio">Esta rutina todavía no tiene días.</div>';
+ }
+ r.dias.forEach(function(d, i){
+  html += '<div class="diaprev">' +
+   '<h3>' + escaparHtml(d.weekday || "Día " + (i+1)) + ' · ' +
+            escaparHtml(d.title || "sin nombre") + '</h3>' +
+   '<div class="sub">' + escaparHtml(d.focus || "") + '</div>';
+  pasosDelDia(d).forEach(function(p){
+   html += '<div class="paso ' + p.clase + '">' +
+    '<b>' + escaparHtml(p.nombre) + '</b>' +
+    (p.datos ? '<div class="datos">' + escaparHtml(p.datos) + '</div>' : '') +
+    (p.texto ? '<div class="consejo">' + escaparHtml(p.texto) + '</div>' : '') +
+    (p.extra ? '<div class="consejo">' + escaparHtml(p.extra) + '</div>' : '') +
+    (p.video ? '<video data-ref="' + escaparHtml(p.video) + '" controls playsinline preload="none"></video>'
+             : '<div class="sinvideo">Sin video</div>') +
+   '</div>';
+  });
+  html += '</div>';
+ });
+ html += '</div>';
+ $("cajaPrevio").innerHTML = html;
+
+ Array.prototype.forEach.call($("cajaPrevio").querySelectorAll("video[data-ref]"), function(v){
+  direccionDe(v.dataset.ref, function(url){ if(url) v.src = url; });
+ });
+}
+$("bPrevio").addEventListener("click", function(){ ir(verPrevio); });
+
+/* ── Armar el archivo para mandármelo ────────────────────────────────── */
+
+/* Un ZIP hecho a mano, sin comprimir: los videos ya vienen comprimidos y así
+   no hace falta cargar ninguna librería de afuera. */
+var TABLA_CRC = (function(){
+ var t = new Uint32Array(256), c, n, k;
+ for(n = 0; n < 256; n++){
+  c = n;
+  for(k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+  t[n] = c >>> 0;
+ }
+ return t;
+})();
+function crc32(u8){
+ var c = 0xFFFFFFFF;
+ for(var i = 0; i < u8.length; i++) c = TABLA_CRC[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+ return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function armarZip(archivos){
+ var partes = [], centrales = [], corrido = 0;
+ var f = new Date();
+ var fecha = ((f.getFullYear() - 1980) << 9) | ((f.getMonth() + 1) << 5) | f.getDate();
+ var hora  = (f.getHours() << 11) | (f.getMinutes() << 5) | (f.getSeconds() >> 1);
+ archivos.forEach(function(a){
+  var nom = new TextEncoder().encode(a.nombre);
+  var crc = crc32(a.datos), tam = a.datos.length;
+
+  var cab = new Uint8Array(30 + nom.length), v = new DataView(cab.buffer);
+  v.setUint32(0, 0x04034b50, true);
+  v.setUint16(4, 20, true); v.setUint16(6, 0x0800, true); v.setUint16(8, 0, true);
+  v.setUint16(10, hora, true); v.setUint16(12, fecha, true);
+  v.setUint32(14, crc, true); v.setUint32(18, tam, true); v.setUint32(22, tam, true);
+  v.setUint16(26, nom.length, true); v.setUint16(28, 0, true);
+  cab.set(nom, 30);
+  partes.push(cab, a.datos);
+
+  var cen = new Uint8Array(46 + nom.length), w = new DataView(cen.buffer);
+  w.setUint32(0, 0x02014b50, true);
+  w.setUint16(4, 20, true); w.setUint16(6, 20, true);
+  w.setUint16(8, 0x0800, true); w.setUint16(10, 0, true);
+  w.setUint16(12, hora, true); w.setUint16(14, fecha, true);
+  w.setUint32(16, crc, true); w.setUint32(20, tam, true); w.setUint32(24, tam, true);
+  w.setUint16(28, nom.length, true);
+  w.setUint32(42, corrido, true);
+  cen.set(nom, 46);
+  centrales.push(cen);
+
+  corrido += cab.length + tam;
+ });
+ var largoCentral = centrales.reduce(function(s, c){ return s + c.length; }, 0);
+ var fin = new Uint8Array(22), z = new DataView(fin.buffer);
+ z.setUint32(0, 0x06054b50, true);
+ z.setUint16(8, archivos.length, true); z.setUint16(10, archivos.length, true);
+ z.setUint32(12, largoCentral, true); z.setUint32(16, corrido, true);
+ return new Blob(partes.concat(centrales, [fin]), { type:"application/zip" });
+}
+
+function bajarArchivo(blob, nombre){
+ var url = URL.createObjectURL(blob);
+ var a = document.createElement("a");
+ a.href = url; a.download = nombre;
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+}
+
+function apodo(texto){
+ return sinTildes(texto || "rutina").replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "").slice(0, 40) || "rutina";
+}
+
+/* Recorre la rutina y arma la lista de videos que usa, con dónde se usa. */
+function videosUsados(r){
+ var mapa = {}, orden = [];
+ function anotar(ref, donde){
+  if(!ref) return;
+  if(!mapa[ref]){ mapa[ref] = { ref:ref, usadoEn:[] }; orden.push(ref); }
+  mapa[ref].usadoEn.push(donde);
+ }
+ r.dias.forEach(function(d, i){
+  var dia = d.weekday || ("Día " + (i+1));
+  anotar(d.warmupVideo, dia + " · calentamiento");
+  d.exercises.forEach(function(ex){ anotar(ex.video, dia + " · " + (ex.name || "sin nombre")); });
+  anotar(d.cooldownVideo, dia + " · " + (d.cooldownTitle || "cierre"));
+ });
+ return orden.map(function(k){ return mapa[k]; });
+}
+
+function revisarRutina(r){
+ var problemas = [];
+ if(!r.titulo) problemas.push("La rutina no tiene título.");
+ if(!r.dias.length) problemas.push("La rutina no tiene ningún día.");
+ r.dias.forEach(function(d, i){
+  var dia = d.weekday || ("Día " + (i+1));
+  if(!d.weekday) problemas.push(dia + ": falta el nombre del día.");
+  if(!d.exercises.length) problemas.push(dia + ": no tiene ejercicios.");
+  d.exercises.forEach(function(ex, j){
+   var quien = dia + " · ejercicio " + (j+1);
+   if(!ex.name) problemas.push(quien + ": falta el nombre.");
+   if(!ex.video) problemas.push((ex.name || quien) + ": falta el video.");
+  });
+ });
+ return problemas;
+}
+
+/* Junta el texto de la rutina en el formato que después convierto en app. */
+function armarFicha(r, videos, conVideos){
+ return {
+  app: "WGYMADNSPORT · EDICIÓN DE RUTINAS",
+  version: 1,
+  exportado: new Date().toISOString(),
+  incluyeVideos: !!conVideos,
+  rutina: {
+   titulo: r.titulo || "", corto: r.corto || "", bajada: r.bajada || "",
+   dias: r.dias.map(function(d){
+    return {
+     weekday:d.weekday||"", title:d.title||"", focus:d.focus||"",
+     warmup:d.warmup||"", warmupVideo:d.warmupVideo||"",
+     exercises: d.exercises.map(function(ex){
+      return { name:ex.name||"", sets:ex.sets||"", rest:ex.rest||"",
+               equip:ex.equip||"", video:ex.video||"",
+               tip:ex.tip||"", alt:ex.alt||"" };
+     }),
+     cooldownTitle:d.cooldownTitle||"", cooldown:d.cooldown||"",
+     cooldownVideo:d.cooldownVideo||""
+    };
+   })
+  },
+  videos: videos.map(function(v){
+   var f = { ref:v.ref, usadoEn:v.usadoEn };
+   if(v.ref.indexOf("lib:") === 0){
+    f.origen = "gimnasio";
+    f.archivo = "assets/" + v.ref.slice(4) + ".mp4";
+   }else{
+    f.origen = "propio";
+    f.archivo = v.archivo || "";
+    f.nombreOriginal = v.nombreOriginal || "";
+    f.peso = v.peso || 0;
+   }
+   return f;
+  })
+ };
+}
+
+function exportar(conVideos){
+ var r = rutinaActual();
+ var problemas = revisarRutina(r);
+ if(problemas.length){
+  var texto = "Antes de mandarla, mire esto:\n\n" +
+    problemas.slice(0, 12).map(function(p){ return "· " + p; }).join("\n") +
+    (problemas.length > 12 ? "\n· …y " + (problemas.length - 12) + " cosa(s) más." : "") +
+    "\n\n¿Igual quiere mandarla así?";
+  if(!confirm(texto)) return;
+ }
+
+ var usados = videosUsados(r);
+ var propios = usados.filter(function(v){ return v.ref.indexOf("mio:") === 0; });
+
+ if(!conVideos || !propios.length){
+  usados.forEach(function(v){ v.archivo = ""; });
+  cargarFichasPropias(propios, function(fichas){
+   propios.forEach(function(v, i){
+    var f = fichas[i];
+    if(f){ v.nombreOriginal = f.nombre; v.peso = f.peso; v.archivo = "(mándemelo aparte)"; }
+   });
+   var ficha = armarFicha(r, usados, false);
+   var blob = new Blob([JSON.stringify(ficha, null, 1)], { type:"application/json" });
+   bajarArchivo(blob, "rutina-" + apodo(r.titulo) + ".json");
+   if(propios.length && !conVideos){
+    alert("Listo. Ojo: esta rutina usa " + propios.length + " video(s) grabado(s) por usted.\n" +
+          "En el archivo van los nombres, pero los videos me los tiene que mandar aparte\n" +
+          "(o use el botón verde, que los manda todos juntos).");
+   }
+  });
+  return;
+ }
+
+ var b = $("bEnviar");
+ var textoOriginal = b.textContent;
+ b.disabled = true;
+ b.textContent = "Armando el archivo…";
+
+ cargarDatosPropios(propios, function(fichas){
+  var archivos = [];
+  propios.forEach(function(v, i){
+   var f = fichas[i];
+   if(!f) return;
+   var ext = (f.nombre.match(/\.[a-z0-9]+$/i) || [".mp4"])[0];
+   v.archivo = "videos/" + v.ref.slice(4) + ext;
+   v.nombreOriginal = f.nombre;
+   v.peso = f.peso;
+   archivos.push({ nombre:v.archivo, datos:f.datos });
+  });
+  var ficha = armarFicha(r, usados, true);
+  archivos.unshift({
+   nombre: "rutina.json",
+   datos: new TextEncoder().encode(JSON.stringify(ficha, null, 1))
+  });
+  var zip = armarZip(archivos);
+  bajarArchivo(zip, "rutina-" + apodo(r.titulo) + ".zip");
+  b.disabled = false;
+  b.textContent = textoOriginal;
+  alert("Archivo listo: pesa " + pesoBonito(zip.size) + ".\n" +
+        "Mándemelo por el chat y se lo convierto en app con su QR.");
+ });
+}
+
+/* Solo la ficha (nombre y peso), sin cargar el video entero a memoria. */
+function cargarFichasPropias(propios, luego){
+ var salida = [], i = 0;
+ (function siguiente(){
+  if(i >= propios.length) return luego(salida);
+  sacarVideo(propios[i].ref.slice(4), function(f){
+   salida.push(f ? { nombre:f.nombre, peso:f.peso } : null);
+   i++; siguiente();
+  });
+ })();
+}
+
+/* Saca de IndexedDB los videos propios que hacen falta, uno tras otro. */
+function cargarDatosPropios(propios, luego){
+ var salida = [], i = 0;
+ (function siguiente(){
+  if(i >= propios.length) return luego(salida);
+  var ref = propios[i].ref.slice(4);
+  sacarVideo(ref, function(f){
+   if(!f || !f.blob){ salida.push(null); i++; return siguiente(); }
+   var lector = new FileReader();
+   lector.onload = function(){
+    salida.push({ nombre:f.nombre, peso:f.peso, datos:new Uint8Array(lector.result) });
+    i++; siguiente();
+   };
+   lector.onerror = function(){ salida.push(null); i++; siguiente(); };
+   lector.readAsArrayBuffer(f.blob);
+  });
+ })();
+}
+
+$("bEnviar").addEventListener("click", function(){ exportar(true); });
+$("bEnviarTexto").addEventListener("click", function(){ exportar(false); });
+
+/* ── Arranque ────────────────────────────────────────────────────────── */
+verLista();
+
+</script>
+</body>
+</html>
