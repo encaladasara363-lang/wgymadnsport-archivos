@@ -257,6 +257,16 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   text-transform:uppercase;letter-spacing:.1em;
 }
 .descansar:active{transform:scale(.99)}
+/* El botón de hecho del calentamiento: uno grande, sin tabla de series. */
+.hecho{
+  display:block;width:100%;margin-top:6px;cursor:pointer;
+  background:var(--negro-card);border:1.5px solid var(--linea);border-radius:13px;
+  color:var(--gris);padding:19px 14px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;
+  text-transform:uppercase;letter-spacing:.11em;
+}
+.hecho[data-h="si"]{background:rgba(67,196,141,.12);border-color:var(--verde);color:var(--verde)}
+.hecho:active{transform:scale(.99)}
 
 /* ── Pie fijo con navegación ──────────────────────────────────────────── */
 .pie{
@@ -1349,6 +1359,7 @@ function pintarDias(){
   b.querySelector("b").textContent = d.title;
   b.querySelector("small").textContent =
    d.weekday + " · " + d.exercises.length + " ejercicios" +
+   (d.warmup ? " · con calentamiento" : "") +
    (hechos[i] ? " · ya lo hiciste esta semana" : "");
   b.addEventListener("click", function(){ empezarDia(i); });
   cont.appendChild(b);
@@ -1399,6 +1410,30 @@ $("bSeguir").addEventListener("click", function(){
  if(D.actual) abrirEntreno();
 });
 
+/* ═══ Los pasos del día ════════════════════════════════════════════════
+   Un día no son solo los ejercicios: parte con el calentamiento, que en la
+   hoja de la rutina va primero. Va en la misma lista para que el socio lo
+   recorra en orden y no se lo salte. No lleva kilos: se marca como hecho.
+
+   Los estiramientos del final NO se muestran, por decisión de la dueña. Lo
+   único que se conserva de ese bloque es cuando trae título propio, porque
+   entonces no es un estiramiento sino trabajo de verdad: el viernes de la
+   rutina de mujeres cierra con "Cardio final", quince minutos de bicicleta
+   que sí son parte del entrenamiento. */
+function pasosDe(dia){
+ var p = [];
+ if(dia.warmup) p.push({ tipo:"calentamiento", nombre:"Calentamiento",
+   texto:dia.warmup, video:dia.warmupVideo, donde:"WARMUP" });
+ dia.exercises.forEach(function(ex){ p.push({ tipo:"ejercicio", ex:ex, nombre:ex.name }); });
+ if(dia.cooldown && dia.cooldownTitle) p.push({ tipo:"cierre", nombre:dia.cooldownTitle,
+   texto:dia.cooldown, video:dia.cooldownVideo, donde:"COOLDOWN" });
+ return p;
+}
+function videoDelPaso(rutina, paso){
+ if(paso.tipo === "ejercicio") return RUTINAS[rutina].VIDEOS[paso.ex.video];
+ return (RUTINAS[rutina][paso.donde] || {})[paso.video];
+}
+
 /* ═══ El entrenamiento ═════════════════════════════════════════════════ */
 var iEj = 0;            /* en qué ejercicio va */
 var ticTac = null;      /* el reloj de la sesión */
@@ -1413,11 +1448,16 @@ function armarSesion(rutina, dia){
   dia: dia,
   fecha: hoyISO(),
   inicio: Date.now(),
-  ejercicios: d.exercises.map(function(ex){
-   var s = leerSeries(ex.sets);
-   var antes = ultimaVezDe(ex.name);
+  ejercicios: pasosDe(d).map(function(paso){
+   /* El calentamiento y el estiramiento son un solo casillero de "hecho". */
+   if(paso.tipo !== "ejercicio"){
+    return { nombre:paso.nombre, tipo:paso.tipo, series:[{ kg:"", reps:"", hecha:false }] };
+   }
+   var s = leerSeries(paso.ex.sets);
+   var antes = ultimaVezDe(paso.ex.name);
    return {
-    nombre: ex.name,
+    nombre: paso.ex.name,
+    tipo: "ejercicio",
     series: Array.from({ length: s.cuantas }, function(_, i){
      var v = antes && antes.series[i] ? antes.series[i] : (antes ? antes.series[antes.series.length-1] : null);
      return { kg: v ? v.kg : "", reps: v ? v.reps : "", hecha: false };
@@ -1466,13 +1506,22 @@ function arrancarReloj(){
 function pintarEjercicio(){
  var a = D.actual;
  var dia = RUTINAS[a.rutina].DAYS[a.dia];
- var ex = dia.exercises[iEj];
+ var pasos = pasosDe(dia);
+ var paso = pasos[iEj];
  var mio = a.ejercicios[iEj];
+
+ $("txtPaso").textContent = (iEj + 1) + " de " + pasos.length + " · " + dia.title;
+ $("pistaAvance").style.width = ((iEj) / pasos.length * 100) + "%";
+
+ /* El calentamiento y el cardio del final no llevan series ni kilos: se
+    leen, se hacen y se marcan con un botón grande. */
+ if(paso.tipo !== "ejercicio"){
+  pintarPasoSuelto(paso, mio, pasos);
+  return;
+ }
+ var ex = paso.ex;
  var s = leerSeries(ex.sets);
  var conPeso = llevaPeso(ex);
-
- $("txtPaso").textContent = (iEj + 1) + " de " + dia.exercises.length + " · " + dia.title;
- $("pistaAvance").style.width = ((iEj) / dia.exercises.length * 100) + "%";
 
  var video = RUTINAS[a.rutina].VIDEOS[ex.video];
  var antes = ultimaVezDe(ex.name);
@@ -1557,7 +1606,35 @@ function pintarEjercicio(){
   abrirDescanso(segDesc, "Cuando termine, sigue con <b>" + limpio(ex.name) + "</b>.");
  });
 
- var ultimo = (iEj === dia.exercises.length - 1);
+ pintarPie(pasos);
+}
+
+/* El calentamiento (y el cardio del viernes) se ven distinto: sin tabla de
+   series, con el texto de lo que hay que hacer y un botón de hecho. */
+function pintarPasoSuelto(paso, mio, pasos){
+ var video = videoDelPaso(D.actual.rutina, paso);
+ var hecho = !!(mio.series[0] && mio.series[0].hecha);
+ var h = '';
+ h += '<h2>' + limpio(paso.nombre) + '</h2>';
+ h += '<div class="meta"><span>' +
+      (paso.tipo === "calentamiento" ? "Antes de empezar" : "Para cerrar") +
+      '</span></div>';
+ if(video) h += '<video src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
+ h += '<div class="consejo"><b>Qué tienes que hacer</b>' + limpio(paso.texto) + '</div>';
+ h += '<button class="hecho" id="bHecho" type="button" data-h="' + (hecho ? "si" : "no") + '">' +
+      (hecho ? "✓ Listo" : "Marcar como hecho") + '</button>';
+ $("cuerpoEj").innerHTML = h;
+
+ $("bHecho").addEventListener("click", function(){
+  mio.series[0].hecha = !mio.series[0].hecha;
+  guardar();
+  pintarEjercicio();
+ });
+ pintarPie(pasos);
+}
+
+function pintarPie(pasos){
+ var ultimo = (iEj === pasos.length - 1);
  $("bDespues").textContent = ultimo ? "Terminar" : "Siguiente";
  $("bDespues").className = "btn " + (ultimo ? "btn-verde" : "btn-rojo");
  $("bAntes").disabled = (iEj === 0);
@@ -1572,19 +1649,21 @@ var VUELTA = 2 * Math.PI * 88;   /* el largo del aro del reloj */
 function trasMarcar(iSerie){
  var a = D.actual;
  var dia = RUTINAS[a.rutina].DAYS[a.dia];
- var ex = dia.exercises[iEj];
+ var pasos = pasosDe(dia);
+ if(pasos[iEj].tipo !== "ejercicio") return;
+ var ex = pasos[iEj].ex;
  var mio = a.ejercicios[iEj];
  var seg = leerDescanso(ex.rest);
 
  var quedanAqui = mio.series.some(function(s){ return !s.hecha; });
- var esFinal = !quedanAqui && iEj === dia.exercises.length - 1;
+ var esFinal = !quedanAqui && iEj === pasos.length - 1;
  if(esFinal || !seg) return;
 
  var sigue = quedanAqui
   ? "Después viene la <b>serie " + (iSerie + 2 <= mio.series.length ? iSerie + 2 : mio.series.length) +
     " de " + mio.series.length + "</b> de " + limpio(ex.name) + "."
   : "Terminaste este ejercicio. Después viene <b>" +
-    limpio(dia.exercises[iEj + 1].name) + "</b>.";
+    limpio(pasos[iEj + 1].nombre) + "</b>.";
  abrirDescanso(seg, sigue);
 }
 
@@ -1649,8 +1728,8 @@ $("bAntes").addEventListener("click", function(){
  if(iEj > 0){ iEj--; pintarEjercicio(); window.scrollTo(0,0); }
 });
 $("bDespues").addEventListener("click", function(){
- var dia = RUTINAS[D.actual.rutina].DAYS[D.actual.dia];
- if(iEj < dia.exercises.length - 1){
+ var pasos = pasosDe(RUTINAS[D.actual.rutina].DAYS[D.actual.dia]);
+ if(iEj < pasos.length - 1){
   iEj++; pintarEjercicio(); window.scrollTo(0,0);
  }else{
   terminar();
@@ -1675,14 +1754,18 @@ function terminar(){
     contra sí misma y nunca habría récord nuevo. */
  var records = 0;
  a.ejercicios.forEach(function(e){
+  if(e.tipo && e.tipo !== "ejercicio") return;
   var antes = recordDe(e.nombre);
   var ahora = 0;
   (e.series || []).forEach(function(s){ if(s.hecha && +s.kg > ahora) ahora = +s.kg; });
   if(ahora > 0 && ahora > antes) records++;
  });
 
+ /* El calentamiento no es una serie: si se contara, el resumen diria que
+    hizo una serie mas de las que hizo. */
  var series = 0, volumen = 0;
  a.ejercicios.forEach(function(e){
+  if(e.tipo && e.tipo !== "ejercicio") return;
   (e.series || []).forEach(function(s){
    if(!s.hecha) return;
    series++;
