@@ -149,6 +149,11 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
 }
 .mini:active{transform:scale(.94)}
 .mini.borrar{color:#FF6A73;border-color:rgba(255,106,115,.35);width:34px;height:34px;font-size:15px}
+/* El renglón de un ejercicio que todavía no tiene nombre se ve apagado, para
+   distinguir de una lo que falta de lo que ya está puesto. */
+.item[data-vacio="si"]{border-style:dashed}
+.item[data-vacio="si"] .cuerpo h3{color:var(--gris-tenue);font-weight:600}
+.item[data-vacio="si"] .n{color:var(--gris-tenue)}
 .vacio{
   border:1.5px dashed var(--linea);border-radius:14px;padding:26px 18px;text-align:center;
   color:var(--gris-tenue);font-size:15.5px;line-height:1.5;
@@ -257,7 +262,10 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
   <section id="pLista">
     <div class="aviso">
       Acá arma sus rutinas con calma: los días, los ejercicios, los consejos y
-      los videos. Todo se guarda solo en este teléfono o computador.
+      los videos. La rutina nueva ya viene con <b>los cinco días y cinco
+      ejercicios cada uno</b>, en blanco, con la misma forma de las que ya
+      tiene: usted solo va llenando. Todo se guarda solo en este teléfono o
+      computador.
       <b>Cuando la tenga lista, apriete «Enviar a Claude»</b> y me manda el
       archivo para convertirla en app con su QR.
     </div>
@@ -267,7 +275,7 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
       <div class="pila" id="listaRutinas"></div>
     </div>
 
-    <button class="btn btn-rojo" id="bNueva">+ Nueva rutina desde cero</button>
+    <button class="btn btn-rojo" id="bNueva">+ Nueva rutina de 5 días en blanco</button>
     <button class="btn btn-linea" id="bCopiar">Copiar una rutina que ya tengo</button>
   </section>
 
@@ -1619,10 +1627,29 @@ $("listaRutinas").addEventListener("click", function(e){
  }
 });
 
+/* La rutina nueva nace con la misma forma que las tres que ya tiene: cinco
+   días, de lunes a viernes, cada uno con su calentamiento y cinco ejercicios.
+   Todo en blanco -- sin nombres y sin videos -- para que ella lo llene. Cinco
+   ejercicios es lo que traen once de los quince días de sus rutinas; si a
+   algún día le sobra o le falta uno, se agrega o se borra con sus botones. */
+var DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
+var EJERCICIOS_POR_DIA = 5;
+
+function ejercicioEnBlanco(){
+ return { name:"", sets:"3 × 12", rest:"60 seg", equip:"mancuerna",
+          video:"", tip:"", alt:"" };
+}
+function diaEnBlanco(weekday){
+ var ejs = [];
+ for(var i = 0; i < EJERCICIOS_POR_DIA; i++) ejs.push(ejercicioEnBlanco());
+ return { weekday:weekday, title:"", focus:"", warmup:"", warmupVideo:"",
+          exercises:ejs, cooldownTitle:"", cooldown:"", cooldownVideo:"" };
+}
+
 $("bNueva").addEventListener("click", function(){
  DATOS.rutinas.push({
   id: nuevoId("r"), titulo: "", corto: "", bajada: "5 días · con videos",
-  dias: [], creada: new Date().toISOString()
+  dias: DIAS_SEMANA.map(diaEnBlanco), creada: new Date().toISOString()
  });
  guardar();
  rutinaAbierta = DATOS.rutinas.length - 1;
@@ -1669,12 +1696,17 @@ function pintarDias(){
  }
  caja.innerHTML = r.dias.map(function(d, i){
   var cuantos = d.exercises.length;
+  /* Para que de una se vea cuánto le falta llenar a cada día. */
+  var conNombre = d.exercises.filter(function(ex){ return !!ex.name; }).length;
+  var detalle = conNombre === cuantos
+   ? cuantos + (cuantos === 1 ? ' ejercicio' : ' ejercicios')
+   : conNombre + ' de ' + cuantos + ' ejercicios puestos';
   return '<div class="item">' +
    '<div class="n">' + (i+1) + '</div>' +
    '<div class="cuerpo" data-dia="' + i + '">' +
      '<h3>' + escaparHtml(d.weekday || "Día " + (i+1)) + ' · ' +
               escaparHtml(d.title || "sin nombre") + '</h3>' +
-     '<p>' + cuantos + (cuantos === 1 ? ' ejercicio' : ' ejercicios') +
+     '<p>' + detalle +
              (d.warmup ? ' · con calentamiento' : '') + '</p>' +
    '</div>' +
    '<div class="mover">' +
@@ -1764,11 +1796,11 @@ function pintarEjercicios(){
   return;
  }
  caja.innerHTML = d.exercises.map(function(ex, i){
-  return '<div class="item">' +
+  return '<div class="item"' + (ex.name ? '' : ' data-vacio="si"') + '>' +
    '<div class="n">' + (i+1) + '</div>' +
    '<div class="cuerpo" data-ej="' + i + '">' +
-     '<h3>' + escaparHtml(ex.name || "Ejercicio sin nombre") + '</h3>' +
-     '<p>' + escaparHtml([ex.sets, ex.rest, ex.video ? "con video" : "SIN VIDEO"]
+     '<h3>' + escaparHtml(ex.name || "Toque para ponerle nombre") + '</h3>' +
+     '<p>' + escaparHtml([ex.sets, ex.rest, ex.video ? "con video" : "sin video"]
               .filter(Boolean).join(" · ")) + '</p>' +
    '</div>' +
    '<div class="mover">' +
