@@ -155,12 +155,32 @@ def texto_de_la_semana(sem):
     return "\n".join(lineas)
 
 
-def main():
-    if len(sys.argv) < 2:
-        sys.exit("uso: python3 contenido/semana.py <numero de semana 1-16>")
-    n = int(sys.argv[1])
+# El domingo 07-09-2026 se publica la semana 1. De ahi en adelante, una por
+# semana, y al llegar a la 16 vuelve a empezar.
+ARRANQUE = "2026-09-07"
 
+
+def semana_que_toca(hoy=None):
+    from datetime import date, timedelta
+    if hoy is None:
+        hoy = date.today()
+    a, m, d = (int(x) for x in ARRANQUE.split("-"))
+    inicio = date(a, m, d)
+    # el lunes de la semana que se va a publicar
+    lunes = hoy + timedelta(days=(7 - hoy.weekday()) % 7 or (0 if hoy.weekday() == 0 else 7))
+    if hoy.weekday() == 0:
+        lunes = hoy
+    corridas = (lunes - inicio).days // 7
+    return (corridas % 16) + 1
+
+
+def main():
     semanas = json.loads((AQUI / "contenido.json").read_text(encoding="utf-8"))
+    if len(sys.argv) < 2:
+        n = semana_que_toca()
+        print("sin numero: toca la semana %d" % n)
+    else:
+        n = int(sys.argv[1])
     sem = next((s for s in semanas if s["semana"] == n), None)
     if sem is None:
         sys.exit("no existe la semana %d (hay %d)" % (n, len(semanas)))
