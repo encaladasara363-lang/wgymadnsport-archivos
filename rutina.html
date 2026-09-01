@@ -560,7 +560,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var hoy = parseDMY(todayISO());  
  var diffDays = (venc - hoy) / 86400000;  
  if(diffDays < 0) return {cls:"danger", txt:"Vencido"};  
- if(diffDays <= 7) return {cls:"warn", txt:"Vence pronto"};  
+ if(diffDays <= 1) return {cls:"warn", txt:"Vence pronto"};  
  return {cls:"good", txt:"Al día"};  
  }  
  /* ---------- gate: find socio + check bloqueo (vencido o sin rutina asignada) ---------- */
@@ -585,7 +585,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var banner = document.getElementById("expiryBanner");
  if(dias === 1){ banner.textContent = "🚨 ¡TU PLAN VENCE MAÑANA! Renueva ahora mismo"; banner.hidden = false; banner.className = "expiry-banner expiry-critical"; }
  else if(dias === 0){ banner.textContent = "🚨 ¡TU PLAN VENCE HOY! Renueva inmediatamente"; banner.hidden = false; banner.className = "expiry-banner expiry-critical"; }
- else if(dias > 0 && dias <= 3){ banner.textContent = "⚠️ Tu plan vence en " + dias + " día" + (dias > 1 ? "s" : "") + ". Renueva pronto"; banner.hidden = false; banner.className = "expiry-banner expiry-warn"; }
+ else if(dias > 0 && dias <= 1){ banner.textContent = "⚠️ Tu plan vence en " + dias + " día" + (dias > 1 ? "s" : "") + ". Renueva pronto"; banner.hidden = false; banner.className = "expiry-banner expiry-warn"; }
  else { banner.hidden = true; }
  }
  function tryLogin(nombre, apellido){

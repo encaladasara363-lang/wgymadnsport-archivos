@@ -530,7 +530,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  var hoy = parseDMY(todayISO());  
  var diffDays = (venc - hoy) / 86400000;  
  if(diffDays < 0) return {cls:"danger", txt:"Vencido"};  
- if(diffDays <= 7) return {cls:"warn", txt:"Vence pronto"};  
+ if(diffDays <= 1) return {cls:"warn", txt:"Vence pronto"};  
  return {cls:"good", txt:"Al día"};  
  }  
  function escapeHtml(s){
@@ -766,7 +766,9 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  ". Pasa a renovar en recepción." };
  if(d === 0) return { v:"warn", fallo:"Pasa, pero avísale",
  det:"Tu mensualidad vence hoy. Acuérdate de renovar." };
- if(d <= 5) return { v:"warn", fallo:"Pasa, pero avísale",
+ /* Recien el día antes: avisado con cinco días de anticipación el socio lo
+    pasaba por alto. */
+ if(d <= 1) return { v:"warn", fallo:"Pasa, pero avísale",
  det:"Vence el " + venc + " · queda" + (d===1?" 1 día":"n " + d + " días") +
  ". Acuérdate de renovar." };
  return { v:"ok", fallo:"Acceso permitido",

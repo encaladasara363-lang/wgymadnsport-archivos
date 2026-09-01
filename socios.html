@@ -573,7 +573,7 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
  var hoy = parseDMY(todayISO());  
  var diffDays = (venc - hoy) / 86400000;  
  if(diffDays < 0) return {cls:"danger", txt:"Vencido"};  
- if(diffDays <= 7) return {cls:"warn", txt:"Vence pronto"};  
+ if(diffDays <= 1) return {cls:"warn", txt:"Vence pronto"};  
  return {cls:"good", txt:"Al día"};  
  }  
  /* ---------- gate: find socio + check vencimiento (read-only) ---------- */  

@@ -954,10 +954,14 @@ function diasPara(v, plan){
  if(f > h && esPlanSemanal(plan)) return diasAbiertos(h, f);
  return Math.round((f - h) / 86400000);
 }
+/* El aviso de que se le viene el vencimiento sale recien el dia antes, no
+   cinco dias antes: avisado con tanta anticipacion el socio lo pasaba por
+   alto y para ella era ruido en la lista. */
+var DIAS_AVISO = 1;
 function estadoDe(s){
  var d = diasPara(s.v, s.plan);
  if(d === null || d < 0) return "vencido";
- return d <= 5 ? "porvencer" : "aldia";
+ return d <= DIAS_AVISO ? "porvencer" : "aldia";
 }
 var NOMBRE_ESTADO = { aldia:"Al día", porvencer:"Por vencer", vencido:"Vencido" };
 var COLOR_ESTADO = { aldia:"var(--verde)", porvencer:"var(--dorado)", vencido:"var(--rojo-claro)" };
@@ -1312,7 +1316,7 @@ function pintarKpis(){
  var defs = [
   { k:"", cls:"t", lbl:"Total de socios", val:socios.length, sub:"en la lista completa" },
   { k:"aldia", cls:"a", lbl:"Al día", val:c.aldia, sub:"más de 5 días por delante" },
-  { k:"porvencer", cls:"p", lbl:"Por vencer", val:c.porvencer, sub:"5 días o menos · avísales" },
+  { k:"porvencer", cls:"p", lbl:"Por vencer", val:c.porvencer, sub:"Vencen mañana o ya vencen hoy" },
   { k:"vencido", cls:"v", lbl:"Vencidos", val:c.vencido, sub:"no pueden entrar" },
   { k:"", cls:"r", lbl:"Recaudación proyectada", val:clp(recauda), sub:"si renuevan los vigentes", fijo:true }
  ];

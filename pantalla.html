@@ -357,7 +357,7 @@ function estadoVenc(venc){
  var hoy = new Date(); hoy.setHours(0,0,0,0);
  var diffDays = Math.round((d - hoy) / 86400000);
  if(diffDays < 0) return {cls:"danger", txt:"Vencido " + venc};
- if(diffDays <= 7) return {cls:"warn", txt:"Vence " + venc};
+ if(diffDays <= 1) return {cls:"warn", txt:"Vence " + venc};
  return {cls:"good", txt:"Vence " + venc};
 }
 
@@ -473,7 +473,7 @@ function veredictoDe(r){
            detalle:"Venció el " + vence + " · hace " + Math.abs(dias) + (Math.abs(dias)===1?" día":" días"),
            corto:null, cls:"danger", plan:s.plan };
  }
- if(dias <= 5){
+ if(dias <= 1){
   return { v:"warn", fallo:"Pasa, pero avísale",
            detalle: dias === 0 ? "Vence hoy" : "Vence el " + vence + " · quedan " + dias + (dias===1?" día":" días"),
            corto:null, cls:"warn", plan:s.plan };
