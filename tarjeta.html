@@ -627,6 +627,35 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  function aISO(f){
  return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
  }
+ /* ── Desde cuándo le corre el mes ─────────────────────────────────────
+    Antes el mes se adivinaba restándole un mes al vencimiento, y el primer
+    día caía justo en el corte y no le contaba: al socio nuevo su tarjeta le
+    decía "día 0 de 12". Ahora la tarjeta se acuerda de la fecha con la que
+    lo vio la última vez: si cambió, es que le renovaron, y su mes nuevo le
+    empieza el día en que abre la tarjeta -- que es el día en que vuelve al
+    gimnasio. La primera vez de todas se usa el mes hacia atrás, contando
+    ese día. */
+ var CLAVE_CICLOS = "wgym_ciclo_socio_v1";
+ function leerCiclos(){
+ try{ return JSON.parse(localStorage.getItem(CLAVE_CICLOS) || "{}") || {}; }catch(e){ return {}; }
+ }
+ function mesAtrasDe(v){
+ var dia = v.getDate();
+ var f = new Date(v.getFullYear(), v.getMonth() - 1, 1);
+ var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
+ f.setDate(Math.min(dia, ultimo));
+ return aISO(f);
+ }
+ function inicioCiclo(s, v){
+ var todo = leerCiclos(), k = llaveDe(s), c = todo[k], venc = aISO(v);
+ if(c && c.v === venc && c.desde) return c.desde;
+ var hoy = isoDeHoy();
+ var desde = (c && hoy <= venc) ? hoy : mesAtrasDe(v);
+ if(desde > venc) desde = mesAtrasDe(v);
+ todo[k] = { v:venc, desde:desde };
+ try{ localStorage.setItem(CLAVE_CICLOS, JSON.stringify(todo)); }catch(e){}
+ return desde;
+ }
  /* Los dos planes se pagan por mes; lo que cambia es cómo se reparten los
     días: el de turno da 14 para todo el mes que está pagando, y el de tres
     veces da 3 por semana, de lunes a domingo. */
@@ -634,28 +663,19 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  if(esTurno(s)){
  var v = parseDMY(s.vencimiento);
  if(!v) return null;
- var dia = v.getDate();
- var f = new Date(v.getFullYear(), v.getMonth() - 1, 1);
- var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
- f.setDate(Math.min(dia, ultimo));
- return { tope:DIAS_TURNO, ini:aISO(f), fin:aISO(v),
+ return { tope:DIAS_TURNO, ini:inicioCiclo(s, v), fin:aISO(v),
  cuando:"este mes", suPlan:"tu plan por turno", semana:null };
  }
  if(esSemanal(s)){
  var h = new Date(); h.setHours(0,0,0,0);
  var lun = new Date(h); lun.setDate(lun.getDate() - ((lun.getDay() + 6) % 7));
- var corte = new Date(lun); corte.setDate(corte.getDate() - 1);
  var dom = new Date(lun); dom.setDate(dom.getDate() + 6);
  /* Los 12 días se cuentan contra el mes que pagó, no contra la semana. */
  var v = parseDMY(s.vencimiento);
  if(!v) return null;
- var dia = v.getDate();
- var im = new Date(v.getFullYear(), v.getMonth() - 1, 1);
- var ultimo = new Date(im.getFullYear(), im.getMonth() + 1, 0).getDate();
- im.setDate(Math.min(dia, ultimo));
- return { tope:DIAS_MES_3X, ini:aISO(im), fin:aISO(v),
+ return { tope:DIAS_MES_3X, ini:inicioCiclo(s, v), fin:aISO(v),
  cuando:"este mes", suPlan:"tu plan de 3 veces por semana",
- semana:{ ini:aISO(corte), fin:aISO(dom), tope:DIAS_SEMANA } };
+ semana:{ ini:aISO(lun), fin:aISO(dom), tope:DIAS_SEMANA } };
  }
  return null;
  }
@@ -672,7 +692,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  var dias = leerDias()[llaveDe(s)] || {}, n = 0;
  for(var d in dias){
  if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
- if(d > ini && d <= fin) n++;
+ if(d >= ini && d <= fin) n++;   /* el primer día del mes también cuenta */
  }
  return n;
  }

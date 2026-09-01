@@ -232,6 +232,12 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
  font-size:19px; font-weight:800; line-height:1; }
 .ficha .tc-ctrl button:hover{ border-color:var(--dorado); }
 .ficha .tc-ctrl b{ min-width:52px; text-align:center; font-size:22px; font-weight:900; }
+.ficha .tc-desde{ flex:1 1 100%; display:flex; align-items:center; gap:9px;
+ justify-content:flex-start;
+ margin-top:2px; padding-top:9px; border-top:1px solid rgba(212,175,55,.28); }
+.ficha .tc-desde span{ font-size:11px; font-weight:800; letter-spacing:.1em;
+ text-transform:uppercase; color:var(--dorado); white-space:nowrap; }
+.ficha .tc-desde input{ width:auto; flex:0 0 auto; padding:7px 9px; font-size:14px; }
 .ficha .rapidos{ grid-column:1 / -1; display:flex; gap:7px; flex-wrap:wrap; }
 .ficha .rapidos button{ background:var(--surface-2); border:1px solid var(--line);
  border-radius:999px; color:var(--gris); font-family:inherit; font-size:12px;
@@ -670,6 +676,12 @@ if(guardado && LISTA_VERSION > versionVista){
  }
 }
 
+/* Al arrancar queda anotado, socio por socio, desde cuando le corre su mes:
+   a los que ya estaban con el criterio de siempre, y a los que se renovaron
+   desde otro lado, desde hoy. Va abajo del todo para que la lista ya venga
+   junta con la del sitio. */
+setTimeout(function(){ try{ anotarCiclos(); }catch(e){} }, 0);
+
 /* ── planes con dias contados ───────────────────────────────────────────
    Hay dos planes que no dan el mes corrido sino una cantidad de dias:
      · por turno, 14 dias dentro del mes que esta pagando;
@@ -712,6 +724,57 @@ function mesAtras(iso){
  f.setDate(Math.min(dia, ultimo));
  return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
 }
+/* ── Desde cuando corre el mes de cada socio ───────────────────────────
+   Los dos planes de dias contados se cuentan dentro del mes que el socio
+   pago. Antes ese mes se adivinaba restandole un mes al vencimiento, y eso
+   solo sale bien cuando la fecha viene de una renovacion de mes justo. Al
+   socio nuevo que entraba hoy con vencimiento a un mes, su primer dia caia
+   justo en el corte y no le contaba; y al que se le corrio la fecha unos
+   pocos dias, el mes le quedaba en cualquier parte.
+
+   Ahora se guarda, socio por socio, desde cuando le corre el mes. Se anota
+   sola cuando el meson ve una fecha de vencimiento distinta a la que tenia
+   -- que es el dia en que ella lo renueva o lo agrega -- y se puede
+   corregir a mano en la ficha. A los socios que ya estaban, la primera vez
+   se les deja el mismo criterio de antes para que a nadie le cambie la
+   cuenta de golpe. */
+var CLAVE_CICLOS = "wgym_ciclos_v1";
+var ciclos = {};
+try{ ciclos = JSON.parse(localStorage.getItem(CLAVE_CICLOS) || "{}") || {}; }catch(e){}
+function guardarCiclos(){
+ try{ localStorage.setItem(CLAVE_CICLOS, JSON.stringify(ciclos)); }catch(e){}
+}
+function planCuentaDias(s){ return esTurno(s) || esSemanal(s); }
+/* El criterio de antes: el dia siguiente al de un mes atras del vencimiento. */
+function inicioPorDefecto(v){ return sumarDias(mesAtras(v), 1); }
+/* Solo calcula, no guarda: la ficha lo llama con fechas que ella todavia
+   esta escribiendo y no hay que anotar nada hasta que apriete Guardar. */
+function inicioCalculado(s){
+ if(!s || !fechaValida(s.v)) return null;
+ /* La ficha manda uno propio mientras ella lo esta escribiendo. */
+ if(s.desdeFicha && fechaValida(s.desdeFicha)) return s.desdeFicha;
+ var c = ciclos[llaveSocio(s)];
+ if(c && c.v === s.v && fechaValida(c.desde)) return c.desde;
+ var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v);
+ return (desde > s.v) ? inicioPorDefecto(s.v) : desde;
+}
+function anotarCiclo(s){
+ var k = llaveSocio(s), c = ciclos[k], desde = inicioCalculado(s);
+ if(!desde) return false;
+ if(c && c.v === s.v && c.desde === desde) return false;
+ ciclos[k] = { v:s.v, desde:desde };
+ return true;
+}
+function anotarCiclos(){
+ var cambio = false;
+ socios.forEach(function(s){ if(planCuentaDias(s) && anotarCiclo(s)) cambio = true; });
+ if(cambio) guardarCiclos();
+}
+function fijarInicioCiclo(s, desde){
+ ciclos[llaveSocio(s)] = { v:s.v, desde:desde };
+ guardarCiclos();
+}
+
 /* Cuantos dias le tocan y dentro de que periodo se cuentan. Los dos planes se
    pagan por mes y los dos se cuentan contra el mes que esta pagando:
      · el de turno trae 14 dias;
@@ -722,15 +785,15 @@ function mesAtras(iso){
 function reglaDe(s){
  if(esTurno(s)){
   if(!s || !s.v) return null;
-  return { tope:DIAS_TURNO, ini:mesAtras(s.v), fin:s.v,
+  return { tope:DIAS_TURNO, ini:inicioCalculado(s), fin:s.v,
            nombre:"Turno", cuando:"este mes", semana:null };
  }
  if(esSemanal(s)){
   if(!s || !s.v) return null;
   var lun = lunesDe(hoyISO());
-  return { tope:DIAS_MES_3X, ini:mesAtras(s.v), fin:s.v,
+  return { tope:DIAS_MES_3X, ini:inicioCalculado(s), fin:s.v,
            nombre:"3 por semana", cuando:"este mes",
-           semana:{ ini:sumarDias(lun, -1), fin:sumarDias(lun, 6), tope:DIAS_SEMANA } };
+           semana:{ ini:lun, fin:sumarDias(lun, 6), tope:DIAS_SEMANA } };
  }
  return null;
 }
@@ -739,7 +802,7 @@ function contarEntre(s, ini, fin){
  var n = 0;
  for(var d in dias){
   if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
-  if(d > ini && d <= fin) n++;
+  if(d >= ini && d <= fin) n++;   /* el primer dia del mes tambien cuenta */
  }
  return n;
 }
@@ -771,7 +834,7 @@ function corregirDias(s, cuanto){
   var d = hoyISO();
   if(d > c.fin) d = c.fin;
   for(var i = 0; i < 40; i++){
-   if(d <= c.ini) break;
+   if(d < c.ini) break;
    if(!asistencia[k][d]){ asistencia[k][d] = 1; break; }
    d = sumarDias(d, -1);
   }
@@ -779,7 +842,7 @@ function corregirDias(s, cuanto){
   /* Borra el dia mas nuevo del ciclo. */
   var dentro = [];
   for(var x in asistencia[k]){
-   if(Object.prototype.hasOwnProperty.call(asistencia[k], x) && x > c.ini && x <= c.fin) dentro.push(x);
+   if(Object.prototype.hasOwnProperty.call(asistencia[k], x) && x >= c.ini && x <= c.fin) dentro.push(x);
   }
   dentro.sort();
   if(dentro.length) delete asistencia[k][dentro[dentro.length - 1]];
@@ -1332,7 +1395,9 @@ function abrirFicha(s){
   '<span class="tc-sub" id="fTurnoSub"></span></div>'+
   '<div class="tc-ctrl"><button type="button" id="fTurnoMenos" aria-label="Quitar un día">−</button>'+
   '<b id="fTurnoNum">0</b>'+
-  '<button type="button" id="fTurnoMas" aria-label="Sumar un día">+</button></div></div>'+
+  '<button type="button" id="fTurnoMas" aria-label="Sumar un día">+</button></div>'+
+  '<label class="tc-desde"><span>Su mes empezó el</span>'+
+  '<input id="fDesde" type="date"></label></div>'+
   '<div class="rapidos">'+
   '<button type="button" class="rap-oro" data-meses="1">Renovar un mes</button>'+
   '<button type="button" data-meses="3">Renovar 3 meses</button>'+
@@ -1406,17 +1471,35 @@ function abrirFicha(s){
     veces a la semana. Si cambian el plan o el vencimiento en la misma ficha,
     se actualiza al tiro. */
  var cajaTurno = velo.querySelector("#fTurnoCaja");
- function pintarTurnoFicha(){
+ var iDesde = velo.querySelector("#fDesde");
+ /* Lo que ella escriba en "su mes empezó el" manda por sobre lo calculado,
+    hasta que cambie el vencimiento (ahi vuelve a proponerse solo). */
+ var desdeAMano = "";
+ var vAnterior = iV.value;
+ function socioDeLaFicha(){
   var p = partirNombre(iN.value);
-  var falso = { n: p.n || d.n, a: p.a || d.a, plan: sel.value, v: iV.value };
+  var f = { n: p.n || d.n, a: p.a || d.a, plan: sel.value, v: iV.value };
+  if(desdeAMano) f.desdeFicha = desdeAMano;
+  return f;
+ }
+ function inicioDeLaFicha(f){
+  return desdeAMano || inicioCalculado(f);
+ }
+ function pintarTurnoFicha(){
+  /* Si le cambio el vencimiento, el mes nuevo se propone de nuevo solo: hay
+     que borrar lo escrito a mano ANTES de calcular nada con ello. */
+  if(iV.value !== vAnterior){ desdeAMano = ""; vAnterior = iV.value; }
+  var falso = socioDeLaFicha();
   var c = nuevo ? null : reglaDe(falso);
   if(!c){ cajaTurno.hidden = true; return; }
   cajaTurno.hidden = false;
-  var n = diasUsados(falso);
+  var desde = inicioDeLaFicha(falso);
+  c.ini = desde;
+  iDesde.value = desde || "";
+  iDesde.max = iV.value || "";
+  var n = contarEntre(falso, c.ini, c.fin);
   velo.querySelector("#fTurnoNum").textContent = n;
   velo.querySelector("#fTurnoLbl").textContent = "Días usados " + c.cuando;
-  /* El primer dia del periodo es el siguiente al de corte, que no se cuenta. */
-  var desde = sumarDias(c.ini, 1);
   var sem = diasDeLaSemana(falso);
   velo.querySelector("#fTurnoSub").textContent =
    (n > c.tope ? "Se pasó por " + (n - c.tope) + (n - c.tope === 1 ? " día" : " días")
@@ -1424,9 +1507,15 @@ function abrirFicha(s){
    " · del " + fechaCL(desde) + " al " + fechaCL(c.fin) +
    (sem === null ? "" : " · esta semana lleva " + sem + " de " + c.semana.tope);
  }
+ iDesde.addEventListener("change", function(){
+  if(!fechaValida(this.value)) return;
+  if(iV.value && this.value > iV.value) this.value = iV.value;
+  desdeAMano = this.value;
+  vAnterior = iV.value;
+  pintarTurnoFicha(); pintar();
+ });
  function tocarTurno(cuanto){
-  var p = partirNombre(iN.value);
-  var falso = { n: p.n || d.n, a: p.a || d.a, plan: sel.value, v: iV.value };
+  var falso = socioDeLaFicha();
   corregirDias(falso, cuanto);
   pintarTurnoFicha(); pintar();
  }
@@ -1465,6 +1554,10 @@ function abrirFicha(s){
    else base.setDate(base.getDate() + parseInt(b.dataset.mas, 10));
    iV.value = base.getFullYear()+"-"+String(base.getMonth()+1).padStart(2,"0")+
               "-"+String(base.getDate()).padStart(2,"0");
+   /* Cambiar el valor desde el codigo no dispara el "change" del campo, asi
+      que la caja de dias hay que volver a pintarla a mano: si no, se queda
+      mostrando el mes viejo despues de apretar Renovar. */
+   pintarTurnoFicha();
   });
  });
 
@@ -1481,10 +1574,20 @@ function abrirFicha(s){
   var p = partirNombre(iN.value), n = p.n, a = p.a;
   if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe el nombre y el apellido."; iN.focus(); return; }
   if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
+  var quien;
   if(nuevo){
-   socios.push({ id:idNuevo(), n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value });
+   quien = { id:idNuevo(), n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value };
+   socios.push(quien);
   }else{
    s.n = n; s.a = a; s.plan = sel.value; s.m = soloDigitos(iM.value); s.v = iV.value;
+   quien = s;
+  }
+  /* Queda anotado desde cuando le corre el mes: lo que ella puso a mano, o
+     lo que corresponde por la fecha nueva. Al socio nuevo, desde hoy. */
+  if(planCuentaDias(quien)){
+   if(desdeAMano && fechaValida(desdeAMano)) fijarInicioCiclo(quien, desdeAMano);
+   else if(nuevo && hoyISO() <= quien.v) fijarInicioCiclo(quien, hoyISO());
+   else anotarCiclos();
   }
   cerrar(); guardar(); pintar();
   if(socioEnHero && !nuevo && socioEnHero.id === s.id) mostrarHero(s.n+" "+s.a, null, s);
