@@ -262,10 +262,10 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
   <section id="pLista">
     <div class="aviso">
       Acá arma sus rutinas con calma: los días, los ejercicios, los consejos y
-      los videos. La rutina nueva ya viene con <b>los cinco días y cinco
-      ejercicios cada uno</b>, en blanco, con la misma forma de las que ya
-      tiene: usted solo va llenando. Todo se guarda solo en este teléfono o
-      computador.
+      los videos. La rutina nueva ya viene armada y en blanco, con
+      <b>cinco ejercicios por día</b>, con la misma forma de las que ya tiene:
+      usted solo va llenando. Elija el molde <b>de 5 días</b> o el
+      <b>de 3 días</b>. Todo se guarda solo en este teléfono o computador.
       <b>Cuando la tenga lista, apriete «Enviar a Claude»</b> y me manda el
       archivo para convertirla en app con su QR.
     </div>
@@ -276,6 +276,7 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
     </div>
 
     <button class="btn btn-rojo" id="bNueva">+ Nueva rutina de 5 días en blanco</button>
+    <button class="btn btn-oro" id="bNueva3">+ Nueva rutina de 3 días en blanco</button>
     <button class="btn btn-linea" id="bCopiar">Copiar una rutina que ya tengo</button>
   </section>
 
@@ -1632,7 +1633,12 @@ $("listaRutinas").addEventListener("click", function(e){
    Todo en blanco -- sin nombres y sin videos -- para que ella lo llene. Cinco
    ejercicios es lo que traen once de los quince días de sus rutinas; si a
    algún día le sobra o le falta uno, se agrega o se borra con sus botones. */
+/* La de cinco días va de lunes a viernes, como las tres que ya tiene. La de
+   tres días va como "Día 1, Día 2 y Día 3", igual que su rutina de 3 días
+   impresa: al que viene tres veces por semana le da lo mismo cuáles sean,
+   así que no conviene amarrarlo a un día del calendario. */
 var DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
+var DIAS_SUELTOS = ["Día 1", "Día 2", "Día 3"];
 var EJERCICIOS_POR_DIA = 5;
 
 function ejercicioEnBlanco(){
@@ -1646,15 +1652,18 @@ function diaEnBlanco(weekday){
           exercises:ejs, cooldownTitle:"", cooldown:"", cooldownVideo:"" };
 }
 
-$("bNueva").addEventListener("click", function(){
+function nuevaEnBlanco(nombresDeDia){
  DATOS.rutinas.push({
-  id: nuevoId("r"), titulo: "", corto: "", bajada: "5 días · con videos",
-  dias: DIAS_SEMANA.map(diaEnBlanco), creada: new Date().toISOString()
+  id: nuevoId("r"), titulo: "", corto: "",
+  bajada: nombresDeDia.length + " días · con videos",
+  dias: nombresDeDia.map(diaEnBlanco), creada: new Date().toISOString()
  });
  guardar();
  rutinaAbierta = DATOS.rutinas.length - 1;
  ir(verRutina);
-});
+}
+$("bNueva").addEventListener("click", function(){ nuevaEnBlanco(DIAS_SEMANA); });
+$("bNueva3").addEventListener("click", function(){ nuevaEnBlanco(DIAS_SUELTOS); });
 
 $("bCopiar").addEventListener("click", function(){
  var opciones = Object.keys(BASES);
