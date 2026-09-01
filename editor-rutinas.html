@@ -232,6 +232,19 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
 }
 .aviso b{color:var(--dorado)}
 .aviso.rojo{background:rgba(227,6,19,.1);border-color:rgba(227,6,19,.35)}
+/* Pie chico con la version de la app y el boton para volver a bajarla. El
+   telefono se queda con la pagina guardada y no la cambia solo: cuando le
+   agrego algo, ella lo sigue viendo igual hasta que la vuelve a pedir. */
+.pieversion{
+  margin-top:26px;padding-top:16px;border-top:1px solid var(--linea);
+  text-align:center;
+}
+.pieversion .cual{
+  display:block;font-family:'Barlow Condensed',sans-serif;font-weight:600;
+  text-transform:uppercase;letter-spacing:.12em;font-size:12.5px;
+  color:var(--gris-tenue);margin-bottom:11px;
+}
+.pieversion .btn{margin-bottom:0}
 .guardado{
   position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:80;
   background:var(--verde);color:#08301F;font-family:'Barlow Condensed',sans-serif;
@@ -278,6 +291,11 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
     <button class="btn btn-rojo" id="bNueva">+ Nueva rutina de 5 días en blanco</button>
     <button class="btn btn-oro" id="bNueva3">+ Nueva rutina de 3 días en blanco</button>
     <button class="btn btn-linea" id="bCopiar">Copiar una rutina que ya tengo</button>
+
+    <div class="pieversion">
+      <span class="cual">Versión <b id="versionApp">—</b></span>
+      <button class="btn btn-linea" id="bFresca">Buscar versión nueva</button>
+    </div>
   </section>
 
   <!-- ═══ 2. Una rutina ═════════════════════════════════════════════════ -->
@@ -493,6 +511,9 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
    ═══════════════════════════════════════════════════════════════════════ */
 
 var LLAVE = "wgym_editor_rutinas_v1";
+
+/* La fecha de esta version, para saber si el aparato tiene la ultima. */
+var VERSION_APP = "01-09-2026 · moldes de 5 y 3 días";
 
 /* ── Los videos que ya están en el gimnasio (carpeta assets) ─────────── */
 var BIBLIOTECA = ("abdominales_banca_hombres abdominales_colchoneta abduccion_gluteos aductores "+
@@ -2368,6 +2389,17 @@ function cargarDatosPropios(propios, luego){
 
 $("bEnviar").addEventListener("click", function(){ exportar(true); });
 $("bEnviarTexto").addEventListener("click", function(){ exportar(false); });
+
+/* ── La version, y como pedir la ultima ──────────────────────────────
+   El telefono guarda la pagina y no la cambia solo, asi que cuando le
+   agrego algo ella lo sigue viendo igual. Este boton la vuelve a pedir con
+   una direccion distinta cada vez, que es lo unico que obliga al navegador
+   a bajarla de nuevo. Lo que tenga escrito no se toca: eso vive aparte. */
+$("versionApp").textContent = VERSION_APP;
+$("bFresca").addEventListener("click", function(){
+ var base = location.href.split("?")[0].split("#")[0];
+ location.href = base + "?v=" + Date.now();
+});
 
 /* ── Arranque ────────────────────────────────────────────────────────── */
 verLista();
