@@ -1,0 +1,3202 @@
+[
+ {
+  "tema": "Las ganas no llegan solas",
+  "bajada": "La semana de enganche. Habla del problema que tiene todo el mundo antes de pagar un plan: empezar y no seguir.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "Nadie llega con ganas todos los días",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "NADIE LLEGA CON GANAS TODOS LOS DÍAS"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Si esperas tener ganas para entrenar, vas a entrenar tres veces al mes.\n\nLa gente que ves acá todos los días tampoco llega con ganas. Llega igual. Entra, hace su rutina y se va.\n\nLas ganas aparecen a los diez minutos, no antes de salir de la casa. Así que no negocies contigo: ponte la ropa y ven. Una vez adentro, el resto sale solo."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Las ganas llegan entrenando, no antes de entrenar.\n\nTe esperamos en WGYMADNSPORT, Tocopilla. Lunes a jueves de 8:00 a 23:30."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda este video para el día que no quieras venir."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿A qué hora entrenas tú?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #constancia #entrenamiento #fitnesschile #nortegrande #vidasana"
+     }
+    ],
+    "grabar": "20 segundos del gimnasio funcionando: 8 de la mañana o 9 de la noche, con gente entrenando y máquinas ocupadas. Grabe vertical y no ponga música tan fuerte que tape su voz.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "La constancia se organiza",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "LA CONSTANCIA SE ORGANIZA, NO SE ESPERA"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. ELIGE TUS DÍAS FIJOS Y ANÓTALOS"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. DEJA LA ROPA LISTA LA NOCHE ANTES"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. TEN UNA VERSIÓN CORTA PARA LOS DÍAS APURADOS"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. SI FALLAS UN DÍA, VUELVES AL SIGUIENTE. NO LA OTRA SEMANA"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. MIDE MESES, NO DÍAS SUELTOS"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "CONSTANCIA NO ES PERFECCIÓN. ES VOLVER. GUARDA ESTE POST"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Nadie sostiene una rutina a pura fuerza de voluntad. Se sostiene cuando la dejas fácil.\n\nEstas cinco cosas son la diferencia entre venir un mes y venir todo el año.\n\nGuarda el post y aplica una esta semana."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #constancia #entrenamiento #fitnesschile #nortegrande #vidasana"
+     }
+    ],
+    "grabar": "Siete fotos del gimnasio: la entrada, el mesón, las mancuernas, las trotadoras, una máquina, un socio entrenando y el cierre. Póngales el texto encima en Canva, letra grande y blanca sobre una franja oscura.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Qué te falta más para entrenar?\n\nOpciones: TIEMPO / GANAS"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "Cuando pierdes un día, ¿qué haces?\n\nOpciones: VUELVO AL TIRO / ESPERO EL LUNES"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "Cuéntame: ¿qué es lo que más te cuesta para ser constante?"
+     }
+    ],
+    "grabar": "Fotos simples del gimnasio a esa hora, sin producir nada: el mesón, una máquina, la sala. Las historias funcionan mejor cuando se ven reales.",
+    "ojo": ""
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué te hace dejar de venir al gimnasio? Cuéntame y te doy una idea para resolverlo."
+     }
+    ],
+    "grabar": "Una foto suya en el gimnasio o del cartel de la entrada.",
+    "ojo": "Lo importante no es la pregunta, es responder. Vaya contestando una por una en historias durante el día. Eso es lo que hace que después le escriban por interno."
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "La regla para los días malos",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "LA REGLA PARA LOS DÍAS QUE NO QUIERES ENTRENAR"
+     },
+     {
+      "etq": "Guion",
+      "txt": "En un día malo no elijas entre entrenar perfecto o no hacer nada. Pregúntate otra cosa: ¿qué sí puedo hacer hoy?\n\nMedia hora en vez de una. Solo la parte de arriba. Solo trotadora y dos máquinas.\n\nSi de verdad necesitas descansar, descansa. Pero no conviertas un día complicado en una semana perdida."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Adaptar no es fracasar. Muchas veces es justo lo que te deja seguir."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda este Reel para el próximo día difícil."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Prefieres acortar la sesión o saltártela?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #constancia #entrenamiento #fitnesschile #nortegrande #vidasana"
+     }
+    ],
+    "grabar": "Usted misma hablando a la cámara en el gimnasio, o un socio haciendo una rutina corta de tres ejercicios. Si habla usted, mejor: la voz de la dueña vale más que cualquier edición.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Cómo queda el gimnasio antes de abrir",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Un sábado a las 10 de la mañana esto está limpio, ordenado y con todo funcionando.\n\nNo se ve en las fotos, pero es la parte que más trabajo da. Así lo encuentras tú cuando llegas."
+     }
+    ],
+    "grabar": "Un recorrido de 20 segundos por el gimnasio vacío, limpio y con las luces prendidas, antes de que llegue el primer socio.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Pase diario y full mensual",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "¿Nunca has entrenado en gimnasio y no quieres comprometerte todavía?\n\nVen con el pase diario a $4.000 y prueba. Si te gusta, el plan full mensual queda en $33.000 y entras todos los días, a la hora que quieras.\n\nLunes a jueves de 8:00 a 23:30. Viernes de 9:00 a 23:30. Sábados y feriados de 10:00 a 22:00.\n\nTodo medio de pago."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 o pásate directamente por WGYMADNSPORT, Tocopilla."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #constancia #entrenamiento #fitnesschile #nortegrande #vidasana"
+     }
+    ],
+    "grabar": "La entrada del gimnasio o el cartel de planes. Que se lean bien los precios.",
+    "ojo": ""
+   }
+  ],
+  "mes": 1,
+  "semana": 1
+ },
+ {
+  "tema": "Volver después de dejarlo",
+  "bajada": "La semana que le habla al que fue socio y se fue, y al que nunca ha entrado. Es la que más mensajes por interno genera.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "Llevas meses sin entrenar. Así se vuelve.",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "LLEVAS MESES SIN ENTRENAR. ASÍ SE VUELVE."
+     },
+     {
+      "etq": "Guion",
+      "txt": "Volver no es empezar de cero. Tu cuerpo se acuerda.\n\nPero no vuelvas queriendo hacer lo mismo que hacías antes el primer día, porque terminas tres días adolorido y no vuelves más.\n\nPrimera semana: dos o tres días, poco peso, aprender de nuevo el movimiento. Segunda semana subes un poco. A las tres semanas ya estás enganchado otra vez.\n\nLo difícil no es el ejercicio. Es la primera vez que cruzas la puerta."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Volver cuesta un día. No volver cuesta meses."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Manda este video a alguien que quiere volver."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Cuánto llevas sin entrenar?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #volveraentrenar #habitos #entrenamiento #fitnesschile #antofagastaregion"
+     }
+    ],
+    "grabar": "La puerta del gimnasio desde afuera y alguien entrando. Simple y directo: la puerta es justo lo que le cuesta cruzar a esa persona.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "Volver sin lesionarte",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "VOLVER DESPUÉS DE MESES: HAZLO ASÍ"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. PARTE CON 2 O 3 DÍAS A LA SEMANA, NO CON 6"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. USA MENOS PESO DEL QUE CREES QUE PUEDES"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. CALIENTA DE VERDAD, AUNQUE TE DÉ LATA"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. APRENDE BIEN EL MOVIMIENTO ANTES DE SUBIR CARGA"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. SI QUEDAS DESTRUIDO EL PRIMER DÍA, NO VUELVES EL SEGUNDO"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "VOLVER BIEN ES VOLVER DESPACIO. GUARDA ESTE POST"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "El error de casi todos los que vuelven es querer entrenar como el día que lo dejaron.\n\nAsí se lesionan, o quedan tan adoloridos que no aparecen nunca más.\n\nSe vuelve despacio y se sube de a poco. En tres semanas ya estás de vuelta."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #volveraentrenar #habitos #entrenamiento #fitnesschile #antofagastaregion"
+     }
+    ],
+    "grabar": "Fotos de las máquinas con poco peso, los discos chicos, las mancuernas livianas y la zona de calentamiento. La idea es que se vea accesible, no intimidante.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Cuánto llevas sin entrenar?\n\nOpciones: MENOS DE UN MES / MÁS DE SEIS MESES"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Qué te frena para volver?\n\nOpciones: VERGÜENZA / TIEMPO"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué necesitas para volver esta semana?"
+     }
+    ],
+    "grabar": "Una foto del gimnasio con poca gente, para que quien tiene vergüenza vea que no siempre está lleno.",
+    "ojo": ""
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué te da vergüenza o miedo al entrar a un gimnasio? Pregúntame lo que sea, respondo todo."
+     }
+    ],
+    "grabar": "Usted a la cámara, cara conocida. Esta es la pregunta que más responde la gente que todavía no es socia.",
+    "ojo": "Responda con calma y sin burlarse de ninguna pregunta, por básica que sea. La mitad de los que preguntan acá terminan pagando un plan."
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "Una semana mala no borra meses",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "UNA SEMANA MALA NO BORRA MESES DE TRABAJO"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Te enfermaste, te cambiaron el turno, dormiste mal y entrenaste dos veces en vez de cinco.\n\nEso no borra los meses que llevas. Si vienes hace tiempo, una semana mala es una variación, no el final.\n\nAjusta lo que tengas que ajustar y vuelve a tu ritmo cuando puedas. La constancia de verdad incluye semanas imperfectas."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "El progreso no se rompe porque tuviste una semana complicada."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Manda esto a alguien que se está exigiendo demasiado."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Cómo fue tu semana: perfecta o real?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #volveraentrenar #habitos #entrenamiento #fitnesschile #antofagastaregion"
+     }
+    ],
+    "grabar": "Un socio de los antiguos entrenando tranquilo. Si le da permiso, mejor todavía: sirve de ejemplo real de alguien que lleva meses.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Las rutinas con QR",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Cada socio de WGYMADNSPORT tiene su rutina en el celular.\n\nSe escanea el QR y ahí está todo: los ejercicios del día, las series, el video de cómo se hace cada uno y el descanso cronometrado.\n\nNadie tiene que andar preguntando qué toca hoy."
+     }
+    ],
+    "grabar": "Alguien escaneando el QR con el celular y la app abriéndose. Que se vea el video del ejercicio corriendo dentro de la app. Este es su diferencia con cualquier otro gimnasio: muéstrela.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Por turno y tres veces por semana",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "¿No puedes venir todos los días? Tenemos planes justo para eso.\n\nMensual por turno $23.000: vienes en tu horario fijo.\nTres veces por semana $28.000: eliges tus días.\n\nEs mejor venir tres veces todas las semanas que seis veces una semana y desaparecer el resto del mes."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 y te cuento cuál te sirve más. WGYMADNSPORT, Tocopilla."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #volveraentrenar #habitos #entrenamiento #fitnesschile #antofagastaregion"
+     }
+    ],
+    "grabar": "El gimnasio en un horario tranquilo, para que se entienda que hay espacio en cualquier turno.",
+    "ojo": ""
+   }
+  ],
+  "mes": 1,
+  "semana": 2
+ },
+ {
+  "tema": "Calentar, descansar, recuperarte",
+  "bajada": "La semana que la muestra a usted sabiendo del tema. Es contenido útil: se guarda y se comparte más que cualquier otro.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "¿Hay que estirar antes de entrenar?",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿HAY QUE ESTIRAR ANTES DE ENTRENAR?"
+     },
+     {
+      "etq": "Guion",
+      "txt": "No existe un estiramiento obligatorio para todo el mundo.\n\nAntes de entrenar lo que sirve es subir la temperatura y mover las articulaciones que vas a usar. Si te toca pierna, calientas pierna. Si te toca espalda, mueves hombros y caderas.\n\nCinco o diez minutos de trotadora o bicicleta, y una o dos series suaves del mismo ejercicio que vas a hacer.\n\nEstirar largo y en frío antes de levantar peso no te prepara para nada."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Tu calentamiento debería prepararte para lo que viene, no ser un trámite que haces sin saber para qué."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y revisa tu calentamiento."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Qué haces tú antes de empezar?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #calentamiento #recuperacion #descanso #entrenamiento #fitnesschile #gimnasio"
+     }
+    ],
+    "grabar": "La trotadora y la bicicleta funcionando, y alguien haciendo movilidad de hombro o cadera. En las rutinas del gimnasio ya tiene los videos de calentamiento grabados: puede usar esos.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "Calienta para lo que vas a hacer",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "CALIENTA PARA LO QUE VAS A HACER"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. SUBE LA TEMPERATURA: 5 A 10 MINUTOS SUAVES"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. MUEVE LAS ARTICULACIONES QUE VAS A USAR"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. HAZ UNA O DOS SERIES LIVIANAS DEL MISMO EJERCICIO"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. NO CONVIERTAS CADA SESIÓN EN UN MÁXIMO"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. DEJA ESPACIO PARA RECUPERARTE"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "ENTRENA, RECUPERA Y VUELVE PREPARADO. GUARDA ESTE POST"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Calentar no es estirar diez minutos mirando el techo.\n\nEs preparar el cuerpo para el trabajo que viene después. Cinco pasos y listo."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #calentamiento #recuperacion #descanso #entrenamiento #fitnesschile #gimnasio"
+     }
+    ],
+    "grabar": "Capturas de los videos de calentamiento que ya tiene en las rutinas, o fotos de la trotadora, la bicicleta y la colchoneta.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Qué haces antes de entrenar?\n\nOpciones: CALIENTO / PARTO AL TIRO"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Te cuesta tomar días de descanso?\n\nOpciones: SÍ / NO"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué duda tienes sobre calentamiento, descanso o recuperación?"
+     }
+    ],
+    "grabar": "La zona de cardio y la colchoneta. Nada producido.",
+    "ojo": ""
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué te gustaría entender mejor: el calentamiento, el descanso o el dolor después de entrenar?"
+     }
+    ],
+    "grabar": "Usted a la cámara, en el gimnasio.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "¿Dolor después de entrenar? No todo es normal",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿DOLOR DESPUÉS DE ENTRENAR? NO TODO ES NORMAL"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Estar adolorido uno o dos días después de una sesión fuerte es normal.\n\nLo que no es normal es: dolor que aparece durante el ejercicio y te obliga a parar, dolor en una articulación puntual, o dolor que sigue igual una semana después.\n\nEso no es progreso, es una señal. Baja la carga, revisa la técnica, y si sigue, anda al médico.\n\nEntrenar aguantando dolor de articulación no te hace más fuerte."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Molestia muscular y dolor de articulación no son lo mismo. Aprender a distinguirlos te evita meses parado."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y compártelo con quien entrena aguantando."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Alguna vez entrenaste con dolor por no querer parar?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #calentamiento #recuperacion #descanso #entrenamiento #fitnesschile #gimnasio"
+     }
+    ],
+    "grabar": "Una máquina y alguien ajustando el peso hacia abajo. No grabe a nadie quejándose de dolor.",
+    "ojo": "No diagnostique por Instagram. Si alguien le escribe contando un dolor específico, respóndale con amabilidad que eso lo tiene que ver un médico. Eso da más confianza que opinar."
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "El descanso entre series",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Una de las cosas que más hay que corregir acá es el descanso.\n\nHay quien descansa veinte segundos cuando necesita sesenta, y quien se queda cinco minutos con el celular.\n\nPor eso las rutinas del gimnasio traen el descanso cronometrado: la app te avisa cuándo volver."
+     }
+    ],
+    "grabar": "La pantalla de la app con el cronómetro de descanso corriendo, filmada con otro celular. Se ve el número bajando y se entiende al tiro.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Estudiantes, funcionarios y tercera edad",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "En WGYMADNSPORT hay un plan para cada situación:\n\nEstudiante o profesor $28.000\nFuncionarios públicos $28.000\nMensual tercera edad $23.000\nPlan semanal $15.000, si andas de paso por Tocopilla\nPase diario $4.000\n\nTodo medio de pago."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Trae tu credencial y te lo aplicamos al tiro. WhatsApp +56 9 7519 6394."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #calentamiento #recuperacion #descanso #entrenamiento #fitnesschile #gimnasio"
+     }
+    ],
+    "grabar": "El cartel de planes de la entrada. Que se lean bien los precios en la foto.",
+    "ojo": ""
+   }
+  ],
+  "mes": 1,
+  "semana": 3
+ },
+ {
+  "tema": "Por qué entrenar aquí",
+  "bajada": "La semana de cierre. Ya habló del problema y demostró que sabe; ahora muestra el gimnasio y cierra ventas de fin de mes.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "Tres cosas que un buen gimnasio no hace",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "UN BUEN GIMNASIO NO HACE ESTO"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Uno: no te vende un plan y después no te habla nunca más.\n\nDos: no te deja dando vueltas el primer día sin saber qué hacer.\n\nTres: no te promete resultados en treinta días, porque eso no depende solo del gimnasio.\n\nLo que sí corresponde: que las máquinas funcionen, que el lugar esté limpio, que tengas una rutina clara y que alguien te explique cómo se hace cada ejercicio."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "No se trata de prometer. Se trata de que cuando llegues, esté todo listo."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto si valoras un gimnasio ordenado."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Qué esperas tú de un gimnasio?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #rutinaconqr #entrenamiento #fitnesschile #nortedechile #gimnasio"
+     }
+    ],
+    "grabar": "El gimnasio ordenado y limpio, las máquinas en buen estado. Nada de comparaciones con otros gimnasios de Tocopilla: hable de lo suyo y ya.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "Lo que tienes siendo socio",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "LO QUE TIENES SIENDO SOCIO DE WGYMADNSPORT"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. TU RUTINA EN EL CELULAR, CON VIDEO DE CADA EJERCICIO"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. TU TARJETA VIRTUAL CON LA FECHA DE VENCIMIENTO"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. DESCANSO CRONOMETRADO ENTRE SERIES"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. HORARIO AMPLIO: DE 8:00 A 23:30 DE LUNES A JUEVES"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. PLANES DESDE $15.000 Y PASE DIARIO A $4.000"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "TODO ESTO SIN COSTO EXTRA. GUARDA ESTE POST"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Acá no es solo pagar y entrar.\n\nCada socio se va con su rutina cargada en el celular, con los videos grabados en estas mismas máquinas, y con su tarjeta virtual para saber cuándo le vence el plan."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #rutinaconqr #entrenamiento #fitnesschile #nortedechile #gimnasio"
+     }
+    ],
+    "grabar": "Capturas de pantalla de la app de rutinas y de la tarjeta virtual del socio, más fotos del gimnasio. Las capturas de pantalla funcionan muy bien acá porque nadie más las tiene.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Ya tienes tu rutina con QR?\n\nOpciones: SÍ / TODAVÍA NO"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Sabías que tienes tarjeta virtual de socio?\n\nOpciones: SÍ / NO SABÍA"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué te gustaría que tuviera el gimnasio?"
+     }
+    ],
+    "grabar": "El QR pegado en la pared del gimnasio y la app abierta en el celular.",
+    "ojo": "Guarde las respuestas de la tercera historia. Ahí le van a decir qué máquina falta, qué horario quieren o qué clase pedirían. Es información que después le sirve para comprar bien."
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué te gustaría que sumáramos en WGYMADNSPORT? Máquinas, horarios, clases, lo que sea."
+     }
+    ],
+    "grabar": "Usted a la cámara en el gimnasio, preguntando en voz alta lo mismo que dice el texto.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "Un día cualquiera en WGYMADNSPORT",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "UN DÍA CUALQUIERA EN WGYMADNSPORT"
+     },
+     {
+      "etq": "Guion · sin hablar, solo texto sobre el video",
+      "txt": "8:00 · Abrimos\n10:00 · Los de la mañana\n13:00 · Los que vienen al almuerzo\n19:00 · La hora peak\n22:00 · Los últimos\n23:30 · Cerramos\n\nTexto final en pantalla: TODOS LOS DÍAS, DE 8:00 A 23:30"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Así se ve un día normal acá. Elige tu hora."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Etiqueta a la persona con la que quieres venir."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿A qué hora vendrías tú?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #rutinaconqr #entrenamiento #fitnesschile #nortedechile #gimnasio"
+     }
+    ],
+    "grabar": "Cinco o seis clips cortos del mismo lugar del gimnasio a distintas horas del día. Grabe siempre desde el mismo punto: el corte queda mucho mejor. Este necesita un día entero de grabación, así que empiece el jueves.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Cómo se arma una rutina nueva",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Cada rutina que sale de acá se graba ejercicio por ejercicio, en las máquinas de este gimnasio. No son videos bajados de internet.\n\nPor eso cuando abres el video en tu celular, la máquina que ves es exactamente la que vas a usar."
+     }
+    ],
+    "grabar": "Usted grabando un ejercicio con el celular, o armando la rutina en el computador. Es el detrás de escena que más autoridad le da, porque nadie más en Tocopilla hace esto.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Cierre de mes",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "Se acaba el mes. Si estabas esperando el momento para empezar, es este.\n\nFull mensual $33.000 · todos los días\nTres veces por semana $28.000\nMensual por turno $23.000\nEstudiante o profesor $28.000\nFuncionarios públicos $28.000\nMensual tercera edad $23.000\nPlan semanal $15.000\nPase diario $4.000\n\nTodo medio de pago. Lunes a jueves de 8:00 a 23:30, viernes de 9:00 a 23:30, sábados y feriados de 10:00 a 22:00."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 y te dejo todo listo, o pásate por WGYMADNSPORT en Tocopilla."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #gimnasiotocopilla #rutinaconqr #entrenamiento #fitnesschile #nortedechile #gimnasio"
+     }
+    ],
+    "grabar": "El cartel de planes y la entrada del gimnasio. Si tiene una foto con socios, mejor: el último domingo del mes conviene que se vea gente.",
+    "ojo": ""
+   }
+  ],
+  "mes": 1,
+  "semana": 4
+ },
+ {
+  "tema": "Entrena con cabeza",
+  "bajada": "Del Módulo 7. La semana en que usted enseña: fuerza, control y descanso. Contenido útil que la gente guarda.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "Fuerza no es solo levantar mucho peso",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "FUERZA NO ES SOLO LEVANTAR MUCHO PESO"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Todos creen que ser fuerte es cuánto levantas en una repetición. No es eso.\n\nFuerza es cuánto controlas el peso. Es bajar lento y subir firme. Es hacer 10 repeticiones bien hechas y que la número 10 se vea igual que la primera.\n\nEl que sube 100 kilos moviéndose como gelatina no es más fuerte. Es más suertudo.\n\nOjo con eso 👀"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Fuerte no es el que más levanta. Es el que más controla 💪\n\nWGYMADNSPORT, Tocopilla."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y acuérdate la próxima vez que quieras subir el peso."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Cuánto llevas entrenando tú?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #fuerza #tecnica #entrenamiento #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "Un socio haciendo un ejercicio con control: bajada lenta, sin tirar el cuerpo. Si su celular tiene cámara lenta, úsela en la bajada. Queda mucho mejor que grabar a alguien levantando pesado.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "Fuerza de verdad",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "FUERZA NO ES SOLO LEVANTAR MUCHO PESO"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. CONTROLA LA BAJADA, NO SOLO LA SUBIDA"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. QUE LA ÚLTIMA REPETICIÓN SE VEA COMO LA PRIMERA"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. RANGO COMPLETO ANTES QUE MÁS KILOS"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. SI TIENES QUE TIRAR EL CUERPO, ES MUCHO PESO"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. SUBE DE A POCO. TODAS LAS SEMANAS, NO TODOS LOS DÍAS"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "FUERTE ES EL QUE CONTROLA. GUARDA ESTE POST 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Cinco cosas que te hacen más fuerte de verdad, y ninguna es subir el peso de golpe.\n\nAplica una esta semana y me cuentas 🙌"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #fuerza #tecnica #entrenamiento #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "Siete fotos: alguien controlando la bajada, las mancuernas, una máquina con peso moderado, alguien tirando el cuerpo (para el error) y el cierre. Texto grande encima en Canva.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Qué te importa más?\n\nOpciones: LEVANTAR MÁS / HACERLO BIEN"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Alguien te ha corregido la técnica acá?\n\nOpciones: SÍ / NUNCA"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué ejercicio sientes que no te sale bien?"
+     }
+    ],
+    "grabar": "La zona de mancuernas y una máquina. Nada producido.",
+    "ojo": "Las respuestas de la tercera historia le sirven para el jueves y para saber qué videos grabar después."
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué ejercicio te complica? Dime cuál y te explico cómo se hace 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara en el gimnasio.",
+    "ojo": "Si le preguntan por un ejercicio que ya tiene grabado en las rutinas, mándeles ese video de respuesta. Se ve profesional y no le cuesta nada."
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "¿Cuánto hay que descansar entre series?",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿CUÁNTO TIENES QUE DESCANSAR ENTRE SERIES?"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Acá pasan dos cosas: o descansas 20 segundos y llegas muerto a la segunda serie, o te quedas 5 minutos con el celular y se te enfría todo.\n\nRegla simple. Si buscas fuerza: entre 2 y 3 minutos. Si buscas tono y resistencia: entre 45 y 90 segundos.\n\n¿Y cómo sabes que ya? Cuando puedes respirar normal y sientes que la próxima serie te sale.\n\nPor eso las rutinas del gimnasio traen el descanso cronometrado. No tienes que andar adivinando ⏱️"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Descansar poco te arruina la serie. Descansar mucho te arruina el entreno."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y deja de adivinar."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Tú cuánto descansas entre series?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #fuerza #tecnica #entrenamiento #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "La pantalla de la app con el cronómetro de descanso corriendo, filmada con otro celular. Que se vea el número bajando.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Lo que hay en el mesón",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "En el mesón tenemos suplementación deportiva, snacks saludables y ropa.\n\nNo está ahí para vender por vender. Está para que no tengas que salir a buscar afuera lo que necesitas después de entrenar.\n\nPregunta nomás y te decimos qué te sirve y qué no 🙌"
+     }
+    ],
+    "grabar": "El mesón ordenado con los productos a la vista. Buena luz.",
+    "ojo": "Si quiere que aparezcan productos y precios concretos, mándemelos y le dejo el texto con esos datos. No los inventé."
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Suplementación y snacks",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "¿Entrenas y después te vas con las manos vacías? 🤔\n\nEn el mesón del WGYM tenemos suplementación deportiva, snacks saludables y ropa deportiva.\n\nPregunta antes de comprar por internet: acá te decimos qué te sirve de verdad para lo que estás haciendo y qué no. Y te lo llevas hoy mismo, sin esperar despacho."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Pásate por el mesón o escríbeme al WhatsApp +56 9 7519 6394."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #fuerza #tecnica #entrenamiento #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "Los productos del mesón bien ordenados, o alguien tomando algo después de entrenar.",
+    "ojo": ""
+   }
+  ],
+  "mes": 2,
+  "semana": 5
+ },
+ {
+  "tema": "Los errores que veo todos los días",
+  "bajada": "Del Módulo 8. La semana que más se comparte, porque todo el mundo se reconoce en algo. Ojo: hable de errores, nunca de personas.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "7 errores que veo todos los días",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "7 ERRORES QUE VEO TODOS LOS DÍAS EN EL GIMNASIO"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Uno: llegar sin saber qué vas a hacer.\nDos: cambiar de rutina cada dos semanas.\nTres: subir peso sacrificando la técnica.\nCuatro: copiar la rutina de un influencer.\nCinco: no anotar nada.\nSeis: saltarse el calentamiento.\nSiete: entrenar solo lo que te gusta.\n\nSi te reconociste en dos o más, tranquilo. Todos pasamos por ahí 😅 Pero ahora ya sabes."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "¿En cuántos te reconociste? 👀"
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y mándaselo al que lo necesita."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "Confiesa: ¿cuál haces tú?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #erroresenelgimnasio #rutina #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Usted hablando a la cámara, contando los siete con los dedos. Este funciona mejor con su voz que con letras.",
+    "ojo": "No grabe a ningún socio haciendo un error para señalarlo. Si necesita mostrar el error, hágalo usted misma o pídale a alguien de confianza que lo actúe."
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "Menos improvisación, más dirección",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "7 ERRORES QUE VEO TODOS LOS DÍAS"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. LLEGAR SIN SABER QUÉ VAS A HACER"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. CAMBIAR DE RUTINA ANTES DE PODER MEDIRLA"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. SACRIFICAR LA TÉCNICA POR MÁS KILOS"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. COPIAR RUTINAS DE INTERNET SIN CONTEXTO"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. NO ANOTAR NADA Y NO SABER SI AVANZAS"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "MENOS IMPROVISACIÓN. MÁS DIRECCIÓN. GUARDA ESTE POST 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Ninguno de estos errores es grave por sí solo. El problema es hacerlos todos juntos durante meses y después preguntarse por qué no pasa nada."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #erroresenelgimnasio #rutina #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Fotos del gimnasio: alguien mirando el celular sin entrenar, las máquinas vacías, un cuaderno de registro. Texto grande encima.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Qué error te pasa más?\n\nOpciones: IMPROVISO / CAMBIO MUCHO DE RUTINA"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Registras tus entrenamientos?\n\nOpciones: SÍ / NUNCA"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "Confiesa: ¿qué maña del gimnasio sabes que tienes que corregir?"
+     }
+    ],
+    "grabar": "El gimnasio en horario normal. Fotos rápidas, sin producir.",
+    "ojo": ""
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué duda tienes de tu rutina? Pregunta lo que sea, respondo todo 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "La rutina del influencer",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "LA RUTINA QUE LE FUNCIONA A OTRO NO FUE HECHA PARA TI"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Ves una rutina en Instagram, se ve bacán, la copias.\n\nPero no sabes nada del que la hizo: cuántos años lleva entrenando, cuántos días va a la semana, qué come, cuánto duerme, si tiene lesiones.\n\nCopias el programa completo de alguien que está en otra realidad y después te preguntas por qué no te resulta.\n\nSaca ideas de internet, todo bien 👌 Pero tu rutina tiene que estar hecha para ti, con tus días y tu nivel."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Instagram te da ideas. Tu entrenamiento tiene que ser tuyo."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto antes de copiar la próxima rutina viral."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Alguna vez copiaste una rutina completa de internet?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #erroresenelgimnasio #rutina #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Alguien mirando un video de rutina en el celular parado en medio del gimnasio, sin saber qué hacer. Después el mismo con su rutina del QR abierta. El antes y el después se entiende solo.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Cómo se arma una rutina acá",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Cuando alguien llega nuevo no le pasamos una hoja genérica.\n\nVemos cuántos días puede venir, qué quiere lograr y de dónde viene. De ahí sale su rutina, con sus días y sus ejercicios.\n\nY le queda en el celular con el QR, con el video de cada ejercicio grabado en estas mismas máquinas 🔥"
+     }
+    ],
+    "grabar": "El mesón con la ficha de un socio nuevo, y después el QR y la app abierta.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Para el amigo que empieza el lunes",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "¿Tienes un amigo que dice que va a empezar «el lunes» hace tres meses? 😏\n\nTráelo.\n\nPase diario $4.000 y plan semanal $15.000, así prueba antes de decidirse. Si le gusta, ahí conversamos el mensual.\n\nLunes a jueves de 8:00 a 23:30. Viernes de 9:00 a 23:30. Sábados y feriados de 10:00 a 22:00."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Etiqueta a ese amigo acá abajo 👇 o escríbeme al WhatsApp +56 9 7519 6394."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #erroresenelgimnasio #rutina #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "La entrada del gimnasio, o dos socios entrenando juntos.",
+    "ojo": "Si este mes tiene activa la promo del amigo gratis de los viernes, avíseme y le cambio este domingo por esa promo. Vende mucho más que el pase diario, pero no la puse porque no sé si está corriendo ahora."
+   }
+  ],
+  "mes": 2,
+  "semana": 6
+ },
+ {
+  "tema": "Mitos que hay que botar",
+  "bajada": "Del Módulo 9. La semana que más comentarios genera, porque todo el mundo se creyó alguno. Es la más entretenida de grabar.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "Los abdominales no queman la grasa de la guata",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "HACER ABDOMINALES NO QUEMA LA GRASA DE LA GUATA"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Esto le duele a mucha gente, pero hay que decirlo: no existe quemar grasa de una zona específica.\n\nPuedes hacer 500 abdominales al día y la grasa del abdomen no se va por eso. Los abdominales fortalecen el músculo que está debajo, y eso está bien. Pero para que se note hay que bajar la grasa de todo el cuerpo: comer bien, entrenar completo y ser constante.\n\nTrabaja el abdomen, sí. Pero no esperes que eso solo te lo marque 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "No existe bajar grasa de una sola zona. Ojalá, pero no."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Mándale esto al que hace 500 abdominales todos los días."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Te habían dicho que sí funcionaba?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #mitosdelfitness #entrenamiento #fitnesschile #gimnasiotocopilla #saludyfitness"
+     }
+    ],
+    "grabar": "La colchoneta y la máquina de abdominales. Usted hablando a la cámara funciona muy bien acá: es un tema que la gente discute.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "7 mitos que todavía se repiten",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "7 MITOS DEL FITNESS QUE TODAVÍA SE REPITEN"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. «LOS ABDOMINALES QUEMAN LA GRASA DE LA GUATA». NO."
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. «SI NO QUEDAS ADOLORIDO, NO SIRVIÓ». FALSO."
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. «ENTRENAR EN AYUNAS QUEMA MÁS GRASA». NO ES TAN SIMPLE."
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. «LAS PESAS TE VAN A PONER ENORME». NO PASA ASÍ DE FÁCIL."
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. «MIENTRAS MÁS EJERCICIOS, MEJOR». MENOS Y BIEN HECHO RINDE MÁS."
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "MENOS MITOS, MÁS ENTRENAR. GUARDA ESTE POST 🔥"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Cinco cosas que se siguen repitiendo en todos los gimnasios y ninguna es como te la contaron.\n\n¿Cuál te habías creído tú? 👀"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #mitosdelfitness #entrenamiento #fitnesschile #gimnasiotocopilla #saludyfitness"
+     }
+    ],
+    "grabar": "Fotos del gimnasio de fondo con el texto encima. Este carrusel se lee más que se mira: que la letra sea grande y clara.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Te habían dicho que los abdominales queman la grasa de la guata?\n\nOpciones: SÍ / TODA LA VIDA"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Crees que si no quedas adolorido no sirvió?\n\nOpciones: SÍ / NO"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué mito del gimnasio te han contado a ti?"
+     }
+    ],
+    "grabar": "Fotos rápidas del gimnasio.",
+    "ojo": "Esta caja de preguntas se le va a llenar. Guarde las respuestas: dan para varios Reels más adelante."
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "Mándame cualquier cosa que te hayan dicho del gimnasio y te digo si es verdad o puro cuento 😂"
+     }
+    ],
+    "grabar": "Usted a la cámara, con cara de complicidad. Esta es la más entretenida del mes.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "¿Si no quedas adolorido no sirvió?",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿SI NO QUEDAS ADOLORIDO NO SIRVIÓ?"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Falso.\n\nEl dolor muscular aparece sobre todo cuando haces algo nuevo, o algo que hace rato no hacías. Por eso el primer día siempre quedas hecho pebre 😅\n\nPero cuando llevas meses entrenando bien, te va a doler menos y vas a estar avanzando igual.\n\nNo midas tu entrenamiento por cuánto te duele al otro día. Mídelo por si estás levantando más, aguantando más y haciéndolo mejor."
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Dolor no es sinónimo de progreso. Y no tener dolor no es sinónimo de flojera."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y compártelo con el que anda cojeando orgulloso 😂"
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Quedas adolorido siempre o casi nunca?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #mitosdelfitness #entrenamiento #fitnesschile #gimnasiotocopilla #saludyfitness"
+     }
+    ],
+    "grabar": "Alguien entrenando tranquilo y con buena técnica. No grabe a nadie quejándose de dolor.",
+    "ojo": "Molestia muscular no es lo mismo que dolor de articulación. Si alguien le escribe contando un dolor puntual que no se le pasa, dígale con amabilidad que eso lo tiene que ver un médico. No opine de dolores por Instagram."
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Lo que más preguntan en el mesón",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Las preguntas que más nos hacen acá:\n\n«¿Esto me va a poner muy grande?»\n«¿Tengo que hacer cardio primero?»\n«¿Sirve entrenar sin haber comido?»\n\nNinguna es tonta. Pregunta nomás, para eso estamos 🙌"
+     }
+    ],
+    "grabar": "El mesón, con usted atendiendo a alguien. Una foto normal de un día cualquiera.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Ropa y snacks después de entrenar",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "Terminaste de entrenar y andas con hambre 😅\n\nEn el mesón tenemos snacks saludables, suplementación y ropa deportiva. Todo acá mismo, sin esperar despacho ni pagar envío.\n\nPregunta qué hay y te mostramos."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Pásate por el mesón o escríbeme al WhatsApp +56 9 7519 6394."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #mitosdelfitness #entrenamiento #fitnesschile #gimnasiotocopilla #saludyfitness"
+     }
+    ],
+    "grabar": "Los productos bien ordenados y con buena luz. Si tiene ropa con la marca del gimnasio, esa va primero.",
+    "ojo": "Igual que el domingo de la semana 5: si me manda los productos y precios, le dejo el texto con los datos exactos."
+   }
+  ],
+  "mes": 2,
+  "semana": 7
+ },
+ {
+  "tema": "¿Estás avanzando de verdad?",
+  "bajada": "Cierre del mes. Junta lo mejor de los tres módulos y termina vendiendo. Es la semana que convierte seguidores en socios.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "5 formas de saber que estás avanzando",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "5 FORMAS DE SABER QUE ESTÁS AVANZANDO SIN MIRARTE AL ESPEJO"
+     },
+     {
+      "etq": "Guion",
+      "txt": "El espejo miente y la pesa también. Estas son cinco señales reales:\n\nUno: levantas más peso que hace un mes.\nDos: haces más repeticiones con el mismo peso.\nTres: te recuperas más rápido entre series.\nCuatro: la técnica te sale sin pensarla.\nCinco: subes la escalera y no llegas muerto.\n\nEso es progreso, aunque el espejo te diga otra cosa 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "El progreso no siempre se ve. Casi siempre se siente primero."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto para el día que te desanimes."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Cuál de las 5 ya notaste tú?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #progreso #constancia #entrenamiento #fitnesschile #gimnasiotocopilla #nortedechile"
+     }
+    ],
+    "grabar": "Un socio antiguo entrenando. Si le da permiso para contar cuánto tiempo lleva, mejor todavía.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "El espejo no es el único termómetro",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "5 FORMAS DE SABER QUE ESTÁS AVANZANDO"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. LEVANTAS MÁS PESO QUE HACE UN MES"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. HACES MÁS REPETICIONES CON EL MISMO PESO"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. TE RECUPERAS MÁS RÁPIDO ENTRE SERIES"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. LA TÉCNICA TE SALE SOLA"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. TE CANSAS MENOS EN EL DÍA A DÍA"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "EL ESPEJO NO ES EL ÚNICO TERMÓMETRO. GUARDA ESTE POST 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Mucha gente deja el gimnasio porque «no ve cambios», cuando en realidad lleva semanas mejorando.\n\nEstas cinco señales sí se pueden medir."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #progreso #constancia #entrenamiento #fitnesschile #gimnasiotocopilla #nortedechile"
+     }
+    ],
+    "grabar": "Capturas de la app mostrando los récords y «la vez pasada». Esas pantallas son la prueba de lo que dice el post.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Sabes cuánto levantabas hace un mes?\n\nOpciones: SÍ / NI IDEA"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Te sientes mejor que cuando empezaste?\n\nOpciones: SÍ / TODAVÍA NO"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué cambio notaste desde que empezaste a entrenar?"
+     }
+    ],
+    "grabar": "El gimnasio en la hora peak.",
+    "ojo": "Guarde las respuestas de la tercera. Con permiso de cada socio, esos son testimonios reales y valen más que cualquier publicidad."
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "Cuéntame un cambio que hayas notado desde que empezaste a entrenar. Lo que sea 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "Si no anotas nada, no sabes si avanzas",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "SI NO ANOTAS NADA, NO SABES SI ESTÁS AVANZANDO"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Te hago una pregunta: ¿cuánto levantabas hace un mes en tu primer ejercicio?\n\nSi no sabes, ahí está el problema. Sin registro estás entrenando a ciegas: no sabes si subiste, si estás estancado o si andas peor que antes.\n\nNo necesitas nada raro, un cuaderno basta.\n\nY si eres socio de acá ya lo tienes: la app de tu rutina te guarda lo que hiciste la vez pasada y te muestra tus récords 🔥"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Lo que no se mide, no se sabe si mejora."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y anota tu próximo entrenamiento."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Anotas o vas a puro recuerdo?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #progreso #constancia #entrenamiento #fitnesschile #gimnasiotocopilla #nortedechile"
+     }
+    ],
+    "grabar": "La pantalla de la app mostrando «la vez pasada» y los récords. Es el mejor argumento que tiene y casi no lo muestra.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Cuando ven lo que levantaban al principio",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Lo mejor de tener el registro es esto: alguien llega, abre su rutina y ve lo que levantaba cuando partió.\n\nAhí caen solos.\n\n«Oye, ¿yo levantaba eso no más?»\n\nSí. Eso levantabas 😄"
+     }
+    ],
+    "grabar": "Un socio mirando sus récords en el celular. Con su permiso, grabe la reacción: eso no se puede actuar.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Cierre de mes",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "Se acaba el mes 🔥 Si estabas esperando el momento, es este.\n\nFull mensual $33.000 · todos los días\nTres veces por semana $28.000\nMensual por turno $23.000\nEstudiante o profesor $28.000\nFuncionarios públicos $28.000\nMensual tercera edad $23.000\nPlan semanal $15.000\nPase diario $4.000\n\nTodo medio de pago.\n\nLunes a jueves de 8:00 a 23:30. Viernes de 9:00 a 23:30. Sábados y feriados de 10:00 a 22:00."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 y te dejo todo listo, o pásate por WGYMADNSPORT en Tocopilla 💪"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #progreso #constancia #entrenamiento #fitnesschile #gimnasiotocopilla #nortedechile"
+     }
+    ],
+    "grabar": "El cartel de planes y la entrada. Si tiene una foto con hartos socios, esa va: el último domingo conviene que se vea movimiento.",
+    "ojo": ""
+   }
+  ],
+  "mes": 2,
+  "semana": 8
+ },
+ {
+  "tema": "Mujeres y pesas",
+  "bajada": "Del Módulo 4. La semana que le habla directo a la mitad de sus socias, y a todas las que no se atreven. Usted ya tiene la rutina de mujeres hecha: esta semana la muestra.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "Las pesas no te van a poner enorme",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "«LAS PESAS ME VAN A PONER ENORME»"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Este es el mito que más escucho y hay que botarlo de una vez.\n\nLevantar pesas no te va a poner enorme. Ponerse musculosa de verdad cuesta años, entrenamiento muy específico y comer para eso. No pasa por accidente ni en tres meses.\n\nLo que sí te va a pasar con las pesas: te vas a ver más firme, vas a tener más fuerza para el día a día y vas a cuidar tus huesos.\n\nAsí que entra a la zona de pesas tranquila 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Las pesas no te ponen enorme. Te ponen fuerte 💪\n\nWGYMADNSPORT, Tocopilla."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Mándale esto a la amiga que todavía le tiene miedo a las mancuernas."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Te habían dicho esto alguna vez?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #mujeresfitness #entrenamientofemenino #pesas #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "Socias del gimnasio entrenando con mancuernas, con su permiso. Mujeres reales de Tocopilla, no modelos: esa es toda la gracia del video.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "5 mitos sobre mujeres y pesas",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "5 MITOS SOBRE MUJERES Y PESAS"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. «LAS PESAS TE PONEN ENORME». NO."
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. «PRIMERO BAJA DE PESO Y DESPUÉS HACES PESAS». AL REVÉS."
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. «EL CARDIO ES LO ÚNICO QUE SIRVE». FALSO."
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. «SOLO GLÚTEOS Y PIERNAS». TE FALTA MEDIO CUERPO."
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. «ESO ES PARA HOMBRES». LA ZONA DE PESAS ES DE TODOS."
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "ENTRENA PARA TI. GUARDA ESTE POST 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Cinco cosas que se siguen repitiendo y ninguna es cierta.\n\n¿Cuál te habían dicho a ti? 👀"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #mujeresfitness #entrenamientofemenino #pesas #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "Fotos de socias entrenando: con mancuernas, en máquina, en la zona de pesas. Texto grande encima en Canva.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Entrenas con pesas?\n\nOpciones: SÍ / SOLO CARDIO"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Te da cosa entrar a la zona de pesas?\n\nOpciones: SÍ / PARA NADA"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué te han dicho a ti sobre las mujeres y las pesas?"
+     }
+    ],
+    "grabar": "La zona de pesas con socias entrenando.",
+    "ojo": ""
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué duda tienes sobre entrenar con pesas? Pregunta sin vergüenza 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara, en la zona de pesas.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "¿Entrenar solo glúteos y piernas?",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿ENTRENAR SOLO GLÚTEOS Y PIERNAS?"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Entiendo que quieras priorizar glúteos. Está bien, es tu objetivo y se respeta.\n\nPero si entrenas solo eso durante meses te van a pasar tres cosas: te vas a estancar, vas a quedar descompensada y vas a tener menos fuerza para todo lo demás.\n\nLa espalda, el pecho y los hombros también sostienen tu postura.\n\nPrioriza lo que te gusta, sí. Pero no dejes medio cuerpo botado 👀"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Prioriza lo que quieras. Pero no abandones el resto."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto si tu rutina es puro glúteo."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Cuántos días entrenas tren superior?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #mujeresfitness #entrenamientofemenino #pesas #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "Alguien entrenando espalda u hombro. Justo lo que el post dice que falta.",
+    "ojo": "Acá le conviene mencionar que tiene las dos rutinas: la de glúteos para priorizar, y la de principiantes mujeres completa para no quedar descompensada. Es el único gimnasio de Tocopilla que puede decir eso."
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "La rutina de mujeres del WGYM",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "La rutina de principiantes para mujeres del WGYM está hecha completa: cinco días, tren superior e inferior, con el video de cada ejercicio grabado acá mismo.\n\nY la de glúteos aparte, para las que quieren priorizar eso.\n\nNinguna de las dos te va a poner enorme 😄"
+     }
+    ],
+    "grabar": "El QR de la rutina de mujeres pegado en la pared, y la app abierta en el celular mostrando un video.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Para la que lleva tiempo diciendo que va a empezar",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "¿Llevas tiempo diciendo que vas a empezar? 👀\n\nEn el WGYM tienes tu rutina lista desde el primer día: escaneas el QR y ahí está todo, con el video de cada ejercicio. No llegas a adivinar qué hacer.\n\nFull mensual $33.000 · todos los días\nTres veces por semana $28.000\nY si quieres probar antes, pase diario $4.000."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 o pásate por WGYMADNSPORT, Tocopilla 💪"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #mujeresfitness #entrenamientofemenino #pesas #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "El QR de la rutina de mujeres junto al cartel de planes.",
+    "ojo": ""
+   }
+  ],
+  "mes": 3,
+  "semana": 9
+ },
+ {
+  "tema": "Empezar sin vergüenza",
+  "bajada": "Del Módulo 4. La semana que más socias nuevas puede traerle. Le habla a la que pasa por fuera del gimnasio hace meses y no entra.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "¿Te da vergüenza entrar a la zona de pesas?",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿TE DA VERGÜENZA ENTRAR A LA ZONA DE PESAS?"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Te voy a decir algo: todos los que están ahí adentro pasaron por lo mismo. Nadie nació sabiendo entrenar. Nadie se sabía las máquinas el primer día.\n\nY te tengo otra noticia: nadie te está mirando. Cada uno está en lo suyo, contando sus repeticiones.\n\nEmpieza con pocos ejercicios, aprende a hacerlos bien, y la confianza llega sola.\n\nAcá si no sabes algo, preguntas y listo 🙌"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "No necesitas sentirte experta para entrar. La experiencia se hace estando adentro."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Mándale esto a una amiga que quiere empezar pero no se atreve."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Qué parte del gimnasio te intimidaba cuando partiste?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #principiantes #mujeresfitness #empezardecero #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "La entrada del gimnasio, y después la zona de pesas con gente normal entrenando. Nada de fisicoculturistas: gente común, que es lo que hay de verdad.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "Tu primer día",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "TU PRIMER DÍA EN EL GIMNASIO"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. NADIE TE ESTÁ MIRANDO. TODOS ESTÁN EN LO SUYO."
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. NO TIENES QUE SABER USAR TODAS LAS MÁQUINAS."
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. PARTE CON POCOS EJERCICIOS Y HAZLOS BIEN."
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. PREGUNTAR NO ES RIDÍCULO. ES LO CORRECTO."
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. TU NIVEL DE HOY ES EL PUNTO DE PARTIDA, NO UN LÍMITE."
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "SE EMPIEZA ESTANDO AHÍ. GUARDA ESTE POST 🙌"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Si llevas meses pasando por fuera del gimnasio sin entrar, este post es para ti.\n\nNo hay que saber nada para empezar. Se aprende adentro."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #principiantes #mujeresfitness #empezardecero #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Fotos de la entrada, el mesón, una máquina simple, alguien preguntando algo. Que se vea acogedor, no imponente.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Te dio vergüenza tu primer día?\n\nOpciones: SÍ / NADA"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Qué te frena para empezar?\n\nOpciones: VERGÜENZA / NO SÉ QUÉ HACER"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué necesitas para atreverte a venir esta semana?"
+     }
+    ],
+    "grabar": "El gimnasio en un horario tranquilo, para que se vea que no siempre está lleno.",
+    "ojo": ""
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué te gustaría saber antes de venir por primera vez? Pregunta lo que sea, acá no hay preguntas tontas 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara.",
+    "ojo": "Esta es la caja de preguntas que más gente nueva le va a traer en todo el mes. Responda una por una y con calma."
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "Entrenar en tus días de regla",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿HAY QUE DEJAR DE ENTRENAR CON LA REGLA?"
+     },
+     {
+      "etq": "Guion",
+      "txt": "No. No tienes que parar.\n\nHay días en que te vas a sentir con menos energía y otros en que vas a andar como avión. Escucha eso.\n\nSi un día te sientes mal, baja el peso o acorta la sesión, pero ven igual. Y si un día te sientes bien, aprovecha.\n\nLo importante es no borrar la semana completa. Cada una es distinta, así que no te compares con nadie 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "No tienes que parar. Ajusta y sigue."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y compártelo con quien lo necesite."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Tú entrenas esos días o paras?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #principiantes #mujeresfitness #empezardecero #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Una socia entrenando tranquila. Nada especial.",
+    "ojo": "Si este tema no le acomoda publicarlo, sáltelo sin problema y ponga otro día en su lugar. Se lo dejé porque es de las cosas que más consultan las socias y casi ningún gimnasio lo habla. Usted decide."
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Una mujer manejando un gimnasio",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Este gimnasio lo llevo yo.\n\nY una de las razones por las que hice la rutina de mujeres completa, con sus videos, es justamente porque sé lo que es entrar a un lugar donde sientes que no cabes.\n\nAcá cabes 🙌"
+     }
+    ],
+    "grabar": "Usted en el gimnasio, en el mesón o entrenando. De frente a la cámara.",
+    "ojo": "Este texto es personal: cámbielo con sus palabras si quiere. Pero úselo. Es lo que más la diferencia de cualquier otro gimnasio y casi nunca lo cuenta."
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Ven con una amiga",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "Empezar sola cuesta. Empezar con una amiga cuesta la mitad 🙌\n\nPase diario $4.000 cada una, o plan semanal $15.000 para probar la semana completa.\n\nY si se quedan: full mensual $33.000, o tres veces por semana $28.000."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Etiqueta a esa amiga acá abajo 👇 o escríbanme al WhatsApp +56 9 7519 6394."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #principiantes #mujeresfitness #empezardecero #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Dos socias entrenando juntas, con su permiso.",
+    "ojo": "Si tiene activa la promo del amigo gratis de los viernes, este es el domingo del mes para anunciarla. Encaja perfecto."
+   }
+  ],
+  "mes": 3,
+  "semana": 10
+ },
+ {
+  "tema": "Nunca es tarde",
+  "bajada": "Del Módulo 5. Le habla a los 40, 50 y 60. Es el público que más paga a tiempo, menos se cambia de gimnasio y menos contenido recibe.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "¿Es tarde a los 40? ¿A los 50?",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿ES TARDE PARA EMPEZAR A ENTRENAR A LOS 40?"
+     },
+     {
+      "etq": "Guion",
+      "txt": "No. Y a los 50 tampoco. Ni a los 60.\n\nLo que cambia no es si puedes, es cómo empiezas. A los 40 tienes que calentar mejor, subir el peso más despacio y dormir lo que corresponde.\n\nPero la fuerza se puede ganar a cualquier edad. Y mientras más años tienes, más importante se pone: es lo que te mantiene parándote solo de la silla, subiendo escaleras y sin caídas.\n\nNo es tarde. Es justo el momento 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Nunca es tarde. Solo se empieza distinto."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Mándale esto a alguien que cree que ya se le pasó la edad."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿A qué edad empezaste tú?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #nuncaestarde #entrenamiento40 #fuerza #fitnesschile #gimnasiotocopilla #terceraedad"
+     }
+    ],
+    "grabar": "Socios mayores del gimnasio entrenando, con su permiso. Es el mejor contenido que puede grabar en todo el mes: nadie puede copiarle eso.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "5 errores después de los 40",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "EMPEZAR DESPUÉS DE LOS 40: 5 ERRORES QUE PUEDES EVITAR"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. QUERER ENTRENAR COMO A LOS 20"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. SALTARSE EL CALENTAMIENTO"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. SUBIR EL PESO DEMASIADO RÁPIDO"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. SOLO CAMINAR Y NUNCA HACER FUERZA"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. PARAR DEL TODO CUANDO ALGO MOLESTA, EN VEZ DE AJUSTAR"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "NUNCA ES TARDE. GUARDA ESTE POST 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Después de los 40 el problema no es la edad. Son estos cinco errores.\n\nY los cinco se arreglan."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #nuncaestarde #entrenamiento40 #fuerza #fitnesschile #gimnasiotocopilla #terceraedad"
+     }
+    ],
+    "grabar": "Fotos de la zona de calentamiento, máquinas con peso moderado y socios mayores entrenando.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Cuántos años tienes?\n\nOpciones: MENOS DE 40 / MÁS DE 40"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Crees que ya se te pasó la edad para empezar?\n\nOpciones: SÍ / NO"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "Si pasaste los 40 y entrenas, ¿qué le dirías al que cree que ya no puede?"
+     }
+    ],
+    "grabar": "El gimnasio en la mañana.",
+    "ojo": "Guarde las respuestas de la tercera historia. Son testimonios reales y valen más que cualquier publicidad que usted pague."
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Tienes más de 40 y quieres empezar pero no sabes cómo? Pregúntame lo que quieras 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "No necesitas entrenar como a los 20",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "NO NECESITAS ENTRENAR COMO A LOS 20"
+     },
+     {
+      "etq": "Guion",
+      "txt": "A los 20 uno entrena a lo bruto y aguanta. A los 45 no, y está bien.\n\nTres días a la semana bien hechos te sirven más que seis días mal llevados.\n\nFuerza para mantener el músculo. Algo de movilidad para no andar tieso. Y caminar o bicicleta para el corazón.\n\nEso es. No necesitas destruirte para estar en forma. Necesitas ser constante 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Menos días, mejor hechos. A esta edad eso rinde más."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto si andas queriendo entrenar como hace 20 años."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Cuántos días a la semana puedes venir?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #nuncaestarde #entrenamiento40 #fuerza #fitnesschile #gimnasiotocopilla #terceraedad"
+     }
+    ],
+    "grabar": "Un socio mayor haciendo un ejercicio de fuerza con peso moderado y buena técnica.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Los de la mañana",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "De 8 a 11 de la mañana el gimnasio tiene otra cara.\n\nVienen los que ya jubilaron, los que trabajan por turno y los que prefieren tranquilidad. Sin apuro, cada uno en lo suyo.\n\nSi te complica el gimnasio lleno, esa es tu hora ☀️"
+     }
+    ],
+    "grabar": "El gimnasio a las 9 de la mañana. Este post no vende un plan, vende un horario: y es un horario que usted tiene desocupado.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Plan tercera edad",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "Plan mensual tercera edad $23.000 en WGYMADNSPORT 🙌\n\nY si prefieres venir en la mañana con calma, abrimos a las 8:00 de lunes a jueves.\n\nNunca es tarde para empezar. La fuerza es justo lo que hay que cuidar con los años."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 o pásate por el gimnasio y conversamos."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #nuncaestarde #entrenamiento40 #fuerza #fitnesschile #gimnasiotocopilla #terceraedad"
+     }
+    ],
+    "grabar": "Un socio mayor entrenando tranquilo en la mañana, con su permiso.",
+    "ojo": ""
+   }
+  ],
+  "mes": 3,
+  "semana": 11
+ },
+ {
+  "tema": "Los días que no puedes venir",
+  "bajada": "Del Módulo 6, pero dado vuelta. El módulo original enseña a entrenar en casa; así como venía, le hacía la competencia a su propio gimnasio. Acá está reescrito para que la gente no pierda el hábito y vuelva.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "El día que no puedes venir",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "EL DÍA QUE NO PUEDES VENIR AL GIMNASIO"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Se te cruzó el trabajo, se enfermó un niño, te cambiaron el turno. Pasa.\n\nPero no borres el día completo. Veinte minutos en la casa te mantienen el hábito vivo: sentadillas, flexiones aunque sean apoyadas, plancha y algo de movimiento.\n\nNo reemplaza el gimnasio, ni cerca. Pero evita que un día perdido se convierta en una semana perdida, y después en un mes 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "No es lo mismo que venir. Pero es mucho mejor que nada."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto para el día que se te complique."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Qué te complica más para venir?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #constancia #entrenamiento #habitos #fitnesschile #gimnasiotocopilla #nortedechile"
+     }
+    ],
+    "grabar": "Usted a la cámara en el gimnasio, hablando del día que no se puede venir. Grábelo acá adentro, no en una casa: eso deja claro dónde está el lugar de verdad.",
+    "ojo": "Toda esta semana está escrita para que la gente NO pierda el hábito y vuelva, no para que se quede en la casa. Por eso todos los días terminan diciendo que el gimnasio es lo que rinde. Si publica el módulo original tal cual, se estaría haciendo la competencia sola."
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "20 minutos cuando no puedes venir",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "20 MINUTOS EN CASA CUANDO NO PUEDES VENIR"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. SENTADILLAS · 3 SERIES DE 15"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. FLEXIONES, APOYADAS SI HACE FALTA · 3 × 8"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. ZANCADAS · 3 × 10 POR PIERNA"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. PLANCHA · 3 × 30 SEGUNDOS"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. PUENTE DE GLÚTEOS · 3 × 15"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "PARA EL DÍA SUELTO. PARA LO DEMÁS, TE ESPERAMOS EN EL GYM 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Para el día que de verdad no puedes venir. Veinte minutos, sin nada de equipo.\n\nOjo: esto es un parche, no un plan. Para progresar necesitas peso y máquinas."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #constancia #entrenamiento #habitos #fitnesschile #gimnasiotocopilla #nortedechile"
+     }
+    ],
+    "grabar": "Los cinco ejercicios grabados en el gimnasio, en la colchoneta. Aunque sean de casa, grábelos acá: la marca queda en cada foto.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Qué te hace faltar más al gimnasio?\n\nOpciones: TRABAJO / CANSANCIO"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Entrenas en casa cuando no puedes venir?\n\nOpciones: SÍ / NUNCA"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué día de la semana te cuesta más venir?"
+     }
+    ],
+    "grabar": "El gimnasio en un día normal.",
+    "ojo": "La respuesta de la tercera historia le sirve para el negocio, no solo para el post. Si le contestan todos el mismo día, ahí tiene algo real que revisar en su horario."
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué te complica venir al gimnasio? Cuéntame y vemos cómo lo acomodamos 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara.",
+    "ojo": "Esta pregunta es de oro para vender. Si alguien le dice «es que salgo del trabajo a las 22», usted le responde que abre hasta las 23:30. Ahí se cierra una venta."
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "7 errores al entrenar en casa",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "7 ERRORES AL ENTRENAR EN CASA"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Uno: no calentar porque «total es en la casa».\nDos: hacer ejercicios sin saber para qué sirven.\nTres: no descansar entre series.\nCuatro: cambiar de rutina todos los días.\nCinco: no anotar nada.\nSeis: hacerlo apurado entre otras cosas.\nSiete: creer que reemplaza al gimnasio.\n\nSirve para un día suelto. Pero si quieres progresar de verdad necesitas peso, máquinas y una rutina que avance 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Entrenar en casa te saca del apuro. No te hace progresar."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto para tu próximo día complicado."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Has intentado entrenar en casa? ¿Te resultó?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #constancia #entrenamiento #habitos #fitnesschile #gimnasiotocopilla #nortedechile"
+     }
+    ],
+    "grabar": "El gimnasio con las máquinas funcionando. Mientras la voz enumera los errores, la imagen muestra todo lo que en la casa no hay.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Lo que no hay en la casa",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "En la casa no tienes prensa, no tienes poleas, no tienes mancuernas de todos los pesos ni una máquina para cada cosa.\n\nY sobre todo no tienes con qué seguir subiendo cuando el peso de tu propio cuerpo ya te queda corto.\n\nPor eso el gimnasio no se reemplaza 💪"
+     }
+    ],
+    "grabar": "Un recorrido por las máquinas que nadie tiene en la casa: la prensa, las poleas, el rack de mancuernas completo. Este es el mejor video de venta de todo el mes y no dice ni un precio.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Cierre de mes",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "Se acaba el mes 🔥 Si andas entrenando a medias en la casa, vente para acá.\n\nFull mensual $33.000 · todos los días\nTres veces por semana $28.000\nMensual por turno $23.000\nEstudiante o profesor $28.000\nFuncionarios públicos $28.000\nMensual tercera edad $23.000\nPlan semanal $15.000\nPase diario $4.000\n\nTodo medio de pago.\n\nLunes a jueves de 8:00 a 23:30. Viernes de 9:00 a 23:30. Sábados y feriados de 10:00 a 22:00."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 y te dejo todo listo, o pásate por WGYMADNSPORT en Tocopilla 💪"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #constancia #entrenamiento #habitos #fitnesschile #gimnasiotocopilla #nortedechile"
+     }
+    ],
+    "grabar": "El cartel de planes y el gimnasio con movimiento.",
+    "ojo": ""
+   }
+  ],
+  "mes": 3,
+  "semana": 12
+ },
+ {
+  "tema": "Bajar grasa sin cuentos",
+  "bajada": "Del Módulo 2. Es lo que más le preguntan en el mesón y donde más mentiras circulan. Esta semana usted pone las cosas en su lugar.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "Sudar más no es quemar más grasa",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "SUDAR MÁS NO ES QUEMAR MÁS GRASA"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Esto hay que decirlo: sudar no significa quemar grasa.\n\nEl sudor es tu cuerpo enfriándose, nada más. Por eso sudas en un día caluroso sentado sin hacer nada.\n\nY por eso las fajas y los plásticos no sirven: lo que pierdes ahí es agua, y la recuperas apenas tomas líquido.\n\nLo que sí quema grasa es entrenar con constancia y comer bien. Aburrido, pero es así 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "El sudor mide temperatura, no grasa quemada."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Mándale esto al que entrena con faja 😅"
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Habías caído en esta?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #bajardegrasa #cardio #entrenamiento #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "Alguien entrenando normal y tomando agua. Sin faja, sin plástico.",
+    "ojo": "Si en el gimnasio le preguntan seguido por fajas o por entrenar con plástico, este post le va a generar harta conversación. Vale la pena publicarlo aunque incomode a alguien."
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "5 errores que sabotean tu baja de grasa",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "5 ERRORES QUE SABOTEAN TU BAJA DE GRASA"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. DEJAR DE COMER EN VEZ DE COMER MEJOR"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. HACER SOLO CARDIO Y NADA DE FUERZA"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. PESARTE TODOS LOS DÍAS Y DESESPERARTE"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. ENTRENAR 6 DÍAS UNA SEMANA Y NINGUNO LA SIGUIENTE"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. DORMIR MAL Y NO CONTARLO COMO PARTE DEL PROBLEMA"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "NO ES FALTA DE GANAS. SON ESTOS 5. GUARDA ESTE POST 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Si llevas meses intentando bajar grasa y no pasa nada, revisa estos cinco antes de echarle la culpa a las ganas."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #bajardegrasa #cardio #entrenamiento #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "Fotos de la zona de cardio, la de pesas y las máquinas. Texto grande encima en Canva.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Qué haces para bajar grasa?\n\nOpciones: SOLO CARDIO / CARDIO Y PESAS"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Te pesas todos los días?\n\nOpciones: SÍ / CASI NUNCA"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué te ha costado más para bajar de peso?"
+     }
+    ],
+    "grabar": "La zona de cardio con las trotadoras andando.",
+    "ojo": ""
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Qué te han dicho que hay que hacer para bajar grasa? Te digo si es verdad o puro cuento 😂"
+     }
+    ],
+    "grabar": "Usted a la cámara.",
+    "ojo": "Esta caja se le va a llenar. Es el tema donde más mentiras circulan y la gente quiere que alguien se las aclare."
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "¿Cardio o pesas para bajar grasa?",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿CARDIO O PESAS PARA BAJAR GRASA?"
+     },
+     {
+      "etq": "Guion",
+      "txt": "La respuesta corta: los dos. Pero no como crees.\n\nCasi todos parten haciendo solo cardio, y ahí está el error. Si haces solo cardio y bajas de peso, parte de lo que pierdes es músculo.\n\nLas pesas son las que te mantienen el músculo mientras bajas grasa. Y el músculo es el que hace que tu cuerpo gaste más, incluso cuando estás sentado.\n\nCardio para gastar. Pesas para conservar lo que sí quieres 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Cardio para gastar. Pesas para conservar. No es uno o el otro."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto si haces puro cardio."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Tú haces solo cardio o mezclas?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #bajardegrasa #cardio #entrenamiento #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "Una toma que parta en la trotadora y termine en la zona de pesas, sin cortar. Se entiende sola.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Acá tienes las dos zonas",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Acá tienes las dos: trotadoras, bicicletas y elípticas por un lado, y toda la zona de pesas y máquinas por el otro.\n\nNo tienes que elegir. La rutina que te armamos usa las dos, en el orden que corresponde 💪"
+     }
+    ],
+    "grabar": "El recorrido completo de la zona de cardio hacia la de pesas, en una sola toma. Es el mismo video del viernes pero más largo: grábelo una vez y le sirve para los dos.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Full mensual",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "Si tu objetivo es bajar grasa, no te sirve venir tres veces y desaparecer 👀\n\nFull mensual $33.000 y entras todos los días, a la hora que quieras. Vienes, haces tu rutina con cardio y pesas, y en un mes ya se nota.\n\nLunes a jueves de 8:00 a 23:30. Viernes de 9:00 a 23:30. Sábados y feriados de 10:00 a 22:00."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 o pásate por WGYMADNSPORT, Tocopilla 💪"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #bajardegrasa #cardio #entrenamiento #fitnesschile #gimnasiotocopilla #nortegrande"
+     }
+    ],
+    "grabar": "El gimnasio con las dos zonas funcionando y gente entrenando.",
+    "ojo": ""
+   }
+  ],
+  "mes": 4,
+  "semana": 13
+ },
+ {
+  "tema": "La balanza no lo dice todo",
+  "bajada": "Del Módulo 2. La semana que evita que se le vayan socios. Mucha gente deja el gimnasio porque la pesa no baja, sin saber que sí está avanzando.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "La balanza no cuenta toda la historia",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "LA BALANZA NO CUENTA TODA LA HISTORIA"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Te subes a la pesa, marca lo mismo que el mes pasado, y te bajoneas.\n\nPero la pesa mide todo junto: músculo, grasa, agua, lo que comiste ayer y hasta si tomaste mucha sal. Puedes estar igual de peso y haber cambiado el cuerpo completo.\n\nMira otras cosas: cómo te queda la ropa, cuánto levantas ahora, las fotos de hace dos meses, cómo te sientes.\n\nUn solo número no cuenta toda tu historia 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Un número no cuenta toda la historia."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Mándale esto a quien se pesa todos los días."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Te pesas mucho o casi nada?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #progreso #bajardepeso #constancia #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Ropa que ya queda grande, o la app mostrando los récords de un socio. Nunca grabe a nadie pesándose ni muestre un número de peso de otra persona.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "5 formas de medir que no son la pesa",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "5 FORMAS DE MEDIR QUE NO SON LA BALANZA"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. CÓMO TE QUEDA LA ROPA"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. CUÁNTO PESO LEVANTAS AHORA"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. LAS FOTOS DE HACE DOS MESES"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. CUÁNTA ENERGÍA TIENES EN EL DÍA"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. CÓMO ESTÁS DURMIENDO"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "LA PESA ES UNA MEDIDA, NO LA ÚNICA. GUARDA ESTE POST 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Si te guías solo por la pesa, te vas a desanimar justo cuando estás mejorando.\n\nEstas cinco también cuentan, y estas sí las notas tú."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #progreso #bajardepeso #constancia #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Capturas de la app con los récords, y fotos del gimnasio. Nada de básculas.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Te pesas todos los días?\n\nOpciones: SÍ / CASI NUNCA"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Te ha pasado que la pesa no baja pero la ropa te queda mejor?\n\nOpciones: SÍ / NO"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué cambio notaste que la pesa no te mostró?"
+     }
+    ],
+    "grabar": "El gimnasio en un día normal.",
+    "ojo": "Las respuestas de la tercera son testimonios. Guárdelas y, con permiso, úselas en historias más adelante."
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿La pesa te tiene bajoneado? Cuéntame y lo vemos 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "No necesitas entrenar todos los días",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "NO NECESITAS ENTRENAR TODOS LOS DÍAS"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Mucha gente cree que si no viene seis días no sirve, y por eso ni empieza.\n\nFalso. Tres días bien hechos todas las semanas te dan más que seis días una semana y ninguno el mes siguiente.\n\nAdemás el músculo crece cuando descansas, no mientras entrenas.\n\nElige los días que de verdad puedes cumplir, y cúmplelos. Eso es lo que funciona 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Tres días que cumples le ganan a seis que no."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto si crees que no tienes tiempo para el gimnasio."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Cuántos días puedes venir de verdad?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #progreso #bajardepeso #constancia #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Socios entrenando un día cualquiera.",
+    "ojo": "Este es su mejor Reel del mes para vender el plan de tres veces por semana. Publíquelo el viernes y el domingo remata con el precio."
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Los que vienen tres veces",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Tenemos socios que vienen tres veces por semana hace más de un año, sin fallar.\n\nY les va mejor que a varios que vinieron todos los días durante un mes y después desaparecieron.\n\nLa constancia le gana a la intensidad. Siempre 💪"
+     }
+    ],
+    "grabar": "Un socio antiguo de los de tres veces por semana, con su permiso.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Tres veces por semana",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "Plan tres veces por semana $28.000 🙌\n\nEliges tus días y vienes esos. Si sabes que no vas a poder venir todos los días, este es tu plan: mejor tres que cumples que siete que no.\n\nY si un mes te acomoda venir más, te cambias al full mensual de $33.000 y listo."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 y vemos cuál te sirve."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #progreso #bajardepeso #constancia #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "El gimnasio en un horario tranquilo.",
+    "ojo": ""
+   }
+  ],
+  "mes": 4,
+  "semana": 14
+ },
+ {
+  "tema": "Ganar músculo de verdad",
+  "bajada": "Del Módulo 3. Le habla a los que ya vienen y quieren más. Es la semana que hace que un socio no se aburra y se quede.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "Si siempre levantas lo mismo, siempre te vas a ver igual",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "SI SIEMPRE LEVANTAS LO MISMO, SIEMPRE TE VAS A VER IGUAL"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Este es el principio que casi nadie aplica.\n\nTu cuerpo cambia cuando le pides un poco más que la vez pasada. Si llevas seis meses haciendo las mismas 3 series de 12 con el mismo peso, tu cuerpo ya se acostumbró y no tiene por qué cambiar.\n\nSube de a poco: un kilo más, una repetición más, un poco mejor la técnica.\n\nNo hace falta más que eso. Pero hace falta que pase 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Si nunca subes nada, el cuerpo no tiene por qué cambiar."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y sube algo esta semana."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Hace cuánto que no subes el peso?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #ganarmusculo #fuerza #progresion #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Alguien poniendo un disco chico más en la barra. Ese gesto de subir de a poco es todo el video.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "5 errores que frenan tu músculo",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "5 ERRORES QUE FRENAN TU GANANCIA MUSCULAR"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "1. NUNCA SUBIR EL PESO NI LAS REPETICIONES"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "2. CAMBIAR DE RUTINA ANTES DE VER RESULTADOS"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "3. NO COMER LO SUFICIENTE"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "4. DORMIR MAL"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "5. NO DESCANSAR ENTRE DÍAS DE ENTRENAMIENTO"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "EL MÚSCULO SE HACE ENTRENANDO Y DESCANSANDO. GUARDA ESTE POST 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Los cinco se arreglan y ninguno cuesta plata.\n\n¿Cuál estás haciendo tú? 👀"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #ganarmusculo #fuerza #progresion #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Fotos de la barra, los discos, las mancuernas y la app con la rutina. Texto grande encima.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Hace cuánto no subes el peso?\n\nOpciones: MENOS DE UN MES / NI ME ACUERDO"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Cuántas horas duermes?\n\nOpciones: MENOS DE 6 / MÁS DE 7"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Qué te cuesta más para ganar músculo?"
+     }
+    ],
+    "grabar": "La zona de pesas en la hora peak.",
+    "ojo": ""
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Quieres ganar músculo y sientes que no avanzas? Pregúntame lo que sea 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara en la zona de pesas.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "¿Más peso siempre es más músculo?",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "¿MÁS PESO SIEMPRE ES MÁS MÚSCULO?"
+     },
+     {
+      "etq": "Guion",
+      "txt": "No.\n\nSi subes el peso pero pierdes la técnica, dejas de trabajar el músculo que querías y empiezas a trabajar la espalda y la suerte 😅\n\nEl músculo crece cuando lo llevas cerca de su límite con control, no cuando mueves el peso como sea.\n\nPrefiere 10 repeticiones limpias con menos kilos que 6 tirando el cuerpo.\n\nEl peso importa. Pero va después de la técnica, no antes 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "El peso importa. Pero va después de la técnica, no antes."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto y revisa tu última serie."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Prefieres más peso o más control?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #ganarmusculo #fuerza #progresion #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "El mismo ejercicio dos veces: una con control y otra tirando el cuerpo. Hágalo usted o pídale a alguien de confianza. No grabe a un socio haciéndolo mal.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Por qué la rutina no repite grupo dos días",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "El músculo no crece mientras entrenas. Crece cuando descansas.\n\nPor eso las rutinas de acá no te ponen el mismo grupo dos días seguidos: si entrenas piernas hoy, mañana te toca otra cosa.\n\nEso está pensado. No es al azar 💪"
+     }
+    ],
+    "grabar": "La app abierta mostrando los días de la rutina, uno tras otro. Que se vea que cada día es distinto.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Tu rutina lista con QR",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "¿Quieres ganar músculo pero no sabes cómo organizar la semana? 🤔\n\nAcá te armamos la rutina y te queda en el celular con el QR: qué toca cada día, cuántas series, cuánto descansar y el video de cada ejercicio grabado en estas máquinas.\n\nFull mensual $33.000\nTres veces por semana $28.000\nPase diario $4.000 si quieres probar"
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 o pásate por el gimnasio 💪"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #ganarmusculo #fuerza #progresion #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "El QR y la app abierta mostrando un día de rutina completo.",
+    "ojo": ""
+   }
+  ],
+  "mes": 4,
+  "semana": 15
+ },
+ {
+  "tema": "Deja de improvisar",
+  "bajada": "Del Módulo 1, adaptado. El módulo original enseñaba a captar clientes como entrenador personal; acá está dado vuelta para que hable con el que todavía no se atreve a entrar.",
+  "dias": [
+   {
+    "dia": "Lunes",
+    "formato": "reel",
+    "titulo": "5 razones por las que no te atreves a empezar",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "5 RAZONES POR LAS QUE NO TE ATREVES A EMPEZAR"
+     },
+     {
+      "etq": "Guion",
+      "txt": "Uno: no sabes qué hacer una vez adentro.\nDos: te da vergüenza que te vean.\nTres: crees que hay que estar en forma antes de entrar.\nCuatro: te dijeron que hay que ir todos los días.\nCinco: ya probaste antes y lo dejaste.\n\nNinguna de las cinco es un problema de verdad. Las cinco tienen solución, y la mayoría se resuelve el primer día 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Ninguna de esas cinco razones es motivo suficiente para no empezar."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Mándale esto a alguien que lleva meses pensándolo."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Cuál de las cinco es la tuya?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #empezardecero #rutina #constancia #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "La entrada del gimnasio y el mesón. Que se vea acogedor.",
+    "ojo": ""
+   },
+   {
+    "dia": "Martes",
+    "formato": "carrusel",
+    "titulo": "Empezar con dirección",
+    "bloques": [
+     {
+      "etq": "Diapositiva 1 · portada",
+      "clase": "pantalla",
+      "txt": "NO NECESITAS HACERLO PERFECTO. NECESITAS EMPEZAR CON DIRECCIÓN"
+     },
+     {
+      "etq": "Diapositiva 2",
+      "clase": "pantalla",
+      "txt": "PASO 1 · DEFINE UN OBJETIVO CONCRETO"
+     },
+     {
+      "etq": "Diapositiva 3",
+      "clase": "pantalla",
+      "txt": "PASO 2 · ADAPTA EL ENTRENAMIENTO A TU NIVEL DE HOY"
+     },
+     {
+      "etq": "Diapositiva 4",
+      "clase": "pantalla",
+      "txt": "PASO 3 · ORDENA TUS DÍAS EN LA SEMANA"
+     },
+     {
+      "etq": "Diapositiva 5",
+      "clase": "pantalla",
+      "txt": "PASO 4 · APRENDE LA TÉCNICA ANTES DE SUBIR EL PESO"
+     },
+     {
+      "etq": "Diapositiva 6",
+      "clase": "pantalla",
+      "txt": "PASO 5 · REGISTRA Y REVISA TU PROGRESO"
+     },
+     {
+      "etq": "Diapositiva 7 · cierre",
+      "clase": "pantalla",
+      "txt": "CON DIRECCIÓN, NO PERFECTO. GUARDA ESTE POST 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "Cinco pasos y ya tienes un plan. Los cinco te los armamos acá el primer día."
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #empezardecero #rutina #constancia #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "El mesón, la ficha de socio nuevo, el QR y la app. Los cinco pasos son literalmente lo que usted hace cuando entra alguien nuevo: grábelo.",
+    "ojo": ""
+   },
+   {
+    "dia": "Miércoles",
+    "formato": "historias",
+    "titulo": "Tres historias con encuesta",
+    "bloques": [
+     {
+      "etq": "Historia 1 · con encuesta",
+      "txt": "¿Qué te cuesta más al entrenar?\n\nOpciones: NO SÉ QUÉ HACER / FALTA DE TIEMPO"
+     },
+     {
+      "etq": "Historia 2 · con encuesta",
+      "txt": "¿Entrenas con rutina o improvisas?\n\nOpciones: CON RUTINA / IMPROVISO"
+     },
+     {
+      "etq": "Historia 3 · caja de preguntas",
+      "txt": "¿Cuál es tu mayor dificultad para ser constante?"
+     }
+    ],
+    "grabar": "El gimnasio en un día normal.",
+    "ojo": ""
+   },
+   {
+    "dia": "Jueves",
+    "formato": "preguntas",
+    "titulo": "Caja de preguntas",
+    "bloques": [
+     {
+      "etq": "Pregunta",
+      "txt": "¿Improvisas cuando llegas al gimnasio? Cuéntame y vemos cómo ordenarlo 🙌"
+     }
+    ],
+    "grabar": "Usted a la cámara.",
+    "ojo": ""
+   },
+   {
+    "dia": "Viernes",
+    "formato": "reel",
+    "titulo": "El mejor entrenamiento es el que puedes sostener",
+    "bloques": [
+     {
+      "etq": "Texto de portada",
+      "clase": "pantalla",
+      "txt": "EL MEJOR ENTRENAMIENTO ES EL QUE PUEDES SOSTENER"
+     },
+     {
+      "etq": "Guion",
+      "txt": "La rutina perfecta que no cumples no sirve de nada. La rutina normal que sí haces todas las semanas te cambia la vida.\n\nAntes de preguntarte cuál es el mejor plan, pregúntate cuál puedes cumplir de verdad, con tu trabajo, tus horarios y tu vida.\n\nEse es el mejor. Y ese es el que te armamos acá 💪"
+     },
+     {
+      "etq": "Leyenda",
+      "txt": "El mejor plan es el que cumples."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Guarda esto si llevas años empezando y dejando."
+     },
+     {
+      "etq": "Comentario fijado",
+      "txt": "¿Cuántas veces has empezado de nuevo?"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #empezardecero #rutina #constancia #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "Un socio antiguo entrenando tranquilo. La imagen de alguien que lleva años viniendo dice más que el guion.",
+    "ojo": ""
+   },
+   {
+    "dia": "Sábado",
+    "formato": "bastidores",
+    "titulo": "Todo lo que hay detrás de un QR",
+    "bloques": [
+     {
+      "etq": "Leyenda",
+      "txt": "Todas las rutinas que están en los QR del gimnasio se grabaron acá, ejercicio por ejercicio, en estas mismas máquinas.\n\nEs harto trabajo y no se ve.\n\nPero es la diferencia entre pasarte una hoja fotocopiada y entregarte tu rutina en el celular, con el video de cada cosa 💪"
+     }
+    ],
+    "grabar": "Usted grabando un ejercicio con el celular, y después ese mismo video ya dentro de la app. El antes y el después.",
+    "ojo": ""
+   },
+   {
+    "dia": "Domingo",
+    "formato": "venta",
+    "titulo": "Cierre de mes",
+    "bloques": [
+     {
+      "etq": "Texto de venta",
+      "txt": "Se acaba el mes 🔥 Si llevas rato pensándolo, este es el momento.\n\nFull mensual $33.000 · todos los días\nTres veces por semana $28.000\nMensual por turno $23.000\nEstudiante o profesor $28.000\nFuncionarios públicos $28.000\nMensual tercera edad $23.000\nPlan semanal $15.000\nPase diario $4.000\n\nTodo medio de pago.\n\nLunes a jueves de 8:00 a 23:30. Viernes de 9:00 a 23:30. Sábados y feriados de 10:00 a 22:00."
+     },
+     {
+      "etq": "Llamado a la acción",
+      "txt": "Escríbeme al WhatsApp +56 9 7519 6394 y te dejo todo listo, o pásate por WGYMADNSPORT en Tocopilla 💪"
+     },
+     {
+      "etq": "Hashtags",
+      "clase": "etiquetas",
+      "txt": "#wgymadnsport #tocopilla #empezardecero #rutina #constancia #entrenamiento #fitnesschile #gimnasiotocopilla"
+     }
+    ],
+    "grabar": "El cartel de planes y el gimnasio con movimiento.",
+    "ojo": ""
+   }
+  ],
+  "mes": 4,
+  "semana": 16
+ }
+]
