@@ -457,6 +457,7 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
         <div class="aviso">
           Grabe el ejercicio con su teléfono y súbalo acá. El video queda
           guardado en este aparato y viaja dentro del archivo que me manda.
+          <b>Máximo 25 segundos</b> — los del gimnasio duran 10 segundos.
         </div>
         <button class="btn btn-oro" id="bSubirVideo">+ Subir un video mío</button>
         <input type="file" id="archivoVideo" accept="video/*" hidden>
@@ -1423,6 +1424,44 @@ function escaparHtml(t){
 function sinTildes(t){
  return String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 }
+/* Los videos de los ejercicios son cortos: los 71 que ya estan en el gimnasio
+   duran entre 6 y 18 segundos. Un video largo grabado con el telefono pesa
+   mucho, hace lenta la app del socio y no muestra nada mas. */
+var TOPE_SEG = 25;
+/* Medio segundo de gracia: el telefono a veces graba 25,2 en vez de 25. */
+var GRACIA_SEG = 0.5;
+
+function segundosBonito(seg){
+ if(!(seg > 0)) return "";
+ var s = Math.round(seg);
+ if(s < 60) return s + " seg";
+ return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0") + " min";
+}
+/* Le pregunta al navegador cuanto dura, sin llegar a mostrarlo. Si no lo puede
+   averiguar devuelve null y el video se acepta igual: mejor eso que dejarla
+   sin poder subir nada. */
+function medirDuracion(archivo, luego){
+ var url = URL.createObjectURL(archivo);
+ var v = document.createElement("video");
+ var listo = false;
+ function terminar(seg){
+  if(listo) return;
+  listo = true;
+  clearTimeout(reloj);
+  URL.revokeObjectURL(url);
+  luego(seg);
+ }
+ var reloj = setTimeout(function(){ terminar(null); }, 6000);
+ v.preload = "metadata";
+ v.muted = true;
+ v.onloadedmetadata = function(){
+  var d = v.duration;
+  terminar((isFinite(d) && d > 0) ? d : null);
+ };
+ v.onerror = function(){ terminar(null); };
+ v.src = url;
+}
+
 function pesoBonito(bytes){
  if(bytes < 1024) return bytes + " B";
  if(bytes < 1024*1024) return Math.round(bytes/1024) + " KB";
@@ -1906,7 +1945,8 @@ function pintarMisVideos(){
    return '<button data-mio="' + escaparHtml(f.id) + '">' +
     '<span class="marca">▶</span>' +
     '<span class="txt">' + escaparHtml(f.nombre) +
-      '<small>' + pesoBonito(f.peso || 0) + '</small></span>' +
+      '<small>' + [segundosBonito(f.duracion), pesoBonito(f.peso || 0)]
+                    .filter(Boolean).join(" · ") + '</small></span>' +
     '<span class="mini borrar" data-borrarmio="' + escaparHtml(f.id) + '">✕</span></button>';
   }).join("");
  });
@@ -1948,9 +1988,33 @@ $("archivoVideo").addEventListener("change", function(){
  var archivo = this.files && this.files[0];
  this.value = "";
  if(!archivo) return;
+ var boton = $("bSubirVideo"), textoBoton = boton.textContent;
+ boton.disabled = true;
+ boton.textContent = "Revisando el video…";
+ medirDuracion(archivo, function(seg){
+  boton.disabled = false;
+  boton.textContent = textoBoton;
+  if(seg !== null && seg > TOPE_SEG + GRACIA_SEG){
+   alert("Ese video dura " + segundosBonito(seg) + " y el máximo son " +
+         TOPE_SEG + " segundos.\n\n" +
+         "Córtelo en su teléfono y vuelva a subirlo: abra el video en la galería, " +
+         "toque Editar y arrastre los bordes hasta dejarlo en 25 segundos o menos.\n\n" +
+         "Para mostrar un ejercicio alcanza de sobra: los del gimnasio duran 10 segundos.");
+   return;
+  }
+  if(seg === null){
+   alert("No pude medir cuánto dura este video, así que lo voy a guardar igual.\n\n" +
+         "Fíjese usted que no pase de " + TOPE_SEG + " segundos.");
+  }
+  guardarVideoPropio(archivo, seg);
+ });
+});
+
+function guardarVideoPropio(archivo, seg){
  var ficha = {
   id: nuevoId("v"), nombre: archivo.name || "video.mp4",
   tipo: archivo.type || "video/mp4", peso: archivo.size || 0,
+  duracion: (seg !== null) ? Math.round(seg * 10) / 10 : null,
   subido: new Date().toISOString(), blob: archivo
  };
  ponerVideo(ficha, function(bien){
@@ -1963,7 +2027,7 @@ $("archivoVideo").addEventListener("change", function(){
   cerrarElector();
   if(f) f("mio:" + ficha.id);
  });
-});
+}
 
 
 /* ── Pantalla 5: cómo la verán los socios ────────────────────────────── */
@@ -2156,6 +2220,8 @@ function armarFicha(r, videos, conVideos){
     f.archivo = v.archivo || "";
     f.nombreOriginal = v.nombreOriginal || "";
     f.peso = v.peso || 0;
+    f.duracion = v.duracion || null;
+    f.topeSegundos = TOPE_SEG;
    }
    return f;
   })
@@ -2181,7 +2247,8 @@ function exportar(conVideos){
   cargarFichasPropias(propios, function(fichas){
    propios.forEach(function(v, i){
     var f = fichas[i];
-    if(f){ v.nombreOriginal = f.nombre; v.peso = f.peso; v.archivo = "(mándemelo aparte)"; }
+    if(f){ v.nombreOriginal = f.nombre; v.peso = f.peso; v.duracion = f.duracion;
+           v.archivo = "(mándemelo aparte)"; }
    });
    var ficha = armarFicha(r, usados, false);
    var blob = new Blob([JSON.stringify(ficha, null, 1)], { type:"application/json" });
@@ -2209,6 +2276,7 @@ function exportar(conVideos){
    v.archivo = "videos/" + v.ref.slice(4) + ext;
    v.nombreOriginal = f.nombre;
    v.peso = f.peso;
+   v.duracion = f.duracion;
    archivos.push({ nombre:v.archivo, datos:f.datos });
   });
   var ficha = armarFicha(r, usados, true);
@@ -2231,7 +2299,7 @@ function cargarFichasPropias(propios, luego){
  (function siguiente(){
   if(i >= propios.length) return luego(salida);
   sacarVideo(propios[i].ref.slice(4), function(f){
-   salida.push(f ? { nombre:f.nombre, peso:f.peso } : null);
+   salida.push(f ? { nombre:f.nombre, peso:f.peso, duracion:f.duracion } : null);
    i++; siguiente();
   });
  })();
@@ -2247,7 +2315,8 @@ function cargarDatosPropios(propios, luego){
    if(!f || !f.blob){ salida.push(null); i++; return siguiente(); }
    var lector = new FileReader();
    lector.onload = function(){
-    salida.push({ nombre:f.nombre, peso:f.peso, datos:new Uint8Array(lector.result) });
+    salida.push({ nombre:f.nombre, peso:f.peso, duracion:f.duracion,
+                  datos:new Uint8Array(lector.result) });
     i++; siguiente();
    };
    lector.onerror = function(){ salida.push(null); i++; siguiente(); };
