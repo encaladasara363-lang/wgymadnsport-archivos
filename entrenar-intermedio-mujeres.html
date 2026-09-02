@@ -210,7 +210,11 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   font-size:14.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--gris);
 }
 .ej video{width:100%;border-radius:14px;background:#000;border:1.5px solid var(--linea);
-  display:block;margin-bottom:15px;aspect-ratio:16/10;object-fit:cover}
+  display:block;margin-bottom:15px;height:auto;max-height:58vh;
+  /* Los videos vienen parados y otros acostados. Con un recuadro ancho
+     y recorte se perdia justo el movimiento: ahora manda la forma del
+     video y no se corta nada. */
+  object-fit:contain}
 .consejo{background:var(--negro-card);border-left:4px solid var(--dorado);border-radius:0 12px 12px 0;
   padding:13px 15px;margin-bottom:13px;font-size:16px;line-height:1.5;color:var(--crema)}
 .consejo b{color:var(--dorado);display:block;margin-bottom:4px;
