@@ -112,12 +112,12 @@ html,body{background:var(--paper);color:var(--ink);
 
 /* ---- hoja de la semana ---- */
 .mapa{border:.9mm solid var(--ink);margin-top:4.5mm;flex-shrink:0}
-.mapa div{display:flex;align-items:baseline;gap:3mm;padding:1.9mm 3.4mm;
+.mapa div{display:flex;align-items:baseline;gap:3mm;padding:1.5mm 3.4mm;
  border-bottom:.35mm solid var(--ink)}
 .mapa div:last-child{border-bottom:0}
 .mapa dt{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:12.5pt;
  letter-spacing:.02em;text-transform:uppercase;width:32mm;flex-shrink:0}
-.mapa dd{flex:1;font-weight:600;font-size:12pt;color:#33343A}
+.mapa dd{flex:1;font-weight:600;font-size:11.5pt;color:#33343A}
 .mapa b{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:14pt;white-space:nowrap}
 .mapa div[data-n="alto"]{background:#FBE3E5}
 .mapa div[data-n="alto"] b{color:var(--red)}
