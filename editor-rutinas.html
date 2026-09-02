@@ -101,6 +101,8 @@ main{padding:18px 16px 60px}
 label.campo{display:block;margin-bottom:15px}
 label.campo > span.etq{display:block;margin-bottom:7px}
 label.campo .pista{display:block;color:var(--gris-tenue);font-size:14px;margin-top:6px;line-height:1.4}
+.seccion > .pista{color:var(--gris-tenue);font-size:14px;line-height:1.45;
+  margin:2px 0 0;white-space:pre-line}
 input[type=text],textarea,select{
   width:100%;background:var(--negro-card);border:1.5px solid var(--linea);
   border-radius:12px;color:var(--blanco);font:600 17px/1.35 'Barlow',sans-serif;
@@ -327,8 +329,10 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
     <div class="seccion">
       <span class="etq">Cuando esté lista</span>
       <button class="btn btn-linea" id="bPrevio">Ver como la verán los socios</button>
-      <button class="btn btn-verde" id="bEnviar">Enviar a Claude (con los videos)</button>
-      <button class="btn btn-linea" id="bEnviarTexto">Enviar solo el texto (sin videos)</button>
+      <button class="btn btn-verde" id="bEnviarTexto">Enviármela (archivo liviano)</button>
+      <button class="btn btn-linea" id="bEnviar">Enviármela con los videos adentro</button>
+      <p class="pista" id="pistaEnvio">El archivo liviano pesa unos pocos KB y siempre se puede mandar por el chat.
+      El de los videos puede pesar demasiado y el chat lo rechaza.</p>
     </div>
 
     <div class="seccion">
@@ -513,7 +517,7 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
 var LLAVE = "wgym_editor_rutinas_v1";
 
 /* La fecha de esta version, para saber si el aparato tiene la ultima. */
-var VERSION_APP = "01-09-2026 · moldes de 5 y 3 días";
+var VERSION_APP = "02-09-2026 · envío liviano";
 
 /* ── Los videos que ya están en el gimnasio (carpeta assets) ─────────── */
 var BIBLIOTECA = ("abdominales_banca_hombres abdominales_colchoneta abduccion_gluteos aductores "+
@@ -2316,9 +2320,16 @@ function exportar(conVideos){
    var blob = new Blob([JSON.stringify(ficha, null, 1)], { type:"application/json" });
    bajarArchivo(blob, "rutina-" + apodo(r.titulo) + ".json");
    if(propios.length && !conVideos){
-    alert("Listo. Ojo: esta rutina usa " + propios.length + " video(s) grabado(s) por usted.\n" +
-          "En el archivo van los nombres, pero los videos me los tiene que mandar aparte\n" +
-          "(o use el botón verde, que los manda todos juntos).");
+    var lista = propios.map(function(v){
+     return "· " + (v.nombreOriginal || v.ref) + "  (" + (v.usadoEn[0] || "") + ")";
+    }).join("\n");
+    var uno = (propios.length === 1);
+    alert("Archivo listo y liviano. Mándemelo por el chat.\n\n" +
+          "Esta rutina usa " + (uno ? "un video grabado" : propios.length + " videos grabados") +
+          " por usted. En el archivo\n" +
+          (uno ? "va anotado con su nombre, pero el video me lo tiene que mandar aparte:\n\n"
+               : "van anotados con su nombre, pero los videos me los tiene que mandar aparte,\n" +
+                 "de a uno, como manda un video por WhatsApp:\n\n") + lista);
    }
   });
   return;
@@ -2328,6 +2339,33 @@ function exportar(conVideos){
  var textoOriginal = b.textContent;
  b.disabled = true;
  b.textContent = "Armando el archivo…";
+
+ /* Un ZIP con videos adentro puede pasarse del tamaño que acepta el chat.
+    Mejor pesarlo antes y avisarle, que armarlo entero y que se lo rechacen. */
+ cargarFichasPropias(propios, function(previas){
+  var total = 0;
+  previas.forEach(function(f){ if(f && f.peso) total += f.peso; });
+  if(total > TOPE_CHAT){
+   b.disabled = false;
+   b.textContent = textoOriginal;
+   alert("Este archivo va a pesar como " + pesoBonito(total) + " y el chat no lo va a aceptar.\n\n" +
+         "Haga esto mejor:\n" +
+         "1. Apriete el botón verde, el del archivo liviano.\n" +
+         "2. Mándeme ese archivo por el chat.\n" +
+         "3. Después mándeme " + (propios.length === 1 ? "el video" : "los " + propios.length + " videos") +
+         " de a uno, como manda un video por WhatsApp.\n\n" +
+         "Queda igual de bien y no se le atraca nada.");
+   return;
+  }
+  armarElPesado(r, usados, propios, b, textoOriginal);
+ });
+ return;
+}
+
+/* El tope que aguanta el chat sin quejarse. */
+var TOPE_CHAT = 25 * 1024 * 1024;
+
+function armarElPesado(r, usados, propios, b, textoOriginal){
 
  cargarDatosPropios(propios, function(fichas){
   var archivos = [];
