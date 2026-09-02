@@ -136,11 +136,14 @@ h3{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:12.5pt;
 
 /* ---- ficha de medidas ---- */
 .arranque{display:flex;border:.9mm solid var(--ink);margin-top:4.5mm;flex-shrink:0}
-.arranque div{flex:1;padding:2.2mm 2mm;text-align:center;border-left:.35mm solid var(--ink)}
+.arranque div{flex:1;padding:2.2mm 1.2mm;text-align:center;border-left:.35mm solid var(--ink)}
 .arranque div:first-child{border-left:0}
 .arranque dt{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:7pt;color:var(--steel)}
-.arranque dd{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:14pt;margin-top:.6mm}
+.arranque dd{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:13pt;margin-top:.6mm}
 .arranque .vacio{color:#AFAFAB}
+.arranque div:nth-last-child(-n+2){background:var(--ink)}
+.arranque div:nth-last-child(-n+2) dt{color:#9B9DA2}
+.arranque div:nth-last-child(-n+2) dd{color:var(--paper)}
 .instru{border:.9mm solid var(--ink);padding:2.4mm 3mm;margin-top:3.4mm;font-weight:600;font-size:12pt;line-height:1.3}
 .instru b{font-weight:800}
 .instru p{margin-top:1.1mm}
