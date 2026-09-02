@@ -215,6 +215,10 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
      y recorte se perdia justo el movimiento: ahora manda la forma del
      video y no se corta nada. */
   object-fit:contain}
+/* Algunos videos vienen con franjas negras grabadas adentro: a esos se les
+   recorta, porque mostrados enteros se ven chicos. Se marcan en la rutina
+   agregándole recortar=1 a la dirección. */
+.ej video.recortar{aspect-ratio:16/10;max-height:none;object-fit:cover}
 .consejo{background:var(--negro-card);border-left:4px solid var(--dorado);border-radius:0 12px 12px 0;
   padding:13px 15px;margin-bottom:13px;font-size:16px;line-height:1.5;color:var(--crema)}
 .consejo b{color:var(--dorado);display:block;margin-bottom:4px;
@@ -1172,6 +1176,8 @@ function reloj(seg){
  return (h ? h + ":" + String(m).padStart(2,"0") : m) + ":" + String(s).padStart(2,"0");
 }
 function miles(n){ return Math.round(n).toLocaleString("es-CL"); }
+/* La rutina marca con recortar=1 los videos que traen franjas negras. */
+function recortaEste(url){ return String(url || "").indexOf("recortar=1") >= 0; }
 function limpio(t){
  return String(t == null ? "" : t).replace(/[&<>"']/g, function(c){
   return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
@@ -1521,7 +1527,8 @@ function pintarEjercicio(){
         '<span>Descanso ' + limpio(ex.rest) + '</span>' +
         (ex.equip ? '<span>' + limpio(ex.equip) + '</span>' : '') +
       '</div>';
- if(video) h += '<video src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
+ if(video) h += '<video' + (recortaEste(video) ? ' class="recortar"' : '') +
+             ' src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
  if(ex.tip)  h += '<div class="consejo"><b>Cómo se hace</b>' + limpio(ex.tip) + '</div>';
  if(ex.alt)  h += '<div class="consejo alterna"><b>Si te cuesta</b>' + limpio(ex.alt) + '</div>';
 
@@ -1606,7 +1613,8 @@ function pintarPasoSuelto(paso, mio, pasos){
  h += '<div class="meta"><span>' +
       (paso.tipo === "calentamiento" ? "Antes de empezar" : "Para cerrar") +
       '</span></div>';
- if(video) h += '<video src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
+ if(video) h += '<video' + (recortaEste(video) ? ' class="recortar"' : '') +
+             ' src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
  h += '<div class="consejo"><b>Qué tienes que hacer</b>' + limpio(paso.texto) + '</div>';
  h += '<button class="hecho" id="bHecho" type="button" data-h="' + (hecho ? "si" : "no") + '">' +
       (hecho ? "✓ Listo" : "Marcar como hecho") + '</button>';

@@ -215,6 +215,11 @@
     /* Con recorte se perdia el movimiento en los videos parados. */
     background:#000;object-fit:contain;
   }
+  /* Los que traen franjas negras grabadas adentro sí se recortan: enteros
+     se verían chicos. La rutina los marca con recortar=1. */
+  .ex-video[src*="recortar=1"]{
+    max-height:420px;object-fit:cover;
+  }
   .cooldown{
     background:var(--negro-suave);
     border:1px solid #262626;

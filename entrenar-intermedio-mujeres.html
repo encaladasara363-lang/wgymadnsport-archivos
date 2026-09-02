@@ -215,6 +215,10 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
      y recorte se perdia justo el movimiento: ahora manda la forma del
      video y no se corta nada. */
   object-fit:contain}
+/* Algunos videos vienen con franjas negras grabadas adentro: a esos se les
+   recorta, porque mostrados enteros se ven chicos. Se marcan en la rutina
+   agregándole recortar=1 a la dirección. */
+.ej video.recortar{aspect-ratio:16/10;max-height:none;object-fit:cover}
 .consejo{background:var(--negro-card);border-left:4px solid var(--dorado);border-radius:0 12px 12px 0;
   padding:13px 15px;margin-bottom:13px;font-size:16px;line-height:1.5;color:var(--crema)}
 .consejo b{color:var(--dorado);display:block;margin-bottom:4px;
@@ -678,7 +682,7 @@ var RUTINAS = {
    }
   ],
   "VIDEOS": {
-   "abdominales_en_polea": "assets/dia_2_abdominales_en_polea_intermedio.mp4?v=1",
+   "abdominales_en_polea": "assets/dia_2_abdominales_en_polea_intermedio.mp4?v=1&recortar=1",
    "abduccion_en_maquina": "assets/dia_1_abduccion_en_maquina_intermedio.mp4?v=1",
    "bulgara": "assets/dia_3_bulgara_intermedio.mp4?v=1",
    "extension_de_cuadriceps": "assets/dia_3_extension_de_cuadriceps_intermedio.mp4?v=1",
@@ -688,7 +692,7 @@ var RUTINAS = {
    "pantorrillas_en_maquina_sentado": "assets/dia_1_pantorrillas_en_maquina_sentado_intermedio.mp4?v=1",
    "peso_muerto_rumano": "assets/dia_1_peso_muerto_rumano_intermedio.mp4?v=1",
    "press_militar": "assets/dia_2_press_militar_intermedio.mp4?v=1",
-   "remo_bajo_en_polea": "assets/dia_2_remo_bajo_en_polea_intermedio.mp4?v=1",
+   "remo_bajo_en_polea": "assets/dia_2_remo_bajo_en_polea_intermedio.mp4?v=1&recortar=1",
    "remo_con_mancuerna": "assets/dia_2_remo_con_mancuerna_intermedio.mp4?v=1",
    "sentadilla_hack": "assets/dia_3_sentadilla_hack_intermedio.mp4?v=1",
    "sentadilla_hack_invertida": "assets/dia_1_sentadilla_hack_invertida_intermedio.mp4?v=1",
@@ -1094,6 +1098,8 @@ function reloj(seg){
  return (h ? h + ":" + String(m).padStart(2,"0") : m) + ":" + String(s).padStart(2,"0");
 }
 function miles(n){ return Math.round(n).toLocaleString("es-CL"); }
+/* La rutina marca con recortar=1 los videos que traen franjas negras. */
+function recortaEste(url){ return String(url || "").indexOf("recortar=1") >= 0; }
 function limpio(t){
  return String(t == null ? "" : t).replace(/[&<>"']/g, function(c){
   return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
@@ -1443,7 +1449,8 @@ function pintarEjercicio(){
         '<span>Descanso ' + limpio(ex.rest) + '</span>' +
         (ex.equip ? '<span>' + limpio(ex.equip) + '</span>' : '') +
       '</div>';
- if(video) h += '<video src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
+ if(video) h += '<video' + (recortaEste(video) ? ' class="recortar"' : '') +
+             ' src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
  if(ex.tip)  h += '<div class="consejo"><b>Cómo se hace</b>' + limpio(ex.tip) + '</div>';
  if(ex.alt)  h += '<div class="consejo alterna"><b>Si te cuesta</b>' + limpio(ex.alt) + '</div>';
 
@@ -1528,7 +1535,8 @@ function pintarPasoSuelto(paso, mio, pasos){
  h += '<div class="meta"><span>' +
       (paso.tipo === "calentamiento" ? "Antes de empezar" : "Para cerrar") +
       '</span></div>';
- if(video) h += '<video src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
+ if(video) h += '<video' + (recortaEste(video) ? ' class="recortar"' : '') +
+             ' src="' + limpio(video) + '" controls loop muted playsinline preload="metadata"></video>';
  h += '<div class="consejo"><b>Qué tienes que hacer</b>' + limpio(paso.texto) + '</div>';
  h += '<button class="hecho" id="bHecho" type="button" data-h="' + (hecho ? "si" : "no") + '">' +
       (hecho ? "✓ Listo" : "Marcar como hecho") + '</button>';
