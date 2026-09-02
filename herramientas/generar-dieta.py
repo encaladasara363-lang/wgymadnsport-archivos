@@ -85,7 +85,7 @@ html,body{background:var(--paper);color:var(--ink);
 /* ---- comidas ---- */
 .cuerpo{display:grid;grid-template-columns:1fr 1fr;gap:0 7mm;margin-top:4.5mm;align-items:start;flex:1}
 .col{min-width:0}
-.bloque{margin-bottom:3.4mm;break-inside:avoid}
+.bloque{margin-bottom:3.1mm;break-inside:avoid}
 .bloque h2{
  font-family:'Anton','Arial Black',Impact,sans-serif;font-weight:900;
  font-size:12.5pt;letter-spacing:.02em;text-transform:uppercase;
@@ -102,6 +102,8 @@ html,body{background:var(--paper);color:var(--ink);
 .bloque li.sup{background:var(--suave);justify-content:flex-start}
 .bloque li.sup b{margin-left:auto}
 .bloque li.sup i{font-style:normal;color:var(--red);font-weight:800;margin-right:1.6mm;font-size:11pt}
+.bloque li.agua{border-left:1.1mm solid var(--red);padding-left:2.2mm;font-weight:700}
+.bloque li.agua b{color:var(--red)}
 
 .nota{border:.9mm solid var(--ink);padding:2.4mm 3mm;font-weight:600;font-size:12pt;
  line-height:1.3;break-inside:avoid;margin-bottom:3.4mm}
@@ -203,8 +205,10 @@ def dia_html(d, plan, logo):
         li = []
         for it in c["items"]:
             nombre, cant = it[0], it[1]
-            supl = len(it) > 2 and it[2]
-            if supl:
+            marca = it[2] if len(it) > 2 else None
+            if marca == "agua":
+                li.append('<li class="agua">%s<b>%s</b></li>' % (esc(nombre), esc(cant)))
+            elif marca:
                 li.append('<li class="sup"><i>&#9679;</i>%s<b>%s</b></li>' % (esc(nombre), esc(cant)))
             else:
                 li.append('<li>%s<b>%s</b></li>' % (esc(nombre), esc(cant)))
