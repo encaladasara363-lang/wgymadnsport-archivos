@@ -298,25 +298,10 @@
 <script>
 const LOGO_SRC = "assets/logo.jpg";
 const WARMUP_VIDEOS = {
-  trotadora: "assets/calentamiento_trotadora.mp4?v=1",
   bicicleta: "assets/calentamiento_bicicleta.mp4?v=1"
 };
-const COOLDOWN_VIDEOS = {
-  cardio: "assets/cardio_trotadora.mp4?v=1",
-  estirar: "assets/estiramiento_final.mp4?v=1"
-};
-const VIDEOS = {
-  zancada_trx:        "assets/zancada_trx_gluteos.mp4?v=1",
-  abduccion_gluteos:  "assets/abduccion_gluteos.mp4?v=1",
-  peso_muerto_rumano: "assets/peso_muerto_rumano_gluteos.mp4?v=1",
-  pantorrillas:       "assets/pantorrillas.mp4?v=1",
-  remo_bajo_polea:    "assets/remo_sentado.mp4?v=1",
-  remo_mancuerna:     "assets/remo_una_mano.mp4?v=1",
-  triceps_cuerda:     "assets/extension_triceps_polea.mp4?v=1",
-  press_militar:      "assets/press_militar.mp4?v=1",
-  extension_cuadriceps:"assets/extension_cuadriceps.mp4?v=1",
-  femoral_un_pie:     "assets/femoral_un_pie.mp4?v=1"
-};
+const COOLDOWN_VIDEOS = {};
+const VIDEOS = {};
 
 document.getElementById('gateLogoImg').src = LOGO_SRC;
 document.getElementById('logoImg').src = LOGO_SRC;
@@ -656,27 +641,25 @@ const DAYS = [
     title:"Pierna y Glúteos",
     focus:"Glúteo",
     warmup:"Calentamiento en trotadora — 8 minutos",
-    warmupVideo:"trotadora",
     exercises:[
-      {name:"Zancada con TRX", sets:"3 × 12 por pierna", rest:"60 seg", equip:"trx", video:"zancada_trx",
+      {name:"Zancada con TRX", sets:"3 × 12 por pierna", rest:"60 seg", equip:"trx",
        tip:"Desplante en suspensión que mejora la fuerza de una pierna a la vez, la estabilidad de la cadera y el equilibrio.",
        alt:"¿Muy exigente? Haz zancadas normales con los dos pies en el suelo para ganar estabilidad."},
       {name:"Sentadilla hack invertida", sets:"3 × 12", rest:"60 seg", equip:"maquina",
        tip:"Variante de sentadilla en máquina donde te colocas mirando hacia el respaldo. Al permitir más flexión de cadera, el esfuerzo se va de forma segura a glúteos y femorales.",
        alt:"¿Muy exigente? Practica el movimiento con menos peso, o haz sentadillas libres con tu propio peso."},
-      {name:"Abducción en máquina", sets:"4 × 12", rest:"60 seg", equip:"maquina", video:"abduccion_gluteos",
+      {name:"Abducción en máquina", sets:"4 × 12", rest:"60 seg", equip:"maquina",
        tip:"Ejercicio guiado que aísla los glúteos, sobre todo el medio y el menor, empujando las almohadillas hacia afuera contra la resistencia.",
        alt:"¿Muy exigente? Baja el peso de la máquina y concéntrate en aguantar un segundo la apertura máxima."},
-      {name:"Peso muerto rumano", sets:"3 × 12", rest:"60 seg", equip:"barra", video:"peso_muerto_rumano",
+      {name:"Peso muerto rumano", sets:"3 × 12", rest:"60 seg", equip:"barra",
        tip:"Trabaja fuerte glúteos y femorales con una bisagra de cadera, manteniendo las rodillas casi fijas.",
        alt:"¿Muy exigente? Practica primero el movimiento de bisagra sin peso, empujando los glúteos hacia una pared."},
-      {name:"Pantorrillas en máquina sentado", sets:"3 × 15", rest:"60 seg", equip:"maquina", video:"pantorrillas",
+      {name:"Pantorrillas en máquina sentado", sets:"3 × 15", rest:"60 seg", equip:"maquina",
        tip:"Aísla el sóleo, el músculo profundo de la pantorrilla, extendiendo el tobillo con las rodillas dobladas a 90 grados.",
        alt:"¿Muy exigente? Baja la carga y empuja solo con la almohadilla del pie, no con los dedos."},
     ],
     cooldownTitle:"Cardio final",
-    cooldown:"Cierra con 10 minutos de trotadora a ritmo suave.",
-    cooldownVideo:"cardio"
+    cooldown:"Cierra con 10 minutos de trotadora a ritmo suave."
   },
   {
     weekday:"Día 2",
@@ -688,16 +671,16 @@ const DAYS = [
       {name:"Abdominales en polea", sets:"4 × 15", rest:"60 seg", equip:"polea",
        tip:"Flexión de torso con resistencia constante. De rodillas se protege la zona lumbar.",
        alt:"¿Muy exigente? Baja el peso y concéntrate en llevar las costillas hacia la cadera, en vez de jalar con los brazos."},
-      {name:"Remo bajo en polea", sets:"3 × 15", rest:"60 seg", equip:"polea", video:"remo_bajo_polea",
+      {name:"Remo bajo en polea", sets:"3 × 15", rest:"60 seg", equip:"polea",
        tip:"Trabaja dorsal ancho y trapecio jalando el manillar hacia el abdomen. Mejora la postura y la fuerza de tracción.",
        alt:"¿Muy exigente? Baja el peso para no tener que balancear el torso hacia atrás al jalar."},
-      {name:"Remo con mancuerna", sets:"3 × 12 por brazo", rest:"60 seg", equip:"mancuerna", video:"remo_mancuerna",
+      {name:"Remo con mancuerna", sets:"3 × 12 por brazo", rest:"60 seg", equip:"mancuerna",
        tip:"Tracción de un brazo a la vez. Llega más profundo al dorsal ancho y corrige diferencias de fuerza entre un lado y otro.",
        alt:"¿Muy exigente? Usa una mancuerna más liviana y guía el codo hacia la cadera, en vez de subir el peso en vertical."},
-      {name:"Tríceps en polea con cuerda", sets:"3 × 12", rest:"60 seg", equip:"polea", video:"triceps_cuerda",
+      {name:"Tríceps en polea con cuerda", sets:"3 × 12", rest:"60 seg", equip:"polea",
        tip:"Aísla las tres cabezas del tríceps. Separa las manos al final del recorrido para apretar bien el músculo.",
        alt:"¿Muy exigente? Baja el peso y mantén los codos pegados a los costados, sin mover los hombros."},
-      {name:"Press militar", sets:"3 × 12", rest:"60 seg", equip:"mancuerna", video:"press_militar",
+      {name:"Press militar", sets:"3 × 12", rest:"60 seg", equip:"mancuerna",
        tip:"Empuje vertical que desarrolla hombro y tríceps, y exige harta firmeza del abdomen.",
        alt:"¿Muy exigente? Hazlo sentada en un banco con respaldo, así no tienes que estabilizar con la espalda baja."},
       {name:"Hombro posterior", sets:"3 × 12", rest:"60 seg", equip:"maquina",
@@ -705,26 +688,24 @@ const DAYS = [
        alt:"¿Muy exigente? Baja el peso y piensa en empujar hacia afuera, en vez de jalar hacia atrás."},
     ],
     cooldownTitle:"Elongación",
-    cooldown:"Estira espalda, hombros y brazos 30 seg por lado.",
-    cooldownVideo:"estirar"
+    cooldown:"Estira espalda, hombros y brazos 30 seg por lado."
   },
   {
     weekday:"Día 3",
     title:"Piernas",
     focus:"Cuádriceps",
     warmup:"Calentamiento en trotadora — 8 minutos",
-    warmupVideo:"trotadora",
     exercises:[
       {name:"Sentadilla hack", sets:"3 × 12", rest:"60 seg", equip:"maquina",
        tip:"La máquina te sostiene el peso, así que puedes bajar profundo y cansar bien el cuádriceps sin arriesgar la técnica.",
        alt:"¿Muy exigente? Baja solo hasta 90 grados hasta que ganes fuerza y confianza en las rodillas."},
-      {name:"Extensión de cuádriceps", sets:"4 × 12", rest:"60 seg", equip:"maquina", video:"extension_cuadriceps",
+      {name:"Extensión de cuádriceps", sets:"4 × 12", rest:"60 seg", equip:"maquina",
        tip:"Aísla por completo el cuádriceps extendiendo la rodilla, con tensión pareja en todo el recorrido.",
        alt:"¿Muy exigente? Acorta el recorrido y no bajes del todo si sientes molestia en la rodilla."},
       {name:"Búlgara", sets:"3 × 12 por pierna", rest:"60 seg", equip:"mancuerna",
        tip:"Con el pie de atrás apoyado en un banco. Desafía el equilibrio y carga el trabajo en cuádriceps y glúteo de la pierna de adelante.",
        alt:"¿Muy exigente? Hazla solo con tu peso, sin mancuernas, hasta dominar el equilibrio."},
-      {name:"Femoral a un pie", sets:"3 × 12 por pierna", rest:"60 seg", equip:"maquina", video:"femoral_un_pie",
+      {name:"Femoral a un pie", sets:"3 × 12 por pierna", rest:"60 seg", equip:"maquina",
        tip:"Aísla el femoral de una pierna a la vez flexionando la rodilla. Sirve para emparejar la fuerza entre las dos.",
        alt:"¿Muy exigente? Baja la carga al mínimo y mantén la cadera pegada al rodillo, sin arquear la espalda baja."},
       {name:"Hack invertida", sets:"3 × 12", rest:"60 seg", equip:"maquina",
@@ -732,8 +713,7 @@ const DAYS = [
        alt:"¿Muy exigente? Usa la máquina sin discos para asimilar primero la postura y el recorrido."},
     ],
     cooldownTitle:"Elongación",
-    cooldown:"Estira cuádriceps, femoral y glúteo 30 seg por lado.",
-    cooldownVideo:"estirar"
+    cooldown:"Estira cuádriceps, femoral y glúteo 30 seg por lado."
   },
 ];
 
