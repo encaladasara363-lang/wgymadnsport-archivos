@@ -299,18 +299,25 @@
 const LOGO_SRC = "assets/logo.jpg";
 const WARMUP_VIDEOS = {
   bicicleta: "assets/calentamiento_bicicleta.mp4?v=1",
-  cal_dia1: "assets/dia_1_calentamiento_intermedio.mp4?v=1"
+  cal_dia1: "assets/dia_1_calentamiento_intermedio.mp4?v=1",
+  cal_dia3: "assets/dia_3_calentamiento_intermedio.mp4?v=1"
 };
 const COOLDOWN_VIDEOS = {
-  fin_dia1: "assets/dia_1_cardio_final_intermedio.mp4?v=1"
+  fin_dia1: "assets/dia_1_cardio_final_intermedio.mp4?v=1",
+  fin_dia2: "assets/dia_2_cierre_intermedio.mp4?v=1"
 };
 const VIDEOS = {
   abdominales_en_polea: "assets/dia_2_abdominales_en_polea_intermedio.mp4?v=1",
   abduccion_en_maquina: "assets/dia_1_abduccion_en_maquina_intermedio.mp4?v=1",
+  bulgara: "assets/dia_3_bulgara_intermedio.mp4?v=1",
+  extension_de_cuadriceps: "assets/dia_3_extension_de_cuadriceps_intermedio.mp4?v=1",
+  femoral_a_un_pie: "assets/dia_3_femoral_a_un_pie_intermedio.mp4?v=1",
+  hack_invertida: "assets/dia_3_hack_invertida_intermedio.mp4?v=1",
   pantorrillas_en_maquina_sentado: "assets/dia_1_pantorrillas_en_maquina_sentado_intermedio.mp4?v=1",
   peso_muerto_rumano: "assets/dia_1_peso_muerto_rumano_intermedio.mp4?v=1",
   remo_bajo_en_polea: "assets/dia_2_remo_bajo_en_polea_intermedio.mp4?v=1",
   remo_con_mancuerna: "assets/dia_2_remo_con_mancuerna_intermedio.mp4?v=1",
+  sentadilla_hack: "assets/dia_3_sentadilla_hack_intermedio.mp4?v=1",
   sentadilla_hack_invertida: "assets/dia_1_sentadilla_hack_invertida_intermedio.mp4?v=1",
   triceps_en_polea_con_cuerda: "assets/dia_2_triceps_en_polea_con_cuerda_intermedio.mp4?v=1",
   zancada_con_trx: "assets/dia_1_zancada_con_trx_intermedio.mp4?v=1"
@@ -675,8 +682,7 @@ const DAYS = [
     cooldownTitle:"Cardio final",
     cooldown:"Cierra con 10 minutos de trotadora a ritmo suave.",
     cooldownVideo:"fin_dia1"
-  },
-  {
+  },  {
     weekday:"Día 2",
     title:"Cuerpo Completo",
     focus:"Tren superior y abdomen",
@@ -703,27 +709,28 @@ const DAYS = [
        alt:"¿Muy exigente? Baja el peso y piensa en empujar hacia afuera, en vez de jalar hacia atrás."},
     ],
     cooldownTitle:"Elongación",
-    cooldown:"Estira espalda, hombros y brazos 30 seg por lado."
-  },
-  {
+    cooldown:"Estira espalda, hombros y brazos 30 seg por lado.",
+    cooldownVideo:"fin_dia2"
+  },  {
     weekday:"Día 3",
     title:"Piernas",
     focus:"Cuádriceps",
     warmup:"Calentamiento en trotadora — 8 minutos",
+    warmupVideo:"cal_dia3",
     exercises:[
-      {name:"Sentadilla hack", sets:"3 × 12", rest:"60 seg", equip:"maquina",
+      {name:"Sentadilla hack", sets:"3 × 12", rest:"60 seg", equip:"maquina", video:"sentadilla_hack",
        tip:"La máquina te sostiene el peso, así que puedes bajar profundo y cansar bien el cuádriceps sin arriesgar la técnica.",
        alt:"¿Muy exigente? Baja solo hasta 90 grados hasta que ganes fuerza y confianza en las rodillas."},
-      {name:"Extensión de cuádriceps", sets:"4 × 12", rest:"60 seg", equip:"maquina",
+      {name:"Extensión de cuádriceps", sets:"4 × 12", rest:"60 seg", equip:"maquina", video:"extension_de_cuadriceps",
        tip:"Aísla por completo el cuádriceps extendiendo la rodilla, con tensión pareja en todo el recorrido.",
        alt:"¿Muy exigente? Acorta el recorrido y no bajes del todo si sientes molestia en la rodilla."},
-      {name:"Búlgara", sets:"3 × 12 por pierna", rest:"60 seg", equip:"mancuerna",
+      {name:"Búlgara", sets:"3 × 12 por pierna", rest:"60 seg", equip:"mancuerna", video:"bulgara",
        tip:"Con el pie de atrás apoyado en un banco. Desafía el equilibrio y carga el trabajo en cuádriceps y glúteo de la pierna de adelante.",
        alt:"¿Muy exigente? Hazla solo con tu peso, sin mancuernas, hasta dominar el equilibrio."},
-      {name:"Femoral a un pie", sets:"3 × 12 por pierna", rest:"60 seg", equip:"maquina",
+      {name:"Femoral a un pie", sets:"3 × 12 por pierna", rest:"60 seg", equip:"maquina", video:"femoral_a_un_pie",
        tip:"Aísla el femoral de una pierna a la vez flexionando la rodilla. Sirve para emparejar la fuerza entre las dos.",
        alt:"¿Muy exigente? Baja la carga al mínimo y mantén la cadera pegada al rodillo, sin arquear la espalda baja."},
-      {name:"Hack invertida", sets:"3 × 12", rest:"60 seg", equip:"maquina",
+      {name:"Hack invertida", sets:"3 × 12", rest:"60 seg", equip:"maquina", video:"hack_invertida",
        tip:"De frente al respaldo de la máquina. La mayor flexión de cadera lleva el trabajo a glúteos y femorales.",
        alt:"¿Muy exigente? Usa la máquina sin discos para asimilar primero la postura y el recorrido."},
     ],
