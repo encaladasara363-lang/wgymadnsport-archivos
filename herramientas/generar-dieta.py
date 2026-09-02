@@ -138,22 +138,22 @@ h3{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:12.5pt;
 .arranque{display:flex;border:.9mm solid var(--ink);margin-top:4.5mm;flex-shrink:0}
 .arranque div{flex:1;padding:2.2mm 2mm;text-align:center;border-left:.35mm solid var(--ink)}
 .arranque div:first-child{border-left:0}
-.arranque dt{font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:7.5pt;color:var(--steel)}
-.arranque dd{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:16pt;margin-top:.6mm}
+.arranque dt{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:7pt;color:var(--steel)}
+.arranque dd{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:14pt;margin-top:.6mm}
 .arranque .vacio{color:#AFAFAB}
 .instru{border:.9mm solid var(--ink);padding:2.4mm 3mm;margin-top:3.4mm;font-weight:600;font-size:12pt;line-height:1.3}
 .instru b{font-weight:800}
 .instru p{margin-top:1.1mm}
 table.ficha{width:100%;border-collapse:collapse;margin-top:3mm}
-table.ficha th{font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:8pt;
+table.ficha th{font-weight:800;letter-spacing:.03em;text-transform:uppercase;font-size:7.5pt;
  padding:1.6mm .7mm;border:.35mm solid var(--ink);background:var(--ink);color:var(--paper);
  text-align:center;line-height:1.2}
-table.ficha td{border:.3mm solid var(--ink);height:8.2mm;text-align:center;font-weight:600;font-size:12pt}
-table.ficha td.sem{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:12.5pt;
- background:var(--suave);width:13mm}
-table.ficha td.fec{font-size:10.5pt;width:29mm;color:#33343A}
+table.ficha td{border:.3mm solid var(--ink);height:8.2mm;text-align:center;font-weight:600;font-size:11.5pt}
+table.ficha td.sem{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:12pt;
+ background:var(--suave);width:11mm}
+table.ficha td.fec{font-size:9.5pt;width:26mm;color:#33343A}
 table.ficha tr[data-hito] td.sem{background:var(--red);color:var(--paper)}
-table.ficha td.fot{width:13mm}
+table.ficha td.fot{width:11mm}
 table.ficha tr.ejemplo td{background:var(--suave);color:var(--steel);height:7mm;font-style:italic}
 table.ficha tr.ejemplo td.sem{background:#DEDEDA;font-style:normal;color:var(--steel)}
 
@@ -248,19 +248,21 @@ def ficha_html(plan, logo):
     arr = "".join('<div><dt>%s</dt><dd%s>%s</dd></div>'
                   % (esc(k), ' class="vacio"' if "_" in str(v) else "", esc(v))
                   for k, v in a)
+    dias = plan.get("dias_peso", ["lunes", "miércoles", "viernes"])
     tr = ['   <tr class="ejemplo"><td class="sem">ej.</td><td class="fec">así se llena</td>'
-          '<td>65,0</td><td>64,8</td><td>64,6</td><td>64,8</td><td>78</td><td class="fot">&#10003;</td></tr>']
-    for n, f, hito in plan["ficha"]:
+          '<td>70,0</td><td>69,8</td><td>69,6</td><td>69,8</td><td>82</td><td>99</td>'
+          '<td class="fot">&#10003;</td></tr>']
+    for nn, f, hito in plan["ficha"]:
         at = ' data-hito="1"' if hito else ""
         tr.append('   <tr%s><td class="sem">%s</td><td class="fec">%s</td>'
-                  '<td></td><td></td><td></td><td></td><td></td><td class="fot"></td></tr>'
-                  % (at, esc(n), esc(f)))
+                  '<td></td><td></td><td></td><td></td><td></td><td></td><td class="fot"></td></tr>'
+                  % (at, esc(nn), esc(f)))
     return """ <div class="hoja" data-n="info">
 %s  <dl class="arranque">%s</dl>
   <div class="instru">%s</div>
   <table class="ficha">
-   <thead><tr><th>Sem</th><th>Semana del</th><th>Peso<br>lunes</th><th>Peso<br>miércoles</th>
-   <th>Peso<br>viernes</th><th>Promedio<br>de los 3</th><th>Cintura<br>del lunes</th><th>Foto</th></tr></thead>
+   <thead><tr><th>Sem</th><th>Semana del</th><th>Peso<br>%s</th><th>Peso<br>%s</th>
+   <th>Peso<br>%s</th><th>Promedio<br>de los 3</th><th>Cintura<br>cm</th><th>Cadera<br>cm</th><th>Foto</th></tr></thead>
    <tbody>
 %s
    </tbody>
@@ -268,7 +270,7 @@ def ficha_html(plan, logo):
 %s </div>
 """ % (CAB.format(logo=logo, doc=esc(plan["documento"]), socio=esc(plan["socio"]),
                   tag="Medidas", sub=esc(plan["periodo"])),
-       arr, plan["instrucciones"], "\n".join(tr),
+       arr, plan["instrucciones"], dias[0], dias[1], dias[2], "\n".join(tr),
        PIE.format(izq=esc(plan.get("pie_ficha", ""))))
 
 
