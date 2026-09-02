@@ -298,10 +298,13 @@
 <script>
 const LOGO_SRC = "assets/logo.jpg";
 const WARMUP_VIDEOS = {
-  bicicleta: "assets/calentamiento_bicicleta.mp4?v=1"
+  bicicleta: "assets/calentamiento_bicicleta.mp4?v=1",
+  cal_dia1: "assets/dia_1_calentamiento_intermedio.mp4?v=1"
 };
 const COOLDOWN_VIDEOS = {};
-const VIDEOS = {};
+const VIDEOS = {
+  zancada_con_trx: "assets/dia_1_zancada_con_trx_intermedio.mp4?v=1"
+};
 
 document.getElementById('gateLogoImg').src = LOGO_SRC;
 document.getElementById('logoImg').src = LOGO_SRC;
@@ -641,8 +644,9 @@ const DAYS = [
     title:"Pierna y Glúteos",
     focus:"Glúteo",
     warmup:"Calentamiento en trotadora — 8 minutos",
+    warmupVideo:"cal_dia1",
     exercises:[
-      {name:"Zancada con TRX", sets:"3 × 12 por pierna", rest:"60 seg", equip:"trx",
+      {name:"Zancada con TRX", sets:"3 × 12 por pierna", rest:"60 seg", equip:"trx", video:"zancada_con_trx",
        tip:"Desplante en suspensión que mejora la fuerza de una pierna a la vez, la estabilidad de la cadera y el equilibrio.",
        alt:"¿Muy exigente? Haz zancadas normales con los dos pies en el suelo para ganar estabilidad."},
       {name:"Sentadilla hack invertida", sets:"3 × 12", rest:"60 seg", equip:"maquina",
