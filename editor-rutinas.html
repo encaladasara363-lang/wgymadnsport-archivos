@@ -330,9 +330,11 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
       <span class="etq">Cuando esté lista</span>
       <button class="btn btn-linea" id="bPrevio">Ver como la verán los socios</button>
       <button class="btn btn-verde" id="bEnviarTexto">Enviármela (archivo liviano)</button>
+      <button class="btn btn-linea" id="bEnviarPartes">Mandar los videos por partes</button>
       <button class="btn btn-linea" id="bEnviar">Enviármela con los videos adentro</button>
-      <p class="pista" id="pistaEnvio">El archivo liviano pesa unos pocos KB y siempre se puede mandar por el chat.
-      El de los videos puede pesar demasiado y el chat lo rechaza.</p>
+      <p class="pista" id="pistaEnvio">Primero mande el archivo liviano: pesa unos pocos KB y siempre pasa.
+      Después, si la rutina lleva videos suyos, mándelos por partes: la app los corta
+      en tandas del tamaño que el chat acepta y les pone el nombre del ejercicio.</p>
     </div>
 
     <div class="seccion">
@@ -517,7 +519,7 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
 var LLAVE = "wgym_editor_rutinas_v1";
 
 /* La fecha de esta version, para saber si el aparato tiene la ultima. */
-var VERSION_APP = "02-09-2026 · envío liviano";
+var VERSION_APP = "02-09-2026 · videos por partes";
 
 /* ── Los videos que ya están en el gimnasio (carpeta assets) ─────────── */
 var BIBLIOTECA = ("abdominales_banca_hombres abdominales_colchoneta abduccion_gluteos aductores "+
@@ -2424,6 +2426,94 @@ function cargarDatosPropios(propios, luego){
   });
  })();
 }
+
+/* ── Los videos, en tandas que el chat sí acepta ───────────────────────
+   Sus grabaciones suman más de lo que deja mandar el chat de una vez. En
+   vez de armar un archivo que va a ser rechazado, se reparten en tandas
+   bajo el tope y se baja una por vez. Cada video sale con el nombre del
+   día y del ejercicio, así no hay que adivinar cuál es cuál. */
+function repartirEnTandas(fichas, propios){
+ var tandas = [], act = [], peso = 0;
+ propios.forEach(function(v, i){
+  var f = fichas[i];
+  if(!f) return;
+  if(peso + f.peso > TOPE_CHAT && act.length){ tandas.push(act); act = []; peso = 0; }
+  act.push({ v:v, f:f });
+  peso += f.peso;
+ });
+ if(act.length) tandas.push(act);
+ return tandas;
+}
+
+function nombreDeVideo(v, f){
+ var donde = (v.usadoEn && v.usadoEn[0]) || "video";
+ var ext = (f.nombre.match(/\.[a-z0-9]+$/i) || [".mp4"])[0];
+ return apodo(donde.replace(/\s*·\s*/g, " ")) + ext;
+}
+
+function exportarPorPartes(){
+ var r = rutinaActual();
+ var usados = videosUsados(r);
+ var propios = usados.filter(function(v){ return v.ref.indexOf("mio:") === 0; });
+ if(!propios.length){
+  alert("Esta rutina no usa videos grabados por usted, así que no hay nada que mandar aparte.");
+  return;
+ }
+
+ var b = $("bEnviarPartes");
+ var textoOriginal = b.textContent;
+ b.disabled = true;
+ b.textContent = "Preparando…";
+
+ cargarFichasPropias(propios, function(previas){
+  var tandas = repartirEnTandas(previas, propios);
+  b.disabled = false;
+  b.textContent = textoOriginal;
+  if(!confirm("Sus videos pesan " + pesoBonito(previas.reduce(function(a,f){
+      return a + (f ? f.peso : 0); }, 0)) + " en total.\n\n" +
+    "Se van a bajar en " + tandas.length + " parte(s), una por vez.\n" +
+    "Mándeme cada una por el chat a medida que salga.\n\n¿Empezamos?")) return;
+  bajarTanda(r, propios, tandas, 0);
+ });
+}
+
+function bajarTanda(r, propios, tandas, i){
+ if(i >= tandas.length){
+  alert("Listas las " + tandas.length + " partes.\n\n" +
+        "Mándemelas todas por el chat, en cualquier orden.");
+  return;
+ }
+ var b = $("bEnviarPartes");
+ b.disabled = true;
+ b.textContent = "Armando la parte " + (i+1) + " de " + tandas.length + "…";
+
+ var grupo = tandas[i];
+ cargarDatosPropios(grupo.map(function(x){ return x.v; }), function(datos){
+  var archivos = [];
+  grupo.forEach(function(x, k){
+   var d = datos[k];
+   if(d) archivos.push({ nombre: nombreDeVideo(x.v, d), datos: d.datos });
+  });
+  var zip = armarZip(archivos);
+  bajarArchivo(zip, "videos-" + apodo(r.titulo) + "-parte-" + (i+1) +
+                    "-de-" + tandas.length + ".zip");
+  b.disabled = false;
+  b.textContent = "Siguiente parte (" + (i+2) + " de " + tandas.length + ")";
+  if(i + 1 >= tandas.length){
+   b.textContent = "Mandar los videos por partes";
+   alert("Listas las " + tandas.length + " partes: búsquelas en sus descargas.\n\n" +
+         "Mándemelas por el chat, en cualquier orden.");
+   return;
+  }
+  alert("Parte " + (i+1) + " de " + tandas.length + " lista (" + pesoBonito(zip.size) + ").\n\n" +
+        "Mándemela por el chat, y después toque el botón para bajar la siguiente.");
+  b.onclick = function(){ b.onclick = null; bajarTanda(r, propios, tandas, i+1); };
+ });
+}
+
+$("bEnviarPartes").addEventListener("click", function(){
+ if(!$("bEnviarPartes").onclick) exportarPorPartes();
+});
 
 $("bEnviar").addEventListener("click", function(){ exportar(true); });
 $("bEnviarTexto").addEventListener("click", function(){ exportar(false); });
