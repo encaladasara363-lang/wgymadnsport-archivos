@@ -519,7 +519,7 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
 var LLAVE = "wgym_editor_rutinas_v1";
 
 /* La fecha de esta version, para saber si el aparato tiene la ultima. */
-var VERSION_APP = "02-09-2026 · achica los videos pesados";
+var VERSION_APP = "02-09-2026 · seguir desde la parte que falta";
 
 /* ── Los videos que ya están en el gimnasio (carpeta assets) ─────────── */
 var BIBLIOTECA = ("abdominales_banca_hombres abdominales_colchoneta abduccion_gluteos aductores "+
@@ -2561,15 +2561,30 @@ function exportarPorPartes(){
              "3. Ese súbalo al chat.";
    }
   }
-  if(!confirm(aviso + "\n\n¿Empezamos?")) return;
-  bajarTanda(r, propios, tandas, 0);
+  aviso += "\n\nSi ya me mandó algunas, no las repita: ponga desde qué parte seguir.";
+  if(!confirm(aviso + "\n\n¿Seguimos?")) return;
+
+  /* Que pueda retomar donde quedó. Volver a bajar las trece cuando solo
+     faltan dos es tiempo perdido. */
+  var desde = 1;
+  if(tandas.length > 1){
+   var puesto = prompt("¿Desde qué parte empiezo?\n\n" +
+     "Escriba un número del 1 al " + tandas.length + ".\n" +
+     "Si ya me mandó hasta la 7, escriba 8.", "1");
+   if(puesto === null) return;
+   desde = parseInt(puesto, 10);
+   if(!(desde >= 1 && desde <= tandas.length)){
+    alert("Ese número no existe. Tiene que ser del 1 al " + tandas.length + ".");
+    return;
+   }
+  }
+  bajarTanda(r, propios, tandas, desde - 1);
  });
 }
 
 function bajarTanda(r, propios, tandas, i){
  if(i >= tandas.length){
-  alert("Listas las " + tandas.length + " partes.\n\n" +
-        "Mándemelas todas por el chat, en cualquier orden.");
+  alert("No queda ninguna parte por bajar.");
   return;
  }
  var b = $("bEnviarPartes");
@@ -2586,8 +2601,8 @@ function bajarTanda(r, propios, tandas, i){
   b.textContent = "Siguiente parte (" + (i+2) + " de " + tandas.length + ")";
   if(i + 1 >= tandas.length){
    b.textContent = "Mandar los videos por partes";
-   alert("Listas las " + tandas.length + " partes: búsquelas en sus descargas.\n\n" +
-         "Mándemelas por el chat, en cualquier orden.");
+   alert("Esa era la última parte (" + tandas.length + " de " + tandas.length + ").\n\n" +
+         "Búsquela en sus descargas y mándemela por el chat.");
    return;
   }
   alert("Parte " + (i+1) + " de " + tandas.length + " lista (" + pesoBonito(zip.size) + ").\n\n" +
