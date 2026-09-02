@@ -301,8 +301,18 @@ const WARMUP_VIDEOS = {
   bicicleta: "assets/calentamiento_bicicleta.mp4?v=1",
   cal_dia1: "assets/dia_1_calentamiento_intermedio.mp4?v=1"
 };
-const COOLDOWN_VIDEOS = {};
+const COOLDOWN_VIDEOS = {
+  fin_dia1: "assets/dia_1_cardio_final_intermedio.mp4?v=1"
+};
 const VIDEOS = {
+  abdominales_en_polea: "assets/dia_2_abdominales_en_polea_intermedio.mp4?v=1",
+  abduccion_en_maquina: "assets/dia_1_abduccion_en_maquina_intermedio.mp4?v=1",
+  pantorrillas_en_maquina_sentado: "assets/dia_1_pantorrillas_en_maquina_sentado_intermedio.mp4?v=1",
+  peso_muerto_rumano: "assets/dia_1_peso_muerto_rumano_intermedio.mp4?v=1",
+  remo_bajo_en_polea: "assets/dia_2_remo_bajo_en_polea_intermedio.mp4?v=1",
+  remo_con_mancuerna: "assets/dia_2_remo_con_mancuerna_intermedio.mp4?v=1",
+  sentadilla_hack_invertida: "assets/dia_1_sentadilla_hack_invertida_intermedio.mp4?v=1",
+  triceps_en_polea_con_cuerda: "assets/dia_2_triceps_en_polea_con_cuerda_intermedio.mp4?v=1",
   zancada_con_trx: "assets/dia_1_zancada_con_trx_intermedio.mp4?v=1"
 };
 
@@ -649,21 +659,22 @@ const DAYS = [
       {name:"Zancada con TRX", sets:"3 × 12 por pierna", rest:"60 seg", equip:"trx", video:"zancada_con_trx",
        tip:"Desplante en suspensión que mejora la fuerza de una pierna a la vez, la estabilidad de la cadera y el equilibrio.",
        alt:"¿Muy exigente? Haz zancadas normales con los dos pies en el suelo para ganar estabilidad."},
-      {name:"Sentadilla hack invertida", sets:"3 × 12", rest:"60 seg", equip:"maquina",
+      {name:"Sentadilla hack invertida", sets:"3 × 12", rest:"60 seg", equip:"maquina", video:"sentadilla_hack_invertida",
        tip:"Variante de sentadilla en máquina donde te colocas mirando hacia el respaldo. Al permitir más flexión de cadera, el esfuerzo se va de forma segura a glúteos y femorales.",
        alt:"¿Muy exigente? Practica el movimiento con menos peso, o haz sentadillas libres con tu propio peso."},
-      {name:"Abducción en máquina", sets:"4 × 12", rest:"60 seg", equip:"maquina",
+      {name:"Abducción en máquina", sets:"4 × 12", rest:"60 seg", equip:"maquina", video:"abduccion_en_maquina",
        tip:"Ejercicio guiado que aísla los glúteos, sobre todo el medio y el menor, empujando las almohadillas hacia afuera contra la resistencia.",
        alt:"¿Muy exigente? Baja el peso de la máquina y concéntrate en aguantar un segundo la apertura máxima."},
-      {name:"Peso muerto rumano", sets:"3 × 12", rest:"60 seg", equip:"barra",
+      {name:"Peso muerto rumano", sets:"3 × 12", rest:"60 seg", equip:"barra", video:"peso_muerto_rumano",
        tip:"Trabaja fuerte glúteos y femorales con una bisagra de cadera, manteniendo las rodillas casi fijas.",
        alt:"¿Muy exigente? Practica primero el movimiento de bisagra sin peso, empujando los glúteos hacia una pared."},
-      {name:"Pantorrillas en máquina sentado", sets:"3 × 15", rest:"60 seg", equip:"maquina",
+      {name:"Pantorrillas en máquina sentado", sets:"3 × 15", rest:"60 seg", equip:"maquina", video:"pantorrillas_en_maquina_sentado",
        tip:"Aísla el sóleo, el músculo profundo de la pantorrilla, extendiendo el tobillo con las rodillas dobladas a 90 grados.",
        alt:"¿Muy exigente? Baja la carga y empuja solo con la almohadilla del pie, no con los dedos."},
     ],
     cooldownTitle:"Cardio final",
-    cooldown:"Cierra con 10 minutos de trotadora a ritmo suave."
+    cooldown:"Cierra con 10 minutos de trotadora a ritmo suave.",
+    cooldownVideo:"fin_dia1"
   },
   {
     weekday:"Día 2",
@@ -672,16 +683,16 @@ const DAYS = [
     warmup:"Calentamiento en bicicleta — 8 minutos",
     warmupVideo:"bicicleta",
     exercises:[
-      {name:"Abdominales en polea", sets:"4 × 15", rest:"60 seg", equip:"polea",
+      {name:"Abdominales en polea", sets:"4 × 15", rest:"60 seg", equip:"polea", video:"abdominales_en_polea",
        tip:"Flexión de torso con resistencia constante. De rodillas se protege la zona lumbar.",
        alt:"¿Muy exigente? Baja el peso y concéntrate en llevar las costillas hacia la cadera, en vez de jalar con los brazos."},
-      {name:"Remo bajo en polea", sets:"3 × 15", rest:"60 seg", equip:"polea",
+      {name:"Remo bajo en polea", sets:"3 × 15", rest:"60 seg", equip:"polea", video:"remo_bajo_en_polea",
        tip:"Trabaja dorsal ancho y trapecio jalando el manillar hacia el abdomen. Mejora la postura y la fuerza de tracción.",
        alt:"¿Muy exigente? Baja el peso para no tener que balancear el torso hacia atrás al jalar."},
-      {name:"Remo con mancuerna", sets:"3 × 12 por brazo", rest:"60 seg", equip:"mancuerna",
+      {name:"Remo con mancuerna", sets:"3 × 12 por brazo", rest:"60 seg", equip:"mancuerna", video:"remo_con_mancuerna",
        tip:"Tracción de un brazo a la vez. Llega más profundo al dorsal ancho y corrige diferencias de fuerza entre un lado y otro.",
        alt:"¿Muy exigente? Usa una mancuerna más liviana y guía el codo hacia la cadera, en vez de subir el peso en vertical."},
-      {name:"Tríceps en polea con cuerda", sets:"3 × 12", rest:"60 seg", equip:"polea",
+      {name:"Tríceps en polea con cuerda", sets:"3 × 12", rest:"60 seg", equip:"polea", video:"triceps_en_polea_con_cuerda",
        tip:"Aísla las tres cabezas del tríceps. Separa las manos al final del recorrido para apretar bien el músculo.",
        alt:"¿Muy exigente? Baja el peso y mantén los codos pegados a los costados, sin mover los hombros."},
       {name:"Press militar", sets:"3 × 12", rest:"60 seg", equip:"mancuerna",
