@@ -85,18 +85,18 @@ html,body{background:var(--paper);color:var(--ink);
 /* ---- comidas ---- */
 .cuerpo{display:grid;grid-template-columns:1fr 1fr;gap:0 7mm;margin-top:4.5mm;align-items:start;flex:1}
 .col{min-width:0}
-.bloque{margin-bottom:3.1mm;break-inside:avoid}
+.bloque{margin-bottom:2.6mm;break-inside:avoid}
 .bloque h2{
  font-family:'Anton','Arial Black',Impact,sans-serif;font-weight:900;
  font-size:12.5pt;letter-spacing:.02em;text-transform:uppercase;
- border-bottom:1.1mm solid var(--ink);padding-bottom:1mm;margin-bottom:1.6mm;
+ border-bottom:1.1mm solid var(--ink);padding-bottom:.8mm;margin-bottom:1.3mm;
  display:flex;justify-content:space-between;align-items:baseline;gap:2mm
 }
 .bloque h2 em{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:normal;
  font-size:9pt;letter-spacing:.05em;color:var(--steel);text-transform:none;white-space:nowrap}
 .bloque li{list-style:none;display:flex;justify-content:space-between;align-items:baseline;
- gap:2.5mm;padding:.9mm 1.4mm;border-bottom:.2mm dotted #A9A9A5;
- font-weight:600;font-size:13.5pt;line-height:1.24}
+ gap:2.5mm;padding:.72mm 1.4mm;border-bottom:.2mm dotted #A9A9A5;
+ font-weight:600;font-size:13pt;line-height:1.18}
 .bloque li:last-child{border-bottom:0}
 .bloque li b{font-weight:800;white-space:nowrap}
 .bloque li.sup{background:var(--suave);justify-content:flex-start}
