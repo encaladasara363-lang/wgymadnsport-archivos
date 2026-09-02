@@ -519,7 +519,7 @@ input[type=text]:focus-visible,textarea:focus-visible,select:focus-visible{
 var LLAVE = "wgym_editor_rutinas_v1";
 
 /* La fecha de esta version, para saber si el aparato tiene la ultima. */
-var VERSION_APP = "02-09-2026 · videos por partes";
+var VERSION_APP = "02-09-2026 · achica los videos pesados";
 
 /* ── Los videos que ya están en el gimnasio (carpeta assets) ─────────── */
 var BIBLIOTECA = ("abdominales_banca_hombres abdominales_colchoneta abduccion_gluteos aductores "+
@@ -2427,6 +2427,73 @@ function cargarDatosPropios(propios, luego){
  })();
 }
 
+/* ── Achicar un video que no pasa por el chat ──────────────────────────
+   Un video suelto de cuarenta megas no se puede partir en tandas: hay que
+   achicarlo. Se vuelve a dibujar en un lienzo más chico mientras corre, y
+   se graba eso. Tarda lo que dura el video, y se pierde el sonido, que en
+   un video de ejercicio no hace falta. */
+var LADO_ACHICADO = 640;
+var BITS_ACHICADO = 900000;
+
+function sePuedeAchicar(){
+ return typeof MediaRecorder !== "undefined" &&
+        !!document.createElement("canvas").captureStream;
+}
+
+function tipoDeGrabacion(){
+ var opciones = ["video/mp4", "video/webm;codecs=vp9", "video/webm;codecs=vp8", "video/webm"];
+ for(var i = 0; i < opciones.length; i++){
+  try{ if(MediaRecorder.isTypeSupported(opciones[i])) return opciones[i]; }catch(e){}
+ }
+ return "";
+}
+
+function achicarVideo(blob, luego){
+ var tipo = tipoDeGrabacion();
+ if(!sePuedeAchicar() || !tipo) return luego(null);
+
+ var url = URL.createObjectURL(blob);
+ var v = document.createElement("video");
+ var termino = false;
+ function acabar(salida){
+  if(termino) return;
+  termino = true;
+  try{ URL.revokeObjectURL(url); }catch(e){}
+  luego(salida);
+ }
+ var reloj = setTimeout(function(){ acabar(null); }, 180000);
+
+ v.muted = true; v.playsInline = true; v.setAttribute("playsinline", "");
+ v.preload = "auto";
+ v.onerror = function(){ clearTimeout(reloj); acabar(null); };
+ v.onloadedmetadata = function(){
+  try{
+   var esc = Math.min(1, LADO_ACHICADO / Math.max(v.videoWidth, v.videoHeight));
+   var lienzo = document.createElement("canvas");
+   lienzo.width  = Math.max(2, Math.round(v.videoWidth  * esc / 2) * 2);
+   lienzo.height = Math.max(2, Math.round(v.videoHeight * esc / 2) * 2);
+   var ctx = lienzo.getContext("2d");
+   var grab = new MediaRecorder(lienzo.captureStream(24),
+                { mimeType: tipo, videoBitsPerSecond: BITS_ACHICADO });
+   var trozos = [];
+   grab.ondataavailable = function(e){ if(e.data && e.data.size) trozos.push(e.data); };
+   grab.onstop = function(){
+    clearTimeout(reloj);
+    acabar(trozos.length ? new Blob(trozos, { type: tipo }) : null);
+   };
+   grab.start();
+   v.play();
+   (function pintar(){
+    if(termino) return;
+    if(v.ended){ if(grab.state !== "inactive") grab.stop(); return; }
+    ctx.drawImage(v, 0, 0, lienzo.width, lienzo.height);
+    requestAnimationFrame(pintar);
+   })();
+  }catch(e){ clearTimeout(reloj); acabar(null); }
+ };
+ v.src = url;
+}
+
 /* ── Los videos, en tandas que el chat sí acepta ───────────────────────
    Sus grabaciones suman más de lo que deja mandar el chat de una vez. En
    vez de armar un archivo que va a ser rechazado, se reparten en tandas
@@ -2469,10 +2536,32 @@ function exportarPorPartes(){
   var tandas = repartirEnTandas(previas, propios);
   b.disabled = false;
   b.textContent = textoOriginal;
-  if(!confirm("Sus videos pesan " + pesoBonito(previas.reduce(function(a,f){
-      return a + (f ? f.peso : 0); }, 0)) + " en total.\n\n" +
-    "Se van a bajar en " + tandas.length + " parte(s), una por vez.\n" +
-    "Mándeme cada una por el chat a medida que salga.\n\n¿Empezamos?")) return;
+
+  /* Un video que por sí solo se pasa del tope no se arregla partiendo:
+     hay que achicarlo. */
+  var gordos = [];
+  previas.forEach(function(f, i){
+   if(f && f.peso > TOPE_CHAT) gordos.push(propios[i].usadoEn[0] || f.nombre);
+  });
+
+  var total = previas.reduce(function(a, f){ return a + (f ? f.peso : 0); }, 0);
+  var aviso = "Sus videos pesan " + pesoBonito(total) + " en total.\n\n" +
+              "Se van a bajar en " + tandas.length + " parte(s), una por vez.\n" +
+              "Mándeme cada una por el chat a medida que salga.";
+  if(gordos.length){
+   aviso += "\n\nOJO: " + (gordos.length === 1 ? "este video pesa" : "estos " +
+     gordos.length + " videos pesan") + " más de lo que acepta el chat aunque vayan solos:\n" +
+     gordos.map(function(g){ return "· " + g; }).join("\n") +
+     "\n\nSe van a achicar antes de mandarlos. Eso tarda lo que dura cada video\n" +
+     "y les saca el sonido, que en un ejercicio no hace falta.";
+   if(!sePuedeAchicar()){
+    aviso += "\n\nPero este teléfono no sabe achicarlos. Mándelos así:\n" +
+             "1. Mándeselos a usted misma por WhatsApp.\n" +
+             "2. Guarde el que le llegó por WhatsApp: viene mucho más liviano.\n" +
+             "3. Ese súbalo al chat.";
+   }
+  }
+  if(!confirm(aviso + "\n\n¿Empezamos?")) return;
   bajarTanda(r, propios, tandas, 0);
  });
 }
@@ -2489,11 +2578,7 @@ function bajarTanda(r, propios, tandas, i){
 
  var grupo = tandas[i];
  cargarDatosPropios(grupo.map(function(x){ return x.v; }), function(datos){
-  var archivos = [];
-  grupo.forEach(function(x, k){
-   var d = datos[k];
-   if(d) archivos.push({ nombre: nombreDeVideo(x.v, d), datos: d.datos });
-  });
+  achicarLosQueNoQuepan(grupo, datos, b, function(archivos){
   var zip = armarZip(archivos);
   bajarArchivo(zip, "videos-" + apodo(r.titulo) + "-parte-" + (i+1) +
                     "-de-" + tandas.length + ".zip");
@@ -2508,7 +2593,43 @@ function bajarTanda(r, propios, tandas, i){
   alert("Parte " + (i+1) + " de " + tandas.length + " lista (" + pesoBonito(zip.size) + ").\n\n" +
         "Mándemela por el chat, y después toque el botón para bajar la siguiente.");
   b.onclick = function(){ b.onclick = null; bajarTanda(r, propios, tandas, i+1); };
+  });
  });
+}
+
+/* Arma los archivos de una tanda, achicando los que no pasarían por el chat. */
+function achicarLosQueNoQuepan(grupo, datos, b, luego){
+ var archivos = [];
+ var i = 0;
+ (function siguiente(){
+  if(i >= grupo.length) return luego(archivos);
+  var x = grupo[i], d = datos[i];
+  if(!d){ i++; return siguiente(); }
+  var nombre = nombreDeVideo(x.v, d);
+  if(d.peso <= TOPE_CHAT || !sePuedeAchicar()){
+   archivos.push({ nombre: nombre, datos: d.datos });
+   i++; return siguiente();
+  }
+  b.textContent = "Achicando " + (x.v.usadoEn[0] || nombre) + "…";
+  achicarVideo(new Blob([d.datos], { type: "video/mp4" }), function(chico){
+   if(!chico){
+    archivos.push({ nombre: nombre, datos: d.datos });
+    i++; return siguiente();
+   }
+   var lector = new FileReader();
+   lector.onload = function(){
+    var ext = chico.type.indexOf("mp4") >= 0 ? ".mp4" : ".webm";
+    archivos.push({ nombre: nombre.replace(/\.[a-z0-9]+$/i, "") + ext,
+                    datos: new Uint8Array(lector.result) });
+    i++; siguiente();
+   };
+   lector.onerror = function(){
+    archivos.push({ nombre: nombre, datos: d.datos });
+    i++; siguiente();
+   };
+   lector.readAsArrayBuffer(chico);
+  });
+ })();
 }
 
 $("bEnviarPartes").addEventListener("click", function(){
