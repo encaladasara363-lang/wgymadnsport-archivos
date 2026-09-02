@@ -23,6 +23,8 @@ CARTELES = {
     "mujeres": {"linea1": "RUTINA PRINCIPIANTE", "linea2": "MUJERES"},
     "hombres": {"linea1": "RUTINA INTERMEDIO",   "linea2": "HOMBRES"},
     "gluteos": {"linea1": "RUTINA ENFOCADA EN",  "linea2": "GLÚTEOS"},
+    "intermedio-mujeres": {"linea1": "RUTINA INTERMEDIO MUJERES",
+                           "linea2": "GLÚTEOS"},
 }
 
 VENTAJAS = [
@@ -178,7 +180,7 @@ PLANTILLA = """<!DOCTYPE html>
     <div class="tag"><span>YA TENEMOS APP</span></div>
 
     <h1>__LINEA1__<br><em>__LINEA2__</em></h1>
-    <div class="sub">5 días · __DIAS__</div>
+    <div class="sub">__CUANTOS__ días · __DIAS__</div>
 
     <div class="medio">
       <div class="fono">
@@ -212,6 +214,14 @@ PLANTILLA = """<!DOCTYPE html>
 """
 
 
+def nombre_corto(dia):
+    """En las rutinas por día de la semana basta con las tres primeras letras
+    (LUN, MAR). Cuando el día viene numerado, cortarlo deja tres veces DÍA,
+    así que ahí se deja el nombre completo."""
+    d = (dia or "").strip()
+    return d.upper() if d.upper().startswith("DÍA") or d.upper().startswith("DIA") else d[:3].upper()
+
+
 def main():
     logo = b64(os.path.join(RAIZ, "assets/logo.jpg"))
     ventajas = "".join(
@@ -236,7 +246,8 @@ def main():
              .replace("__LOGO__", logo)
              .replace("__LINEA1__", cfg["linea1"])
              .replace("__LINEA2__", cfg["linea2"])
-             .replace("__DIAS__", " · ".join(d["weekday"][:3].upper() for d in dias))
+             .replace("__CUANTOS__", str(len(dias)))
+             .replace("__DIAS__", " · ".join(nombre_corto(d["weekday"]) for d in dias))
              .replace("__PANTALLA__", b64(pant))
              .replace("__QR__", qr)
              .replace("__VENTAJAS__", ventajas))

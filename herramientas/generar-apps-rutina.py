@@ -52,6 +52,16 @@ RUTINAS = {
         "barra2":  "GLÚTEOS",
         "bajada":  "5 días · con videos",
     },
+    "intermedio-mujeres": {
+        "archivo": "rutina-intermedio-mujeres.html",
+        "titulo":  "Rutina Intermedio Mujeres · 3 días",
+        "corto":   "Rutina Intermedio",
+        "marca1":  "RUTINA INTERMEDIO MUJERES",
+        "marca2":  "ENFOCADA EN GLÚTEOS",
+        "barra1":  "RUTINA",
+        "barra2":  "INTERMEDIO",
+        "bajada":  "3 días · con videos",
+    },
 }
 
 

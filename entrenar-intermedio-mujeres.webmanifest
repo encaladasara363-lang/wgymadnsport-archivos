@@ -1,0 +1,38 @@
+{
+  "name": "RUTINA INTERMEDIO MUJERES · WGYMADNSPORT",
+  "short_name": "RUTINA INTERMEDIO",
+  "description": "Rutina Intermedio Mujeres · 3 días de WGYMADNSPORT Tocopilla.",
+  "lang": "es-CL",
+  "start_url": "entrenar-intermedio-mujeres.html",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "icons": [
+    {
+      "src": "assets/icono-192.png?v=3",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icono-512.png?v=3",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icono-maskable-192.png?v=3",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/icono-maskable-512.png?v=3",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
