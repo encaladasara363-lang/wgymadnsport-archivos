@@ -3,3 +3,9 @@ cartel-transferencia.html
 cartel-transferencia.pdf
 cartel-transferencia-mercadopago.html
 cartel-transferencia-mercadopago.pdf
+
+# Dietas de socios: llevan datos personales de salud, no van al repositorio publico
+dieta-*.json
+dieta-*.html
+dieta-*.pdf
+!herramientas/dieta-ejemplo.json

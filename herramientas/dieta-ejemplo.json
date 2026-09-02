@@ -1,0 +1,779 @@
+{
+ "socio": "Nombre del socio",
+ "documento": "Plan de alimentación",
+ "periodo": "fecha de inicio → fecha de término",
+ "dias": [
+  {
+   "clave": "alto",
+   "nombre": "Día alto",
+   "cuando": "Lunes y miércoles · Piernas",
+   "corte": 3,
+   "cifras": [
+    [
+     "Calorías",
+     "2.450"
+    ],
+    [
+     "Proteína",
+     "183 g"
+    ],
+    [
+     "Carbos",
+     "274 g"
+    ],
+    [
+     "Grasa",
+     "62 g"
+    ],
+    [
+     "Agua",
+     "3,5 L"
+    ]
+   ],
+   "comidas": [
+    {
+     "nombre": "Desayuno",
+     "hora": "07:30",
+     "items": [
+      [
+       "Kéfir",
+       "100 g"
+      ],
+      [
+       "Claras de huevo",
+       "250 g"
+      ],
+      [
+       "Huevo entero",
+       "1 unidad"
+      ],
+      [
+       "Avena",
+       "60 g"
+      ],
+      [
+       "Frutillas",
+       "150 g"
+      ],
+      [
+       "Café solo",
+       "a gusto"
+      ],
+      [
+       "Multivitamínico",
+       "1 dosis",
+       true
+      ],
+      [
+       "Omega 3",
+       "1 cápsula",
+       true
+      ],
+      [
+       "Beta-alanina",
+       "2 g",
+       true
+      ]
+     ]
+    },
+    {
+     "nombre": "Media mañana",
+     "hora": "10:30",
+     "items": [
+      [
+       "Yogurt griego",
+       "150 g"
+      ],
+      [
+       "Almendras en lonjas",
+       "20 g"
+      ],
+      [
+       "Red Bull",
+       "1 lata"
+      ]
+     ]
+    },
+    {
+     "nombre": "Almuerzo",
+     "hora": "13:00",
+     "items": [
+      [
+       "Pechuga de pollo",
+       "200 g"
+      ],
+      [
+       "Arroz blanco",
+       "85 g"
+      ],
+      [
+       "Lechuga, pepino, morrón",
+       "250 g"
+      ],
+      [
+       "Aceite de oliva",
+       "10 g"
+      ],
+      [
+       "Piña",
+       "100 g"
+      ],
+      [
+       "Omega 3",
+       "1 cápsula",
+       true
+      ],
+      [
+       "Citrato de potasio",
+       "ver envase",
+       true
+      ]
+     ]
+    },
+    {
+     "nombre": "Pre-entreno",
+     "hora": "16:30",
+     "items": [
+      [
+       "Psychotic — con 300 ml de agua",
+       "½ scoop",
+       true
+      ],
+      [
+       "Beta-alanina",
+       "2 g",
+       true
+      ]
+     ]
+    },
+    {
+     "nombre": "En el entreno",
+     "hora": "17:00",
+     "items": [
+      [
+       "Agua",
+       "750 ml"
+      ]
+     ]
+    },
+    {
+     "nombre": "Post-entreno",
+     "hora": "al terminar",
+     "items": [
+      [
+       "Whey Gold Standard",
+       "1 scoop",
+       true
+      ],
+      [
+       "Creatina",
+       "5 g",
+       true
+      ],
+      [
+       "Plátano",
+       "100 g"
+      ],
+      [
+       "Galletas de arroz",
+       "2 unidades"
+      ],
+      [
+       "Miel",
+       "10 g"
+      ]
+     ]
+    },
+    {
+     "nombre": "Cena",
+     "hora": "20:30",
+     "items": [
+      [
+       "Camote",
+       "180 g"
+      ],
+      [
+       "Pechuga de pollo",
+       "130 g"
+      ],
+      [
+       "Quesillo",
+       "65 g"
+      ],
+      [
+       "Espinaca y morrón",
+       "200 g"
+      ],
+      [
+       "Aceite de oliva",
+       "12 g"
+      ],
+      [
+       "Jalea sin azúcar",
+       "1 porción"
+      ]
+     ]
+    },
+    {
+     "nombre": "Antes de dormir",
+     "hora": "22:00",
+     "items": [
+      [
+       "Citrato de magnesio",
+       "200–400 mg",
+       true
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "clave": "medio",
+   "nombre": "Día medio",
+   "cuando": "Martes, jueves, viernes y sábado",
+   "corte": 3,
+   "cifras": [
+    [
+     "Calorías",
+     "2.180"
+    ],
+    [
+     "Proteína",
+     "182 g"
+    ],
+    [
+     "Carbos",
+     "219 g"
+    ],
+    [
+     "Grasa",
+     "61 g"
+    ],
+    [
+     "Agua",
+     "3,5 L"
+    ]
+   ],
+   "comidas": [
+    {
+     "nombre": "Desayuno",
+     "hora": "07:30",
+     "items": [
+      [
+       "Kéfir",
+       "100 g"
+      ],
+      [
+       "Claras de huevo",
+       "250 g"
+      ],
+      [
+       "Huevo entero",
+       "1 unidad"
+      ],
+      [
+       "Avena",
+       "40 g"
+      ],
+      [
+       "Frutillas",
+       "150 g"
+      ],
+      [
+       "Café solo",
+       "a gusto"
+      ],
+      [
+       "Multivitamínico",
+       "1 dosis",
+       true
+      ],
+      [
+       "Omega 3",
+       "1 cápsula",
+       true
+      ],
+      [
+       "Beta-alanina",
+       "2 g",
+       true
+      ]
+     ]
+    },
+    {
+     "nombre": "Media mañana",
+     "hora": "10:30",
+     "items": [
+      [
+       "Yogurt griego",
+       "150 g"
+      ],
+      [
+       "Almendras en lonjas",
+       "20 g"
+      ],
+      [
+       "Red Bull",
+       "1 lata"
+      ]
+     ]
+    },
+    {
+     "nombre": "Almuerzo",
+     "hora": "13:00",
+     "items": [
+      [
+       "Pechuga de pollo",
+       "200 g"
+      ],
+      [
+       "Arroz blanco",
+       "60 g"
+      ],
+      [
+       "Lechuga, pepino, morrón",
+       "250 g"
+      ],
+      [
+       "Aceite de oliva",
+       "10 g"
+      ],
+      [
+       "Piña",
+       "100 g"
+      ],
+      [
+       "Omega 3",
+       "1 cápsula",
+       true
+      ],
+      [
+       "Citrato de potasio",
+       "ver envase",
+       true
+      ]
+     ]
+    },
+    {
+     "nombre": "Pre-entreno",
+     "hora": "16:30",
+     "items": [
+      [
+       "Psychotic — con 300 ml de agua",
+       "½ scoop",
+       true
+      ],
+      [
+       "Beta-alanina",
+       "2 g",
+       true
+      ]
+     ]
+    },
+    {
+     "nombre": "En el entreno",
+     "hora": "17:00",
+     "items": [
+      [
+       "Agua",
+       "750 ml"
+      ]
+     ]
+    },
+    {
+     "nombre": "Post-entreno",
+     "hora": "al terminar",
+     "items": [
+      [
+       "Whey Gold Standard",
+       "1 scoop",
+       true
+      ],
+      [
+       "Creatina",
+       "5 g",
+       true
+      ],
+      [
+       "Plátano",
+       "100 g"
+      ]
+     ]
+    },
+    {
+     "nombre": "Cena",
+     "hora": "20:30",
+     "items": [
+      [
+       "Camote",
+       "180 g"
+      ],
+      [
+       "Pechuga de pollo",
+       "130 g"
+      ],
+      [
+       "Quesillo",
+       "65 g"
+      ],
+      [
+       "Espinaca y morrón",
+       "200 g"
+      ],
+      [
+       "Aceite de oliva",
+       "12 g"
+      ],
+      [
+       "Jalea sin azúcar",
+       "1 porción"
+      ]
+     ]
+    },
+    {
+     "nombre": "Antes de dormir",
+     "hora": "22:00",
+     "items": [
+      [
+       "Citrato de magnesio",
+       "200–400 mg",
+       true
+      ]
+     ]
+    }
+   ],
+   "nota": "<b class=\"rojo\">SOLO LOS VIERNES:</b> el arroz del almuerzo baja de 60 g a <b>45 g</b>. Todo lo demás queda igual."
+  },
+  {
+   "clave": "bajo",
+   "nombre": "Día bajo",
+   "cuando": "Domingo · Descanso total",
+   "corte": 3,
+   "cifras": [
+    [
+     "Calorías",
+     "1.720"
+    ],
+    [
+     "Proteína",
+     "173 g"
+    ],
+    [
+     "Carbos",
+     "107 g"
+    ],
+    [
+     "Grasa",
+     "64 g"
+    ],
+    [
+     "Agua",
+     "2,8 L"
+    ]
+   ],
+   "comidas": [
+    {
+     "nombre": "Desayuno",
+     "hora": "08:30",
+     "items": [
+      [
+       "Kéfir",
+       "100 g"
+      ],
+      [
+       "Claras de huevo",
+       "250 g"
+      ],
+      [
+       "Huevos enteros",
+       "2 unidades"
+      ],
+      [
+       "Frutillas",
+       "150 g"
+      ],
+      [
+       "Café solo",
+       "a gusto"
+      ],
+      [
+       "Creatina",
+       "5 g",
+       true
+      ],
+      [
+       "Multivitamínico",
+       "1 dosis",
+       true
+      ],
+      [
+       "Omega 3",
+       "1 cápsula",
+       true
+      ],
+      [
+       "Beta-alanina",
+       "2 g",
+       true
+      ]
+     ]
+    },
+    {
+     "nombre": "Media mañana",
+     "hora": "11:00",
+     "items": [
+      [
+       "Yogurt griego",
+       "150 g"
+      ],
+      [
+       "Nueces",
+       "10 g"
+      ],
+      [
+       "Red Bull",
+       "1 lata"
+      ]
+     ]
+    },
+    {
+     "nombre": "Almuerzo",
+     "hora": "13:30",
+     "items": [
+      [
+       "Carne magra",
+       "200 g"
+      ],
+      [
+       "Pasta integral",
+       "35 g"
+      ],
+      [
+       "Lechuga, pepino, morrón, espinaca",
+       "250 g"
+      ],
+      [
+       "Aceite de oliva",
+       "10 g"
+      ],
+      [
+       "Omega 3",
+       "1 cápsula",
+       true
+      ],
+      [
+       "Citrato de potasio",
+       "ver envase",
+       true
+      ]
+     ]
+    },
+    {
+     "nombre": "Colación tarde",
+     "hora": "17:00",
+     "items": [
+      [
+       "Jamón de pavo",
+       "60 g"
+      ],
+      [
+       "Quesillo",
+       "65 g"
+      ],
+      [
+       "Pepino",
+       "150 g"
+      ],
+      [
+       "Beta-alanina",
+       "2 g",
+       true
+      ]
+     ]
+    },
+    {
+     "nombre": "Cena",
+     "hora": "20:30",
+     "items": [
+      [
+       "Pechuga de pollo",
+       "180 g"
+      ],
+      [
+       "Espinaca y morrón",
+       "250 g"
+      ],
+      [
+       "Aceite de oliva",
+       "5 g"
+      ],
+      [
+       "Chocolate negro",
+       "1 cuadradito"
+      ],
+      [
+       "Jalea sin azúcar",
+       "1 porción"
+      ]
+     ]
+    },
+    {
+     "nombre": "Antes de dormir",
+     "hora": "22:00",
+     "items": [
+      [
+       "Citrato de magnesio",
+       "200–400 mg",
+       true
+      ]
+     ]
+    }
+   ],
+   "nota": "<b class=\"rojo\">HOY NO VAN:</b> pre-entreno ni whey. Sin entrenamiento no tienen para qué. La creatina se toma en el desayuno y la segunda beta-alanina en la colación de la tarde.",
+   "pie": "<b>&#9679;</b> = suplemento &nbsp;·&nbsp; Carne, pasta y arroz en crudo"
+  }
+ ],
+ "semana": [
+  [
+   "Lunes",
+   "Piernas · cuádriceps",
+   "2.450",
+   "alto"
+  ],
+  [
+   "Martes",
+   "Empujes · pecho, hombro, tríceps",
+   "2.180",
+   "medio"
+  ],
+  [
+   "Miércoles",
+   "Piernas · glúteos e isquios",
+   "2.450",
+   "alto"
+  ],
+  [
+   "Jueves",
+   "Tirones · espalda y bíceps",
+   "2.180",
+   "medio"
+  ],
+  [
+   "Viernes",
+   "Tren superior + abdomen",
+   "2.130",
+   "medio"
+  ],
+  [
+   "Sábado",
+   "Metabólico · puntos débiles",
+   "2.180",
+   "medio"
+  ],
+  [
+   "Domingo",
+   "Descanso total",
+   "1.720",
+   "bajo"
+  ]
+ ],
+ "bloques_semana": "   <h3>Las pausas — no se las salte</h3>\n   <p><b>Cada 14 días,</b> un miércoles sí y otro no: suba a <b>2.800 kcal</b> — 100 g más de arroz en el almuerzo y 40 g más de avena en el desayuno. Todo en carbohidratos, nada de grasa.</p>\n   <p><b>La semana 7 completa</b> a 2.500 kcal al día, el menú del día alto los siete días. Sin esa pausa, de la semana 10 en adelante se detiene todo.</p>\n\n   <h3>Las dos reglas que más pesan</h3>\n   <div class=\"caja\"><b>CAFEÍNA.</b> Tope <b>400 mg al día</b> contando el café. <b>Nada después de las 14:00</b>, salvo el pre-entreno, y ese <b>solo lunes y miércoles</b>. Dormir mal en déficit no frena la baja: hace que lo que pierda sea músculo en vez de grasa.</div>\n   <div class=\"caja\"><b>NADA DE CARDIO EXTRA.</b> Con seis días de pesas ya es suficiente. Agregarlo le come la recuperación y le hace perder el músculo que quiere conservar. Si quiere gastar más, camine.</div>\n\n   <h3>Si le falta un alimento</h3>\n   <div class=\"caja\"><b>QUESO.</b> Quesillo 65 g · gauda light 24 g · 1 lámina de sándwich · ricotta 37 g · gauda normal 18 g.\n    <div class=\"regla\">6.500 ÷ kcal por 100 g = los gramos</div></div>\n   <div class=\"caja\"><b>GALLETAS DE ARROZ.</b> Con las redondas grandes son 2 unidades.\n    <div class=\"regla\">75 ÷ kcal por galleta = cuántas</div></div>",
+ "pie_semana": "Objetivo del plan",
+ "partida": [
+  [
+   "Peso de partida",
+   "___ kg"
+  ],
+  [
+   "Cintura de partida",
+   "___ cm"
+  ],
+  [
+   "Grasa de partida",
+   "___ %"
+  ],
+  [
+   "Meta",
+   "___ kg"
+  ]
+ ],
+ "instrucciones": "<b>CADA FILA ES UNA SEMANA COMPLETA, NO UN DÍA.</b> Son 15 filas para 15 semanas.\n   <p><b>La balanza: 3 mañanas.</b> Lunes, miércoles y viernes. Al viernes suma los tres, divide por 3, y ese es el <b>promedio</b> — el único que importa.</p>\n   <p><b>La huincha: 1 sola vez, el lunes.</b> La cintura no se mide todos los días.</p>\n   <p><b>Si prefiere pesarse una sola vez</b>, hágalo el lunes y deje las otras dos casillas vacías. La que no se salta es la cintura.</p>",
+ "ficha": [
+  [
+   "1",
+   "7 al 13 sep",
+   1
+  ],
+  [
+   "2",
+   "14 al 20 sep",
+   0
+  ],
+  [
+   "3",
+   "21 al 27 sep",
+   0
+  ],
+  [
+   "4",
+   "28 sep al 4 oct",
+   1
+  ],
+  [
+   "5",
+   "5 al 11 oct",
+   1
+  ],
+  [
+   "6",
+   "12 al 18 oct",
+   0
+  ],
+  [
+   "7",
+   "19 al 25 oct",
+   1
+  ],
+  [
+   "8",
+   "26 oct al 1 nov",
+   0
+  ],
+  [
+   "9",
+   "2 al 8 nov",
+   1
+  ],
+  [
+   "10",
+   "9 al 15 nov",
+   0
+  ],
+  [
+   "11",
+   "16 al 22 nov",
+   0
+  ],
+  [
+   "12",
+   "23 al 29 nov",
+   0
+  ],
+  [
+   "13",
+   "30 nov al 6 dic",
+   1
+  ],
+  [
+   "14",
+   "7 al 13 dic",
+   0
+  ],
+  [
+   "FIN",
+   "lunes 14 dic",
+   1
+  ]
+ ],
+ "pie_ficha": "Las semanas en rojo tienen algo especial: foto (1, 5, 9, 13 y final), revisión (4) o mantenimiento (7)."
+}
