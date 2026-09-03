@@ -647,7 +647,7 @@
    "a": "HERNANDEZ",
    "rut": "00.000.000-0",
    "plan": "Tres Veces a La Semana",
-   "monto": 28000,
+   "monto": 23000,
    "fv": 46295
   },
   {
@@ -1375,7 +1375,7 @@
    "a": "SANABRIA",
    "rut": "00.000.000-0",
    "plan": "Tres Veces a La Semana",
-   "monto": 28000,
+   "monto": 23000,
    "fv": 46295
   },
   {
@@ -1616,7 +1616,7 @@
    "rut": "00.000.000-0",
    "plan": "Funcionario Público",
    "monto": 28000,
-   "fv": 46268
+   "fv": 46298
   }
  ]
 }
