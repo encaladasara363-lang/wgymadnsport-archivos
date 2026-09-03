@@ -212,10 +212,11 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   padding:6px 12px;font-family:'Barlow Condensed',sans-serif;font-weight:600;
   font-size:14.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--gris);
 }
-.ej .pictograma{width:100%;border-radius:14px;background:var(--crema);
-  border:1.5px solid var(--linea);display:flex;align-items:center;justify-content:center;
-  margin-bottom:15px;padding:22px 10px}
-.ej .pictograma img{max-width:230px;width:75%;height:auto}
+.ej .cabezal{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.ej .cabezal h2{margin-bottom:0}
+.ej .pictograma{width:64px;height:64px;flex-shrink:0;border-radius:12px;background:var(--crema);
+  border:1.5px solid var(--linea);display:flex;align-items:center;justify-content:center;padding:7px}
+.ej .pictograma img{width:100%;height:100%;object-fit:contain}
 .consejo{background:var(--negro-card);border-left:4px solid var(--dorado);border-radius:0 12px 12px 0;
   padding:13px 15px;margin-bottom:13px;font-size:16px;line-height:1.5;color:var(--crema)}
 .consejo b{color:var(--dorado);display:block;margin-bottom:4px;
@@ -1430,13 +1431,13 @@ function pintarEjercicio(){
  var record = recordDe(ex.name);
 
  var h = "";
- h += '<h2>' + limpio(ex.name) + '</h2>';
+ if(video) h += '<div class="cabezal"><div class="pictograma"><img src="' + video + '" alt=""></div><h2>' + limpio(ex.name) + '</h2></div>';
+ else h += '<h2>' + limpio(ex.name) + '</h2>';
  h += '<div class="meta">' +
         '<span>' + limpio(ex.sets) + '</span>' +
         '<span>Descanso ' + limpio(ex.rest) + '</span>' +
         (ex.equip ? '<span>' + limpio(ex.equip) + '</span>' : '') +
       '</div>';
- if(video) h += '<div class="pictograma"><img src="' + video + '" alt=""></div>';
  if(ex.tip)  h += '<div class="consejo"><b>Cómo se hace</b>' + limpio(ex.tip) + '</div>';
  if(ex.alt)  h += '<div class="consejo alterna"><b>Si te cuesta</b>' + limpio(ex.alt) + '</div>';
 
@@ -1517,11 +1518,11 @@ function pintarPasoSuelto(paso, mio, pasos){
  var video = videoDelPaso(D.actual.rutina, paso);
  var hecho = !!(mio.series[0] && mio.series[0].hecha);
  var h = '';
- h += '<h2>' + limpio(paso.nombre) + '</h2>';
+ if(video) h += '<div class="cabezal"><div class="pictograma"><img src="' + video + '" alt=""></div><h2>' + limpio(paso.nombre) + '</h2></div>';
+ else h += '<h2>' + limpio(paso.nombre) + '</h2>';
  h += '<div class="meta"><span>' +
       (paso.tipo === "calentamiento" ? "Antes de empezar" : "Para cerrar") +
       '</span></div>';
- if(video) h += '<div class="pictograma"><img src="' + video + '" alt=""></div>';
  h += '<div class="consejo"><b>Qué tienes que hacer</b>' + limpio(paso.texto) + '</div>';
  h += '<button class="hecho" id="bHecho" type="button" data-h="' + (hecho ? "si" : "no") + '">' +
       (hecho ? "✓ Listo" : "Marcar como hecho") + '</button>';
