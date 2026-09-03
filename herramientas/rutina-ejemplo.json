@@ -259,5 +259,6 @@
   "CÓMO SE PROGRESA",
   "LA PARTE QUE HACE QUE ESTO FUNCIONE"
  ],
- "cierre": "Si el peso de la barra sube mes a mes, vas bien."
+ "cierre": "Si el peso de la barra sube mes a mes, vas bien.",
+ "metodo_corte": 3
 }

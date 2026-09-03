@@ -64,7 +64,7 @@ li.p:before{content:"•";position:absolute;left:0;color:#E30613;font-weight:800
 .ej .tx{padding:2mm 4mm;flex:1;display:flex;flex-direction:column;justify-content:center}
 .ej .tx b{font-size:12.4pt;font-weight:800;text-transform:uppercase;line-height:1.1}
 .ej .tx .dato{font-size:10pt;font-weight:800;color:#E30613;margin:1.1mm 0}
-.ej .tx .dato u{text-decoration:none;margin-right:4mm}
+.ej .tx .dato u{text-decoration:none;margin-right:3.4mm;white-space:nowrap}
 .ej .tx i{font-size:9.8pt;color:#333;line-height:1.28}
 .frase{background:#E30613;color:#fff;text-align:center;font-size:10.6pt;font-weight:800;
  font-style:italic;padding:3.4mm 6mm;margin-top:auto;flex-shrink:0}
@@ -110,24 +110,33 @@ for i, d in enumerate(DIAS):
              "".join('<li class="p">%s</li>' % esc(x) for x in d["calentamiento"]) + '</ul>')
     H.append('<div class="tag"><i>●</i> TRABAJO PRINCIPAL · 85 MIN</div>')
     for k, e in enumerate(d["ejercicios"], 1):
-        ic, nom, ser, rep, des, tec = e
+        ic, nom, ser, rep, des, tec = e[:6]
+        carga = e[6] if len(e) > 6 else None
         if ic not in ICO: ICO[ic] = icono(ic)
+        datos = '<u>SERIES: %s</u><u>REPS: %s</u><u>DESCANSO: %s</u>' % (esc(ser), esc(rep), esc(des))
+        if carga and carga.strip("—- "): datos += '<u>CARGA: %s</u>' % esc(carga)
         H.append('<div class="ej"><div class="num">%d</div><div class="ic"><img src="%s"></div>'
-                 '<div class="tx"><b>%s</b><div class="dato"><u>SERIES: %s</u><u>REPS: %s</u>'
-                 '<u>DESCANSO: %s</u></div><i>%s</i></div></div>'
-                 % (k, ICO[ic], esc(nom), esc(ser), esc(rep), esc(des), esc(tec)))
+                 '<div class="tx"><b>%s</b><div class="dato">%s</div><i>%s</i></div></div>'
+                 % (k, ICO[ic], esc(nom), datos, tec))
     H.append('<div class="tag"><i>●</i> ESTIRAMIENTOS · 10 MIN</div><ul>' +
              "".join('<li class="p">%s</li>' % esc(x) for x in d["estiramientos"]) + '</ul>')
     H.append('<div class="frase">%s</div></div>' % esc(FRASES[i]))
 
 # ---- hoja del método ----
-H.append('<div class="hoja">' + top())
-H.append('<div class="banner"><div class="n">★</div><div class="d"><b>%s</b><span>%s</span></div></div>'
-         % (esc(R["metodo_titulo"][0]), esc(R["metodo_titulo"][1])))
-for tit, puntos in METODO:
-    H.append('<h3 class="m">%s</h3><ul>' % esc(tit) +
-             "".join('<li class="m">%s</li>' % p for p in puntos) + '</ul>')
-H.append('<div class="frase">%s</div></div>' % esc(R["cierre"]))
+# el metodo puede no caber en una hoja: "metodo_corte" dice donde partirlo
+CORTE = R.get("metodo_corte", len(METODO))
+TRAMOS = [x for x in (METODO[:CORTE], METODO[CORTE:]) if x]
+for h, tramo in enumerate(TRAMOS):
+    H.append('<div class="hoja">' + top())
+    sub = R["metodo_titulo"][1] if h == 0 else R["metodo_titulo"][1] + " · CONTINÚA"
+    H.append('<div class="banner"><div class="n">★</div><div class="d"><b>%s</b><span>%s</span></div></div>'
+             % (esc(R["metodo_titulo"][0]), esc(sub)))
+    for tit, puntos in tramo:
+        H.append('<h3 class="m">%s</h3><ul>' % esc(tit) +
+                 "".join('<li class="m">%s</li>' % p for p in puntos) + '</ul>')
+    if h == len(TRAMOS) - 1:
+        H.append('<div class="frase">%s</div>' % esc(R["cierre"]))
+    H.append('</div>')
 
 html = "".join(H)
 open(BASE + ".html","w",encoding="utf-8").write(html)
