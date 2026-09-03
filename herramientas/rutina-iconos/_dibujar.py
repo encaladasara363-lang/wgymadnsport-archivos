@@ -237,3 +237,19 @@ ln(ax,(3.1,5.95),(2.9,4.2)); ln(ax,(2.9,4.2),(4.1,4.2)) # antebrazo de apoyo
 maquina(ax,[(1.8,3.9),(8.9,3.9)])                       # piso
 save(f,'plancha_lateral')
 print("sentadilla_hack y plancha_lateral dibujadas")
+
+
+# bicicleta estatica — rueda grande al frente, sillin y manubrio en rojo
+f,ax = fig()
+ax.add_patch(mp.Circle((6.2,3.0),1.6,fill=False,ec=RED,lw=LW))  # volante, grande y claro
+maquina(ax,[(4.3,3.3),(4.3,5.8)])                        # poste del asiento
+maquina(ax,[(3.7,5.9),(4.6,5.9)])                        # sillin
+maquina(ax,[(4.3,3.3),(6.2,3.0)])                        # tubo al eje
+maquina(ax,[(6.2,3.0),(5.6,6.2)])                        # tubo al manubrio
+maquina(ax,[(5.1,6.3),(6.1,6.4)])                        # manubrio
+head(ax,4.0,7.0)
+ln(ax,(4.0,6.38),(4.3,5.8))                              # torso corto sentado
+ln(ax,(4.2,6.5),(5.6,6.3))                                # brazo al manubrio
+ln(ax,(4.3,5.8),(5.3,4.2)); ln(ax,(5.3,4.2),(6.0,2.6))    # pierna pedaleando
+save(f,'bicicleta')
+print("bicicleta redibujada")
