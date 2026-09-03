@@ -264,3 +264,16 @@ ln(ax,(3.5,3.35),(2.9,4.15))                            # brazo hacia la cabeza
 head(ax,2.55,4.55)
 save(f,'crunch')
 print("crunch dibujado")
+
+# patada de gluteo en maquina — de pie, sujeto de la maquina, pierna al cable
+f,ax = fig()
+maquina(ax,[(2.8,1.8),(2.8,7.4)])                        # poste / manubrio de la maquina
+maquina(ax,[(8.0,1.8),(8.0,4.6)])                        # cable hacia el tobillo
+ax.add_patch(mp.Circle((8.0,4.6),.28,fc=RED,ec=RED))     # tobillera
+head(ax,4.7,8.0)
+ln(ax,(4.9,7.38),(5.1,5.3))                              # torso, leve inclinacion
+ln(ax,(4.8,7.5),(2.8,6.6))                                # brazo a la manija
+ln(ax,(5.1,5.3),(4.9,1.8))                                # pierna de apoyo
+ln(ax,(5.1,5.3),(8.0,4.6))                                # pierna pateando hacia atras y arriba
+save(f,'patada_gluteo')
+print("patada_gluteo dibujada")
