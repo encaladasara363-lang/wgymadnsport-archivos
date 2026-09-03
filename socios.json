@@ -32,7 +32,7 @@
    "rut": "00.000.000-0",
    "plan": "Estudiante Profesor",
    "monto": 28000,
-   "fv": 46259
+   "fv": 46298
   },
   {
    "n": "ANTONELLA",
@@ -257,6 +257,14 @@
    "plan": "Plan Semanal",
    "monto": 15000,
    "fv": 46272
+  },
+  {
+   "n": "JORGE",
+   "a": "CARRASCO",
+   "rut": "Sin Rut",
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46298
   },
   {
    "n": "MILENKA",
@@ -883,6 +891,14 @@
    "fv": 46277
   },
   {
+   "n": "LUIS",
+   "a": "MARTINEZ",
+   "rut": "Sin Rut",
+   "plan": "Mensual Tercera Edad",
+   "monto": 23000,
+   "fv": 46275
+  },
+  {
    "n": "MAYUMY",
    "a": "MARTINEZ",
    "rut": "00.000.000-2",
@@ -1304,7 +1320,7 @@
    "rut": "00.000.000-0",
    "plan": "Tres Veces a La Semana",
    "monto": 23000,
-   "fv": 46242
+   "fv": 46298
   },
   {
    "n": "LUIS",
