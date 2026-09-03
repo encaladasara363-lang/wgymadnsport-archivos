@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt, matplotlib.patches as mp
 from matplotlib.lines import Line2D
 import math, os
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icons")
-BLACK, RED, LW = '#1a1a1a', '#e30613', 5
+OUT = os.environ.get("ICONOS_OUT") or os.path.dirname(os.path.abspath(__file__))
+BLACK = os.environ.get('ICONOS_TRAZO', '#1a1a1a')
+RED, LW = '#e30613', 5
 
 def fig():
     f, ax = plt.subplots(figsize=(2.6,2.6), dpi=150)
@@ -159,8 +160,9 @@ import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt, matplotlib.patches as mp
 from matplotlib.lines import Line2D
 import math, os
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icons")
-BLACK, RED, LW = '#1a1a1a', '#e30613', 5
+OUT = os.environ.get("ICONOS_OUT") or os.path.dirname(os.path.abspath(__file__))
+BLACK = os.environ.get('ICONOS_TRAZO', '#1a1a1a')
+RED, LW = '#e30613', 5
 def fig():
     f,ax = plt.subplots(figsize=(2.6,2.6),dpi=150)
     ax.set_xlim(0,10); ax.set_ylim(0,10); ax.axis('off'); ax.set_aspect('equal'); return f,ax
@@ -213,3 +215,25 @@ ln(ax,(6.2,5.0),(7.4,3.2))                                             # piernas
 ln(ax,(3.5,5.4),(3.2,6.6)); ln(ax,(4.1,5.3),(3.8,6.5))                 # brazos al pecho
 save(f,'hiperextension')
 print("rehechos")
+
+
+# sentadilla en maquina hack — plataforma inclinada y hombreras
+f,ax = fig()
+maquina(ax,[(1.5,2.0),(8.5,4.8)])                       # plataforma inclinada
+maquina(ax,[(7.6,4.4),(8.8,7.0)])                       # riel de la maquina
+ln(ax,(6.3,6.0),(8.2,6.7),RED,LW)                       # hombreras
+head(ax,5.6,6.2)
+ln(ax,(5.2,5.65),(3.9,4.2))                             # tronco contra el respaldo
+ln(ax,(3.9,4.2),(2.9,5.0)); ln(ax,(2.9,5.0),(2.4,3.2))  # pierna flexionada
+ln(ax,(3.9,4.2),(3.3,2.9))                              # segunda pierna
+save(f,'sentadilla_hack')
+
+# plancha lateral — apoyo en un antebrazo, cuerpo en linea
+f,ax = fig()
+head(ax,2.2,6.4)
+ln(ax,(2.8,6.1),(7.6,3.6))                              # cuerpo en diagonal recta
+ln(ax,(7.6,3.6),(8.6,3.2))                              # pies
+ln(ax,(3.1,5.95),(2.9,4.2)); ln(ax,(2.9,4.2),(4.1,4.2)) # antebrazo de apoyo
+maquina(ax,[(1.8,3.9),(8.9,3.9)])                       # piso
+save(f,'plancha_lateral')
+print("sentadilla_hack y plancha_lateral dibujadas")
