@@ -126,15 +126,15 @@ html,body{background:var(--paper);color:var(--ink);
 .mapa div[data-n="bajo"] dd{color:#B4B6BA}
 
 h3{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:12.5pt;
- letter-spacing:.03em;text-transform:uppercase;margin:3mm 0 1.2mm;
+ letter-spacing:.03em;text-transform:uppercase;margin:2.3mm 0 1mm;
  border-bottom:1.1mm solid var(--ink);padding-bottom:.9mm}
-.info p,.info li{font-weight:600;font-size:12pt;line-height:1.32;margin-top:1.4mm}
+.info p,.info li{font-weight:600;font-size:12pt;line-height:1.28;margin-top:1.1mm}
 .info li{margin-left:5mm}
 .info b{font-weight:800}
-.caja{border:.7mm solid var(--ink);padding:2.2mm 3mm;margin-top:1.8mm;font-weight:600;font-size:12pt;line-height:1.3}
+.caja{border:.7mm solid var(--ink);padding:1.6mm 2.6mm;margin-top:1.3mm;font-weight:600;font-size:12pt;line-height:1.26}
 .caja b{font-weight:800}
 .regla{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:13pt;text-align:center;
- padding:1.8mm 0;background:var(--ink);color:var(--paper);margin-top:1.6mm;letter-spacing:.02em}
+ padding:1.3mm 0;background:var(--ink);color:var(--paper);margin-top:1.2mm;letter-spacing:.02em}
 
 /* ---- ficha de medidas ---- */
 .arranque{display:flex;border:.9mm solid var(--ink);margin-top:4.5mm;flex-shrink:0}
