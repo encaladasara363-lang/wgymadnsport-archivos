@@ -198,6 +198,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 .fab-admin:active{ background:var(--rojo-oscuro); }  
 .hint2{ font-size:12px; color:var(--gris-soft); margin:10px 0 0; line-height:1.5; }  
 .hint2 b{ color:var(--dorado); }  
+ body{ padding-bottom:120px; }
 </style>  
   
 <div id="appRoot" artifact-local>
@@ -245,10 +246,6 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="card">
  <div class="card-head"><h2>Registro de socios</h2></div>
  <p class="card-sub">Esta tabla es la fuente única de socios y controla el acceso a la rutina. Si agregas, editas o eliminas algo aquí, avísame por chat con los cambios para que yo actualice y publique la página — así queda igual para todos.</p>  
- <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
-  <button class="btn btn-primary" id="copiar-lista" type="button">📋 Copiar lista al día</button>
-  <span id="copiar-aviso" style="font-size:13px;color:var(--gris-tenue)">Cópiala y pégamela por chat: con eso dejo la lista igual en la tarjeta y en todas las rutinas.</span>
- </div>
  <input type="text" id="socio-search" placeholder="Buscar socio por nombre o apellido..." style="width:100%;margin-bottom:12px;background:var(--negro);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--blanco);font-family:inherit;">  
  <div class="twrap">  
  <table>  
@@ -484,6 +481,21 @@ const EXTENSION_PIERNAS_VIDEO = "assets/extension_piernas.mp4";
 const CURL_FEMORAL_VIDEO = "assets/curl_femoral.mp4";  
 const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
 </script>  
+
+<!-- Barra fija: el botón para pasar la lista queda siempre a la vista, sin
+     tener que bajar por toda la página. -->
+<div id="barra-copiar" style="position:fixed;left:0;right:0;bottom:0;z-index:9999;
+ background:#141418;border-top:2px solid #D4AF37;padding:12px 14px;
+ padding-bottom:calc(12px + env(safe-area-inset-bottom));
+ display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;
+ box-shadow:0 -10px 24px -12px rgba(0,0,0,.9)">
+ <button id="copiar-lista" type="button" style="cursor:pointer;border:none;border-radius:10px;
+  padding:14px 22px;font-weight:800;font-size:15px;text-transform:uppercase;letter-spacing:.03em;
+  background:#E30613;color:#fff;font-family:inherit">📋 COPIAR LISTA AL DÍA</button>
+ <span id="copiar-aviso" style="font-size:13.5px;color:#9B9BA6;max-width:420px">
+  Tócalo y pégamela por chat: con eso queda igual en la tarjeta y en todas las rutinas.</span>
+</div>
+
 <script>  
 (function(){  
  "use strict";  

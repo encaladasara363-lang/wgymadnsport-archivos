@@ -252,6 +252,13 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 </div>  
   
 <!-- ===================== ADMIN VIEW (gestión) ===================== -->  
+<div style="max-width:1100px;margin:0 auto 16px;padding:16px 18px;border:1px solid #D4AF37;border-radius:14px;background:rgba(212,175,55,.07)">
+ <div style="font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">📋 Pasar la lista a los celulares</div>
+ <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+  <button id="copiar-lista" type="button" style="cursor:pointer;border:none;border-radius:10px;padding:13px 20px;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.03em;background:#E30613;color:#fff">📋 COPIAR LISTA AL DÍA</button>
+  <span id="copiar-aviso" style="font-size:14px;opacity:.75">Cópiala y pégamela por chat.</span>
+ </div>
+</div>
 <div id="sociosDataStore" style="display:none" aria-hidden="true">
 <table><tbody id="socios-tbody">
 <tr><td contenteditable="true">AARON</td><td contenteditable="true">SOZA</td><td contenteditable="true">00.000.000-0</td><td contenteditable="true">Tres Veces a La Semana</td><td contenteditable="true" class="num">$23.000</td><td contenteditable="true">22-09-2026</td><td contenteditable="true">Sí</td><td artifact-local class="estado-cell"></td><td><button class="iconbtn" title="Eliminar">✕</button></td></tr>
@@ -862,5 +869,68 @@ const CARDIO_TROTADORA_VIDEO = "assets/cardio_trotadora.mp4";
   
  /* ---------- go ---------- */  
  initRoute();  
+
+ /* ═══ Copiar la lista para dejarla igual en todas las apps ═════════════
+    Lo que se edita aquí queda guardado en este equipo. Este botón arma la
+    lista completa en el formato de socios.json, que es el archivo que leen
+    la tarjeta virtual y las apps de rutina. */
+ (function(){
+  var boton = document.getElementById("copiar-lista");
+  var aviso = document.getElementById("copiar-aviso");
+  if(!boton) return;
+  function aSerial(dmy){
+   var p = String(dmy || "").trim().split(/[-\/]/);
+   if(p.length !== 3) return 0;
+   var d = Date.UTC(Number(p[2]), Number(p[1]) - 1, Number(p[0]));
+   return Math.round((d - Date.UTC(1899, 11, 30)) / 86400000);
+  }
+  function texto(celda){
+   if(!celda) return "";
+   var s = celda.querySelector(".venc-text");
+   return (s ? s.textContent : celda.textContent).trim();
+  }
+  function armar(){
+   var cuerpo = document.getElementById("socios-tbody");
+   var lista = [];
+   Array.prototype.forEach.call(cuerpo.children, function(tr){
+    var t = tr.children;
+    var nombre = texto(t[0]), apellido = texto(t[1]);
+    if(!nombre && !apellido) return;
+    lista.push({
+     n: nombre, a: apellido,
+     rut: texto(t[2]) || "Sin Rut",
+     plan: texto(t[3]),
+     monto: Number(texto(t[4]).replace(/[^\d]/g, "")) || 0,
+     fv: aSerial(texto(t[5]))
+    });
+   });
+   lista.sort(function(x, y){ return (x.a + x.n).localeCompare(y.a + y.n, "es"); });
+   var h = new Date();
+   var iso = h.getFullYear() + "-" + String(h.getMonth()+1).padStart(2,"0") +
+             "-" + String(h.getDate()).padStart(2,"0");
+   return JSON.stringify({ actualizado: iso, socios: lista }, null, 1);
+  }
+  boton.addEventListener("click", function(){
+   var txt = armar();
+   var n = (txt.match(/"n":/g) || []).length;
+   function ok(){
+    aviso.textContent = "¡Copiado! " + n + " socios. Pégamelo por chat.";
+    aviso.style.color = "#43C48D";
+   }
+   function aMano(){
+    aviso.textContent = "No pude copiarlo solo. Apreta Ctrl + C ahora.";
+    var ta = document.createElement("textarea");
+    ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    setTimeout(function(){ document.body.removeChild(ta); }, 15000);
+   }
+   try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+     navigator.clipboard.writeText(txt).then(ok, aMano);
+    }else{ aMano(); }
+   }catch(e){ aMano(); }
+  });
+ })();
+
 })();  
 </script>  
