@@ -85,7 +85,7 @@ html,body{background:var(--paper);color:var(--ink);
 /* ---- comidas ---- */
 .cuerpo{display:grid;grid-template-columns:1fr 1fr;gap:0 7mm;margin-top:4.5mm;align-items:start;flex:1}
 .col{min-width:0}
-.bloque{margin-bottom:2.6mm;break-inside:avoid}
+.bloque{margin-bottom:2.3mm;break-inside:avoid}
 .bloque h2{
  font-family:'Anton','Arial Black',Impact,sans-serif;font-weight:900;
  font-size:12.5pt;letter-spacing:.02em;text-transform:uppercase;
@@ -95,8 +95,8 @@ html,body{background:var(--paper);color:var(--ink);
 .bloque h2 em{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:normal;
  font-size:9pt;letter-spacing:.05em;color:var(--steel);text-transform:none;white-space:nowrap}
 .bloque li{list-style:none;display:flex;justify-content:space-between;align-items:baseline;
- gap:2.5mm;padding:.72mm 1.4mm;border-bottom:.2mm dotted #A9A9A5;
- font-weight:600;font-size:13pt;line-height:1.18}
+ gap:2.5mm;padding:.6mm 1.4mm;border-bottom:.2mm dotted #A9A9A5;
+ font-weight:600;font-size:13pt;line-height:1.14}
 .bloque li:last-child{border-bottom:0}
 .bloque li b{font-weight:800;white-space:nowrap}
 .bloque li.sup{background:var(--suave);justify-content:flex-start}
@@ -131,7 +131,7 @@ h3{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:12.5pt;
 .info p,.info li{font-weight:600;font-size:12pt;line-height:1.28;margin-top:1.1mm}
 .info li{margin-left:5mm}
 .info b{font-weight:800}
-.caja{border:.7mm solid var(--ink);padding:1.6mm 2.6mm;margin-top:1.3mm;font-weight:600;font-size:12pt;line-height:1.26}
+.caja{border:.7mm solid var(--ink);padding:1.3mm 2.4mm;margin-top:1mm;font-weight:600;font-size:12pt;line-height:1.22}
 .caja b{font-weight:800}
 .regla{font-family:'Anton',Impact,sans-serif;font-weight:900;font-size:13pt;text-align:center;
  padding:1.3mm 0;background:var(--ink);color:var(--paper);margin-top:1.2mm;letter-spacing:.02em}
