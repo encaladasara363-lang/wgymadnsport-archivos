@@ -253,3 +253,14 @@ ln(ax,(4.2,6.5),(5.6,6.3))                                # brazo al manubrio
 ln(ax,(4.3,5.8),(5.3,4.2)); ln(ax,(5.3,4.2),(6.0,2.6))    # pierna pedaleando
 save(f,'bicicleta')
 print("bicicleta redibujada")
+
+# abdominales / crunch — acostado, rodilla doblada, hombros curvados hacia arriba
+f,ax = fig()
+maquina(ax,[(1.0,2.3),(9.0,2.3)])                      # piso
+ln(ax,(5.6,2.3),(7.0,4.6))                              # muslo (rodilla doblada)
+ln(ax,(7.0,4.6),(8.1,2.3))                              # pantorrilla al piso
+ln(ax,(5.6,2.3),(3.4,3.15))                             # torso curvado hacia arriba
+ln(ax,(3.5,3.35),(2.9,4.15))                            # brazo hacia la cabeza
+head(ax,2.55,4.55)
+save(f,'crunch')
+print("crunch dibujado")
