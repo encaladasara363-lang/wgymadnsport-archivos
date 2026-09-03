@@ -1,0 +1,263 @@
+{
+ "socio": "Nombre del Socio",
+ "titulo": [
+  "RUTINA 3 DÍAS",
+  "NIVEL INTERMEDIO"
+ ],
+ "cabecera": [
+  "RUTINA INTERMEDIA · NOMBRE DEL SOCIO",
+  "3 DÍAS · W GYM ADN SPORT TOCOPILLA"
+ ],
+ "portada_frase": "La rutina que se cumple gana siempre a la rutina perfecta que se abandona.",
+ "ficha": [
+  [
+   "Objetivo",
+   "Ganar fuerza y masa muscular"
+  ],
+  [
+   "Estructura",
+   "Lunes, miércoles y viernes"
+  ],
+  [
+   "Duración",
+   "1 hora 15 minutos por sesión"
+  ],
+  [
+   "Frecuencia",
+   "Cuerpo completo, tres veces por semana"
+  ],
+  [
+   "Período",
+   "Doce semanas"
+  ]
+ ],
+ "frases": [
+  "Empieza con el peso justo: sobra semana para subirlo.",
+  "La segunda sesión es la que arma el hábito.",
+  "Cerraste la semana. Eso ya es una victoria."
+ ],
+ "dias": [
+  {
+   "num": "1",
+   "dia": "LUNES",
+   "sub": "PIERNA · CUÁDRICEPS  ·  DÍA ALTO 2.450 KCAL",
+   "calentamiento": [
+    "Bicicleta suave — 5 minutos",
+    "Movilidad de cadera y tobillo — 3 minutos",
+    "Dos series de aproximación en sentadilla, subiendo peso"
+   ],
+   "ejercicios": [
+    [
+     "sentadilla",
+     "Sentadilla libre",
+     "4",
+     "5-6",
+     "3 min",
+     "Baja hasta que el muslo pase la paralela. Deja una repetición guardada: en déficit no se falla."
+    ],
+    [
+     "prensa_piernas",
+     "Prensa de piernas",
+     "4",
+     "8-10",
+     "2 min",
+     "Pies al medio de la plataforma. No trabes la rodilla arriba."
+    ],
+    [
+     "sentadilla_bulgara",
+     "Sentadilla búlgara",
+     "3",
+     "8 por pierna",
+     "90 seg",
+     "Pie de atrás sobre el banco. Todo el peso en el talón de adelante."
+    ],
+    [
+     "extension_cuadriceps",
+     "Extensión de cuádriceps",
+     "3",
+     "12-15",
+     "75 seg",
+     "Aprieta un segundo arriba. La última serie sí va al fallo."
+    ],
+    [
+     "gemelos",
+     "Gemelo de pie",
+     "4",
+     "12-15",
+     "60 seg",
+     "Recorrido completo y dos segundos abajo, estirando."
+    ],
+    [
+     "plancha",
+     "Plancha con disco en la espalda",
+     "3",
+     "45 seg",
+     "60 seg",
+     "Glúteo y abdomen apretados. La cadera ni sube ni se hunde."
+    ]
+   ],
+   "estiramientos": [
+    "Cuádriceps — 30 seg cada pierna",
+    "Psoas en zancada — 30 seg cada lado"
+   ]
+  },
+  {
+   "num": "2",
+   "dia": "MARTES",
+   "sub": "EMPUJE · PECHO, HOMBRO Y TRÍCEPS",
+   "calentamiento": [
+    "Remo o bicicleta — 5 minutos",
+    "Rotación de hombro con banda — 3 minutos",
+    "Dos series de aproximación en press banca"
+   ],
+   "ejercicios": [
+    [
+     "press_banca",
+     "Press de banca",
+     "4",
+     "5-6",
+     "3 min",
+     "Omóplatos juntos y pecho arriba. Baja controlado, sube fuerte."
+    ],
+    [
+     "press_inclinado",
+     "Press inclinado con mancuernas",
+     "3",
+     "8-10",
+     "2 min",
+     "Banco a 30 grados. Baja hasta sentir el pecho estirado."
+    ],
+    [
+     "press_militar",
+     "Press militar sentada",
+     "3",
+     "8-10",
+     "2 min",
+     "Sin arquear la espalda: costillas abajo y glúteo apretado."
+    ],
+    [
+     "aperturas",
+     "Aperturas en polea",
+     "3",
+     "12-15",
+     "75 seg",
+     "Codo casi fijo. Junta las manos y aprieta un segundo."
+    ],
+    [
+     "elevaciones_laterales",
+     "Elevaciones laterales",
+     "4",
+     "12-15",
+     "60 seg",
+     "Sin impulso. Sube hasta la altura del hombro y no más."
+    ],
+    [
+     "extension_triceps",
+     "Extensión de tríceps en polea",
+     "3",
+     "12",
+     "60 seg",
+     "Codo pegado al cuerpo. Estira completo abajo."
+    ]
+   ],
+   "estiramientos": [
+    "Pecho en el marco de la puerta — 30 seg",
+    "Tríceps por detrás de la cabeza — 30 seg cada brazo"
+   ]
+  },
+  {
+   "num": "3",
+   "dia": "MIÉRCOLES",
+   "sub": "PIERNA · GLÚTEO E ISQUIOS  ·  DÍA ALTO 2.450 KCAL",
+   "calentamiento": [
+    "Bicicleta suave — 5 minutos",
+    "Puente de glúteo sin peso — 2 series de 20",
+    "Banda de glúteo — 2 series de 15"
+   ],
+   "ejercicios": [
+    [
+     "hip_thrust",
+     "Hip thrust con barra",
+     "4",
+     "6-8",
+     "3 min",
+     "Barbilla al pecho. Aprieta el glúteo dos segundos arriba."
+    ],
+    [
+     "peso_muerto_rumano",
+     "Peso muerto rumano",
+     "4",
+     "8",
+     "2,5 min",
+     "Rodilla casi recta y cadera atrás. Para cuando el isquio tire."
+    ],
+    [
+     "curl_femoral",
+     "Curl femoral tumbada",
+     "3",
+     "10-12",
+     "90 seg",
+     "Baja en tres segundos: ahí está todo el trabajo."
+    ],
+    [
+     "zancada",
+     "Zancada caminando",
+     "3",
+     "10 por pierna",
+     "90 seg",
+     "Paso largo. El talón de adelante es el que manda."
+    ],
+    [
+     "abduccion_cadera",
+     "Abducción de cadera",
+     "3",
+     "15-20",
+     "60 seg",
+     "Torso un poco adelante y aprieta arriba."
+    ],
+    [
+     "hiperextension",
+     "Hiperextensión",
+     "3",
+     "12",
+     "60 seg",
+     "Sube con el glúteo, no con la espalda baja."
+    ]
+   ],
+   "estiramientos": [
+    "Isquiotibiales — 30 seg cada pierna",
+    "Glúteo en figura 4 — 30 seg cada lado"
+   ]
+  }
+ ],
+ "metodo": [
+  [
+   "La regla que lo decide todo",
+   [
+    "En déficit el músculo <b>no</b> se pierde por comer menos: se pierde por bajar el peso de la barra. El volumen puede bajar; la carga no.",
+    "Si una semana está muy cansada, saque una serie de los accesorios. <b>Nunca baje el peso del primer ejercicio del día.</b>"
+   ]
+  ],
+  [
+   "Doble progresión — así sube el peso",
+   [
+    "Cada ejercicio tiene un rango, por ejemplo 8-10. Empiece en 8 repeticiones en todas las series.",
+    "Cuando logre el tope del rango (10) en <b>todas</b> las series, la próxima vez sube el peso y vuelve a empezar en 8.",
+    "Subidas chicas: <b>2,5 kg</b> en tren superior, <b>5 kg</b> en pierna. Apurarse es lesionarse."
+   ]
+  ],
+  [
+   "Cuánto apretar cada serie",
+   [
+    "Ejercicios 1 y 2 del día: deje <b>siempre una repetición guardada</b>. Nunca al fallo.",
+    "Último ejercicio del día: la última serie sí va al fallo. Ahí y solo ahí.",
+    "Respete los descansos del papel. Tres minutos se hacen largos, pero son los que le permiten mover el peso."
+   ]
+  ]
+ ],
+ "metodo_titulo": [
+  "CÓMO SE PROGRESA",
+  "LA PARTE QUE HACE QUE ESTO FUNCIONE"
+ ],
+ "cierre": "Si el peso de la barra sube mes a mes, vas bien."
+}

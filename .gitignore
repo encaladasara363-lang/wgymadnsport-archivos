@@ -9,3 +9,9 @@ dieta-*.json
 dieta-*.html
 dieta-*.pdf
 !herramientas/dieta-ejemplo.json
+
+# Rutinas de socios: llevan medidas y datos de salud, no van al repositorio publico
+rutina-*.json
+rutina-*.html
+rutina-*.pdf
+!herramientas/rutina-ejemplo.json
