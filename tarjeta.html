@@ -531,6 +531,56 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  function allSocios(){  
  return Array.prototype.map.call(sociosTbody.children, socioRowData);  
  }  
+
+ /* ═══ Lista de socios al día ═══════════════════════════════════════════
+    Las filas escritas aquí abajo quedan de respaldo, para que la tarjeta
+    sirva aunque el teléfono esté sin señal. Al abrir se intenta bajar
+    socios.json — la lista única del gimnasio — y si llega, se rehacen las
+    filas con esa. Así, lo que se renueva en el mesón le aparece al socio
+    en su celular sin que nadie tenga que tocar esta página. */
+ function refrescarSocios(alTerminar){
+ var listo = false;
+ function seguir(){ if(listo) return; listo = true; alTerminar(); }
+ var reloj = setTimeout(seguir, 3000);
+ function cerrar(){ clearTimeout(reloj); seguir(); }
+ function dosDigitos(n){ return (n < 10 ? "0" : "") + n; }
+ function fechaDeSerial(fv){
+ var d = new Date(Date.UTC(1899, 11, 30) + Number(fv) * 86400000);
+ return dosDigitos(d.getUTCDate()) + "-" + dosDigitos(d.getUTCMonth() + 1) +
+ "-" + d.getUTCFullYear();
+ }
+ function plata(m){ return "$" + String(Number(m) || 0).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+ try{
+ fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
+ .then(function(r){ return r.ok ? r.json() : null; })
+ .then(function(d){
+ if(!d || !Array.isArray(d.socios) || !d.socios.length) return;
+ /* El "tiene rutina" solo vive en esta tabla, así que se conserva. */
+ var rutinaPrevia = {};
+ Array.prototype.forEach.call(sociosTbody.children, function(tr){
+ var x = socioRowData(tr);
+ rutinaPrevia[(x.nombre + "|" + x.apellido).toUpperCase()] = x.tieneRutina;
+ });
+ var filas = d.socios.slice().sort(function(a, b){
+ return (a.n + a.a).localeCompare(b.n + b.a, "es");
+ }).map(function(s){
+ var con = rutinaPrevia[(s.n + "|" + s.a).toUpperCase()] ? "Sí" : "No";
+ return '<tr><td contenteditable="true">' + escapeHtml(s.n) +
+ '</td><td contenteditable="true">' + escapeHtml(s.a) +
+ '</td><td contenteditable="true">' + escapeHtml(s.rut || "Sin Rut") +
+ '</td><td contenteditable="true">' + escapeHtml(s.plan || "") +
+ '</td><td contenteditable="true" class="num">' + plata(s.monto) +
+ '</td><td contenteditable="true">' + fechaDeSerial(s.fv) +
+ '</td><td contenteditable="true">' + con +
+ '</td><td artifact-local class="estado-cell"></td>' +
+ '<td><button class="iconbtn" title="Eliminar">✕</button></td></tr>';
+ }).join("");
+ sociosTbody.innerHTML = filas;
+ })
+ .catch(function(){})
+ .then(cerrar, cerrar);
+ }catch(e){ cerrar(); }
+ }
  function estadoDe(vencimiento){  
  var venc = parseDMY(vencimiento);  
  if(!venc) return {cls:"good", txt:"Al día"};  
@@ -863,6 +913,6 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  });
 
  /* ---------- go ---------- */
- initRoute();
+ refrescarSocios(initRoute);
 })();
 </script>  

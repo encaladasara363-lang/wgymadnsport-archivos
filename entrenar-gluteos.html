@@ -1014,6 +1014,33 @@ var SOCIOS = [
 {n:"MARIA",a:"ZEPEDA",rut:"00.000.000-0",plan:"Funcionario Público",monto:28000,fv:46268}
 ];
 
+/* ═══ Lista de socios al día ════════════════════════════════════════════
+   La lista de aquí arriba viaja dentro del archivo y queda de respaldo,
+   para que la app sirva aunque el teléfono esté sin señal. Al abrir, se
+   intenta bajar socios.json — la lista única del gimnasio — y si llega,
+   esa manda. Así, cuando en el mesón renuevan a alguien, no hay que
+   tocar app por app: se actualiza sola. */
+function refrescarSocios(alTerminar){
+ var listo = false;
+ function seguir(){ if(listo) return; listo = true; alTerminar(); }
+ /* Si la red se demora, no dejamos al socio mirando una pantalla en
+    blanco: a los 3 segundos entra igual con la lista de respaldo. */
+ var reloj = setTimeout(seguir, 3000);
+ function cerrar(){ clearTimeout(reloj); seguir(); }
+ try{
+  fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
+   .then(function(r){ return r.ok ? r.json() : null; })
+   .then(function(d){
+    if(d && Array.isArray(d.socios) && d.socios.length){
+     SOCIOS.length = 0;
+     d.socios.forEach(function(s){ SOCIOS.push(s); });
+    }
+   })
+   .catch(function(){})
+   .then(cerrar, cerrar);
+ }catch(e){ cerrar(); }
+}
+
 /* ═══ El portón ═════════════════════════════════════════════════════════
    Reconoce al socio aunque escriba con faltas de ortografía o al revés, y
    solo lo deja pasar si tiene el plan al día. */
@@ -1838,6 +1865,7 @@ document.addEventListener("visibilitychange", function(){
  if(document.hidden) cerrarDescanso();
 });
 
+function arrancarApp(){
 /* Al volver a abrir la app se comprueba de nuevo el vencimiento: si se le
    venció el plan desde la última vez, no sigue entrando con el permiso viejo. */
 if(TODO.socio){
@@ -1862,6 +1890,8 @@ if(TODO.socio){
  mostrar("p-ingreso");
  setTimeout(function(){ try{ $("iNombre").focus(); }catch(e){} }, 250);
 }
+}
+refrescarSocios(arrancarApp);
 
 })();
 </script>
