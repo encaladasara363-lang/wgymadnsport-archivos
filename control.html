@@ -266,6 +266,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
  .ficha .campos{ grid-template-columns:1fr; }
 }
 @media (prefers-reduced-motion:reduce){ *{ transition:none !important; animation:none !important; } }
+ body{ padding-bottom:120px; }
 </style>
 
 <header class="top">
@@ -567,6 +568,20 @@ const LISTA_BASE = [
 {n:"MARIA",a:"ZEPEDA",plan:"Funcionario Público",m:28000,v:"2026-09-03"}
 ];
 </script>
+
+<!-- Barra fija: pasar la lista de este equipo a los celulares de los socios. -->
+<div id="barra-copiar" style="position:fixed;left:0;right:0;bottom:0;z-index:9999;
+ background:#141418;border-top:2px solid #D4AF37;padding:12px 14px;
+ padding-bottom:calc(12px + env(safe-area-inset-bottom));
+ display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;
+ box-shadow:0 -10px 24px -12px rgba(0,0,0,.9)">
+ <button id="copiar-lista" type="button" style="cursor:pointer;border:none;border-radius:10px;
+  padding:14px 22px;font-weight:800;font-size:15px;text-transform:uppercase;letter-spacing:.03em;
+  background:#E30613;color:#fff;font-family:inherit">📋 COPIAR LISTA AL DÍA</button>
+ <span id="copiar-aviso" style="font-size:13.5px;color:#9B9BA6;max-width:430px">
+  Tócalo y pégamela por chat: con eso los socios que renovaste acá quedan al día en su celular.</span>
+</div>
+
 <script>
 (function(){
 "use strict";
@@ -1776,5 +1791,50 @@ setInterval(reloj, 20000);
 pintar();
 poll();
 setInterval(poll, 4000);
+
+/* ═══ Pasar la lista de este equipo a los celulares ═════════════════════
+   Las renovaciones hechas acá quedan guardadas en este mismo equipo. Este
+   botón arma la lista completa en el formato de socios.json — el archivo
+   que leen la tarjeta virtual y las apps de rutina — para copiarla y
+   mandarla por chat de una sola vez. */
+(function(){
+ var boton = document.getElementById("copiar-lista");
+ var aviso = document.getElementById("copiar-aviso");
+ if(!boton) return;
+ function aSerial(iso){
+  var p = String(iso || "").trim().split("-");
+  if(p.length !== 3) return 0;
+  var d = Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  return Math.round((d - Date.UTC(1899, 11, 30)) / 86400000);
+ }
+ boton.addEventListener("click", function(){
+  var lista = socios.map(function(s){
+   return { n:s.n, a:s.a, rut:s.rut || "Sin Rut", plan:s.plan || "",
+            monto:Number(s.m) || 0, fv:aSerial(s.v) };
+  }).filter(function(s){ return s.n || s.a; });
+  lista.sort(function(x, y){ return (x.a + x.n).localeCompare(y.a + y.n, "es"); });
+  var h = new Date();
+  var iso = h.getFullYear() + "-" + String(h.getMonth()+1).padStart(2,"0") +
+            "-" + String(h.getDate()).padStart(2,"0");
+  var txt = JSON.stringify({ actualizado:iso, socios:lista }, null, 1);
+  function ok(){
+   aviso.textContent = "¡Copiado! " + lista.length + " socios. Pégamelo por chat.";
+   aviso.style.color = "#43C48D";
+  }
+  function aMano(){
+   aviso.textContent = "No pude copiarlo solo. Apreta Ctrl + C ahora.";
+   var ta = document.createElement("textarea");
+   ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+   document.body.appendChild(ta); ta.select();
+   setTimeout(function(){ document.body.removeChild(ta); }, 15000);
+  }
+  try{
+   if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(ok, aMano);
+   }else{ aMano(); }
+  }catch(e){ aMano(); }
+ });
+})();
+
 })();
 </script>
