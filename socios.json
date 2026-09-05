@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-04",
+ "actualizado": "2026-09-05",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -1625,6 +1625,62 @@
    "plan": "Funcionario Público",
    "monto": 28000,
    "fv": 46298
+  },
+  {
+   "n": "BRAYAN",
+   "a": "ALVARE",
+   "rut": "Sin Rut",
+   "plan": "Tres Veces a La Semana",
+   "monto": 23000,
+   "fv": 46295
+  },
+  {
+   "n": "GUILLERMO",
+   "a": "ARAYA",
+   "rut": "Sin Rut",
+   "plan": "Estudiante Profesor",
+   "monto": 28000,
+   "fv": 46299
+  },
+  {
+   "n": "IGNASIO",
+   "a": "CANDIA",
+   "rut": "Sin Rut",
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46297
+  },
+  {
+   "n": "ISABEL",
+   "a": "HERRERRA",
+   "rut": "Sin Rut",
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46297
+  },
+  {
+   "n": "MARIA",
+   "a": "JOSE HERNANDEZ",
+   "rut": "Sin Rut",
+   "plan": "Tres Veces a La Semana",
+   "monto": 28000,
+   "fv": 46295
+  },
+  {
+   "n": "ANA",
+   "a": "MARIA SANABRIA",
+   "rut": "Sin Rut",
+   "plan": "Tres Veces a La Semana",
+   "monto": 28000,
+   "fv": 46295
+  },
+  {
+   "n": "MAYORI",
+   "a": "RAMIREZ",
+   "rut": "Sin Rut",
+   "plan": "Tres Veces a La Semana",
+   "monto": 23000,
+   "fv": 46269
   }
  ]
 }
