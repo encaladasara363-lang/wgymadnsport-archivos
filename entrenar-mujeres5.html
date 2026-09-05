@@ -219,8 +219,8 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 .ej .pictograma img{width:100%;height:100%;object-fit:contain}
 /* El calentamiento (trotadora/bicicleta) se ve grande arriba del título,
    no metido en el cuadrito de 64px de los ejercicios normales. */
-.ej .pictograma.grande{width:100%;max-width:280px;height:auto;aspect-ratio:3/4;
-  margin:0 auto 14px;padding:0}
+.ej .pictograma.grande{width:100%;height:auto;aspect-ratio:3/4;
+  margin:0 0 14px;padding:0}
 .consejo{background:var(--negro-card);border-left:4px solid var(--dorado);border-radius:0 12px 12px 0;
   padding:13px 15px;margin-bottom:13px;font-size:16px;line-height:1.5;color:var(--crema)}
 .consejo b{color:var(--dorado);display:block;margin-bottom:4px;
@@ -1557,7 +1557,11 @@ function pintarEjercicio(){
  var record = recordDe(ex.name);
 
  var h = "";
- if(video) h += '<div class="cabezal"><div class="pictograma"><img src="' + video + '" alt=""></div><h2>' + limpio(ex.name) + '</h2></div>';
+ /* Las fotos con clave "grande_..." son las imágenes grandes que manda la
+    dueña una por una para cada ejercicio (mismo diseño del calentamiento) —
+    se ven arriba del título, no metidas en el cuadrito chico de 64px. */
+ if(video && /^grande_/.test(ex.video)) h += '<div class="pictograma grande"><img src="' + video + '" alt=""></div><h2>' + limpio(ex.name) + '</h2>';
+ else if(video) h += '<div class="cabezal"><div class="pictograma"><img src="' + video + '" alt=""></div><h2>' + limpio(ex.name) + '</h2></div>';
  else h += '<h2>' + limpio(ex.name) + '</h2>';
  h += '<div class="meta">' +
         '<span>' + limpio(ex.sets) + '</span>' +
