@@ -1088,7 +1088,7 @@
    "rut": "Sin Rut",
    "plan": "Mensual Turno",
    "monto": 23000,
-   "fv": 46247
+   "fv": 46391
   },
   {
    "n": "BASTIAN",
@@ -1248,7 +1248,7 @@
    "rut": "00.000.000-0",
    "plan": "Mensual Turno",
    "monto": 23000,
-   "fv": 46271
+   "fv": 46301
   },
   {
    "n": "LUIS",
@@ -1262,9 +1262,9 @@
    "n": "SEBASTIAN",
    "a": "RIVERA",
    "rut": "00.000.000-0",
-   "plan": "Estudiante Profesor",
-   "monto": 28000,
-   "fv": 46261
+   "plan": "Plan Semanal",
+   "monto": 15000,
+   "fv": 46277
   },
   {
    "n": "JOSE",
