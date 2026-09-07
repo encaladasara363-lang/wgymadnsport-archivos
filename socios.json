@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-05",
+ "actualizado": "2026-09-07",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -57,6 +57,14 @@
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46261
+  },
+  {
+   "n": "BRAYAN",
+   "a": "ALVARE",
+   "rut": "Sin Rut",
+   "plan": "Tres Veces a La Semana",
+   "monto": 23000,
+   "fv": 46295
   },
   {
    "n": "BRAYAN",
@@ -121,6 +129,14 @@
    "plan": "Estudiante Profesor",
    "monto": 28000,
    "fv": 46295
+  },
+  {
+   "n": "GUILLERMO",
+   "a": "ARAYA",
+   "rut": "Sin Rut",
+   "plan": "Estudiante Profesor",
+   "monto": 28000,
+   "fv": 46299
   },
   {
    "n": "PAULINA",
@@ -236,6 +252,14 @@
   },
   {
    "n": "IGNACIO",
+   "a": "CANDIA",
+   "rut": "Sin Rut",
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46297
+  },
+  {
+   "n": "IGNASIO",
    "a": "CANDIA",
    "rut": "Sin Rut",
    "plan": "Mensual Turno",
@@ -699,6 +723,14 @@
    "fv": 46275
   },
   {
+   "n": "ISABEL",
+   "a": "HERRERRA",
+   "rut": "Sin Rut",
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46297
+  },
+  {
    "n": "LUISA",
    "a": "HIDALGO",
    "rut": "00.000.000-0",
@@ -729,6 +761,14 @@
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46289
+  },
+  {
+   "n": "MARIA",
+   "a": "JOSE HERNANDEZ",
+   "rut": "Sin Rut",
+   "plan": "Tres Veces a La Semana",
+   "monto": 28000,
+   "fv": 46295
   },
   {
    "n": "CAMILA",
@@ -851,6 +891,14 @@
    "fv": 46289
   },
   {
+   "n": "ANA",
+   "a": "MARIA SANABRIA",
+   "rut": "Sin Rut",
+   "plan": "Tres Veces a La Semana",
+   "monto": 28000,
+   "fv": 46295
+  },
+  {
    "n": "CONSTANZA",
    "a": "MARIN",
    "rut": "00.000.000-0",
@@ -904,7 +952,7 @@
    "rut": "00.000.000-2",
    "plan": "Funcionario Público",
    "monto": 28000,
-   "fv": 46269
+   "fv": 46302
   },
   {
    "n": "GABRIEL",
@@ -995,20 +1043,20 @@
    "fv": 46299
   },
   {
-   "n": "Sebastian",
-   "a": "OLIVA",
-   "rut": "00.000.000-1",
-   "plan": "Estudiante Profesor",
-   "monto": 28000,
-   "fv": 46249
-  },
-  {
    "n": "PEDRO",
    "a": "OLIVARES",
    "rut": "00.000.000-4",
    "plan": "Funcionario Público",
    "monto": 28000,
    "fv": 46295
+  },
+  {
+   "n": "Sebastian",
+   "a": "OLIVA",
+   "rut": "00.000.000-1",
+   "plan": "Estudiante Profesor",
+   "monto": 28000,
+   "fv": 46249
   },
   {
    "n": "AlEXANDER",
@@ -1084,11 +1132,27 @@
   },
   {
    "n": "ANDRES",
+   "a": "PAVES",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46299
+  },
+  {
+   "n": "ANDRES",
    "a": "PAVEZ",
    "rut": "Sin Rut",
    "plan": "Mensual Turno",
    "monto": 23000,
    "fv": 46299
+  },
+  {
+   "n": "CAMILA",
+   "a": "PEÑA",
+   "rut": "00.000.000-0",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46269
   },
   {
    "n": "BASTIAN",
@@ -1123,14 +1187,6 @@
    "fv": 46254
   },
   {
-   "n": "CAMILA",
-   "a": "PEÑA",
-   "rut": "00.000.000-0",
-   "plan": "Full Mensual",
-   "monto": 33000,
-   "fv": 46269
-  },
-  {
    "n": "JEAN",
    "a": "PIERRE",
    "rut": "00.000.000-0",
@@ -1147,20 +1203,20 @@
    "fv": 46275
   },
   {
-   "n": "CRISTOBAL",
-   "a": "PIZARRO",
-   "rut": "00.000.000-0",
-   "plan": "Estudiante Profesor",
-   "monto": 28000,
-   "fv": 46276
-  },
-  {
    "n": "GABRIEL",
    "a": "PIÑOL",
    "rut": "00.000.000-0",
    "plan": "Mensual Turno",
    "monto": 23000,
    "fv": 46273
+  },
+  {
+   "n": "CRISTOBAL",
+   "a": "PIZARRO",
+   "rut": "00.000.000-0",
+   "plan": "Estudiante Profesor",
+   "monto": 28000,
+   "fv": 46276
   },
   {
    "n": "RODRIGO",
@@ -1209,6 +1265,14 @@
    "plan": "Mensual Turno",
    "monto": 23000,
    "fv": 46271
+  },
+  {
+   "n": "MAYORI",
+   "a": "RAMIREZ",
+   "rut": "Sin Rut",
+   "plan": "Tres Veces a La Semana",
+   "monto": 23000,
+   "fv": 46269
   },
   {
    "n": "OBRAIN",
@@ -1408,7 +1472,7 @@
    "rut": "23.230.244-5",
    "plan": "Estudiante Profesor",
    "monto": 28000,
-   "fv": 46268
+   "fv": 46300
   },
   {
    "n": "AARON",
@@ -1625,62 +1689,6 @@
    "plan": "Funcionario Público",
    "monto": 28000,
    "fv": 46298
-  },
-  {
-   "n": "BRAYAN",
-   "a": "ALVARE",
-   "rut": "Sin Rut",
-   "plan": "Tres Veces a La Semana",
-   "monto": 23000,
-   "fv": 46295
-  },
-  {
-   "n": "GUILLERMO",
-   "a": "ARAYA",
-   "rut": "Sin Rut",
-   "plan": "Estudiante Profesor",
-   "monto": 28000,
-   "fv": 46299
-  },
-  {
-   "n": "IGNASIO",
-   "a": "CANDIA",
-   "rut": "Sin Rut",
-   "plan": "Mensual Turno",
-   "monto": 23000,
-   "fv": 46297
-  },
-  {
-   "n": "ISABEL",
-   "a": "HERRERRA",
-   "rut": "Sin Rut",
-   "plan": "Mensual Turno",
-   "monto": 23000,
-   "fv": 46297
-  },
-  {
-   "n": "MARIA",
-   "a": "JOSE HERNANDEZ",
-   "rut": "Sin Rut",
-   "plan": "Tres Veces a La Semana",
-   "monto": 28000,
-   "fv": 46295
-  },
-  {
-   "n": "ANA",
-   "a": "MARIA SANABRIA",
-   "rut": "Sin Rut",
-   "plan": "Tres Veces a La Semana",
-   "monto": 28000,
-   "fv": 46295
-  },
-  {
-   "n": "MAYORI",
-   "a": "RAMIREZ",
-   "rut": "Sin Rut",
-   "plan": "Tres Veces a La Semana",
-   "monto": 23000,
-   "fv": 46269
   }
  ]
 }
