@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>WGYMADNSPORT · Préstamo de Bandas</title>
+<meta name="description" content="Control de préstamo y devolución de bandas elásticas — WGYMADNSPORT Tocopilla.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icono-180.png?v=1">
+<style>
+:root{
+  --negro:#0A0A0A;
+  --surface:#161616;
+  --surface-2:#1F1F1F;
+  --card:#1c1c1c;
+  --rojo:#E30613;
+  --rojo-oscuro:#A40410;
+  --dorado:#D4AF37;
+  --dorado-tint:#332B10;
+  --blanco:#FFFFFF;
+  --gris:#CFCFCF;
+  --gris-soft:#8C8C8C;
+  --line:#2A2A2A;
+  --good:#5CA85C;
+  --good-tint:#16261A;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 20px -10px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  background:var(--negro);
+  color:var(--blanco);
+  font-family:'Segoe UI', Arial, sans-serif;
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{ font-weight:800; color:var(--blanco); text-transform:uppercase; letter-spacing:.02em; margin:0; }
+[hidden]{ display:none !important; }
+.wrap{ max-width:520px; margin:0 auto; padding-bottom:60px; }
+
+header.masthead{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%); border-bottom:3px solid var(--rojo); padding:22px 20px 18px; text-align:center; }
+header.masthead .logo{ width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid var(--dorado); margin-bottom:10px; }
+header.masthead .gymname{ font-size:12px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 4px; }
+header.masthead h1{ font-size:23px; margin:0 0 6px; line-height:1.15; }
+header.masthead h1 span{ color:var(--rojo); }
+header.masthead .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:600; }
+
+section{ padding:18px 16px 0; }
+.card{
+  background:var(--card);
+  border:1.5px solid var(--line);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+.card + .card{ margin-top:16px; }
+.card h2{ font-size:14px; letter-spacing:.1em; color:var(--dorado); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.card h2 .count{ margin-left:auto; background:var(--rojo); color:#fff; font-size:12px; border-radius:999px; padding:2px 9px; letter-spacing:0; }
+
+label{ display:block; font-size:11.5px; font-weight:800; letter-spacing:.1em; color:var(--gris-soft); text-transform:uppercase; margin:0 0 7px 2px; }
+
+.search-box{ position:relative; }
+.search-input{
+  width:100%; background:var(--surface); border:1.5px solid var(--line);
+  border-radius:10px; padding:13px 14px; font-size:15px; color:var(--blanco);
+  font-family:inherit;
+}
+.search-input:focus{ outline:none; border-color:var(--rojo); }
+
+.suggestions{
+  position:relative;
+  margin-top:6px;
+  background:var(--surface-2);
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+}
+.suggestions button{
+  display:block; width:100%; text-align:left; background:none; border:none;
+  color:var(--blanco); font-family:inherit; font-size:14.5px; font-weight:600;
+  padding:11px 14px; cursor:pointer; border-bottom:1px solid var(--line);
+}
+.suggestions button:last-child{ border-bottom:none; }
+.suggestions button:active, .suggestions button:hover{ background:var(--surface); }
+.suggestions button .tag{ float:right; font-size:10.5px; font-weight:800; letter-spacing:.06em; color:var(--dorado); text-transform:uppercase; }
+.suggestions .empty{ padding:11px 14px; font-size:13px; color:var(--gris-soft); }
+
+.picked{
+  margin-top:10px;
+  display:flex; align-items:center; gap:10px;
+  background:var(--good-tint); border:1.5px solid var(--good);
+  border-radius:10px; padding:10px 12px;
+}
+.picked b{ flex:1; font-size:14.5px; }
+.picked .tag{ font-size:10.5px; font-weight:800; letter-spacing:.06em; color:var(--good); text-transform:uppercase; }
+.picked button{
+  background:none; border:none; color:var(--gris-soft); font-size:18px; line-height:1;
+  cursor:pointer; padding:2px 4px;
+}
+
+.chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+.chip{
+  background:var(--surface); border:1.5px solid var(--line); border-radius:999px;
+  padding:9px 16px; font-size:13.5px; font-weight:700; color:var(--gris);
+  font-family:inherit; cursor:pointer;
+}
+.chip[data-active="1"]{ background:var(--rojo); border-color:var(--rojo); color:#fff; }
+
+.field{ margin-top:16px; }
+
+.btn-primary{
+  width:100%; margin-top:18px; background:var(--rojo); color:#fff; border:none; border-radius:10px;
+  padding:15px 16px; font-size:14px; font-weight:900; letter-spacing:.06em; text-transform:uppercase;
+  font-family:inherit; cursor:pointer;
+}
+.btn-primary:disabled{ background:var(--surface-2); color:var(--gris-soft); cursor:not-allowed; }
+.btn-primary:active:not(:disabled){ background:var(--rojo-oscuro); }
+
+.loan{
+  display:flex; align-items:center; gap:12px;
+  padding:12px 0; border-bottom:1px solid var(--line);
+}
+.loan:last-child{ border-bottom:none; }
+.loan .dot{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.loan .info{ flex:1; min-width:0; display:flex; flex-direction:column; }
+.loan .name{ display:block; font-size:14.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.loan .meta{ display:block; font-size:12px; color:var(--gris-soft); margin-top:2px; }
+.loan .elapsed{ font-size:12px; font-weight:800; color:var(--dorado); }
+.loan .elapsed.late{ color:var(--rojo); }
+.loan button{
+  flex-shrink:0; background:var(--surface); border:1.5px solid var(--line); color:var(--blanco);
+  border-radius:8px; padding:9px 13px; font-size:12.5px; font-weight:800; letter-spacing:.04em;
+  text-transform:uppercase; font-family:inherit; cursor:pointer;
+}
+.loan button:active{ background:var(--good); border-color:var(--good); }
+
+.empty-state{ text-align:center; padding:20px 10px; color:var(--gris-soft); font-size:13.5px; }
+
+.hist-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:13px; }
+.hist-row:last-child{ border-bottom:none; }
+.hist-row .name{ flex:1; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hist-row .times{ color:var(--gris-soft); font-size:12px; flex-shrink:0; }
+
+.toggle-hist{
+  width:100%; background:none; border:none; color:var(--gris-soft); font-family:inherit;
+  font-size:12.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+  padding:14px 0 0; cursor:pointer; text-align:center;
+}
+
+.status-line{ text-align:center; font-size:12px; color:var(--gris-soft); padding:14px 16px 0; }
+.status-line.err{ color:var(--rojo); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <img class="logo" src="assets/logo.jpg" alt="WGYMADNSPORT">
+    <div class="gymname">WGYMADNSPORT · TOCOPILLA</div>
+    <h1>Préstamo de <span>Bandas</span></h1>
+    <p class="sub">Registra el retiro y la devolución en recepción</p>
+  </header>
+
+  <div id="statusLine" class="status-line">Cargando lista de socios…</div>
+
+  <section>
+    <div class="card">
+      <h2>Nuevo préstamo</h2>
+
+      <label for="buscar">Socio o cliente del día</label>
+      <div class="search-box">
+        <input id="buscar" class="search-input" type="text" autocomplete="off" spellcheck="false"
+          placeholder="Escribe el nombre…">
+        <div id="sugerencias" class="suggestions" hidden></div>
+      </div>
+      <div id="picked" class="picked" hidden>
+        <b id="pickedName"></b>
+        <span id="pickedTag" class="tag"></span>
+        <button id="pickedClear" type="button" aria-label="Quitar selección">✕</button>
+      </div>
+
+      <div class="field">
+        <label>Banda / color</label>
+        <div id="chips" class="chips">
+          <button class="chip" data-color="Amarilla">Amarilla</button>
+          <button class="chip" data-color="Verde">Verde</button>
+          <button class="chip" data-color="Roja">Roja</button>
+          <button class="chip" data-color="Azul">Azul</button>
+          <button class="chip" data-color="Negra">Negra</button>
+        </div>
+      </div>
+
+      <button id="btnPrestar" class="btn-primary" disabled>Prestar banda</button>
+    </div>
+
+    <div class="card">
+      <h2>Bandas afuera <span id="countActivos" class="count">0</span></h2>
+      <div id="listaActivos"></div>
+    </div>
+
+    <div class="card">
+      <button id="toggleHist" class="toggle-hist">Ver historial de hoy ▾</button>
+      <div id="listaHistorial" hidden></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STORE_KEY = "wgym_bandas_v1";
+  var socios = [];
+  var picked = null; // {nombre, esSocio}
+
+  var elBuscar = document.getElementById("buscar");
+  var elSugerencias = document.getElementById("sugerencias");
+  var elPicked = document.getElementById("picked");
+  var elPickedName = document.getElementById("pickedName");
+  var elPickedTag = document.getElementById("pickedTag");
+  var elPickedClear = document.getElementById("pickedClear");
+  var elChips = document.getElementById("chips");
+  var elBtnPrestar = document.getElementById("btnPrestar");
+  var elListaActivos = document.getElementById("listaActivos");
+  var elCountActivos = document.getElementById("countActivos");
+  var elListaHistorial = document.getElementById("listaHistorial");
+  var elToggleHist = document.getElementById("toggleHist");
+  var elStatus = document.getElementById("statusLine");
+
+  var colorElegido = null;
+
+  function normalizar(s){
+    return (s || "").toString().normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim();
+  }
+
+  function cargarDatos(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      if(!raw) return { activos:[], historial:[] };
+      var d = JSON.parse(raw);
+      return { activos: d.activos || [], historial: d.historial || [] };
+    }catch(e){ return { activos:[], historial:[] }; }
+  }
+  function guardarDatos(d){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }catch(e){}
+  }
+  var datos = cargarDatos();
+
+  function esMismoDia(iso){
+    var d = new Date(iso), hoy = new Date();
+    return d.getFullYear()===hoy.getFullYear() && d.getMonth()===hoy.getMonth() && d.getDate()===hoy.getDate();
+  }
+  function hora(iso){
+    var d = new Date(iso);
+    var h = d.getHours(), m = d.getMinutes();
+    return (h<10?"0":"")+h+":"+(m<10?"0":"")+m;
+  }
+  function minutosDesde(iso){
+    return Math.max(0, Math.round((Date.now() - new Date(iso).getTime())/60000));
+  }
+
+  // ---- carga de socios.json ----
+  fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
+    .then(function(r){ if(!r.ok) throw new Error("http " + r.status); return r.json(); })
+    .then(function(data){
+      socios = (data && data.socios) || [];
+      elStatus.textContent = socios.length + " socios cargados. Puedes buscar o escribir un nombre nuevo.";
+      setTimeout(function(){ elStatus.textContent = ""; }, 3500);
+    })
+    .catch(function(){
+      elStatus.textContent = "No se pudo cargar la lista de socios (revisa el internet). Igual puedes escribir el nombre a mano.";
+      elStatus.classList.add("err");
+    });
+
+  // ---- búsqueda ----
+  elBuscar.addEventListener("input", function(){
+    limpiarSeleccion(false);
+    var q = normalizar(elBuscar.value);
+    if(!q){ elSugerencias.hidden = true; elSugerencias.innerHTML = ""; return; }
+
+    var match = socios.filter(function(s){
+      var full = normalizar(s.n + " " + s.a);
+      return full.indexOf(q) !== -1;
+    }).slice(0, 6);
+
+    elSugerencias.innerHTML = "";
+    if(match.length === 0){
+      var div = document.createElement("div");
+      div.className = "empty";
+      div.textContent = "Sin coincidencias — toca “Prestar banda” para anotarlo como cliente del día.";
+      elSugerencias.appendChild(div);
+    }else{
+      match.forEach(function(s){
+        var b = document.createElement("button");
+        b.type = "button";
+        b.innerHTML = s.n + " " + s.a + " <span class=\"tag\">Socio</span>";
+        b.addEventListener("click", function(){
+          seleccionar(s.n + " " + s.a, true);
+        });
+        elSugerencias.appendChild(b);
+      });
+    }
+    elSugerencias.hidden = false;
+  });
+
+  function seleccionar(nombre, esSocio){
+    picked = { nombre: nombre, esSocio: !!esSocio };
+    elBuscar.value = "";
+    elSugerencias.hidden = true;
+    elSugerencias.innerHTML = "";
+    elPickedName.textContent = nombre;
+    elPickedTag.textContent = esSocio ? "Socio" : "Cliente del día";
+    elPicked.hidden = false;
+    actualizarBoton();
+  }
+  function limpiarSeleccion(limpiarTambienInput){
+    picked = null;
+    elPicked.hidden = true;
+    if(limpiarTambienInput) elBuscar.value = "";
+    actualizarBoton();
+  }
+  elPickedClear.addEventListener("click", function(){ limpiarSeleccion(true); });
+
+  elChips.addEventListener("click", function(ev){
+    var btn = ev.target.closest(".chip");
+    if(!btn) return;
+    var color = btn.getAttribute("data-color");
+    colorElegido = (colorElegido === color) ? null : color;
+    Array.prototype.forEach.call(elChips.querySelectorAll(".chip"), function(c){
+      c.setAttribute("data-active", (c.getAttribute("data-color") === colorElegido) ? "1" : "0");
+    });
+    actualizarBoton();
+  });
+
+  function nombreActual(){
+    if(picked) return picked.nombre;
+    var v = elBuscar.value.trim();
+    return v;
+  }
+  function actualizarBoton(){
+    elBtnPrestar.disabled = !(nombreActual() && colorElegido);
+  }
+  elBuscar.addEventListener("input", actualizarBoton);
+
+  elBtnPrestar.addEventListener("click", function(){
+    var nombre = nombreActual();
+    if(!nombre || !colorElegido) return;
+    var esSocio = picked ? picked.esSocio : false;
+
+    datos.activos.push({
+      id: "l" + Date.now() + Math.random().toString(36).slice(2,6),
+      nombre: nombre.toUpperCase(),
+      esSocio: esSocio,
+      banda: colorElegido,
+      retiro: new Date().toISOString()
+    });
+    guardarDatos(datos);
+
+    elBuscar.value = "";
+    limpiarSeleccion(false);
+    colorElegido = null;
+    Array.prototype.forEach.call(elChips.querySelectorAll(".chip"), function(c){ c.setAttribute("data-active","0"); });
+    actualizarBoton();
+    render();
+  });
+
+  function devolver(id){
+    var idx = -1;
+    for(var i=0;i<datos.activos.length;i++){ if(datos.activos[i].id === id){ idx = i; break; } }
+    if(idx === -1) return;
+    var item = datos.activos.splice(idx,1)[0];
+    item.devolucion = new Date().toISOString();
+    datos.historial.unshift(item);
+    if(datos.historial.length > 200) datos.historial.length = 200;
+    guardarDatos(datos);
+    render();
+  }
+
+  var COLOR_DOT = {
+    Amarilla:"#E8C547", Verde:"#5CA85C", Roja:"#E30613", Azul:"#4C86E0", Negra:"#3A3A3A"
+  };
+
+  function render(){
+    // activos
+    elCountActivos.textContent = datos.activos.length;
+    elListaActivos.innerHTML = "";
+    if(datos.activos.length === 0){
+      var e = document.createElement("div");
+      e.className = "empty-state";
+      e.textContent = "No hay bandas afuera en este momento.";
+      elListaActivos.appendChild(e);
+    }else{
+      datos.activos
+        .slice()
+        .sort(function(a,b){ return new Date(a.retiro) - new Date(b.retiro); })
+        .forEach(function(item){
+          var mins = minutosDesde(item.retiro);
+          var row = document.createElement("div");
+          row.className = "loan";
+          row.innerHTML =
+            '<span class="dot" style="background:' + (COLOR_DOT[item.banda]||"#888") + '"></span>' +
+            '<span class="info">' +
+              '<span class="name">' + item.nombre + '</span>' +
+              '<span class="meta">' + item.banda + ' · retiró ' + hora(item.retiro) + (item.esSocio? '' : ' · cliente del día') + '</span>' +
+            '</span>' +
+            '<span class="elapsed' + (mins>=45?' late':'') + '">' + mins + ' min</span>' +
+            '<button type="button" data-id="' + item.id + '">Devolver</button>';
+          elListaActivos.appendChild(row);
+        });
+    }
+
+    // historial de hoy
+    elListaHistorial.innerHTML = "";
+    var hoy = datos.historial.filter(function(h){ return esMismoDia(h.devolucion); });
+    if(hoy.length === 0){
+      var eh = document.createElement("div");
+      eh.className = "empty-state";
+      eh.textContent = "Aún no hay devoluciones registradas hoy.";
+      elListaHistorial.appendChild(eh);
+    }else{
+      hoy.forEach(function(item){
+        var row = document.createElement("div");
+        row.className = "hist-row";
+        row.innerHTML =
+          '<span class="name">' + item.nombre + ' <span style="color:var(--gris-soft);font-weight:400;">· ' + item.banda + '</span></span>' +
+          '<span class="times">' + hora(item.retiro) + '–' + hora(item.devolucion) + '</span>';
+        elListaHistorial.appendChild(row);
+      });
+    }
+  }
+
+  elListaActivos.addEventListener("click", function(ev){
+    var btn = ev.target.closest("button[data-id]");
+    if(!btn) return;
+    devolver(btn.getAttribute("data-id"));
+  });
+
+  elToggleHist.addEventListener("click", function(){
+    elListaHistorial.hidden = !elListaHistorial.hidden;
+    elToggleHist.textContent = elListaHistorial.hidden ? "Ver historial de hoy ▾" : "Ocultar historial ▴";
+  });
+
+  document.addEventListener("click", function(ev){
+    if(!ev.target.closest(".search-box")) { elSugerencias.hidden = true; }
+  });
+
+  setInterval(render, 30000);
+  render();
+})();
+</script>
+</body>
+</html>
