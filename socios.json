@@ -1224,7 +1224,7 @@
    "rut": "00.000.000-0",
    "plan": "Tres Veces a La Semana",
    "monto": 23000,
-   "fv": 46269
+   "fv": 46302
   },
   {
    "n": "IVAN",
@@ -1481,6 +1481,14 @@
    "plan": "Tres Veces a La Semana",
    "monto": 23000,
    "fv": 46287
+  },
+  {
+   "n": "ANTONY",
+   "a": "SUAREZ",
+   "rut": "Sin Rut",
+   "plan": "Estudiante Profesor",
+   "monto": 28000,
+   "fv": 46302
   },
   {
    "n": "JHANKARLA",
