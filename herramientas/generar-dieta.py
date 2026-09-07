@@ -9,11 +9,13 @@ Produce <salida>.html y, si hay Playwright, <salida>.pdf.
 El json define socio, dias, semana y ficha de medidas: ver dieta-ejemplo.json.
 Sirve igual para el plan de un socio que para el de la duena del gimnasio.
 """
-import base64, io, json, os, sys
+import base64, io, json, os, re, sys
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(AQUI)
 LOGO = os.path.join(RAIZ, "contenido", "logo.jpg")
+FUENTE_ANTON = os.path.join(RAIZ, "contenido", "fuentes", "Anton.ttf")
+FUENTE_BARLOW = os.path.join(RAIZ, "contenido", "fuentes", "BarlowCondensed.ttf")
 
 
 def logo_incrustado(lado=460):
@@ -302,6 +304,318 @@ def construir(plan):
 """ % (esc(plan["socio"]), esc(plan["documento"]), CSS, "".join(partes))
 
 
+MM = 2.834645669  # 1 mm en puntos PDF
+INK = "#0D0D0F"
+PAPEL = "#FCFCFA"
+ROJO = "#E1061B"
+ACERO = "#6E7278"
+SUAVE = "#EDEDEA"
+
+
+def _html_a_lineas(txt):
+    """Convierte el HTML simple usado en instrucciones/pie (<p>, <b>, <b class=rojo>)
+    al mini-marcado que entiende reportlab.platypus.Paragraph."""
+    txt = re.sub(r"\s*<p>\s*", "<br/><br/>", txt)
+    txt = re.sub(r"</p>\s*", "", txt)
+    txt = re.sub(r'<b class="rojo">(.*?)</b>', r'<font color="%s"><b>\1</b></font>' % ROJO, txt, flags=re.S)
+    txt = txt.replace("&nbsp;", " ")
+    txt = txt.strip()
+    if txt.startswith("<br/><br/>"):
+        txt = txt[len("<br/><br/>"):]
+    return txt
+
+
+def _sano(s):
+    """La fuente Barlow Condensed convertida no trae el glifo de flecha;
+    se reemplaza por un guión para que no desaparezca el texto."""
+    return str(s).replace("→", "-")
+
+
+def _fuentes_registradas():
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    if "Anton" not in pdfmetrics.getRegisteredFontNames():
+        pdfmetrics.registerFont(TTFont("Anton", FUENTE_ANTON))
+        pdfmetrics.registerFont(TTFont("Barlow", FUENTE_BARLOW))
+    return True
+
+
+def pagina_medidas_pdf(plan, ruta_salida, logo_path=LOGO):
+    """Genera, como PDF de una sola hoja A4 con campos de formulario reales,
+    el reemplazo editable de la hoja 'Medidas' (peso, cintura, cadera y foto
+    por semana) para que se llene en el computador o el celular sin imprimir."""
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.colors import HexColor
+    from reportlab.platypus import Paragraph
+    from reportlab.lib.styles import ParagraphStyle
+    from reportlab.lib.enums import TA_LEFT
+
+    tiene_fuentes = False
+    try:
+        tiene_fuentes = _fuentes_registradas()
+    except Exception:
+        pass
+    F_DISP = "Anton" if tiene_fuentes else "Helvetica-Bold"
+    F_TXT = "Barlow" if tiene_fuentes else "Helvetica"
+    F_TXTB = "Barlow" if tiene_fuentes else "Helvetica-Bold"
+
+    ANCHO, ALTO = 210 * MM, 297 * MM
+    MARGEN_L = MARGEN_R = 13 * MM
+    MARGEN_T = 13 * MM
+    ANCHO_UTIL = ANCHO - MARGEN_L - MARGEN_R
+
+    c = canvas.Canvas(ruta_salida, pagesize=(ANCHO, ALTO))
+    c.setTitle("%s · Medidas · %s" % (plan["socio"], plan["documento"]))
+
+    # ---- barra superior ----
+    c.setFillColor(HexColor(INK))
+    c.rect(0, ALTO - 5 * MM, ANCHO, 5 * MM, fill=1, stroke=0)
+    c.setFillColor(HexColor(ROJO))
+    c.rect(0, ALTO - 5 * MM, 58 * MM, 5 * MM, fill=1, stroke=0)
+
+    cursor = ALTO - MARGEN_T - 3 * MM  # tope de la cabecera
+
+    # ---- logo circular ----
+    logo_d = 22 * MM
+    try:
+        c.saveState()
+        p = c.beginPath()
+        p.circle(MARGEN_L + logo_d / 2, cursor - logo_d / 2, logo_d / 2)
+        c.clipPath(p, stroke=0)
+        c.drawImage(logo_path, MARGEN_L, cursor - logo_d, width=logo_d, height=logo_d,
+                    preserveAspectRatio=True, mask="auto")
+        c.restoreState()
+        c.setLineWidth(1.1 * MM)
+        c.setStrokeColor(HexColor(INK))
+        c.circle(MARGEN_L + logo_d / 2, cursor - logo_d / 2, logo_d / 2, fill=0, stroke=1)
+    except Exception:
+        pass
+
+    # ---- identidad (kicker / doc / socio) ----
+    tx = MARGEN_L + logo_d + 5 * MM
+    c.setFont(F_TXTB, 11)
+    c.setFillColor(HexColor(INK))
+    c.drawString(tx, cursor - 3.6 * MM, "WGYMADNSPORT · ")
+    ancho_kicker = c.stringWidth("WGYMADNSPORT · ", F_TXTB, 11)
+    c.setFillColor(HexColor(ROJO))
+    c.drawString(tx + ancho_kicker, cursor - 3.6 * MM, "TOCOPILLA")
+    c.setFillColor(HexColor(ACERO))
+    c.setFont(F_TXTB, 8)
+    c.drawString(tx, cursor - 7.6 * MM, plan["documento"].upper())
+    c.setFillColor(HexColor(INK))
+    c.setFont(F_DISP, 15)
+    c.drawString(tx, cursor - 13.5 * MM, plan["socio"].upper())
+
+    # ---- etiqueta "MEDIDAS" (esquina superior derecha) ----
+    et_txt, et_sub = "MEDIDAS", _sano(plan["periodo"])
+    c.setFont(F_DISP, 17)
+    et_ancho = max(c.stringWidth(et_txt, F_DISP, 17) + 10 * MM, 46 * MM)
+    et_x = ANCHO - MARGEN_R - et_ancho
+    et_y = cursor - 15.5 * MM
+    et_alto = 15.5 * MM
+    c.setFillColor(HexColor(INK))
+    c.roundRect(et_x + 1.6 * MM, et_y - 1.6 * MM, et_ancho, et_alto, 0, fill=1, stroke=0)
+    c.setFillColor(HexColor(PAPEL))
+    c.drawCentredString(et_x + et_ancho / 2 + 1.6 * MM, et_y + et_alto - 6.5 * MM, et_txt)
+    c.setFont(F_TXTB, 8.5)
+    c.drawCentredString(et_x + et_ancho / 2 + 1.6 * MM, et_y + 2.2 * MM, et_sub)
+
+    cursor -= 16 * MM
+    # ---- raya roja ----
+    c.setFillColor(HexColor(ROJO))
+    c.rect(MARGEN_L, cursor, ANCHO_UTIL, 1.6 * MM, fill=1, stroke=0)
+    cursor -= 4.5 * MM
+
+    # ---- arranque (punto de partida) ----
+    partida = plan.get("partida", [])
+    if partida:
+        alto_arranque = 13 * MM
+        n = len(partida)
+        ancho_col = ANCHO_UTIL / n
+        c.setLineWidth(0.9 * MM)
+        c.setStrokeColor(HexColor(INK))
+        c.rect(MARGEN_L, cursor - alto_arranque, ANCHO_UTIL, alto_arranque, fill=0, stroke=1)
+        for i, (k, v) in enumerate(partida):
+            x0 = MARGEN_L + i * ancho_col
+            oscuro = i >= n - 2
+            if oscuro:
+                c.setFillColor(HexColor(INK))
+                c.rect(x0, cursor - alto_arranque, ancho_col, alto_arranque, fill=1, stroke=0)
+            if i > 0:
+                c.setStrokeColor(HexColor(INK))
+                c.setLineWidth(0.35 * MM)
+                c.line(x0, cursor - alto_arranque, x0, cursor)
+            c.setFont(F_TXTB, 6.3)
+            c.setFillColor(HexColor(PAPEL) if oscuro else HexColor(ACERO))
+            c.drawCentredString(x0 + ancho_col / 2, cursor - 4.2 * MM, k.upper())
+            c.setFont(F_DISP, 11)
+            c.setFillColor(HexColor(PAPEL) if oscuro else HexColor(INK))
+            c.drawCentredString(x0 + ancho_col / 2, cursor - 9.6 * MM, str(v))
+        cursor -= alto_arranque + 3.4 * MM
+
+    # ---- instrucciones ----
+    instr = plan.get("instrucciones", "")
+    if instr:
+        estilo = ParagraphStyle("instru", fontName=F_TXTB, fontSize=9, leading=11.5,
+                                 textColor=HexColor(INK), alignment=TA_LEFT)
+        parrafo = Paragraph(_html_a_lineas(instr), estilo)
+        ancho_p, alto_p = parrafo.wrap(ANCHO_UTIL - 6 * MM, 1000)
+        alto_caja = alto_p + 4.8 * MM
+        c.setLineWidth(0.9 * MM)
+        c.setStrokeColor(HexColor(INK))
+        c.rect(MARGEN_L, cursor - alto_caja, ANCHO_UTIL, alto_caja, fill=0, stroke=1)
+        parrafo.drawOn(c, MARGEN_L + 3 * MM, cursor - alto_caja + 2.4 * MM)
+        cursor -= alto_caja + 3.4 * MM
+
+    # ---- tabla de medidas (editable) ----
+    dias_peso = plan.get("dias_peso", ["Miércoles", "Viernes", "Lunes"])
+    encabezados = ["Sem", "Semana del", "Peso\n%s" % dias_peso[0], "Peso\n%s" % dias_peso[1],
+                   "Peso\n%s" % dias_peso[2], "Promedio\nde los 3", "Cintura\ncm", "Cadera\ncm", "Foto"]
+    col_sem, col_fec, col_fot = 11 * MM, 26 * MM, 11 * MM
+    resto = ANCHO_UTIL - col_sem - col_fec - col_fot
+    col_dato = resto / 6.0
+    anchos = [col_sem, col_fec] + [col_dato] * 6 + [col_fot]
+    xs = [MARGEN_L]
+    for a in anchos:
+        xs.append(xs[-1] + a)
+
+    alto_cab = 8 * MM
+    alto_fila = 8.2 * MM
+    filas = plan.get("ficha", [])
+    n_filas_totales = 1 + len(filas)  # incluye la fila de ejemplo
+    alto_tabla = alto_cab + n_filas_totales * alto_fila
+    y_tabla_top = cursor
+    y_tabla_bottom = y_tabla_top - alto_tabla
+
+    # encabezado
+    c.setFillColor(HexColor(INK))
+    c.rect(MARGEN_L, y_tabla_top - alto_cab, ANCHO_UTIL, alto_cab, fill=1, stroke=0)
+    c.setFillColor(HexColor(PAPEL))
+    c.setFont(F_TXTB, 6.3)
+    for i, txt in enumerate(encabezados):
+        cx = (xs[i] + xs[i + 1]) / 2
+        lineas = txt.split("\n")
+        base_y = y_tabla_top - alto_cab / 2 + (1.6 * MM if len(lineas) > 1 else 0)
+        for j, ln in enumerate(lineas):
+            c.drawCentredString(cx, base_y - j * 3.1 * MM - 1.2 * MM, ln.upper())
+
+    # fila de ejemplo (no editable, solo referencia visual)
+    y = y_tabla_top - alto_cab
+    ejemplo = ["ej.", "así se llena", "70,0", "69,8", "69,6", "69,8", "82", "99", "✓"]
+    c.setFillColor(HexColor(SUAVE))
+    c.rect(MARGEN_L, y - alto_fila, ANCHO_UTIL, alto_fila, fill=1, stroke=0)
+    c.setFont(F_TXT, 8.3)
+    c.setFillColor(HexColor(ACERO))
+    for i, txt in enumerate(ejemplo):
+        cx = (xs[i] + xs[i + 1]) / 2
+        c.drawCentredString(cx, y - alto_fila / 2 - 1.2 * MM, txt)
+    y -= alto_fila
+
+    form = c.acroForm
+    for idx, (nn, fecha, hito) in enumerate(filas):
+        fila_id = "f%02d" % idx
+        if hito:
+            c.setFillColor(HexColor(ROJO))
+            c.rect(xs[0], y - alto_fila, col_sem, alto_fila, fill=1, stroke=0)
+            c.setFillColor(HexColor(PAPEL))
+        else:
+            c.setFillColor(HexColor(SUAVE))
+            c.rect(xs[0], y - alto_fila, col_sem, alto_fila, fill=1, stroke=0)
+            c.setFillColor(HexColor(INK))
+        c.setFont(F_DISP, 9)
+        c.drawCentredString((xs[0] + xs[1]) / 2, y - alto_fila / 2 - 1.4 * MM, str(nn))
+        c.setFont(F_TXT, 7.4)
+        c.setFillColor(HexColor("#33343A"))
+        c.drawCentredString((xs[1] + xs[2]) / 2, y - alto_fila / 2 - 1.2 * MM, fecha)
+
+        # 5 campos de texto: 3 pesos, promedio, cintura, cadera
+        for col in range(2, 8):
+            x0, x1 = xs[col], xs[col + 1]
+            form.textfield(
+                name="%s_c%d" % (fila_id, col),
+                tooltip="Semana %s" % nn,
+                x=x0 + 0.6 * MM, y=y - alto_fila + 0.6 * MM,
+                width=(x1 - x0) - 1.2 * MM, height=alto_fila - 1.2 * MM,
+                borderStyle="inset", borderWidth=0.4, borderColor=HexColor(INK),
+                fillColor=HexColor(PAPEL), textColor=HexColor(INK),
+                fontName="Helvetica", fontSize=9, forceBorder=True,
+            )
+        # casilla de foto
+        cxf0, cxf1 = xs[8], xs[9]
+        lado = min(alto_fila, cxf1 - cxf0) - 2.4 * MM
+        form.checkbox(
+            name="%s_foto" % fila_id, tooltip="Foto semana %s" % nn,
+            x=(cxf0 + cxf1) / 2 - lado / 2, y=y - alto_fila / 2 - lado / 2,
+            size=lado, borderStyle="inset", borderWidth=0.4, borderColor=HexColor(INK),
+            fillColor=HexColor(PAPEL), buttonStyle="check", forceBorder=True,
+        )
+        y -= alto_fila
+
+    # marco general de la tabla + líneas de columnas
+    c.setStrokeColor(HexColor(INK))
+    c.setLineWidth(0.3 * MM)
+    for x in xs:
+        c.line(x, y_tabla_top, x, y_tabla_bottom)
+    c.line(MARGEN_L, y_tabla_top, MARGEN_L + ANCHO_UTIL, y_tabla_top)
+    c.line(MARGEN_L, y_tabla_bottom, MARGEN_L + ANCHO_UTIL, y_tabla_bottom)
+    for i in range(n_filas_totales + 1):
+        yy = y_tabla_top - alto_cab - i * alto_fila
+        c.line(MARGEN_L, yy, MARGEN_L + ANCHO_UTIL, yy)
+
+    # ---- pie ----
+    pie_txt = plan.get("pie_ficha", "")
+    if pie_txt:
+        c.setLineWidth(0.9 * MM)
+        c.setStrokeColor(HexColor(INK))
+        c.line(MARGEN_L, MARGEN_T * 0.55, MARGEN_L + ANCHO_UTIL, MARGEN_T * 0.55)
+        estilo_pie = ParagraphStyle("pie", fontName=F_TXTB, fontSize=8, leading=10,
+                                     textColor=HexColor("#33343A"))
+        pp = Paragraph(_html_a_lineas(pie_txt), estilo_pie)
+        pp.wrap(ANCHO_UTIL * 0.65, 20 * MM)
+        pp.drawOn(c, MARGEN_L, MARGEN_T * 0.55 - 9 * MM)
+        c.setFont(F_TXTB, 7.5)
+        c.setFillColor(HexColor(ACERO))
+        c.drawRightString(MARGEN_L + ANCHO_UTIL, MARGEN_T * 0.55 - 5.5 * MM, "PLAN DE ALIMENTACIÓN")
+        c.setFont(F_DISP, 10)
+        c.setFillColor(HexColor(INK))
+        c.drawRightString(MARGEN_L + ANCHO_UTIL, MARGEN_T * 0.55 - 9.5 * MM, "WGYMADNSPORT")
+
+    c.showPage()
+    c.save()
+
+
+def insertar_medidas_editable(pdf_path, plan):
+    """Reemplaza la última hoja del PDF ya renderizado (la de Medidas, plana)
+    por una versión con campos de formulario reales, dejando intactas todas
+    las hojas anteriores. Requiere reportlab y pypdf; si faltan, no hace nada."""
+    try:
+        from pypdf import PdfReader, PdfWriter
+    except Exception:
+        print("  (sin pypdf: la hoja de medidas queda como imagen, no editable)")
+        return False
+
+    tmp_medidas = pdf_path + ".medidas-tmp.pdf"
+    try:
+        pagina_medidas_pdf(plan, tmp_medidas)
+    except Exception as e:
+        print("  (no se pudo generar la hoja editable: %s)" % e)
+        return False
+
+    lector_original = PdfReader(pdf_path)
+    lector_medidas = PdfReader(tmp_medidas)
+    writer = PdfWriter()
+    for pagina in lector_original.pages[:-1]:
+        writer.add_page(pagina)
+    writer.append(lector_medidas)
+
+    tmp_final = pdf_path + ".tmp"
+    with open(tmp_final, "wb") as f:
+        writer.write(f)
+    os.replace(tmp_final, pdf_path)
+    os.remove(tmp_medidas)
+    return True
+
+
 def a_pdf(html_path, pdf_path):
     try:
         from playwright.sync_api import sync_playwright
@@ -339,6 +653,8 @@ def main():
         malas = [i + 1 for i, h in enumerate(altos) if h > 0]
         if malas:
             print("  OJO: se desbordan las hojas", malas)
+        if insertar_medidas_editable(pdf, plan):
+            print("  hoja de medidas: editable (campos de formulario)")
 
 
 if __name__ == "__main__":
