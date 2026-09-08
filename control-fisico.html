@@ -548,7 +548,14 @@ document.getElementById("btnGuardar").addEventListener("click", function(){
   datos.socios.push(s);
  }
  s.sexo = sexoActual;
- if(inEstatura.value !== "") s.estatura = Number(inEstatura.value);
+ if(inEstatura.value !== ""){
+  var est = Number(inEstatura.value);
+  /* Si lo escriben como "1.67" (metros, como se acostumbra a decir la
+     estatura), se pasa solo a centímetros — el Omron y esta ficha
+     siempre guardan en cm. */
+  if(est > 0 && est < 3) est = Math.round(est * 100);
+  s.estatura = est;
+ }
  s.registros.push(registro);
  guardarLocal();
 
