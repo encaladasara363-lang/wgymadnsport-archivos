@@ -146,7 +146,8 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .evo-chip.high{ background:var(--naranja-tint); color:var(--naranja); } .evo-chip.high .dot{ background:var(--naranja); }
 .evo-chip.veryhigh{ background:var(--danger-tint); color:var(--danger); } .evo-chip.veryhigh .dot{ background:var(--danger); }
 .evo-fecha{ font-size:11.5px; color:var(--gris-soft); font-weight:600; margin:0 0 12px; }
-.evo-hist{ border-top:1px solid var(--line); padding-top:10px; }
+.evo-hist{ border-top:1px solid var(--line); padding-top:10px; max-height:220px; overflow-y:auto; }
+.evo-hist-tit{ font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--gris-soft); margin:0 0 6px; }
 .evo-row{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:12.5px; }
 .evo-row span{ color:var(--gris-soft); font-weight:600; }
 .evo-row b{ color:var(--blanco); font-weight:800; }
@@ -614,7 +615,9 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  function dmy(iso){ var p = String(iso||"").split("-"); return p.length===3 ? p[2]+"-"+p[1]+"-"+p[0] : (iso||"—"); }
  var bg = bandaGrasa(m.sexo, ultimo.edad, ultimo.grasa);
  var bi = bandaImc(ultimo.imc);
- var historial = regs.slice(0, -1).reverse().slice(0, 4).map(function(r){
+ /* Todo el historial, del más reciente al más viejo — ningún mes se
+ pierde, aunque el socio ya lleve un año midiéndose. */
+ var historial = regs.slice(0, -1).reverse().map(function(r){
  return '<div class="evo-row"><span>'+dmy(r.fecha)+'</span><b>'+
  (r.peso!=null?r.peso+" kg · ":"")+(r.grasa!=null?r.grasa+"% grasa · ":"")+(r.imc!=null?"IMC "+r.imc:"")+
  '</b></div>';
@@ -628,7 +631,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  (ultimo.imc!=null ? '<div class="evo-stat"><div class="n">'+ultimo.imc+'</div><span class="l">IMC</span>'+chipEvo("",bi)+'</div>' : '') +
  '</div>' +
  '<p class="evo-fecha">Última medición: '+dmy(ultimo.fecha)+'</p>' +
- (historial ? '<div class="evo-hist">'+historial+'</div>' : '');
+ (historial ? '<p class="evo-hist-tit">Historial completo ('+regs.length+' mediciones)</p><div class="evo-hist">'+historial+'</div>' : '');
  });
  }
 
