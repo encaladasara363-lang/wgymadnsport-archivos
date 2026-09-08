@@ -139,6 +139,17 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .band-btn:disabled{ background:var(--surface-2); color:var(--gris-soft); cursor:default; }
 .band-msg{ text-align:center; font-size:12.5px; font-weight:700; color:#5CA85C; margin:10px 0 0; }
 .band-msg.err{ color:var(--danger); }
+.band-note{ text-align:center; font-size:11.5px; font-weight:700; color:var(--gris-soft); margin:9px 0 0; letter-spacing:.01em; }
+.band-note b{ color:var(--dorado); }
+.band-colors{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.band-chip{
+  flex:1 1 auto; display:flex; align-items:center; justify-content:center; gap:7px;
+  background:var(--surface); border:1.5px solid var(--line); border-radius:10px;
+  padding:10px 8px; font-size:12px; font-weight:800; letter-spacing:.02em; text-transform:uppercase;
+  color:var(--gris); font-family:inherit; cursor:pointer;
+}
+.band-chip .dot{ width:11px; height:11px; border-radius:50%; flex-shrink:0; border:1px solid rgba(255,255,255,.25); }
+.band-chip[data-active="1"]{ border-color:var(--dorado); color:var(--blanco); background:rgba(212,175,55,.12); }
 
 nav.days{ display:flex; gap:8px; overflow-x:auto; padding:16px 16px 4px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }  
 nav.days::-webkit-scrollbar{ display:none; }  
@@ -473,11 +484,19 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  </header>
  <div class="member-card" id="memberCard"></div>
  <div class="band-box">
- <button class="band-btn" id="bandBtn" type="button">
+ <div class="band-colors" id="bandColors">
+ <button class="band-chip" type="button" data-color="Negra"><span class="dot" style="background:#2B2B2B"></span>Negra</button>
+ <button class="band-chip" type="button" data-color="Verde"><span class="dot" style="background:#5CA85C"></span>Verde</button>
+ <button class="band-chip" type="button" data-color="Morada"><span class="dot" style="background:#9B59D0"></span>Morada</button>
+ <button class="band-chip" type="button" data-color="Roja"><span class="dot" style="background:#E30613"></span>Roja</button>
+ <button class="band-chip" type="button" data-color="Amarilla"><span class="dot" style="background:#E8C547"></span>Amarilla</button>
+ </div>
+ <button class="band-btn" id="bandBtn" type="button" disabled>
  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4c0 4 3 5 3 8s-3 4-3 8"></path><path d="M18 4c0 4-3 5-3 8s3 4 3 8"></path></svg>
  Pedir banda elástica
  </button>
  <p class="band-msg" id="bandMsg" hidden></p>
+ <p class="band-note">Recuerda <b>devolver la banda en recepción</b> al terminar de usarla.</p>
  </div>
  <footer class="footer2">
  <p class="slogan">ENTRENA CON ACTITUD</p>
@@ -909,17 +928,32 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
 
  /* ---------- pedir banda elástica ---------- */
  var socioActual = null;
+ var colorElegido = null;
  function resetBandBtn(){
  var btn = document.getElementById("bandBtn");
  var msg = document.getElementById("bandMsg");
- btn.disabled = false;
+ var colores = document.getElementById("bandColors");
+ colorElegido = null;
+ colores.hidden = false;
+ Array.prototype.forEach.call(colores.querySelectorAll(".band-chip"), function(c){ c.setAttribute("data-active","0"); });
+ btn.disabled = true;
  btn.hidden = false;
  msg.hidden = true;
  }
+ document.getElementById("bandColors").addEventListener("click", function(ev){
+ var chip = ev.target.closest(".band-chip");
+ if(!chip) return;
+ colorElegido = chip.getAttribute("data-color");
+ Array.prototype.forEach.call(this.querySelectorAll(".band-chip"), function(c){
+ c.setAttribute("data-active", (c === chip) ? "1" : "0");
+ });
+ document.getElementById("bandBtn").disabled = false;
+ });
  function pedirBanda(){
- if(!socioActual || !CHECKIN_URL) return;
+ if(!socioActual || !CHECKIN_URL || !colorElegido) return;
  var btn = document.getElementById("bandBtn");
  var msg = document.getElementById("bandMsg");
+ var colores = document.getElementById("bandColors");
  btn.disabled = true;
  var cb = "wgymBanda_" + Date.now();
  var terminado = false;
@@ -929,6 +963,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  script.remove();
  if(data && data.ok){
  btn.hidden = true;
+ colores.hidden = true;
  msg.hidden = false;
  msg.classList.remove("err");
  msg.textContent = "Listo, avisamos a recepción. Retírala en el mesón.";
@@ -941,7 +976,8 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  };
  var script = document.createElement("script");
  script.src = CHECKIN_URL + "?action=pedirBanda&nombre=" + encodeURIComponent(socioActual.nombre) +
- "&apellido=" + encodeURIComponent(socioActual.apellido) + "&callback=" + cb + "&_=" + Date.now();
+ "&apellido=" + encodeURIComponent(socioActual.apellido) + "&banda=" + encodeURIComponent(colorElegido) +
+ "&callback=" + cb + "&_=" + Date.now();
  script.onerror = function(){
  if(terminado) return;
  delete window[cb];
