@@ -52,6 +52,21 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .copy-msg{ font-size:12.5px; font-weight:700; margin:0 0 18px; color:var(--verde); }
 .copy-msg[data-err="1"]{ color:var(--rojo-claro); }
 
+.tablas{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin-bottom:18px; }
+.tablas h4{ font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--dorado);
+ font-weight:800; margin:18px 0 10px; }
+.tablas h4:first-of-type{ margin-top:4px; }
+.tablas-nota{ font-size:12px; color:var(--gris-soft); line-height:1.6; margin:0; }
+.tabla-scroll{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+.tablas table{ width:100%; border-collapse:collapse; min-width:420px; font-size:12.5px; }
+.tablas th{ text-align:left; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
+ color:var(--gris-soft); font-weight:700; padding:8px 10px; background:var(--surface-2);
+ border-bottom:1px solid var(--line); }
+.tablas td{ padding:8px 10px; border-bottom:1px solid var(--line); font-weight:700; }
+.tablas tbody tr:last-child td{ border-bottom:none; }
+.tablas .c-low{ color:var(--azul); } .tablas .c-normal{ color:var(--verde); }
+.tablas .c-high{ color:var(--naranja); } .tablas .c-veryhigh{ color:var(--rojo-claro); }
+
 .buscador{ position:relative; margin-bottom:16px; }
 .buscador input{ width:100%; background:var(--surface); border:1px solid var(--line);
  border-radius:10px; color:var(--blanco); font-size:16px; font-weight:600;
@@ -139,6 +154,50 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
   <button class="btn-copy" id="btnCopiar" type="button">📋 Copiar mediciones</button>
  </div>
  <p class="copy-msg" id="copyMsg" hidden></p>
+
+ <button class="btn-copy" id="btnTablas" type="button" style="margin-bottom:16px">📊 Ver tablas de referencia</button>
+ <div class="tablas" id="tablasRef" hidden>
+  <p class="tablas-nota">Rangos estándar Omron para bioimpedancia por palmas. Confirmalos contra el manual físico del HBF‑306 antes de tomarlos como definitivos — pueden variar levemente según la región del equipo.</p>
+
+  <h4>% Grasa corporal — Mujeres</h4>
+  <div class="tabla-scroll">
+   <table>
+    <thead><tr><th>Categoría</th><th>20‑39 años</th><th>40‑59 años</th><th>60‑79 años</th></tr></thead>
+    <tbody>
+     <tr><td class="c-low">Bajo</td><td>&lt; 21</td><td>&lt; 23</td><td>&lt; 24</td></tr>
+     <tr><td class="c-normal">Normal</td><td>21 – 32.9</td><td>23 – 33.9</td><td>24 – 35.9</td></tr>
+     <tr><td class="c-high">Alto</td><td>33 – 38.9</td><td>34 – 39.9</td><td>36 – 41.9</td></tr>
+     <tr><td class="c-veryhigh">Muy alto</td><td>≥ 39</td><td>≥ 40</td><td>≥ 42</td></tr>
+    </tbody>
+   </table>
+  </div>
+
+  <h4>% Grasa corporal — Hombres</h4>
+  <div class="tabla-scroll">
+   <table>
+    <thead><tr><th>Categoría</th><th>20‑39 años</th><th>40‑59 años</th><th>60‑79 años</th></tr></thead>
+    <tbody>
+     <tr><td class="c-low">Bajo</td><td>&lt; 8</td><td>&lt; 11</td><td>&lt; 13</td></tr>
+     <tr><td class="c-normal">Normal</td><td>8 – 19.9</td><td>11 – 21.9</td><td>13 – 24.9</td></tr>
+     <tr><td class="c-high">Alto</td><td>20 – 24.9</td><td>22 – 27.9</td><td>25 – 29.9</td></tr>
+     <tr><td class="c-veryhigh">Muy alto</td><td>≥ 25</td><td>≥ 28</td><td>≥ 30</td></tr>
+    </tbody>
+   </table>
+  </div>
+
+  <h4>IMC</h4>
+  <div class="tabla-scroll">
+   <table>
+    <thead><tr><th>Categoría</th><th>Rango</th></tr></thead>
+    <tbody>
+     <tr><td class="c-low">Bajo</td><td>&lt; 18.5</td></tr>
+     <tr><td class="c-normal">Normal</td><td>18.5 – 24.9</td></tr>
+     <tr><td class="c-high">Alto</td><td>25 – 29.9</td></tr>
+     <tr><td class="c-veryhigh">Muy alto</td><td>≥ 30</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </div>
 
  <div class="buscador">
   <input type="text" id="qSocio" placeholder="Buscar socio por nombre o apellido…" autocomplete="off" autocapitalize="words">
@@ -265,6 +324,13 @@ function socioGuardado(n, a){
  var kn = normName(n), ka = normName(a);
  return datos.socios.filter(function(s){ return normName(s.n)===kn && normName(s.a)===ka; })[0] || null;
 }
+
+/* ── tablas de referencia (solo para vos, no las ve ningún socio) ─────── */
+document.getElementById("btnTablas").addEventListener("click", function(){
+ var box = document.getElementById("tablasRef");
+ box.hidden = !box.hidden;
+ this.textContent = box.hidden ? "📊 Ver tablas de referencia" : "📊 Ocultar tablas de referencia";
+});
 
 /* ── lista de socios (solo para buscar nombres, viene de socios.json) ── */
 var listaSocios = [];
