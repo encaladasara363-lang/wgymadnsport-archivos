@@ -52,21 +52,50 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .copy-msg{ font-size:12.5px; font-weight:700; margin:0 0 18px; color:var(--verde); }
 .copy-msg[data-err="1"]{ color:var(--rojo-claro); }
 
-.tablas{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin-bottom:18px; }
-.tablas h4{ font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--dorado);
- font-weight:800; margin:18px 0 10px; }
-.tablas h4:first-of-type{ margin-top:4px; }
-.tablas-nota{ font-size:12px; color:var(--gris-soft); line-height:1.6; margin:0; }
-.rango-grupo{ background:var(--surface); border:1px solid var(--line); border-radius:10px;
- padding:4px 12px; margin-bottom:10px; }
-.rango-edad{ font-size:10.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
- color:var(--gris-soft); margin:8px 0 2px; }
+/* ═══ Tablas de referencia — pensadas para pantalla ancha (notebook) ═══ */
+.tablas-shell{ max-width:1180px; margin:0 auto; padding:0 20px; }
+.tablas-shell .btn-copy{ margin:18px 0; }
+.tablas{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 24px 26px; margin-bottom:24px; }
+.tablas-nota{ font-size:12.5px; color:var(--gris-soft); line-height:1.6; margin:0 0 18px; max-width:70ch; }
+
+.leyenda-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+@media (max-width:820px){ .leyenda-grid{ grid-template-columns:1fr 1fr; } }
+@media (max-width:460px){ .leyenda-grid{ grid-template-columns:1fr; } }
+.leyenda-item{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px 15px;
+ border-top:3px solid var(--line); }
+.leyenda-item.low{ border-top-color:var(--azul); } .leyenda-item.normal{ border-top-color:var(--verde); }
+.leyenda-item.high{ border-top-color:var(--naranja); } .leyenda-item.veryhigh{ border-top-color:var(--rojo-claro); }
+.leyenda-item .ltit{ font-size:12.5px; font-weight:900; letter-spacing:.04em; text-transform:uppercase; margin:0 0 5px; }
+.leyenda-item.low .ltit{ color:var(--azul); } .leyenda-item.normal .ltit{ color:var(--verde); }
+.leyenda-item.high .ltit{ color:var(--naranja); } .leyenda-item.veryhigh .ltit{ color:var(--rojo-claro); }
+.leyenda-item p{ margin:0; font-size:12.5px; color:var(--gris); line-height:1.5; }
+
+.tablas h4{ font-size:13px; letter-spacing:.05em; text-transform:uppercase; color:var(--dorado);
+ font-weight:800; margin:0 0 14px; }
+
+.tab-sexo-row{ display:flex; gap:8px; margin-bottom:16px; }
+.tab-sexo{ background:var(--surface); border:1.5px solid var(--line); border-radius:10px; color:var(--gris);
+ font-family:inherit; font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:.02em;
+ padding:10px 20px; cursor:pointer; }
+.tab-sexo[data-active="1"]{ border-color:var(--dorado); background:var(--dorado); color:var(--negro); }
+
+.edad-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:28px; }
+@media (max-width:900px){ .edad-grid{ grid-template-columns:1fr; } }
+.edad-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; }
+.edad-card .etit{ font-size:11.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+ color:var(--gris-soft); margin:0 0 12px; text-align:center; }
 .rango-row{ display:flex; justify-content:space-between; align-items:center;
  padding:8px 0; border-bottom:1px solid var(--line); font-size:13.5px; }
 .rango-row:last-child{ border-bottom:none; }
-.rango-row b{ font-weight:800; }
-.tablas .c-low{ color:var(--azul); } .tablas .c-normal{ color:var(--verde); }
-.tablas .c-high{ color:var(--naranja); } .tablas .c-veryhigh{ color:var(--rojo-claro); }
+.rango-row b{ font-weight:800; font-variant-numeric:tabular-nums; }
+.c-low{ color:var(--azul); } .c-normal{ color:var(--verde); }
+.c-high{ color:var(--naranja); } .c-veryhigh{ color:var(--rojo-claro); }
+.barra-seg{ display:flex; height:10px; border-radius:6px; overflow:hidden; margin-top:12px; background:var(--negro); }
+.barra-seg i{ display:block; height:100%; }
+.barra-seg .b-low{ background:var(--azul); } .barra-seg .b-normal{ background:var(--verde); }
+.barra-seg .b-high{ background:var(--naranja); } .barra-seg .b-veryhigh{ background:var(--rojo-claro); }
+
+.imc-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px 22px; max-width:460px; }
 
 .buscador{ position:relative; margin-bottom:16px; }
 .buscador input{ width:100%; background:var(--surface); border:1px solid var(--line);
@@ -148,6 +177,89 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
  <p class="reloj" id="reloj"></p>
 </header>
 
+<div class="tablas-shell">
+ <button class="btn-copy" id="btnTablas" type="button">📊 Ver tablas de referencia</button>
+ <div class="tablas" id="tablasRef" hidden>
+  <p class="tablas-nota">Rangos estándar Omron para bioimpedancia por palmas, para que sepas qué significa cada categoría antes de explicarle el resultado a tu socio. Confirmalos contra el manual físico del HBF‑306 antes de tomarlos como definitivos — pueden variar levemente según la región del equipo.</p>
+
+  <div class="leyenda-grid">
+   <div class="leyenda-item low"><p class="ltit">Bajo</p><p>Por debajo de lo saludable para su sexo y edad. En grasa corporal puede indicar déficit energético.</p></div>
+   <div class="leyenda-item normal"><p class="ltit">Normal</p><p>Rango saludable para su sexo y edad. No requiere ninguna acción.</p></div>
+   <div class="leyenda-item high"><p class="ltit">Alto</p><p>Por sobre lo saludable. Conviene revisar entrenamiento y alimentación con el socio.</p></div>
+   <div class="leyenda-item veryhigh"><p class="ltit">Muy alto</p><p>Bien por sobre lo recomendado. Amerita seguimiento más cercano.</p></div>
+  </div>
+
+  <h4>% Grasa corporal</h4>
+  <div class="tab-sexo-row" id="tabSexoRow">
+   <button type="button" class="tab-sexo" data-tab="F">Mujeres</button>
+   <button type="button" class="tab-sexo" data-tab="M">Hombres</button>
+  </div>
+
+  <div class="edad-grid" id="gridF">
+   <div class="edad-card">
+    <p class="etit">20 – 39 años</p>
+    <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 21</b></div>
+    <div class="rango-row"><span class="c-normal">Normal</span><b>21 – 32.9</b></div>
+    <div class="rango-row"><span class="c-high">Alto</span><b>33 – 38.9</b></div>
+    <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 39</b></div>
+    <div class="barra-seg"><i class="b-low" style="width:47%"></i><i class="b-normal" style="width:27%"></i><i class="b-high" style="width:13%"></i><i class="b-veryhigh" style="width:13%"></i></div>
+   </div>
+   <div class="edad-card">
+    <p class="etit">40 – 59 años</p>
+    <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 23</b></div>
+    <div class="rango-row"><span class="c-normal">Normal</span><b>23 – 33.9</b></div>
+    <div class="rango-row"><span class="c-high">Alto</span><b>34 – 39.9</b></div>
+    <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 40</b></div>
+    <div class="barra-seg"><i class="b-low" style="width:51%"></i><i class="b-normal" style="width:24%"></i><i class="b-high" style="width:14%"></i><i class="b-veryhigh" style="width:11%"></i></div>
+   </div>
+   <div class="edad-card">
+    <p class="etit">60 – 79 años</p>
+    <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 24</b></div>
+    <div class="rango-row"><span class="c-normal">Normal</span><b>24 – 35.9</b></div>
+    <div class="rango-row"><span class="c-high">Alto</span><b>36 – 41.9</b></div>
+    <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 42</b></div>
+    <div class="barra-seg"><i class="b-low" style="width:53%"></i><i class="b-normal" style="width:27%"></i><i class="b-high" style="width:13%"></i><i class="b-veryhigh" style="width:7%"></i></div>
+   </div>
+  </div>
+
+  <div class="edad-grid" id="gridM" hidden>
+   <div class="edad-card">
+    <p class="etit">20 – 39 años</p>
+    <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 8</b></div>
+    <div class="rango-row"><span class="c-normal">Normal</span><b>8 – 19.9</b></div>
+    <div class="rango-row"><span class="c-high">Alto</span><b>20 – 24.9</b></div>
+    <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 25</b></div>
+    <div class="barra-seg"><i class="b-low" style="width:25%"></i><i class="b-normal" style="width:38%"></i><i class="b-high" style="width:15%"></i><i class="b-veryhigh" style="width:22%"></i></div>
+   </div>
+   <div class="edad-card">
+    <p class="etit">40 – 59 años</p>
+    <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 11</b></div>
+    <div class="rango-row"><span class="c-normal">Normal</span><b>11 – 21.9</b></div>
+    <div class="rango-row"><span class="c-high">Alto</span><b>22 – 27.9</b></div>
+    <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 28</b></div>
+    <div class="barra-seg"><i class="b-low" style="width:34%"></i><i class="b-normal" style="width:35%"></i><i class="b-high" style="width:19%"></i><i class="b-veryhigh" style="width:12%"></i></div>
+   </div>
+   <div class="edad-card">
+    <p class="etit">60 – 79 años</p>
+    <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 13</b></div>
+    <div class="rango-row"><span class="c-normal">Normal</span><b>13 – 24.9</b></div>
+    <div class="rango-row"><span class="c-high">Alto</span><b>25 – 29.9</b></div>
+    <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 30</b></div>
+    <div class="barra-seg"><i class="b-low" style="width:41%"></i><i class="b-normal" style="width:37%"></i><i class="b-high" style="width:16%"></i><i class="b-veryhigh" style="width:6%"></i></div>
+   </div>
+  </div>
+
+  <h4>IMC — aplica para todas las edades y ambos sexos</h4>
+  <div class="imc-card">
+   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 18.5</b></div>
+   <div class="rango-row"><span class="c-normal">Normal</span><b>18.5 – 24.9</b></div>
+   <div class="rango-row"><span class="c-high">Alto</span><b>25 – 29.9</b></div>
+   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 30</b></div>
+   <div class="barra-seg"><i class="b-low" style="width:58%"></i><i class="b-normal" style="width:20%"></i><i class="b-high" style="width:16%"></i><i class="b-veryhigh" style="width:6%"></i></div>
+  </div>
+ </div>
+</div>
+
 <div class="wrap">
 
  <div class="aviso">
@@ -155,65 +267,6 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
   <button class="btn-copy" id="btnCopiar" type="button">📋 Copiar mediciones</button>
  </div>
  <p class="copy-msg" id="copyMsg" hidden></p>
-
- <button class="btn-copy" id="btnTablas" type="button" style="margin-bottom:16px">📊 Ver tablas de referencia</button>
- <div class="tablas" id="tablasRef" hidden>
-  <p class="tablas-nota">Rangos estándar Omron para bioimpedancia por palmas. Confirmalos contra el manual físico del HBF‑306 antes de tomarlos como definitivos — pueden variar levemente según la región del equipo.</p>
-
-  <h4>% Grasa corporal — Mujeres</h4>
-  <div class="rango-grupo">
-   <p class="rango-edad">20 – 39 años</p>
-   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 21</b></div>
-   <div class="rango-row"><span class="c-normal">Normal</span><b>21 – 32.9</b></div>
-   <div class="rango-row"><span class="c-high">Alto</span><b>33 – 38.9</b></div>
-   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 39</b></div>
-  </div>
-  <div class="rango-grupo">
-   <p class="rango-edad">40 – 59 años</p>
-   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 23</b></div>
-   <div class="rango-row"><span class="c-normal">Normal</span><b>23 – 33.9</b></div>
-   <div class="rango-row"><span class="c-high">Alto</span><b>34 – 39.9</b></div>
-   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 40</b></div>
-  </div>
-  <div class="rango-grupo">
-   <p class="rango-edad">60 – 79 años</p>
-   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 24</b></div>
-   <div class="rango-row"><span class="c-normal">Normal</span><b>24 – 35.9</b></div>
-   <div class="rango-row"><span class="c-high">Alto</span><b>36 – 41.9</b></div>
-   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 42</b></div>
-  </div>
-
-  <h4>% Grasa corporal — Hombres</h4>
-  <div class="rango-grupo">
-   <p class="rango-edad">20 – 39 años</p>
-   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 8</b></div>
-   <div class="rango-row"><span class="c-normal">Normal</span><b>8 – 19.9</b></div>
-   <div class="rango-row"><span class="c-high">Alto</span><b>20 – 24.9</b></div>
-   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 25</b></div>
-  </div>
-  <div class="rango-grupo">
-   <p class="rango-edad">40 – 59 años</p>
-   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 11</b></div>
-   <div class="rango-row"><span class="c-normal">Normal</span><b>11 – 21.9</b></div>
-   <div class="rango-row"><span class="c-high">Alto</span><b>22 – 27.9</b></div>
-   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 28</b></div>
-  </div>
-  <div class="rango-grupo">
-   <p class="rango-edad">60 – 79 años</p>
-   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 13</b></div>
-   <div class="rango-row"><span class="c-normal">Normal</span><b>13 – 24.9</b></div>
-   <div class="rango-row"><span class="c-high">Alto</span><b>25 – 29.9</b></div>
-   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 30</b></div>
-  </div>
-
-  <h4>IMC</h4>
-  <div class="rango-grupo">
-   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 18.5</b></div>
-   <div class="rango-row"><span class="c-normal">Normal</span><b>18.5 – 24.9</b></div>
-   <div class="rango-row"><span class="c-high">Alto</span><b>25 – 29.9</b></div>
-   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 30</b></div>
-  </div>
- </div>
 
  <div class="buscador">
   <input type="text" id="qSocio" placeholder="Buscar socio por nombre o apellido…" autocomplete="off" autocapitalize="words">
@@ -347,6 +400,17 @@ document.getElementById("btnTablas").addEventListener("click", function(){
  box.hidden = !box.hidden;
  this.textContent = box.hidden ? "📊 Ver tablas de referencia" : "📊 Ocultar tablas de referencia";
 });
+document.getElementById("tabSexoRow").addEventListener("click", function(ev){
+ var b = ev.target.closest(".tab-sexo");
+ if(!b) return;
+ var tab = b.getAttribute("data-tab");
+ Array.prototype.forEach.call(this.querySelectorAll(".tab-sexo"), function(x){
+  x.setAttribute("data-active", x === b ? "1" : "0");
+ });
+ document.getElementById("gridF").hidden = tab !== "F";
+ document.getElementById("gridM").hidden = tab !== "M";
+});
+document.querySelector('.tab-sexo[data-tab="F"]').setAttribute("data-active", "1");
 
 /* ── lista de socios (solo para buscar nombres, viene de socios.json) ── */
 var listaSocios = [];
