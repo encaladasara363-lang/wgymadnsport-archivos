@@ -1,5 +1,21 @@
 {
  "actualizado": "2026-09-08",
  "nota": "Mediciones de composicion corporal (Omron HBF-306). Solo aparecen los socios que se miden - los demas no necesitan estar aca. La lee tarjeta.html para mostrar la evolucion en la tarjeta virtual de cada socio medido.",
- "socios": []
+ "socios": [
+  {
+   "n": "MILTON",
+   "a": "FUENTES",
+   "sexo": "M",
+   "estatura": 167,
+   "registros": [
+    {
+     "fecha": "2026-09-08",
+     "edad": 38,
+     "peso": 80,
+     "grasa": 22.8,
+     "imc": 24.5
+    }
+   ]
+  }
+ ]
 }
