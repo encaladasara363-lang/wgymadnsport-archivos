@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-07",
+ "actualizado": "2026-09-08",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -918,9 +918,9 @@
    "n": "CONSTANZA",
    "a": "MARIN",
    "rut": "00.000.000-0",
-   "plan": "Funcionario Público",
+   "plan": "Estudiante Profesor",
    "monto": 28000,
-   "fv": 46238
+   "fv": 46303
   },
   {
    "n": "SEBASTIAN",
@@ -1608,7 +1608,7 @@
    "rut": "16.613.967-8",
    "plan": "Estudiante Profesor",
    "monto": 28000,
-   "fv": 46244
+   "fv": 46303
   },
   {
    "n": "NELSON",
