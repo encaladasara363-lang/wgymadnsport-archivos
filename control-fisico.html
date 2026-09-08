@@ -81,8 +81,10 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
  letter-spacing:.03em; padding:11px; cursor:pointer; }
 .sexo-btn[data-active="1"]{ border-color:var(--dorado); color:var(--negro); background:var(--dorado); }
 
+.grupo-label{ font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+ color:var(--dorado); margin:14px 0 8px; }
 .campo-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:8px; }
-@media (max-width:420px){ .campo-grid{ grid-template-columns:1fr 1fr; } .campo-grid .c-edad{ grid-column:1/-1; } }
+@media (max-width:420px){ .campo-grid{ grid-template-columns:1fr 1fr; } }
 .campo label{ display:block; font-size:10.5px; font-weight:800; letter-spacing:.06em;
  text-transform:uppercase; color:var(--gris-soft); margin-bottom:6px; }
 .campo input{ width:100%; background:var(--surface); border:1.5px solid var(--line); border-radius:10px;
@@ -151,12 +153,16 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
    <button type="button" class="sexo-btn" data-sexo="M">Hombre</button>
   </div>
 
+  <p class="grupo-label">Cargá esto en el Omron antes de medir</p>
+  <div class="campo-grid" style="grid-template-columns:1fr 1fr">
+   <div class="campo"><label>Edad</label><input type="number" inputmode="numeric" id="inEdad" placeholder="—"></div>
+   <div class="campo"><label>Estatura (cm)</label><input type="number" inputmode="numeric" id="inEstatura" placeholder="—"></div>
+  </div>
+
+  <p class="grupo-label">Lo que te muestra el Omron al terminar</p>
   <div class="campo-grid">
-   <div class="campo c-edad"><label>Edad</label><input type="number" inputmode="numeric" id="inEdad" placeholder="—"></div>
    <div class="campo"><label>Peso (kg)</label><input type="number" inputmode="decimal" step="0.1" id="inPeso" placeholder="—"></div>
    <div class="campo"><label>% Grasa</label><input type="number" inputmode="decimal" step="0.1" id="inGrasa" placeholder="—"></div>
-  </div>
-  <div class="campo-grid" style="grid-template-columns:1fr">
    <div class="campo"><label>IMC</label><input type="number" inputmode="decimal" step="0.1" id="inImc" placeholder="—"></div>
   </div>
 
@@ -317,7 +323,8 @@ qSocio.addEventListener("keydown", function(ev){
 var socioActual = null, sexoActual = null;
 var panel = document.getElementById("panel");
 var hist = document.getElementById("hist");
-var inEdad = document.getElementById("inEdad"), inPeso = document.getElementById("inPeso"),
+var inEdad = document.getElementById("inEdad"), inEstatura = document.getElementById("inEstatura"),
+    inPeso = document.getElementById("inPeso"),
     inGrasa = document.getElementById("inGrasa"), inImc = document.getElementById("inImc");
 var chipGrasa = document.getElementById("chipGrasa"), chipImc = document.getElementById("chipImc");
 
@@ -335,6 +342,7 @@ function elegir(s){
   b.setAttribute("data-active", b.getAttribute("data-sexo") === sexoActual ? "1" : "0");
  });
  inEdad.value = ultimo ? ultimo.edad : "";
+ inEstatura.value = previo && previo.estatura ? previo.estatura : "";
  inPeso.value = ""; inGrasa.value = ""; inImc.value = "";
  actualizarChips();
  pintarHistorial(previo);
@@ -394,6 +402,7 @@ document.getElementById("btnGuardar").addEventListener("click", function(){
   datos.socios.push(s);
  }
  s.sexo = sexoActual;
+ if(inEstatura.value !== "") s.estatura = Number(inEstatura.value);
  s.registros.push(registro);
  guardarLocal();
 
