@@ -22,12 +22,16 @@
  --gris:#CFCFCF;  
  --gris-soft:#8C8C8C;  
  --line:#2A2A2A;  
- --good:#5CA85C;  
- --good-tint:#16261A;  
- --warn:#D4AF37;  
- --warn-tint:#332B10;  
- --danger:#E85C5C;  
- --danger-tint:#331414;  
+ --good:#5CA85C;
+ --good-tint:#16261A;
+ --warn:#D4AF37;
+ --warn-tint:#332B10;
+ --danger:#E85C5C;
+ --danger-tint:#331414;
+ --azul:#4C9FD6;
+ --azul-tint:#122A38;
+ --naranja:#E2933D;
+ --naranja-tint:#332210;
  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 20px -10px rgba(0,0,0,.7);  
 }  
 *{box-sizing:border-box;}  
@@ -128,6 +132,24 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
  color:var(--gris); margin:8px 0 0; }
 .mc-veredicto .vfavor b{ color:var(--dorado); }
 .routine-blocked{ text-align:center; color:var(--danger); font-weight:700; font-size:13px; line-height:1.5; margin:18px 0 0; }
+
+.evo-card{ margin:14px 16px 0; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 16px 14px; }
+.evo-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 10px; }
+.evo-actual{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.evo-stat{ flex:1; min-width:90px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px; text-align:center; }
+.evo-stat .n{ font-size:20px; font-weight:900; color:var(--blanco); }
+.evo-stat .l{ display:block; font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--gris-soft); margin-top:2px; }
+.evo-chip{ display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; padding:3px 8px; border-radius:999px; margin-top:6px; }
+.evo-chip .dot{ width:6px; height:6px; border-radius:50%; }
+.evo-chip.low{ background:var(--azul-tint); color:var(--azul); } .evo-chip.low .dot{ background:var(--azul); }
+.evo-chip.normal{ background:var(--good-tint); color:var(--good); } .evo-chip.normal .dot{ background:var(--good); }
+.evo-chip.high{ background:var(--naranja-tint); color:var(--naranja); } .evo-chip.high .dot{ background:var(--naranja); }
+.evo-chip.veryhigh{ background:var(--danger-tint); color:var(--danger); } .evo-chip.veryhigh .dot{ background:var(--danger); }
+.evo-fecha{ font-size:11.5px; color:var(--gris-soft); font-weight:600; margin:0 0 12px; }
+.evo-hist{ border-top:1px solid var(--line); padding-top:10px; }
+.evo-row{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:12.5px; }
+.evo-row span{ color:var(--gris-soft); font-weight:600; }
+.evo-row b{ color:var(--blanco); font-weight:800; }
 
 .band-box{ margin:14px 16px 0; }
 .band-btn{
@@ -483,6 +505,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <p class="sub">tu acceso digital al gimnasio</p>
  </header>
  <div class="member-card" id="memberCard"></div>
+ <div class="evo-card" id="evoCard" hidden></div>
  <div class="band-box">
  <div class="band-colors" id="bandColors">
  <button class="band-chip" type="button" data-color="Negra"><span class="dot" style="background:#2B2B2B"></span>Negra</button>
@@ -539,6 +562,74 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  }
  function normName(s){
  return (s||"").toString().trim().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ");
+ }
+
+ /* ═══ Evolución física (Omron) ═══════════════════════════════════════
+    mediciones.json es un archivo aparte de socios.json: solo trae a los
+    socios que efectivamente se miden. Si un socio no aparece ahí, la
+    tarjeta simplemente no muestra esta sección — nada se rompe para el
+    resto. Rangos de referencia estándar Omron (ver control-fisico.html). */
+ function grupoEdad(edad){
+ var e = Number(edad) || 30;
+ if(e < 40) return "20-39";
+ if(e < 60) return "40-59";
+ return "60-79";
+ }
+ var TABLA_GRASA = {
+ F: { "20-39":[21,33,39], "40-59":[23,34,40], "60-79":[24,36,42] },
+ M: { "20-39":[8,20,25],  "40-59":[11,22,28], "60-79":[13,25,30] }
+ };
+ function bandaDesdeCortes(valor, cortes){
+ var v = Number(valor);
+ if(valor == null || isNaN(v)) return null;
+ if(v < cortes[0]) return "low";
+ if(v < cortes[1]) return "normal";
+ if(v < cortes[2]) return "high";
+ return "veryhigh";
+ }
+ function bandaGrasa(sexo, edad, valor){
+ return bandaDesdeCortes(valor, TABLA_GRASA[sexo === "M" ? "M" : "F"][grupoEdad(edad)]);
+ }
+ function bandaImc(valor){ return bandaDesdeCortes(valor, [18.5, 25, 30]); }
+ var ETIQUETA_BANDA = { low:"LOW", normal:"NORMAL", high:"HIGH", veryhigh:"VERY HIGH" };
+ function chipEvo(prefijo, banda){
+ if(!banda) return "";
+ return '<span class="evo-chip '+banda+'"><span class="dot"></span>'+prefijo+ETIQUETA_BANDA[banda]+'</span>';
+ }
+ var medicionesPromise = fetch("mediciones.json?v=" + Date.now(), { cache:"no-store" })
+ .then(function(r){ return r.ok ? r.json() : null; })
+ .catch(function(){ return null; });
+ function socioMedido(data, s){
+ if(!data || !Array.isArray(data.socios)) return null;
+ var kn = normName(s.nombre), ka = normName(s.apellido);
+ return data.socios.filter(function(m){ return normName(m.n)===kn && normName(m.a)===ka; })[0] || null;
+ }
+ function renderEvolucion(s){
+ medicionesPromise.then(function(data){
+ var box = document.getElementById("evoCard");
+ var m = socioMedido(data, s);
+ if(!m || !m.registros || !m.registros.length){ box.hidden = true; box.innerHTML = ""; return; }
+ var regs = m.registros.slice();
+ var ultimo = regs[regs.length - 1];
+ function dmy(iso){ var p = String(iso||"").split("-"); return p.length===3 ? p[2]+"-"+p[1]+"-"+p[0] : (iso||"—"); }
+ var bg = bandaGrasa(m.sexo, ultimo.edad, ultimo.grasa);
+ var bi = bandaImc(ultimo.imc);
+ var historial = regs.slice(0, -1).reverse().slice(0, 4).map(function(r){
+ return '<div class="evo-row"><span>'+dmy(r.fecha)+'</span><b>'+
+ (r.peso!=null?r.peso+" kg · ":"")+(r.grasa!=null?r.grasa+"% grasa · ":"")+(r.imc!=null?"IMC "+r.imc:"")+
+ '</b></div>';
+ }).join("");
+ box.hidden = false;
+ box.innerHTML =
+ '<p class="evo-kicker">Tu evolución física</p>' +
+ '<div class="evo-actual">' +
+ (ultimo.peso!=null ? '<div class="evo-stat"><div class="n">'+ultimo.peso+'</div><span class="l">Peso (kg)</span></div>' : '') +
+ (ultimo.grasa!=null ? '<div class="evo-stat"><div class="n">'+ultimo.grasa+'%</div><span class="l">Grasa</span>'+chipEvo("",bg)+'</div>' : '') +
+ (ultimo.imc!=null ? '<div class="evo-stat"><div class="n">'+ultimo.imc+'</div><span class="l">IMC</span>'+chipEvo("",bi)+'</div>' : '') +
+ '</div>' +
+ '<p class="evo-fecha">Última medición: '+dmy(ultimo.fecha)+'</p>' +
+ (historial ? '<div class="evo-hist">'+historial+'</div>' : '');
+ });
  }
 
  document.getElementById("gateLogoImg").src = LOGO_B64;
@@ -921,6 +1012,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  document.getElementById("cardView").hidden = false;
  anotarDia(s);
  renderCard(s);
+ renderEvolucion(s);
  avisarIngreso(s);
  socioActual = s;
  resetBandBtn();

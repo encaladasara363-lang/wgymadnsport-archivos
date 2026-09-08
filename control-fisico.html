@@ -1,0 +1,431 @@
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>WGYMADNSPORT · Control Físico</title>
+<meta name="description" content="Carga rápida de mediciones Omron (composición corporal) de WGYMADNSPORT Tocopilla.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="manifest" href="control-fisico.webmanifest?v=1">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icono-180.png?v=3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="CONTROL FÍSICO">
+<style>
+:root{
+ --negro:#0A0A0A; --surface:#161616; --surface-2:#1F1F1F; --card:#1c1c1c;
+ --rojo:#E30613; --rojo-oscuro:#A40410; --dorado:#D4AF37;
+ --blanco:#FFFFFF; --gris:#CFCFCF; --gris-soft:#8C8C8C; --line:#2A2A2A;
+ --verde:#5CA85C; --verde-soft:rgba(92,168,92,.13);
+ --azul:#4C9FD6; --azul-soft:rgba(76,159,214,.14);
+ --naranja:#E2933D; --naranja-soft:rgba(226,147,61,.14);
+ --rojo-claro:#E85C5C; --rojo-soft:rgba(232,92,92,.13);
+}
+*{box-sizing:border-box;}
+body{ margin:0; background:var(--negro); color:var(--blanco);
+ font-family:'Segoe UI', Arial, sans-serif; min-height:100vh; }
+[hidden]{ display:none !important; }
+:focus-visible{ outline:2px solid var(--rojo); outline-offset:2px; }
+
+header.top{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%);
+ border-bottom:3px solid var(--rojo); padding:18px 20px; text-align:center; }
+header.top .logo{ width:48px; height:48px; border-radius:50%; object-fit:cover;
+ border:2px solid var(--dorado); margin-bottom:6px; }
+header.top .gymname{ font-size:12px; font-weight:800; letter-spacing:.14em;
+ color:var(--dorado); text-transform:uppercase; margin:0 0 4px; }
+header.top h1{ font-size:21px; margin:0; font-weight:800; text-transform:uppercase; }
+header.top h1 span{ color:var(--rojo); }
+header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; margin:6px 0 0; }
+
+.wrap{ max-width:640px; margin:0 auto; padding:20px 18px 70px; }
+
+.aviso{ background:rgba(212,175,55,.1); border:1.5px solid var(--dorado);
+ border-radius:12px; padding:14px 16px; font-size:13px; color:var(--gris);
+ line-height:1.6; margin-bottom:18px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+.aviso p{ margin:0; flex:1; min-width:210px; }
+.aviso b{ color:var(--dorado); }
+
+.btn-copy{ cursor:pointer; border:1px solid var(--dorado); border-radius:9px; background:transparent;
+ color:var(--dorado); font-family:inherit; font-size:12.5px; font-weight:700; text-transform:uppercase;
+ letter-spacing:.03em; padding:9px 14px; white-space:nowrap; }
+.btn-copy:active{ background:rgba(212,175,55,.14); }
+.copy-msg{ font-size:12.5px; font-weight:700; margin:0 0 18px; color:var(--verde); }
+.copy-msg[data-err="1"]{ color:var(--rojo-claro); }
+
+.buscador{ position:relative; margin-bottom:16px; }
+.buscador input{ width:100%; background:var(--surface); border:1px solid var(--line);
+ border-radius:10px; color:var(--blanco); font-size:16px; font-weight:600;
+ font-family:inherit; padding:14px 15px; }
+.buscador input::placeholder{ color:var(--gris-soft); font-weight:500; }
+.sugerencias{ position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:30;
+ background:var(--surface-2); border:1px solid #3A3A3A; border-radius:12px;
+ max-height:280px; overflow-y:auto; list-style:none; margin:0; padding:0;
+ box-shadow:0 18px 40px -14px #000; }
+.sugerencias li{ display:flex; align-items:center; gap:10px; padding:12px 14px;
+ cursor:pointer; border-bottom:1px solid var(--line); font-weight:700; font-size:14.5px; }
+.sugerencias li:last-child{ border-bottom:none; }
+.sugerencias li:hover,.sugerencias li[aria-selected="true"]{ background:#2A2A2A; }
+.sugerencias .smed{ margin-left:auto; font-size:11px; font-weight:800; letter-spacing:.04em;
+ color:var(--dorado); text-transform:uppercase; }
+
+.panel{ background:linear-gradient(135deg,#161616 0%, #0A0A0A 60%, #1c1608 100%);
+ border:1.5px solid var(--dorado); border-radius:18px; padding:22px 20px; margin-bottom:18px; }
+.panel .kicker{ font-size:11px; font-weight:800; letter-spacing:.14em; color:var(--dorado);
+ text-transform:uppercase; margin:0 0 6px; }
+.panel h2{ font-size:22px; margin:0 0 16px; text-transform:uppercase; font-weight:900; }
+.panel .empty{ font-size:14.5px; color:var(--gris-soft); font-weight:600; text-align:center; padding:10px 0; }
+
+.sexo-row{ display:flex; gap:9px; margin-bottom:14px; }
+.sexo-btn{ flex:1; background:var(--surface); border:1.5px solid var(--line); border-radius:10px;
+ color:var(--gris); font-family:inherit; font-weight:800; font-size:13.5px; text-transform:uppercase;
+ letter-spacing:.03em; padding:11px; cursor:pointer; }
+.sexo-btn[data-active="1"]{ border-color:var(--dorado); color:var(--negro); background:var(--dorado); }
+
+.campo-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:8px; }
+@media (max-width:420px){ .campo-grid{ grid-template-columns:1fr 1fr; } .campo-grid .c-edad{ grid-column:1/-1; } }
+.campo label{ display:block; font-size:10.5px; font-weight:800; letter-spacing:.06em;
+ text-transform:uppercase; color:var(--gris-soft); margin-bottom:6px; }
+.campo input{ width:100%; background:var(--surface); border:1.5px solid var(--line); border-radius:10px;
+ color:var(--blanco); font-family:inherit; font-size:18px; font-weight:700; padding:12px;
+ text-align:center; }
+.campo input:focus{ outline:none; border-color:var(--rojo); }
+
+.chip-row{ display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 4px; }
+.chip{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800;
+ letter-spacing:.03em; padding:6px 12px; border-radius:999px; text-transform:uppercase; }
+.chip .dot{ width:7px; height:7px; border-radius:50%; }
+.chip.low{ background:var(--azul-soft); color:var(--azul); }
+.chip.low .dot{ background:var(--azul); }
+.chip.normal{ background:var(--verde-soft); color:var(--verde); }
+.chip.normal .dot{ background:var(--verde); }
+.chip.high{ background:var(--naranja-soft); color:var(--naranja); }
+.chip.high .dot{ background:var(--naranja); }
+.chip.veryhigh{ background:var(--rojo-soft); color:var(--rojo-claro); }
+.chip.veryhigh .dot{ background:var(--rojo-claro); }
+.chip.mudo{ background:var(--surface); color:var(--gris-soft); }
+.chip.mudo .dot{ background:var(--gris-soft); }
+
+.btn-guardar{ width:100%; margin-top:16px; background:linear-gradient(135deg,var(--rojo),var(--rojo-oscuro));
+ color:#fff; border:none; border-radius:12px; padding:15px; font-size:14.5px; font-weight:900;
+ text-transform:uppercase; letter-spacing:.05em; font-family:inherit; cursor:pointer; }
+.btn-guardar:active{ filter:brightness(.9); }
+.guardado-msg{ text-align:center; font-size:12.5px; font-weight:700; color:var(--verde); margin:10px 0 0; }
+
+.hist{ background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+.hist h3{ font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--gris-soft);
+ font-weight:800; margin:0; padding:14px 16px; border-bottom:1px solid var(--line); }
+.hist table{ width:100%; border-collapse:collapse; font-size:13px; }
+.hist th{ text-align:left; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+ color:var(--gris-soft); font-weight:700; padding:9px 12px; background:var(--surface-2); }
+.hist td{ padding:10px 12px; border-top:1px solid var(--line); vertical-align:middle; }
+.hist td.num{ font-weight:700; }
+.hist .fila-chips{ display:flex; gap:6px; flex-wrap:wrap; }
+.hist-empty{ padding:18px; text-align:center; color:var(--gris-soft); font-size:13px; }
+</style>
+
+<header class="top">
+ <img class="logo" id="logoImg" alt="WGYMADNSPORT">
+ <p class="gymname">WGYMADNSPORT Tocopilla</p>
+ <h1>Control <span>Físico</span></h1>
+ <p class="reloj" id="reloj"></p>
+</header>
+
+<div class="wrap">
+
+ <div class="aviso">
+  <p>Cargá acá los números que te muestra el <b>Omron HBF‑306</b> apenas termina de medir. Solo aparecen los socios que efectivamente se miden — el resto de la planilla sigue igual. Cuando quieras que la evolución se vea en la tarjeta del socio, tocá <b>Copiar mediciones</b> y pegámelo por chat.</p>
+  <button class="btn-copy" id="btnCopiar" type="button">📋 Copiar mediciones</button>
+ </div>
+ <p class="copy-msg" id="copyMsg" hidden></p>
+
+ <div class="buscador">
+  <input type="text" id="qSocio" placeholder="Buscar socio por nombre o apellido…" autocomplete="off" autocapitalize="words">
+ </div>
+
+ <div class="panel" id="panel" hidden>
+  <p class="kicker">Registrando a</p>
+  <h2 id="panelNombre">—</h2>
+
+  <div class="sexo-row" id="sexoRow">
+   <button type="button" class="sexo-btn" data-sexo="F">Mujer</button>
+   <button type="button" class="sexo-btn" data-sexo="M">Hombre</button>
+  </div>
+
+  <div class="campo-grid">
+   <div class="campo c-edad"><label>Edad</label><input type="number" inputmode="numeric" id="inEdad" placeholder="—"></div>
+   <div class="campo"><label>Peso (kg)</label><input type="number" inputmode="decimal" step="0.1" id="inPeso" placeholder="—"></div>
+   <div class="campo"><label>% Grasa</label><input type="number" inputmode="decimal" step="0.1" id="inGrasa" placeholder="—"></div>
+  </div>
+  <div class="campo-grid" style="grid-template-columns:1fr">
+   <div class="campo"><label>IMC / BMI</label><input type="number" inputmode="decimal" step="0.1" id="inImc" placeholder="—"></div>
+  </div>
+
+  <div class="chip-row">
+   <span class="chip mudo" id="chipGrasa"><span class="dot"></span>% Grasa —</span>
+   <span class="chip mudo" id="chipImc"><span class="dot"></span>IMC —</span>
+  </div>
+
+  <button class="btn-guardar" id="btnGuardar" type="button">Guardar registro</button>
+  <p class="guardado-msg" id="guardadoMsg" hidden></p>
+ </div>
+
+ <div class="hist" id="hist" hidden>
+  <h3>Historial de este socio (en este equipo)</h3>
+  <div style="overflow-x:auto">
+   <table>
+    <thead><tr><th>Fecha</th><th>Peso</th><th>% Grasa</th><th>IMC</th></tr></thead>
+    <tbody id="histBody"></tbody>
+   </table>
+  </div>
+ </div>
+
+</div>
+
+<script>
+const LOGO_B64 = "assets/logo.jpg";
+document.getElementById("logoImg").src = LOGO_B64;
+
+(function(){
+"use strict";
+
+/* ── reloj ─────────────────────────────────────────────────────────── */
+function reloj(){
+ var d = new Date();
+ var s = d.toLocaleDateString("es-CL", { weekday:"long", day:"numeric", month:"long" });
+ document.getElementById("reloj").textContent =
+  s.charAt(0).toUpperCase() + s.slice(1) + " · " +
+  String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")+" hrs";
+}
+reloj(); setInterval(reloj, 20000);
+
+function normName(s){
+ return (s||"").toString().trim().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ");
+}
+function hoyISO(){
+ var d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function fechaLegible(iso){
+ var p = String(iso||"").split("-");
+ if(p.length !== 3) return iso || "—";
+ return p[2]+"-"+p[1]+"-"+p[0];
+}
+
+/* ── bandas Omron (LOW / NORMAL / HIGH / VERY HIGH) ───────────────────
+   Valores de referencia estandar publicados por Omron para monitores de
+   bioimpedancia por palmas. Confirmar contra el manual fisico del
+   HBF-306 antes de tomarlos como definitivos. */
+function grupoEdad(edad){
+ var e = Number(edad) || 30;
+ if(e < 40) return "20-39";
+ if(e < 60) return "40-59";
+ return "60-79";
+}
+var TABLA_GRASA = {
+ F: { "20-39":[21,33,39], "40-59":[23,34,40], "60-79":[24,36,42] },
+ M: { "20-39":[8,20,25],  "40-59":[11,22,28], "60-79":[13,25,30] }
+};
+function bandaDesdeCortes(valor, cortes){
+ var v = Number(valor);
+ if(isNaN(v)) return null;
+ if(v < cortes[0]) return "low";
+ if(v < cortes[1]) return "normal";
+ if(v < cortes[2]) return "high";
+ return "veryhigh";
+}
+function bandaGrasa(sexo, edad, valor){
+ var tabla = TABLA_GRASA[sexo === "M" ? "M" : "F"];
+ return bandaDesdeCortes(valor, tabla[grupoEdad(edad)]);
+}
+function bandaImc(valor){ return bandaDesdeCortes(valor, [18.5, 25, 30]); }
+var ETIQUETA = { low:"LOW", normal:"NORMAL", high:"HIGH", veryhigh:"VERY HIGH" };
+
+function pintarChip(el, prefijo, banda){
+ el.className = "chip " + (banda || "mudo");
+ el.innerHTML = '<span class="dot"></span>' + prefijo + " " + (banda ? ETIQUETA[banda] : "—");
+}
+
+/* ── almacen local (este equipo) ──────────────────────────────────────
+   Mismo esquema que mediciones.json, asi "Copiar mediciones" es un
+   volcado directo sin transformar nada. */
+var KEY = "wgym_mediciones_v1";
+var datos = null;
+try{ datos = JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){}
+if(!datos || !Array.isArray(datos.socios)) datos = { socios:[] };
+function guardarLocal(){
+ try{ localStorage.setItem(KEY, JSON.stringify(datos)); }catch(e){}
+}
+function socioGuardado(n, a){
+ var kn = normName(n), ka = normName(a);
+ return datos.socios.filter(function(s){ return normName(s.n)===kn && normName(s.a)===ka; })[0] || null;
+}
+
+/* ── lista de socios (solo para buscar nombres, viene de socios.json) ── */
+var listaSocios = [];
+fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
+ .then(function(r){ return r.ok ? r.json() : null; })
+ .then(function(d){ if(d && Array.isArray(d.socios)) listaSocios = d.socios; })
+ .catch(function(){});
+
+function calzan(q){
+ q = normName(q);
+ if(!q) return [];
+ return listaSocios.filter(function(s){
+  return normName(s.n + " " + s.a).indexOf(q) > -1 || normName(s.a + " " + s.n).indexOf(q) > -1;
+ }).sort(function(a,b){ return (a.a+a.n).localeCompare(b.a+b.n, "es"); });
+}
+
+/* ── buscador con sugerencias ──────────────────────────────────────── */
+var qSocio = document.getElementById("qSocio");
+var cajaSug = null, marcado = -1, cierre = null;
+function cerrarSug(){ if(cajaSug){ cajaSug.remove(); cajaSug = null; } marcado = -1; }
+function verSug(){
+ clearTimeout(cierre); cerrarSug();
+ var lista = calzan(qSocio.value).slice(0, 8);
+ if(!lista.length) return;
+ cajaSug = document.createElement("ul");
+ cajaSug.className = "sugerencias";
+ lista.forEach(function(s){
+  var li = document.createElement("li");
+  var yaMedido = !!socioGuardado(s.n, s.a);
+  li.innerHTML = '<span></span>' + (yaMedido ? '<span class="smed">Con historial</span>' : "");
+  li.querySelector("span").textContent = s.n + " " + s.a;
+  li.addEventListener("mousedown", function(ev){ ev.preventDefault(); elegir(s); });
+  cajaSug.appendChild(li);
+ });
+ qSocio.parentNode.appendChild(cajaSug);
+}
+function moverMarca(paso){
+ if(!cajaSug) return;
+ var items = cajaSug.children;
+ marcado = (marcado + paso + items.length) % items.length;
+ Array.prototype.forEach.call(items, function(li,i){ li.setAttribute("aria-selected", i===marcado?"true":"false"); });
+}
+qSocio.addEventListener("input", verSug);
+qSocio.addEventListener("blur", function(){ cierre = setTimeout(cerrarSug, 120); });
+qSocio.addEventListener("keydown", function(ev){
+ if(ev.key === "ArrowDown"){ ev.preventDefault(); moverMarca(1); }
+ else if(ev.key === "ArrowUp"){ ev.preventDefault(); moverMarca(-1); }
+ else if(ev.key === "Escape"){ cerrarSug(); }
+ else if(ev.key === "Enter"){
+  ev.preventDefault();
+  if(cajaSug && marcado > -1) elegir(calzan(qSocio.value)[marcado]);
+ }
+});
+
+/* ── panel de carga ────────────────────────────────────────────────── */
+var socioActual = null, sexoActual = null;
+var panel = document.getElementById("panel");
+var hist = document.getElementById("hist");
+var inEdad = document.getElementById("inEdad"), inPeso = document.getElementById("inPeso"),
+    inGrasa = document.getElementById("inGrasa"), inImc = document.getElementById("inImc");
+var chipGrasa = document.getElementById("chipGrasa"), chipImc = document.getElementById("chipImc");
+
+function elegir(s){
+ socioActual = s;
+ cerrarSug(); qSocio.value = "";
+ document.getElementById("panelNombre").textContent = s.n + " " + s.a;
+ panel.hidden = false;
+ document.getElementById("guardadoMsg").hidden = true;
+
+ var previo = socioGuardado(s.n, s.a);
+ var ultimo = previo && previo.registros.length ? previo.registros[previo.registros.length - 1] : null;
+ sexoActual = previo ? previo.sexo : null;
+ Array.prototype.forEach.call(document.querySelectorAll(".sexo-btn"), function(b){
+  b.setAttribute("data-active", b.getAttribute("data-sexo") === sexoActual ? "1" : "0");
+ });
+ inEdad.value = ultimo ? ultimo.edad : "";
+ inPeso.value = ""; inGrasa.value = ""; inImc.value = "";
+ actualizarChips();
+ pintarHistorial(previo);
+ panel.scrollIntoView({ behavior:"smooth", block:"start" });
+}
+
+document.getElementById("sexoRow").addEventListener("click", function(ev){
+ var b = ev.target.closest(".sexo-btn");
+ if(!b) return;
+ sexoActual = b.getAttribute("data-sexo");
+ Array.prototype.forEach.call(this.querySelectorAll(".sexo-btn"), function(x){
+  x.setAttribute("data-active", x === b ? "1" : "0");
+ });
+ actualizarChips();
+});
+function actualizarChips(){
+ pintarChip(chipGrasa, "% Grasa", sexoActual && inGrasa.value !== "" ? bandaGrasa(sexoActual, inEdad.value, inGrasa.value) : null);
+ pintarChip(chipImc, "IMC", inImc.value !== "" ? bandaImc(inImc.value) : null);
+}
+[inEdad, inGrasa, inImc].forEach(function(el){ el.addEventListener("input", actualizarChips); });
+
+function pintarHistorial(previo){
+ var body = document.getElementById("histBody");
+ if(!previo || !previo.registros.length){
+  hist.hidden = true; body.innerHTML = "";
+  return;
+ }
+ hist.hidden = false;
+ var COLOR = { low:"var(--azul)", normal:"var(--verde)", high:"var(--naranja)", veryhigh:"var(--rojo-claro)" };
+ var filas = previo.registros.slice().reverse().map(function(r){
+  var bg = r.grasa != null ? bandaGrasa(previo.sexo, r.edad, r.grasa) : null;
+  var bi = r.imc != null ? bandaImc(r.imc) : null;
+  return "<tr><td>" + fechaLegible(r.fecha) + "</td>" +
+   '<td class="num">' + (r.peso != null ? r.peso + " kg" : "—") + "</td>" +
+   '<td class="num"' + (bg ? ' style="color:' + COLOR[bg] + '"' : "") + ">" + (r.grasa != null ? r.grasa + "%" : "—") + "</td>" +
+   '<td class="num"' + (bi ? ' style="color:' + COLOR[bi] + '"' : "") + ">" + (r.imc != null ? r.imc : "—") + "</td></tr>";
+ }).join("");
+ body.innerHTML = filas;
+}
+
+document.getElementById("btnGuardar").addEventListener("click", function(){
+ if(!socioActual){ return; }
+ if(!sexoActual){ alert("Elegí Mujer u Hombre antes de guardar."); return; }
+ if(inPeso.value === "" && inGrasa.value === "" && inImc.value === ""){
+  alert("Cargá al menos un dato antes de guardar."); return;
+ }
+ var registro = {
+  fecha: hoyISO(),
+  edad: Number(inEdad.value) || null,
+  peso: inPeso.value !== "" ? Number(inPeso.value) : null,
+  grasa: inGrasa.value !== "" ? Number(inGrasa.value) : null,
+  imc: inImc.value !== "" ? Number(inImc.value) : null
+ };
+ var s = socioGuardado(socioActual.n, socioActual.a);
+ if(!s){
+  s = { n: socioActual.n, a: socioActual.a, sexo: sexoActual, registros: [] };
+  datos.socios.push(s);
+ }
+ s.sexo = sexoActual;
+ s.registros.push(registro);
+ guardarLocal();
+
+ var msg = document.getElementById("guardadoMsg");
+ msg.hidden = false;
+ msg.textContent = "Registro guardado en este equipo. No te olvides de tocar \"Copiar mediciones\" cuando termines la ronda.";
+ pintarHistorial(s);
+});
+
+/* ── copiar mediciones (igual esquema que mediciones.json) ───────────── */
+document.getElementById("btnCopiar").addEventListener("click", function(){
+ var aviso = document.getElementById("copyMsg");
+ var lista = datos.socios.filter(function(s){ return s.registros && s.registros.length; })
+  .sort(function(a,b){ return (a.a+a.n).localeCompare(b.a+b.n, "es"); });
+ var txt = JSON.stringify({ actualizado: hoyISO(), nota:"Mediciones de composicion corporal (Omron HBF-306). Solo aparecen los socios que se miden.", socios: lista }, null, 1);
+ function ok(){
+  aviso.hidden = false; aviso.removeAttribute("data-err");
+  aviso.textContent = "¡Copiado! " + lista.length + " socios con mediciones. Pégamelo por chat.";
+ }
+ function aMano(){
+  aviso.hidden = false; aviso.setAttribute("data-err","1");
+  aviso.textContent = "No pude copiarlo solo. Apretá Ctrl + C ahora.";
+  var ta = document.createElement("textarea");
+  ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  setTimeout(function(){ document.body.removeChild(ta); }, 15000);
+ }
+ try{
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok, aMano); }
+  else{ aMano(); }
+ }catch(e){ aMano(); }
+});
+
+})();
+</script>
