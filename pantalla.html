@@ -89,6 +89,21 @@ header.top h1 span{ color:var(--rojo); }
 .feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; }
 .feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:30px 0; }
 
+.banda-item{
+ display:flex; align-items:center; justify-content:space-between; gap:12px;
+ background:rgba(212,175,55,.1); border:1.5px solid var(--dorado); border-radius:12px;
+ padding:13px 16px; margin-bottom:8px;
+}
+.banda-item .binfo{ min-width:0; }
+.banda-item .bname{ font-weight:800; font-size:15px; letter-spacing:.01em; }
+.banda-item .btime{ font-size:12px; color:var(--gris-soft); font-weight:600; margin-top:2px; }
+.banda-item button{
+ flex-shrink:0; background:var(--dorado); color:var(--negro); border:none; border-radius:9px;
+ padding:10px 14px; font-size:12px; font-weight:900; letter-spacing:.04em; text-transform:uppercase;
+ font-family:inherit; cursor:pointer;
+}
+.banda-item button:active{ opacity:.8; }
+
 .setup-notice{
  background:rgba(212,175,55,.1); border:1.5px solid var(--dorado); border-radius:12px;
  padding:16px 18px; font-size:13px; color:var(--gris); line-height:1.6; margin-bottom:24px;
@@ -116,6 +131,12 @@ Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te 
 <p class="venc" id="heroVenc" hidden></p>
 <p class="plan" id="heroPlan" hidden></p>
 </div>
+
+<div class="feed-head">
+<h2>Bandas pedidas</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="bandasFeed"></div>
 
 <div class="feed-head">
 <h2>Ingresos recientes</h2>
@@ -569,7 +590,55 @@ function poll(){
  document.body.appendChild(script);
 }
 
+/* ---------- bandas elásticas ---------- */
+function fmtMin(ts){
+ var min = Math.max(0, Math.round((Date.now() - ts) / 60000));
+ return min + " min";
+}
+function renderBandas(activos){
+ var el = document.getElementById("bandasFeed");
+ if(!activos || activos.length===0){
+  el.innerHTML = '<div class="feed-empty">Nadie ha pedido banda por ahora.</div>';
+  return;
+ }
+ el.innerHTML = activos.map(function(b){
+  return '<div class="banda-item"><span class="binfo"><span class="bname">'+escapeHtml(b.nombre)+' '+escapeHtml(b.apellido)+'</span>'+
+   '<span class="btime">Hace '+fmtMin(b.retiro)+'</span></span>'+
+   '<button type="button" data-id="'+escapeHtml(b.id)+'">Devolver</button></div>';
+ }).join('');
+}
+function pollBandas(){
+ pollCounter++;
+ var cb = "wgymBandaCb" + pollCounter + "_" + Date.now();
+ window[cb] = function(data){
+  renderBandas(data && data.activos);
+  delete window[cb];
+  script.remove();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=listarBandas&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+document.getElementById("bandasFeed").addEventListener("click", function(ev){
+ var btn = ev.target.closest("button[data-id]");
+ if(!btn) return;
+ btn.disabled = true;
+ var cb = "wgymDevBanda_" + Date.now();
+ window[cb] = function(){
+  delete window[cb];
+  script.remove();
+  pollBandas();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=devolverBanda&id=" + encodeURIComponent(btn.getAttribute("data-id")) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
+ document.body.appendChild(script);
+});
+
 poll();
+pollBandas();
 setInterval(poll, 4000);
+setInterval(pollBandas, 4000);
 })();
 </script>

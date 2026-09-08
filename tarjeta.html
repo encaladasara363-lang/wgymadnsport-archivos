@@ -129,6 +129,17 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .mc-veredicto .vfavor b{ color:var(--dorado); }
 .routine-blocked{ text-align:center; color:var(--danger); font-weight:700; font-size:13px; line-height:1.5; margin:18px 0 0; }
 
+.band-box{ margin:14px 16px 0; }
+.band-btn{
+  width:100%; background:var(--rojo); color:var(--blanco); border:none; border-radius:12px;
+  padding:15px 16px; font-size:13.5px; font-weight:900; letter-spacing:.05em; text-transform:uppercase;
+  font-family:inherit; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px;
+}
+.band-btn:active{ background:var(--rojo-oscuro); }
+.band-btn:disabled{ background:var(--surface-2); color:var(--gris-soft); cursor:default; }
+.band-msg{ text-align:center; font-size:12.5px; font-weight:700; color:#5CA85C; margin:10px 0 0; }
+.band-msg.err{ color:var(--danger); }
+
 nav.days{ display:flex; gap:8px; overflow-x:auto; padding:16px 16px 4px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }  
 nav.days::-webkit-scrollbar{ display:none; }  
 nav.days button{ flex:0 0 auto; background:var(--surface); color:var(--gris); border:1.5px solid var(--line); border-radius:999px; padding:10px 16px; font-size:13px; font-weight:800; letter-spacing:.04em; cursor:pointer; white-space:nowrap; }  
@@ -461,6 +472,13 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <p class="sub">tu acceso digital al gimnasio</p>
  </header>
  <div class="member-card" id="memberCard"></div>
+ <div class="band-box">
+ <button class="band-btn" id="bandBtn" type="button">
+ <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4c0 4 3 5 3 8s-3 4-3 8"></path><path d="M18 4c0 4-3 5-3 8s3 4 3 8"></path></svg>
+ Pedir banda elástica
+ </button>
+ <p class="band-msg" id="bandMsg" hidden></p>
+ </div>
  <footer class="footer2">
  <p class="slogan">ENTRENA CON ACTITUD</p>
  <p class="name">WGYMADNSPORT · Tocopilla</p>
@@ -885,7 +903,57 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  anotarDia(s);
  renderCard(s);
  avisarIngreso(s);
+ socioActual = s;
+ resetBandBtn();
  }
+
+ /* ---------- pedir banda elástica ---------- */
+ var socioActual = null;
+ function resetBandBtn(){
+ var btn = document.getElementById("bandBtn");
+ var msg = document.getElementById("bandMsg");
+ btn.disabled = false;
+ btn.hidden = false;
+ msg.hidden = true;
+ }
+ function pedirBanda(){
+ if(!socioActual || !CHECKIN_URL) return;
+ var btn = document.getElementById("bandBtn");
+ var msg = document.getElementById("bandMsg");
+ btn.disabled = true;
+ var cb = "wgymBanda_" + Date.now();
+ var terminado = false;
+ window[cb] = function(data){
+ terminado = true;
+ delete window[cb];
+ script.remove();
+ if(data && data.ok){
+ btn.hidden = true;
+ msg.hidden = false;
+ msg.classList.remove("err");
+ msg.textContent = "Listo, avisamos a recepción. Retírala en el mesón.";
+ } else {
+ btn.disabled = false;
+ msg.hidden = false;
+ msg.classList.add("err");
+ msg.textContent = "No se pudo avisar, prueba de nuevo o pide en el mesón.";
+ }
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=pedirBanda&nombre=" + encodeURIComponent(socioActual.nombre) +
+ "&apellido=" + encodeURIComponent(socioActual.apellido) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){
+ if(terminado) return;
+ delete window[cb];
+ script.remove();
+ btn.disabled = false;
+ msg.hidden = false;
+ msg.classList.add("err");
+ msg.textContent = "No se pudo avisar, prueba de nuevo o pide en el mesón.";
+ };
+ document.body.appendChild(script);
+ }
+ document.getElementById("bandBtn").addEventListener("click", pedirBanda);
  function tryLogin(texto){
  var socio = findSocioJunto(texto);
  if(socio){
