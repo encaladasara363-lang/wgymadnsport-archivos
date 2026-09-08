@@ -57,13 +57,14 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
  font-weight:800; margin:18px 0 10px; }
 .tablas h4:first-of-type{ margin-top:4px; }
 .tablas-nota{ font-size:12px; color:var(--gris-soft); line-height:1.6; margin:0; }
-.tabla-scroll{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
-.tablas table{ width:100%; border-collapse:collapse; min-width:420px; font-size:12.5px; }
-.tablas th{ text-align:left; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
- color:var(--gris-soft); font-weight:700; padding:8px 10px; background:var(--surface-2);
- border-bottom:1px solid var(--line); }
-.tablas td{ padding:8px 10px; border-bottom:1px solid var(--line); font-weight:700; }
-.tablas tbody tr:last-child td{ border-bottom:none; }
+.rango-grupo{ background:var(--surface); border:1px solid var(--line); border-radius:10px;
+ padding:4px 12px; margin-bottom:10px; }
+.rango-edad{ font-size:10.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+ color:var(--gris-soft); margin:8px 0 2px; }
+.rango-row{ display:flex; justify-content:space-between; align-items:center;
+ padding:8px 0; border-bottom:1px solid var(--line); font-size:13.5px; }
+.rango-row:last-child{ border-bottom:none; }
+.rango-row b{ font-weight:800; }
 .tablas .c-low{ color:var(--azul); } .tablas .c-normal{ color:var(--verde); }
 .tablas .c-high{ color:var(--naranja); } .tablas .c-veryhigh{ color:var(--rojo-claro); }
 
@@ -160,42 +161,57 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
   <p class="tablas-nota">Rangos estándar Omron para bioimpedancia por palmas. Confirmalos contra el manual físico del HBF‑306 antes de tomarlos como definitivos — pueden variar levemente según la región del equipo.</p>
 
   <h4>% Grasa corporal — Mujeres</h4>
-  <div class="tabla-scroll">
-   <table>
-    <thead><tr><th>Categoría</th><th>20‑39 años</th><th>40‑59 años</th><th>60‑79 años</th></tr></thead>
-    <tbody>
-     <tr><td class="c-low">Bajo</td><td>&lt; 21</td><td>&lt; 23</td><td>&lt; 24</td></tr>
-     <tr><td class="c-normal">Normal</td><td>21 – 32.9</td><td>23 – 33.9</td><td>24 – 35.9</td></tr>
-     <tr><td class="c-high">Alto</td><td>33 – 38.9</td><td>34 – 39.9</td><td>36 – 41.9</td></tr>
-     <tr><td class="c-veryhigh">Muy alto</td><td>≥ 39</td><td>≥ 40</td><td>≥ 42</td></tr>
-    </tbody>
-   </table>
+  <div class="rango-grupo">
+   <p class="rango-edad">20 – 39 años</p>
+   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 21</b></div>
+   <div class="rango-row"><span class="c-normal">Normal</span><b>21 – 32.9</b></div>
+   <div class="rango-row"><span class="c-high">Alto</span><b>33 – 38.9</b></div>
+   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 39</b></div>
+  </div>
+  <div class="rango-grupo">
+   <p class="rango-edad">40 – 59 años</p>
+   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 23</b></div>
+   <div class="rango-row"><span class="c-normal">Normal</span><b>23 – 33.9</b></div>
+   <div class="rango-row"><span class="c-high">Alto</span><b>34 – 39.9</b></div>
+   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 40</b></div>
+  </div>
+  <div class="rango-grupo">
+   <p class="rango-edad">60 – 79 años</p>
+   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 24</b></div>
+   <div class="rango-row"><span class="c-normal">Normal</span><b>24 – 35.9</b></div>
+   <div class="rango-row"><span class="c-high">Alto</span><b>36 – 41.9</b></div>
+   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 42</b></div>
   </div>
 
   <h4>% Grasa corporal — Hombres</h4>
-  <div class="tabla-scroll">
-   <table>
-    <thead><tr><th>Categoría</th><th>20‑39 años</th><th>40‑59 años</th><th>60‑79 años</th></tr></thead>
-    <tbody>
-     <tr><td class="c-low">Bajo</td><td>&lt; 8</td><td>&lt; 11</td><td>&lt; 13</td></tr>
-     <tr><td class="c-normal">Normal</td><td>8 – 19.9</td><td>11 – 21.9</td><td>13 – 24.9</td></tr>
-     <tr><td class="c-high">Alto</td><td>20 – 24.9</td><td>22 – 27.9</td><td>25 – 29.9</td></tr>
-     <tr><td class="c-veryhigh">Muy alto</td><td>≥ 25</td><td>≥ 28</td><td>≥ 30</td></tr>
-    </tbody>
-   </table>
+  <div class="rango-grupo">
+   <p class="rango-edad">20 – 39 años</p>
+   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 8</b></div>
+   <div class="rango-row"><span class="c-normal">Normal</span><b>8 – 19.9</b></div>
+   <div class="rango-row"><span class="c-high">Alto</span><b>20 – 24.9</b></div>
+   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 25</b></div>
+  </div>
+  <div class="rango-grupo">
+   <p class="rango-edad">40 – 59 años</p>
+   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 11</b></div>
+   <div class="rango-row"><span class="c-normal">Normal</span><b>11 – 21.9</b></div>
+   <div class="rango-row"><span class="c-high">Alto</span><b>22 – 27.9</b></div>
+   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 28</b></div>
+  </div>
+  <div class="rango-grupo">
+   <p class="rango-edad">60 – 79 años</p>
+   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 13</b></div>
+   <div class="rango-row"><span class="c-normal">Normal</span><b>13 – 24.9</b></div>
+   <div class="rango-row"><span class="c-high">Alto</span><b>25 – 29.9</b></div>
+   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 30</b></div>
   </div>
 
   <h4>IMC</h4>
-  <div class="tabla-scroll">
-   <table>
-    <thead><tr><th>Categoría</th><th>Rango</th></tr></thead>
-    <tbody>
-     <tr><td class="c-low">Bajo</td><td>&lt; 18.5</td></tr>
-     <tr><td class="c-normal">Normal</td><td>18.5 – 24.9</td></tr>
-     <tr><td class="c-high">Alto</td><td>25 – 29.9</td></tr>
-     <tr><td class="c-veryhigh">Muy alto</td><td>≥ 30</td></tr>
-    </tbody>
-   </table>
+  <div class="rango-grupo">
+   <div class="rango-row"><span class="c-low">Bajo</span><b>&lt; 18.5</b></div>
+   <div class="rango-row"><span class="c-normal">Normal</span><b>18.5 – 24.9</b></div>
+   <div class="rango-row"><span class="c-high">Alto</span><b>25 – 29.9</b></div>
+   <div class="rango-row"><span class="c-veryhigh">Muy alto</span><b>≥ 30</b></div>
   </div>
  </div>
 
