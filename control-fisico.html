@@ -157,7 +157,7 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
    <div class="campo"><label>% Grasa</label><input type="number" inputmode="decimal" step="0.1" id="inGrasa" placeholder="—"></div>
   </div>
   <div class="campo-grid" style="grid-template-columns:1fr">
-   <div class="campo"><label>IMC / BMI</label><input type="number" inputmode="decimal" step="0.1" id="inImc" placeholder="—"></div>
+   <div class="campo"><label>IMC</label><input type="number" inputmode="decimal" step="0.1" id="inImc" placeholder="—"></div>
   </div>
 
   <div class="chip-row">
@@ -238,7 +238,7 @@ function bandaGrasa(sexo, edad, valor){
  return bandaDesdeCortes(valor, tabla[grupoEdad(edad)]);
 }
 function bandaImc(valor){ return bandaDesdeCortes(valor, [18.5, 25, 30]); }
-var ETIQUETA = { low:"LOW", normal:"NORMAL", high:"HIGH", veryhigh:"VERY HIGH" };
+var ETIQUETA = { low:"BAJO", normal:"NORMAL", high:"ALTO", veryhigh:"MUY ALTO" };
 
 function pintarChip(el, prefijo, banda){
  el.className = "chip " + (banda || "mudo");
