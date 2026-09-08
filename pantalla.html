@@ -94,8 +94,11 @@ header.top h1 span{ color:var(--rojo); }
  background:rgba(212,175,55,.1); border:1.5px solid var(--dorado); border-radius:12px;
  padding:13px 16px; margin-bottom:8px;
 }
-.banda-item .binfo{ min-width:0; }
+.banda-item .binfo{ min-width:0; display:flex; align-items:center; gap:9px; }
+.banda-item .bdot{ width:12px; height:12px; border-radius:50%; flex-shrink:0; border:1px solid rgba(255,255,255,.25); }
+.banda-item .btxt{ min-width:0; }
 .banda-item .bname{ font-weight:800; font-size:15px; letter-spacing:.01em; }
+.banda-item .bcolor{ font-size:12px; color:var(--gris-soft); font-weight:700; text-transform:uppercase; letter-spacing:.03em; }
 .banda-item .btime{ font-size:12px; color:var(--gris-soft); font-weight:600; margin-top:2px; }
 .banda-item button{
  flex-shrink:0; background:var(--dorado); color:var(--negro); border:none; border-radius:9px;
@@ -595,6 +598,7 @@ function fmtMin(ts){
  var min = Math.max(0, Math.round((Date.now() - ts) / 60000));
  return min + " min";
 }
+var COLOR_DOT = { Negra:"#2B2B2B", Verde:"#5CA85C", Morada:"#9B59D0", Roja:"#E30613", Amarilla:"#E8C547" };
 function renderBandas(activos){
  var el = document.getElementById("bandasFeed");
  if(!activos || activos.length===0){
@@ -602,8 +606,11 @@ function renderBandas(activos){
   return;
  }
  el.innerHTML = activos.map(function(b){
-  return '<div class="banda-item"><span class="binfo"><span class="bname">'+escapeHtml(b.nombre)+' '+escapeHtml(b.apellido)+'</span>'+
-   '<span class="btime">Hace '+fmtMin(b.retiro)+'</span></span>'+
+  var color = b.banda || "";
+  var dot = COLOR_DOT[color] || "#8C8C8C";
+  return '<div class="banda-item"><span class="binfo"><span class="bdot" style="background:'+dot+'"></span>'+
+   '<span class="btxt"><span class="bname">'+escapeHtml(b.nombre)+' '+escapeHtml(b.apellido)+'</span><br>'+
+   '<span class="bcolor">'+escapeHtml(color)+'</span> · <span class="btime">Hace '+fmtMin(b.retiro)+'</span></span></span>'+
    '<button type="button" data-id="'+escapeHtml(b.id)+'">Devolver</button></div>';
  }).join('');
 }
