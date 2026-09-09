@@ -31,6 +31,36 @@ exporta el botón "Pasar la lista" de `control.html`):
 lista en el `localStorage` del dispositivo); no lee `socios.json` y no
 hace falta tocarla para estas actualizaciones.
 
+### ⚠️ `pantalla.html` (control de acceso en la puerta) NO lee `socios.json`
+
+`pantalla.html` — la pantalla que se usa en la recepción para dar el
+acceso físico al gimnasio — lee exclusivamente el `localStorage`
+(`wgym_control_v1`) que llena `control.html` en ese mismo computador.
+**No consulta `socios.json` en ningún momento.**
+
+Esto significa que actualizar `socios.json` por chat (agregar, renovar,
+cambiar plan) deja al socio perfecto en la tarjeta virtual (`tarjeta.html`)
+y en las rutinas, pero **la pantalla de la puerta lo va a seguir marcando
+en rojo como "No está en la lista de socios" hasta que el dueño lo
+escriba también, a mano, en `control.html` en el computador de la
+recepción.** Confirmado con el dueño (2026-09): así se queda por ahora,
+no hay que "arreglarlo" automáticamente ni asumir que ya sincroniza.
+
+Por eso, cada vez que se agregue o renueve un socio por chat:
+- Aclarar en la confirmación final que ese cambio cubre tarjeta/rutinas,
+  pero que además hay que cargarlo en `control.html` en la recepción para
+  que la pantalla de acceso lo reconozca.
+- Si el usuario reporta que "la pantalla dice que no está en la lista"
+  para alguien que ya está en `socios.json`, la causa casi siempre es esta
+  desincronización — no un bug de datos. Verificar primero que el socio
+  esté bien en `socios.json` (nombre/apellido exactos, sin duplicar) y
+  luego recordarle que debe cargarlo también en `control.html` en el
+  equipo de la puerta.
+- Si en algún momento el usuario pide que esto se una en una sola fuente,
+  la opción es modificar `pantalla.html` para que también consulte
+  `socios.json` — pero es un cambio al sistema de control de acceso de la
+  puerta, así que hay que pedir confirmación explícita antes de tocarlo.
+
 ## Rutinas de entrenamiento para clientes exclusivos (regla permanente)
 
 Cuando el usuario pida una app de entrenamiento personalizada para un
