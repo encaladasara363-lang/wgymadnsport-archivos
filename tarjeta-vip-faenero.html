@@ -171,68 +171,65 @@
     background:var(--paper);
     display:flex;
     flex-direction:column;
-    padding:38px 30px 28px;
+    justify-content:space-between;
+    padding:40px 28px 30px;
     color:var(--ink);
   }
 
   .back-kicker{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:12px;
   }
-  .back-kicker .dot{ width:10px; height:10px; border-radius:50%; background:var(--red); flex-shrink:0; }
+  .back-kicker .dot{ width:13px; height:13px; border-radius:50%; background:var(--red); flex-shrink:0; }
   .back-kicker span{
     font-weight:800;
     letter-spacing:.16em;
     text-transform:uppercase;
-    font-size:13px;
+    font-size:15px;
     color:var(--steel);
   }
 
   .back-title{
     font-family:'Anton','Arial Black',Impact,sans-serif;
     font-weight:400;
-    font-size:38px;
-    line-height:.96;
+    font-size:50px;
+    line-height:.94;
     color:var(--red);
-    margin-top:10px;
   }
 
   .rules{
-    margin-top:24px;
     display:flex;
     flex-direction:column;
-    gap:20px;
+    gap:22px;
   }
-  .rule-item{ display:flex; gap:14px; align-items:flex-start; }
+  .rule-item{ display:flex; gap:16px; align-items:flex-start; }
   .rule-num{
     font-family:'Anton','Arial Black',Impact,sans-serif;
     font-weight:400;
-    font-size:30px;
+    font-size:40px;
     color:var(--paper);
-    -webkit-text-stroke:2px var(--ink);
-    width:34px;
+    -webkit-text-stroke:2.2px var(--ink);
+    width:46px;
     flex-shrink:0;
     line-height:1;
-    transform:translateY(-2px);
+    transform:translateY(-3px);
   }
-  .rule-item.important .rule-num{ -webkit-text-stroke:2px var(--red); color:var(--red); }
+  .rule-item.important .rule-num{ -webkit-text-stroke:2.2px var(--red); color:var(--red); }
   .rule-txt{
     font-weight:700;
-    font-size:16px;
-    line-height:1.22;
+    font-size:19px;
+    line-height:1.18;
     color:var(--ink);
   }
   .rule-item.important .rule-txt b{ color:var(--red); }
 
   .back-divider{
     height:0;
-    border-bottom:3px solid var(--rule);
-    margin:26px 0 22px;
+    border-bottom:4px solid var(--rule);
   }
 
   .back-foot{
-    margin-top:auto;
     display:flex;
     flex-direction:column;
     gap:10px;
@@ -240,53 +237,52 @@
   .addr-row{
     display:flex;
     align-items:center;
-    gap:8px;
+    gap:10px;
   }
-  .addr-row svg{ width:16px; height:16px; flex-shrink:0; }
+  .addr-row svg{ width:20px; height:20px; flex-shrink:0; }
   .addr-row span{
     font-weight:700;
-    font-size:13.5px;
+    font-size:16px;
     line-height:1.2;
     color:var(--steel);
   }
   .back-tagline{
     font-weight:800;
     font-style:italic;
-    font-size:15px;
+    font-size:18px;
     line-height:1.22;
     color:var(--ink);
   }
   .back-tagline b{ color:var(--red); font-style:normal; }
 
   .back-brand{
-    margin-top:14px;
+    margin-top:12px;
     padding-top:12px;
     border-top:1px solid var(--hairline);
     text-align:center;
     font-weight:800;
     letter-spacing:.16em;
     text-transform:uppercase;
-    font-size:11px;
+    font-size:12px;
     color:#B7B9BC;
   }
 
   /* retenida stamp */
   .stamp{
     align-self:center;
-    margin-top:34px;
-    width:250px;
+    width:290px;
     text-align:center;
     transform:rotate(-4deg);
     font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
     font-weight:800;
-    letter-spacing:.16em;
+    letter-spacing:.13em;
     text-transform:uppercase;
-    font-size:15px;
-    line-height:1.35;
-    color:rgba(225,6,27,.62);
-    border:3px solid rgba(225,6,27,.55);
-    padding:10px 8px;
-    border-radius:8px;
+    font-size:17px;
+    line-height:1.3;
+    color:rgba(225,6,27,.65);
+    border:4px solid rgba(225,6,27,.55);
+    padding:11px 8px;
+    border-radius:10px;
     pointer-events:none;
   }
 
