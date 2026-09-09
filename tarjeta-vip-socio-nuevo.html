@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>WGYMADNSPORT · Pase VIP Socio Nuevo (Cricut)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0D0D0F;
+    --paper:#FCFCFA;
+    --red:#E1061B;
+    --steel:#6E7278;
+    --rule:#17171A;
+    --hairline:#D9D9D6;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html,body{ background:#E7E7E3; }
+
+  body{
+    font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:60px;
+    padding:60px 16px 100px;
+  }
+
+  .page-label{
+    font-weight:700;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#8B8E92;
+    font-size:12px;
+  }
+
+  .pair{
+    display:flex;
+    gap:60px;
+    align-items:flex-start;
+  }
+
+  .col{ display:flex; flex-direction:column; align-items:center; gap:16px; }
+  .col .cap{ font-weight:800; letter-spacing:.12em; text-transform:uppercase; font-size:13px; color:#8B8E92; }
+
+  /* ===== CARD ===== =====
+     Tamano real: 4.5cm x 8.3cm.
+     Escala de trabajo: 1cm = 100px  -> 450px x 830px (alta resolucion para Cricut / impresion)
+  */
+  .card{
+    position:relative;
+    width:450px;
+    height:830px;
+    overflow:hidden;
+    box-shadow:0 24px 50px -18px rgba(0,0,0,.4);
+    border-radius:18px;
+  }
+
+  /* ---------- FRONT (fondo rojo para esta variante) ---------- */
+  .front{
+    background:var(--red);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+    color:var(--paper);
+    padding:26px 22px 20px;
+  }
+
+  .front::before{
+    content:"";
+    position:absolute;
+    inset:14px;
+    border:2px solid rgba(13,13,15,.28);
+    border-radius:10px;
+    pointer-events:none;
+  }
+
+  .front-header{ display:flex; flex-direction:column; align-items:center; }
+
+  .logo-ring{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    border:4px solid var(--ink);
+    background:var(--paper);
+    padding:5px;
+    flex-shrink:0;
+  }
+  .logo-ring img{ width:100%; height:100%; object-fit:cover; border-radius:50%; display:block; }
+
+  .front-word{
+    margin-top:10px;
+    font-weight:800;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-size:14px;
+    color:rgba(13,13,15,.68);
+  }
+  .front-word b{ color:var(--ink); }
+
+  .vip-badge{
+    font-family:'Anton','Arial Black',Impact,sans-serif;
+    font-weight:400;
+    font-size:140px;
+    line-height:.84;
+    letter-spacing:.01em;
+    color:var(--ink);
+    text-align:center;
+    text-shadow:0 4px 0 rgba(0,0,0,.2);
+  }
+
+  .front-hero{ display:flex; flex-direction:column; align-items:center; }
+
+  .hero-icons{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .hero-icons svg{ width:26px; height:26px; flex-shrink:0; }
+  .hero-icons-line{ width:52px; height:2px; background:var(--ink); }
+
+  .hero-title{
+    margin-top:12px;
+    font-family:'Anton','Arial Black',Impact,sans-serif;
+    font-weight:400;
+    font-size:46px;
+    line-height:.92;
+    letter-spacing:.005em;
+    color:var(--paper);
+    text-align:center;
+    text-shadow:0 2px 0 rgba(0,0,0,.2);
+  }
+  .hero-accent{
+    display:block;
+    font-size:82px;
+    color:var(--ink);
+    margin-top:4px;
+    text-shadow:0 3px 0 rgba(0,0,0,.2);
+  }
+
+  .front-sub{ display:flex; flex-direction:column; align-items:center; }
+
+  .invitado{
+    font-weight:700;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    font-size:16px;
+    color:var(--paper);
+  }
+
+  .front-divider{
+    width:70px;
+    height:3px;
+    background:var(--ink);
+    margin-top:14px;
+  }
+
+  .front-foot{
+    text-align:center;
+  }
+  .front-quote{
+    font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+    font-weight:700;
+    font-style:italic;
+    font-size:21px;
+    line-height:1.2;
+    color:var(--paper);
+    max-width:330px;
+  }
+  .front-brand{
+    margin-top:12px;
+    font-weight:800;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-size:14px;
+    color:var(--ink);
+  }
+
+  /* ---------- BACK ---------- */
+  .back{
+    background:var(--paper);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:28px 20px 20px;
+    color:var(--ink);
+  }
+
+  .back-kicker{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .back-kicker .dot{ width:15px; height:15px; border-radius:50%; background:var(--red); flex-shrink:0; }
+  .back-kicker span{
+    font-weight:800;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:18px;
+    color:var(--steel);
+  }
+
+  .back-title{
+    font-family:'Anton','Arial Black',Impact,sans-serif;
+    font-weight:400;
+    font-size:64px;
+    line-height:.92;
+    color:var(--red);
+  }
+
+  .rules{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .rule-item{ display:flex; gap:14px; align-items:flex-start; }
+  .rule-num{
+    font-family:'Anton','Arial Black',Impact,sans-serif;
+    font-weight:400;
+    font-size:52px;
+    color:var(--paper);
+    -webkit-text-stroke:2.6px var(--ink);
+    width:58px;
+    flex-shrink:0;
+    line-height:1;
+    transform:translateY(-4px);
+  }
+  .rule-item.important .rule-num{ -webkit-text-stroke:2.6px var(--red); color:var(--red); }
+  .rule-txt{
+    font-weight:700;
+    font-size:25px;
+    line-height:1.14;
+    color:var(--ink);
+  }
+  .rule-item.important .rule-txt b{ color:var(--red); }
+
+  .back-divider{
+    height:0;
+    border-bottom:4px solid var(--rule);
+  }
+
+  .back-foot{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .addr-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .addr-row svg{ width:25px; height:25px; flex-shrink:0; }
+  .addr-row span{
+    font-weight:700;
+    font-size:20px;
+    line-height:1.15;
+    color:var(--steel);
+  }
+  .back-tagline{
+    font-weight:800;
+    font-style:italic;
+    font-size:24px;
+    line-height:1.16;
+    color:var(--ink);
+  }
+  .back-tagline b{ color:var(--red); font-style:normal; }
+
+  .back-brand{
+    margin-top:8px;
+    padding-top:10px;
+    border-top:1px solid var(--hairline);
+    text-align:center;
+    font-weight:800;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    font-size:14px;
+    color:#B7B9BC;
+  }
+
+  /* retenida stamp */
+  .stamp{
+    align-self:center;
+    width:340px;
+    text-align:center;
+    transform:rotate(-4deg);
+    font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+    font-weight:800;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-size:22px;
+    line-height:1.26;
+    color:rgba(225,6,27,.65);
+    border:5px solid rgba(225,6,27,.55);
+    padding:12px 8px;
+    border-radius:10px;
+    pointer-events:none;
+  }
+
+  @media print{
+    html,body{ background:#fff; padding:0; margin:0; gap:0; }
+    .page-label,.cap{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="page-label">Pase VIP · Socio Nuevo · WGYMADNSPORT Tocopilla — 4.5 x 8.3 cm (Print Then Cut)</div>
+
+  <div class="pair">
+
+    <div class="col">
+      <div class="cap">Cara frontal</div>
+      <div class="card front" id="front">
+
+        <div class="front-header">
+          <div class="logo-ring"><img src="assets/logo.jpg" alt="WGYMADNSPORT"></div>
+          <div class="front-word">GYM <b>ADN</b> SPORT</div>
+        </div>
+
+        <div class="vip-badge">PASE<br>VIP</div>
+
+        <div class="front-hero">
+          <div class="hero-icons">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7"></path><path d="M16 4.2a3 3 0 0 1 0 5.6"></path><path d="M22 21c0-3-2-5.5-4.7-6.6"></path></svg>
+            <div class="hero-icons-line"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7"></path><path d="M16 4.2a3 3 0 0 1 0 5.6"></path><path d="M22 21c0-3-2-5.5-4.7-6.6"></path></svg>
+          </div>
+          <div class="hero-title">SOCIO<span class="hero-accent">NUEVO</span></div>
+        </div>
+
+        <div class="front-sub">
+          <div class="invitado">Trae a tu amig@</div>
+          <div class="front-divider"></div>
+        </div>
+
+        <div class="front-foot">
+          <div class="front-quote">&ldquo;Entrena mejor<br>cuando vienes acompañado.&rdquo;</div>
+          <div class="front-brand">WGYMADNSPORT · TOCOPILLA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="cap">Cara trasera</div>
+      <div class="card back" id="back">
+
+        <div class="back-kicker"><div class="dot"></div><span>Uso exclusivo del mesón</span></div>
+        <div class="back-title">REGLAS DEL<br>PASE VIP:</div>
+
+        <div class="rules">
+          <div class="rule-item">
+            <div class="rule-num">01</div>
+            <div class="rule-txt">Válido por <b>1 ACCESO LIBRE</b> completo a la sala de musculación para tu invitado.</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-num">02</div>
+            <div class="rule-txt">El invitado debe asistir <b>acompañado de forma obligatoria</b> por el socio nuevo que lo invita.</div>
+          </div>
+          <div class="rule-item important">
+            <div class="rule-num">03</div>
+            <div class="rule-txt"><b>IMPORTANTE:</b> al ingresar, esta tarjeta física se entrega en la recepción del gimnasio.</div>
+          </div>
+        </div>
+
+        <div class="stamp">RETENER EN RECEPCIÓN<br>AL INGRESAR</div>
+
+        <div class="back-divider"></div>
+
+        <div class="back-foot">
+          <div class="addr-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#6E7278" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+            <span>21 de Mayo 1520, Tocopilla.</span>
+          </div>
+          <div class="back-tagline">¡Empieza fuerte y <b>trae a tu mejor amigo!</b></div>
+          <div class="back-brand">WGYMADNSPORT · TOCOPILLA</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
