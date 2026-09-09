@@ -148,6 +148,10 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .evo-fecha{ font-size:11.5px; color:var(--gris-soft); font-weight:600; margin:0 0 12px; }
 .evo-hist{ border-top:1px solid var(--line); padding-top:10px; max-height:220px; overflow-y:auto; }
 .evo-hist-tit{ font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--gris-soft); margin:0 0 6px; }
+.evo-meta{ margin:14px 0; background:rgba(212,175,55,.09); border:1.5px solid var(--dorado); border-radius:12px; padding:14px 16px; }
+.evo-meta .mt{ font-size:10.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--dorado); margin:0 0 6px; }
+.evo-meta p.mtxt{ margin:0; font-size:13px; color:var(--gris); line-height:1.5; }
+.evo-meta b{ color:var(--dorado); }
 .evo-row{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:12.5px; }
 .evo-row span{ color:var(--gris-soft); font-weight:600; }
 .evo-row b{ color:var(--blanco); font-weight:800; }
@@ -597,6 +601,21 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  if(!banda) return "";
  return '<span class="evo-chip '+banda+'"><span class="dot"></span>'+prefijo+ETIQUETA_BANDA[banda]+'</span>';
  }
+ /* Meta motivacional: usa el nivel "Fitness" de la tabla ACE (la misma
+ de control-fisico.html) como aspiración, sin tocar la clasificación
+ oficial del Omron que ya se muestra arriba. */
+ var ACE_FITNESS_MAX = { F:24, M:17 };
+ function metaFitness(sexo, grasa){
+ if(grasa == null) return "";
+ var limite = ACE_FITNESS_MAX[sexo === "M" ? "M" : "F"];
+ if(grasa <= limite){
+ return '<div class="evo-meta"><p class="mt">Meta Fitness</p>' +
+ '<p class="mtxt">Tu % de grasa ya está en nivel <b>FITNESS</b> — uno de los mejores rangos que existen. ¡Sigue así!</p></div>';
+ }
+ var falta = Math.round((grasa - limite) * 10) / 10;
+ return '<div class="evo-meta"><p class="mt">Tu próxima meta</p>' +
+ '<p class="mtxt">Para llegar a nivel <b>FITNESS</b> te faltan <b>'+falta+' puntos</b>: bajar tu % de grasa de '+grasa+'% a '+limite+'% o menos.</p></div>';
+ }
  var medicionesPromise = fetch("mediciones.json?v=" + Date.now(), { cache:"no-store" })
  .then(function(r){ return r.ok ? r.json() : null; })
  .catch(function(){ return null; });
@@ -631,6 +650,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  (ultimo.imc!=null ? '<div class="evo-stat"><div class="n">'+ultimo.imc+'</div><span class="l">IMC</span>'+chipEvo("",bi)+'</div>' : '') +
  '</div>' +
  '<p class="evo-fecha">Última medición: '+dmy(ultimo.fecha)+'</p>' +
+ metaFitness(m.sexo, ultimo.grasa) +
  (historial ? '<p class="evo-hist-tit">Historial completo ('+regs.length+' mediciones)</p><div class="evo-hist">'+historial+'</div>' : '');
  });
  }
