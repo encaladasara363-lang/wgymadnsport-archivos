@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-08",
+ "actualizado": "2026-09-09",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -1232,7 +1232,7 @@
    "rut": "00.000.000-0",
    "plan": "Mensual Turno",
    "monto": 23000,
-   "fv": 46273
+   "fv": 46303
   },
   {
    "n": "CRISTOBAL",
