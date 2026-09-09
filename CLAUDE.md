@@ -21,15 +21,54 @@ exporta el botón "Pasar la lista" de `control.html`):
 3. Mantener el archivo ordenado alfabéticamente por apellido y sin
    duplicados.
 4. Actualizar el campo `"actualizado"` con la fecha del día.
-5. **Publicar el cambio directamente en `main`** (además de guardarlo en
+5. **Actualizar también `LISTA_BASE` en `control.html`** (ver sección de
+   abajo) para que el mesón y la pantalla de la puerta se enteren solos.
+6. **Publicar el cambio directamente en `main`** (además de guardarlo en
    cualquier rama de trabajo) para que quede reflejado en el link en vivo
    de arriba — el usuario espera que sus socios tengan acceso inmediato a
    su QR de ingreso y a sus rutinas, no un cambio pendiente de fusionar.
-6. Confirmarle al usuario qué socios se agregaron, renovaron o cambiaron.
+7. Confirmarle al usuario qué socios se agregaron, renovaron o cambiaron.
 
-`control.html` es solo la herramienta de administración local (guarda su
-lista en el `localStorage` del dispositivo); no lee `socios.json` y no
-hace falta tocarla para estas actualizaciones.
+### `control.html` y `pantalla.html` — cómo se enteran de los cambios
+
+`pantalla.html` (la pantalla de acceso en la puerta) **no lee
+`socios.json` directamente**: lee el `localStorage` (`wgym_control_v1`)
+que llena `control.html` en ese mismo computador — la "lista del mesón".
+Si esa lista local tiene aunque sea un socio guardado, `pantalla.html`
+la usa SIEMPRE y nunca mira `socios.json` por su cuenta.
+
+Por eso `control.html` trae embebida su propia copia de la planilla,
+`const LISTA_BASE = [...]`, con un número de versión `LISTA_VERSION`
+justo arriba. Cada vez que se abre `control.html` en un equipo, compara
+esa versión con la última que vio (`versionVista`, guardada en ese mismo
+`localStorage`): si `LISTA_BASE` es más nueva, fusiona sola los cambios
+con la lista del mesón (agrega socios nuevos, deja la fecha más
+adelantada de las dos) **sin borrar nada de lo que se cargó a mano en ese
+equipo** — y avisa en pantalla cuántos socios agregó o actualizó.
+
+**Por eso, cada vez que se edite `socios.json` (alta, renovación, cambio
+de plan), hay que regenerar `LISTA_BASE` en `control.html` con los mismos
+datos y subir `LISTA_VERSION`, y publicar ambos archivos juntos en
+`main`.** Sin este paso, el mesón y la puerta se quedan con la foto vieja
+y el socio nuevo aparece "Sin ficha de socio" o "No está en la lista de
+socios" aunque `socios.json` esté perfecto.
+
+Cómo regenerar `LISTA_BASE`:
+- Recorrer `socios.json` en el mismo orden y armar cada línea como
+  `{n:"...",a:"...",plan:"...",m:MONTO,v:"AAAA-MM-DD"}` (sin `rut`:
+  `control.html` no maneja RUT). El campo `v` es la fecha ISO que sale de
+  convertir el `fv` (serial tipo Excel) — no el serial mismo.
+- Reemplazar todo el contenido entre `const LISTA_BASE = [` y `];`.
+- Subir `LISTA_VERSION` a un número mayor (formato `AAAAMMDDNN`, ver el
+  valor actual como ejemplo).
+- Validar que el array quedó bien formado (por ejemplo cargándolo con
+  Node: `eval()` del fragmento y contar cuántos socios trajo) antes de
+  publicar — un JSON/JS mal cerrado rompe toda la página para todos los
+  que abran `control.html`.
+
+Con esto, la próxima vez que el dueño abra o refresque `control.html` en
+el equipo de la recepción, se sincroniza solo — no hace falta pedirle que
+cargue cada socio a mano, ni tocar `pantalla.html`.
 
 ## Rutinas de entrenamiento para clientes exclusivos (regla permanente)
 
@@ -88,3 +127,17 @@ alimentación WGYMADNSPORT), seguir siempre este proceso:
    impreso apuntando ahí — salvo que el usuario ya haya dejado claro que
    siempre hay que reemplazarlo.
 8. Confirmarle al usuario la URL final en vivo.
+9. **Límite que no tiene arreglo por código: ninguna página web puede
+   sonar, vibrar ni avisar mientras el celular tiene OTRA APP nativa en
+   primer plano** (por ejemplo TikTok, Instagram, WhatsApp). Es una regla
+   de iOS/Android que corta la ejecución de cualquier pestaña de
+   navegador en segundo plano — no es un bug de esta app ni algo que se
+   arregle con más beeps, `Notification` API o trucos de audio. Si el
+   usuario pide que la alarma de descanso "interrumpa" mientras ve un
+   video en otra app, la respuesta correcta es explicarle este límite
+   (no prometer un intento más de código) y sugerirle usar el
+   temporizador/alarma NATIVO del celular (la app Reloj) para ese caso
+   puntual, ya que esa sí tiene permiso del sistema para sonar por
+   encima de cualquier app. El beep + vibración + aviso visual dentro de
+   esta app siguen funcionando perfecto mientras la pestaña está abierta
+   y visible — el límite es solo cuando el usuario se va a otra app.
