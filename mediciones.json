@@ -63,6 +63,21 @@
    ]
   },
   {
+   "n": "IDALBA",
+   "a": "MARTINEZ",
+   "sexo": "F",
+   "estatura": 170,
+   "registros": [
+    {
+     "fecha": "2026-09-09",
+     "edad": 49,
+     "peso": 88.8,
+     "grasa": 39,
+     "imc": 30.7
+    }
+   ]
+  },
+  {
    "n": "LAURA",
    "a": "VERA",
    "sexo": "F",
