@@ -21,45 +21,54 @@ exporta el botón "Pasar la lista" de `control.html`):
 3. Mantener el archivo ordenado alfabéticamente por apellido y sin
    duplicados.
 4. Actualizar el campo `"actualizado"` con la fecha del día.
-5. **Publicar el cambio directamente en `main`** (además de guardarlo en
+5. **Actualizar también `LISTA_BASE` en `control.html`** (ver sección de
+   abajo) para que el mesón y la pantalla de la puerta se enteren solos.
+6. **Publicar el cambio directamente en `main`** (además de guardarlo en
    cualquier rama de trabajo) para que quede reflejado en el link en vivo
    de arriba — el usuario espera que sus socios tengan acceso inmediato a
    su QR de ingreso y a sus rutinas, no un cambio pendiente de fusionar.
-6. Confirmarle al usuario qué socios se agregaron, renovaron o cambiaron.
+7. Confirmarle al usuario qué socios se agregaron, renovaron o cambiaron.
 
-`control.html` es solo la herramienta de administración local (guarda su
-lista en el `localStorage` del dispositivo); no lee `socios.json` y no
-hace falta tocarla para estas actualizaciones.
+### `control.html` y `pantalla.html` — cómo se enteran de los cambios
 
-### ⚠️ `pantalla.html` (control de acceso en la puerta) NO lee `socios.json`
+`pantalla.html` (la pantalla de acceso en la puerta) **no lee
+`socios.json` directamente**: lee el `localStorage` (`wgym_control_v1`)
+que llena `control.html` en ese mismo computador — la "lista del mesón".
+Si esa lista local tiene aunque sea un socio guardado, `pantalla.html`
+la usa SIEMPRE y nunca mira `socios.json` por su cuenta.
 
-`pantalla.html` — la pantalla que se usa en la recepción para dar el
-acceso físico al gimnasio — lee exclusivamente el `localStorage`
-(`wgym_control_v1`) que llena `control.html` en ese mismo computador.
-**No consulta `socios.json` en ningún momento.**
+Por eso `control.html` trae embebida su propia copia de la planilla,
+`const LISTA_BASE = [...]`, con un número de versión `LISTA_VERSION`
+justo arriba. Cada vez que se abre `control.html` en un equipo, compara
+esa versión con la última que vio (`versionVista`, guardada en ese mismo
+`localStorage`): si `LISTA_BASE` es más nueva, fusiona sola los cambios
+con la lista del mesón (agrega socios nuevos, deja la fecha más
+adelantada de las dos) **sin borrar nada de lo que se cargó a mano en ese
+equipo** — y avisa en pantalla cuántos socios agregó o actualizó.
 
-Esto significa que actualizar `socios.json` por chat (agregar, renovar,
-cambiar plan) deja al socio perfecto en la tarjeta virtual (`tarjeta.html`)
-y en las rutinas, pero **la pantalla de la puerta lo va a seguir marcando
-en rojo como "No está en la lista de socios" hasta que el dueño lo
-escriba también, a mano, en `control.html` en el computador de la
-recepción.** Confirmado con el dueño (2026-09): así se queda por ahora,
-no hay que "arreglarlo" automáticamente ni asumir que ya sincroniza.
+**Por eso, cada vez que se edite `socios.json` (alta, renovación, cambio
+de plan), hay que regenerar `LISTA_BASE` en `control.html` con los mismos
+datos y subir `LISTA_VERSION`, y publicar ambos archivos juntos en
+`main`.** Sin este paso, el mesón y la puerta se quedan con la foto vieja
+y el socio nuevo aparece "Sin ficha de socio" o "No está en la lista de
+socios" aunque `socios.json` esté perfecto.
 
-Por eso, cada vez que se agregue o renueve un socio por chat:
-- Aclarar en la confirmación final que ese cambio cubre tarjeta/rutinas,
-  pero que además hay que cargarlo en `control.html` en la recepción para
-  que la pantalla de acceso lo reconozca.
-- Si el usuario reporta que "la pantalla dice que no está en la lista"
-  para alguien que ya está en `socios.json`, la causa casi siempre es esta
-  desincronización — no un bug de datos. Verificar primero que el socio
-  esté bien en `socios.json` (nombre/apellido exactos, sin duplicar) y
-  luego recordarle que debe cargarlo también en `control.html` en el
-  equipo de la puerta.
-- Si en algún momento el usuario pide que esto se una en una sola fuente,
-  la opción es modificar `pantalla.html` para que también consulte
-  `socios.json` — pero es un cambio al sistema de control de acceso de la
-  puerta, así que hay que pedir confirmación explícita antes de tocarlo.
+Cómo regenerar `LISTA_BASE`:
+- Recorrer `socios.json` en el mismo orden y armar cada línea como
+  `{n:"...",a:"...",plan:"...",m:MONTO,v:"AAAA-MM-DD"}` (sin `rut`:
+  `control.html` no maneja RUT). El campo `v` es la fecha ISO que sale de
+  convertir el `fv` (serial tipo Excel) — no el serial mismo.
+- Reemplazar todo el contenido entre `const LISTA_BASE = [` y `];`.
+- Subir `LISTA_VERSION` a un número mayor (formato `AAAAMMDDNN`, ver el
+  valor actual como ejemplo).
+- Validar que el array quedó bien formado (por ejemplo cargándolo con
+  Node: `eval()` del fragmento y contar cuántos socios trajo) antes de
+  publicar — un JSON/JS mal cerrado rompe toda la página para todos los
+  que abran `control.html`.
+
+Con esto, la próxima vez que el dueño abra o refresque `control.html` en
+el equipo de la recepción, se sincroniza solo — no hace falta pedirle que
+cargue cada socio a mano, ni tocar `pantalla.html`.
 
 ## Rutinas de entrenamiento para clientes exclusivos (regla permanente)
 
