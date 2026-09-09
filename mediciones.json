@@ -108,6 +108,21 @@
    ]
   },
   {
+   "n": "MARTINA",
+   "a": "ROJAS",
+   "sexo": "F",
+   "estatura": 158,
+   "registros": [
+    {
+     "fecha": "2026-09-09",
+     "edad": 21,
+     "peso": 61.8,
+     "grasa": 29.9,
+     "imc": 24.8
+    }
+   ]
+  },
+  {
    "n": "LAURA",
    "a": "VERA",
    "sexo": "F",
