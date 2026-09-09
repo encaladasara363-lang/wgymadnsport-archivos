@@ -123,6 +123,21 @@
    ]
   },
   {
+   "n": "JEAN",
+   "a": "PIERRE",
+   "sexo": "M",
+   "estatura": 179,
+   "registros": [
+    {
+     "fecha": "2026-09-09",
+     "edad": 28,
+     "peso": 81.2,
+     "grasa": 13.7,
+     "imc": 25.2
+    }
+   ]
+  },
+  {
    "n": "RODRIGO",
    "a": "PLAZA",
    "sexo": "M",
