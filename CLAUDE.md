@@ -127,3 +127,17 @@ alimentación WGYMADNSPORT), seguir siempre este proceso:
    impreso apuntando ahí — salvo que el usuario ya haya dejado claro que
    siempre hay que reemplazarlo.
 8. Confirmarle al usuario la URL final en vivo.
+9. **Límite que no tiene arreglo por código: ninguna página web puede
+   sonar, vibrar ni avisar mientras el celular tiene OTRA APP nativa en
+   primer plano** (por ejemplo TikTok, Instagram, WhatsApp). Es una regla
+   de iOS/Android que corta la ejecución de cualquier pestaña de
+   navegador en segundo plano — no es un bug de esta app ni algo que se
+   arregle con más beeps, `Notification` API o trucos de audio. Si el
+   usuario pide que la alarma de descanso "interrumpa" mientras ve un
+   video en otra app, la respuesta correcta es explicarle este límite
+   (no prometer un intento más de código) y sugerirle usar el
+   temporizador/alarma NATIVO del celular (la app Reloj) para ese caso
+   puntual, ya que esa sí tiene permiso del sistema para sonar por
+   encima de cualquier app. El beep + vibración + aviso visual dentro de
+   esta app siguen funcionando perfecto mientras la pestaña está abierta
+   y visible — el límite es solo cuando el usuario se va a otra app.
