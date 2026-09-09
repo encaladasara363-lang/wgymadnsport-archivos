@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>WGYMADNSPORT · Pase Diario (1 hoja)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0D0D0F;
+    --paper:#FCFCFA;
+    --red:#E1061B;
+    --red-deep:#8C0512;
+    --steel:#6E7278;
+    --steel-lt:#9A9DA2;
+    --rule:#17171A;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html,body{ width:50mm; height:70mm; }
+
+  body{
+    background:#3a3a3a;
+    font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+  }
+
+  .card{
+    position:relative;
+    width:50mm;
+    height:70mm;
+    background:var(--paper);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ===== FRONT (top) ===== */
+  .front{
+    position:relative;
+    flex-shrink:0;
+    height:41mm;
+    background:
+      radial-gradient(120% 80% at 50% 20%, #1d1a1c 0%, var(--ink) 55%, #000 100%);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:2.6mm 3.4mm 0;
+  }
+  .front::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:1.2mm;
+    background:linear-gradient(90deg, var(--red-deep), var(--red) 45%, var(--red) 55%, var(--red-deep));
+  }
+  .corner-accent{
+    position:absolute;
+    right:-8mm; bottom:-10mm;
+    width:20mm; height:20mm;
+    border:1.1mm solid rgba(225,6,27,.14);
+    border-radius:50%;
+  }
+
+  .brandline{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand-name{
+    font-weight:800;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    font-size:2.1mm;
+    color:var(--paper);
+  }
+  .brand-loc{
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-size:2.1mm;
+    color:var(--red);
+  }
+
+  .logo-ring{
+    margin-top:1.5mm;
+    width:11.5mm;
+    height:11.5mm;
+    border-radius:50%;
+    padding:.5mm;
+    background:conic-gradient(from 200deg, var(--red-deep), var(--red), var(--red-deep));
+    box-shadow:0 .8mm 2mm rgba(0,0,0,.55);
+    flex-shrink:0;
+  }
+  .logo-ring .logo-inner{
+    width:100%; height:100%;
+    border-radius:50%;
+    overflow:hidden;
+    background:var(--paper);
+    border:.4mm solid var(--ink);
+  }
+  .logo-ring img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .badge{
+    margin-top:1.4mm;
+    padding:.6mm 2.2mm;
+    border:.3mm solid var(--red);
+    border-radius:4mm;
+    font-weight:800;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-size:1.7mm;
+    color:var(--paper);
+    white-space:nowrap;
+  }
+
+  .title{
+    margin-top:1.6mm;
+    text-align:center;
+    line-height:.86;
+  }
+  .title .t1{
+    font-family:'Anton','Arial Black',Impact,sans-serif;
+    font-weight:400;
+    font-size:4.6mm;
+    color:var(--paper);
+  }
+  .title .t2{
+    font-family:'Anton','Arial Black',Impact,sans-serif;
+    font-weight:400;
+    font-size:6.8mm;
+    color:var(--red);
+    margin-top:.2mm;
+  }
+
+  .front-foot{
+    margin-top:1.3mm;
+    text-align:center;
+  }
+  .front-foot .valid{
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-size:1.6mm;
+    color:var(--paper);
+    opacity:.92;
+  }
+  .front-foot .loc2{
+    margin-top:.4mm;
+    font-weight:600;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-size:1.45mm;
+    color:var(--steel-lt);
+  }
+
+  /* ===== CUT LINE ===== */
+  .cutline{
+    flex-shrink:0;
+    height:3.2mm;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--paper);
+    position:relative;
+  }
+  .cutline::before{
+    content:"";
+    position:absolute;
+    left:3mm; right:3mm; top:50%;
+    border-top:.35mm dashed #C7C7C2;
+  }
+  .cutline .scissors{
+    position:relative;
+    background:var(--paper);
+    padding:0 1.4mm;
+    font-size:2.1mm;
+    color:#B7B7B2;
+    line-height:1;
+  }
+
+  /* ===== LEGEND (bottom) ===== */
+  .legend-wrap{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:0 3.2mm 2.2mm;
+    text-align:center;
+  }
+
+  .legend{
+    font-weight:600;
+    font-size:1.85mm;
+    line-height:1.32;
+    color:var(--ink);
+  }
+  .legend b{
+    display:block;
+    margin-top:1mm;
+    font-weight:800;
+    letter-spacing:.06em;
+    color:var(--red);
+    font-size:1.95mm;
+  }
+
+  .loc-row{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.9mm;
+  }
+  .loc-row svg{ width:2.3mm; height:2.3mm; flex-shrink:0; }
+  .loc-row span{
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-size:1.65mm;
+    color:var(--ink);
+  }
+
+  @media print{
+    html,body{ margin:0; }
+    @page{ size:50mm 70mm; margin:0; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+
+    <div class="front">
+      <div class="corner-accent"></div>
+      <div class="brandline">
+        <div class="brand-name">WGYM ADN</div>
+        <div class="brand-loc">Tocopilla</div>
+      </div>
+
+      <div class="logo-ring">
+        <div class="logo-inner">
+          <img src="assets/logo.jpg" alt="WGYMADNSPORT Tocopilla">
+        </div>
+      </div>
+
+      <div class="badge">Acceso individual</div>
+
+      <div class="title">
+        <div class="t1">PASE</div>
+        <div class="t2">DIARIO</div>
+      </div>
+
+      <div class="front-foot">
+        <div class="valid">Válido por un día</div>
+        <div class="loc2">Sala de musculación</div>
+      </div>
+    </div>
+
+    <div class="cutline"><span class="scissors">✂</span></div>
+
+    <div class="legend-wrap">
+      <div class="legend">
+        Pase diario válido por un día en sala de musculación. Este ticket debe entregarse en recepción al ingresar.
+        <b>No comercializable</b>
+      </div>
+
+      <div class="loc-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+        <span>Tocopilla, Chile</span>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
