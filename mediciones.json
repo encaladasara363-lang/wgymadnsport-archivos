@@ -108,6 +108,21 @@
    ]
   },
   {
+   "n": "RODRIGO",
+   "a": "PLAZA",
+   "sexo": "M",
+   "estatura": 180,
+   "registros": [
+    {
+     "fecha": "2026-09-09",
+     "edad": 43,
+     "peso": 85.3,
+     "grasa": 22.4,
+     "imc": 26.3
+    }
+   ]
+  },
+  {
    "n": "MARTINA",
    "a": "ROJAS",
    "sexo": "F",
