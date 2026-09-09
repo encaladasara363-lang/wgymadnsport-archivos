@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>WGYMADNSPORT · Pase Diario · Reverso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0D0D0F;
+    --paper:#FCFCFA;
+    --red:#E1061B;
+    --steel:#6E7278;
+    --rule:#17171A;
+    --hairline:#DDDDD8;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html,body{
+    width:50mm;
+    height:70mm;
+  }
+
+  body{
+    background:#3a3a3a;
+    font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+  }
+
+  .card{
+    position:relative;
+    width:50mm;
+    height:70mm;
+    background:var(--paper);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:3.6mm 3.6mm 3mm;
+  }
+
+  .card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:1.4mm;
+    background:linear-gradient(90deg, #8C0512, var(--red) 45%, var(--red) 55%, #8C0512);
+  }
+
+  .corner-accent{
+    position:absolute;
+    left:-9mm; bottom:14mm;
+    width:26mm; height:26mm;
+    border:1.4mm solid rgba(225,6,27,.08);
+    border-radius:50%;
+  }
+
+  .brandline{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:1.6mm;
+    margin-top:1mm;
+  }
+  .brandline .dot{
+    width:1.6mm; height:1.6mm;
+    border-radius:50%;
+    background:var(--red);
+    flex-shrink:0;
+  }
+  .brandline .name{
+    font-weight:800;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-size:2.35mm;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+
+  .hr{
+    width:100%;
+    height:.35mm;
+    background:var(--hairline);
+    margin-top:2.2mm;
+  }
+
+  .legend{
+    margin-top:3mm;
+    text-align:center;
+    font-weight:600;
+    letter-spacing:.01em;
+    font-size:2.5mm;
+    line-height:1.5;
+    color:var(--ink);
+  }
+  .legend b{
+    display:block;
+    margin-top:1.6mm;
+    font-weight:800;
+    letter-spacing:.08em;
+    color:var(--red);
+  }
+
+  .fields{
+    margin-top:6mm;
+    width:100%;
+    display:flex;
+    gap:3mm;
+  }
+  .field{ flex:1; }
+  .field .label{
+    font-weight:800;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-size:1.85mm;
+    color:var(--steel);
+    margin-bottom:1.4mm;
+  }
+  .field .line{
+    height:0;
+    border-bottom:.5mm solid var(--rule);
+  }
+
+  .loc-row{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:1.2mm;
+  }
+  .loc-row svg{ width:3mm; height:3mm; flex-shrink:0; }
+  .loc-row span{
+    font-weight:700;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-size:2.1mm;
+    color:var(--ink);
+  }
+
+  .tagline{
+    margin-top:2mm;
+    text-align:center;
+    font-weight:700;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    font-size:1.75mm;
+    color:var(--steel);
+  }
+  .tagline em{ color:var(--red); font-style:normal; }
+
+  @media print{
+    html,body{ margin:0; }
+    @page{ size:50mm 70mm; margin:0; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="corner-accent"></div>
+
+    <div class="brandline">
+      <div class="dot"></div>
+      <div class="name">WGYM ADN SPORT</div>
+      <div class="dot"></div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="legend">
+      Pase diario válido por un día en sala de musculación. Este ticket debe entregarse en recepción al ingresar.
+      <b>No comercializable</b>
+    </div>
+
+    <div class="fields">
+      <div class="field">
+        <div class="label">N°</div>
+        <div class="line"></div>
+      </div>
+      <div class="field">
+        <div class="label">Fecha</div>
+        <div class="line"></div>
+      </div>
+    </div>
+
+    <div class="loc-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0D0D0F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+      <span>Tocopilla, Chile</span>
+    </div>
+
+    <div class="tagline">La perseverancia es <em>el secreto</em> de tu éxito</div>
+  </div>
+
+</body>
+</html>
