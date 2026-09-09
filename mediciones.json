@@ -33,6 +33,21 @@
    ]
   },
   {
+   "n": "MACARENA",
+   "a": "ENCALADA",
+   "sexo": "F",
+   "estatura": 160,
+   "registros": [
+    {
+     "fecha": "2026-09-09",
+     "edad": 38,
+     "peso": 62.1,
+     "grasa": 23,
+     "imc": 24.3
+    }
+   ]
+  },
+  {
    "n": "SARA",
    "a": "ENCALADA",
    "sexo": "F",
