@@ -33,6 +33,21 @@
    ]
   },
   {
+   "n": "CELINDA",
+   "a": "BARJA",
+   "sexo": "F",
+   "estatura": 154,
+   "registros": [
+    {
+     "fecha": "2026-09-09",
+     "edad": 24,
+     "peso": 51.6,
+     "grasa": 21.7,
+     "imc": 21.8
+    }
+   ]
+  },
+  {
    "n": "MACARENA",
    "a": "ENCALADA",
    "sexo": "F",
