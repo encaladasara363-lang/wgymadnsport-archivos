@@ -123,6 +123,21 @@
    ]
   },
   {
+   "n": "MARYORY",
+   "a": "RAMIREZ",
+   "sexo": "F",
+   "estatura": 158,
+   "registros": [
+    {
+     "fecha": "2026-09-09",
+     "edad": 30,
+     "peso": 57.2,
+     "grasa": 26,
+     "imc": 22.9
+    }
+   ]
+  },
+  {
    "n": "MARTINA",
    "a": "ROJAS",
    "sexo": "F",
