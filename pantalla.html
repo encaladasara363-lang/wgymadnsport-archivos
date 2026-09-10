@@ -489,6 +489,16 @@ var ciclos = {};
 try{ ciclos = JSON.parse(localStorage.getItem(CLAVE_CICLOS) || "{}") || {}; }catch(e){}
 function guardarAsistencia(){ try{ localStorage.setItem(CLAVE_ASIS, JSON.stringify(asistencia)); }catch(e){} }
 function guardarCiclos(){ try{ localStorage.setItem(CLAVE_CICLOS, JSON.stringify(ciclos)); }catch(e){} }
+/* Reparación de una sola vez (2026-09-10): ver la misma nota en control.html.
+   Borra los ciclos guardados para que se recalculen solos desde la fecha de
+   vencimiento actual — el historial de asistencia real no se toca. */
+try{
+ if(!localStorage.getItem("wgym_ciclos_reparado_v1")){
+  ciclos = {};
+  guardarCiclos();
+  localStorage.setItem("wgym_ciclos_reparado_v1", "1");
+ }
+}catch(e){}
 function llaveSocio(s){ return (s.n + "|" + s.a).toUpperCase(); }
 function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
 function esTresVeces(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
@@ -526,7 +536,10 @@ function inicioPorDefecto(v, s){
 function inicioCalculado(s){
  if(!s || !fechaValida(s.v)) return null;
  var c = ciclos[llaveSocio(s)];
- if(c && c.v === s.v && fechaValida(c.desde)) return c.desde;
+ /* Sigue siendo el MISMO ciclo mientras hoy no haya pasado todavia la fecha
+    de vencimiento que tenia guardada — aunque esa fecha se haya corregido
+    despues sin que el socio haya renovado de verdad (ver control.html). */
+ if(c && fechaValida(c.desde) && fechaValida(c.v) && hoyISO() <= c.v) return c.desde;
  var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v, s);
  /* El ciclo nunca puede arrancar despues de hoy: si el calculo por defecto
     daba "mañana", al que entraba justo hoy (primera vez que se le anota el
