@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>WGYMADNSPORT · Pase Diario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0D0D0F;
+    --paper:#FCFCFA;
+    --red:#E1061B;
+    --red-deep:#8C0512;
+    --steel:#9A9DA2;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html,body{
+    width:50mm;
+    height:70mm;
+  }
+
+  body{
+    background:#3a3a3a;
+    font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+  }
+
+  .card{
+    position:relative;
+    width:50mm;
+    height:70mm;
+    background:
+      radial-gradient(120% 70% at 50% 28%, #1d1a1c 0%, var(--ink) 55%, #000 100%);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:4mm 3.6mm 3.2mm;
+  }
+
+  /* top accent bar */
+  .card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:1.4mm;
+    background:linear-gradient(90deg, var(--red-deep), var(--red) 45%, var(--red) 55%, var(--red-deep));
+  }
+
+  /* faint diagonal texture line, bottom-right corner accent */
+  .corner-accent{
+    position:absolute;
+    right:-9mm; bottom:-9mm;
+    width:26mm; height:26mm;
+    border:1.4mm solid rgba(225,6,27,.12);
+    border-radius:50%;
+  }
+
+  .brandline{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .brand-name{
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-size:2.5mm;
+    color:var(--paper);
+  }
+
+  .brand-loc{
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-size:2.5mm;
+    color:var(--red);
+  }
+
+  .logo-ring{
+    margin-top:2.6mm;
+    width:17mm;
+    height:17mm;
+    border-radius:50%;
+    padding:.6mm;
+    background:conic-gradient(from 200deg, var(--red-deep), var(--red), var(--red-deep));
+    box-shadow:0 1.2mm 3mm rgba(0,0,0,.55);
+    flex-shrink:0;
+  }
+  .logo-ring .logo-inner{
+    width:100%; height:100%;
+    border-radius:50%;
+    overflow:hidden;
+    background:var(--paper);
+    border:.5mm solid var(--ink);
+  }
+  .logo-ring img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .badge{
+    margin-top:2.4mm;
+    padding:1mm 3mm;
+    border:.35mm solid var(--red);
+    border-radius:5mm;
+    font-weight:800;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-size:2.15mm;
+    color:var(--paper);
+    white-space:nowrap;
+  }
+
+  .title{
+    margin-top:3.6mm;
+    text-align:center;
+    line-height:.86;
+  }
+  .title .t1{
+    font-family:'Anton','Arial Black',Impact,sans-serif;
+    font-weight:400;
+    font-size:7.6mm;
+    color:var(--paper);
+    letter-spacing:.01em;
+  }
+  .title .t2{
+    font-family:'Anton','Arial Black',Impact,sans-serif;
+    font-weight:400;
+    font-size:11.4mm;
+    color:var(--red);
+    letter-spacing:.01em;
+    margin-top:.4mm;
+  }
+
+  .rule{
+    margin-top:2.6mm;
+    width:13mm;
+    height:.7mm;
+    background:linear-gradient(90deg, transparent, var(--red) 20%, var(--red) 80%, transparent);
+  }
+
+  .foot{
+    margin-top:auto;
+    text-align:center;
+  }
+  .foot .valid{
+    font-weight:800;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-size:2.05mm;
+    color:var(--paper);
+    opacity:.92;
+  }
+  .foot .loc{
+    margin-top:.9mm;
+    font-weight:600;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:1.85mm;
+    color:var(--steel);
+  }
+
+  @media print{
+    html,body{ margin:0; }
+    @page{ size:50mm 70mm; margin:0; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="corner-accent"></div>
+
+    <div class="brandline">
+      <div class="brand-name">WGYM ADN</div>
+      <div class="brand-loc">Tocopilla</div>
+    </div>
+
+    <div class="logo-ring">
+      <div class="logo-inner">
+        <img src="assets/logo.jpg" alt="WGYMADNSPORT Tocopilla">
+      </div>
+    </div>
+
+    <div class="badge">Acceso individual</div>
+
+    <div class="title">
+      <div class="t1">PASE</div>
+      <div class="t2">DIARIO</div>
+    </div>
+
+    <div class="rule"></div>
+
+    <div class="foot">
+      <div class="valid">Válido por un día</div>
+      <div class="loc">Sala de musculación</div>
+    </div>
+  </div>
+
+</body>
+</html>
