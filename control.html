@@ -807,9 +807,14 @@ try{ ciclos = JSON.parse(localStorage.getItem(CLAVE_CICLOS) || "{}") || {}; }cat
 function guardarCiclos(){
  try{ localStorage.setItem(CLAVE_CICLOS, JSON.stringify(ciclos)); }catch(e){}
 }
-function planCuentaDias(s){ return esTurno(s) || esSemanal(s); }
-/* El criterio de antes: el dia siguiente al de un mes atras del vencimiento. */
-function inicioPorDefecto(v){ return sumarDias(mesAtras(v), 1); }
+function planCuentaDias(s){ return esTurno(s) || esSemanal(s) || esSemanalPlan(s); }
+/* El criterio de antes: el dia siguiente al de un mes atras del vencimiento.
+   Al Plan Semanal no le corre un mes sino una semana, asi que su ciclo por
+   defecto arranca 6 dias antes del vencimiento (7 dias en total). */
+function inicioPorDefecto(v, s){
+ if(s && esSemanalPlan(s)) return sumarDias(v, -6);
+ return sumarDias(mesAtras(v), 1);
+}
 /* Solo calcula, no guarda: la ficha lo llama con fechas que ella todavia
    esta escribiendo y no hay que anotar nada hasta que apriete Guardar. */
 function inicioCalculado(s){
@@ -818,8 +823,8 @@ function inicioCalculado(s){
  if(s.desdeFicha && fechaValida(s.desdeFicha)) return s.desdeFicha;
  var c = ciclos[llaveSocio(s)];
  if(c && c.v === s.v && fechaValida(c.desde)) return c.desde;
- var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v);
- return (desde > s.v) ? inicioPorDefecto(s.v) : desde;
+ var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v, s);
+ return (desde > s.v) ? inicioPorDefecto(s.v, s) : desde;
 }
 function anotarCiclo(s){
  var k = llaveSocio(s), c = ciclos[k], desde = inicioCalculado(s);
@@ -845,6 +850,7 @@ function fijarInicioCiclo(s, desde){
    Al de tres veces se le lleva ademas la cuenta de la semana corrida, pero
    solo como guia: si una semana viene una vez, las otras dos no se pierden,
    le quedan a favor dentro de los 12 del mes. */
+function esSemanalPlan(s){ return !!s && esPlanSemanal(s.plan); }
 function reglaDe(s){
  if(esTurno(s)){
   if(!s || !s.v) return null;
@@ -857,6 +863,14 @@ function reglaDe(s){
   return { tope:DIAS_MES_3X, ini:inicioCalculado(s), fin:s.v,
            nombre:"3 por semana", cuando:"este mes",
            semana:{ ini:lun, fin:sumarDias(lun, 6), tope:DIAS_SEMANA } };
+ }
+ if(esSemanalPlan(s)){
+  if(!s || !s.v) return null;
+  var ini = inicioCalculado(s);
+  if(!ini) return null;
+  var p1 = ini.split("-"), p2 = s.v.split("-");
+  var tope = diasAbiertos(new Date(+p1[0], +p1[1]-1, +p1[2]), new Date(+p2[0], +p2[1]-1, +p2[2]));
+  return { tope:tope || 1, ini:ini, fin:s.v, nombre:"Semanal", cuando:"esta semana", semana:null };
  }
  return null;
 }
@@ -879,7 +893,7 @@ function diasDeLaSemana(s){
  return (c && c.semana) ? contarEntre(s, c.semana.ini, c.semana.fin) : null;
 }
 function marcarDia(s, iso){
- if(!esTurno(s) && !esSemanal(s)) return false;
+ if(!planCuentaDias(s)) return false;
  var k = llaveSocio(s);
  if(!asistencia[k]) asistencia[k] = {};
  if(asistencia[k][iso]) return false;
