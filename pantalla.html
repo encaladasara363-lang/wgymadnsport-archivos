@@ -686,5 +686,14 @@ poll();
 pollBandas();
 setInterval(poll, 4000);
 setInterval(pollBandas, 4000);
+
+/* Esta pantalla se queda abierta todo el día en una tablet, sin que nadie
+   la recargue. Si mientras tanto se publica una lista nueva (renovaciones,
+   socios nuevos), se queda pegada con la copia vieja hasta que alguien la
+   refresque a mano — y ahí es cuando un socio sale "vencido" acá aunque en
+   control.html ya esté al día. Para que nunca más se desincronicen, se
+   recarga sola cada 10 minutos: como es solo de lectura (nadie escribe
+   fichas en esta pantalla), recargarla no pierde nada. */
+setInterval(function(){ location.reload(); }, 10 * 60 * 1000);
 })();
 </script>
