@@ -528,6 +528,10 @@ function inicioCalculado(s){
  var c = ciclos[llaveSocio(s)];
  if(c && c.v === s.v && fechaValida(c.desde)) return c.desde;
  var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v, s);
+ /* El ciclo nunca puede arrancar despues de hoy: si el calculo por defecto
+    daba "mañana", al que entraba justo hoy (primera vez que se le anota el
+    ciclo en este aparato) no le contaba su propio dia. */
+ if(desde > hoyISO() && hoyISO() <= s.v) desde = hoyISO();
  return (desde > s.v) ? inicioPorDefecto(s.v, s) : desde;
 }
 function anotarCiclo(s){
