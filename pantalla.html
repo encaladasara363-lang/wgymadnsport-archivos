@@ -49,7 +49,7 @@ header.top h1 span{ color:var(--rojo); }
 .hero .kicker{ font-size:12px; font-weight:800; letter-spacing:.16em; color:var(--dorado); text-transform:uppercase; margin:0 0 12px; }
 .hero .name{ font-size:38px; font-weight:900; text-transform:uppercase; line-height:1.15; margin:0 0 8px; }
 .hero .time{ font-size:15px; color:var(--gris-soft); font-weight:600; }
-.hero .venc{ font-size:14px; font-weight:700; margin-top:10px; padding:5px 14px; border-radius:999px; display:inline-block; }
+.hero .venc{ font-size:24px; font-weight:800; margin-top:10px; padding:8px 20px; border-radius:999px; display:inline-block; }
 .hero .venc.good{ color:#5CA85C; background:rgba(92,168,92,.12); }
 .hero .venc.warn{ color:var(--dorado); background:rgba(212,175,55,.12); }
 .hero .venc.danger{ color:#E85C5C; background:rgba(232,92,92,.12); }
@@ -57,8 +57,8 @@ header.top h1 span{ color:var(--rojo); }
 .hero .fallo{ font-size:26px; font-weight:900; text-transform:uppercase; letter-spacing:.02em;
  line-height:1.1; margin:0 0 10px; text-wrap:balance; }
 .hero .plan{ font-size:13px; color:var(--gris-soft); font-weight:600; margin:6px 0 0; }
-.hero .turno{ margin-top:8px; font-size:14px; font-weight:800; letter-spacing:.02em;
- display:inline-block; padding:6px 13px; border-radius:999px; border:1px solid; }
+.hero .turno{ margin-top:8px; font-size:24px; font-weight:800; letter-spacing:.02em;
+ display:inline-block; padding:8px 20px; border-radius:999px; border:1px solid; }
 .hero .turno[data-t="ok"]{ color:#5CA85C; border-color:#5CA85C; background:rgba(92,168,92,.12); }
 .hero .turno[data-t="tope"]{ color:var(--dorado); border-color:var(--dorado); background:rgba(212,175,55,.14); }
 .hero[data-v="ok"]{ border-color:#5CA85C; }
@@ -72,7 +72,8 @@ header.top h1 span{ color:var(--rojo); }
 .hero[data-v="bad"].flash{ box-shadow:0 0 0 4px var(--rojo), 0 0 40px 8px rgba(227,6,19,.55); }
 .hero[data-v="nadie"]{ border-color:var(--line); }
 .hero[data-v="nadie"] .fallo{ color:var(--gris-soft); font-size:20px; }
-@media (max-width:520px){ .hero .name{ font-size:30px; } .hero .fallo{ font-size:21px; } }
+@media (max-width:520px){ .hero .name{ font-size:30px; } .hero .fallo{ font-size:21px; }
+ .hero .venc{ font-size:19px; padding:7px 16px; } .hero .turno{ font-size:19px; padding:7px 16px; } }
 
 .feed-head{ display:flex; align-items:center; justify-content:space-between; margin:28px 0 10px; }
 .feed-head h2{ font-size:13px; font-weight:800; letter-spacing:.1em; color:var(--gris-soft); text-transform:uppercase; margin:0; }
