@@ -138,6 +138,21 @@
    ]
   },
   {
+   "n": "MARIA",
+   "a": "OSES",
+   "sexo": "F",
+   "estatura": 164,
+   "registros": [
+    {
+     "fecha": "2026-09-09",
+     "edad": 24,
+     "peso": 69.8,
+     "grasa": 28.7,
+     "imc": 26
+    }
+   ]
+  },
+  {
    "n": "JEAN",
    "a": "PIERRE",
    "sexo": "M",
