@@ -78,6 +78,21 @@
    ]
   },
   {
+   "n": "CLAUDIA",
+   "a": "FERNANDEZ",
+   "sexo": "F",
+   "estatura": 158,
+   "registros": [
+    {
+     "fecha": "2026-09-09",
+     "edad": 40,
+     "peso": 78.8,
+     "grasa": 37,
+     "imc": 31.6
+    }
+   ]
+  },
+  {
    "n": "MILTON",
    "a": "FUENTES",
    "sexo": "M",
