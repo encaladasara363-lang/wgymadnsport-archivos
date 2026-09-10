@@ -807,6 +807,20 @@ try{ ciclos = JSON.parse(localStorage.getItem(CLAVE_CICLOS) || "{}") || {}; }cat
 function guardarCiclos(){
  try{ localStorage.setItem(CLAVE_CICLOS, JSON.stringify(ciclos)); }catch(e){}
 }
+/* Reparación de una sola vez (2026-09-10): antes, sincronizar la lista con
+   el sitio podía reiniciar sin querer el ciclo de casi todo el mundo a
+   "hoy", aunque no hubieran renovado — perdiendo de vista los días que ya
+   llevaban usados este mes. El historial real de ingresos (asistencia) no
+   se tocó nunca; el problema era solo esta cuenta de ciclos. Se borra una
+   vez para que se recalcule sola desde la fecha de vencimiento actual de
+   cada quien, y los días ya marcados en asistencia vuelvan a contar. */
+try{
+ if(!localStorage.getItem("wgym_ciclos_reparado_v1")){
+  ciclos = {};
+  guardarCiclos();
+  localStorage.setItem("wgym_ciclos_reparado_v1", "1");
+ }
+}catch(e){}
 function planCuentaDias(s){ return esTurno(s) || esSemanal(s) || esSemanalPlan(s); }
 /* El criterio de antes: el dia siguiente al de un mes atras del vencimiento.
    Al Plan Semanal no le corre un mes sino una semana, asi que su ciclo por
@@ -822,7 +836,16 @@ function inicioCalculado(s){
  /* La ficha manda uno propio mientras ella lo esta escribiendo. */
  if(s.desdeFicha && fechaValida(s.desdeFicha)) return s.desdeFicha;
  var c = ciclos[llaveSocio(s)];
- if(c && c.v === s.v && fechaValida(c.desde)) return c.desde;
+ /* Sigue siendo el MISMO ciclo mientras hoy no haya pasado todavia la fecha
+    de vencimiento que tenia guardada — aunque esa fecha se haya corregido
+    un poco despues (por ejemplo al sincronizar con el sitio, sin que el
+    socio haya renovado de verdad). Antes se exigia que coincidiera exacto
+    con la fecha actual, y cualquier ajuste de fecha —aunque fuera solo
+    para reflejar la misma renovacion— borraba el inicio del ciclo y le
+    hacia perder los dias que ya llevaba usados este mes. Solo cuando hoy
+    ya pasó la fecha que tenia guardada se considera que empieza un ciclo
+    nuevo de verdad (una renovacion). */
+ if(c && fechaValida(c.desde) && fechaValida(c.v) && hoyISO() <= c.v) return c.desde;
  var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v, s);
  /* El ciclo nunca puede arrancar despues de hoy: si el calculo por defecto
     daba "mañana", al que entraba justo hoy (primera vez que se le anota el
