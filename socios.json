@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-09",
+ "actualizado": "2026-09-10",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -1006,8 +1006,8 @@
    "n": "GABRIEL",
    "a": "MOLINA",
    "rut": "00.000.000-0",
-   "plan": "Mensual Turno",
-   "monto": 23000,
+   "plan": "Full Mensual",
+   "monto": 33000,
    "fv": 46291
   },
   {
