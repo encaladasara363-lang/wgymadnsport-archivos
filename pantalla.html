@@ -86,6 +86,9 @@ header.top h1 span{ color:var(--rojo); }
 .feed-item .fvenc.good{ color:#5CA85C; }
 .feed-item .fvenc.warn{ color:var(--dorado); }
 .feed-item .fvenc.danger{ color:#E85C5C; }
+.feed-item .fveces{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
+ border:1px solid rgba(212,175,55,.6); color:var(--dorado); background:rgba(212,175,55,.12);
+ white-space:nowrap; }
 .feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; }
 .feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:30px 0; }
 
@@ -398,6 +401,40 @@ function estadoVenc(venc){
 function sinTildes(s){
  return String(s==null?"":s).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
 }
+function diaDelTs(ts){
+ var d = ts ? new Date(ts) : new Date();
+ if(isNaN(d)) d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function hoyISO(){
+ var d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+/* Un mismo escaneo a veces llega repetido desde el script de Google. Se
+   agrupan por persona + d\u00eda para que el feed muestre una sola l\u00ednea con
+   "\u00d7N" en vez de N l\u00edneas iguales \u2014 igual que ya hace control.html. */
+function juntarRepetidos(lista){
+ var porLlave = {}, orden = [];
+ lista.forEach(function(r){
+  var k = sinTildes(r.nombre) + "|" + sinTildes(r.apellido) + "|" + diaDelTs(r.ts);
+  var g = porLlave[k];
+  if(!g){
+   porLlave[k] = { nombre:r.nombre, apellido:r.apellido, ts:r.ts,
+                   primera:r.ts, veces:1, dia:diaDelTs(r.ts) };
+   orden.push(k);
+   return;
+  }
+  g.veces++;
+  if(r.ts > g.ts) g.ts = r.ts;
+  if(r.ts < g.primera) g.primera = r.ts;
+ });
+ return orden.map(function(k){ return porLlave[k]; });
+}
+function textoVeces(g){
+ if(g.veces < 2) return "";
+ var cuando = (g.dia === hoyISO()) ? " hoy" : "";
+ return g.veces + "\u00aa vez" + cuando;
+}
 function isoDeSerial(fv){
  var base = new Date(1899,11,30); base.setHours(0,0,0,0);
  var d = new Date(base.getTime() + fv*86400000);
@@ -524,12 +561,14 @@ function keyOf(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
 
 function renderFeed(rows){
  var feed = document.getElementById("feed");
- if(rows.length===0){ feed.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>'; return; }
- feed.innerHTML = rows.map(function(r){
+ var agrupadas = juntarRepetidos(rows);
+ if(agrupadas.length===0){ feed.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>'; return; }
+ feed.innerHTML = agrupadas.map(function(r){
   var d = veredictoDe(r);
   var nota = d.corto || d.detalle;
   var vencHtml = nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '';
-  return '<div class="feed-item"><span class="finfo"><span class="fname">'+escapeHtml(r.nombre)+' '+escapeHtml(r.apellido)+'</span>'+vencHtml+'</span><span class="ftime">'+fmtTime(r.ts)+'</span></div>';
+  var vecesHtml = r.veces > 1 ? '<span class="fveces">'+escapeHtml(textoVeces(r))+'</span>' : '';
+  return '<div class="feed-item"><span class="finfo"><span class="fname">'+escapeHtml(r.nombre)+' '+escapeHtml(r.apellido)+'</span>'+vencHtml+vecesHtml+'</span><span class="ftime">'+fmtTime(r.ts)+'</span></div>';
  }).join('');
 }
 
