@@ -149,6 +149,12 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 }
 .banda-item button:active{ opacity:.8; }
 
+/* En celular, el último ingreso y las bandas van uno abajo del otro
+   (igual que antes). En pantalla ancha van lado a lado. */
+@media (min-width:860px){
+ .hero-fila{ display:grid; grid-template-columns:1fr 340px; gap:0 18px; align-items:start; }
+}
+
 /* ── Indicadores ────────────────────────────────────────────────────── */
 .kpis{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:26px 0 18px; }
 .kpi{ background:var(--card); border:1px solid var(--line); border-radius:12px;
@@ -305,6 +311,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <button class="btn btn-linea" id="seguirMia">Seguir con la mía</button>
 </div>
 
+<div class="hero-fila">
 <div class="hero" id="hero">
 <p class="kicker">Último ingreso</p>
 <p class="empty" id="heroEmpty">Esperando el primer escaneo del día…</p>
@@ -325,6 +332,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <span class="dot-status"><span class="dot-live"></span> En vivo</span>
 </div>
 <div id="bandasFeed"></div>
+</div>
 </div>
 
 <div class="manual">
