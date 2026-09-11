@@ -683,10 +683,22 @@ function juntarConElSitio(){
    nuevos++;
    return;
   }
-  /* Las fechas van en aaaa-mm-dd, asi que la mas grande es la mas adelante. */
-  if(fechaValida(b.v) && (!fechaValida(m.v) || b.v > m.v)){ m.v = b.v; corridos++; }
-  if(!m.plan) m.plan = b.plan;
-  if(!m.m) m.m = b.m;
+  /* Las fechas van en aaaa-mm-dd, asi que la mas grande es la mas adelante.
+     Cuando el sitio trae una fecha mas nueva, quiere decir que esta ficha
+     ya se puso al dia (renovacion, cambio de plan) del lado de socios.json
+     -- asi que ahi tambien se toman su plan y su monto, no solo la fecha.
+     Antes esto solo rellenaba un plan vacio y nunca corregia uno viejo: si
+     alguna vez quedo mal escrito en este equipo, se quedaba mal para
+     siempre aunque socios.json ya estuviera bien. Si la fecha de este
+     equipo sigue siendo la mas nueva (una renovacion hecha aca que todavia
+     no se le conto a Claude), se respeta el plan de este equipo, tal como
+     antes. */
+  if(fechaValida(b.v) && (!fechaValida(m.v) || b.v > m.v)){
+   m.v = b.v; m.plan = b.plan; m.m = b.m; corridos++;
+  }else{
+   if(!m.plan) m.plan = b.plan;
+   if(!m.m) m.m = b.m;
+  }
  });
  return { nuevos:nuevos, corridos:corridos };
 }
