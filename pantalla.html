@@ -845,7 +845,7 @@ function showHero(r){
      es el dato que de verdad les importa mes a mes. Si no hay fecha que
      mostrar (por ejemplo "Vence hoy"), igual se deja algo en vez de
      dejar el cuadro vacío. */
-  var ocultarDias = s && esTurno(s) && d.fechaTxt;
+  var ocultarDias = s && (esTurno(s) || esTresVeces(s)) && d.fechaTxt;
   vencEl.innerHTML = d.fechaTxt
    ? escapeHtml(d.fechaTxt) + (ocultarDias ? '' : '<span class="venc-dias">' + escapeHtml(d.diasTxt) + '</span>')
    : '<span class="venc-dias">' + escapeHtml(d.diasTxt) + '</span>';
