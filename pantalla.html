@@ -49,7 +49,8 @@ header.top h1 span{ color:var(--rojo); }
 .hero .kicker{ font-size:12px; font-weight:800; letter-spacing:.16em; color:var(--dorado); text-transform:uppercase; margin:0 0 12px; }
 .hero .name{ font-size:38px; font-weight:900; text-transform:uppercase; line-height:1.15; margin:0 0 8px; }
 .hero .time{ font-size:15px; color:var(--gris-soft); font-weight:600; }
-.hero .venc{ font-size:clamp(13px, 3.6vw, 34px); font-weight:800; margin-top:12px; padding:8px 14px; border-radius:999px; display:inline-block; white-space:nowrap; max-width:100%; }
+.hero .venc{ font-size:clamp(15px, 4.6vw, 22px); font-weight:800; margin-top:12px; padding:10px 16px; border-radius:20px; display:inline-block; white-space:nowrap; max-width:100%; }
+.hero .venc .venc-dias{ display:block; margin-top:6px; font-size:clamp(24px, 9vw, 42px); }
 .hero .venc.good{ color:#5CA85C; background:rgba(92,168,92,.12); }
 .hero .venc.warn{ color:var(--dorado); background:rgba(212,175,55,.12); }
 .hero .venc.danger{ color:#E85C5C; background:rgba(232,92,92,.12); }
@@ -162,6 +163,7 @@ header.top h1 span{ color:var(--rojo); }
  .hero .name{ font-size:24px; }
  .hero .fallo{ font-size:17px; }
  .hero .venc, .hero .turno{ font-size:20px; padding:7px 14px; }
+ .hero .venc .venc-dias{ font-size:28px; margin-top:4px; }
  .hero .plan{ font-size:17px; }
  .feed-head h2{ font-size:11px; }
  .banda-item{ padding:10px 12px; }
@@ -761,28 +763,41 @@ function veredictoDe(r){
  var s = buscarSocio(r.nombre, r.apellido);
  if(!s){
   var viejo = estadoVenc(r.venc);
+  var txt = viejo ? viejo.txt : "Revísalo en la planilla";
   return { v:"nadie", fallo:"No está en la lista de socios",
-           detalle: viejo ? viejo.txt : "Revísalo en la planilla",
+           detalle:txt, fechaTxt:"", diasTxt:txt,
            corto:"Sin ficha de socio", cls:"", plan:"" };
  }
  var dias = diasPara(s.v, s.plan);
  var vence = fechaCL(s.v);
  if(dias === null){
+  var sf = "Revísale la fecha en el mesón";
   return { v:"nadie", fallo:"Ficha sin fecha de vencimiento",
-           detalle:"Revísale la fecha en el mesón", corto:"Sin fecha", cls:"", plan:s.plan };
+           detalle:sf, fechaTxt:"", diasTxt:sf, corto:"Sin fecha", cls:"", plan:s.plan };
  }
  if(dias < 0){
+  var haceTxt = "hace " + Math.abs(dias) + (Math.abs(dias)===1?" día":" días");
   return { v:"bad", fallo:"Acceso denegado · membresía vencida",
-           detalle:"Venció el " + vence + " · hace " + Math.abs(dias) + (Math.abs(dias)===1?" día":" días"),
+           detalle:"Venció el " + vence + " · " + haceTxt,
+           fechaTxt:"Venció el " + vence, diasTxt:haceTxt,
            corto:null, cls:"danger", plan:s.plan };
  }
  if(dias <= 1){
+  if(dias === 0){
+   return { v:"warn", fallo:"Pasa, pero avísale",
+            detalle:"Vence hoy", fechaTxt:"", diasTxt:"Vence hoy",
+            corto:null, cls:"warn", plan:s.plan };
+  }
+  var quedanTxt1 = "quedan " + dias + (dias===1?" día":" días");
   return { v:"warn", fallo:"Pasa, pero avísale",
-           detalle: dias === 0 ? "Vence hoy" : "Vence el " + vence + " · quedan " + dias + (dias===1?" día":" días"),
+           detalle:"Vence el " + vence + " · " + quedanTxt1,
+           fechaTxt:"Vence el " + vence, diasTxt:quedanTxt1,
            corto:null, cls:"warn", plan:s.plan };
  }
+ var quedanTxt = "quedan " + dias + " días";
  return { v:"ok", fallo:"Acceso permitido",
-          detalle:"Vence el " + vence + " · quedan " + dias + " días",
+          detalle:"Vence el " + vence + " · " + quedanTxt,
+          fechaTxt:"Vence el " + vence, diasTxt:quedanTxt,
           corto:null, cls:"good", plan:s.plan };
 }
 
@@ -823,8 +838,12 @@ function showHero(r){
  falloEl.hidden = false; falloEl.textContent = d.fallo;
  nameEl.hidden = false;  nameEl.textContent = r.nombre + " " + r.apellido;
  timeEl.hidden = false;  timeEl.textContent = fmtTime(r.ts);
- if(d.detalle){ vencEl.hidden = false; vencEl.textContent = d.detalle; vencEl.className = "venc " + d.cls; }
- else { vencEl.hidden = true; }
+ if(d.detalle){
+  vencEl.hidden = false; vencEl.className = "venc " + d.cls;
+  vencEl.innerHTML = d.fechaTxt
+   ? escapeHtml(d.fechaTxt) + '<span class="venc-dias">' + escapeHtml(d.diasTxt) + '</span>'
+   : '<span class="venc-dias">' + escapeHtml(d.diasTxt) + '</span>';
+ } else { vencEl.hidden = true; }
  var nt = s ? notaTurno(s) : null;
  if(nt){
   turnoEl.hidden = false; turnoEl.textContent = nt.txt;
