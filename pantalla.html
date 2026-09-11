@@ -715,81 +715,27 @@ function diasPara(v, plan){
  return Math.round((f - h) / 86400000);
 }
 
-/* La lista que manda es la del mesón (control.html), que se guarda en este
-   mismo navegador. Si esta pantalla corre en otro aparato, o todavía no se
-   ha abierto el mesón acá, usa la lista publicada en el sitio. */
-var CLAVE_MESON = "wgym_control_v1";
-var lista = [], listaDeDonde = "sitio", crudoAnterior = false;
-
-/* Si este aparato ya tiene guardada la lista del mesón (porque acá también
-   se abrió control.html alguna vez, o porque esta misma pantalla ya venía
-   fusionando), pero SOCIOS trae una versión más nueva que la última que se
-   fusionó, se agregan los socios nuevos y se deja la fecha más adelantada
-   de las dos — sin pisar nada. Así esta pantalla deja de quedarse pegada
-   con una fecha vieja mientras control.html en otro equipo ya está al día:
-   antes esta pantalla nunca comparaba versión con nadie, por eso un socio
-   podía salir "vencido" acá y "vigente" allá aunque los dos leyeran la
-   misma fecha publicada. Si el aparato no tiene nada guardado todavía,
-   cargarLista() más abajo ya usa SOCIOS directo — no hace falta sembrar
-   nada aquí. */
-(function fusionarConElSitio(){
- var guardado = null;
- try{ guardado = JSON.parse(localStorage.getItem(CLAVE_MESON) || "null"); }catch(e){}
- if(!guardado || !Array.isArray(guardado.socios)) return;
- var versionVista = (typeof guardado.version === "number") ? guardado.version : 0;
- if(SOCIOS_VERSION <= versionVista) return;
- var mios = {};
- guardado.socios.forEach(function(s){ mios[sinTildes(s.n) + "|" + sinTildes(s.a)] = s; });
- SOCIOS.forEach(function(b, i){
-  var bv = isoDeSerial(b.fv);
-  var k = sinTildes(b.n) + "|" + sinTildes(b.a);
-  var m = mios[k];
-  if(!m){
-   var nuevo = { id:"p"+i+"_"+Date.now().toString(36), n:b.n, a:b.a, plan:b.plan, m:0, v:bv };
-   guardado.socios.push(nuevo);
-   mios[k] = nuevo;
-   return;
-  }
-  if(!m.v || bv > m.v) m.v = bv;
-  if(!m.plan) m.plan = b.plan;
- });
- guardado.version = SOCIOS_VERSION;
- try{ localStorage.setItem(CLAVE_MESON, JSON.stringify(guardado)); }catch(e){}
-})();
-
-/* Devuelve true si la lista cambió desde la última vez. */
-function cargarLista(){
- var crudo = null;
- try{ crudo = localStorage.getItem(CLAVE_MESON); }catch(e){}
- if(crudo === crudoAnterior && lista.length) return false;
- crudoAnterior = crudo;
- try{
-  var g = JSON.parse(crudo || "null");
-  if(g && Array.isArray(g.socios) && g.socios.length){
-   lista = g.socios.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:s.v }; });
-   listaDeDonde = "meson";
-   return true;
-  }
- }catch(e){}
- lista = SOCIOS.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:isoDeSerial(s.fv) }; });
- listaDeDonde = "sitio";
- return true;
-}
-cargarLista();
-/* Si agregas un socio en el mesón con esta pantalla abierta, se entera sola. */
-window.addEventListener("storage", function(ev){
- if(ev.key !== CLAVE_MESON) return;
- if(!cargarLista()) return;
- pintarOrigen();
- renderFeed(ultimasFilas);
- if(ultimasFilas.length) showHero(ultimasFilas[0]);
-});
+/* Esta pantalla corre siempre en un aparato aparte (la tablet de la
+   puerta), nunca en la misma compu donde se edita control.html — así que
+   nunca tiene un motivo real para guardar su propia copia de la lista en
+   este navegador. Antes lo hacía (fusionándose con "wgym_control_v1"), y
+   eso traía un problema serio: si alguna vez, por lo que sea, un socio
+   quedaba guardado ahí con un dato viejo (por ejemplo un plan mal puesto
+   hace tiempo), la fusión solo rellenaba lo que estuviera vacío y nunca
+   corregía lo que ya tenía algo escrito — así que un socio podía quedar
+   pegado para siempre con un plan viejo en ESTA pantalla, aunque el sitio
+   y el mesón ya estuvieran perfectos (por ejemplo, mostrando el contador
+   de "Turno" a alguien que en realidad es Full Mensual). Ahora esta
+   pantalla lee siempre, directo, la lista tal cual viene publicada en
+   SOCIOS — sin guardar ni fusionar nada — así nunca puede quedarse con un
+   dato colgado de una versión vieja. */
+var lista = SOCIOS.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:isoDeSerial(s.fv) }; });
+function cargarLista(){ return false; }
 
 function pintarOrigen(){
  var el = document.getElementById("origenLista");
  if(!el) return;
- el.textContent = (listaDeDonde === "meson" ? "Lista del mesón" : "Lista del sitio") +
-                  " · " + lista.length + " socios";
+ el.textContent = "Lista del sitio · " + lista.length + " socios";
 }
 
 /* Busca al socio por como venga escrito en el registro del QR. */
