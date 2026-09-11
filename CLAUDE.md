@@ -102,6 +102,34 @@ el usuario tiene que borrar la fila de más él mismo con el ícono de
 basurero de esa fila en `control.html` — no es algo que se arregle
 editando los archivos).
 
+### El contador "día X de Y" es un dato aparte — también hay que sincronizarlo
+
+`fv`/`plan`/`monto` no son los únicos datos que viven en dos aparatos:
+el contador de días (Turno, 3 Veces por Semana) se arma con `asistencia`
+(qué días marcó cada socio) y `ciclos` (desde cuándo le corre el mes),
+que se guardan solo en el `localStorage` de cada equipo — **nunca se
+sincronizan solos entre la compu y la tablet**, así que pueden mostrar
+números distintos aunque las fechas ya estén iguales en los dos.
+
+El export de "📋 Copiar lista" de `control.html` ya incluye `asistencia`
+y `ciclos` además de `socios`. Cuando el usuario mande ese JSON (o pida
+arreglar un contador que no coincide entre los dos aparatos):
+- Tomar `asistencia` y `ciclos` del JSON tal cual y regenerar
+  `ASISTENCIA_BASE`/`CICLOS_BASE` en `control.html` y `pantalla.html`
+  (mismo bloque, mismos nombres de variable) con esos objetos completos.
+- Subir `ASISTENCIA_VERSION` a un número mayor.
+- Es un agregado puro: `ASISTENCIA_BASE`/`CICLOS_BASE` solo rellenan lo
+  que a cada aparato le falte, nunca pisan ni borran un día o un ciclo
+  que ese equipo ya tenía anotado — así nunca hace bajar un contador que
+  ya iba bien en alguno de los dos.
+- Publicar junto con cualquier otro cambio de `socios.json`/`LISTA_BASE`/
+  `SOCIOS` de esa misma tanda.
+
+Si el usuario reclama que los contadores no coinciden y no mandó ese
+export todavía, pedírselo (apretar de nuevo "📋 Copiar lista" y pegar el
+resultado) — sin él no hay forma de saber los días reales que ya lleva
+marcados cada socio en el equipo que el usuario toma como el bueno.
+
 ## Rutinas de entrenamiento para clientes exclusivos (regla permanente)
 
 Cuando el usuario pida una app de entrenamiento personalizada para un
