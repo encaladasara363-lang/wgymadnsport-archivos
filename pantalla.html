@@ -590,14 +590,9 @@ function reglaDe(s){
   return { tope:DIAS_MES_3X, ini:inicioCalculado(s), fin:s.v, nombre:"3 por semana", cuando:"este mes",
            semana:{ ini:lun, fin:sumarDias(lun, 6), tope:DIAS_SEMANA } };
  }
- if(esSemanalPlan(s)){
-  if(!s || !s.v) return null;
-  var ini = inicioCalculado(s);
-  if(!ini) return null;
-  var p1 = ini.split("-"), p2 = s.v.split("-");
-  var tope = diasAbiertos(new Date(+p1[0], +p1[1]-1, +p1[2]), new Date(+p2[0], +p2[1]-1, +p2[2]));
-  return { tope:tope || 1, ini:ini, fin:s.v, nombre:"Semanal", cuando:"esta semana", semana:null };
- }
+ /* El Plan Semanal no lleva contador de dias: "Vence el... quedan X dias"
+    ya cuenta toda su historia, y mezclarlo con un "dia X de Y" aparte
+    confundia (parecian dos cuentas distintas). */
  return null;
 }
 function notaTurno(s){
