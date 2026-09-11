@@ -132,7 +132,23 @@ header.top h1 span{ color:var(--rojo); }
    puerta es táctil (pointer:coarse) y nunca entra acá, asi que queda
    exactamente como siempre. */
 @media (min-width:640px) and (pointer:fine){
- .wrap{ max-width:480px; }
+ .wrap{
+  max-width:760px;
+  display:grid;
+  grid-template-columns:1fr 260px;
+  grid-template-areas:
+   "notice notice"
+   "hero bandas"
+   "ihead bandas"
+   "ifeed bandas";
+  gap:0 16px;
+  align-items:start;
+ }
+ #setupNotice{ grid-area:notice; }
+ .hero{ grid-area:hero; }
+ #bandasSection{ grid-area:bandas; }
+ #ingresosHead{ grid-area:ihead; }
+ #feed{ grid-area:ifeed; }
  header.top h1{ font-size:18px; }
  .hero{ padding:22px 18px; }
  .hero .name{ font-size:24px; }
@@ -175,13 +191,15 @@ Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te 
 <p class="plan" id="heroPlan" hidden></p>
 </div>
 
+<div id="bandasSection">
 <div class="feed-head">
 <h2>Bandas pedidas</h2>
 <span class="dot-status"><span class="dot-live"></span> En vivo</span>
 </div>
 <div id="bandasFeed"></div>
+</div>
 
-<div class="feed-head">
+<div class="feed-head" id="ingresosHead">
 <h2>Ingresos recientes</h2>
 <span class="dot-status"><span class="dot-live"></span> En vivo · <span id="origenLista">—</span></span>
 </div>
