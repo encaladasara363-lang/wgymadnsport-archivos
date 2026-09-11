@@ -542,6 +542,37 @@ try{
   localStorage.setItem("wgym_ciclos_reparado_v1", "1");
  }
 }catch(e){}
+/* Traer los dias marcados y los ciclos que se exportaron con "Copiar
+   lista" en control.html la última vez que se publicó. Es un agregado,
+   nunca un reemplazo: solo suma días de asistencia que faltaban acá y
+   completa el ciclo de un socio que esta pantalla todavía no tiene
+   guardado -- así el contador "día X de Y" no le queda atrás a esta
+   tablet frente al mesón, sin arriesgar lo que ya tenía anotado. */
+const ASISTENCIA_VERSION = 1;
+const ASISTENCIA_BASE = {};
+const CICLOS_BASE = {};
+(function(){
+ var vistaKey = "wgym_asistencia_version_vista";
+ var vista = 0;
+ try{ vista = Number(localStorage.getItem(vistaKey)) || 0; }catch(e){}
+ if(ASISTENCIA_VERSION <= vista) return;
+ var cambio = false;
+ for(var llaveA in ASISTENCIA_BASE){
+  if(!Object.prototype.hasOwnProperty.call(ASISTENCIA_BASE, llaveA)) continue;
+  if(!asistencia[llaveA]) asistencia[llaveA] = {};
+  var dias = ASISTENCIA_BASE[llaveA];
+  for(var dia in dias){
+   if(!Object.prototype.hasOwnProperty.call(dias, dia)) continue;
+   if(!asistencia[llaveA][dia]){ asistencia[llaveA][dia] = 1; cambio = true; }
+  }
+ }
+ for(var llaveC in CICLOS_BASE){
+  if(!Object.prototype.hasOwnProperty.call(CICLOS_BASE, llaveC)) continue;
+  if(!ciclos[llaveC]){ ciclos[llaveC] = CICLOS_BASE[llaveC]; cambio = true; }
+ }
+ if(cambio){ guardarAsistencia(); guardarCiclos(); }
+ try{ localStorage.setItem(vistaKey, String(ASISTENCIA_VERSION)); }catch(e){}
+})();
 function llaveSocio(s){ return (s.n + "|" + s.a).toUpperCase(); }
 function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
 function esTresVeces(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
