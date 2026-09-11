@@ -1045,7 +1045,7 @@ function notaTurno(s){
  if(n === c.tope) return { pasado:true, n:n,
   txt:"Este es su día " + c.tope + " de " + c.tope + " de " + c.cuando + cola };
  return { pasado:false, n:n,
-  txt:c.nombre + " · día " + (n || 0) + " de " + c.tope + " " + c.cuando + cola };
+  txt:"día " + (n || 0) + " de " + c.tope + " " + c.cuando + cola };
 }
 
 /* ── que la pantalla del mesón no se apague sola ──────────────────────
