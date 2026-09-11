@@ -811,14 +811,6 @@
    "fv": 46289
   },
   {
-   "n": "MARIA",
-   "a": "JOSE HERNANDEZ",
-   "rut": "Sin Rut",
-   "plan": "Tres Veces a La Semana",
-   "monto": 28000,
-   "fv": 46295
-  },
-  {
    "n": "CAMILA",
    "a": "JUICA",
    "rut": "Sin Rut",
@@ -937,14 +929,6 @@
    "plan": "Mensual Tercera Edad",
    "monto": 23000,
    "fv": 46289
-  },
-  {
-   "n": "ANA",
-   "a": "MARIA SANABRIA",
-   "rut": "Sin Rut",
-   "plan": "Tres Veces a La Semana",
-   "monto": 28000,
-   "fv": 46295
   },
   {
    "n": "CONSTANZA",
