@@ -21,8 +21,11 @@ exporta el botón "Pasar la lista" de `control.html`):
 3. Mantener el archivo ordenado alfabéticamente por apellido y sin
    duplicados.
 4. Actualizar el campo `"actualizado"` con la fecha del día.
-5. **Actualizar también `LISTA_BASE` en `control.html`** (ver sección de
-   abajo) para que el mesón y la pantalla de la puerta se enteren solos.
+5. **Actualizar también `LISTA_BASE` en `control.html` Y `SOCIOS` en
+   `pantalla.html`** (ver sección de abajo) — el usuario trabaja con LOS
+   DOS aparatos (la compu de recepción con `control.html` y la tablet de
+   la puerta con `pantalla.html`), así que TODO cambio de socios.json va
+   siempre en los tres archivos juntos, nunca en uno solo.
 6. **Publicar el cambio directamente en `main`** (además de guardarlo en
    cualquier rama de trabajo) para que quede reflejado en el link en vivo
    de arriba — el usuario espera que sus socios tengan acceso inmediato a
@@ -31,44 +34,73 @@ exporta el botón "Pasar la lista" de `control.html`):
 
 ### `control.html` y `pantalla.html` — cómo se enteran de los cambios
 
-`pantalla.html` (la pantalla de acceso en la puerta) **no lee
-`socios.json` directamente**: lee el `localStorage` (`wgym_control_v1`)
-que llena `control.html` en ese mismo computador — la "lista del mesón".
-Si esa lista local tiene aunque sea un socio guardado, `pantalla.html`
-la usa SIEMPRE y nunca mira `socios.json` por su cuenta.
+La compu de recepción (`control.html`) y la tablet de la puerta
+(`pantalla.html`) son DOS APARATOS FÍSICOS DISTINTOS, cada uno con su
+propio navegador y su propio `localStorage` — nunca comparten
+almacenamiento entre sí aunque abran la misma página. Por eso ningún
+mecanismo del lado del cliente puede "avisarle" a uno lo que pasó en el
+otro: la única forma de que los dos aparatos vean lo mismo es que cada
+uno traiga su propia copia embebida y actualizada de la planilla, para
+que se sincronice sola contra lo que está publicado en el sitio.
 
-Por eso `control.html` trae embebida su propia copia de la planilla,
-`const LISTA_BASE = [...]`, con un número de versión `LISTA_VERSION`
-justo arriba. Cada vez que se abre `control.html` en un equipo, compara
-esa versión con la última que vio (`versionVista`, guardada en ese mismo
-`localStorage`): si `LISTA_BASE` es más nueva, fusiona sola los cambios
-con la lista del mesón (agrega socios nuevos, deja la fecha más
-adelantada de las dos) **sin borrar nada de lo que se cargó a mano en ese
-equipo** — y avisa en pantalla cuántos socios agregó o actualizó.
+- `control.html` trae `const LISTA_BASE = [...]` + `const LISTA_VERSION`.
+  Al abrirlo, compara `LISTA_VERSION` con la última que vio
+  (`versionVista`, guardada en el `localStorage` de ESE equipo): si es
+  más nueva, fusiona sola los cambios con la lista del mesón de esa
+  compu (agrega socios nuevos, deja la fecha más adelantada de las dos)
+  **sin borrar nada de lo que se cargó a mano ahí** — y avisa en pantalla
+  cuántos socios agregó o actualizó.
+- `pantalla.html` trae, por separado, `const SOCIOS = [...]` + `const
+  SOCIOS_VERSION`, con el mismo mecanismo de fusión — independiente del
+  de `control.html`, porque corre en otro aparato con otro
+  `localStorage`.
 
 **Por eso, cada vez que se edite `socios.json` (alta, renovación, cambio
-de plan), hay que regenerar `LISTA_BASE` en `control.html` con los mismos
-datos y subir `LISTA_VERSION`, y publicar ambos archivos juntos en
-`main`.** Sin este paso, el mesón y la puerta se quedan con la foto vieja
-y el socio nuevo aparece "Sin ficha de socio" o "No está en la lista de
-socios" aunque `socios.json` esté perfecto.
+de plan o de fecha), hay que regenerar LAS DOS copias — `LISTA_BASE` en
+`control.html` y `SOCIOS` en `pantalla.html` — con los mismos datos,
+subir `LISTA_VERSION` y `SOCIOS_VERSION`, y publicar los tres archivos
+juntos en `main`.** Regenerar solo una de las dos deja al otro aparato
+con la foto vieja: el socio nuevo o renovado aparece "Sin ficha de
+socio" o "No está en la lista de socios" en ESE aparato, aunque
+`socios.json` y el otro archivo estén perfectos.
 
-Cómo regenerar `LISTA_BASE`:
-- Recorrer `socios.json` en el mismo orden y armar cada línea como
-  `{n:"...",a:"...",plan:"...",m:MONTO,v:"AAAA-MM-DD"}` (sin `rut`:
-  `control.html` no maneja RUT). El campo `v` es la fecha ISO que sale de
-  convertir el `fv` (serial tipo Excel) — no el serial mismo.
-- Reemplazar todo el contenido entre `const LISTA_BASE = [` y `];`.
-- Subir `LISTA_VERSION` a un número mayor (formato `AAAAMMDDNN`, ver el
+Cómo regenerar cada copia:
+- `LISTA_BASE` (control.html): recorrer `socios.json` en el mismo orden
+  y armar cada línea como `{n:"...",a:"...",plan:"...",m:MONTO,v:"AAAA-MM-DD"}`
+  (sin `rut`: `control.html` no maneja RUT). El campo `v` es la fecha ISO
+  que sale de convertir el `fv` (serial tipo Excel) — no el serial mismo.
+  Reemplazar todo el contenido entre `const LISTA_BASE = [` y `];`, y
+  subir `LISTA_VERSION` a un número mayor (formato `AAAAMMDDNN`, ver el
   valor actual como ejemplo).
-- Validar que el array quedó bien formado (por ejemplo cargándolo con
-  Node: `eval()` del fragmento y contar cuántos socios trajo) antes de
+- `SOCIOS` (pantalla.html): mismo recorrido, pero cada línea como
+  `{n:"...",a:"...",plan:"...",fv:SERIAL}` (con el `fv` serial tal cual,
+  no la fecha ISO — `pantalla.html` convierte el serial internamente).
+  Reemplazar el contenido entre `const SOCIOS = [` y `];`, y subir
+  `SOCIOS_VERSION` al mismo número que `LISTA_VERSION` para no
+  confundirse de cuál va con cuál.
+- Validar que los dos arrays quedaron bien formados (por ejemplo
+  cargándolos con Node: `eval()` del fragmento y contar cuántos socios
+  trajo cada uno, comparando contra el total de `socios.json`) antes de
   publicar — un JSON/JS mal cerrado rompe toda la página para todos los
-  que abran `control.html`.
+  que abran ese archivo.
 
 Con esto, la próxima vez que el dueño abra o refresque `control.html` en
-el equipo de la recepción, se sincroniza solo — no hace falta pedirle que
-cargue cada socio a mano, ni tocar `pantalla.html`.
+la compu Y `pantalla.html` en la tablet, cada uno se sincroniza solo con
+lo publicado — no hace falta pedirle que cargue cada socio a mano en
+ninguno de los dos aparatos.
+
+Si el usuario manda el JSON que exporta el botón "📋 Copiar lista" de
+`control.html` (la lista en vivo de la compu, con las fechas reales que
+haya tocado directo ahí), tratarlo como la fuente de verdad para esa
+fusión: comparar contra `socios.json` por nombre+apellido, aplicar a
+`socios.json` cualquier `fv`/`plan`/`monto` que haya cambiado, y avisar
+si aparece algún socio repetido (mismo nombre) en el export — eso es un
+doble registro hecho sin querer en el mesón, no un socio nuevo: no
+agregarlo solo, preguntar cuál de las dos fichas hay que borrar (esa
+duplicación vive únicamente en el `localStorage` de esa compu, así que
+el usuario tiene que borrar la fila de más él mismo con el ícono de
+basurero de esa fila en `control.html` — no es algo que se arregle
+editando los archivos).
 
 ## Rutinas de entrenamiento para clientes exclusivos (regla permanente)
 
