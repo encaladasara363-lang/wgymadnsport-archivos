@@ -941,8 +941,15 @@ setInterval(pollBandas, 4000);
    socios nuevos), se queda pegada con la copia vieja hasta que alguien la
    refresque a mano — y ahí es cuando un socio sale "vencido" acá aunque en
    control.html ya esté al día. Para que nunca más se desincronicen, se
-   recarga sola cada 10 minutos: como es solo de lectura (nadie escribe
-   fichas en esta pantalla), recargarla no pierde nada. */
-setInterval(function(){ location.reload(); }, 10 * 60 * 1000);
+   recarga sola cada 5 minutos. Un location.reload() común a veces vuelve
+   a mostrar la copia guardada en la memoria del navegador en vez de ir a
+   buscar la de verdad al sitio — por eso se navega a esta misma página
+   con un numero distinto pegado al final (?t=...): eso obliga al
+   navegador a pedirla de nuevo por internet SIEMPRE. Como esta pantalla
+   es solo de lectura (nadie escribe fichas acá), recargarla no pierde
+   nada. */
+setInterval(function(){
+ location.href = location.pathname + "?t=" + Date.now();
+}, 5 * 60 * 1000);
 })();
 </script>
