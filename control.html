@@ -131,6 +131,24 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; flex:0 0 auto; }
 .feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:26px 0; }
 
+.banda-item{
+ display:flex; align-items:center; justify-content:space-between; gap:12px;
+ background:rgba(212,175,55,.1); border:1.5px solid var(--dorado); border-radius:12px;
+ padding:13px 16px; margin-bottom:8px;
+}
+.banda-item .binfo{ min-width:0; display:flex; align-items:center; gap:9px; }
+.banda-item .bdot{ width:12px; height:12px; border-radius:50%; flex-shrink:0; border:1px solid rgba(255,255,255,.25); }
+.banda-item .btxt{ min-width:0; }
+.banda-item .bname{ font-weight:800; font-size:15px; letter-spacing:.01em; }
+.banda-item .bcolor{ font-size:12px; color:var(--gris-soft); font-weight:700; text-transform:uppercase; letter-spacing:.03em; }
+.banda-item .btime{ font-size:12px; color:var(--gris-soft); font-weight:600; margin-top:2px; }
+.banda-item button{
+ flex-shrink:0; background:var(--dorado); color:var(--negro); border:none; border-radius:9px;
+ padding:10px 14px; font-size:12px; font-weight:900; letter-spacing:.04em; text-transform:uppercase;
+ font-family:inherit; cursor:pointer;
+}
+.banda-item button:active{ opacity:.8; }
+
 /* ── Indicadores ────────────────────────────────────────────────────── */
 .kpis{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:26px 0 18px; }
 .kpi{ background:var(--card); border:1px solid var(--line); border-radius:12px;
@@ -299,6 +317,14 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <div class="renovar" hidden id="heroAcc">
 <button class="btn btn-oro" id="heroEditar">Renovar / editar ficha</button>
 </div>
+</div>
+
+<div id="bandasSection">
+<div class="feed-head">
+<h2>Bandas pedidas</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="bandasFeed"></div>
 </div>
 
 <div class="manual">
@@ -1884,6 +1910,65 @@ setInterval(reloj, 20000);
 pintar();
 poll();
 setInterval(poll, 4000);
+
+/* ═══ Bandas elásticas prestadas ══════════════════════════════════════
+   Mismo panel que ya se ve en pantalla.html (la puerta), para que en el
+   mesón también se vea quién tiene una banda afuera sin tener que ir a
+   mirar la otra pantalla. */
+function fmtMinBanda(ts){
+ var min = Math.max(0, Math.round((Date.now() - ts) / 60000));
+ return min + " min";
+}
+var COLOR_DOT_BANDA = { Negra:"#2B2B2B", Verde:"#5CA85C", Morada:"#9B59D0", Roja:"#E30613", Amarilla:"#E8C547" };
+function renderBandas(activos){
+ var el = document.getElementById("bandasFeed");
+ if(!el) return;
+ if(!activos || activos.length===0){
+  el.innerHTML = '<div class="feed-empty">Nadie ha pedido banda por ahora.</div>';
+  return;
+ }
+ el.innerHTML = activos.map(function(b){
+  var color = b.banda || "";
+  var dot = COLOR_DOT_BANDA[color] || "#8C8C8C";
+  return '<div class="banda-item"><span class="binfo"><span class="bdot" style="background:'+dot+'"></span>'+
+   '<span class="btxt"><span class="bname">'+escapeHtml(b.nombre)+' '+escapeHtml(b.apellido)+'</span><br>'+
+   '<span class="bcolor">'+escapeHtml(color)+'</span> · <span class="btime">Hace '+fmtMinBanda(b.retiro)+'</span></span></span>'+
+   '<button type="button" data-id="'+escapeHtml(b.id)+'">Devolver</button></div>';
+ }).join('');
+}
+var nPollBandas = 0;
+function pollBandas(){
+ if(!CHECKIN_URL) return;
+ nPollBandas++;
+ var cb = "wgymBandaCb" + nPollBandas + "_" + Date.now();
+ var script = document.createElement("script");
+ window[cb] = function(data){
+  renderBandas(data && data.activos);
+  delete window[cb];
+  script.remove();
+ };
+ script.src = CHECKIN_URL + "?action=listarBandas&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+var bandasFeedEl = document.getElementById("bandasFeed");
+if(bandasFeedEl) bandasFeedEl.addEventListener("click", function(ev){
+ var btn = ev.target.closest("button[data-id]");
+ if(!btn) return;
+ btn.disabled = true;
+ var cb = "wgymDevBanda_" + Date.now();
+ var script = document.createElement("script");
+ window[cb] = function(){
+  delete window[cb];
+  script.remove();
+  pollBandas();
+ };
+ script.src = CHECKIN_URL + "?action=devolverBanda&id=" + encodeURIComponent(btn.getAttribute("data-id")) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
+ document.body.appendChild(script);
+});
+pollBandas();
+setInterval(pollBandas, 4000);
 
 /* ═══ Pasar la lista de este equipo a los celulares ═════════════════════
    Las renovaciones hechas acá quedan guardadas en este mismo equipo. Este
