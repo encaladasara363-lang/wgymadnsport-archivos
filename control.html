@@ -821,6 +821,37 @@ try{
   localStorage.setItem("wgym_ciclos_reparado_v1", "1");
  }
 }catch(e){}
+/* Traer los dias marcados y los ciclos que este mismo equipo exportó con
+   "Copiar lista" la ultima vez que se publicó. Es un agregado, nunca un
+   reemplazo: solo suma dias de asistencia que faltaban acá y completa el
+   ciclo de un socio que este equipo todavía no tiene guardado -- así el
+   contador "día X de Y" no le queda atrás a un equipo recién abierto o
+   con la memoria borrada, sin arriesgar lo que ya tenía anotado. */
+const ASISTENCIA_VERSION = 1;
+const ASISTENCIA_BASE = {};
+const CICLOS_BASE = {};
+(function(){
+ var vistaKey = "wgym_asistencia_version_vista";
+ var vista = 0;
+ try{ vista = Number(localStorage.getItem(vistaKey)) || 0; }catch(e){}
+ if(ASISTENCIA_VERSION <= vista) return;
+ var cambio = false;
+ for(var llaveA in ASISTENCIA_BASE){
+  if(!Object.prototype.hasOwnProperty.call(ASISTENCIA_BASE, llaveA)) continue;
+  if(!asistencia[llaveA]) asistencia[llaveA] = {};
+  var dias = ASISTENCIA_BASE[llaveA];
+  for(var dia in dias){
+   if(!Object.prototype.hasOwnProperty.call(dias, dia)) continue;
+   if(!asistencia[llaveA][dia]){ asistencia[llaveA][dia] = 1; cambio = true; }
+  }
+ }
+ for(var llaveC in CICLOS_BASE){
+  if(!Object.prototype.hasOwnProperty.call(CICLOS_BASE, llaveC)) continue;
+  if(!ciclos[llaveC]){ ciclos[llaveC] = CICLOS_BASE[llaveC]; cambio = true; }
+ }
+ if(cambio){ guardarAsistencia(); guardarCiclos(); }
+ try{ localStorage.setItem(vistaKey, String(ASISTENCIA_VERSION)); }catch(e){}
+})();
 function planCuentaDias(s){ return esTurno(s) || esSemanal(s) || esSemanalPlan(s); }
 /* El criterio de antes: el dia siguiente al de un mes atras del vencimiento.
    Al Plan Semanal no le corre un mes sino una semana, asi que su ciclo por
@@ -1866,7 +1897,12 @@ setInterval(poll, 4000);
   var h = new Date();
   var iso = h.getFullYear() + "-" + String(h.getMonth()+1).padStart(2,"0") +
             "-" + String(h.getDate()).padStart(2,"0");
-  var txt = JSON.stringify({ actualizado:iso, socios:lista }, null, 1);
+  /* Los dias marcados (asistencia) y desde cuando corre el ciclo de cada
+     socio (ciclos) van aparte: son los datos que arman el contador
+     "dia X de Y" y este equipo es el que manda para copiarlos tal cual a
+     la tablet y a cualquier otro que se abra. */
+  var txt = JSON.stringify({ actualizado:iso, socios:lista,
+   asistencia:asistencia, ciclos:ciclos }, null, 1);
   function ok(){
    aviso.textContent = "¡Copiado! " + lista.length + " socios. Pégamelo por chat.";
    aviso.style.color = "#43C48D";
