@@ -280,6 +280,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 .ficha .aviso{ grid-column:1 / -1; color:var(--rojo-claro); font-size:13.5px; margin:0; }
 .ficha .pie{ display:flex; gap:9px; justify-content:flex-end; padding:0 20px 20px;
  flex-wrap:wrap; }
+.ficha .pie #fCopiar{ margin-right:auto; }
 
 .nota{ margin-top:26px; padding-top:16px; border-top:1px solid var(--line);
  font-size:12.5px; color:var(--gris-soft); line-height:1.65; }
@@ -1597,7 +1598,8 @@ function abrirFicha(s){
   '<button type="button" data-mas="15">+15 días</button>'+
   '<button type="button" id="fMas7" data-mas="7">+7 días</button>'+
   '</div><p class="aviso" id="fAviso"></p></div>'+
-  '<div class="pie"><button class="btn btn-linea" id="fCancelar">Cancelar</button>'+
+  '<div class="pie"><button class="btn btn-linea" id="fCopiar" type="button">📋 Copiar</button>'+
+  '<button class="btn btn-linea" id="fCancelar">Cancelar</button>'+
   '<button class="btn btn-rojo" id="fGuardar">Guardar</button></div></div>';
  document.body.appendChild(velo);
 
@@ -1785,6 +1787,35 @@ function abrirFicha(s){
   cerrar(); guardar(); pintar();
   if(socioEnHero && !nuevo && socioEnHero.id === s.id) mostrarHero(s.n+" "+s.a, null, s);
  }
+ /* Copia solo esta ficha (no la lista completa) en el mismo formato que
+    entiende socios.json, para que sea fácil pegársela a Claude cuando
+    renueva a una sola persona en vez de a todas. */
+ function aSerialFicha(iso){
+  var p = String(iso || "").trim().split("-");
+  if(p.length !== 3) return 0;
+  var d = Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  return Math.round((d - Date.UTC(1899, 11, 30)) / 86400000);
+ }
+ velo.querySelector("#fCopiar").addEventListener("click", function(){
+  var p = partirNombre(iN.value);
+  var ficha = { n:p.n || d.n, a:p.a || d.a, rut:(s && s.rut) || "Sin Rut",
+   plan:sel.value, monto:soloDigitos(iM.value), fv:aSerialFicha(iV.value) };
+  var txt = JSON.stringify(ficha, null, 1);
+  var aviso = velo.querySelector("#fAviso");
+  function ok(){ aviso.style.color = "#43C48D"; aviso.textContent = "¡Copiado! Pégaselo a Claude por chat."; }
+  function aMano(){
+   aviso.style.color = "";
+   aviso.textContent = "No pude copiarlo solo. Apreta Ctrl + C ahora.";
+   var ta = document.createElement("textarea");
+   ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+   document.body.appendChild(ta); ta.select();
+   setTimeout(function(){ ta.remove(); }, 15000);
+  }
+  try{
+   if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok, aMano); }
+   else{ aMano(); }
+  }catch(e){ aMano(); }
+ });
  velo.querySelector("#fCancelar").addEventListener("click", cerrar);
  velo.querySelector("#fGuardar").addEventListener("click", aceptar);
  velo.addEventListener("mousedown", function(ev){ if(ev.target === velo) cerrar(); });
