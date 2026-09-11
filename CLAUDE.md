@@ -128,6 +128,26 @@ Esta es la forma preferida de avisar una renovación de UNA persona —
 más simple que pegar la lista completa de "Pasar la lista" para un
 solo cambio.
 
+### Borrar solo de la planilla a quien lleve 3 meses o más vencido (regla permanente)
+
+Cada vez que se edite `socios.json` por cualquier motivo (renovación,
+socio nuevo, corrección), aprovechar esa misma pasada para revisar la
+fecha de vencimiento (`fv`) de TODOS los socios: a cualquiera cuya
+fecha ya haya pasado hace **3 meses o más** contados desde hoy, sacarlo
+de `socios.json` directamente, sin preguntar antes.
+
+- El corte es por meses calendario, no por 90 días fijos: si hoy es
+  11 de septiembre, el corte es el 11 de junio — vencido antes de esa
+  fecha se borra, vencido después se queda (aunque ya esté vencido).
+- Es SOLO borrar, no una alerta ni un archivo aparte: la persona sale
+  de `socios.json`, de `LISTA_BASE` y de `SOCIOS` en la misma tanda,
+  como cualquier otro cambio de la planilla.
+- Siempre avisar en la confirmación quién se borró por esta regla (
+  nombre, apellido y hace cuánto estaba vencido) — nunca borrar en
+  silencio, para que la usuaria pueda decir "no, a ese no, todavía me
+  va a pagar" si corresponde.
+- Si nadie cumple los 3 meses, no hace falta decir nada al respecto.
+
 ### El contador "día X de Y" es un dato aparte — también hay que sincronizarlo
 
 `fv`/`plan`/`monto` no son los únicos datos que viven en dos aparatos:
