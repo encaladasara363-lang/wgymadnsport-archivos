@@ -126,6 +126,31 @@ header.top h1 span{ color:var(--rojo); }
  padding:16px 18px; font-size:13px; color:var(--gris); line-height:1.6; margin-bottom:24px;
 }
 .setup-notice b{ color:var(--dorado); }
+
+/* Pantalla en el computador (mouse, pantalla ancha): se ve la misma
+   página pero más grande, para leerla de lejos en el mesón. La tablet
+   de la puerta es táctil (pointer:coarse) y nunca entra acá, asi que
+   queda exactamente como siempre. */
+@media (min-width:640px) and (pointer:fine){
+ .wrap{ max-width:1100px; }
+ header.top h1{ font-size:30px; }
+ .hero{ padding:48px 40px; }
+ .hero .name{ font-size:52px; }
+ .hero .fallo{ font-size:34px; }
+ .hero .venc, .hero .turno{ font-size:42px; padding:12px 26px; }
+ .hero .plan{ font-size:36px; }
+ .feed-head h2{ font-size:16px; }
+ .banda-item{ padding:20px 24px; }
+ .banda-item .bdot{ width:16px; height:16px; }
+ .banda-item .bname{ font-size:20px; }
+ .banda-item .bcolor{ font-size:15px; }
+ .banda-item .btime{ font-size:14px; }
+ .banda-item button{ font-size:14px; padding:13px 18px; }
+ .feed-item{ padding:18px 20px; }
+ .feed-item .fname{ font-size:19px; }
+ .feed-item .fvenc, .feed-item .fturno, .feed-item .fveces{ font-size:14px; }
+ .feed-item .ftime{ font-size:14px; }
+}
 </style>
 
 <header class="top">
