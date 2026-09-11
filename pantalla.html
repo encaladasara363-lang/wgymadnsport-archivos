@@ -57,8 +57,8 @@ header.top h1 span{ color:var(--rojo); }
 .hero .fallo{ font-size:26px; font-weight:900; text-transform:uppercase; letter-spacing:.02em;
  line-height:1.1; margin:0 0 10px; text-wrap:balance; }
 .hero .plan{ font-size:28px; color:var(--dorado); font-weight:700; margin:12px 0 0; }
-.hero .turno{ margin-top:10px; font-size:34px; font-weight:800; letter-spacing:.02em;
- display:inline-block; padding:10px 22px; border-radius:999px; border:1px solid; }
+.hero .turno{ margin-top:10px; font-size:clamp(12px, 3.4vw, 34px); font-weight:800; letter-spacing:.02em;
+ display:inline-block; padding:8px 14px; border-radius:999px; border:1px solid; white-space:nowrap; max-width:100%; }
 .hero .turno[data-t="ok"]{ color:#5CA85C; border-color:#5CA85C; background:rgba(92,168,92,.12); }
 .hero .turno[data-t="tope"]{ color:var(--dorado); border-color:var(--dorado); background:rgba(212,175,55,.14); }
 .hero[data-v="ok"]{ border-color:#5CA85C; }
