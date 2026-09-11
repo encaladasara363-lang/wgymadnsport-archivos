@@ -10,7 +10,8 @@ Sitio en vivo: https://encaladasara363-lang.github.io/wgymadnsport-archivos/
 
 Siempre que el usuario pida **renovar, actualizar o cambiar la fecha de
 vencimiento** de uno o varios socios (por ejemplo, pegando el JSON que
-exporta el botón "Pasar la lista" de `control.html`):
+exporta el botón "Pasar la lista" de `control.html`, o el que copia el
+botón "📋 Copiar" de la ficha de un solo socio — ver más abajo):
 
 1. Editar `socios.json` fusionando los datos nuevos (nombre, apellido,
    plan, monto, fecha de vencimiento `fv`) con los existentes.
@@ -101,6 +102,31 @@ duplicación vive únicamente en el `localStorage` de esa compu, así que
 el usuario tiene que borrar la fila de más él mismo con el ícono de
 basurero de esa fila en `control.html` — no es algo que se arregle
 editando los archivos).
+
+### Renovar UN solo socio: el botón "📋 Copiar" de la ficha (regla permanente)
+
+`control.html` tiene, dentro del cuadro "Editar ficha" de cada socio
+(el que se abre con "Renovar / editar ficha"), un botón **"📋 Copiar"**
+que copia SOLO esa ficha, ya en el formato exacto de `socios.json`:
+```json
+{ "n": "...", "a": "...", "rut": "...", "plan": "...", "monto": ..., "fv": ... }
+```
+Cuando el usuario pegue uno de estos objetos sueltos (no una lista con
+`"socios": [...]`, sino un solo objeto `{n, a, rut, plan, monto, fv}`),
+es exactamente lo mismo que pedir renovar/actualizar a esa persona: no
+hace falta preguntarle la fecha ni nada más, el objeto ya trae todo
+listo. Seguir el mismo proceso de siempre —
+1. Buscar a ese socio en `socios.json` por nombre + apellido y
+   actualizar `plan`/`monto`/`fv` con lo que llegó (conservando el RUT
+   real ya cargado si el que llega es genérico o "Sin Rut").
+2. Regenerar `LISTA_BASE` (control.html) y `SOCIOS` (pantalla.html),
+   subir versión, validar y publicar en `main`, igual que con
+   cualquier otro cambio de `socios.json`.
+3. Confirmarle a la usuaria el cambio (nombre, fecha nueva).
+
+Esta es la forma preferida de avisar una renovación de UNA persona —
+más simple que pegar la lista completa de "Pasar la lista" para un
+solo cambio.
 
 ### El contador "día X de Y" es un dato aparte — también hay que sincronizarlo
 
