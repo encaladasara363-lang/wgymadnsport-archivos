@@ -148,6 +148,15 @@ de `socios.json` directamente, sin preguntar antes.
   va a pagar" si corresponde.
 - Si nadie cumple los 3 meses, no hace falta decir nada al respecto.
 
+### Avisos por Gmail sobre vencidos (regla permanente)
+
+Cuando el aviso al dueño del gimnasio sea por Gmail (correo) sobre
+socios vencidos, el correo lleva **solo** a los que vencieron **en la
+última semana** (los 7 días corridos hasta hoy) — nadie vencido de
+antes, nadie por vencer todavía. Se listan **ordenados alfabéticamente
+por apellido**, sin agregar otros datos ni socios que no cumplan ese
+corte.
+
 ### El contador "día X de Y" es un dato aparte — también hay que sincronizarlo
 
 `fv`/`plan`/`monto` no son los únicos datos que viven en dos aparatos:
