@@ -683,7 +683,7 @@ function notaTurno(s){
  var cola = sem === null ? "" : " \u00b7 " + sem + " esta semana";
  if(n > c.tope) return { pasado:true, n:n, txt:"Ya us\u00f3 sus " + c.tope + " d\u00edas de " + c.cuando + " \u00b7 lleva " + n + cola };
  if(n === c.tope) return { pasado:true, n:n, txt:"Este es su d\u00eda " + c.tope + " de " + c.tope + " de " + c.cuando + cola };
- return { pasado:false, n:n, txt:c.nombre + " \u00b7 d\u00eda " + (n || 0) + " de " + c.tope + " " + c.cuando + cola };
+ return { pasado:false, n:n, txt:"d\u00eda " + (n || 0) + " de " + c.tope + " " + c.cuando + cola };
 }
 
 function isoDeSerial(fv){
