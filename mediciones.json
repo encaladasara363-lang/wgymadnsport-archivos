@@ -33,6 +33,21 @@
    ]
   },
   {
+   "n": "KEVIN",
+   "a": "BONILLA",
+   "sexo": "M",
+   "estatura": 170,
+   "registros": [
+    {
+     "fecha": "2026-09-12",
+     "edad": 28,
+     "peso": 67.6,
+     "grasa": 11.5,
+     "imc": 23.4
+    }
+   ]
+  },
+  {
    "n": "CELINDA",
    "a": "BARJA",
    "sexo": "F",
