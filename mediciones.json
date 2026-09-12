@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-09",
+ "actualizado": "2026-09-12",
  "nota": "Mediciones de composicion corporal (Omron HBF-306). Solo aparecen los socios que se miden - los demas no necesitan estar aca. La lee tarjeta.html para mostrar la evolucion en la tarjeta virtual de cada socio medido.",
  "socios": [
   {
@@ -209,6 +209,21 @@
      "peso": 61.8,
      "grasa": 29.9,
      "imc": 24.8
+    }
+   ]
+  },
+  {
+   "n": "DANIELA",
+   "a": "SALAZAR",
+   "sexo": "F",
+   "estatura": 154,
+   "registros": [
+    {
+     "fecha": "2026-09-12",
+     "edad": 32,
+     "peso": 56.8,
+     "grasa": 26.4,
+     "imc": 24
     }
    ]
   },
