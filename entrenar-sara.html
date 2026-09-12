@@ -1896,11 +1896,6 @@ function htmlMarcas(){
 }
 
 /* ═══ Arranque ═════════════════════════════════════════════════════════ */
-/* Si cierra la app en pleno descanso, al volver no se queda el velo pegado. */
-document.addEventListener("visibilitychange", function(){
- if(document.hidden) cerrarDescanso();
-});
-
 /* La ficha (peso, grasa, cintura, cadera) es la única parte de esta app
    que no viaja en el archivo: son datos de salud de una persona real, así
    que no van escritos en el código. Se escriben una sola vez a mano acá y
