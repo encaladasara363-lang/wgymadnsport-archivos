@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-11",
+ "actualizado": "2026-09-12",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -88,7 +88,7 @@
    "rut": "00.000.000-0",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46275
+   "fv": 46307
   },
   {
    "n": "KEIDY",
