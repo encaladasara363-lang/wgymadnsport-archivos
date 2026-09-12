@@ -19,9 +19,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap">
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap">
 <style>
+
 /* ── La paleta es la misma de la página web y de las rutinas: negro, rojo
       E30613 y dorado D4AF37. Nada nuevo, para que se vea de la casa. ───── */
 :root{
@@ -35,15 +35,15 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--negro);color:var(--blanco)}
 body{
-  font-family:'Barlow','Segoe UI',Arial,sans-serif;
-  font-size:17px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  font-family:'Inter','Segoe UI',Arial,sans-serif;
+  font-size:19.5px; line-height:1.45; -webkit-font-smoothing:antialiased;
   padding-bottom:env(safe-area-inset-bottom);
   overscroll-behavior-y:contain;
 }
 .envase{max-width:560px;margin:0 auto;min-height:100vh;position:relative}
 .tit{font-family:'Anton',Impact,sans-serif;letter-spacing:.01em;line-height:1;text-transform:uppercase}
-.etq{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;
-     letter-spacing:.14em;font-size:14px;color:var(--gris-tenue)}
+.etq{font-family:'Inter',sans-serif;font-weight:700;text-transform:uppercase;
+     letter-spacing:.14em;font-size:16px;color:var(--blanco)}
 .num{font-variant-numeric:tabular-nums}
 [hidden]{display:none!important}
 
@@ -59,15 +59,15 @@ header .logo{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
 header .quien{flex:1;min-width:0}
 /* El titulo de arriba lleva el nombre completo de la rutina, el mismo de la
    portada, asi que puede ocupar dos lineas en un telefono angosto. */
-header .quien h1{font-family:'Anton',Impact,sans-serif;font-size:16px;line-height:1.1;
-  text-transform:uppercase;letter-spacing:0}
+header .quien h1{font-family:'Inter',sans-serif;font-weight:700;font-size:19.5px;
+  line-height:1.15;text-transform:uppercase;letter-spacing:.02em}
 header .quien h1 span{color:var(--rojo-vivo)}
-header .quien p{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13.5px;
-  text-transform:uppercase;letter-spacing:.16em;color:var(--gris-tenue);margin-top:3px;
+header .quien p{font-family:'Inter',sans-serif;font-weight:600;font-size:15.5px;
+  text-transform:uppercase;letter-spacing:.16em;color:var(--blanco);margin-top:3px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .iconbtn{
   flex:0 0 auto;background:none;border:1px solid var(--linea);border-radius:10px;
-  color:var(--gris);padding:8px 9px;cursor:pointer;font-size:14px;line-height:1;
+  color:var(--blanco);padding:8px 9px;cursor:pointer;font-size:16px;line-height:1;
 }
 .iconbtn:active{transform:scale(.95)}
 
@@ -76,14 +76,14 @@ main{padding:18px 16px 40px}
 /* ── Botones ──────────────────────────────────────────────────────────── */
 .btn{
   display:block;width:100%;border:none;border-radius:13px;cursor:pointer;
-  padding:17px 18px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:18px;text-transform:uppercase;letter-spacing:.12em;
+  padding:17px 18px;font-family:'Inter',sans-serif;font-weight:700;
+  font-size:20.5px;text-transform:uppercase;letter-spacing:.12em;
   transition:filter .15s,transform .07s;
 }
 .btn:active{transform:scale(.98)}
 .btn-rojo{background:var(--rojo);color:#fff}
 .btn-oro{background:var(--dorado);color:#14140F}
-.btn-linea{background:transparent;color:var(--gris);border:1.5px solid var(--linea)}
+.btn-linea{background:transparent;color:var(--blanco);border:1.5px solid var(--linea)}
 .btn-verde{background:var(--verde);color:#08301F}
 .btn:disabled{opacity:.45;cursor:default}
 
@@ -92,19 +92,20 @@ main{padding:18px 16px 40px}
 .ingreso .marca{width:104px;height:104px;border-radius:50%;margin:0 auto 20px;
   border:3px solid var(--dorado);object-fit:cover;background:#fff;display:block;
   box-shadow:0 0 0 7px rgba(212,175,55,.12)}
-.ingreso h2{font-family:'Anton',Impact,sans-serif;font-size:31px;line-height:1.02;
-  text-transform:uppercase;margin-bottom:11px}
-.ingreso h2 span{color:var(--rojo-vivo)}
-.ingreso p.baja{color:var(--gris);font-size:16.5px;line-height:1.5;margin-bottom:26px}
+.ingreso h2{font-family:'Inter',sans-serif;font-weight:700;font-size:37px;
+  line-height:1.1;text-transform:uppercase;letter-spacing:.02em;margin-bottom:11px}
+.ingreso h2 span{color:var(--rojo-vivo);display:block;font-size:1.2em;letter-spacing:.01em;
+  margin-top:3px}
+.ingreso p.baja{color:var(--blanco);font-size:19px;line-height:1.5;margin-bottom:26px}
 label.campo{display:block;text-align:left;margin-bottom:16px}
 label.campo > span{display:block;margin-bottom:9px}
 input[type=text]{
   width:100%;background:var(--negro-card);border:1.5px solid var(--linea);
-  border-radius:12px;color:var(--blanco);font:600 19px/1.2 'Barlow',sans-serif;
+  border-radius:12px;color:var(--blanco);font:600 19px/1.2 'Inter',sans-serif;
   padding:16px 15px;
 }
 input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
-.aviso{margin-top:14px;font-size:15.5px;color:var(--dorado);line-height:1.5}
+.aviso{margin-top:14px;font-size:18px;color:var(--blanco);line-height:1.5}
 
 /* ── Tarjetas de día ──────────────────────────────────────────────────── */
 .seccion{margin-bottom:26px}
@@ -120,25 +121,25 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 .dia .n{
   width:46px;height:46px;border-radius:12px;flex:0 0 auto;display:grid;place-items:center;
   background:var(--negro-suave);border:1.5px solid var(--linea);
-  font-family:'Anton',Impact,sans-serif;font-size:19px;color:var(--gris-tenue);
+  font-family:'Anton',Impact,sans-serif;font-size:19px;color:var(--blanco);
 }
 .dia[data-hecho="si"] .n{background:rgba(67,196,141,.14);border-color:var(--verde);color:var(--verde)}
 .dia .txt{flex:1;min-width:0}
-.dia .txt b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:19px;text-transform:uppercase;letter-spacing:.03em;line-height:1.15}
-.dia .txt small{display:block;color:var(--gris-tenue);font-size:15px;margin-top:3px}
-.dia .flecha{color:var(--rojo-vivo);font-size:22px;flex:0 0 auto}
+.dia .txt b{display:block;font-family:'Inter',sans-serif;font-weight:700;
+  font-size:22px;text-transform:uppercase;letter-spacing:.03em;line-height:1.15}
+.dia .txt small{display:block;color:var(--blanco);font-size:17px;margin-top:3px}
+.dia .flecha{color:var(--rojo-vivo);font-size:25.5px;flex:0 0 auto}
 
 /* ── Selector de rutina ───────────────────────────────────────────────── */
 .rutinas{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
 .rutinas button{
   min-width:0;background:var(--negro-card);border:1.5px solid var(--linea);border-radius:12px;
-  color:var(--gris);padding:12px 6px;cursor:pointer;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;
+  color:var(--blanco);padding:12px 6px;cursor:pointer;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:18.5px;
   text-transform:uppercase;letter-spacing:.04em;line-height:1.15;
 }
-.rutinas button small{display:block;font-size:11.5px;font-weight:600;letter-spacing:.09em;
-  color:var(--gris-tenue);margin-top:3px}
+.rutinas button small{display:block;font-size:13px;font-weight:600;letter-spacing:.09em;
+  color:var(--blanco);margin-top:3px}
 .rutinas button[aria-pressed="true"] small{color:rgba(255,255,255,.75)}
 .rutinas button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo);color:#fff}
 
@@ -147,17 +148,25 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   padding:14px 16px 16px;margin-bottom:18px}
 .ficha-cab{display:flex;align-items:baseline;justify-content:space-between;gap:8px;
   margin-bottom:12px;flex-wrap:wrap}
-.ficha-fecha{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;
-  color:var(--gris-tenue);letter-spacing:.02em}
+.ficha-fecha{font-family:'Inter',sans-serif;font-weight:600;font-size:15px;
+  color:var(--dorado);letter-spacing:.02em}
 .ficha-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}
 .fdato{min-width:0}
-.fdato span{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--gris-tenue)}
+.fdato span{display:block;font-family:'Inter',sans-serif;font-weight:700;
+  font-size:14.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--blanco)}
 .fdato b{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:22px;
-  color:var(--blanco);line-height:1.2}
-.fdato b small{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px}
-.fdato i{display:block;font-style:normal;font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;font-size:13.5px;color:var(--rojo-vivo);margin-top:1px}
+  color:var(--dorado);line-height:1.2}
+.fdato b small{font-family:'Inter',sans-serif;font-weight:700;font-size:15px}
+.fdato i{display:block;font-style:normal;font-family:'Inter',sans-serif;
+  font-weight:700;font-size:15.5px;color:var(--rojo-vivo);margin-top:1px}
+.ficha-nota{margin:14px 0 0;padding-top:13px;border-top:1px solid var(--linea);
+  font-size:16px;line-height:1.5;color:var(--blanco)}
+.finput,.finput-meta{background:none;border:none;border-bottom:1.5px dashed var(--linea);
+  font:inherit;color:inherit;padding:0 0 1px;text-align:left}
+.finput{width:2.6ch}
+.finput-meta{width:2.6ch}
+.finput:focus,.finput-meta:focus{outline:none;border-bottom-color:currentColor}
+.finput::placeholder,.finput-meta::placeholder{color:inherit;opacity:.35}
 
 /* ── Resumen de arriba ────────────────────────────────────────────────── */
 .marcas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--linea);
@@ -165,8 +174,8 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 .marcas .m{background:var(--negro-card);padding:14px 8px 15px;text-align:center;min-width:0}
 .marcas .m .v{font-family:'Anton',Impact,sans-serif;font-size:25px;line-height:1;
   color:var(--dorado);font-variant-numeric:tabular-nums}
-.marcas .m .d{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12.5px;
-  text-transform:uppercase;letter-spacing:.05em;color:var(--gris-tenue);margin-top:6px;
+.marcas .m .d{font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--blanco);margin-top:6px;
   overflow-wrap:break-word}
 
 /* ── Continuar sesión ─────────────────────────────────────────────────── */
@@ -174,24 +183,24 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   background:linear-gradient(120deg,rgba(227,6,19,.18),rgba(212,175,55,.10));
   border:1.5px solid var(--rojo);border-radius:14px;padding:15px 16px;margin-bottom:22px;
 }
-.seguir p{font-size:16px;color:var(--crema);margin-bottom:12px;line-height:1.45}
+.seguir p{font-size:18.5px;color:var(--blanco);margin-bottom:12px;line-height:1.45}
 .seguir p b{color:#fff}
 
 /* Aviso de que se le viene el vencimiento encima. */
 .avisovence{background:rgba(212,175,55,.13);border:1.5px solid var(--dorado);
-  border-radius:12px;padding:13px 15px;margin-bottom:20px;font-size:16px;
-  line-height:1.45;color:var(--crema)}
-.avisovence b{color:var(--dorado)}
+  border-radius:12px;padding:13px 15px;margin-bottom:20px;font-size:18.5px;
+  line-height:1.45;color:var(--blanco)}
+.avisovence b{color:var(--blanco)}
 
 /* En el mesón o en un teléfono prestado, la app entra sola como el último
    socio que la usó. Este botón deja a la vista cómo cambiarse, en vez de
    esconderlo en un iconito de arriba. */
 .otrosocio{
   display:block;width:100%;margin-top:6px;background:none;border:none;cursor:pointer;
-  color:var(--gris-tenue);font-family:'Barlow',sans-serif;font-size:15.5px;
+  color:var(--blanco);font-family:'Inter',sans-serif;font-size:18px;
   line-height:1.5;padding:14px 8px;text-align:center;
 }
-.otrosocio b{color:var(--gris)}
+.otrosocio b{color:var(--blanco)}
 .otrosocio span{color:var(--rojo-vivo);font-weight:700;text-decoration:underline;
   text-underline-offset:3px}
 
@@ -202,18 +211,25 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   padding-top:calc(12px + env(safe-area-inset-top));
 }
 .barra .paso{flex:1;min-width:0}
-.barra .paso b{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14.5px;
-  text-transform:uppercase;letter-spacing:.09em;color:var(--gris-tenue);display:block;
+.barra .paso b{font-family:'Inter',sans-serif;font-weight:700;font-size:16.5px;
+  text-transform:uppercase;letter-spacing:.09em;color:var(--blanco);display:block;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .barra .paso .pista{height:5px;border-radius:3px;background:#252525;margin-top:7px;overflow:hidden}
 .barra .paso .pista i{display:block;height:100%;background:var(--rojo);border-radius:3px;
   transition:width .35s cubic-bezier(.2,.8,.3,1)}
 .barra .reloj{flex:0 0 auto;text-align:right;line-height:1}
-.barra .reloj .cual{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:600;
-  font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--gris-tenue);
+.barra .reloj .cual{display:block;font-family:'Inter',sans-serif;font-weight:600;
+  font-size:13px;text-transform:uppercase;letter-spacing:.13em;color:var(--blanco);
   margin-bottom:4px}
 .barra .reloj b{font-family:'Anton',Impact,sans-serif;font-size:21px;color:var(--dorado);
   font-variant-numeric:tabular-nums;font-weight:400}
+.barra .reloj-linea{display:flex;align-items:center;gap:5px;justify-content:flex-end}
+.reloj-reset{background:none;border:none;padding:2px;line-height:1;font-size:17px;
+  color:var(--blanco);cursor:pointer;border-radius:6px}
+.reloj-reset:active{color:var(--blanco)}
+.reloj-reset:focus-visible{outline:2px solid var(--dorado);outline-offset:1px}
+.reloj-desde{display:block;font-family:'Inter',sans-serif;font-weight:600;font-size:11.5px;
+  color:var(--blanco);opacity:.7;margin-top:3px;white-space:nowrap}
 /* Mientras descansa, el reloj de arriba muestra la cuenta hacia atrás en
    rojo. Así el tiempo de descanso se ve siempre, aunque haya cerrado el
    aviso grande o esté mirando la lista de series. */
@@ -221,13 +237,13 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 .barra .reloj.desc b{color:var(--rojo-vivo)}
 
 .ej{padding:18px 16px 130px}
-.ej h2{font-family:'Anton',Impact,sans-serif;font-size:26px;line-height:1.08;
-  text-transform:uppercase;margin-bottom:9px}
+.ej h2{font-family:'Inter',sans-serif;font-weight:800;font-size:24px;line-height:1.2;
+  text-transform:uppercase;letter-spacing:.01em;margin-bottom:9px}
 .ej .meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:15px}
 .ej .meta span{
   background:var(--negro-card);border:1px solid var(--linea);border-radius:999px;
-  padding:6px 12px;font-family:'Barlow Condensed',sans-serif;font-weight:600;
-  font-size:14.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--gris);
+  padding:6px 12px;font-family:'Inter',sans-serif;font-weight:600;
+  font-size:16.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--blanco);
 }
 .ej .cabezal{display:flex;align-items:center;gap:12px;margin-bottom:9px}
 .ej .cabezal h2{margin-bottom:0}
@@ -242,15 +258,15 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   margin:0 0 14px;padding:0;background:none;border:none}
 .ej .pictograma.grande img{height:auto;object-fit:contain;display:block;border-radius:12px}
 .consejo{background:var(--negro-card);border-left:4px solid var(--dorado);border-radius:0 12px 12px 0;
-  padding:13px 15px;margin-bottom:13px;font-size:16px;line-height:1.5;color:var(--crema)}
-.consejo b{color:var(--dorado);display:block;margin-bottom:4px;
-  font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:13.5px}
+  padding:13px 15px;margin-bottom:13px;font-size:18.5px;line-height:1.5;color:var(--blanco)}
+.consejo b{color:var(--blanco);display:block;margin-bottom:4px;
+  font-family:'Inter',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:15.5px}
 .consejo.alterna{border-left-color:var(--rojo)}
 .consejo.alterna b{color:var(--rojo-vivo)}
 
 .vezpasada{background:rgba(212,175,55,.10);border:1px solid rgba(212,175,55,.35);
-  border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:16px;color:var(--crema)}
-.vezpasada b{color:var(--dorado)}
+  border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:18.5px;color:var(--blanco)}
+.vezpasada b{color:var(--blanco)}
 
 /* ── Las series: una fila por serie ───────────────────────────────────── */
 .series{display:flex;flex-direction:column;gap:9px;margin-bottom:8px}
@@ -259,33 +275,33 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   background:var(--negro-card);border:1.5px solid var(--linea);border-radius:13px;padding:10px 11px;
 }
 .serie[data-hecha="si"]{border-color:var(--verde);background:rgba(67,196,141,.09)}
-.serie .idx{font-family:'Anton',Impact,sans-serif;font-size:19px;color:var(--gris-tenue);text-align:center}
+.serie .idx{font-family:'Anton',Impact,sans-serif;font-size:19px;color:var(--dorado);text-align:center}
 .serie[data-hecha="si"] .idx{color:var(--verde)}
 .campito{position:relative}
 .campito input{
   width:100%;background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:10px;
-  color:#fff;font:700 21px/1 'Barlow',sans-serif;padding:13px 10px 13px 11px;text-align:center;
+  color:#fff;font:700 21px/1 'Inter',sans-serif;padding:13px 10px 13px 11px;text-align:center;
   font-variant-numeric:tabular-nums;
 }
 .campito input:focus-visible{outline:2px solid var(--rojo);outline-offset:1px}
 .campito input::placeholder{color:#4A4A4A;font-weight:600}
 .tick{
   width:100%;height:48px;border-radius:11px;border:1.5px solid var(--linea);
-  background:var(--negro-suave);color:var(--gris-tenue);font-size:23px;line-height:1;
+  background:var(--negro-suave);color:var(--blanco);font-size:26.5px;line-height:1;
   cursor:pointer;display:grid;place-items:center;
 }
 .serie[data-hecha="si"] .tick{background:var(--verde);border-color:var(--verde);color:#08301F}
 .cabseries{display:grid;grid-template-columns:38px 1fr 1fr 58px;gap:9px;
-  padding:0 11px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;
-  font-size:12.5px;text-transform:uppercase;letter-spacing:.11em;color:var(--gris-tenue);text-align:center}
-.sinpeso{font-size:15.5px;color:var(--gris-tenue);margin-top:2px;line-height:1.45}
+  padding:0 11px 8px;font-family:'Inter',sans-serif;font-weight:700;
+  font-size:14.5px;text-transform:uppercase;letter-spacing:.11em;color:var(--blanco);text-align:center}
+.sinpeso{font-size:18px;color:var(--blanco);margin-top:2px;line-height:1.45}
 /* Para tomarse el descanso sin tener que marcar una serie: sirve cuando se
    equivocó, cuando repite una serie o cuando solo quiere el reloj. */
 .descansar{
   display:block;width:100%;margin-top:12px;cursor:pointer;
   background:var(--negro-card);border:1.5px solid var(--linea);border-radius:12px;
-  color:var(--gris);padding:14px 12px;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;
+  color:var(--blanco);padding:14px 12px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:18.5px;
   text-transform:uppercase;letter-spacing:.1em;
 }
 .descansar:active{transform:scale(.99)}
@@ -293,8 +309,8 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 .hecho{
   display:block;width:100%;margin-top:6px;cursor:pointer;
   background:var(--negro-card);border:1.5px solid var(--linea);border-radius:13px;
-  color:var(--gris);padding:19px 14px;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;
+  color:var(--blanco);padding:19px 14px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:20.5px;
   text-transform:uppercase;letter-spacing:.11em;
 }
 .hecho[data-h="si"]{background:rgba(67,196,141,.12);border-color:var(--verde);color:var(--verde)}
@@ -317,7 +333,7 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:8px;padding:30px 22px;text-align:center;
 }
-.descanso .etq{color:var(--dorado);margin-bottom:6px}
+.descanso .etq{color:var(--blanco);margin-bottom:6px}
 .descanso .cuenta{font-family:'Anton',Impact,sans-serif;font-size:96px;line-height:1;
   color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .descanso .aro{width:186px;height:186px;margin:14px 0 20px;position:relative}
@@ -329,50 +345,54 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
    latir, para que se note aunque el socio esté mirando para otro lado. */
 .descanso[data-e="listo"] .etq{color:var(--verde)}
 .descanso[data-e="listo"] .aro .barra{stroke:var(--verde)}
-.descanso[data-e="listo"] .cuenta{color:var(--verde);font-size:64px;animation:late 1s ease-in-out infinite}
+.descanso[data-e="listo"] .cuenta{color:var(--verde);font-size:73.5px;animation:late 1s ease-in-out infinite}
 @keyframes late{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.75}}
 .descanso .aro .centro{position:absolute;inset:0;display:grid;place-items:center}
-.descanso .sigue{font-size:17px;color:var(--gris);line-height:1.45;max-width:30ch}
+.descanso .sigue{font-size:19.5px;color:var(--blanco);line-height:1.45;max-width:30ch}
 .descanso .sigue b{color:#fff}
+.aviso-tempo{margin-top:16px;padding:12px 15px;max-width:30ch;background:rgba(212,175,55,.10);
+  border:1px solid rgba(212,175,55,.35);border-radius:12px;font-size:15.5px;line-height:1.45;
+  color:var(--blanco)}
+.aviso-tempo:empty{display:none}
 .descanso .acc{display:flex;gap:10px;width:100%;max-width:340px;margin-top:22px}
 .descanso .acc .btn{flex:1}
 
 /* ── Final ────────────────────────────────────────────────────────────── */
 .final{padding:32px 20px 44px;text-align:center}
-.final .sello{font-size:60px;line-height:1;margin-bottom:14px}
+.final .sello{font-size:69px;line-height:1;margin-bottom:14px}
 .final h2{font-family:'Anton',Impact,sans-serif;font-size:33px;line-height:1.05;
   text-transform:uppercase;margin-bottom:10px}
 .final h2 span{color:var(--verde)}
-.final p.baja{color:var(--gris);font-size:17px;line-height:1.5;margin-bottom:24px}
+.final p.baja{color:var(--blanco);font-size:19.5px;line-height:1.5;margin-bottom:24px}
 .resumen{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--linea);
   border:1px solid var(--linea);border-radius:14px;overflow:hidden;margin-bottom:26px}
 .resumen .r{background:var(--negro-card);padding:17px 14px 18px}
 .resumen .r .v{font-family:'Anton',Impact,sans-serif;font-size:29px;line-height:1;
   color:var(--dorado);font-variant-numeric:tabular-nums}
-.resumen .r .d{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13.5px;
-  text-transform:uppercase;letter-spacing:.09em;color:var(--gris-tenue);margin-top:7px}
+.resumen .r .d{font-family:'Inter',sans-serif;font-weight:600;font-size:15.5px;
+  text-transform:uppercase;letter-spacing:.09em;color:var(--blanco);margin-top:7px}
 
 /* ── Progreso ─────────────────────────────────────────────────────────── */
 .hist{display:flex;flex-direction:column;gap:10px}
 .hsesion{background:var(--negro-card);border:1.5px solid var(--linea);border-radius:13px;padding:14px 15px}
 .hsesion .arriba{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.hsesion b{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;
+.hsesion b{font-family:'Inter',sans-serif;font-weight:700;font-size:20.5px;
   text-transform:uppercase;letter-spacing:.03em}
-.hsesion .cuando{font-size:15px;color:var(--gris-tenue);white-space:nowrap}
-.hsesion .abajo{margin-top:8px;font-size:15.5px;color:var(--gris);font-variant-numeric:tabular-nums}
+.hsesion .cuando{font-size:17px;color:var(--blanco);white-space:nowrap}
+.hsesion .abajo{margin-top:8px;font-size:18px;color:var(--blanco);font-variant-numeric:tabular-nums}
 .hsesion .abajo em{font-style:normal;color:var(--dorado);font-weight:600}
 .marca-ej{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-  padding:11px 2px;border-bottom:1px solid var(--linea);font-size:16px}
+  padding:11px 2px;border-bottom:1px solid var(--linea);font-size:18.5px}
 .marca-ej:last-child{border-bottom:none}
 .marca-ej .p{font-family:'Anton',Impact,sans-serif;color:var(--dorado);font-size:19px;
   white-space:nowrap;font-variant-numeric:tabular-nums}
-.vacio{padding:34px 12px;text-align:center;color:var(--gris-tenue);font-size:16px;line-height:1.5}
+.vacio{padding:34px 12px;text-align:center;color:var(--blanco);font-size:18.5px;line-height:1.5}
 
 .pestanas{display:flex;gap:8px;margin-bottom:20px}
 .pestanas button{
   flex:1;background:var(--negro-card);border:1.5px solid var(--linea);border-radius:11px;
-  color:var(--gris-tenue);padding:12px 8px;cursor:pointer;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;
+  color:var(--blanco);padding:12px 8px;cursor:pointer;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:17px;
   text-transform:uppercase;letter-spacing:.08em;
 }
 .pestanas button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo);color:#fff}
@@ -380,13 +400,13 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 @media (max-width:360px){
   .serie{grid-template-columns:30px 1fr 1fr 50px;gap:7px}
   .cabseries{grid-template-columns:30px 1fr 1fr 50px;gap:7px}
-  .campito input{font-size:19px;padding:12px 8px}
-  .descanso .cuenta{font-size:78px}
+  .campito input{font-size:22px;padding:12px 8px}
+  .descanso .cuenta{font-size:89.5px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
 </style>
-</head>
-<body>
+
 
 <div class="envase">
 
@@ -402,7 +422,7 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
     </label>
     <button class="btn btn-rojo" id="bEntrar">Entrar</button>
     <p class="aviso" id="avisoIngreso" hidden></p>
-    <p class="baja" style="margin:22px 0 0;font-size:15px;color:var(--gris-tenue)">
+    <p class="baja" style="margin:22px 0 0;font-size:15px;color:var(--blanco)">
       Todo lo que anotes se guarda en <b>tu propio teléfono</b>. Nadie más lo ve.
     </p>
   </section>
@@ -412,7 +432,6 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
     <img class="logo" src="assets/logo.jpg" alt="">
     <div class="quien">
       <h1>RUTINA VIP <span>SARA ENCALADA</span></h1>
-      <p id="hQuien">—</p>
     </div>
     <button class="iconbtn" id="bProgreso" title="Ver mi progreso" aria-label="Ver mi progreso">📈</button>
     <button class="iconbtn" id="bSalir" title="Salir" aria-label="Salir" hidden>⏻</button>
@@ -427,11 +446,12 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
         <span class="ficha-fecha">2 sep — 9 dic 2026</span>
       </div>
       <div class="ficha-grid">
-        <div class="fdato"><span>Peso</span><b>65,0 <small>kg</small></b><i>→ 61,3 kg</i></div>
-        <div class="fdato"><span>Grasa</span><b>24,1<small>%</small></b><i>→ 19%</i></div>
-        <div class="fdato"><span>Cintura</span><b>73 <small>cm</small></b><i>→ 69 cm</i></div>
-        <div class="fdato"><span>Cadera</span><b>91 <small>cm</small></b><i>mantener</i></div>
+        <div class="fdato"><span>Peso hoy</span><b><input type="text" inputmode="decimal" class="finput" id="fPesoHoy" placeholder="—" autocomplete="off"> <small>kg</small></b><i>Meta <input type="text" inputmode="decimal" class="finput-meta" id="fPesoMeta" placeholder="—" autocomplete="off"> kg</i></div>
+        <div class="fdato"><span>Grasa hoy</span><b><input type="text" inputmode="decimal" class="finput" id="fGrasaHoy" placeholder="—" autocomplete="off"><small>%</small></b><i>Meta <input type="text" inputmode="decimal" class="finput-meta" id="fGrasaMeta" placeholder="—" autocomplete="off">%</i></div>
+        <div class="fdato"><span>Cintura hoy</span><b><input type="text" inputmode="decimal" class="finput" id="fCinturaHoy" placeholder="—" autocomplete="off"> <small>cm</small></b><i>Meta <input type="text" inputmode="decimal" class="finput-meta" id="fCinturaMeta" placeholder="—" autocomplete="off"> cm</i></div>
+        <div class="fdato"><span>Cadera hoy</span><b><input type="text" inputmode="decimal" class="finput" id="fCaderaHoy" placeholder="—" autocomplete="off"> <small>cm</small></b><i>Meta <input type="text" inputmode="decimal" class="finput-meta" id="fCaderaMeta" placeholder="—" autocomplete="off"> cm</i></div>
       </div>
+      <p class="ficha-nota">Tu meta real es la cintura, no la balanza: si baja y la cadera se mantiene, lo que se fue es grasa y el glúteo quedó donde estaba — ahí aparece el abdomen. Balanza miércoles, viernes y lunes (promedio de los 3); huincha solo el miércoles. Toca cualquier número de arriba para escribir el tuyo: queda guardado solo en tu teléfono, nadie más lo ve.</p>
     </div>
 
     <div class="marcas">
@@ -465,7 +485,12 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
       </div>
       <div class="reloj" id="cajaLlevas">
         <span class="cual">Llevas</span>
-        <b class="num" id="relojSesion">0:00</b>
+        <span class="reloj-linea">
+          <b class="num" id="relojSesion">0:00</b>
+          <button type="button" class="reloj-reset" id="bPausarReloj" title="Pausar" aria-label="Pausar el tiempo de entrenamiento">⏸</button>
+          <button type="button" class="reloj-reset" id="bReiniciarReloj" title="Reiniciar el tiempo" aria-label="Reiniciar el tiempo de entrenamiento">↺</button>
+        </span>
+        <span class="reloj-desde" id="relojDesde"></span>
       </div>
       <div class="reloj desc" id="cajaDescanso" hidden>
         <span class="cual">Descanso</span>
@@ -493,6 +518,7 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
       <div class="centro"><div class="cuenta num" id="cuentaDescanso">60</div></div>
     </div>
     <p class="sigue" id="sigueDescanso">—</p>
+    <p class="aviso-tempo" id="avisoTempo"></p>
     <div class="acc">
       <button class="btn btn-linea" id="bMasDescanso">+20 seg</button>
       <button class="btn btn-oro" id="bSaltarDescanso">Ya estoy</button>
@@ -526,7 +552,9 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 
 </div>
 
+
 <script>
+
 (function(){
 "use strict";
 
@@ -539,58 +567,56 @@ var RUTINAS = {
   "DAYS": [
    {
     "weekday": "Lunes",
-    "title": "Glúteo",
-    "focus": "Empuje de cadera y cadena posterior",
-    "warmup": "Calentamiento en trotadora — 8 minutos",
-    "warmupVideo": "trotadora",
+    "title": "Cuádriceps",
+    "focus": "Pierna delantera",
     "exercises": [
      {
-      "name": "Hip thrust con barra",
+      "name": "Sentadilla con barra",
+      "sets": "4 × 8-10",
+      "rest": "2,5 min",
+      "equip": "barra",
+      "video": "",
+      "tip": "Sin cardio antes: calienta con 2-3 series de aproximación subiendo el peso (60% → 80% → 90% de tu peso de trabajo, pocas repeticiones) antes de la primera serie en serio — así no le come recuperación. Pies a la altura de los hombros, pecho arriba todo el recorrido. Baja hasta que el muslo quede paralelo al piso o más y sube empujando por los talones."
+     },
+     {
+      "name": "Prensa de piernas",
       "sets": "4 × 10-12",
       "rest": "2 min",
-      "equip": "barra",
-      "video": "",
-      "tip": "Espalda alta apoyada en el banco, barra sobre la cadera protegida con una toalla o barra acolchada. Empuja con los talones y sube la cadera hasta que el torso quede paralelo al piso, apretando el glúteo arriba dos segundos antes de bajar controlada."
-     },
-     {
-      "name": "Peso muerto rumano con barra",
-      "sets": "4 × 10",
-      "rest": "2 min",
-      "equip": "barra",
-      "video": "",
-      "tip": "Barra pegada a las piernas todo el recorrido, rodilla con un quiebre leve y fijo. Baja llevando la cadera hacia atrás hasta sentir el estiramiento del isquiotibial y sube apretando el glúteo, sin arquear la espalda baja."
-     },
-     {
-      "name": "Patada de glúteo en polea",
-      "sets": "3 × 12-15 por pierna",
-      "rest": "60 seg",
-      "equip": "polea",
-      "video": "",
-      "tip": "De pie frente a la polea baja, tobillera puesta. Lleva la pierna hacia atrás apretando el glúteo arriba sin mover la cadera ni balancear el torso, y vuelve controlada sin dejar caer el peso de golpe."
-     },
-     {
-      "name": "Abducción de cadera en máquina",
-      "sets": "3 × 15",
-      "rest": "45 seg",
       "equip": "maquina",
       "video": "",
-      "tip": "Espalda apoyada en la máquina, rodillas contra los cojinetes. Empuja hacia afuera con el lateral del glúteo, aguanta un segundo abierta y vuelve controlada, sin ayudarte con el impulso de la cadera."
+      "tip": "Pies a la altura de los hombros sobre la plataforma. Baja sin despegar la espalda del respaldo y sin estirar del todo las rodillas al subir."
      },
      {
-      "name": "Puente de glúteo a una pierna",
-      "sets": "3 × 12 por pierna",
-      "rest": "60 seg",
-      "equip": "cuerpo",
-      "video": "",
-      "tip": "Acostada boca arriba, una rodilla doblada con el pie en el piso y la otra pierna estirada al aire. Sube la cadera apretando el glúteo de apoyo hasta formar una línea recta entre hombros y rodilla, y baja controlada."
-     },
-     {
-      "name": "Zancada búlgara con mancuernas",
+      "name": "Sentadilla búlgara con mancuernas",
       "sets": "3 × 10 por pierna",
-      "rest": "90 seg",
+      "rest": "1,5 min",
       "equip": "mancuerna",
       "video": "",
-      "tip": "Pie de atrás apoyado en el banco, el peso en el talón de la pierna de adelante. Baja recto hacia abajo sin que la rodilla se pase de la punta del pie y sube empujando con el talón."
+      "tip": "Pie de atrás apoyado en el banco, mancuernas a los lados. Baja recto controlada y sube empujando con el talón de adelante, sin perder el equilibrio."
+     },
+     {
+      "name": "Extensión de cuádriceps en máquina",
+      "sets": "3 × 12-15",
+      "rest": "1,25 min",
+      "equip": "maquina",
+      "video": "",
+      "tip": "Espalda apoyada en el respaldo. Estira las rodillas hasta casi quedar rectas, aprieta arriba un segundo y baja controlada sin soltar el peso de golpe."
+     },
+     {
+      "name": "Zancada caminando con mancuernas",
+      "sets": "3 × 12 por pierna",
+      "rest": "1,5 min",
+      "equip": "mancuerna",
+      "video": "",
+      "tip": "Mancuernas a los lados, da un paso largo y baja hasta que la rodilla de atrás casi toque el piso. Empuja con el talón de adelante para avanzar al siguiente paso."
+     },
+     {
+      "name": "Sentadilla goblet con mancuerna",
+      "sets": "3 × 12-15",
+      "rest": "1 min",
+      "equip": "mancuerna",
+      "video": "",
+      "tip": "Mancuerna sostenida contra el pecho con ambas manos. Baja entre las piernas manteniendo el pecho arriba y sube empujando por los talones, sin redondear la espalda."
      }
     ]
    },
@@ -598,8 +624,6 @@ var RUTINAS = {
     "weekday": "Martes",
     "title": "Empuje",
     "focus": "Pecho, hombro y tríceps",
-    "warmup": "Calentamiento en bicicleta — 8 minutos",
-    "warmupVideo": "bicicleta",
     "exercises": [
      {
       "name": "Press de banca con mancuernas",
@@ -607,7 +631,7 @@ var RUTINAS = {
       "rest": "2 min",
       "equip": "mancuerna",
       "video": "",
-      "tip": "Acostada en el banco, mancuernas a los lados del pecho. Baja controlada sintiendo el estiramiento y sube sin chocar las mancuernas de golpe arriba, sin bloquear el codo de un tirón."
+      "tip": "Sin cardio antes: calienta con 2-3 series de aproximación subiendo el peso (60% → 80% → 90% de tu peso de trabajo) antes de la primera serie en serio. Acostada en el banco, mancuernas a los lados del pecho. Baja controlada sintiendo el estiramiento y sube sin chocar las mancuernas de golpe arriba, sin bloquear el codo de un tirón."
      },
      {
       "name": "Press militar con mancuernas",
@@ -628,7 +652,7 @@ var RUTINAS = {
      {
       "name": "Elevaciones laterales con mancuernas",
       "sets": "3 × 12-15",
-      "rest": "60 seg",
+      "rest": "1 min",
       "equip": "mancuerna",
       "video": "",
       "tip": "Mancuernas livianas, leve quiebre en el codo fijo todo el movimiento. Sube hasta la altura del hombro y baja controlada, sin ayudarte con impulso de la espalda."
@@ -636,7 +660,7 @@ var RUTINAS = {
      {
       "name": "Fondos en paralelas",
       "sets": "3 × 10-12",
-      "rest": "90 seg",
+      "rest": "1,5 min",
       "equip": "cuerpo",
       "video": "",
       "tip": "Torso levemente inclinado adelante para cargar más el pecho. Baja hasta sentir un buen estiramiento en el hombro y empuja sin bloquear el codo de golpe arriba."
@@ -644,7 +668,7 @@ var RUTINAS = {
      {
       "name": "Extensión de tríceps en polea",
       "sets": "3 × 12-15",
-      "rest": "60 seg",
+      "rest": "1 min",
       "equip": "polea",
       "video": "",
       "tip": "Codos pegados al cuerpo y fijos todo el movimiento. Estira los brazos hacia abajo apretando el tríceps y vuelve controlada, sin que la barra suba de golpe."
@@ -653,58 +677,56 @@ var RUTINAS = {
    },
    {
     "weekday": "Miércoles",
-    "title": "Cuádriceps",
-    "focus": "Pierna delantera",
-    "warmup": "Calentamiento en trotadora — 8 minutos",
-    "warmupVideo": "trotadora",
+    "title": "Glúteo",
+    "focus": "Empuje de cadera y cadena posterior",
     "exercises": [
      {
-      "name": "Sentadilla con barra",
-      "sets": "4 × 8-10",
-      "rest": "2,5 min",
-      "equip": "barra",
-      "video": "",
-      "tip": "Pies a la altura de los hombros, pecho arriba todo el recorrido. Baja hasta que el muslo quede paralelo al piso o más y sube empujando por los talones."
-     },
-     {
-      "name": "Prensa de piernas",
+      "name": "Hip thrust con barra",
       "sets": "4 × 10-12",
       "rest": "2 min",
+      "equip": "barra",
+      "video": "",
+      "tip": "Sin cardio antes: calienta con 2-3 series de aproximación subiendo el peso (60% → 80% → 90% de tu peso de trabajo) antes de la primera serie en serio. Espalda alta apoyada en el banco, barra sobre la cadera protegida con una toalla o barra acolchada. Empuja con los talones y sube la cadera hasta que el torso quede paralelo al piso, apretando el glúteo arriba dos segundos antes de bajar controlada."
+     },
+     {
+      "name": "Peso muerto rumano con barra",
+      "sets": "4 × 10",
+      "rest": "2 min",
+      "equip": "barra",
+      "video": "",
+      "tip": "Barra pegada a las piernas todo el recorrido, rodilla con un quiebre leve y fijo. Baja llevando la cadera hacia atrás hasta sentir el estiramiento del isquiotibial y sube apretando el glúteo, sin arquear la espalda baja."
+     },
+     {
+      "name": "Patada de glúteo en polea",
+      "sets": "3 × 12-15 por pierna",
+      "rest": "1 min",
+      "equip": "polea",
+      "video": "",
+      "tip": "De pie frente a la polea baja, tobillera puesta. Lleva la pierna hacia atrás apretando el glúteo arriba sin mover la cadera ni balancear el torso, y vuelve controlada sin dejar caer el peso de golpe."
+     },
+     {
+      "name": "Abducción de cadera en máquina",
+      "sets": "3 × 15",
+      "rest": "0,75 min",
       "equip": "maquina",
       "video": "",
-      "tip": "Pies a la altura de los hombros sobre la plataforma. Baja sin despegar la espalda del respaldo y sin estirar del todo las rodillas al subir."
+      "tip": "Espalda apoyada en la máquina, rodillas contra los cojinetes. Empuja hacia afuera con el lateral del glúteo, aguanta un segundo abierta y vuelve controlada, sin ayudarte con el impulso de la cadera."
      },
      {
-      "name": "Sentadilla búlgara con mancuernas",
-      "sets": "3 × 10 por pierna",
-      "rest": "90 seg",
-      "equip": "mancuerna",
-      "video": "",
-      "tip": "Pie de atrás apoyado en el banco, mancuernas a los lados. Baja recto controlada y sube empujando con el talón de adelante, sin perder el equilibrio."
-     },
-     {
-      "name": "Extensión de cuádriceps en máquina",
-      "sets": "3 × 12-15",
-      "rest": "75 seg",
-      "equip": "maquina",
-      "video": "",
-      "tip": "Espalda apoyada en el respaldo. Estira las rodillas hasta casi quedar rectas, aprieta arriba un segundo y baja controlada sin soltar el peso de golpe."
-     },
-     {
-      "name": "Zancada caminando con mancuernas",
+      "name": "Puente de glúteo a una pierna",
       "sets": "3 × 12 por pierna",
-      "rest": "90 seg",
-      "equip": "mancuerna",
+      "rest": "1 min",
+      "equip": "cuerpo",
       "video": "",
-      "tip": "Mancuernas a los lados, da un paso largo y baja hasta que la rodilla de atrás casi toque el piso. Empuja con el talón de adelante para avanzar al siguiente paso."
+      "tip": "Acostada boca arriba, una rodilla doblada con el pie en el piso y la otra pierna estirada al aire. Sube la cadera apretando el glúteo de apoyo hasta formar una línea recta entre hombros y rodilla, y baja controlada."
      },
      {
-      "name": "Sentadilla goblet con mancuerna",
-      "sets": "3 × 12-15",
-      "rest": "60 seg",
+      "name": "Zancada búlgara con mancuernas",
+      "sets": "3 × 10 por pierna",
+      "rest": "1,5 min",
       "equip": "mancuerna",
       "video": "",
-      "tip": "Mancuerna sostenida contra el pecho con ambas manos. Baja entre las piernas manteniendo el pecho arriba y sube empujando por los talones, sin redondear la espalda."
+      "tip": "Pie de atrás apoyado en el banco, el peso en el talón de la pierna de adelante. Baja recto hacia abajo sin que la rodilla se pase de la punta del pie y sube empujando con el talón."
      }
     ]
    },
@@ -712,8 +734,6 @@ var RUTINAS = {
     "weekday": "Jueves",
     "title": "Tirón",
     "focus": "Espalda y bíceps",
-    "warmup": "Calentamiento en bicicleta — 8 minutos",
-    "warmupVideo": "bicicleta",
     "exercises": [
      {
       "name": "Peso muerto convencional",
@@ -721,7 +741,7 @@ var RUTINAS = {
       "rest": "2,5 min",
       "equip": "barra",
       "video": "",
-      "tip": "Espalda recta desde el primer centímetro, la barra pegada a las piernas todo el recorrido. Sube empujando el piso con los talones, no tirando con la espalda baja."
+      "tip": "Sin cardio antes: calienta con 2-3 series de aproximación subiendo el peso (60% → 80% → 90% de tu peso de trabajo) antes de la primera serie en serio. Espalda recta desde el primer centímetro, la barra pegada a las piernas todo el recorrido. Sube empujando el piso con los talones, no tirando con la espalda baja."
      },
      {
       "name": "Dominadas asistidas",
@@ -734,7 +754,7 @@ var RUTINAS = {
      {
       "name": "Remo con mancuerna a un brazo",
       "sets": "3 × 10-12 por lado",
-      "rest": "90 seg",
+      "rest": "1,5 min",
       "equip": "mancuerna",
       "video": "",
       "tip": "Rodilla y mano de apoyo en el banco, espalda plana. Tira la mancuerna hacia la cadera llevando el codo pegado al cuerpo y aprieta arriba antes de bajar controlada."
@@ -742,7 +762,7 @@ var RUTINAS = {
      {
       "name": "Jalón al pecho agarre cerrado",
       "sets": "3 × 10-12",
-      "rest": "90 seg",
+      "rest": "1,5 min",
       "equip": "polea",
       "video": "",
       "tip": "Sentada, piernas firmes bajo el soporte. Tira la barra hacia el pecho llevando los codos hacia abajo, sin balancear el cuerpo para ayudarte."
@@ -750,7 +770,7 @@ var RUTINAS = {
      {
       "name": "Curl de bíceps con barra",
       "sets": "3 × 10-12",
-      "rest": "75 seg",
+      "rest": "1,25 min",
       "equip": "barra",
       "video": "",
       "tip": "Codos pegados al cuerpo y fijos todo el movimiento. Sube apretando el bíceps y baja controlada hasta estirar el brazo completo, sin balancear el cuerpo."
@@ -758,7 +778,7 @@ var RUTINAS = {
      {
       "name": "Curl martillo con mancuernas",
       "sets": "3 × 12",
-      "rest": "60 seg",
+      "rest": "1 min",
       "equip": "mancuerna",
       "video": "",
       "tip": "Agarre neutro, palmas mirándose todo el recorrido. Sube y baja sin girar la muñeca, trabajando el bíceps y el antebrazo a la vez."
@@ -769,13 +789,11 @@ var RUTINAS = {
     "weekday": "Viernes",
     "title": "Hombro, brazos y abdomen",
     "focus": "Remate de tren superior",
-    "warmup": "Calentamiento en trotadora — 8 minutos",
-    "warmupVideo": "trotadora",
     "exercises": [
      {
       "name": "Reverse fly con mancuernas",
       "sets": "3 × 15",
-      "rest": "60 seg",
+      "rest": "1 min",
       "equip": "mancuerna",
       "video": "",
       "tip": "Torso inclinado adelante, brazos casi rectos. Abre los brazos hacia los lados apretando el hombro posterior y baja controlada."
@@ -783,7 +801,7 @@ var RUTINAS = {
      {
       "name": "Face pull en polea",
       "sets": "3 × 15-20",
-      "rest": "60 seg",
+      "rest": "1 min",
       "equip": "polea",
       "video": "",
       "tip": "Cuerda a la altura de la cara. Tira separando las manos y llevando los codos bien atrás, apretando el hombro posterior y la espalda alta."
@@ -791,7 +809,7 @@ var RUTINAS = {
      {
       "name": "Curl en banco Scott con barra",
       "sets": "3 × 10-12",
-      "rest": "75 seg",
+      "rest": "1,25 min",
       "equip": "barra",
       "video": "",
       "tip": "Los brazos apoyados en el banco inclinado no dejan hacer trampa con el cuerpo. Sube apretando el bíceps y baja hasta estirar el brazo casi completo."
@@ -799,7 +817,7 @@ var RUTINAS = {
      {
       "name": "Press cerrado con barra",
       "sets": "3 × 10",
-      "rest": "90 seg",
+      "rest": "1,5 min",
       "equip": "barra",
       "video": "",
       "tip": "Agarre a la altura de los hombros, codos pegados al cuerpo bajando la barra al pecho. El agarre estrecho hace que casi todo el trabajo lo haga el tríceps."
@@ -807,7 +825,7 @@ var RUTINAS = {
      {
       "name": "Curl de muñeca con barra",
       "sets": "3 × 15-20",
-      "rest": "45 seg",
+      "rest": "0,75 min",
       "equip": "barra",
       "video": "",
       "tip": "Antebrazos apoyados en el muslo o en un banco, palmas hacia arriba. Sube solo doblando la muñeca y baja dejando que la barra estire el antebrazo."
@@ -815,7 +833,7 @@ var RUTINAS = {
      {
       "name": "Crunch en polea alta",
       "sets": "3 × 15-20",
-      "rest": "45 seg",
+      "rest": "0,75 min",
       "equip": "polea",
       "video": "",
       "tip": "De rodillas frente a la polea con la cuerda detrás de la nuca. Dobla la cintura llevando los codos hacia las rodillas, apretando el abdomen y no tirando con los brazos."
@@ -824,23 +842,21 @@ var RUTINAS = {
    },
    {
     "weekday": "Sábado",
-    "title": "Glúteo",
-    "focus": "Puntos débiles",
-    "warmup": "Calentamiento en bicicleta — 8 minutos",
-    "warmupVideo": "bicicleta",
+    "title": "Metabólico",
+    "focus": "Puntos débiles · glúteo e isquios · horario corrido",
     "exercises": [
      {
       "name": "Hip thrust con disco",
       "sets": "4 × 12-15",
-      "rest": "90 seg",
+      "rest": "1,5 min",
       "equip": "disco",
       "video": "",
-      "tip": "Espalda alta apoyada en el banco, disco sobre la cadera sujeto con las manos. Empuja con los talones y aprieta el glúteo arriba hasta quedar recta, baja controlada."
+      "tip": "Sin cardio antes: calienta con 2-3 series de aproximación subiendo el peso antes de la primera serie en serio. Espalda alta apoyada en el banco, disco sobre la cadera sujeto con las manos. Empuja con los talones y aprieta el glúteo arriba hasta quedar recta, baja controlada."
      },
      {
       "name": "Peso muerto a una pierna con mancuerna",
       "sets": "3 × 10 por pierna",
-      "rest": "90 seg",
+      "rest": "1,5 min",
       "equip": "mancuerna",
       "video": "",
       "tip": "De pie en una pierna, mancuerna en la mano contraria. Baja el torso llevando la pierna libre hacia atrás como contrapeso, hasta quedar paralela al piso, y vuelve controlada."
@@ -848,7 +864,7 @@ var RUTINAS = {
      {
       "name": "Abducción de cadera con banda",
       "sets": "3 × 15-20 por lado",
-      "rest": "45 seg",
+      "rest": "0,75 min",
       "equip": "banda",
       "video": "",
       "tip": "Banda alrededor de los tobillos, de pie o de lado apoyada en la pared. Abre la pierna hacia el costado apretando el glúteo y vuelve controlada sin balancear el cuerpo."
@@ -856,7 +872,7 @@ var RUTINAS = {
      {
       "name": "Step ups con mancuernas",
       "sets": "3 × 12 por pierna",
-      "rest": "75 seg",
+      "rest": "1,25 min",
       "equip": "mancuerna",
       "video": "",
       "tip": "Sube al banco apoyando el pie completo y empujando con el talón, sin impulsarte con la pierna de abajo. Baja controlada y repite del mismo lado antes de cambiar."
@@ -864,7 +880,7 @@ var RUTINAS = {
      {
       "name": "Puente de glúteo con pausa",
       "sets": "3 × 15",
-      "rest": "45 seg",
+      "rest": "0,75 min",
       "equip": "cuerpo",
       "video": "",
       "tip": "Acostada boca arriba, rodillas dobladas y pies apoyados. Sube la cadera apretando el glúteo, aguanta dos segundos arriba y baja controlada sin dejarte caer."
@@ -872,7 +888,7 @@ var RUTINAS = {
      {
       "name": "Sentadilla sumo con mancuerna",
       "sets": "3 × 12-15",
-      "rest": "60 seg",
+      "rest": "1 min",
       "equip": "mancuerna",
       "video": "",
       "tip": "Pies bien abiertos, puntas hacia afuera, mancuerna colgando con ambas manos al centro. Baja entre las piernas apretando el glúteo al subir, sin perder la espalda recta."
@@ -928,7 +944,9 @@ function usarSocio(nombre){
  D.socio = nombre;
  D.rutina = "sara";   /* esta app trae una sola rutina */
 }
-function guardar(){ try{ localStorage.setItem(KEY, JSON.stringify(TODO)); }catch(e){} }
+function guardar(){
+ try{ localStorage.setItem(KEY, JSON.stringify(TODO)); }catch(e){}
+}
 
 
 /* ═══ Los socios ════════════════════════════════════════════════════════
@@ -1065,11 +1083,14 @@ function leerSeries(txt){
  if(m) return { cuantas: Math.min(parseInt(m[1], 10), 12), reps: m[2] };
  return { cuantas: 1, reps: String(txt == null ? "" : txt).trim() || "—" };
 }
-/* "60 seg" son 60 segundos; "2 min", 120. El guión largo es sin descanso. */
+/* "1,5 min" son 90 segundos; "60 seg", 60. El guión largo es sin descanso.
+   El minuto puede venir con coma o punto decimal (1,5 min / 1.5 min). */
 function leerDescanso(txt){
- var s = String(txt == null ? "" : txt);
- var seg = s.match(/(\d+)\s*seg/i); if(seg) return parseInt(seg[1], 10);
- var min = s.match(/(\d+)\s*min/i); if(min) return parseInt(min[1], 10) * 60;
+ var s = String(txt == null ? "" : txt).trim();
+ var min = s.match(/^(\d+(?:[.,]\d+)?)\s*min/i);
+ if(min) return Math.round(parseFloat(min[1].replace(",", ".")) * 60);
+ var seg = s.match(/^(\d+)\s*seg/i);
+ if(seg) return parseInt(seg[1], 10);
  return 0;
 }
 /* Colchoneta, cuerpo, TRX y cardio se hacen con el peso del cuerpo: pedirle
@@ -1094,6 +1115,20 @@ function reloj(seg){
  seg = Math.max(0, Math.round(seg));
  var h = Math.floor(seg/3600), m = Math.floor((seg%3600)/60), s = seg%60;
  return (h ? h + ":" + String(m).padStart(2,"0") : m) + ":" + String(s).padStart(2,"0");
+}
+/* Cuánto lleva contado el cronómetro de la sesión: lo ya acumulado más lo
+   que corre desde que se reanudó, si no está en pausa (corriendoDesde). Las
+   sesiones viejas no tenían estos campos: se tratan como si nunca se
+   hubieran pausado. */
+function segLlevaSesion(a){
+ if(!a) return 0;
+ var acumulado = a.segAcumulados || 0;
+ var desde = ("corriendoDesde" in a) ? a.corriendoDesde : a.inicio;
+ if(desde) acumulado += (Date.now() - desde) / 1000;
+ return acumulado;
+}
+function horaCorta(ts){
+ return new Date(ts).toLocaleTimeString("es-CL", { hour:"2-digit", minute:"2-digit" });
 }
 function miles(n){ return Math.round(n).toLocaleString("es-CL"); }
 /* La rutina marca con recortar=1 los videos que traen franjas negras. */
@@ -1227,7 +1262,6 @@ $("bSalir").addEventListener("click", function(){
 
 /* ═══ Inicio ═══════════════════════════════════════════════════════════ */
 function abrirInicio(){
- $("hQuien").textContent = D.socio || "";
  var av = $("avisoVence");
  if(D.avisoVence){
   av.hidden = false;
@@ -1361,6 +1395,8 @@ function armarSesion(rutina, dia){
   dia: dia,
   fecha: hoyISO(),
   inicio: Date.now(),
+  corriendoDesde: Date.now(),
+  segAcumulados: 0,
   ejercicios: pasosDe(d).map(function(paso){
    /* El calentamiento y el estiramiento son un solo casillero de "hecho". */
    if(paso.tipo !== "ejercicio"){
@@ -1410,7 +1446,12 @@ function arrancarReloj(){
  clearInterval(ticTac);
  function pinta(){
   if(!D.actual) return;
-  $("relojSesion").textContent = reloj((Date.now() - D.actual.inicio) / 1000);
+  $("relojSesion").textContent = reloj(segLlevaSesion(D.actual));
+  var pausado = !D.actual.corriendoDesde;
+  $("bPausarReloj").textContent = pausado ? "▶" : "⏸";
+  $("bPausarReloj").title = pausado ? "Reanudar" : "Pausar";
+  $("bPausarReloj").setAttribute("aria-label", pausado ? "Reanudar el tiempo de entrenamiento" : "Pausar el tiempo de entrenamiento");
+  $("relojDesde").textContent = "Empezaste " + horaCorta(D.actual.inicio);
  }
  pinta();
  ticTac = setInterval(pinta, 1000);
@@ -1471,7 +1512,7 @@ function pintarEjercicio(){
  h += '<div class="series" id="filasSeries"></div>';
  var segDesc = leerDescanso(ex.rest);
  if(segDesc) h += '<button class="descansar" id="bDescansar" type="button">' +
-                  '⏱ Descansar ' + segDesc + ' seg</button>';
+                  '⏱ Descansar ' + limpio(ex.rest) + '</button>';
  if(!conPeso) h += '<p class="sinpeso">Este ejercicio es con el peso de tu cuerpo, ' +
                    'así que no lleva kilos. Anota solo las repeticiones.</p>';
  h += '<p class="sinpeso" style="margin-top:12px">Objetivo de hoy: <b>' +
@@ -1558,7 +1599,34 @@ function pintarPie(pasos){
 }
 
 /* ═══ Descanso entre series ════════════════════════════════════════════ */
-var cuentaAtras = null, volverSolo = null;
+var cuentaAtras = null, volverSolo = null, avisoFinal = null;
+
+/* Pide permiso de avisos del teléfono la primera vez que empieza un
+   descanso (siempre dentro de un toque, que es cuando el navegador deja
+   pedirlo). Si ya se lo negó o ya se lo dio, no vuelve a preguntar. */
+function pedirPermisoAvisos(){
+ try{
+  if(!("Notification" in window)) return;
+  if(Notification.permission === "default") Notification.requestPermission();
+ }catch(e){}
+}
+/* El aviso del teléfono (la notificación) es lo único que se ve encima de
+   otra app o de un video: el pitido y el aro en pantalla solo sirven si
+   se está mirando esta app en ese momento. Por eso solo se manda cuando la
+   pestaña NO está a la vista — si la está mirando, ya le alcanza con eso. */
+function avisarDescansoTerminado(textoSigue){
+ try{
+  if(!("Notification" in window) || Notification.permission !== "granted") return;
+  if(document.visibilityState === "visible") return;
+  var soloTexto = String(textoSigue || "").replace(/<[^>]+>/g, "");
+  var n = new Notification("Se acabó tu descanso · WGYMADNSPORT", {
+   body: soloTexto || "Vuelve a la rutina.",
+   tag: "wgym-descanso",
+   renotify: true
+  });
+  n.onclick = function(){ try{ window.focus(); }catch(e){} n.close(); };
+ }catch(e){}
+}
 var VUELTA = 2 * Math.PI * 88;   /* el largo del aro del reloj */
 
 /* Al marcar una serie arranca el descanso, salvo que haya sido la última
@@ -1586,19 +1654,34 @@ function trasMarcar(iSerie){
 
 function abrirDescanso(seg, textoSigue){
  var velo = $("veloDescanso");
- var quedan = seg, total = seg;
+ /* La cuenta se calcula siempre contra la hora real en que termina
+    (finEn), no restando de a uno: así, si el teléfono frena el temporizador
+    por estar en otra app o con la pantalla apagada, al volver se pone al
+    día solo en vez de seguir atrasado. */
+ var finEn = Date.now() + seg * 1000;
+ var total = seg;
  clearTimeout(volverSolo);
+ clearTimeout(avisoFinal);
+ pedirPermisoAvisos();
  velo.setAttribute("data-e", "contando");
  $("etqDescanso").textContent = "Descansa";
  $("bMasDescanso").hidden = false;
  $("bSaltarDescanso").textContent = "Ya estoy";
  $("sigueDescanso").innerHTML = textoSigue;
+ /* En iPhone, si sale de esta pestaña (a Instagram, TikTok, un video), el
+    celular congela esta página entera y no hay forma de que un sitio web
+    avise por encima de otra app. Lo único que sí suena fuerte encima de
+    cualquier app es el temporizador propio del teléfono. */
+ $("avisoTempo").innerHTML = "📱 Si vas a cambiar de app, pon un temporizador de <b>" +
+  reloj(seg) + "</b> en tu celular — así te avisa aunque estés afuera.";
  velo.hidden = false;
 
  function pinta(){
+  var quedan = Math.max(0, Math.round((finEn - Date.now()) / 1000));
   $("cuentaDescanso").textContent = quedan;
   $("aroBarra").style.strokeDashoffset = VUELTA * (1 - quedan / total);
   $("cuentaBarra").textContent = reloj(quedan);
+  if(quedan <= 0) seAcabo();
  }
  $("cajaLlevas").hidden = true;
  $("cajaDescanso").hidden = false;
@@ -1606,17 +1689,17 @@ function abrirDescanso(seg, textoSigue){
  pinta();
 
  clearInterval(cuentaAtras);
- cuentaAtras = setInterval(function(){
-  quedan--;
-  if(quedan <= 0){ seAcabo(); return; }
-  pinta();
- }, 1000);
+ cuentaAtras = setInterval(pinta, 1000);
+ /* Respaldo por si el intervalo se atrasa de más estando en segundo plano:
+    igual dispara el aviso apenas el navegador vuelva a darle tiempo de CPU. */
+ avisoFinal = setTimeout(seAcabo, seg * 1000 + 200);
 
  /* Antes el aviso desaparecía solo en el mismo instante en que sonaba, así
     que si no alcanzabas a oírlo no quedaba nada que mirar. Ahora se pone
     verde y se queda esperando, para que lo veas aunque estés de espaldas. */
  function seAcabo(){
   clearInterval(cuentaAtras); cuentaAtras = null;
+  clearTimeout(avisoFinal);
   velo.setAttribute("data-e", "listo");
   $("etqDescanso").textContent = "Se acabó el descanso";
   $("cuentaDescanso").textContent = "¡YA!";
@@ -1625,16 +1708,24 @@ function abrirDescanso(seg, textoSigue){
   $("bSaltarDescanso").textContent = "Seguir";
   $("cuentaBarra").textContent = "¡YA!";
   pitar();
+  avisarDescansoTerminado(textoSigue);
   /* Si lo deja abierto porque está en plena serie, se cierra solo. */
   volverSolo = setTimeout(cerrarDescanso, 12000);
  }
 
- $("bMasDescanso").onclick = function(){ quedan += 20; total = Math.max(total, quedan); pinta(); };
+ $("bMasDescanso").onclick = function(){
+  finEn += 20000;
+  total = Math.max(total, Math.round((finEn - Date.now()) / 1000));
+  clearTimeout(avisoFinal);
+  avisoFinal = setTimeout(seAcabo, finEn - Date.now() + 200);
+  pinta();
+ };
  $("bSaltarDescanso").onclick = cerrarDescanso;
 }
 function cerrarDescanso(){
  clearInterval(cuentaAtras); cuentaAtras = null;
  clearTimeout(volverSolo); volverSolo = null;
+ clearTimeout(avisoFinal); avisoFinal = null;
  $("veloDescanso").hidden = true;
  $("cajaDescanso").hidden = true;
  $("cajaLlevas").hidden = false;
@@ -1651,6 +1742,26 @@ $("bDespues").addEventListener("click", function(){
  }else{
   terminar();
  }
+});
+$("bPausarReloj").addEventListener("click", function(){
+ var a = D.actual;
+ if(!a) return;
+ if(a.corriendoDesde){
+  a.segAcumulados = segLlevaSesion(a);
+  a.corriendoDesde = null;
+ }else{
+  a.corriendoDesde = Date.now();
+ }
+ guardar();
+ arrancarReloj();
+});
+$("bReiniciarReloj").addEventListener("click", function(){
+ if(!D.actual) return;
+ if(!confirm("¿Reiniciar el tiempo de entrenamiento a 0:00?")) return;
+ D.actual.segAcumulados = 0;
+ D.actual.corriendoDesde = D.actual.corriendoDesde ? Date.now() : null;
+ guardar();
+ arrancarReloj();
 });
 $("bCerrarEntreno").addEventListener("click", function(){
  /* Se guarda a medias: el botón de arriba dice "seguir donde iba". */
@@ -1692,7 +1803,7 @@ function terminar(){
   });
  });
 
- var seg = Math.round((Date.now() - a.inicio) / 1000);
+ var seg = Math.round(segLlevaSesion(a));
  a.fin = Date.now();
  a.seg = seg;
  a.series = series;
@@ -1777,7 +1888,7 @@ function htmlMarcas(){
  lista.forEach(function(n){
   var m = mejores[n];
   h += '<div class="marca-ej"><span>' + limpio(n) +
-       '<br><small style="color:var(--gris-tenue);font-size:14px">' +
+       '<br><small style="color:var(--blanco);font-size:14px">' +
        limpio(m.reps || "") + ' reps · ' + fechaCorta(m.fecha) + '</small></span>' +
        '<span class="p">' + m.kg + ' kg</span></div>';
  });
@@ -1790,6 +1901,32 @@ document.addEventListener("visibilitychange", function(){
  if(document.hidden) cerrarDescanso();
 });
 
+/* La ficha (peso, grasa, cintura, cadera) es la única parte de esta app
+   que no viaja en el archivo: son datos de salud de una persona real, así
+   que no van escritos en el código. Se escriben una sola vez a mano acá y
+   quedan guardados solo en este teléfono, igual que el resto del progreso. */
+var FKEY = "wgym_ficha_sara_v1";
+var CAMPOS_FICHA = ["PesoHoy","PesoMeta","GrasaHoy","GrasaMeta","CinturaHoy","CinturaMeta","CaderaHoy","CaderaMeta"];
+function cargarFicha(){
+ var m = {};
+ try{ m = JSON.parse(localStorage.getItem(FKEY)) || {}; }catch(e){}
+ CAMPOS_FICHA.forEach(function(k){
+  var el = document.getElementById("f" + k);
+  if(el && m[k] != null) el.value = m[k];
+ });
+}
+function guardarCampoFicha(k, valor){
+ var m = {};
+ try{ m = JSON.parse(localStorage.getItem(FKEY)) || {}; }catch(e){}
+ m[k] = valor;
+ try{ localStorage.setItem(FKEY, JSON.stringify(m)); }catch(e){}
+}
+CAMPOS_FICHA.forEach(function(k){
+ var el = document.getElementById("f" + k);
+ if(el) el.addEventListener("input", function(){ guardarCampoFicha(k, el.value); });
+});
+cargarFicha();
+
 function arrancarApp(){
 /* Rutina VIP de una sola persona: no hay lista de socios ni vencimiento
    que revisar, se entra directo a la ficha de Sara. */
@@ -1799,7 +1936,7 @@ abrirInicio();
 arrancarApp();
 
 })();
-</script>
 
+</script>
 </body>
 </html>
