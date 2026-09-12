@@ -256,3 +256,28 @@ alimentación WGYMADNSPORT), seguir siempre este proceso:
    encima de cualquier app. El beep + vibración + aviso visual dentro de
    esta app siguen funcionando perfecto mientras la pestaña está abierta
    y visible — el límite es solo cuando el usuario se va a otra app.
+10. **Nunca escribir datos de salud reales (peso, grasa corporal, cintura,
+    cadera, o cualquier otra medida corporal) directo en el código del
+    archivo**, aunque vengan del PDF de la dieta y el pedido sea justo
+    "ponle todos sus datos". Este repositorio es público: ya pasó que
+    esos números quedaron expuestos ahí por escribirlos fijos en el
+    HTML. En vez de eso, esa parte de la "ficha" va como casilleros
+    `<input>` vacíos (`placeholder="—"`, clase `finput`/`finput-meta`)
+    que la clienta llena ella misma la primera vez desde su teléfono; el
+    valor se guarda con `localStorage` (clave propia, ej.
+    `wgym_ficha_<nombre>_v1`), nunca en el archivo que se sube al repo.
+    El resto de la rutina (ejercicios, series, tips, fechas del corte)
+    no es dato de salud y sí puede ir fijo en el código, igual que
+    siempre.
+11. **Pedir `navigator.storage.persist()`** al arrancar la app (dentro de
+    un `try/catch`, sin bloquear nada si falla) para bajar el riesgo de
+    que el navegador borre solo el progreso guardado por falta de uso o
+    espacio. No es garantía absoluta — si la usuaria borra a mano los
+    datos del sitio, eso sí se pierde— pero ayuda contra la limpieza
+    automática del celular.
+12. El beep de fin de descanso tiene que sonar como una alarma de
+    verdad, no un timbrecito: onda `square` (no `sine`, que suena
+    débil), volumen cerca del máximo (`gain` ~0.9), varias repeticiones
+    alternando dos tonos agudos, más una vibración larga con
+    `navigator.vibrate`. Ver `pitar()` en `entrenar-sara.html` como
+    referencia ya probada.
