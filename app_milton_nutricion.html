@@ -104,6 +104,32 @@ main{padding:18px 16px 46px}
   line-height:1.25;text-align:center;color:var(--rojo-vivo);text-transform:uppercase;
   letter-spacing:.01em}
 
+/* ── Seguimiento semanal (peso y cintura) ─────────────────────────────── */
+.segui-form{display:flex;gap:12px;align-items:flex-end;margin-bottom:14px}
+.segui-form .campito{flex:1}
+.segui-form label{display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--gris-tenue);margin-bottom:6px}
+.segui-form .conunidad{position:relative}
+.segui-form input{
+  width:100%;background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:10px;
+  color:#fff;font:700 19px/1 'Inter',sans-serif;padding:11px 36px 11px 11px;
+  font-variant-numeric:tabular-nums;
+}
+.segui-form input::placeholder{color:#4A4A4A;font-weight:600}
+.segui-form .unidad{position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  font-size:13.5px;color:var(--gris-tenue);font-weight:600;pointer-events:none}
+.btn-guardar{flex:0 0 auto;background:var(--rojo);border:none;border-radius:10px;color:#fff;
+  font-family:'Inter',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;
+  letter-spacing:.03em;padding:13px 16px;cursor:pointer;white-space:nowrap}
+.segui-fila{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--linea);
+  font-family:'Inter',sans-serif}
+.segui-fila:last-child{border-bottom:none;padding-bottom:0}
+.segui-fecha{flex:0 0 40px;font-weight:700;font-size:13.5px;color:var(--gris-tenue)}
+.segui-dato{flex:1;font-weight:700;font-size:15px;color:var(--blanco)}
+.segui-delta{font-style:normal;font-size:12.5px;color:var(--dorado);font-weight:600}
+.segui-borrar{flex:0 0 auto;background:none;border:none;color:var(--gris-tenue);font-size:15px;
+  cursor:pointer;padding:4px 6px}
+
 /* ── Pestañas de día (7, como en la app de entreno) ───────────────────── */
 .dias-tabs{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px}
 .dias-tabs button{
@@ -163,6 +189,8 @@ main{padding:18px 16px 46px}
   text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
 .suple .dosis{font-size:14px;color:var(--gris-tenue);margin-bottom:3px}
 .suple .motivo{font-size:14.5px;line-height:1.4;color:var(--blanco)}
+.suple-alerta{border-left-color:var(--azul);border-left-style:dashed}
+.suple-alerta .cuando{color:var(--azul)}
 
 /* ── Agua ──────────────────────────────────────────────────────────────── */
 .agua-fila{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--linea)}
@@ -239,6 +267,30 @@ main{padding:18px 16px 46px}
       <p class="meta-frase">TU CUERPO YA SABE HACERLO — SOLO FALTA QUE NO TE RINDAS.</p>
     </div>
 
+    <!-- ══ Seguimiento semanal ══════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Seguimiento semanal — peso y cintura</span>
+      <div class="segui-form">
+        <div class="campito">
+          <label for="seguiPeso">Peso</label>
+          <div class="conunidad">
+            <input type="text" inputmode="decimal" id="seguiPeso" placeholder="—" autocomplete="off">
+            <span class="unidad">kg</span>
+          </div>
+        </div>
+        <div class="campito">
+          <label for="seguiCintura">Cintura</label>
+          <div class="conunidad">
+            <input type="text" inputmode="decimal" id="seguiCintura" placeholder="—" autocomplete="off">
+            <span class="unidad">cm</span>
+          </div>
+        </div>
+        <button type="button" class="btn-guardar" id="bSeguiGuardar">Guardar</button>
+      </div>
+      <div id="seguiHistorial"></div>
+      <p class="pie-nota" style="margin-top:10px">Anota una vez por semana, el mismo día y ojalá en ayunas. Lo que importa es la tendencia de varias semanas, no la subida o bajada de un solo día.</p>
+    </div>
+
     <!-- ══ Resumen diario ═══════════════════════════════════════════════ -->
     <div class="card">
       <span class="etq">Objetivo del día</span>
@@ -272,6 +324,11 @@ main{padding:18px 16px 46px}
     <div class="card">
       <span class="etq">Suplementos — momento del día</span>
       <div id="listaSuplementos"></div>
+      <div class="suple suple-alerta">
+        <div class="cab"><span class="nombre">Vitamina D3</span><span class="cuando">Antes: pedir examen</span></div>
+        <div class="dosis">1000-2000 UI/día — solo si el examen confirma déficit</div>
+        <div class="motivo">No está en su lista actual. Conviene pedir un examen de vitamina D en su próximo control de sangre — sin una deficiencia confirmada, suplementarla no mejora el rendimiento ni acelera nada.</div>
+      </div>
       <p class="pie-nota" style="margin-top:12px">Dosis exactas según el envase de cada suplemento salvo donde ya está documentado (creatina, beta-alanina, omega 3). Si toma algún medicamento, consúltalo con su médico antes de combinar.</p>
     </div>
 
@@ -547,6 +604,80 @@ $("metaCintura").addEventListener("input", function(){
   var dias = Math.round((d2 - d1) / 86400000) + 1;
   $("diasPlan").textContent = dias;
 })();
+
+/* ═══ Seguimiento semanal de peso y cintura — casilleros vacíos, la
+   clienta anota su propio número cada semana; se guarda solo en el
+   localStorage de este teléfono, nunca en el código. ═══════════════ */
+var SEGUI_KEY = "wgym_seguimiento_milton_v1";
+function cargarSeguimiento(){
+  try{ return JSON.parse(localStorage.getItem(SEGUI_KEY)) || []; }
+  catch(e){ return []; }
+}
+function guardarSeguimiento(lista){
+  try{ localStorage.setItem(SEGUI_KEY, JSON.stringify(lista)); }catch(e){}
+}
+function fechaCorta(iso){
+  var p = iso.split("-");
+  return p[2] + "/" + p[1];
+}
+function pintarSeguimiento(){
+  var lista = cargarSeguimiento().slice().sort(function(a, b){ return a.fecha < b.fecha ? -1 : 1; });
+  var cont = $("seguiHistorial");
+  cont.innerHTML = "";
+  if(!lista.length){
+    cont.innerHTML = '<p class="pie-nota" style="margin-top:2px;text-align:left">Todavía no hay registros — anota tu peso y cintura de hoy para empezar.</p>';
+    return;
+  }
+  var ultimos = lista.slice(-6).reverse();
+  ultimos.forEach(function(r, i){
+    var anterior = ultimos[i + 1];
+    var deltaPeso = "", deltaCintura = "";
+    if(anterior){
+      if(r.peso != null && anterior.peso != null){
+        var dp = r.peso - anterior.peso;
+        deltaPeso = (dp > 0 ? "▲" : dp < 0 ? "▼" : "—") + Math.abs(dp).toFixed(1) + "kg";
+      }
+      if(r.cintura != null && anterior.cintura != null){
+        var dc = r.cintura - anterior.cintura;
+        deltaCintura = (dc > 0 ? "▲" : dc < 0 ? "▼" : "—") + Math.abs(dc).toFixed(1) + "cm";
+      }
+    }
+    var div = document.createElement("div");
+    div.className = "segui-fila";
+    div.innerHTML =
+      '<span class="segui-fecha">' + fechaCorta(r.fecha) + '</span>' +
+      '<span class="segui-dato">' + (r.peso != null ? r.peso + " kg" : "—") +
+        (deltaPeso ? ' <i class="segui-delta">' + deltaPeso + '</i>' : '') + '</span>' +
+      '<span class="segui-dato">' + (r.cintura != null ? r.cintura + " cm" : "—") +
+        (deltaCintura ? ' <i class="segui-delta">' + deltaCintura + '</i>' : '') + '</span>' +
+      '<button type="button" class="segui-borrar" data-fecha="' + r.fecha + '" aria-label="Borrar registro">✕</button>';
+    cont.appendChild(div);
+  });
+  cont.querySelectorAll(".segui-borrar").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var f = btn.getAttribute("data-fecha");
+      guardarSeguimiento(cargarSeguimiento().filter(function(r){ return r.fecha !== f; }));
+      pintarSeguimiento();
+    });
+  });
+}
+$("bSeguiGuardar").addEventListener("click", function(){
+  var peso = $("seguiPeso").value.trim().replace(",", ".");
+  var cintura = $("seguiCintura").value.trim().replace(",", ".");
+  if(!peso && !cintura) return;
+  var hoy = hoyISO();
+  var lista = cargarSeguimiento().filter(function(r){ return r.fecha !== hoy; });
+  lista.push({
+    fecha: hoy,
+    peso: peso ? parseFloat(peso) : null,
+    cintura: cintura ? parseFloat(cintura) : null
+  });
+  guardarSeguimiento(lista);
+  $("seguiPeso").value = "";
+  $("seguiCintura").value = "";
+  pintarSeguimiento();
+});
+pintarSeguimiento();
 
 try{
   if(navigator.storage && navigator.storage.persist) navigator.storage.persist();
