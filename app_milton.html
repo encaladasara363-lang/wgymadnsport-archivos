@@ -173,6 +173,14 @@ main{padding:18px 16px 46px}
 
 .pie-nota{margin-top:6px;font-size:14.5px;color:var(--gris-tenue);text-align:center;line-height:1.5}
 
+/* ── Cardio ────────────────────────────────────────────────────────────── */
+.cardio-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 10px}
+.cardio-dato{background:var(--negro-suave);border:1px solid var(--linea);border-radius:11px;
+  padding:11px 12px}
+.cardio-dato span{display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--gris-tenue);margin-bottom:4px}
+.cardio-dato b{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:20px;color:var(--dorado)}
+
 /* ── Modal de exportar (último recurso: copiar a mano) ────────────────── */
 .modal-fondo{
   position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;
@@ -283,6 +291,22 @@ main{padding:18px 16px 46px}
       <div id="listaEjercicios"></div>
       <p class="pie-nota">AL FALLO = repite hasta que ya no puedas completar una repetición más con buena técnica, en el rango indicado. Alerta biomecánica = punto de riesgo real de cada ejercicio, de nuestra base de conocimiento técnico.</p>
       <button class="btn btn-secundario" id="bExportar" type="button" style="margin-top:14px">Exportar sesión de hoy</button>
+    </div>
+
+    <!-- ══ Cardio ═══════════════════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Cardio — para acelerar la baja de grasa</span>
+      <div class="cardio-grid">
+        <div class="cardio-dato"><span>Frecuencia</span><b>4 veces por semana</b></div>
+        <div class="cardio-dato"><span>Duración</span><b>30-35 min</b></div>
+        <div class="cardio-dato"><span>Zona de FC objetivo</span><b>108-136 ppm</b></div>
+        <div class="cardio-dato"><span>Intensidad</span><b>60-75% FC máx.</b></div>
+      </div>
+      <p class="pie-nota" style="text-align:left;margin-top:14px">
+        <b style="color:var(--dorado)">Qué días:</b> Lunes, Martes, Miércoles y Viernes — siempre al final del entrenamiento de fuerza, nunca antes (para no restarle fuerza a la serie al fallo). El Jueves (pierna, el día de mayor esfuerzo) y el Sábado (núcleo, que ya incluye prensa de piernas) quedan sin cardio para proteger la recuperación de la pierna; el Domingo es descanso completo.
+        <br><br>
+        <b style="color:var(--dorado)">Por qué esta duración:</b> el aporte de las grasas como combustible recién gana peso pasados los 30 minutos de ejercicio continuo — sesiones más cortas no aprovechan tanto esa quema. La intensidad moderada (caminata rápida, trotadora o bicicleta, ritmo conversacional) se sostiene ese tiempo sin comprometer la recuperación para el próximo día de fuerza.
+      </p>
     </div>
 
   </main>
