@@ -296,3 +296,273 @@ alimentación WGYMADNSPORT), seguir siempre este proceso:
     alternando dos tonos agudos, más una vibración larga con
     `navigator.vibrate`. Ver `pitar()` en `entrenar-sara.html` como
     referencia ya probada.
+
+## Base de conocimiento técnico: entrenamiento, hipertrofia, nutrición
+## y biomecánica (regla permanente)
+
+Esta sección resume los conceptos clave de 23 manuales y libros técnicos
+(entrenamiento de fuerza, hipertrofia, biomecánica, prevención de
+lesiones, nutrición deportiva y fisiología) que el dueño subió a su
+Google Drive. **Usar siempre esta base como referencia al diseñar
+rutinas de entrenamiento, planes de alimentación y contenido educativo
+de marketing para WGYMADNSPORT** — da rangos numéricos y criterios
+concretos en vez de inventar cifras genéricas.
+
+Si el cliente trae su propio PDF de dieta o indicación médica específica
+(por ejemplo el plan de un cliente VIP, o una condición como diabetes),
+esa indicación puntual siempre tiene prioridad sobre los rangos
+generales de aquí. Algunos PDFs se leyeron de forma incompleta por su
+tamaño (el manual del entrenador personal solo entregó el índice; el
+capítulo de ajuste de insulina de "Diabetes y Ejercicio Físico", págs.
+67-109, no se pudo leer) — no inventar cifras que no estén citadas
+explícitamente en esta sección, especialmente en temas de salud
+sensible como diabetes.
+
+### Metodología del entrenamiento y periodización
+
+- Seis variables de la carga de entrenamiento: frecuencia, volumen,
+  intensidad, densidad, progresión y tipo de ejecución.
+- Orden metodológico recomendado para subir la carga: 1) frecuencia
+  semanal, 2) volumen por sesión, 3) densidad del estímulo, 4)
+  intensidad — en ese orden, no todo a la vez.
+- Clasificación de métodos de fuerza (Zatsiorski): esfuerzos máximos
+  (90-100% 1RM, 3-5 series, 1-3 reps, 5-7 días de recuperación, solo
+  alto rendimiento); esfuerzos repetidos (70-80% 1RM, 6x6, 2 días de
+  recuperación, apto para principiantes); esfuerzos dinámicos (20-50%
+  1RM, 1-8 reps, prioriza velocidad de ejecución).
+- Tabla intensidad-objetivo (González-Badillo): 90-100% 1RM (4-8x1-3) =
+  fuerza máxima, poca hipertrofia; 80-85% (3-5x5-7) = fuerza máxima con
+  hipertrofia moderada; 70-80% (3-5x6-12) = hipertrofia muscular alta;
+  60-75% (3-5x6-12, dejando 2-6 reps en reserva) = acondicionamiento
+  general para principiantes — antecedente del concepto RIR actual.
+- Escala de intensidad (Martin): 30-50% 1RM = escasa, 50-70% = leve,
+  70-80% = media, 80-90% = submáxima, 90-100% = máxima.
+- Fórmulas de %1RM desde repeticiones al fallo: Brzycki
+  `%1RM = 102,78 − 2,78 × reps`; Lander `%1RM = 101,3 − 2,67123 × reps`
+  (más precisas hasta 10 reps).
+- Protocolo de test de 1RM: calentar 10-12 min + 2 series de 12-15 reps
+  al 30-40% 1RM (1 min descanso), subir de a 2-10 kg con 2-3 reps y 1
+  min de descanso hasta acercarse al máximo, luego 1 repetición por
+  intento con 3 min de descanso hasta fallar.
+- Ley de Henneman (reclutamiento de fibras): cargas ligeras reclutan
+  solo fibras lentas tipo I; cargas medias suman fibras IIa; solo cargas
+  máximas o movimientos explosivos reclutan también fibras rápidas IIb.
+- Principio de continuidad: descansos muy largos no generan
+  entrenamiento, muy cortos sobreentrenan; el período de transición
+  entre bloques no debería superar 14-28 días.
+- Calentamiento: eleva la FC a 120-140 ppm y tarda 1-2 min en generar
+  régimen cardiorrespiratorio óptimo antes del bloque principal.
+- Fórmulas de FC para prescribir cardio: FC máx. clásica = 220 − edad;
+  FC máx. de Seals (más exacta) = 208 − (0,7 × edad); FC de
+  entrenamiento por Karvonen = FC reposo + (FC máx. − FC reposo) × un
+  factor de 0,50 (mínimo) a 0,85 (máximo) según intensidad buscada.
+- Principio de multilateralidad: la flexibilidad mejora día a día, la
+  fuerza semana a semana, la velocidad mes a mes y la resistencia año a
+  año — programar la progresión de cada cualidad con su propio ritmo,
+  sin esperar avances iguales en todas a la vez.
+- Toda habilidad técnica nueva se enseña en tres mecanismos: percepción
+  (leer la información relevante), decisión (elegir la respuesta) y
+  ejecución (la técnica en sí) — explicar también el "cuándo y por qué"
+  de un ejercicio, no solo el movimiento.
+
+### Hipertrofia muscular
+
+- Hipertrofia sarcoplásmica (más volumen, 12-15RM, agotar todas las
+  series de un ejercicio antes de pasar al siguiente) vs. sarcomérica/
+  miofibrilar (funcional, 8-10RM, 9 series por grupo repartidas en 3
+  ejercicios, 1ª serie de cada ejercicio antes de repetir) — esta
+  segunda es la que más aumenta la fuerza real.
+- Rango general de hipertrofia: 6 a 20 repeticiones por serie, sin bajar
+  del 80% de la potencia máxima testeada con esa carga.
+- Descanso entre series (hipertrofia): principiante 1 min, intermedio
+  1-2 min, avanzado 1-1:30 a 2 min. Entre sesiones del mismo músculo:
+  36-72 h según nivel.
+- Volumen semanal orientativo por biotipo: ectomorfo 12-21 series/sesión
+  y 2-4 sesiones/semana; mesomorfo y endomorfo 12-24 series/sesión y
+  3-6 sesiones/semana (hasta 8-10 series en avanzados). Alternar 6-9
+  semanas intensas con 2-3 semanas de descarga.
+- El trabajo excéntrico puro no debe superar 3 semanas seguidas ni
+  usarse cerca de una competencia.
+- Técnicas para romper estancamiento: repeticiones forzadas, series
+  descendentes (bajar 10-20% de carga al fallo, máx. 2-3 veces por
+  serie), superseries para el mismo grupo, amplitud creciente por
+  tercios de rango de movimiento.
+- Tipos de hipertrofia según objetivo del cliente: general, estructural,
+  compensadora (corrige desequilibrios biomecánicos) y estética (masa +
+  reducción de grasa) — cada una con fases de 3 a 5 semanas de
+  adaptación y ejercicios distintos.
+
+### Biomecánica, prevención de lesiones y poblaciones especiales
+
+- Equilibrio estructural: la cadena extensora (espalda, dorsales,
+  aductores de escápula) se debilita por sedentarismo mientras la
+  flexora (pectoral, deltoides anterior) se acorta — causa directa del
+  dorso redondo. Dar el doble o triple de volumen a dorsales/aductores
+  de escápula que a pectorales para compensar.
+- Relación de fuerza cuádriceps:isquiotibiales debe ser 3:2; si se
+  desplaza hacia el cuádriceps aumenta la presión rotuliana y el riesgo
+  de síndrome rotuliano — nunca entrenar extensores de rodilla sin la
+  proporción correcta de flexores.
+- Cuatro etapas de adaptación obligatorias y secuenciales (nunca
+  saltarlas, sobre todo con principiantes): 1) neuroendocrina —
+  movilidad + aeróbico suave 15-30 min 3x/semana, 3-5 semanas mínimo;
+  2) cardiovascular — aeróbico 3-5x/semana, 6-15 semanas; 3) aparato
+  motor pasivo — fuerza en máxima amplitud, técnica sobre intensidad,
+  6-15 semanas; 4) aparato motor activo — recién aquí ejercicios
+  poliarticulares e intensidad creciente.
+- Regla de supercompensación: cada músculo se entrena cada 3-4 días; un
+  principiante necesita 4-5 días de recuperación completa.
+- Señales de recuperación insuficiente antes de subir carga: agujetas
+  fuertes, falta de ímpetu, cansancio y tensión persistentes, falta de
+  concentración, sudor en reposo, trastornos del movimiento.
+- Lesiones en sala de pesas por frecuencia: rodillas 30%, columna
+  lumbosacra 18%, hombros 15%, muñeca 13%, codos 10%, manos 6%.
+- Protocolo RICE ante lesión aguda: reposo inmediato, hielo 15-20 min
+  (nunca directo sobre la piel, repetible cada hora durante 24-48h),
+  compresión con venda elástica, elevación a la altura del corazón. El
+  calor está prohibido en fase aguda y hasta 48 h después.
+- Señal de alarma para derivar a un profesional de salud: dolor intenso
+  o que se prolonga más de unos días — nunca automedicar ni seguir
+  entrenando la zona afectada.
+- Regla "5 y 10" de progresión (aplicable también a cargas de sala):
+  nunca subir volumen ni intensidad más del 10% (idealmente 5%) de una
+  semana a la siguiente. Método duro-fácil: nunca dos sesiones intensas
+  seguidas sobre el mismo patrón de movimiento.
+- Toda sesión en 3 partes: inicial (calentamiento general y específico,
+  10-20 min), medular (el objetivo planificado) y final (vuelta a la
+  calma) — omitir la vuelta a la calma empeora la recuperación.
+- Niños/adolescentes: sí pueden ganar fuerza real antes de la pubertad
+  (por coordinación neuromuscular, no por testosterona) sin dañar el
+  cartílago de crecimiento si el entrenamiento está bien supervisado.
+  No iniciar cargas altas y específicas (ej. levantamientos olímpicos)
+  antes de los 13 años. El entrenamiento con sobrecarga reduce hasta un
+  33% las lesiones deportivas generales y un 50% el tiempo de
+  rehabilitación en jóvenes deportistas (NSCA). Supervisión mínima: 1
+  instructor cada 3 niños.
+- Checklist de seguridad de sala válido para cualquier cliente: enseñar
+  la técnica antes de cargar, calentamiento general + específico con
+  estiramiento al inicio y al final, nunca ignorar el dolor articular,
+  registrar cada sesión (ejercicio, volumen, duración, intensidad, si
+  se completó o no y por qué).
+
+### Nutrición deportiva: cálculo calórico, macros y timing
+
+- Gasto calórico total (TEE) = metabolismo basal (TMB) + efecto térmico
+  de los alimentos + gasto por actividad.
+- TMB Harris-Benedict hombres: `66 + (13,7 × kg) + (5 × cm) − (6,8 × edad)`.
+  Mujeres: `65,5 + (9,6 × kg) + (1,7 × cm) − (4,7 × edad)`.
+- Factor de actividad sobre el TMB (orientativo): reposo ×1, muy ligera
+  ×1,5, ligera ×2,5, moderada ×5, intensa ×7 — no reemplaza una
+  medición real, es solo referencia rápida.
+- Proteína según objetivo: 1,2-2,0 g/kg/día cubre a la mayoría de
+  deportistas; subir a ≥2,0 g/kg/día en déficit calórico o lesión para
+  proteger masa magra; rango deportivo amplio 1,8-4,4 g/kg, óptimo para
+  fuerza/potencia ≈2,0-2,2 g/kg, y en superávit no hace falta superar
+  ≈2,2 g/kg (más proteína no mejora más la ganancia muscular).
+- Carbohidratos: fuerza/potencia 2,2-5,5 g/kg/día (promedio útil ≈3,3
+  g/kg); deportes de equipo 3,3-6,6 g/kg/día.
+- Grasas: mínimo 0,66 g/kg/día para soporte hormonal, techo práctico
+  ~40% de las calorías totales; en déficit recortar primero grasas
+  antes que proteína o carbohidratos.
+- Pérdida de grasa: déficit moderado de 250-500 kcal/día, bajar menos
+  del 1% del peso corporal por semana para preservar músculo y
+  rendimiento; resultados esperables recién en 3-6 semanas. Bajar 1 kg
+  de grasa exige un déficit acumulado de ≈7000 kcal.
+- Timing: 4-8 comidas/día con 1/8-1/4 de la proteína diaria cada una,
+  cada 3-6 h; comer entre 30 min y 4 h antes de entrenar, y entre
+  inmediato y 1 h después. Post-entreno: 15-25 g (0,25-0,3 g/kg) de
+  proteína de alto valor biológico en las primeras 0-2 h.
+- Jerarquía real de importancia: 1) balance calórico, 2) macronutrientes,
+  3) timing (un mal timing cuesta como máximo ~10% del resultado — nunca
+  es lo primero a corregir en un plan que no está funcionando).
+- El exceso de proteína no usada se convierte en grasa corporal y sube
+  la carga renal — "más proteína siempre" no es ventaja automática.
+- Para medir avance, priorizar composición corporal (pliegues cutáneos,
+  perímetros) sobre el peso bruto en la balanza; pesar/medir siempre a
+  la misma hora, idealmente en ayunas por la mañana.
+
+### Suplementación deportiva (qué sí tiene evidencia y qué no)
+
+- Creatina monohidrato: única forma con evidencia sólida. Carga 20-30
+  g/día (o 0,25-0,35 g/kg/día) durante 5-7 días + mantenimiento de 3-5
+  g/día (0,1 g/kg/día); también funciona ir directo a la dosis de
+  mantenimiento sin fase de carga, solo tarda más en saturar. Requiere
+  buena hidratación por su efecto osmótico.
+- Cafeína: 3-6 mg/kg, 45-60 min antes del esfuerzo; usarla de forma
+  puntual (no todos los días) para no generar tolerancia.
+- Beta-alanina: 4,8-6,4 g/día fraccionados en dosis de 0,8-1,6 g cada
+  4-6 h para evitar parestesias (hormigueo).
+- BCAA's: evidencia débil — una proteína completa siempre es mejor
+  opción que BCAA's aislados; no recomendarlos como suplemento
+  prioritario.
+- Vitaminas/minerales y picolinato de cromo: sin déficit diagnosticado y
+  con dieta balanceada, no mejoran el rendimiento ni actúan como
+  anabólicos — no venderlos como tal.
+- Vitamina D3: 1000-2000 UI/día solo si hay insuficiencia o deficiencia
+  confirmada por examen. Omega 3: 250-500 mg/día en dietas pobres en
+  pescado azul.
+
+### Metabolismo energético y composición corporal
+
+- Sistemas energéticos según duración del esfuerzo: 0-30 seg → fosfágeno
+  ATP-PC (sprints, saltos); 30 seg-1,5 min → ATP-PC + vía láctica;
+  1,5-3 min → láctica + aeróbica; más de 3 min → predominio aeróbico. El
+  aporte de las grasas gana peso recién pasados los ~30 min de
+  ejercicio continuo.
+- Reservas energéticas de un adulto de 70 kg: glucógeno muscular ≈350 g
+  y hepático ≈150 g (se agotan en ayuno a las 24-36 h); grasa corporal
+  ≈125.000 kcal — la reserva dominante frente a las ~2000 kcal de
+  carbohidratos disponibles.
+- Gasto energético diario: ~70% metabolismo de reposo, ~20% actividad
+  física, ~10% termogénesis de la digestión (mayor con proteínas).
+- Equivalencias: 1 g de carbohidrato o proteína = 4 kcal; 1 g de grasa =
+  9 kcal.
+- Hidratación: se pueden perder hasta 1,5 L de sudor por hora; tomar
+  150-250 ml cada 10-15 min. Agua o hipotónica si el ejercicio dura
+  menos de 1 h; isotónica entre 1-2 h; con carbohidratos añadidos si
+  supera 2 h o hace frío. Electrolitos solo hacen falta si el ejercicio
+  supera 3 h — la mayoría de los calambres se deben a deshidratación,
+  no a falta de sales.
+- Suma de 6 pliegues cutáneos (tríceps + subescapular + supraespinal +
+  abdominal + muslo anterior + pantorrilla) como indicador rápido de
+  grasa subcutánea: referencia de persona joven normal ≈65 mm en
+  hombres y ≈91 mm en mujeres. Medir siempre con el mismo calibre y la
+  misma fórmula en el tiempo — mezclar métodos invalida la comparación.
+- La grasa abdominal/visceral es el principal factor de riesgo
+  cardiovascular y de diabetes, más que la grasa subcutánea general.
+  Hasta un 70% de la variación del IMC entre personas se explica por
+  factores genéticos — útil para explicarle a un cliente por qué dos
+  personas con la misma dieta no bajan de peso igual.
+
+### Salud y poblaciones especiales: sobrepeso, obesidad y diabetes
+
+- Clasificación OMS por IMC: sobrepeso 25,0-29,9 kg/m²; obesidad ≥30
+  kg/m². El riesgo metabólico (triglicéridos, insulina, presión
+  arterial) ya sube de forma clara en el rango de sobrepeso, no solo en
+  obesidad franca; 27 kg/m² es un umbral práctico de alerta temprana de
+  insulinorresistencia.
+- **Diabetes — nunca entrenar a un cliente diabético sin evaluación
+  médica previa**, obligatoria en hombres mayores de 40 años y mujeres
+  mayores de 50, o con factores de riesgo coronario (hipertensión,
+  colesterol alto, tabaquismo, antecedentes familiares tempranos).
+  Contraindicación absoluta de esfuerzo: presión arterial mayor a
+  200/120 mmHg o arritmia ventricular no controlada.
+- Ejercicio recomendado en diabetes: aeróbico de baja intensidad y
+  larga duración (caminar, nadar, bici), con frecuencia cardíaca menor
+  al 80% de la máxima. Progresión segura: inicio (4-6 semanas, 3
+  veces/semana, menos de 45 min, menos del 50% FC máx.) → mejora (5-6
+  meses, hasta 70-80% FC máx., 60 min) → mantenimiento (desde el 6º mes,
+  de por vida).
+- Un solo entrenamiento mejora la sensibilidad a la insulina durante
+  12-24 h, pero el beneficio sobre el control glucémico se pierde a las
+  72 h de la última sesión — con un cliente diabético la regularidad
+  (mínimo 3 veces/semana) no es negociable, entrenar de forma
+  esporádica no sirve.
+- El miedo a la hipoglucemia es una de las principales barreras
+  psicológicas que alejan a un cliente diabético del ejercicio —
+  conviene conversarlo explícitamente al motivarlo, no solo entregarle
+  la rutina.
+- **No improvisar cifras de ajuste de insulina o de manejo de glucemia
+  durante el ejercicio** — ese detalle no se pudo leer completo del
+  manual fuente; para un cliente diabético, la pauta específica siempre
+  debe venir de su propio equipo médico.
