@@ -47,8 +47,11 @@ header{
 }
 header .logo{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
   border:2px solid var(--dorado);object-fit:cover;background:#fff}
-header h1{font-family:'Inter',sans-serif;font-weight:700;font-size:19px;
-  line-height:1.15;text-transform:uppercase;letter-spacing:.02em;flex:1;min-width:0}
+header .quien{flex:1;min-width:0}
+header .kicker{font-family:'Inter',sans-serif;font-weight:700;font-size:12px;
+  text-transform:uppercase;letter-spacing:.14em;color:var(--gris-tenue);margin-bottom:1px}
+header h1{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:26px;
+  line-height:1.05;text-transform:uppercase;letter-spacing:.01em;color:var(--blanco)}
 header h1 span{color:var(--rojo-vivo)}
 
 main{padding:18px 16px 46px}
@@ -194,7 +197,10 @@ main{padding:18px 16px 46px}
 
   <header>
     <img class="logo" src="assets/logo.jpg" alt="">
-    <h1>RUTINA VIP <span>MILTON FUENTES</span></h1>
+    <div class="quien">
+      <div class="kicker">Rutina VIP</div>
+      <h1>MILTON <span>FUENTES</span></h1>
+    </div>
   </header>
 
   <main>
