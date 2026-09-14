@@ -178,6 +178,15 @@ main{padding:18px 16px 46px}
 .comida .macros{font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
   color:var(--dorado);margin-bottom:6px}
 .comida .menu{font-size:15.5px;line-height:1.45;color:var(--blanco)}
+.suples-comida{display:flex;flex-wrap:wrap;margin-top:9px}
+.suple-mini{display:inline-flex;align-items:center;gap:6px;background:var(--negro-card);
+  border:1.5px solid var(--dorado);border-radius:999px;padding:5px 11px 5px 8px;margin:4px 6px 0 0;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;color:var(--dorado);
+  cursor:pointer;white-space:nowrap}
+.suple-mini .chk{width:14px;height:14px;border-radius:4px;border:1.5px solid var(--dorado);
+  flex:0 0 auto;display:grid;place-items:center;font-size:10px;line-height:1;color:transparent}
+.suple-mini[data-tomado="si"]{border-color:var(--verde);color:var(--verde);background:rgba(67,196,141,.1)}
+.suple-mini[data-tomado="si"] .chk{border-color:var(--verde);background:var(--verde);color:#08301F}
 
 /* ── Suplementos ───────────────────────────────────────────────────────── */
 .suple{background:var(--negro-suave);border-left:4px solid var(--dorado);border-radius:0 10px 10px 0;
@@ -329,7 +338,7 @@ main{padding:18px 16px 46px}
         <div class="dosis">1000-2000 UI/día — solo si el examen confirma déficit</div>
         <div class="motivo">No está en su lista actual. Conviene pedir un examen de vitamina D en su próximo control de sangre — sin una deficiencia confirmada, suplementarla no mejora el rendimiento ni acelera nada.</div>
       </div>
-      <p class="pie-nota" style="margin-top:12px">Dosis exactas según el envase de cada suplemento salvo donde ya está documentado (creatina, beta-alanina, omega 3). Si toma algún medicamento, consúltalo con su médico antes de combinar.</p>
+      <p class="pie-nota" style="margin-top:12px">Dosis exactas según el envase de cada suplemento salvo donde ya está documentado (creatina, beta-alanina, omega 3). Si toma algún medicamento, consúltalo con su médico antes de combinar. Marca cada uno directo en el menú de hoy, junto a la comida donde corresponde tomarlo.</p>
     </div>
 
     <!-- ══ Hidratación ══════════════════════════════════════════════════ -->
@@ -429,14 +438,14 @@ var diaActual = indiceHoy();
    base: se deja con una comida por precaución general, no por un dato
    científico específico que tengamos. ═══════════════════════════════ */
 var SUPLEMENTOS = [
-  { nombre:"Multivitamínico", dosis:"según envase", cuando:"Desayuno", motivo:"Con comida, para mejor tolerancia y absorción." },
-  { nombre:"Vitamina C", dosis:"según envase", cuando:"Desayuno", motivo:"Junto al multivitamínico, mismo momento." },
-  { nombre:"Omega 3", dosis:"250-500 mg", cuando:"Almuerzo", motivo:"Es una grasa — se absorbe mejor con una comida que lleve algo de grasa (aceite de oliva). Cubre además lo que dejó de aportar el pescado que ya no come." },
-  { nombre:"Citrato de potasio", dosis:"según envase", cuando:"Almuerzo", motivo:"Con comida, para no irritar el estómago." },
-  { nombre:"HMB", dosis:"1 cápsula", cuando:"Almuerzo", motivo:"No está en la base de conocimiento técnico documentada — dosis y timing según el envase o la indicación de quien se lo recomendó." },
-  { nombre:"Creatina", dosis:"3-5 g", cuando:"Post-entreno", motivo:"Se absorbe mejor con carbohidratos — coincide con la comida de después del entreno." },
-  { nombre:"Beta-alanina", dosis:"0,8-1,6 g por toma, repartida", cuando:"Desayuno, almuerzo y cena", motivo:"Tomada toda junta produce hormigueo (parestesias) — hay que fraccionarla en 2-3 tomas al día." },
-  { nombre:"Citrato de magnesio", dosis:"según envase", cuando:"Cena / antes de dormir", motivo:"Ayuda a la relajación nocturna — es habitual tomarlo en la noche." }
+  { nombre:"Multivitamínico", dosis:"según envase", cuando:"Desayuno", motivo:"Con comida, para mejor tolerancia y absorción.", comidas:["desayuno"] },
+  { nombre:"Vitamina C", dosis:"según envase", cuando:"Desayuno", motivo:"Junto al multivitamínico, mismo momento.", comidas:["desayuno"] },
+  { nombre:"Omega 3", dosis:"250-500 mg", cuando:"Almuerzo", motivo:"Es una grasa — se absorbe mejor con una comida que lleve algo de grasa (aceite de oliva). Cubre además lo que dejó de aportar el pescado que ya no come.", comidas:["almuerzo"] },
+  { nombre:"Citrato de potasio", dosis:"según envase", cuando:"Almuerzo", motivo:"Con comida, para no irritar el estómago.", comidas:["almuerzo"] },
+  { nombre:"HMB", dosis:"1 cápsula", cuando:"Almuerzo", motivo:"No está en la base de conocimiento técnico documentada — dosis y timing según el envase o la indicación de quien se lo recomendó.", comidas:["almuerzo"] },
+  { nombre:"Creatina", dosis:"3-5 g", cuando:"Post-entreno", motivo:"Se absorbe mejor con carbohidratos — coincide con la comida de después del entreno.", comidas:["postentreno"] },
+  { nombre:"Beta-alanina", dosis:"0,8-1,6 g por toma, repartida", cuando:"Desayuno, almuerzo y cena", motivo:"Tomada toda junta produce hormigueo (parestesias) — hay que fraccionarla en 2-3 tomas al día.", comidas:["desayuno","almuerzo","cena"] },
+  { nombre:"Citrato de magnesio", dosis:"según envase", cuando:"Cena / antes de dormir", motivo:"Ayuda a la relajación nocturna — es habitual tomarlo en la noche.", comidas:["cena"] }
 ];
 
 function totalesDia(tipo){
@@ -486,11 +495,23 @@ function guardarCheck(obj){
   try{ localStorage.setItem(CHECK_KEY, JSON.stringify(obj)); }catch(e){}
 }
 
+/* ═══ Suplementos marcados como tomados, junto a la comida donde van ══ */
+var SUPLE_CHECK_KEY = "wgym_suple_check_milton_v1";
+function cargarSupleCheck(){
+  try{ return JSON.parse(localStorage.getItem(SUPLE_CHECK_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function guardarSupleCheck(obj){
+  try{ localStorage.setItem(SUPLE_CHECK_KEY, JSON.stringify(obj)); }catch(e){}
+}
+
 function pintarComidas(){
   var dia = PLAN_DIAS[diaActual];
   var check = cargarCheck();
   var hoy = hoyISO();
   var marcadasHoy = check[hoy] || [];
+  var supleCheck = cargarSupleCheck();
+  var suplesTomadosHoy = supleCheck[hoy] || [];
 
   var cont = $("listaComidas");
   cont.innerHTML = "";
@@ -499,6 +520,18 @@ function pintarComidas(){
     var texto = c.comun;
     if(dia.carneRoja && c.domingo) texto = c.domingo;
     else if(dia.tipo === "alto" && c.juevesAlto) texto = c.juevesAlto;
+
+    var suplesDeEsta = SUPLEMENTOS.filter(function(s){
+      return s.comidas && s.comidas.indexOf(c.id) !== -1;
+    });
+    var chipsHtml = "";
+    if(suplesDeEsta.length){
+      chipsHtml = '<div class="suples-comida">' + suplesDeEsta.map(function(s){
+        var key = c.id + "|" + s.nombre;
+        var tomado = suplesTomadosHoy.indexOf(key) !== -1;
+        return '<button type="button" class="suple-mini" data-tomado="' + (tomado ? "si" : "no") + '" data-key="' + key + '"><span class="chk">✓</span>' + s.nombre + '</button>';
+      }).join("") + '</div>';
+    }
 
     var hecha = marcadasHoy.indexOf(c.id) !== -1;
     var div = document.createElement("div");
@@ -510,6 +543,7 @@ function pintarComidas(){
         '<div class="cab"><h3>' + c.nombre + '</h3><span class="hora">' + c.hora + '</span></div>' +
         '<div class="macros">' + m.prot + 'g prot · ' + m.carb + 'g carb · ' + m.grasa + 'g grasa</div>' +
         '<div class="menu">' + texto + '</div>' +
+        chipsHtml +
       '</div>';
     cont.appendChild(div);
   });
@@ -525,6 +559,19 @@ function pintarComidas(){
       guardarCheck(chk);
       pintarComidas();
       pintarMarcas();
+    });
+  });
+
+  cont.querySelectorAll(".suple-mini").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var key = btn.getAttribute("data-key");
+      var chk = cargarSupleCheck();
+      var lista = chk[hoy] || [];
+      var pos = lista.indexOf(key);
+      if(pos === -1) lista.push(key); else lista.splice(pos, 1);
+      chk[hoy] = lista;
+      guardarSupleCheck(chk);
+      pintarComidas();
     });
   });
 }
