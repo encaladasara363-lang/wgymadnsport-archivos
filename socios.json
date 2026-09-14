@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-12",
+ "actualizado": "2026-09-14",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -177,6 +177,14 @@
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46305
+  },
+  {
+   "n": "EATEFANNY",
+   "a": "BERMUDEZ",
+   "rut": "Sin Rut",
+   "plan": "Funcionario Público",
+   "monto": 28000,
+   "fv": 46309
   },
   {
    "n": "VICTORIA",
