@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Plan nutricional VIP de Milton Fuentes Espinosa, WGYMADNSPORT Tocopilla: calorías, macros y menú diario con carne roja solo el domingo.">
+<title>Plan Nutricional · Milton Fuentes</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+
+/* ── Misma paleta de siempre: negro puro, rojo E30613 y dorado D4AF37 ──── */
+:root{
+  --negro:#000000; --negro-suave:#111111; --negro-card:#1C1C1C; --linea:#2C2C2C;
+  --rojo:#E30613; --rojo-vivo:#FF2130;
+  --dorado:#D4AF37;
+  --blanco:#FFFFFF; --gris:#CFCFCF; --gris-tenue:#8A8A8A;
+  --verde:#43C48D;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--negro);color:var(--blanco)}
+body{
+  font-family:'Inter','Segoe UI',Arial,sans-serif;
+  font-size:19px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  padding-bottom:env(safe-area-inset-bottom);
+  overscroll-behavior-y:contain;
+}
+.envase{max-width:560px;margin:0 auto;min-height:100vh;position:relative}
+.tit{font-family:'Anton',Impact,sans-serif;letter-spacing:.01em;line-height:1;text-transform:uppercase}
+.etq{font-family:'Inter',sans-serif;font-weight:700;text-transform:uppercase;
+     letter-spacing:.12em;font-size:15px;color:var(--gris-tenue);display:block;margin-bottom:10px}
+.num{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+/* ── Cabecera ─────────────────────────────────────────────────────────── */
+header{
+  display:flex;align-items:center;gap:11px;padding:13px 14px;
+  background:linear-gradient(180deg,#111111 0%,var(--negro) 100%);
+  border-bottom:3px solid var(--rojo);position:sticky;top:0;z-index:30;
+  padding-top:calc(14px + env(safe-area-inset-top));
+}
+header .logo{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
+  border:2px solid var(--dorado);object-fit:cover;background:#fff}
+header h1{font-family:'Inter',sans-serif;font-weight:700;font-size:18px;
+  line-height:1.15;text-transform:uppercase;letter-spacing:.02em;flex:1;min-width:0}
+header h1 span{color:var(--rojo-vivo)}
+
+main{padding:18px 16px 46px}
+
+.card{background:var(--negro-card);border:1px solid var(--linea);border-radius:13px;
+  padding:16px;margin-bottom:18px}
+
+/* ── Resumen diario ────────────────────────────────────────────────────── */
+.kcal-total{text-align:center;margin-bottom:16px}
+.kcal-total .v{font-family:'Anton',Impact,sans-serif;font-size:54px;line-height:1;color:var(--dorado)}
+.kcal-total .d{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--gris-tenue);margin-top:4px}
+
+.macro-fila{margin-bottom:13px}
+.macro-fila:last-child{margin-bottom:0}
+.macro-cab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.macro-cab .nombre{font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--blanco)}
+.macro-cab .valor{font-family:'Inter',sans-serif;font-weight:800;font-size:15.5px;color:var(--blanco)}
+.macro-barra{height:10px;border-radius:6px;background:var(--negro-suave);overflow:hidden}
+.macro-barra i{display:block;height:100%;border-radius:6px}
+.macro-barra i.prot{background:var(--rojo)}
+.macro-barra i.grasa{background:var(--dorado)}
+.macro-barra i.carb{background:var(--blanco)}
+
+/* ── Selector de día ───────────────────────────────────────────────────── */
+.dia-tipo-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.dia-tipo-tabs button{
+  background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:10px;
+  color:var(--gris-tenue);font-family:'Inter',sans-serif;font-weight:700;font-size:14.5px;
+  padding:11px 6px;cursor:pointer;text-transform:uppercase;letter-spacing:.03em;
+}
+.dia-tipo-tabs button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo);color:#fff}
+
+/* ── Comidas ───────────────────────────────────────────────────────────── */
+.comida{background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:13px;
+  padding:13px 14px;margin-bottom:11px;display:flex;gap:12px;align-items:flex-start}
+.comida[data-hecha="si"]{border-color:var(--verde);background:rgba(67,196,141,.08)}
+.comida .tick{
+  flex:0 0 auto;width:40px;height:40px;border-radius:10px;border:1.5px solid var(--linea);
+  background:var(--negro-card);color:var(--blanco);font-size:19px;line-height:1;
+  cursor:pointer;display:grid;place-items:center;margin-top:2px;
+}
+.comida[data-hecha="si"] .tick{background:var(--verde);border-color:var(--verde);color:#08301F}
+.comida .info{flex:1;min-width:0}
+.comida .cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:3px}
+.comida h3{font-family:'Inter',sans-serif;font-weight:800;font-size:16.5px;
+  text-transform:uppercase;letter-spacing:.02em}
+.comida .hora{font-size:13px;color:var(--gris-tenue);font-weight:600}
+.comida .macros{font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
+  color:var(--dorado);margin-bottom:6px}
+.comida .menu{font-size:15.5px;line-height:1.45;color:var(--blanco)}
+
+/* ── Contadores ────────────────────────────────────────────────────────── */
+.marcas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--linea);
+  border:1px solid var(--linea);border-radius:13px;overflow:hidden;margin-bottom:18px}
+.marcas .m{background:var(--negro-card);padding:14px 8px 15px;text-align:center;min-width:0}
+.marcas .m .v{font-family:'Anton',Impact,sans-serif;font-size:25px;line-height:1;
+  color:var(--dorado);font-variant-numeric:tabular-nums}
+.marcas .m .d{font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--blanco);margin-top:6px}
+
+.pie-nota{margin-top:6px;font-size:14.5px;color:var(--gris-tenue);text-align:center;line-height:1.5}
+
+</style>
+</head>
+<body>
+
+<div class="envase">
+
+  <header>
+    <img class="logo" src="assets/logo.jpg" alt="">
+    <h1>PLAN NUTRICIONAL <span>MILTON FUENTES</span></h1>
+  </header>
+
+  <main>
+
+    <!-- ══ Resumen diario ═══════════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Objetivo diario</span>
+      <div class="kcal-total">
+        <div class="v" id="kcalTotal">—</div>
+        <div class="d">Calorías al día</div>
+      </div>
+      <div class="macro-fila">
+        <div class="macro-cab"><span class="nombre">Proteína</span><span class="valor" id="protTotal">—</span></div>
+        <div class="macro-barra"><i class="prot" id="protBarra"></i></div>
+      </div>
+      <div class="macro-fila">
+        <div class="macro-cab"><span class="nombre">Grasas</span><span class="valor" id="grasaTotal">—</span></div>
+        <div class="macro-barra"><i class="grasa" id="grasaBarra"></i></div>
+      </div>
+      <div class="macro-fila">
+        <div class="macro-cab"><span class="nombre">Carbohidratos</span><span class="valor" id="carbTotal">—</span></div>
+        <div class="macro-barra"><i class="carb" id="carbBarra"></i></div>
+      </div>
+    </div>
+
+    <!-- ══ Menú del día ═════════════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Menú de hoy</span>
+      <div class="dia-tipo-tabs" id="tabsTipoDia">
+        <button type="button" id="bLunSab">Lunes a Sábado</button>
+        <button type="button" id="bDomingo">Domingo (carne roja)</button>
+      </div>
+      <div id="listaComidas"></div>
+    </div>
+
+    <!-- ══ Contadores ═══════════════════════════════════════════════════ -->
+    <div class="marcas">
+      <div class="m"><div class="v num" id="mHoy">0/6</div><div class="d">Comidas de hoy</div></div>
+      <div class="m"><div class="v num" id="mRacha">0</div><div class="d">Días completos seguidos</div></div>
+    </div>
+
+    <p class="pie-nota">Marca cada comida a medida que la haces — queda guardado solo en este teléfono. Recuerda: la cintura es la métrica real de si está funcionando, no solo la balanza. Primeros cambios medibles en 3-6 semanas.</p>
+
+  </main>
+
+</div>
+
+<script>
+"use strict";
+function $(id){ return document.getElementById(id); }
+function hoyISO(){
+  var f = new Date();
+  return f.getFullYear() + "-" + String(f.getMonth() + 1).padStart(2, "0") + "-" + String(f.getDate()).padStart(2, "0");
+}
+function sumarDias(iso, n){
+  var p = iso.split("-");
+  var d = new Date(+p[0], +p[1] - 1, +p[2] + n);
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+/* ═══ Plan de comidas ════════════════════════════════════════════════════
+   Calculado para el objetivo de recomposición corporal de Milton (bajar
+   grasa, subir músculo, marcar abdomen) con Harris-Benedict + actividad
+   "activo" (trabajo de soldador + entrena 6 días). Esto es un programa
+   nutricional, no un dato de salud — nunca escribir aquí su peso, edad,
+   estatura o % de grasa reales, solo el resultado ya calculado. */
+var COMIDAS = [
+  { id:"desayuno", nombre:"Desayuno", hora:"~7:00 am", prot:30, carb:60, grasa:15,
+    comun:"70 g de avena + 3 huevos + 1 plátano grande", domingo:null },
+  { id:"colacion", nombre:"Colación", hora:"~10:30 am", prot:10, carb:25, grasa:6,
+    comun:"1 fruta + 10 g de almendras", domingo:null },
+  { id:"almuerzo", nombre:"Almuerzo", hora:"~13:00", prot:45, carb:80, grasa:18,
+    comun:"170 g de pollo o pavo (o 200 g de pescado) + 1½ taza de arroz o papa + verduras + 1 cdta de aceite de oliva",
+    domingo:"170-200 g de posta negra o lomo vetado (sin grasa visible) + 1½ taza de arroz o papa + verduras + 1 cdta de aceite de oliva" },
+  { id:"preentreno", nombre:"Pre-entreno", hora:"antes del gym", prot:15, carb:55, grasa:3,
+    comun:"1 fruta grande + 1 yogur griego + un poco de miel o pan", domingo:null },
+  { id:"postentreno", nombre:"Post-entreno", hora:"después del gym", prot:35, carb:55, grasa:3,
+    comun:"Batido de proteína + 1 fruta + arroz o pan", domingo:null },
+  { id:"cena", nombre:"Cena", hora:"noche", prot:25, carb:60, grasa:25,
+    comun:"150 g de pescado o pavo + verduras + ¾ taza de arroz o camote + ½ palta", domingo:null }
+];
+
+function totalesPlan(){
+  var prot = 0, carb = 0, grasa = 0;
+  COMIDAS.forEach(function(c){ prot += c.prot; carb += c.carb; grasa += c.grasa; });
+  var kcal = prot * 4 + carb * 4 + grasa * 9;
+  return { prot:prot, carb:carb, grasa:grasa, kcal:kcal };
+}
+
+function pintarResumen(){
+  var t = totalesPlan();
+  $("kcalTotal").textContent = t.kcal.toLocaleString("es-CL") + " kcal";
+  var protKcal = t.prot * 4, grasaKcal = t.grasa * 9, carbKcal = t.carb * 4;
+  $("protTotal").textContent = t.prot + " g (" + Math.round(protKcal / t.kcal * 100) + "%)";
+  $("grasaTotal").textContent = t.grasa + " g (" + Math.round(grasaKcal / t.kcal * 100) + "%)";
+  $("carbTotal").textContent = t.carb + " g (" + Math.round(carbKcal / t.kcal * 100) + "%)";
+  $("protBarra").style.width = (protKcal / t.kcal * 100) + "%";
+  $("grasaBarra").style.width = (grasaKcal / t.kcal * 100) + "%";
+  $("carbBarra").style.width = (carbKcal / t.kcal * 100) + "%";
+}
+
+/* ═══ Registro de comidas marcadas por día ══════════════════════════════ */
+var CHECK_KEY = "wgym_nutricion_milton_check_v1";
+function cargarCheck(){
+  try{ return JSON.parse(localStorage.getItem(CHECK_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function guardarCheck(obj){
+  try{ localStorage.setItem(CHECK_KEY, JSON.stringify(obj)); }catch(e){}
+}
+
+/* Domingo real → arranca en el menú de domingo; el resto de los días,
+   en Lunes-Sábado. Igual se puede cambiar a mano con las pestañas. */
+var esDomingo = new Date().getDay() === 0;
+
+function pintarTabsTipoDia(){
+  $("bLunSab").setAttribute("aria-pressed", esDomingo ? "false" : "true");
+  $("bDomingo").setAttribute("aria-pressed", esDomingo ? "true" : "false");
+}
+$("bLunSab").addEventListener("click", function(){ esDomingo = false; pintarTabsTipoDia(); pintarComidas(); });
+$("bDomingo").addEventListener("click", function(){ esDomingo = true; pintarTabsTipoDia(); pintarComidas(); });
+
+function pintarComidas(){
+  var check = cargarCheck();
+  var hoy = hoyISO();
+  var marcadasHoy = check[hoy] || [];
+
+  var cont = $("listaComidas");
+  cont.innerHTML = "";
+  COMIDAS.forEach(function(c){
+    var texto = (esDomingo && c.domingo) ? c.domingo : c.comun;
+    var hecha = marcadasHoy.indexOf(c.id) !== -1;
+    var div = document.createElement("div");
+    div.className = "comida";
+    div.setAttribute("data-hecha", hecha ? "si" : "no");
+    div.innerHTML =
+      '<button type="button" class="tick" data-id="' + c.id + '">✓</button>' +
+      '<div class="info">' +
+        '<div class="cab"><h3>' + c.nombre + '</h3><span class="hora">' + c.hora + '</span></div>' +
+        '<div class="macros">' + c.prot + 'g prot · ' + c.carb + 'g carb · ' + c.grasa + 'g grasa</div>' +
+        '<div class="menu">' + texto + '</div>' +
+      '</div>';
+    cont.appendChild(div);
+  });
+
+  cont.querySelectorAll(".tick").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var id = btn.getAttribute("data-id");
+      var chk = cargarCheck();
+      var lista = chk[hoy] || [];
+      var pos = lista.indexOf(id);
+      if(pos === -1) lista.push(id); else lista.splice(pos, 1);
+      chk[hoy] = lista;
+      guardarCheck(chk);
+      pintarComidas();
+      pintarMarcas();
+    });
+  });
+}
+
+function pintarMarcas(){
+  var check = cargarCheck();
+  var hoy = hoyISO();
+  var marcadasHoy = (check[hoy] || []).length;
+  $("mHoy").textContent = marcadasHoy + "/" + COMIDAS.length;
+
+  /* Racha de días con las 6 comidas completas, contando hacia atrás. Si
+     hoy todavía no está completo no se corta la racha, se mira desde
+     ayer — igual que la racha de semanas del cronómetro de entreno. */
+  var diasCompletos = {};
+  Object.keys(check).forEach(function(f){
+    if((check[f] || []).length >= COMIDAS.length) diasCompletos[f] = true;
+  });
+  var arranque = diasCompletos[hoy] ? 0 : 1;
+  var racha = 0;
+  for(var k = arranque; k < 365; k++){
+    if(!diasCompletos[sumarDias(hoy, -k)]) break;
+    racha++;
+  }
+  $("mRacha").textContent = racha;
+}
+
+pintarResumen();
+pintarTabsTipoDia();
+pintarComidas();
+pintarMarcas();
+
+try{
+  if(navigator.storage && navigator.storage.persist) navigator.storage.persist();
+}catch(e){}
+</script>
+</body>
+</html>
