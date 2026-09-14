@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-12",
+ "actualizado": "2026-09-14",
  "nota": "Mediciones de composicion corporal (Omron HBF-306). Solo aparecen los socios que se miden - los demas no necesitan estar aca. La lee tarjeta.html para mostrar la evolucion en la tarjeta virtual de cada socio medido.",
  "socios": [
   {
@@ -29,6 +29,21 @@
      "peso": 65.9,
      "grasa": 13.7,
      "imc": 22.8
+    }
+   ]
+  },
+  {
+   "n": "ESTEFANNY",
+   "a": "BERMUDEZ",
+   "sexo": "F",
+   "estatura": 159,
+   "registros": [
+    {
+     "fecha": "2026-09-14",
+     "edad": 27,
+     "peso": 62,
+     "grasa": 30.6,
+     "imc": 24.5
     }
    ]
   },
