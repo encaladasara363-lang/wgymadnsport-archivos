@@ -133,6 +133,25 @@ main{padding:18px 16px 46px}
 .ejercicio .datos{display:flex;gap:14px;font-family:'Inter',sans-serif;font-weight:700;
   font-size:15.5px;color:var(--blanco);margin-bottom:10px}
 .ejercicio .datos b{color:var(--dorado);font-weight:800}
+
+/* ── Registro real de peso/reps de la serie ───────────────────────────── */
+.registro{display:grid;grid-template-columns:1fr 1fr 52px;gap:8px;margin-bottom:6px}
+.campito label{display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--gris-tenue);margin-bottom:4px}
+.campito input{
+  width:100%;background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:10px;
+  color:#fff;font:700 18px/1 'Inter',sans-serif;padding:11px 8px;text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.campito input:focus-visible{outline:2px solid var(--rojo);outline-offset:1px}
+.campito input::placeholder{color:#4A4A4A;font-weight:600}
+.tick{
+  align-self:end;width:52px;height:44px;border-radius:10px;border:1.5px solid var(--linea);
+  background:var(--negro-suave);color:var(--blanco);font-size:20px;line-height:1;
+  cursor:pointer;display:grid;place-items:center;
+}
+.tick[data-hecho="si"]{background:var(--verde);border-color:var(--verde);color:#08301F}
+.rm1-nota{font-size:13.5px;color:var(--gris-tenue);margin-bottom:10px;min-height:1.2em}
 .alerta{background:rgba(227,6,19,.10);border-left:4px solid var(--rojo);border-radius:0 10px 10px 0;
   padding:9px 11px;font-size:15px;line-height:1.45;color:var(--blanco);margin-bottom:11px}
 .alerta b{color:var(--rojo-vivo);display:block;font-size:12.5px;text-transform:uppercase;
@@ -147,6 +166,22 @@ main{padding:18px 16px 46px}
 .descansar:active{transform:scale(.99)}
 
 .pie-nota{margin-top:6px;font-size:14.5px;color:var(--gris-tenue);text-align:center;line-height:1.5}
+
+/* ── Modal de exportar (último recurso: copiar a mano) ────────────────── */
+.modal-fondo{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.modal-caja{
+  width:100%;max-width:520px;background:var(--negro-card);border:1.5px solid var(--linea);
+  border-radius:16px;padding:18px 16px;
+}
+.texto-exportar{
+  width:100%;min-height:220px;resize:vertical;background:var(--negro-suave);
+  border:1.5px solid var(--linea);border-radius:10px;color:var(--blanco);
+  font-family:'Inter',sans-serif;font-size:15px;line-height:1.5;padding:12px;
+  white-space:pre-wrap;
+}
 
 </style>
 </head>
@@ -238,9 +273,23 @@ main{padding:18px 16px 46px}
       </div>
       <div id="listaEjercicios"></div>
       <p class="pie-nota">AL FALLO = repite hasta que ya no puedas completar una repetición más con buena técnica, en el rango indicado. Alerta biomecánica = punto de riesgo real de cada ejercicio, de nuestra base de conocimiento técnico.</p>
+      <button class="btn btn-secundario" id="bExportar" type="button" style="margin-top:14px">Exportar sesión de hoy</button>
     </div>
 
   </main>
+
+  <!-- ══ Modal de copiar a mano (último recurso de Exportar) ═════════ -->
+  <div class="modal-fondo" id="modalExportar" hidden>
+    <div class="modal-caja">
+      <span class="etq">Copia tu sesión</span>
+      <p class="pie-nota" style="text-align:left;margin:0 0 10px">No se pudo descargar el archivo directo en este navegador — copia el texto de abajo y pégalo donde quieras guardarlo (WhatsApp, Notas, correo).</p>
+      <textarea id="textoExportar" class="texto-exportar" readonly></textarea>
+      <div class="crono-botones" style="margin-top:12px">
+        <button class="btn" id="bCopiarExportar" type="button">Copiar</button>
+        <button class="btn btn-secundario" id="bCerrarExportar" type="button">Cerrar</button>
+      </div>
+    </div>
+  </div>
 
 </div>
 
@@ -460,6 +509,21 @@ var RUTINA = [
   }
 ];
 
+/* ═══ Registro real de peso/reps por serie ════════════════════════════
+   Progreso de entrenamiento, no dato de salud (no es peso corporal ni
+   % de grasa) — igual se guarda solo en este teléfono, nunca en el
+   código del archivo. Clave por día + nombre del ejercicio, para que
+   cada semana pise el registro anterior de ese mismo ejercicio. */
+var REGISTRO_KEY = "wgym_registro_milton_v1";
+function claveRegistro(weekday, nombreEjercicio){ return weekday + "|" + nombreEjercicio; }
+function cargarRegistro(){
+  try{ return JSON.parse(localStorage.getItem(REGISTRO_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function guardarRegistro(reg){
+  try{ localStorage.setItem(REGISTRO_KEY, JSON.stringify(reg)); }catch(e){}
+}
+
 var diaActual = 0;
 
 function pintarTabs(){
@@ -491,16 +555,67 @@ function pintarDia(){
 
   var cont = $("listaEjercicios");
   cont.innerHTML = "";
+  var registro = cargarRegistro();
   d.exercises.forEach(function(ex, i){
+    var clave = claveRegistro(d.weekday, ex.name);
+    var guardado = registro[clave] || {};
     var div = document.createElement("div");
     div.className = "ejercicio";
     div.innerHTML =
       '<div class="cab"><h3>' + (i + 1) + '. ' + ex.name + '</h3>' +
-      '<span class="rm ' + ex.rm + '">' + ex.rmTxt + '</span></div>' +
-      '<div class="datos"><span>Serie <b>' + ex.sets + '</b></span></div>' +
+      '<span class="rm ' + ex.rm + '" id="rm-' + i + '">' + ex.rmTxt + '</span></div>' +
+      '<div class="datos"><span>Objetivo <b>' + ex.sets + '</b></span></div>' +
+      '<div class="registro">' +
+        '<div class="campito"><label for="peso-' + i + '">Peso hoy</label>' +
+        '<input type="text" inputmode="decimal" id="peso-' + i + '" placeholder="kg" value="' + (guardado.peso || "") + '"></div>' +
+        '<div class="campito"><label for="reps-' + i + '">Reps al fallo</label>' +
+        '<input type="text" inputmode="numeric" id="reps-' + i + '" placeholder="reps" value="' + (guardado.reps || "") + '"></div>' +
+        '<button type="button" class="tick" id="hecho-' + i + '" data-hecho="' + (guardado.hecho ? "si" : "no") + '">✓</button>' +
+      '</div>' +
+      '<p class="rm1-nota" id="rm1-' + i + '"></p>' +
       '<div class="alerta"><b>Alerta biomecánica</b>' + ex.tip + '</div>' +
       '<button class="descansar" data-seg="' + ex.rest + '">Descansar ' + ex.rest + ' seg</button>';
     cont.appendChild(div);
+
+    /* Peso + reps reales de la serie → %1RM estimado (Brzycki, ya
+       documentado en la base de conocimiento técnico) clasificado en la
+       escala de Martin. Si falta cualquiera de los dos campos, no se
+       muestra ninguna intensidad calculada — nunca "rellenar" el dato. */
+    var elPeso = $("peso-" + i), elReps = $("reps-" + i), elHecho = $("hecho-" + i);
+    var elRm = $("rm-" + i), elRm1 = $("rm1-" + i);
+
+    function actualizarRM(){
+      var peso = parseFloat((elPeso.value || "").replace(",", "."));
+      var reps = parseInt(elReps.value, 10);
+      if(!peso || !reps || peso <= 0 || reps <= 0){
+        elRm.className = "rm " + ex.rm;
+        elRm.textContent = ex.rmTxt;
+        elRm1.textContent = "";
+        return;
+      }
+      var pct = 102.78 - 2.78 * reps;
+      pct = Math.max(30, Math.min(100, pct));
+      var clase = pct >= 80 ? "alta" : (pct >= 70 ? "media" : "leve");
+      var rm1 = peso / (pct / 100);
+      elRm.className = "rm " + clase;
+      elRm.textContent = Math.round(pct) + "% 1RM";
+      elRm1.textContent = "1RM estimado: ~" + Math.round(rm1) + " kg";
+    }
+
+    function guardarSerie(){
+      var reg = cargarRegistro();
+      reg[clave] = { peso: elPeso.value, reps: elReps.value, hecho: elHecho.getAttribute("data-hecho") === "si" };
+      guardarRegistro(reg);
+    }
+
+    elPeso.addEventListener("input", function(){ actualizarRM(); guardarSerie(); });
+    elReps.addEventListener("input", function(){ actualizarRM(); guardarSerie(); });
+    elHecho.addEventListener("click", function(){
+      var yaHecho = elHecho.getAttribute("data-hecho") === "si";
+      elHecho.setAttribute("data-hecho", yaHecho ? "no" : "si");
+      guardarSerie();
+    });
+    actualizarRM();
   });
 
   /* Temporizador de descanso por ejercicio, con beep + vibración al llegar
@@ -532,6 +647,81 @@ function pintarDia(){
 }
 
 pintarDia();
+
+/* ═══ Exportar sesión de hoy ═══════════════════════════════════════════
+   Tres niveles de respaldo, en este orden: 1) window.claude.use('downloads')
+   si la app corre dentro de un contexto de Claude que lo ofrezca; 2)
+   descarga normal por Blob (lo que de verdad se usa en un navegador
+   común); 3) si el navegador bloquea la descarga (pasa en algunos
+   WebView de WhatsApp/Instagram), un modal para copiar el texto a mano. */
+function textoSesionDeHoy(){
+  var d = RUTINA[diaActual];
+  var lineas = [];
+  lineas.push("WGYMADNSPORT — Rutina VIP Milton Fuentes");
+  lineas.push(d.weekday + " — " + d.title);
+  lineas.push($("diaDuracion").textContent);
+  lineas.push("");
+  d.exercises.forEach(function(ex, i){
+    var peso = ($("peso-" + i) && $("peso-" + i).value) || "";
+    var reps = ($("reps-" + i) && $("reps-" + i).value) || "";
+    var hecho = $("hecho-" + i) && $("hecho-" + i).getAttribute("data-hecho") === "si";
+    var linea = (i + 1) + ". " + ex.name + " — objetivo " + ex.sets;
+    if(peso || reps){
+      linea += " · registrado: " + (peso || "—") + " kg × " + (reps || "—") + " reps";
+    }
+    linea += hecho ? " ✓" : " (sin marcar)";
+    lineas.push(linea);
+  });
+  lineas.push("");
+  lineas.push("Exportado: " + new Date().toLocaleString("es-CL"));
+  return lineas.join("\n");
+}
+
+function mostrarModalExportar(texto){
+  $("textoExportar").value = texto;
+  $("modalExportar").hidden = false;
+}
+$("bCerrarExportar").addEventListener("click", function(){ $("modalExportar").hidden = true; });
+$("bCopiarExportar").addEventListener("click", function(){
+  var ta = $("textoExportar");
+  ta.select();
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value);
+    }else{
+      document.execCommand("copy");
+    }
+  }catch(e){}
+});
+
+$("bExportar").addEventListener("click", function(){
+  var nombreArchivo = "wgym-milton-" + RUTINA[diaActual].weekday.toLowerCase() + ".txt";
+  var texto = textoSesionDeHoy();
+
+  try{
+    if(window.claude && typeof window.claude.use === "function"){
+      var descargas = window.claude.use("downloads");
+      if(descargas && typeof descargas.download === "function"){
+        descargas.download(nombreArchivo, texto);
+        return;
+      }
+    }
+  }catch(e){}
+
+  try{
+    var blob = new Blob([texto], { type:"text/plain;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = nombreArchivo;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    return;
+  }catch(e){}
+
+  mostrarModalExportar(texto);
+});
 
 try{
   if(navigator.storage && navigator.storage.persist) navigator.storage.persist();

@@ -383,14 +383,17 @@ Esta plantilla es exclusiva para clientes VIP — no usarla para apps
 genéricas o de referencia sin nombre de cliente (esas quedan con la
 estructura de `app_wgym_inteligente.html`, que sí puede variar).
 
-**Aviso pendiente:** esta plantilla, tal como quedó con Milton, todavía
-no tiene el registro editable de peso/reps reales por serie (para que
-el %1RM del punto 13 se calcule con datos reales de la persona, no solo
-mostrar el rango objetivo) ni el botón "Exportar" que pedía el punto 5
-más arriba — los `entrenar-*.html` más antiguos (`entrenar-sara.html`,
-`entrenar-milton.html`) sí los tienen. Si el dueño los quiere también
-en esta plantilla nueva, avisar y agregarlos antes de seguir
-replicándola para más clientes.
+La plantilla también incluye, junto a cada ejercicio, un registro
+editable real de **peso (kg) y repeticiones al fallo** más un botón de
+"hecho" (✓) — con eso el %1RM del punto 13 se calcula con el dato real
+que la persona anotó, no solo con el rango objetivo, y se guarda en
+`localStorage` bajo `wgym_registro_<nombre>_v1`, con clave por día +
+nombre del ejercicio (progreso de entrenamiento, no dato de salud). Y
+un botón **"Exportar sesión de hoy"** con los tres niveles de respaldo
+del punto 5: intenta `window.claude.use('downloads')`, si no está
+disponible cae a una descarga por Blob, y si el navegador la bloquea
+(pasa en algunos WebView de WhatsApp/Instagram) muestra un modal para
+copiar el texto a mano.
 
 ## Base de conocimiento técnico: entrenamiento, hipertrofia, nutrición
 ## y biomecánica (regla permanente)
