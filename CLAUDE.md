@@ -350,6 +350,48 @@ datos fijos en el código), asesoría de nutrición (del PDF de dieta del
 cliente o de `rutinas_oficiales.md` si no hay uno específico),
 cronómetro general de sesión y temporizador de descanso.
 
+### Plantilla fija de app VIP: `app_milton.html` (regla permanente)
+
+`app_milton.html` es la plantilla oficial y fija para cualquier cliente
+VIP nuevo de ahora en adelante. Para un cliente VIP nuevo: **copiar
+`app_milton.html` tal cual** y cambiar únicamente —
+
+1. El nombre del archivo: `app_<nombre-o-apodo-del-cliente>.html` (esta
+   plantilla usa el prefijo `app_`, no `entrenar-`, para no chocar con
+   los `entrenar-*.html` más antiguos que ya existan de ese cliente).
+2. El `<title>`, la meta descripción y el `<h1>` del encabezado, con el
+   nombre del cliente nuevo.
+3. La clave de `localStorage` del panel de IMC (`IMC_KEY`), cambiando
+   `milton` por el nombre del cliente nuevo, para que no se mezcle con
+   la ficha de otro cliente en el mismo teléfono.
+4. El array `RUTINA`: la rutina de entrenamiento (días, ejercicios,
+   series, descansos, alertas biomecánicas), diseñada según los datos
+   reales del cliente — edad, biotipo, objetivo, nivel, días
+   disponibles, estilo pedido (ej. Heavy Duty) — aplicando siempre la
+   sección "Base de conocimiento técnico" de más abajo. **Nunca escribir
+   el peso, la edad o el % de grasa real del cliente dentro de este
+   array ni en ninguna otra parte del código** — esos datos siguen
+   yendo solo en el panel de IMC vacío del punto 10.
+
+Todo lo demás queda **idéntico entre clientes, sin rediseñar nada**: el
+cronómetro de sesión, la calculadora de IMC, la duración estimada por
+día, el sistema de pestañas por día, el temporizador de descanso con
+beep, el estilo de las alertas biomecánicas y el diseño WGYM ADN SPORT
+(negro `#000`, tarjetas `#1C1C1C`, acentos rojo/dorado).
+
+Esta plantilla es exclusiva para clientes VIP — no usarla para apps
+genéricas o de referencia sin nombre de cliente (esas quedan con la
+estructura de `app_wgym_inteligente.html`, que sí puede variar).
+
+**Aviso pendiente:** esta plantilla, tal como quedó con Milton, todavía
+no tiene el registro editable de peso/reps reales por serie (para que
+el %1RM del punto 13 se calcule con datos reales de la persona, no solo
+mostrar el rango objetivo) ni el botón "Exportar" que pedía el punto 5
+más arriba — los `entrenar-*.html` más antiguos (`entrenar-sara.html`,
+`entrenar-milton.html`) sí los tienen. Si el dueño los quiere también
+en esta plantilla nueva, avisar y agregarlos antes de seguir
+replicándola para más clientes.
+
 ## Base de conocimiento técnico: entrenamiento, hipertrofia, nutrición
 ## y biomecánica (regla permanente)
 
