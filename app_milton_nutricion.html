@@ -7,7 +7,7 @@
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="Plan nutricional VIP de Milton Fuentes Espinosa, WGYMADNSPORT Tocopilla: calorías, macros y menú diario con carne roja solo el domingo.">
+<meta name="description" content="Plan nutricional VIP de Milton Fuentes Espinosa, WGYMADNSPORT Tocopilla: calorías, macros, suplementos e hidratación con menú diario.">
 <title>Plan Nutricional · Milton Fuentes</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
   --rojo:#E30613; --rojo-vivo:#FF2130;
   --dorado:#D4AF37;
   --blanco:#FFFFFF; --gris:#CFCFCF; --gris-tenue:#8A8A8A;
-  --verde:#43C48D;
+  --verde:#43C48D; --azul:#4FA3D1;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--negro);color:var(--blanco)}
@@ -56,6 +56,18 @@ main{padding:18px 16px 46px}
 .card{background:var(--negro-card);border:1px solid var(--linea);border-radius:13px;
   padding:16px;margin-bottom:18px}
 
+/* ── Pestañas de día (7, como en la app de entreno) ───────────────────── */
+.dias-tabs{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px}
+.dias-tabs button{
+  background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:9px;
+  color:var(--gris-tenue);font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;
+  padding:9px 1px;cursor:pointer;text-transform:uppercase;letter-spacing:.02em;
+}
+.dias-tabs button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.dia-etiqueta{display:inline-block;margin-bottom:14px;padding:6px 14px;border-radius:999px;
+  background:rgba(212,175,55,.14);border:1px solid var(--dorado);color:var(--dorado);
+  font-family:'Inter',sans-serif;font-weight:700;font-size:14.5px}
+
 /* ── Resumen diario ────────────────────────────────────────────────────── */
 .kcal-total{text-align:center;margin-bottom:16px}
 .kcal-total .v{font-family:'Anton',Impact,sans-serif;font-size:54px;line-height:1;color:var(--dorado)}
@@ -73,15 +85,6 @@ main{padding:18px 16px 46px}
 .macro-barra i.prot{background:var(--rojo)}
 .macro-barra i.grasa{background:var(--dorado)}
 .macro-barra i.carb{background:var(--blanco)}
-
-/* ── Selector de día ───────────────────────────────────────────────────── */
-.dia-tipo-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.dia-tipo-tabs button{
-  background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:10px;
-  color:var(--gris-tenue);font-family:'Inter',sans-serif;font-weight:700;font-size:14.5px;
-  padding:11px 6px;cursor:pointer;text-transform:uppercase;letter-spacing:.03em;
-}
-.dia-tipo-tabs button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo);color:#fff}
 
 /* ── Comidas ───────────────────────────────────────────────────────────── */
 .comida{background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:13px;
@@ -101,6 +104,26 @@ main{padding:18px 16px 46px}
 .comida .macros{font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
   color:var(--dorado);margin-bottom:6px}
 .comida .menu{font-size:15.5px;line-height:1.45;color:var(--blanco)}
+
+/* ── Suplementos ───────────────────────────────────────────────────────── */
+.suple{background:var(--negro-suave);border-left:4px solid var(--dorado);border-radius:0 10px 10px 0;
+  padding:10px 13px;margin-bottom:10px}
+.suple:last-child{margin-bottom:0}
+.suple .cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:2px}
+.suple .nombre{font-family:'Inter',sans-serif;font-weight:800;font-size:15.5px;text-transform:uppercase;letter-spacing:.02em}
+.suple .cuando{font-family:'Inter',sans-serif;font-weight:700;font-size:13px;color:var(--dorado);
+  text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.suple .dosis{font-size:14px;color:var(--gris-tenue);margin-bottom:3px}
+.suple .motivo{font-size:14.5px;line-height:1.4;color:var(--blanco)}
+
+/* ── Agua ──────────────────────────────────────────────────────────────── */
+.agua-fila{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--linea)}
+.agua-fila:last-child{border-bottom:none;padding-bottom:0}
+.agua-fila .icono{font-size:26px;flex:0 0 auto}
+.agua-fila .txt{flex:1}
+.agua-fila .txt b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;
+  font-size:22px;color:var(--azul)}
+.agua-fila .txt span{font-size:14.5px;color:var(--gris-tenue)}
 
 /* ── Contadores ────────────────────────────────────────────────────────── */
 .marcas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--linea);
@@ -128,7 +151,9 @@ main{padding:18px 16px 46px}
 
     <!-- ══ Resumen diario ═══════════════════════════════════════════════ -->
     <div class="card">
-      <span class="etq">Objetivo diario</span>
+      <span class="etq">Objetivo del día</span>
+      <div class="dias-tabs" id="diasTabs"></div>
+      <span class="dia-etiqueta" id="diaEtiqueta">—</span>
       <div class="kcal-total">
         <div class="v" id="kcalTotal">—</div>
         <div class="d">Calorías al día</div>
@@ -150,11 +175,27 @@ main{padding:18px 16px 46px}
     <!-- ══ Menú del día ═════════════════════════════════════════════════ -->
     <div class="card">
       <span class="etq">Menú de hoy</span>
-      <div class="dia-tipo-tabs" id="tabsTipoDia">
-        <button type="button" id="bLunSab">Lunes a Sábado</button>
-        <button type="button" id="bDomingo">Domingo (carne roja)</button>
-      </div>
       <div id="listaComidas"></div>
+    </div>
+
+    <!-- ══ Suplementos ══════════════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Suplementos — momento del día</span>
+      <div id="listaSuplementos"></div>
+      <p class="pie-nota" style="margin-top:12px">Dosis exactas según el envase de cada suplemento salvo donde ya está documentado (creatina, beta-alanina, omega 3). Si toma algún medicamento, consúltalo con su médico antes de combinar.</p>
+    </div>
+
+    <!-- ══ Hidratación ══════════════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Agua al día</span>
+      <div class="agua-fila">
+        <span class="icono">💧</span>
+        <div class="txt"><b>~2,7 L</b><span>Base general, todos los días (≈35 ml por kg de peso)</span></div>
+      </div>
+      <div class="agua-fila">
+        <span class="icono">🏋️</span>
+        <div class="txt"><b>~3,0-3,2 L</b><span>Días de entrenamiento (Lunes a Sábado) — 150-250 ml cada 10-15 min mientras entrena</span></div>
+      </div>
     </div>
 
     <!-- ══ Contadores ═══════════════════════════════════════════════════ -->
@@ -184,35 +225,100 @@ function sumarDias(iso, n){
 
 /* ═══ Plan de comidas ════════════════════════════════════════════════════
    Calculado para el objetivo de recomposición corporal de Milton (bajar
-   grasa, subir músculo, marcar abdomen) con Harris-Benedict + actividad
-   "activo" (trabajo de soldador + entrena 6 días). Esto es un programa
-   nutricional, no un dato de salud — nunca escribir aquí su peso, edad,
-   estatura o % de grasa reales, solo el resultado ya calculado. */
+   grasa, subir músculo, marcar abdomen), con Harris-Benedict + actividad
+   "activo" (soldador + entrena 6 días). El jueves (día de pierna, el de
+   mayor volumen de la semana) queda con más calorías y carbohidratos que
+   el resto — el resto de los días bajan un poco para compensar y que el
+   promedio semanal se mantenga. Esto es un programa nutricional
+   calculado, no un dato de salud — nunca escribir aquí su peso, edad,
+   estatura, % de grasa o cintura reales, solo el resultado ya calculado.
+   Sin pescado ni batidos de proteína (no los consume): todo con comida
+   real. Incluye kéfir, arándanos, quesillo, galletas de arroz, harina
+   tostada y ensalada libre, que sí consume. */
 var COMIDAS = [
-  { id:"desayuno", nombre:"Desayuno", hora:"~7:00 am", prot:30, carb:60, grasa:15,
-    comun:"70 g de avena + 3 huevos + 1 plátano grande", domingo:null },
-  { id:"colacion", nombre:"Colación", hora:"~10:30 am", prot:10, carb:25, grasa:6,
-    comun:"1 fruta + 10 g de almendras", domingo:null },
-  { id:"almuerzo", nombre:"Almuerzo", hora:"~13:00", prot:45, carb:80, grasa:18,
-    comun:"170 g de pollo o pavo (o 200 g de pescado) + 1½ taza de arroz o papa + verduras + 1 cdta de aceite de oliva",
-    domingo:"170-200 g de posta negra o lomo vetado (sin grasa visible) + 1½ taza de arroz o papa + verduras + 1 cdta de aceite de oliva" },
-  { id:"preentreno", nombre:"Pre-entreno", hora:"antes del gym", prot:15, carb:55, grasa:3,
-    comun:"1 fruta grande + 1 yogur griego + un poco de miel o pan", domingo:null },
-  { id:"postentreno", nombre:"Post-entreno", hora:"después del gym", prot:35, carb:55, grasa:3,
-    comun:"Batido de proteína + 1 fruta + arroz o pan", domingo:null },
-  { id:"cena", nombre:"Cena", hora:"noche", prot:25, carb:60, grasa:25,
-    comun:"150 g de pescado o pavo + verduras + ¾ taza de arroz o camote + ½ palta", domingo:null }
+  { id:"desayuno", nombre:"Desayuno", hora:"~7:00 am",
+    normal:{prot:30,carb:55,grasa:15}, alto:{prot:32,carb:75,grasa:13},
+    comun:"70 g de avena o harina tostada + 3 huevos + un puñado de arándanos + 1 vaso de kéfir" },
+  { id:"colacion", nombre:"Colación", hora:"~10:30 am",
+    normal:{prot:10,carb:20,grasa:8}, alto:{prot:10,carb:30,grasa:6},
+    comun:"100 g de quesillo + un puñado de arándanos + 2-3 galletas de arroz" },
+  { id:"almuerzo", nombre:"Almuerzo", hora:"~13:00",
+    normal:{prot:45,carb:70,grasa:18}, alto:{prot:50,carb:95,grasa:16},
+    comun:"170 g de pollo o pavo + 1½ taza de arroz o papa + ensalada libre + 1 cdta de aceite de oliva",
+    domingo:"170-200 g de posta negra o lomo vetado (sin grasa visible) + 1½ taza de arroz o papa + ensalada libre + 1 cdta de aceite de oliva",
+    juevesAlto:"170-200 g de pollo o pavo + pasta integral + ensalada libre + 1 cdta de aceite de oliva" },
+  { id:"preentreno", nombre:"Pre-entreno", hora:"antes del gym",
+    normal:{prot:15,carb:45,grasa:3}, alto:{prot:18,carb:65,grasa:3},
+    comun:"1 yogur griego + un puñado de arándanos + 2-3 galletas de arroz o un poco de miel" },
+  { id:"postentreno", nombre:"Post-entreno", hora:"después del gym",
+    normal:{prot:35,carb:50,grasa:3}, alto:{prot:38,carb:70,grasa:3},
+    comun:"120 g de pollo o pavo + arroz blanco o harina tostada con leche + un puñado de arándanos" },
+  { id:"cena", nombre:"Cena", hora:"noche",
+    normal:{prot:25,carb:80,grasa:23}, alto:{prot:22,carb:75,grasa:24},
+    comun:"150 g de pavo o pollo + ensalada libre surtida + ¾ taza de arroz o camote + ½ palta" }
 ];
 
-function totalesPlan(){
+/* Lunes=0 ... Domingo=6, igual que la rutina de entreno. Jueves (índice 3)
+   es el día "alto" en calorías; domingo (índice 6) es el único con carne
+   roja permitida. */
+var PLAN_DIAS = [
+  { weekday:"Lunes", tipo:"normal", carneRoja:false },
+  { weekday:"Martes", tipo:"normal", carneRoja:false },
+  { weekday:"Miércoles", tipo:"normal", carneRoja:false },
+  { weekday:"Jueves", tipo:"alto", carneRoja:false },
+  { weekday:"Viernes", tipo:"normal", carneRoja:false },
+  { weekday:"Sábado", tipo:"normal", carneRoja:false },
+  { weekday:"Domingo", tipo:"normal", carneRoja:true }
+];
+
+function indiceHoy(){
+  var jsDay = new Date().getDay(); // 0 = domingo
+  return jsDay === 0 ? 6 : jsDay - 1;
+}
+var diaActual = indiceHoy();
+
+/* ═══ Suplementos — colocados en el momento del día que más rinden,
+   según la base de conocimiento técnico documentada. HMB no está en esa
+   base: se deja con una comida por precaución general, no por un dato
+   científico específico que tengamos. ═══════════════════════════════ */
+var SUPLEMENTOS = [
+  { nombre:"Multivitamínico", dosis:"según envase", cuando:"Desayuno", motivo:"Con comida, para mejor tolerancia y absorción." },
+  { nombre:"Vitamina C", dosis:"según envase", cuando:"Desayuno", motivo:"Junto al multivitamínico, mismo momento." },
+  { nombre:"Omega 3", dosis:"250-500 mg", cuando:"Almuerzo", motivo:"Es una grasa — se absorbe mejor con una comida que lleve algo de grasa (aceite de oliva). Cubre además lo que dejó de aportar el pescado que ya no come." },
+  { nombre:"Citrato de potasio", dosis:"según envase", cuando:"Almuerzo", motivo:"Con comida, para no irritar el estómago." },
+  { nombre:"HMB", dosis:"1 cápsula", cuando:"Almuerzo", motivo:"No está en la base de conocimiento técnico documentada — dosis y timing según el envase o la indicación de quien se lo recomendó." },
+  { nombre:"Creatina", dosis:"3-5 g", cuando:"Post-entreno", motivo:"Se absorbe mejor con carbohidratos — coincide con la comida de después del entreno." },
+  { nombre:"Beta-alanina", dosis:"0,8-1,6 g por toma, repartida", cuando:"Desayuno, almuerzo y cena", motivo:"Tomada toda junta produce hormigueo (parestesias) — hay que fraccionarla en 2-3 tomas al día." },
+  { nombre:"Citrato de magnesio", dosis:"según envase", cuando:"Cena / antes de dormir", motivo:"Ayuda a la relajación nocturna — es habitual tomarlo en la noche." }
+];
+
+function totalesDia(tipo){
   var prot = 0, carb = 0, grasa = 0;
-  COMIDAS.forEach(function(c){ prot += c.prot; carb += c.carb; grasa += c.grasa; });
+  COMIDAS.forEach(function(c){
+    var m = c[tipo];
+    prot += m.prot; carb += m.carb; grasa += m.grasa;
+  });
   var kcal = prot * 4 + carb * 4 + grasa * 9;
   return { prot:prot, carb:carb, grasa:grasa, kcal:kcal };
 }
 
+function pintarTabs(){
+  var cont = $("diasTabs");
+  cont.innerHTML = "";
+  PLAN_DIAS.forEach(function(d, i){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.textContent = d.weekday.slice(0, 3);
+    b.setAttribute("aria-pressed", i === diaActual ? "true" : "false");
+    b.addEventListener("click", function(){ diaActual = i; pintarTodo(); });
+    cont.appendChild(b);
+  });
+}
+
 function pintarResumen(){
-  var t = totalesPlan();
+  var dia = PLAN_DIAS[diaActual];
+  $("diaEtiqueta").textContent = dia.weekday + (dia.tipo === "alto" ? " — día alto (pierna)" : "") + (dia.carneRoja ? " — con carne roja" : "");
+  var t = totalesDia(dia.tipo);
   $("kcalTotal").textContent = t.kcal.toLocaleString("es-CL") + " kcal";
   var protKcal = t.prot * 4, grasaKcal = t.grasa * 9, carbKcal = t.carb * 4;
   $("protTotal").textContent = t.prot + " g (" + Math.round(protKcal / t.kcal * 100) + "%)";
@@ -233,18 +339,8 @@ function guardarCheck(obj){
   try{ localStorage.setItem(CHECK_KEY, JSON.stringify(obj)); }catch(e){}
 }
 
-/* Domingo real → arranca en el menú de domingo; el resto de los días,
-   en Lunes-Sábado. Igual se puede cambiar a mano con las pestañas. */
-var esDomingo = new Date().getDay() === 0;
-
-function pintarTabsTipoDia(){
-  $("bLunSab").setAttribute("aria-pressed", esDomingo ? "false" : "true");
-  $("bDomingo").setAttribute("aria-pressed", esDomingo ? "true" : "false");
-}
-$("bLunSab").addEventListener("click", function(){ esDomingo = false; pintarTabsTipoDia(); pintarComidas(); });
-$("bDomingo").addEventListener("click", function(){ esDomingo = true; pintarTabsTipoDia(); pintarComidas(); });
-
 function pintarComidas(){
+  var dia = PLAN_DIAS[diaActual];
   var check = cargarCheck();
   var hoy = hoyISO();
   var marcadasHoy = check[hoy] || [];
@@ -252,7 +348,11 @@ function pintarComidas(){
   var cont = $("listaComidas");
   cont.innerHTML = "";
   COMIDAS.forEach(function(c){
-    var texto = (esDomingo && c.domingo) ? c.domingo : c.comun;
+    var m = c[dia.tipo];
+    var texto = c.comun;
+    if(dia.carneRoja && c.domingo) texto = c.domingo;
+    else if(dia.tipo === "alto" && c.juevesAlto) texto = c.juevesAlto;
+
     var hecha = marcadasHoy.indexOf(c.id) !== -1;
     var div = document.createElement("div");
     div.className = "comida";
@@ -261,7 +361,7 @@ function pintarComidas(){
       '<button type="button" class="tick" data-id="' + c.id + '">✓</button>' +
       '<div class="info">' +
         '<div class="cab"><h3>' + c.nombre + '</h3><span class="hora">' + c.hora + '</span></div>' +
-        '<div class="macros">' + c.prot + 'g prot · ' + c.carb + 'g carb · ' + c.grasa + 'g grasa</div>' +
+        '<div class="macros">' + m.prot + 'g prot · ' + m.carb + 'g carb · ' + m.grasa + 'g grasa</div>' +
         '<div class="menu">' + texto + '</div>' +
       '</div>';
     cont.appendChild(div);
@@ -279,6 +379,20 @@ function pintarComidas(){
       pintarComidas();
       pintarMarcas();
     });
+  });
+}
+
+function pintarSuplementos(){
+  var cont = $("listaSuplementos");
+  cont.innerHTML = "";
+  SUPLEMENTOS.forEach(function(s){
+    var div = document.createElement("div");
+    div.className = "suple";
+    div.innerHTML =
+      '<div class="cab"><span class="nombre">' + s.nombre + '</span><span class="cuando">' + s.cuando + '</span></div>' +
+      '<div class="dosis">' + s.dosis + '</div>' +
+      '<div class="motivo">' + s.motivo + '</div>';
+    cont.appendChild(div);
   });
 }
 
@@ -304,9 +418,14 @@ function pintarMarcas(){
   $("mRacha").textContent = racha;
 }
 
-pintarResumen();
-pintarTabsTipoDia();
-pintarComidas();
+function pintarTodo(){
+  pintarTabs();
+  pintarResumen();
+  pintarComidas();
+}
+
+pintarTodo();
+pintarSuplementos();
 pintarMarcas();
 
 try{
