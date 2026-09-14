@@ -297,6 +297,59 @@ alimentación WGYMADNSPORT), seguir siempre este proceso:
     `navigator.vibrate`. Ver `pitar()` en `entrenar-sara.html` como
     referencia ya probada.
 
+### Estándares de Fitness Profesional — inteligencia añadida a la app
+### (regla permanente)
+
+Además de la funcionalidad mínima del punto 5, toda app nueva de
+`entrenar-<nombre>.html` (y, en la medida de lo posible, actualizar
+también las existentes cuando se toquen por otro motivo) debe
+incorporar estas tres capas de inteligencia, basadas en la fórmulas y
+criterios reales de la sección "Base de conocimiento técnico" de más
+abajo — nunca inventar un número o una clasificación que no salga de
+ahí:
+
+13. **Indicador automático de intensidad (%1RM).** Cuando la persona
+    registra peso y repeticiones en una serie (idealmente cerca del
+    fallo, para que el cálculo sea válido), estimar el %1RM de esa
+    serie con la fórmula de Brzycki ya documentada
+    (`%1RM = 102,78 − 2,78 × reps`, válida hasta ~10 reps) y, si hay
+    peso registrado, el 1RM estimado (`1RM = peso ÷ (%1RM ÷ 100)`).
+    Clasificar ese %1RM contra la escala de Martin (30-50% escasa,
+    50-70% leve, 70-80% media, 80-90% submáxima, 90-100% máxima) y
+    mostrarlo como una etiqueta de color junto a la serie — nunca un
+    número aislado sin contexto. Si el campo de reps o peso está vacío,
+    no mostrar ninguna intensidad calculada ni "rellenar" el dato.
+14. **Orden de ejercicios estructurado por fatiga muscular.** Al armar
+    o revisar el orden de los ejercicios de un día: primero los
+    poliarticulares/compuestos (sentadilla, press banca, peso muerto,
+    remo con barra), después los de aislamiento (extensiones, curl,
+    elevaciones) — nunca un aislamiento pesado antes que el compuesto
+    principal del día, porque la fatiga acumulada le resta rendimiento
+    y seguridad a ese compuesto. Alternar cadena flexora/extensora
+    (empuje/tracción) entre los días de la semana, siguiendo el
+    principio de equilibrio estructural ya documentado (dorsales y
+    aductores de escápula necesitan el doble o triple de volumen que
+    pectorales para compensar el sedentarismo).
+15. **Alertas biomecánicas visuales de postura correcta.** El campo
+    `tip` de cada ejercicio (ver estructura JSON de los `entrenar-*.html`
+    existentes) debe señalar explícitamente el punto de riesgo
+    biomecánico del ejercicio cuando aplique (ej. "no dejes que la
+    rodilla sobrepase la punta del pie" en sentadillas, "no arquees la
+    zona lumbar" en press militar), priorizando las zonas de mayor
+    incidencia real de lesión en sala documentadas (rodilla 30%,
+    columna lumbosacra 18%, hombro 15%). En la interfaz, destacar este
+    aviso de forma visual (ícono o color de alerta), no como texto
+    plano perdido entre los demás campos, y mostrarlo al menos la
+    primera vez que la persona ve ese ejercicio en la sesión.
+
+Estas tres capas se **consolidan junto con el resto del sistema ya
+construido** en cada app de cliente, sin reemplazar nada de lo
+existente: acceso por QR (flyer o tarjeta que enlaza a la app), ficha
+de IMC y % de grasa corporal (casilleros vacíos del punto 10, nunca
+datos fijos en el código), asesoría de nutrición (del PDF de dieta del
+cliente o de `rutinas_oficiales.md` si no hay uno específico),
+cronómetro general de sesión y temporizador de descanso.
+
 ## Base de conocimiento técnico: entrenamiento, hipertrofia, nutrición
 ## y biomecánica (regla permanente)
 
