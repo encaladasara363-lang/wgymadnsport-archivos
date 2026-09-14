@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Ficha personal del socio WGYMADNSPORT: peso, grasa, cintura, cadera y racha de entrenamientos, guardado solo en tu teléfono.">
+<title>Ficha del Socio · WGYMADNSPORT</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+
+/* ── Misma paleta de siempre: negro puro, rojo E30613 y dorado D4AF37 ──── */
+:root{
+  --negro:#000000; --negro-suave:#111111; --negro-card:#1C1C1C; --linea:#2C2C2C;
+  --rojo:#E30613; --rojo-vivo:#FF2130;
+  --dorado:#D4AF37;
+  --blanco:#FFFFFF; --gris:#CFCFCF; --gris-tenue:#8A8A8A;
+  --verde:#43C48D;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--negro);color:var(--blanco)}
+body{
+  font-family:'Inter','Segoe UI',Arial,sans-serif;
+  font-size:19.5px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  padding-bottom:env(safe-area-inset-bottom);
+  overscroll-behavior-y:contain;
+}
+.envase{max-width:560px;margin:0 auto;min-height:100vh;position:relative}
+.tit{font-family:'Anton',Impact,sans-serif;letter-spacing:.01em;line-height:1;text-transform:uppercase}
+.etq{font-family:'Inter',sans-serif;font-weight:700;text-transform:uppercase;
+     letter-spacing:.14em;font-size:16px;color:var(--blanco)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ── Cabecera ─────────────────────────────────────────────────────────── */
+header{
+  display:flex;align-items:center;gap:11px;padding:13px 14px;
+  background:linear-gradient(180deg,#111111 0%,var(--negro) 100%);
+  border-bottom:3px solid var(--rojo);position:sticky;top:0;z-index:30;
+  padding-top:calc(14px + env(safe-area-inset-top));
+}
+header .logo{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
+  border:2px solid var(--dorado);object-fit:cover;background:#fff}
+header .quien{flex:1;min-width:0}
+header .quien h1{font-family:'Inter',sans-serif;font-weight:700;font-size:19.5px;
+  line-height:1.15;text-transform:uppercase;letter-spacing:.02em}
+header .quien h1 span{color:var(--rojo-vivo)}
+
+main{padding:18px 16px 40px}
+
+/* ── Ficha personal (peso, grasa, cintura, cadera) ────────────────────── */
+.ficha{background:var(--negro-card);border:1px solid var(--linea);border-radius:13px;
+  padding:14px 16px 16px;margin-bottom:18px}
+.ficha-cab{display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+  margin-bottom:12px;flex-wrap:wrap}
+.ficha-fecha{font-family:'Inter',sans-serif;font-weight:600;font-size:16.5px;
+  color:var(--dorado);letter-spacing:.02em}
+.ficha-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}
+.fdato{min-width:0}
+.fdato span{display:block;font-family:'Inter',sans-serif;font-weight:700;
+  font-size:16.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--blanco)}
+.fdato b{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:27px;
+  color:var(--dorado);line-height:1.2}
+.fdato b small{font-family:'Inter',sans-serif;font-weight:700;font-size:17px}
+.fdato i{display:block;font-style:normal;font-family:'Inter',sans-serif;
+  font-weight:700;font-size:17px;color:var(--rojo-vivo);margin-top:2px}
+.ficha-nota{margin:14px 0 0;padding-top:13px;border-top:1px solid var(--linea);
+  font-size:17.5px;line-height:1.55;color:var(--blanco)}
+.finput,.finput-meta{background:none;border:none;border-bottom:1.5px dashed var(--linea);
+  font:inherit;color:inherit;padding:0 0 1px;text-align:left}
+.finput{width:3.4ch}
+.finput-meta{width:3.4ch}
+.finput:focus,.finput-meta:focus{outline:none;border-bottom-color:currentColor}
+.finput::placeholder,.finput-meta::placeholder{color:inherit;opacity:.35}
+
+/* ── Contadores de abajo ──────────────────────────────────────────────── */
+.marcas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--linea);
+  border:1px solid var(--linea);border-radius:13px;overflow:hidden;margin-bottom:18px}
+.marcas .m{background:var(--negro-card);padding:14px 8px 15px;text-align:center;min-width:0}
+.marcas .m .v{font-family:'Anton',Impact,sans-serif;font-size:25px;line-height:1;
+  color:var(--dorado);font-variant-numeric:tabular-nums}
+.marcas .m .d{font-family:'Inter',sans-serif;font-weight:600;font-size:15px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--blanco);margin-top:6px;
+  overflow-wrap:break-word}
+
+.btn{
+  display:block;width:100%;cursor:pointer;border-radius:13px;padding:16px 14px;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:18.5px;
+  text-transform:uppercase;letter-spacing:.09em;border:1.5px solid var(--linea);
+  background:var(--negro-card);color:var(--blanco);
+}
+.btn:active{transform:scale(.99)}
+.btn-rojo{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.btn-rojo[data-h="si"]{background:rgba(67,196,141,.14);border-color:var(--verde);color:var(--verde)}
+
+.pie-nota{margin-top:16px;font-size:15.5px;color:var(--gris-tenue);text-align:center;line-height:1.5}
+
+</style>
+</head>
+<body>
+
+<div class="envase">
+
+  <header>
+    <img class="logo" src="assets/logo.jpg" alt="">
+    <div class="quien">
+      <h1>WGYM<span>ADNSPORT</span></h1>
+    </div>
+  </header>
+
+  <main>
+    <div class="ficha">
+      <div class="ficha-cab">
+        <span class="etq">Ficha · corte de 14 semanas</span>
+        <span class="ficha-fecha" id="fFechas">—</span>
+      </div>
+      <div class="ficha-grid">
+        <div class="fdato">
+          <span>Peso hoy</span>
+          <b><input type="text" inputmode="decimal" class="finput" id="fPesoHoy" placeholder="—" autocomplete="off"> <small>kg</small></b>
+          <i>Meta <input type="text" inputmode="decimal" class="finput-meta" id="fPesoMeta" placeholder="—" autocomplete="off"> kg</i>
+        </div>
+        <div class="fdato">
+          <span>Grasa hoy</span>
+          <b><input type="text" inputmode="decimal" class="finput" id="fGrasaHoy" placeholder="—" autocomplete="off"><small>%</small></b>
+          <i>Meta <input type="text" inputmode="decimal" class="finput-meta" id="fGrasaMeta" placeholder="—" autocomplete="off">%</i>
+        </div>
+        <div class="fdato">
+          <span>Cintura hoy</span>
+          <b><input type="text" inputmode="decimal" class="finput" id="fCinturaHoy" placeholder="—" autocomplete="off"> <small>cm</small></b>
+          <i>Meta <input type="text" inputmode="decimal" class="finput-meta" id="fCinturaMeta" placeholder="—" autocomplete="off"> cm</i>
+        </div>
+        <div class="fdato">
+          <span>Cadera hoy</span>
+          <b><input type="text" inputmode="decimal" class="finput" id="fCaderaHoy" placeholder="—" autocomplete="off"> <small>cm</small></b>
+          <i>Meta <input type="text" inputmode="decimal" class="finput-meta" id="fCaderaMeta" placeholder="—" autocomplete="off"> cm</i>
+        </div>
+      </div>
+      <p class="ficha-nota">Tu progreso real se mide en la cintura, no solo en la balanza: el peso del cuerpo cambia día a día por agua y glucógeno, pero la grasa abdominal — la más ligada al riesgo cardiovascular — se nota primero en la huincha. Pésate siempre a la misma hora, idealmente en ayunas por la mañana, y mide tu cintura una vez por semana. Toca cualquier número de arriba para escribir el tuyo: queda guardado solo en tu teléfono, nadie más lo ve.</p>
+    </div>
+
+    <div class="marcas">
+      <div class="m"><div class="v num" id="mSesiones">0</div><div class="d">Entrenamientos</div></div>
+      <div class="m"><div class="v num" id="mSemana">0</div><div class="d">Esta semana</div></div>
+      <div class="m"><div class="v num" id="mRacha">0</div><div class="d">Semanas seguidas</div></div>
+    </div>
+
+    <button class="btn btn-rojo" id="bMarcar" type="button">Marcar entrenamiento de hoy</button>
+    <p class="pie-nota">Un toque por día es suficiente — si ya marcaste hoy, el botón se pone verde.</p>
+  </main>
+
+</div>
+
+<script>
+"use strict";
+function $(id){ return document.getElementById(id); }
+function hoyISO(){
+  var d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function lunesDe(iso){
+  var p = iso.split("-");
+  var d = new Date(+p[0], +p[1]-1, +p[2]);
+  var dia = d.getDay(); // 0=domingo
+  var diff = (dia === 0 ? -6 : 1 - dia);
+  d.setDate(d.getDate() + diff);
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function sumarDias(iso, n){
+  var p = iso.split("-");
+  var d = new Date(+p[0], +p[1]-1, +p[2] + n);
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function fechaCorta(iso){
+  var p = iso.split("-");
+  var meses = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  return +p[2] + " " + meses[+p[1]-1];
+}
+
+/* ═══ Ficha (peso, grasa, cintura, cadera) ═════════════════════════════
+   Son datos de salud de una persona real: nunca van escritos en el
+   código de este archivo. Se escriben a mano desde el teléfono y quedan
+   solo en el localStorage de ese equipo — nada de esto viaja al repo. */
+var FKEY = "wgym_ficha_socio_v1";
+var CAMPOS_FICHA = ["PesoHoy","PesoMeta","GrasaHoy","GrasaMeta","CinturaHoy","CinturaMeta","CaderaHoy","CaderaMeta"];
+
+function cargarFicha(){
+  var m = {};
+  try{ m = JSON.parse(localStorage.getItem(FKEY)) || {}; }catch(e){}
+  CAMPOS_FICHA.forEach(function(k){
+    var el = $("f" + k);
+    if(el && m[k] != null) el.value = m[k];
+  });
+}
+function guardarCampoFicha(k, valor){
+  var m = {};
+  try{ m = JSON.parse(localStorage.getItem(FKEY)) || {}; }catch(e){}
+  m[k] = valor;
+  try{ localStorage.setItem(FKEY, JSON.stringify(m)); }catch(e){}
+}
+CAMPOS_FICHA.forEach(function(k){
+  var el = $("f" + k);
+  if(el) el.addEventListener("input", function(){ guardarCampoFicha(k, el.value); });
+});
+cargarFicha();
+
+/* El corte de 14 semanas arranca la primera vez que se abre en este
+   teléfono y queda fijo desde ahí — así la fecha no cambia sola cada
+   día que la persona vuelve a entrar. */
+var FECHAS_KEY = "wgym_ficha_socio_fechas_v1";
+(function pintarFechas(){
+  var f = {};
+  try{ f = JSON.parse(localStorage.getItem(FECHAS_KEY)) || {}; }catch(e){}
+  if(!f.inicio){
+    f.inicio = hoyISO();
+    try{ localStorage.setItem(FECHAS_KEY, JSON.stringify(f)); }catch(e){}
+  }
+  var fin = sumarDias(f.inicio, 98); // 14 semanas
+  $("fFechas").textContent = fechaCorta(f.inicio) + " — " + fechaCorta(fin);
+})();
+
+/* ═══ Contador de entrenamientos y racha semanal ═══════════════════════
+   Un toque en "Marcar entrenamiento de hoy" guarda la fecha de hoy.
+   No suma dos veces el mismo día. */
+var SKEY = "wgym_sesiones_socio_v1";
+function cargarSesiones(){
+  var arr = [];
+  try{ arr = JSON.parse(localStorage.getItem(SKEY)) || []; }catch(e){}
+  return arr;
+}
+function guardarSesiones(arr){
+  try{ localStorage.setItem(SKEY, JSON.stringify(arr)); }catch(e){}
+}
+
+function pintarMarcas(){
+  var sesiones = cargarSesiones();
+  $("mSesiones").textContent = sesiones.length;
+
+  var lunes = lunesDe(hoyISO());
+  $("mSemana").textContent = sesiones.filter(function(f){ return lunesDe(f) === lunes; }).length;
+
+  /* Semanas seguidas: se cuenta hacia atrás desde esta semana. Si todavía
+     no entrena esta semana no se le corta la racha, se mira desde la
+     anterior. */
+  var semanas = {};
+  sesiones.forEach(function(f){ semanas[lunesDe(f)] = true; });
+  function menosSemanas(iso, n){ return sumarDias(iso, -7 * n); }
+  var arranque = semanas[lunes] ? 0 : 1;
+  var racha = 0;
+  for(var k = arranque; k < 260; k++){
+    if(!semanas[menosSemanas(lunes, k)]) break;
+    racha++;
+  }
+  $("mRacha").textContent = racha;
+
+  var b = $("bMarcar");
+  var yaHoy = sesiones.indexOf(hoyISO()) !== -1;
+  b.setAttribute("data-h", yaHoy ? "si" : "no");
+  b.textContent = yaHoy ? "✓ Ya marcaste hoy" : "Marcar entrenamiento de hoy";
+}
+
+$("bMarcar").addEventListener("click", function(){
+  var sesiones = cargarSesiones();
+  var hoy = hoyISO();
+  if(sesiones.indexOf(hoy) === -1){
+    sesiones.push(hoy);
+    guardarSesiones(sesiones);
+  }
+  pintarMarcas();
+});
+
+pintarMarcas();
+
+/* Baja el riesgo de que el navegador borre solo el progreso guardado por
+   falta de uso o espacio. No es garantía absoluta, pero ayuda. */
+try{
+  if(navigator.storage && navigator.storage.persist) navigator.storage.persist();
+}catch(e){}
+</script>
+</body>
+</html>
