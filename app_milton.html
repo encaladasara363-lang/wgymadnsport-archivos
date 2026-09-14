@@ -114,6 +114,10 @@ main{padding:18px 16px 46px}
   text-transform:uppercase;letter-spacing:.01em;line-height:1.2}
 .dia-titulo p{font-size:16px;color:var(--gris-tenue);margin-top:3px;text-transform:uppercase;
   letter-spacing:.05em;font-weight:600}
+.dia-titulo p.duracion-dia{display:inline-block;margin-top:10px;padding:7px 15px;
+  border-radius:999px;background:rgba(212,175,55,.14);border:1px solid var(--dorado);
+  color:var(--dorado);font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
+  letter-spacing:.02em;text-transform:none}
 
 .ejercicio{background:var(--negro-card);border:1.5px solid var(--linea);border-radius:13px;
   padding:14px 15px;margin-bottom:12px}
@@ -230,6 +234,7 @@ main{padding:18px 16px 46px}
       <div class="dia-titulo">
         <h2 id="diaNombre">—</h2>
         <p id="diaFoco">—</p>
+        <p class="duracion-dia" id="diaDuracion">⏱ Duración estimada: — min</p>
       </div>
       <div id="listaEjercicios"></div>
       <p class="pie-nota">AL FALLO = repite hasta que ya no puedas completar una repetición más con buena técnica, en el rango indicado. Alerta biomecánica = punto de riesgo real de cada ejercicio, de nuestra base de conocimiento técnico.</p>
@@ -475,6 +480,14 @@ function pintarDia(){
   var d = RUTINA[diaActual];
   $("diaNombre").textContent = d.weekday + " — " + d.title;
   $("diaFoco").textContent = d.focus;
+
+  /* Duración estimada del día: calentamiento + serie al fallo de cada
+     ejercicio (~90 seg) más el descanso documentado después de cada uno.
+     Es una estimación práctica, no un dato médico — varía según cuánto
+     tarde en cargar cada máquina o cuánta gente haya en el gimnasio. */
+  var segTotal = d.exercises.reduce(function(acc, ex){ return acc + ex.rest + 90; }, 0);
+  var minTotal = Math.round(segTotal / 60);
+  $("diaDuracion").textContent = "⏱ Duración estimada: ~" + minTotal + " min";
 
   var cont = $("listaEjercicios");
   cont.innerHTML = "";
