@@ -152,6 +152,9 @@ main{padding:18px 16px 46px}
 }
 .tick[data-hecho="si"]{background:var(--verde);border-color:var(--verde);color:#08301F}
 .rm1-nota{font-size:13.5px;color:var(--gris-tenue);margin-bottom:10px;min-height:1.2em}
+.sugerencia{background:rgba(212,175,55,.10);border:1px solid rgba(212,175,55,.35);
+  border-radius:10px;padding:9px 11px;font-size:14.5px;line-height:1.45;
+  color:var(--dorado);margin-bottom:11px}
 .alerta{background:rgba(227,6,19,.10);border-left:4px solid var(--rojo);border-radius:0 10px 10px 0;
   padding:9px 11px;font-size:15px;line-height:1.45;color:var(--blanco);margin-bottom:11px}
 .alerta b{color:var(--rojo-vivo);display:block;font-size:12.5px;text-transform:uppercase;
@@ -460,68 +463,106 @@ var RUTINA = [
   {
     weekday: "Lunes", title: "Pecho", focus: "1 serie al fallo por ejercicio",
     exercises: [
-      { name:"Press banca", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"Escápulas fijas contra el banco; codos no más allá de ~75° (el hombro es zona de alta incidencia de lesión en sala)." },
-      { name:"Press inclinado con mancuernas", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"Baja hasta sentir el estiramiento sin hundir los hombros hacia adelante." },
-      { name:"Fondos en máquina", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Codos pegados al cuerpo, sin dejar caer el hombro hacia adelante." }
+      { name:"Press banca", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", repMin:6, repMax:10, tip:"Escápulas fijas contra el banco; codos no más allá de ~75° (el hombro es zona de alta incidencia de lesión en sala)." },
+      { name:"Press inclinado con mancuernas", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", repMin:6, repMax:10, tip:"Baja hasta sentir el estiramiento sin hundir los hombros hacia adelante." },
+      { name:"Fondos en máquina", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", repMin:8, repMax:12, tip:"Codos pegados al cuerpo, sin dejar caer el hombro hacia adelante." }
     ]
   },
   {
     weekday: "Martes", title: "Espalda", focus: "1 serie al fallo por ejercicio",
     exercises: [
-      { name:"Remo con barra", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"Espalda plana, nunca redondeada — la columna lumbosacra es la 2ª zona con más lesiones en sala." },
-      { name:"Jalón al pecho en polea", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"Lleva la barra al pecho sin balancear el torso hacia atrás." },
-      { name:"Remo con mancuerna a una mano", sets:"1 × 8-12 AL FALLO por lado", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Apoya rodilla y mano contraria en el banco, espalda paralela al suelo." }
+      { name:"Remo con barra", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", repMin:6, repMax:10, tip:"Espalda plana, nunca redondeada — la columna lumbosacra es la 2ª zona con más lesiones en sala." },
+      { name:"Jalón al pecho en polea", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", repMin:6, repMax:10, tip:"Lleva la barra al pecho sin balancear el torso hacia atrás." },
+      { name:"Remo con mancuerna a una mano", sets:"1 × 8-12 AL FALLO por lado", rest:120, rm:"alta", rmTxt:"AL FALLO", repMin:8, repMax:12, tip:"Apoya rodilla y mano contraria en el banco, espalda paralela al suelo." }
     ]
   },
   {
     weekday: "Miércoles", title: "Hombro", focus: "1 serie al fallo por ejercicio",
     exercises: [
-      { name:"Press militar", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"No arquees la zona lumbar para ganar rango de movimiento." },
-      { name:"Elevación lateral", sets:"1 × 10-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Sin encoger el trapecio al subir los brazos, lidera el movimiento con el codo." },
-      { name:"Face pull", sets:"1 × 12-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Codos altos — fortalece el hombro posterior y previene lesiones." }
+      { name:"Press militar", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", repMin:6, repMax:10, tip:"No arquees la zona lumbar para ganar rango de movimiento." },
+      { name:"Elevación lateral", sets:"1 × 10-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", repMin:10, repMax:15, tip:"Sin encoger el trapecio al subir los brazos, lidera el movimiento con el codo." },
+      { name:"Face pull", sets:"1 × 12-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", repMin:12, repMax:15, tip:"Codos altos — fortalece el hombro posterior y previene lesiones." }
     ]
   },
   {
     weekday: "Jueves", title: "Pierna", focus: "1 serie al fallo por ejercicio",
     exercises: [
-      { name:"Sentadilla en Smith", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"La rodilla no debe sobrepasar mucho la punta del pie ni colapsar hacia adentro — la rodilla es la zona con más lesiones en sala (30%)." },
-      { name:"Peso muerto rumano", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"La bisagra es de cadera, no de espalda baja; barra rozando los muslos, espalda siempre plana." },
-      { name:"Curl femoral a un pie en máquina", sets:"1 × 8-12 AL FALLO por pierna", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Movimiento controlado, sin usar impulso de cadera." },
-      { name:"Elevación de talones en máquina", sets:"1 × 12-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Sube completo en la punta del pie y controla la bajada, sin rebotar." }
+      { name:"Sentadilla en Smith", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", repMin:6, repMax:10, tip:"La rodilla no debe sobrepasar mucho la punta del pie ni colapsar hacia adentro — la rodilla es la zona con más lesiones en sala (30%)." },
+      { name:"Peso muerto rumano", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", repMin:6, repMax:10, tip:"La bisagra es de cadera, no de espalda baja; barra rozando los muslos, espalda siempre plana." },
+      { name:"Curl femoral a un pie en máquina", sets:"1 × 8-12 AL FALLO por pierna", rest:120, rm:"alta", rmTxt:"AL FALLO", repMin:8, repMax:12, tip:"Movimiento controlado, sin usar impulso de cadera." },
+      { name:"Elevación de talones en máquina", sets:"1 × 12-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", repMin:12, repMax:15, tip:"Sube completo en la punta del pie y controla la bajada, sin rebotar." }
     ]
   },
   {
     weekday: "Viernes", title: "Brazos", focus: "1 serie al fallo por ejercicio",
     exercises: [
-      { name:"Curl de bíceps con barra Z", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Codos fijos, sin balancear el torso para ayudarte con impulso." },
-      { name:"Extensión de tríceps en polea", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Codos fijos pegados al torso durante todo el recorrido." },
-      { name:"Curl martillo con mancuernas", sets:"1 × 10-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Sin balanceo del torso durante el movimiento." },
-      { name:"Press cerrado en banca", sets:"1 × 8-12 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Codos cerca del cuerpo, protege la muñeca manteniéndola recta." }
+      { name:"Curl de bíceps con barra Z", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", repMin:8, repMax:12, tip:"Codos fijos, sin balancear el torso para ayudarte con impulso." },
+      { name:"Extensión de tríceps en polea", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", repMin:8, repMax:12, tip:"Codos fijos pegados al torso durante todo el recorrido." },
+      { name:"Curl martillo con mancuernas", sets:"1 × 10-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", repMin:10, repMax:15, tip:"Sin balanceo del torso durante el movimiento." },
+      { name:"Press cerrado en banca", sets:"1 × 8-12 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", repMin:8, repMax:12, tip:"Codos cerca del cuerpo, protege la muñeca manteniéndola recta." }
     ]
   },
   {
     weekday: "Sábado", title: "Núcleo y puntos débiles", focus: "Día más liviano — cierra la semana",
     exercises: [
-      { name:"Prensa de piernas", sets:"1 × 10-15 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Espalda pegada al respaldo, sin bloquear las rodillas al extender — refuerzo liviano de pierna." },
-      { name:"Plancha abdominal", sets:"1 × AL FALLO (máx. control)", rest:60, rm:"—", rmTxt:"—", tip:"Cadera alineada con los hombros, sin hundir la zona lumbar." },
-      { name:"Elevación de piernas", sets:"1 × AL FALLO", rest:60, rm:"—", rmTxt:"—", tip:"Zona lumbar pegada al piso o al banco durante todo el movimiento." }
+      { name:"Prensa de piernas", sets:"1 × 10-15 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", repMin:10, repMax:15, tip:"Espalda pegada al respaldo, sin bloquear las rodillas al extender — refuerzo liviano de pierna." },
+      { name:"Plancha abdominal", sets:"1 × AL FALLO (máx. control)", rest:60, rm:"—", rmTxt:"—", repMin:null, repMax:null, tip:"Cadera alineada con los hombros, sin hundir la zona lumbar." },
+      { name:"Elevación de piernas", sets:"1 × AL FALLO", rest:60, rm:"—", rmTxt:"—", repMin:null, repMax:null, tip:"Zona lumbar pegada al piso o al banco durante todo el movimiento." }
     ]
   }
 ];
 
-/* ═══ Registro real de peso/reps por serie ════════════════════════════
+/* ═══ Historial real de peso/reps por serie ═══════════════════════════
    Progreso de entrenamiento, no dato de salud (no es peso corporal ni
    % de grasa) — igual se guarda solo en este teléfono, nunca en el
-   código del archivo. Clave por día + nombre del ejercicio, para que
-   cada semana pise el registro anterior de ese mismo ejercicio. */
-var REGISTRO_KEY = "wgym_registro_milton_v1";
+   código del archivo. Clave por día + nombre del ejercicio, con un
+   historial completo (no solo el último dato) para poder sugerir el
+   peso de la próxima sesión con la regla "5 y 10". */
+var HISTORIAL_KEY = "wgym_historial_milton_v1";
 function claveRegistro(weekday, nombreEjercicio){ return weekday + "|" + nombreEjercicio; }
-function cargarRegistro(){
-  try{ return JSON.parse(localStorage.getItem(REGISTRO_KEY)) || {}; }
+function hoyISO(){
+  var f = new Date();
+  return f.getFullYear() + "-" + String(f.getMonth() + 1).padStart(2, "0") + "-" + String(f.getDate()).padStart(2, "0");
+}
+function cargarHistorial(){
+  try{ return JSON.parse(localStorage.getItem(HISTORIAL_KEY)) || {}; }
   catch(e){ return {}; }
 }
-function guardarRegistro(reg){
-  try{ localStorage.setItem(REGISTRO_KEY, JSON.stringify(reg)); }catch(e){}
+function guardarHistorial(hist){
+  try{ localStorage.setItem(HISTORIAL_KEY, JSON.stringify(hist)); }catch(e){}
+}
+/* Guarda (o reemplaza) la entrada de HOY para ese ejercicio, sin tocar
+   las entradas de sesiones anteriores. */
+function guardarEntradaHoy(clave, peso, reps){
+  var hist = cargarHistorial();
+  var lista = (hist[clave] || []).filter(function(e){ return e.fecha !== hoyISO(); });
+  lista.push({ fecha: hoyISO(), peso: peso, reps: reps });
+  hist[clave] = lista;
+  guardarHistorial(hist);
+}
+function quitarEntradaHoy(clave){
+  var hist = cargarHistorial();
+  hist[clave] = (hist[clave] || []).filter(function(e){ return e.fecha !== hoyISO(); });
+  guardarHistorial(hist);
+}
+/* Sugerencia de la próxima sesión, regla "5 y 10": si la última vez
+   llegó al techo del rango de reps, sube ~5% (nunca más del 10%); si
+   quedó bajo el rango, mantiene el peso y prioriza técnica; en el medio,
+   mantiene el peso e intenta una repetición más. */
+function calcularSugerencia(ex, ultimaAnterior){
+  if(!ultimaAnterior || ex.repMin == null || ex.repMax == null) return "";
+  var pesoAnt = parseFloat((ultimaAnterior.peso || "").toString().replace(",", "."));
+  var repsAnt = parseInt(ultimaAnterior.reps, 10);
+  if(!pesoAnt || !repsAnt) return "";
+  var base = "💡 Última vez: " + pesoAnt + " kg × " + repsAnt + " reps. ";
+  if(repsAnt >= ex.repMax){
+    var sugerido = Math.round(pesoAnt * 1.05 * 2) / 2;
+    return base + "Llegaste al techo del rango — prueba con ~" + sugerido + " kg hoy (regla del 5%, nunca más del 10%).";
+  }
+  if(repsAnt < ex.repMin){
+    return base + "Quedaste bajo el rango (" + ex.repMin + "-" + ex.repMax + ") — mantén " + pesoAnt + " kg y prioriza la técnica antes que el peso.";
+  }
+  return base + "Mantén " + pesoAnt + " kg e intenta llegar a " + ex.repMax + " reps antes de subir peso.";
 }
 
 var diaActual = 0;
@@ -555,22 +596,29 @@ function pintarDia(){
 
   var cont = $("listaEjercicios");
   cont.innerHTML = "";
-  var registro = cargarRegistro();
+  var historial = cargarHistorial();
   d.exercises.forEach(function(ex, i){
     var clave = claveRegistro(d.weekday, ex.name);
-    var guardado = registro[clave] || {};
+    var lista = historial[clave] || [];
+    var hoy = hoyISO();
+    var entradaHoy = lista.filter(function(e){ return e.fecha === hoy; })[0] || null;
+    var anteriores = lista.filter(function(e){ return e.fecha !== hoy; });
+    var ultimaAnterior = anteriores.length ? anteriores[anteriores.length - 1] : null;
+    var sugerencia = calcularSugerencia(ex, ultimaAnterior);
+
     var div = document.createElement("div");
     div.className = "ejercicio";
     div.innerHTML =
       '<div class="cab"><h3>' + (i + 1) + '. ' + ex.name + '</h3>' +
       '<span class="rm ' + ex.rm + '" id="rm-' + i + '">' + ex.rmTxt + '</span></div>' +
       '<div class="datos"><span>Objetivo <b>' + ex.sets + '</b></span></div>' +
+      (sugerencia ? '<p class="sugerencia">' + sugerencia + '</p>' : '') +
       '<div class="registro">' +
         '<div class="campito"><label for="peso-' + i + '">Peso hoy</label>' +
-        '<input type="text" inputmode="decimal" id="peso-' + i + '" placeholder="kg" value="' + (guardado.peso || "") + '"></div>' +
+        '<input type="text" inputmode="decimal" id="peso-' + i + '" placeholder="kg" value="' + (entradaHoy ? entradaHoy.peso : "") + '"></div>' +
         '<div class="campito"><label for="reps-' + i + '">Reps al fallo</label>' +
-        '<input type="text" inputmode="numeric" id="reps-' + i + '" placeholder="reps" value="' + (guardado.reps || "") + '"></div>' +
-        '<button type="button" class="tick" id="hecho-' + i + '" data-hecho="' + (guardado.hecho ? "si" : "no") + '">✓</button>' +
+        '<input type="text" inputmode="numeric" id="reps-' + i + '" placeholder="reps" value="' + (entradaHoy ? entradaHoy.reps : "") + '"></div>' +
+        '<button type="button" class="tick" id="hecho-' + i + '" data-hecho="' + (entradaHoy ? "si" : "no") + '">✓</button>' +
       '</div>' +
       '<p class="rm1-nota" id="rm1-' + i + '"></p>' +
       '<div class="alerta"><b>Alerta biomecánica</b>' + ex.tip + '</div>' +
@@ -602,18 +650,31 @@ function pintarDia(){
       elRm1.textContent = "1RM estimado: ~" + Math.round(rm1) + " kg";
     }
 
-    function guardarSerie(){
-      var reg = cargarRegistro();
-      reg[clave] = { peso: elPeso.value, reps: elReps.value, hecho: elHecho.getAttribute("data-hecho") === "si" };
-      guardarRegistro(reg);
+    /* Solo queda guardado en el historial cuando marca "hecho" — así no
+       se registra como sesión real algo que todavía está a medio
+       escribir. Si desmarca, se borra la entrada de hoy (no las de
+       semanas anteriores). */
+    function sincronizarHistorial(){
+      if(elHecho.getAttribute("data-hecho") === "si" && elPeso.value && elReps.value){
+        guardarEntradaHoy(clave, elPeso.value, elReps.value);
+      }
     }
 
-    elPeso.addEventListener("input", function(){ actualizarRM(); guardarSerie(); });
-    elReps.addEventListener("input", function(){ actualizarRM(); guardarSerie(); });
+    elPeso.addEventListener("input", function(){ actualizarRM(); sincronizarHistorial(); });
+    elReps.addEventListener("input", function(){ actualizarRM(); sincronizarHistorial(); });
     elHecho.addEventListener("click", function(){
       var yaHecho = elHecho.getAttribute("data-hecho") === "si";
-      elHecho.setAttribute("data-hecho", yaHecho ? "no" : "si");
-      guardarSerie();
+      if(yaHecho){
+        elHecho.setAttribute("data-hecho", "no");
+        quitarEntradaHoy(clave);
+      }else{
+        if(!elPeso.value || !elReps.value){
+          alert("Anota el peso y las reps antes de marcar como hecho.");
+          return;
+        }
+        elHecho.setAttribute("data-hecho", "si");
+        guardarEntradaHoy(clave, elPeso.value, elReps.value);
+      }
     });
     actualizarRM();
   });
