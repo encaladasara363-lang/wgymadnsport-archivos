@@ -1,5 +1,20 @@
 # WGYMADNSPORT — Archivos del gimnasio
 
+## Reglas generales del dueño (regla permanente)
+
+- **Identidad de marca en todo material de difusión.** Toda publicidad,
+  flyer, tarjeta, estrategia de marketing y organización de eventos que
+  se cree para el gimnasio debe estar totalmente alineada con la marca y
+  el estilo visual de WGYMADNSPORT (ver la sección "Rutinas de
+  entrenamiento" más abajo para la paleta e identidad de referencia, y
+  las skills `wgymadnsport-plantillas` y `wgymadnsport-marketing` para
+  piezas imprimibles y contenido de redes). No usar una identidad visual
+  distinta a la ya aprobada.
+- **Formatear transcripciones y textos extensos.** Cuando el usuario
+  pegue una transcripción o un texto largo, convertirlo automáticamente
+  a Markdown estructurado (títulos, listas, párrafos cortos) antes de
+  trabajar con él, para ahorrar tokens de contexto.
+
 ## Planilla de socios (regla permanente)
 
 `socios.json` (en la raíz del repo) es la **única planilla de socios** que
