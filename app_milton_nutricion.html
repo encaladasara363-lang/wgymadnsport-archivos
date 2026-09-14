@@ -407,7 +407,7 @@ function pintarTabs(){
 
 function pintarResumen(){
   var dia = PLAN_DIAS[diaActual];
-  $("diaEtiqueta").textContent = dia.weekday + (dia.tipo === "alto" ? " — día alto (pierna)" : "") + (dia.carneRoja ? " — con carne roja" : "");
+  $("diaEtiqueta").textContent = dia.weekday + (dia.tipo === "alto" ? " — día alto (pierna)" : " — día bajo (tren superior)") + (dia.carneRoja ? " · con carne roja" : "");
   var t = totalesDia(dia.tipo);
   $("kcalTotal").textContent = t.kcal.toLocaleString("es-CL") + " kcal";
   var protKcal = t.prot * 4, grasaKcal = t.grasa * 9, carbKcal = t.carb * 4;
