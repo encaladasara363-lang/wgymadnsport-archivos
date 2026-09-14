@@ -59,6 +59,50 @@ main{padding:18px 16px 46px}
 .card{background:var(--negro-card);border:1px solid var(--linea);border-radius:13px;
   padding:16px;margin-bottom:18px}
 
+/* ── Tu objetivo (tarjeta motivacional) ───────────────────────────────── */
+.meta-card{
+  background:linear-gradient(150deg,rgba(227,6,19,.14),rgba(212,175,55,.08) 60%),var(--negro-card);
+  border:1.5px solid var(--rojo);
+}
+.meta-titulo{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:28px;
+  line-height:1.12;color:var(--blanco);text-transform:uppercase;margin-bottom:10px}
+.meta-titulo span{color:var(--dorado)}
+.meta-sub{font-size:16px;line-height:1.5;color:var(--blanco);margin-bottom:16px}
+
+.roadmap{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.paso{display:flex;gap:12px;align-items:flex-start}
+.paso .n{
+  flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--rojo);
+  color:#fff;font-family:'Anton',Impact,sans-serif;font-size:15px;font-weight:400;
+  display:grid;place-items:center;margin-top:1px;
+}
+.paso b{display:block;font-family:'Inter',sans-serif;font-weight:800;font-size:15.5px;
+  text-transform:uppercase;letter-spacing:.01em;color:var(--dorado);margin-bottom:2px}
+.paso p{font-size:15px;line-height:1.4;color:var(--blanco)}
+
+.meta-personal{display:flex;gap:12px;align-items:flex-end;margin-bottom:16px;
+  padding-top:14px;border-top:1px solid rgba(255,255,255,.12)}
+.meta-personal .campito{flex:1}
+.meta-personal label{display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--gris-tenue);margin-bottom:6px}
+.meta-personal .conunidad{position:relative}
+.meta-personal input{
+  width:100%;background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:10px;
+  color:#fff;font:700 19px/1 'Inter',sans-serif;padding:11px 36px 11px 11px;
+  font-variant-numeric:tabular-nums;
+}
+.meta-personal input::placeholder{color:#4A4A4A;font-weight:600}
+.meta-personal .unidad{position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  font-size:13.5px;color:var(--gris-tenue);font-weight:600;pointer-events:none}
+.dias-plan{flex:0 0 auto;text-align:center;min-width:78px}
+.dias-plan .v{font-family:'Anton',Impact,sans-serif;font-size:28px;line-height:1;color:var(--dorado)}
+.dias-plan .d{font-size:12px;color:var(--gris-tenue);text-transform:uppercase;letter-spacing:.04em;
+  font-weight:700;margin-top:3px}
+
+.meta-frase{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:17px;
+  line-height:1.25;text-align:center;color:var(--rojo-vivo);text-transform:uppercase;
+  letter-spacing:.01em}
+
 /* ── Pestañas de día (7, como en la app de entreno) ───────────────────── */
 .dias-tabs{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px}
 .dias-tabs button{
@@ -154,6 +198,44 @@ main{padding:18px 16px 46px}
   </header>
 
   <main>
+
+    <!-- ══ Tu objetivo ══════════════════════════════════════════════════ -->
+    <div class="card meta-card">
+      <span class="etq">Tu objetivo</span>
+      <h2 class="meta-titulo">MARCAR EL ABDOMEN<br><span>SIN PERDER MÚSCULO</span></h2>
+      <p class="meta-sub">Bajar grasa y subir músculo a la vez no es magia — es ciencia aplicada con constancia. Tu rutina y tu plan de alimentación ya están calculados. Lo único que falta lo pones tú, entrenamiento por entrenamiento, comida por comida.</p>
+
+      <div class="roadmap">
+        <div class="paso">
+          <span class="n">1</span>
+          <div><b>Semanas 1-6 — Adaptación</b><p>El cuerpo se está ajustando. La balanza puede moverse poco todavía — es normal, no aflojes.</p></div>
+        </div>
+        <div class="paso">
+          <span class="n">2</span>
+          <div><b>Semanas 3-6 — Primeros resultados</b><p>La cintura empieza a bajar y la fuerza sube en la barra, semana a semana.</p></div>
+        </div>
+        <div class="paso">
+          <span class="n">3</span>
+          <div><b>Semanas 12-20 — Se marca de verdad</b><p>El abdomen empieza a notarse a simple vista. Ahí se ve el trabajo hecho.</p></div>
+        </div>
+      </div>
+
+      <div class="meta-personal">
+        <div class="campito">
+          <label for="metaCintura">Tu meta de cintura</label>
+          <div class="conunidad">
+            <input type="text" inputmode="decimal" id="metaCintura" placeholder="—" autocomplete="off">
+            <span class="unidad">cm</span>
+          </div>
+        </div>
+        <div class="dias-plan">
+          <div class="v num" id="diasPlan">0</div>
+          <div class="d">Días en tu plan</div>
+        </div>
+      </div>
+
+      <p class="meta-frase">TU CUERPO YA SABE HACERLO — SOLO FALTA QUE NO TE RINDAS.</p>
+    </div>
 
     <!-- ══ Resumen diario ═══════════════════════════════════════════════ -->
     <div class="card">
@@ -433,6 +515,36 @@ function pintarTodo(){
 pintarTodo();
 pintarSuplementos();
 pintarMarcas();
+
+/* ═══ Tu objetivo: meta de cintura (la pone él, nunca fija en el código)
+   y días en el plan, contados desde la primera vez que abrió esta app
+   en este teléfono. ═══════════════════════════════════════════════════ */
+var META_KEY = "wgym_meta_milton_v1";
+var INICIO_KEY = "wgym_inicio_milton_v1";
+
+(function cargarMetaCintura(){
+  try{
+    var m = JSON.parse(localStorage.getItem(META_KEY)) || {};
+    if(m.cintura != null) $("metaCintura").value = m.cintura;
+  }catch(e){}
+})();
+$("metaCintura").addEventListener("input", function(){
+  try{ localStorage.setItem(META_KEY, JSON.stringify({ cintura: $("metaCintura").value })); }catch(e){}
+});
+
+(function pintarDiasPlan(){
+  var inicio = null;
+  try{ inicio = localStorage.getItem(INICIO_KEY); }catch(e){}
+  if(!inicio){
+    inicio = hoyISO();
+    try{ localStorage.setItem(INICIO_KEY, inicio); }catch(e){}
+  }
+  var p1 = inicio.split("-"), p2 = hoyISO().split("-");
+  var d1 = new Date(+p1[0], +p1[1] - 1, +p1[2]);
+  var d2 = new Date(+p2[0], +p2[1] - 1, +p2[2]);
+  var dias = Math.round((d2 - d1) / 86400000) + 1;
+  $("diasPlan").textContent = dias;
+})();
 
 try{
   if(navigator.storage && navigator.storage.persist) navigator.storage.persist();
