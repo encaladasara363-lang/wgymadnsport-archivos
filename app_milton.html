@@ -79,6 +79,14 @@ main{padding:18px 16px 46px}
   background:var(--rojo);color:#fff;
 }
 .btn:active{transform:scale(.99)}
+.btn-secundario{background:var(--negro-suave);border-color:var(--linea);color:var(--blanco)}
+
+/* ── Cronómetro de sesión ─────────────────────────────────────────────── */
+.crono-card{text-align:center}
+.crono-valor{font-family:'Anton',Impact,sans-serif;font-size:56px;line-height:1;
+  color:var(--dorado);font-variant-numeric:tabular-nums;margin:6px 0 16px}
+.crono-botones{display:flex;gap:10px}
+.crono-botones .btn{flex:1}
 
 .resultado{margin-top:16px;padding-top:16px;border-top:1px solid var(--linea);text-align:center}
 .resultado .valor{font-family:'Anton',Impact,sans-serif;font-size:52px;line-height:1;color:var(--dorado)}
@@ -148,6 +156,16 @@ main{padding:18px 16px 46px}
   </header>
 
   <main>
+
+    <!-- ══ Cronómetro de sesión ═══════════════════════════════════════ -->
+    <div class="card crono-card">
+      <span class="etq">Cronómetro de sesión</span>
+      <div class="crono-valor" id="cronoValor">00:00</div>
+      <div class="crono-botones">
+        <button class="btn" id="bCronoToggle" type="button">Iniciar</button>
+        <button class="btn btn-secundario" id="bCronoReset" type="button">Reiniciar</button>
+      </div>
+    </div>
 
     <!-- ══ Panel IMC ══════════════════════════════════════════════════ -->
     <div class="card">
@@ -262,6 +280,52 @@ function pitar(){
   }catch(e){}
   try{ if(navigator.vibrate) navigator.vibrate([260, 110, 260, 110, 260, 110, 500]); }catch(e){}
 }
+
+/* ═══ Cronómetro de sesión ═══════════════════════════════════════════════
+   Cuánto dura el entrenamiento completo: iniciar/pausar/reiniciar,
+   persistente en localStorage (mismo patrón ya probado en
+   entrenar-milton.html) para que si se cierra la pestaña a mitad de
+   sesión, el tiempo siga corriendo y no se pierda al volver. */
+var CRONO_KEY = "wgym_cronometro_milton_v1";
+function cargarCrono(){
+  try{ return JSON.parse(localStorage.getItem(CRONO_KEY)) || { running:false, accumulated:0, startedAt:null }; }
+  catch(e){ return { running:false, accumulated:0, startedAt:null }; }
+}
+function guardarCrono(){
+  try{ localStorage.setItem(CRONO_KEY, JSON.stringify(crono)); }catch(e){}
+}
+var crono = cargarCrono();
+
+function elapsedCrono(){
+  return crono.accumulated + (crono.running && crono.startedAt ? Math.floor((Date.now() - crono.startedAt) / 1000) : 0);
+}
+function fmtCrono(totalSeg){
+  var s = Math.max(0, Math.floor(totalSeg));
+  var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+  return h > 0 ? (pad(h) + ":" + pad(m) + ":" + pad(sec)) : (pad(m) + ":" + pad(sec));
+}
+function pintarCrono(){
+  $("cronoValor").textContent = fmtCrono(elapsedCrono());
+  $("bCronoToggle").textContent = crono.running ? "Pausar" : (crono.accumulated > 0 ? "Reanudar" : "Iniciar");
+}
+$("bCronoToggle").addEventListener("click", function(){
+  if(crono.running){
+    var add = crono.startedAt ? Math.floor((Date.now() - crono.startedAt) / 1000) : 0;
+    crono = { running:false, accumulated: crono.accumulated + add, startedAt:null };
+  }else{
+    crono = { running:true, accumulated: crono.accumulated, startedAt: Date.now() };
+  }
+  guardarCrono();
+  pintarCrono();
+});
+$("bCronoReset").addEventListener("click", function(){
+  crono = { running:false, accumulated:0, startedAt:null };
+  guardarCrono();
+  pintarCrono();
+});
+pintarCrono();
+setInterval(pintarCrono, 1000);
 
 /* ═══ Calculadora de IMC ════════════════════════════════════════════════
    Los 4 campos (edad, estatura, peso, % grasa) son datos de salud de una
