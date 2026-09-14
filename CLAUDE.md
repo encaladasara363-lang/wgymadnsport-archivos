@@ -386,14 +386,30 @@ estructura de `app_wgym_inteligente.html`, que sí puede variar).
 La plantilla también incluye, junto a cada ejercicio, un registro
 editable real de **peso (kg) y repeticiones al fallo** más un botón de
 "hecho" (✓) — con eso el %1RM del punto 13 se calcula con el dato real
-que la persona anotó, no solo con el rango objetivo, y se guarda en
-`localStorage` bajo `wgym_registro_<nombre>_v1`, con clave por día +
-nombre del ejercicio (progreso de entrenamiento, no dato de salud). Y
-un botón **"Exportar sesión de hoy"** con los tres niveles de respaldo
-del punto 5: intenta `window.claude.use('downloads')`, si no está
-disponible cae a una descarga por Blob, y si el navegador la bloquea
-(pasa en algunos WebView de WhatsApp/Instagram) muestra un modal para
-copiar el texto a mano.
+que la persona anotó, no solo con el rango objetivo. Cada ejercicio
+trae además `repMin`/`repMax` (el rango de reps objetivo, ej. 6 y 10)
+para que la sugerencia de abajo funcione — nunca dejar un ejercicio sin
+esos dos campos (usar `null`/`null` solo en ejercicios sin reps
+numéricas, como planchas por tiempo).
+
+Todo se guarda en `localStorage` bajo `wgym_historial_<nombre>_v1`,
+como un **historial completo por día + ejercicio** (no solo el último
+dato) — cada vez que marca "hecho" se agrega una entrada nueva con la
+fecha de ese día, sin pisar las sesiones anteriores. Con ese historial,
+la app calcula sola una **sugerencia de peso para la próxima sesión**
+(regla "5 y 10" de la base de conocimiento técnico): si la vez anterior
+llegó al techo del rango de reps, sugiere subir ~5% (nunca más del
+10%); si quedó bajo el rango, sugiere mantener el peso y priorizar
+técnica; en el medio, sugiere mantener el peso e intentar una
+repetición más antes de subir. Esta sugerencia se muestra siempre que
+haya una sesión anterior registrada — nunca inventar una sugerencia sin
+un dato real previo de esa persona en ese ejercicio.
+
+También trae un botón **"Exportar sesión de hoy"** con los tres niveles
+de respaldo del punto 5: intenta `window.claude.use('downloads')`, si
+no está disponible cae a una descarga por Blob, y si el navegador la
+bloquea (pasa en algunos WebView de WhatsApp/Instagram) muestra un
+modal para copiar el texto a mano.
 
 ## Base de conocimiento técnico: entrenamiento, hipertrofia, nutrición
 ## y biomecánica (regla permanente)
