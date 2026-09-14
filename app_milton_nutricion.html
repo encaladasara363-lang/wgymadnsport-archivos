@@ -47,8 +47,11 @@ header{
 }
 header .logo{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
   border:2px solid var(--dorado);object-fit:cover;background:#fff}
-header h1{font-family:'Inter',sans-serif;font-weight:700;font-size:18px;
-  line-height:1.15;text-transform:uppercase;letter-spacing:.02em;flex:1;min-width:0}
+header .quien{flex:1;min-width:0}
+header .kicker{font-family:'Inter',sans-serif;font-weight:700;font-size:12px;
+  text-transform:uppercase;letter-spacing:.14em;color:var(--gris-tenue);margin-bottom:1px}
+header h1{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:26px;
+  line-height:1.05;text-transform:uppercase;letter-spacing:.01em;color:var(--blanco)}
 header h1 span{color:var(--rojo-vivo)}
 
 main{padding:18px 16px 46px}
@@ -144,7 +147,10 @@ main{padding:18px 16px 46px}
 
   <header>
     <img class="logo" src="assets/logo.jpg" alt="">
-    <h1>PLAN NUTRICIONAL <span>MILTON FUENTES</span></h1>
+    <div class="quien">
+      <div class="kicker">Plan Nutricional</div>
+      <h1>MILTON <span>FUENTES</span></h1>
+    </div>
   </header>
 
   <main>
@@ -255,7 +261,7 @@ var COMIDAS = [
     comun:"120 g de pollo o pavo + arroz blanco o harina tostada con leche + un puñado de arándanos" },
   { id:"cena", nombre:"Cena", hora:"noche",
     normal:{prot:25,carb:80,grasa:23}, alto:{prot:22,carb:75,grasa:24},
-    comun:"150 g de pavo o pollo + ensalada libre surtida + ¾ taza de arroz o camote + ½ palta" }
+    comun:"150 g de pavo o pollo + ensalada libre surtida + ⅔ taza de arroz o camote + ⅓ palta + 3 cuadraditos de chocolate 85% cacao" }
 ];
 
 /* Lunes=0 ... Domingo=6, igual que la rutina de entreno. Jueves (índice 3)
