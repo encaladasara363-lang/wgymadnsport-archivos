@@ -7,7 +7,7 @@
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="Rutina VIP de Milton Fuentes Espinosa, WGYMADNSPORT Tocopilla: calcula tu IMC y sigue tu rutina Heavy Duty full body A/B con alertas biomecánicas basadas en ciencia.">
+<meta name="description" content="Rutina VIP de Milton Fuentes Espinosa, WGYMADNSPORT Tocopilla: calcula tu IMC y sigue tu rutina Heavy Duty de 6 días (Lunes a Sábado) con alertas biomecánicas basadas en ciencia.">
 <title>Rutina VIP · Milton Fuentes — WGYMADNSPORT</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,7 +93,7 @@ main{padding:18px 16px 46px}
 .resultado .nota{margin-top:12px;font-size:15.5px;line-height:1.5;color:var(--gris-tenue);text-align:left}
 
 /* ── Rutina: pestañas de días ──────────────────────────────────────────── */
-.dias-tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:16px}
+.dias-tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:16px}
 .dias-tabs button{
   background:var(--negro-card);border:1.5px solid var(--linea);border-radius:10px;
   color:var(--gris-tenue);font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
@@ -194,16 +194,19 @@ main{padding:18px 16px 46px}
 
     <!-- ══ Rutina Heavy Duty (alta intensidad, bajo volumen) ═══════════ -->
     <div class="card">
-      <span class="etq">Rutina Heavy Duty · Full Body A/B alternado</span>
+      <span class="etq">Rutina Heavy Duty · Split de 6 días, Lunes a Sábado</span>
       <p class="pie-nota" style="text-align:left;margin-top:0;margin-bottom:14px">
         Solo 1 serie de trabajo AL FALLO por ejercicio (después de 1-2 series de
         calentamiento que no cuentan y no van al fallo). Pocos ejercicios, esfuerzo
         máximo real en cada uno — así se entrena Heavy Duty: la intensidad reemplaza
         al volumen, y el músculo crece en el descanso, no en el gimnasio.
         <br><br>
-        <b style="color:var(--dorado)">Calendario:</b> alterna A y B cada vez que
-        entrenes, con al menos 48 h de por medio (ej. Lunes A · Jueves B · Lunes
-        siguiente A). Nunca dos sesiones seguidas del mismo entrenamiento.
+        <b style="color:var(--dorado)">Por qué 6 días sí funcionan:</b> vas al
+        gimnasio los 6 días, pero cada grupo muscular se entrena SOLO UNA VEZ por
+        semana (pecho el lunes, espalda el martes, hombro el miércoles, pierna el
+        jueves, brazos el viernes, núcleo el sábado). La frecuencia alta es de
+        asistencia, no de repetir el mismo músculo — así cada uno tiene toda la
+        semana para recuperarse antes de volver a exigirlo al máximo.
       </p>
       <div class="dias-tabs" id="diasTabs"></div>
       <div class="dia-titulo">
@@ -325,34 +328,65 @@ $("bCalcular").addEventListener("click", function(){
 });
 
 /* ═══ Rutina Heavy Duty (alta intensidad, bajo volumen) ══════════════════
-   Full body A/B alternado, 1 serie de trabajo AL FALLO por ejercicio
-   (tras calentamiento sin fallo), pocos ejercicios por sesión. Esto es
-   contenido de entrenamiento, no dato de salud, así que sí puede ir fijo
-   en el código — nunca la edad, el peso o el % de grasa de la persona.
-   El orden sigue siendo compuestos antes que aislamiento (equilibrio
-   estructural de la base de conocimiento técnico), aunque el volumen
-   sea mínimo. */
+   Split por grupo muscular, Lunes a Sábado (6 días de gimnasio), pero
+   cada grupo se entrena UNA sola vez por semana — la baja frecuencia
+   POR MÚSCULO es lo que hace que Heavy Duty funcione, no la cantidad de
+   días que la persona va al gimnasio. 1 serie de trabajo AL FALLO por
+   ejercicio (tras calentamiento sin fallo), pocos ejercicios por día.
+   Esto es contenido de entrenamiento, no dato de salud, así que sí
+   puede ir fijo en el código — nunca la edad, el peso o el % de grasa
+   de la persona. El orden sigue siendo compuestos antes que aislamiento
+   (equilibrio estructural de la base de conocimiento técnico), aunque
+   el volumen sea mínimo. */
 var RUTINA = [
   {
-    weekday: "Entreno A", title: "Full Body A", focus: "1 serie al fallo por ejercicio — cuerpo completo",
+    weekday: "Lunes", title: "Pecho", focus: "1 serie al fallo por ejercicio",
+    exercises: [
+      { name:"Press banca", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"Escápulas fijas contra el banco; codos no más allá de ~75° (el hombro es zona de alta incidencia de lesión en sala)." },
+      { name:"Press inclinado con mancuernas", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"Baja hasta sentir el estiramiento sin hundir los hombros hacia adelante." },
+      { name:"Fondos en máquina", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Codos pegados al cuerpo, sin dejar caer el hombro hacia adelante." }
+    ]
+  },
+  {
+    weekday: "Martes", title: "Espalda", focus: "1 serie al fallo por ejercicio",
+    exercises: [
+      { name:"Remo con barra", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"Espalda plana, nunca redondeada — la columna lumbosacra es la 2ª zona con más lesiones en sala." },
+      { name:"Jalón al pecho en polea", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"Lleva la barra al pecho sin balancear el torso hacia atrás." },
+      { name:"Remo con mancuerna a una mano", sets:"1 × 8-12 AL FALLO por lado", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Apoya rodilla y mano contraria en el banco, espalda paralela al suelo." }
+    ]
+  },
+  {
+    weekday: "Miércoles", title: "Hombro", focus: "1 serie al fallo por ejercicio",
+    exercises: [
+      { name:"Press militar", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"No arquees la zona lumbar para ganar rango de movimiento." },
+      { name:"Elevación lateral", sets:"1 × 10-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Sin encoger el trapecio al subir los brazos, lidera el movimiento con el codo." },
+      { name:"Face pull", sets:"1 × 12-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Codos altos — fortalece el hombro posterior y previene lesiones." }
+    ]
+  },
+  {
+    weekday: "Jueves", title: "Pierna", focus: "1 serie al fallo por ejercicio",
     exercises: [
       { name:"Sentadilla en Smith", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"La rodilla no debe sobrepasar mucho la punta del pie ni colapsar hacia adentro — la rodilla es la zona con más lesiones en sala (30%)." },
-      { name:"Press banca", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"Escápulas fijas contra el banco; codos no más allá de ~75° (el hombro es zona de alta incidencia de lesión en sala)." },
-      { name:"Remo con barra", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"Espalda plana, nunca redondeada — la columna lumbosacra es la 2ª zona con más lesiones en sala." },
-      { name:"Press militar", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"No arquees la zona lumbar para ganar rango de movimiento." },
-      { name:"Curl femoral a un pie en máquina", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Movimiento controlado, sin usar impulso de cadera." },
+      { name:"Peso muerto rumano", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"La bisagra es de cadera, no de espalda baja; barra rozando los muslos, espalda siempre plana." },
+      { name:"Curl femoral a un pie en máquina", sets:"1 × 8-12 AL FALLO por pierna", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Movimiento controlado, sin usar impulso de cadera." },
       { name:"Elevación de talones en máquina", sets:"1 × 12-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Sube completo en la punta del pie y controla la bajada, sin rebotar." }
     ]
   },
   {
-    weekday: "Entreno B", title: "Full Body B", focus: "1 serie al fallo por ejercicio — cuerpo completo",
+    weekday: "Viernes", title: "Brazos", focus: "1 serie al fallo por ejercicio",
     exercises: [
-      { name:"Peso muerto rumano", sets:"1 × 6-10 AL FALLO", rest:180, rm:"alta", rmTxt:"AL FALLO", tip:"La bisagra es de cadera, no de espalda baja; barra rozando los muslos, espalda siempre plana." },
-      { name:"Press inclinado con mancuernas", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"Baja hasta sentir el estiramiento sin hundir los hombros hacia adelante." },
-      { name:"Jalón al pecho en polea", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"Lleva la barra al pecho sin balancear el torso hacia atrás." },
-      { name:"Prensa de piernas", sets:"1 × 8-12 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", tip:"Espalda pegada al respaldo, sin bloquear las rodillas al extender." },
-      { name:"Curl de bíceps con barra Z", sets:"1 × 8-12 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Codos fijos, sin balancear el torso para ayudarte con impulso." },
-      { name:"Extensión de tríceps en polea", sets:"1 × 8-12 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Codos fijos pegados al torso durante todo el recorrido." }
+      { name:"Curl de bíceps con barra Z", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Codos fijos, sin balancear el torso para ayudarte con impulso." },
+      { name:"Extensión de tríceps en polea", sets:"1 × 8-12 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Codos fijos pegados al torso durante todo el recorrido." },
+      { name:"Curl martillo con mancuernas", sets:"1 × 10-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Sin balanceo del torso durante el movimiento." },
+      { name:"Press cerrado en banca", sets:"1 × 8-12 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", tip:"Codos cerca del cuerpo, protege la muñeca manteniéndola recta." }
+    ]
+  },
+  {
+    weekday: "Sábado", title: "Núcleo y puntos débiles", focus: "Día más liviano — cierra la semana",
+    exercises: [
+      { name:"Prensa de piernas", sets:"1 × 10-15 AL FALLO", rest:120, rm:"alta", rmTxt:"AL FALLO", tip:"Espalda pegada al respaldo, sin bloquear las rodillas al extender — refuerzo liviano de pierna." },
+      { name:"Plancha abdominal", sets:"1 × AL FALLO (máx. control)", rest:60, rm:"—", rmTxt:"—", tip:"Cadera alineada con los hombros, sin hundir la zona lumbar." },
+      { name:"Elevación de piernas", sets:"1 × AL FALLO", rest:60, rm:"—", rmTxt:"—", tip:"Zona lumbar pegada al piso o al banco durante todo el movimiento." }
     ]
   }
 ];
@@ -365,7 +399,7 @@ function pintarTabs(){
   RUTINA.forEach(function(d, i){
     var b = document.createElement("button");
     b.type = "button";
-    b.textContent = d.weekday;
+    b.textContent = d.weekday.slice(0, 3);
     b.setAttribute("aria-pressed", i === diaActual ? "true" : "false");
     b.addEventListener("click", function(){ diaActual = i; pintarDia(); });
     cont.appendChild(b);
