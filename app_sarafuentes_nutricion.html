@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Plan nutricional VIP de Sara Fuentes, WGYMADNSPORT Tocopilla: calorías, macros, suplementos e hidratación con menú diario.">
+<title>Plan Nutricional · Sara Fuentes</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+
+/* ── Misma paleta de siempre: negro puro, rojo E30613 y dorado D4AF37 ──── */
+:root{
+  --negro:#000000; --negro-suave:#111111; --negro-card:#1C1C1C; --linea:#2C2C2C;
+  --rojo:#E30613; --rojo-vivo:#FF2130;
+  --dorado:#D4AF37;
+  --blanco:#FFFFFF; --gris:#CFCFCF; --gris-tenue:#8A8A8A;
+  --verde:#43C48D; --azul:#4FA3D1;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--negro);color:var(--blanco)}
+body{
+  font-family:'Inter','Segoe UI',Arial,sans-serif;
+  font-size:19px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  padding-bottom:env(safe-area-inset-bottom);
+  overscroll-behavior-y:contain;
+}
+.envase{max-width:560px;margin:0 auto;min-height:100vh;position:relative}
+.tit{font-family:'Anton',Impact,sans-serif;letter-spacing:.01em;line-height:1;text-transform:uppercase}
+.etq{font-family:'Inter',sans-serif;font-weight:700;text-transform:uppercase;
+     letter-spacing:.12em;font-size:15px;color:var(--gris-tenue);display:block;margin-bottom:10px}
+.num{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+/* ── Cabecera ─────────────────────────────────────────────────────────── */
+header{
+  display:flex;align-items:center;gap:11px;padding:13px 14px;
+  background:linear-gradient(180deg,#111111 0%,var(--negro) 100%);
+  border-bottom:3px solid var(--rojo);position:sticky;top:0;z-index:30;
+  padding-top:calc(14px + env(safe-area-inset-top));
+}
+header .logo{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
+  border:2px solid var(--dorado);object-fit:cover;background:#fff}
+header .quien{flex:1;min-width:0}
+header .kicker{font-family:'Inter',sans-serif;font-weight:700;font-size:12px;
+  text-transform:uppercase;letter-spacing:.14em;color:var(--gris-tenue);margin-bottom:1px}
+header h1{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:26px;
+  line-height:1.05;text-transform:uppercase;letter-spacing:.01em;color:var(--blanco)}
+header h1 span{color:var(--rojo-vivo)}
+
+main{padding:18px 16px 46px}
+
+.card{background:var(--negro-card);border:1px solid var(--linea);border-radius:13px;
+  padding:16px;margin-bottom:18px}
+
+/* ── Tu objetivo (tarjeta motivacional) ───────────────────────────────── */
+.meta-card{
+  background:linear-gradient(150deg,rgba(227,6,19,.14),rgba(212,175,55,.08) 60%),var(--negro-card);
+  border:1.5px solid var(--rojo);
+}
+.meta-titulo{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:28px;
+  line-height:1.12;color:var(--blanco);text-transform:uppercase;margin-bottom:10px}
+.meta-titulo span{color:var(--dorado)}
+.meta-sub{font-size:16px;line-height:1.5;color:var(--blanco);margin-bottom:16px}
+
+.roadmap{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.paso{display:flex;gap:12px;align-items:flex-start}
+.paso .n{
+  flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--rojo);
+  color:#fff;font-family:'Anton',Impact,sans-serif;font-size:15px;font-weight:400;
+  display:grid;place-items:center;margin-top:1px;
+}
+.paso b{display:block;font-family:'Inter',sans-serif;font-weight:800;font-size:15.5px;
+  text-transform:uppercase;letter-spacing:.01em;color:var(--dorado);margin-bottom:2px}
+.paso p{font-size:15px;line-height:1.4;color:var(--blanco)}
+
+.meta-personal{display:flex;gap:12px;align-items:flex-end;margin-bottom:16px;
+  padding-top:14px;border-top:1px solid rgba(255,255,255,.12)}
+.meta-personal .campito{flex:1}
+.meta-personal label{display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--gris-tenue);margin-bottom:6px}
+.meta-personal .conunidad{position:relative}
+.meta-personal input{
+  width:100%;background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:10px;
+  color:#fff;font:700 19px/1 'Inter',sans-serif;padding:11px 36px 11px 11px;
+  font-variant-numeric:tabular-nums;
+}
+.meta-personal input::placeholder{color:#4A4A4A;font-weight:600}
+.meta-personal .unidad{position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  font-size:13.5px;color:var(--gris-tenue);font-weight:600;pointer-events:none}
+.hint-meta{display:block;font-size:12.5px;color:var(--gris-tenue);margin-top:6px;line-height:1.35}
+.dias-plan{flex:0 0 auto;text-align:center;min-width:78px}
+.dias-plan .v{font-family:'Anton',Impact,sans-serif;font-size:28px;line-height:1;color:var(--dorado)}
+.dias-plan .d{font-size:12px;color:var(--gris-tenue);text-transform:uppercase;letter-spacing:.04em;
+  font-weight:700;margin-top:3px}
+
+.meta-frase{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:17px;
+  line-height:1.25;text-align:center;color:var(--rojo-vivo);text-transform:uppercase;
+  letter-spacing:.01em}
+
+/* ── Seguimiento semanal (peso y cintura) ─────────────────────────────── */
+.segui-form{display:flex;gap:12px;align-items:flex-end;margin-bottom:14px}
+.segui-form .campito{flex:1}
+.segui-form label{display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--gris-tenue);margin-bottom:6px}
+.segui-form .conunidad{position:relative}
+.segui-form input{
+  width:100%;background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:10px;
+  color:#fff;font:700 19px/1 'Inter',sans-serif;padding:11px 36px 11px 11px;
+  font-variant-numeric:tabular-nums;
+}
+.segui-form input::placeholder{color:#4A4A4A;font-weight:600}
+.segui-form .unidad{position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  font-size:13.5px;color:var(--gris-tenue);font-weight:600;pointer-events:none}
+.btn-guardar{flex:0 0 auto;background:var(--rojo);border:none;border-radius:10px;color:#fff;
+  font-family:'Inter',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;
+  letter-spacing:.03em;padding:13px 16px;cursor:pointer;white-space:nowrap}
+.segui-fila{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--linea);
+  font-family:'Inter',sans-serif}
+.segui-fila:last-child{border-bottom:none;padding-bottom:0}
+.segui-fecha{flex:0 0 40px;font-weight:700;font-size:13.5px;color:var(--gris-tenue)}
+.segui-dato{flex:1;font-weight:700;font-size:15px;color:var(--blanco)}
+.segui-delta{font-style:normal;font-size:12.5px;color:var(--dorado);font-weight:600}
+.segui-borrar{flex:0 0 auto;background:none;border:none;color:var(--gris-tenue);font-size:15px;
+  cursor:pointer;padding:4px 6px}
+
+/* ── Pestañas de día (7, como en la app de entreno) ───────────────────── */
+.dias-tabs{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px}
+.dias-tabs button{
+  background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:9px;
+  color:var(--gris-tenue);font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;
+  padding:9px 1px;cursor:pointer;text-transform:uppercase;letter-spacing:.02em;
+}
+.dias-tabs button[aria-pressed="true"]{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.dia-etiqueta{display:inline-block;margin-bottom:14px;padding:6px 14px;border-radius:999px;
+  background:rgba(212,175,55,.14);border:1px solid var(--dorado);color:var(--dorado);
+  font-family:'Inter',sans-serif;font-weight:700;font-size:14.5px}
+
+/* ── Resumen diario ────────────────────────────────────────────────────── */
+.kcal-total{text-align:center;margin-bottom:16px}
+.kcal-total .v{font-family:'Anton',Impact,sans-serif;font-size:54px;line-height:1;color:var(--dorado)}
+.kcal-total .d{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--gris-tenue);margin-top:4px}
+
+.macro-fila{margin-bottom:13px}
+.macro-fila:last-child{margin-bottom:0}
+.macro-cab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.macro-cab .nombre{font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--blanco)}
+.macro-cab .valor{font-family:'Inter',sans-serif;font-weight:800;font-size:15.5px;color:var(--blanco)}
+.macro-barra{height:10px;border-radius:6px;background:var(--negro-suave);overflow:hidden}
+.macro-barra i{display:block;height:100%;border-radius:6px}
+.macro-barra i.prot{background:var(--rojo)}
+.macro-barra i.grasa{background:var(--dorado)}
+.macro-barra i.carb{background:var(--blanco)}
+
+/* ── Comidas ───────────────────────────────────────────────────────────── */
+.comida{background:var(--negro-suave);border:1.5px solid var(--linea);border-radius:13px;
+  padding:13px 14px;margin-bottom:11px;display:flex;gap:12px;align-items:flex-start}
+.comida[data-hecha="si"]{border-color:var(--verde);background:rgba(67,196,141,.08)}
+.comida .tick{
+  flex:0 0 auto;width:40px;height:40px;border-radius:10px;border:1.5px solid var(--linea);
+  background:var(--negro-card);color:var(--blanco);font-size:19px;line-height:1;
+  cursor:pointer;display:grid;place-items:center;margin-top:2px;
+}
+.comida[data-hecha="si"] .tick{background:var(--verde);border-color:var(--verde);color:#08301F}
+.comida .info{flex:1;min-width:0}
+.comida .cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:3px}
+.comida h3{font-family:'Inter',sans-serif;font-weight:800;font-size:16.5px;
+  text-transform:uppercase;letter-spacing:.02em}
+.comida .hora{font-size:13px;color:var(--gris-tenue);font-weight:600}
+.comida .macros{font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
+  color:var(--dorado);margin-bottom:6px}
+.comida .menu{font-size:15.5px;line-height:1.45;color:var(--blanco)}
+.suples-comida{display:flex;flex-wrap:wrap;margin-top:9px}
+.suple-mini{display:inline-block;background:var(--negro-card);
+  border:1.5px solid var(--dorado);border-radius:999px;padding:5px 11px;margin:4px 6px 0 0;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;color:var(--dorado);
+  white-space:nowrap}
+
+/* ── Suplementos ───────────────────────────────────────────────────────── */
+.suple{background:var(--negro-suave);border-left:4px solid var(--dorado);border-radius:0 10px 10px 0;
+  padding:10px 13px;margin-bottom:10px}
+.suple:last-child{margin-bottom:0}
+.suple .cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:2px}
+.suple .nombre{font-family:'Inter',sans-serif;font-weight:800;font-size:15.5px;text-transform:uppercase;letter-spacing:.02em}
+.suple .cuando{font-family:'Inter',sans-serif;font-weight:700;font-size:13px;color:var(--dorado);
+  text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.suple .dosis{font-size:14px;color:var(--gris-tenue);margin-bottom:3px}
+.suple .motivo{font-size:14.5px;line-height:1.4;color:var(--blanco)}
+.suple-alerta{border-left-color:var(--azul);border-left-style:dashed}
+.suple-alerta .cuando{color:var(--azul)}
+
+/* ── Agua ──────────────────────────────────────────────────────────────── */
+.agua-fila{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--linea)}
+.agua-fila:last-child{border-bottom:none;padding-bottom:0}
+.agua-fila .icono{font-size:26px;flex:0 0 auto}
+.agua-fila .txt{flex:1}
+.agua-fila .txt b{display:block;font-family:'Anton',Impact,sans-serif;font-weight:400;
+  font-size:22px;color:var(--azul)}
+.agua-fila .txt span{font-size:14.5px;color:var(--gris-tenue)}
+
+/* ── Contadores ────────────────────────────────────────────────────────── */
+.marcas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--linea);
+  border:1px solid var(--linea);border-radius:13px;overflow:hidden;margin-bottom:18px}
+.marcas .m{background:var(--negro-card);padding:14px 8px 15px;text-align:center;min-width:0}
+.marcas .m .v{font-family:'Anton',Impact,sans-serif;font-size:25px;line-height:1;
+  color:var(--dorado);font-variant-numeric:tabular-nums}
+.marcas .m .d{font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--blanco);margin-top:6px}
+
+.pie-nota{margin-top:6px;font-size:14.5px;color:var(--gris-tenue);text-align:center;line-height:1.5}
+
+</style>
+</head>
+<body>
+
+<div class="envase">
+
+  <header>
+    <img class="logo" src="assets/logo.jpg" alt="">
+    <div class="quien">
+      <div class="kicker">Plan Nutricional</div>
+      <h1>SARA <span>FUENTES</span></h1>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ══ Tu objetivo ══════════════════════════════════════════════════ -->
+    <div class="card meta-card">
+      <span class="etq">Tu objetivo</span>
+      <h2 class="meta-titulo">MARCAR EL ABDOMEN<br><span>SIN PERDER MÚSCULO</span></h2>
+      <p class="meta-sub">Subir músculo (glúteo sobre todo) y bajar grasa a la vez no es magia — es ciencia aplicada con constancia. Tu rutina y tu plan de alimentación ya están calculados. Lo único que falta lo pones tú, entrenamiento por entrenamiento, comida por comida.</p>
+
+      <div class="roadmap">
+        <div class="paso">
+          <span class="n">1</span>
+          <div><b>Semanas 1-6 — Adaptación</b><p>El cuerpo se está ajustando. La balanza puede moverse poco todavía — es normal, no aflojes.</p></div>
+        </div>
+        <div class="paso">
+          <span class="n">2</span>
+          <div><b>Semanas 3-6 — Primeros resultados</b><p>La cintura empieza a bajar y la fuerza sube en la barra, semana a semana.</p></div>
+        </div>
+        <div class="paso">
+          <span class="n">3</span>
+          <div><b>Semanas 12-20 — Se marca de verdad</b><p>El abdomen empieza a notarse a simple vista y el glúteo se ve más firme. Ahí se ve el trabajo hecho.</p></div>
+        </div>
+      </div>
+
+      <div class="meta-personal">
+        <div class="campito">
+          <label for="metaCintura">Tu meta de cintura</label>
+          <div class="conunidad">
+            <input type="text" inputmode="decimal" id="metaCintura" placeholder="—" autocomplete="off">
+            <span class="unidad">cm</span>
+          </div>
+          <span class="hint-meta">Escribe tu meta para seguir tu progreso semana a semana</span>
+        </div>
+        <div class="dias-plan">
+          <div class="v num" id="diasPlan">0</div>
+          <div class="d">Días en tu plan</div>
+        </div>
+      </div>
+
+      <p class="meta-frase">TU CUERPO YA SABE HACERLO — SOLO FALTA QUE NO TE RINDAS.</p>
+    </div>
+
+    <!-- ══ Seguimiento semanal ══════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Seguimiento semanal — peso y cintura</span>
+      <div class="segui-form">
+        <div class="campito">
+          <label for="seguiPeso">Peso</label>
+          <div class="conunidad">
+            <input type="text" inputmode="decimal" id="seguiPeso" placeholder="—" autocomplete="off">
+            <span class="unidad">kg</span>
+          </div>
+        </div>
+        <div class="campito">
+          <label for="seguiCintura">Cintura</label>
+          <div class="conunidad">
+            <input type="text" inputmode="decimal" id="seguiCintura" placeholder="—" autocomplete="off">
+            <span class="unidad">cm</span>
+          </div>
+        </div>
+        <button type="button" class="btn-guardar" id="bSeguiGuardar">Guardar</button>
+      </div>
+      <div id="seguiHistorial"></div>
+      <p class="pie-nota" style="margin-top:10px">Anota una vez por semana, el mismo día y ojalá en ayunas. Lo que importa es la tendencia de varias semanas, no la subida o bajada de un solo día.</p>
+    </div>
+
+    <!-- ══ Resumen diario ═══════════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Objetivo del día</span>
+      <div class="dias-tabs" id="diasTabs"></div>
+      <span class="dia-etiqueta" id="diaEtiqueta">—</span>
+      <div class="kcal-total">
+        <div class="v" id="kcalTotal">—</div>
+        <div class="d">Calorías al día</div>
+      </div>
+      <div class="macro-fila">
+        <div class="macro-cab"><span class="nombre">Proteína</span><span class="valor" id="protTotal">—</span></div>
+        <div class="macro-barra"><i class="prot" id="protBarra"></i></div>
+      </div>
+      <div class="macro-fila">
+        <div class="macro-cab"><span class="nombre">Grasas</span><span class="valor" id="grasaTotal">—</span></div>
+        <div class="macro-barra"><i class="grasa" id="grasaBarra"></i></div>
+      </div>
+      <div class="macro-fila">
+        <div class="macro-cab"><span class="nombre">Carbohidratos</span><span class="valor" id="carbTotal">—</span></div>
+        <div class="macro-barra"><i class="carb" id="carbBarra"></i></div>
+      </div>
+    </div>
+
+    <!-- ══ Menú del día ═════════════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Menú de hoy</span>
+      <div id="listaComidas"></div>
+    </div>
+
+    <!-- ══ Suplementos ══════════════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Suplementos — momento del día</span>
+      <div id="listaSuplementos"></div>
+      <div class="suple suple-alerta">
+        <div class="cab"><span class="nombre">Vitamina D3</span><span class="cuando">Antes: pedir examen</span></div>
+        <div class="dosis">1000-2000 UI/día — solo si el examen confirma déficit</div>
+        <div class="motivo">No está en su lista actual. Conviene pedir un examen de vitamina D en su próximo control de sangre — sin una deficiencia confirmada, suplementarla no mejora el rendimiento ni acelera nada.</div>
+      </div>
+      <p class="pie-nota" style="margin-top:12px">Dosis exactas según el envase de cada suplemento salvo donde ya está documentado (creatina, beta-alanina, omega 3). Si toma algún medicamento, consúltalo con su médico antes de combinar. Además aparecen junto a la comida donde corresponde tomarlos, en el menú de hoy.</p>
+    </div>
+
+    <!-- ══ Hidratación ══════════════════════════════════════════════════ -->
+    <div class="card">
+      <span class="etq">Agua al día</span>
+      <div class="agua-fila">
+        <span class="icono">💧</span>
+        <div class="txt"><b>~2,3 L</b><span>Base general, todos los días (≈35 ml por kg de peso)</span></div>
+      </div>
+      <div class="agua-fila">
+        <span class="icono">🏋️</span>
+        <div class="txt"><b>~2,6-2,8 L</b><span>Días de entrenamiento (Lunes a Sábado) — 150-250 ml cada 10-15 min mientras entrena</span></div>
+      </div>
+    </div>
+
+    <!-- ══ Contadores ═══════════════════════════════════════════════════ -->
+    <div class="marcas">
+      <div class="m"><div class="v num" id="mHoy">0/6</div><div class="d">Comidas de hoy</div></div>
+      <div class="m"><div class="v num" id="mRacha">0</div><div class="d">Días completos seguidos</div></div>
+    </div>
+
+    <p class="pie-nota">Marca cada comida a medida que la haces — queda guardado solo en este teléfono. Recuerda: la cintura es la métrica real de si está funcionando, no solo la balanza. Primeros cambios medibles en 3-6 semanas.</p>
+
+  </main>
+
+</div>
+
+<script>
+"use strict";
+function $(id){ return document.getElementById(id); }
+function hoyISO(){
+  var f = new Date();
+  return f.getFullYear() + "-" + String(f.getMonth() + 1).padStart(2, "0") + "-" + String(f.getDate()).padStart(2, "0");
+}
+function sumarDias(iso, n){
+  var p = iso.split("-");
+  var d = new Date(+p[0], +p[1] - 1, +p[2] + n);
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+/* ═══ Plan de comidas ════════════════════════════════════════════════════
+   Calculado para el objetivo de recomposición corporal de Sara (subir
+   músculo —sobre todo glúteo—, bajar grasa, marcar abdomen), con
+   Harris-Benedict mujeres + actividad "activo" (entrena 6 días + cardio).
+   Lunes, Jueves y Sábado son sus días de glúteo/pierna (los mismos que
+   en su rutina) y quedan con más calorías y carbohidratos —el resto de
+   los días bajan un poco para compensar y que el promedio semanal se
+   mantenga—. Como pidió menos carbohidratos que el promedio, el reparto
+   queda con más proteína y grasa en proporción que en otros planes del
+   gimnasio. Esto es un programa nutricional calculado, no un dato de
+   salud — nunca escribir aquí su peso, edad, estatura, % de grasa o
+   cintura reales, solo el resultado ya calculado. Pasta integral solo
+   los días de glúteo/pierna; carne roja solo el domingo; sí consume
+   batido de proteína (con leche sin lactosa), a diferencia de otros
+   clientes del gimnasio. */
+var COMIDAS = [
+  { id:"desayuno", nombre:"Desayuno", hora:"8:00",
+    normal:{prot:25,carb:35,grasa:20}, alto:{prot:25,carb:35,grasa:20},
+    comun:"50 g de avena + 15 g de mantequilla de maní + 40 g de arándanos y frutillas + 200 g de kéfir" },
+  { id:"colacion", nombre:"Colación", hora:"11:00",
+    normal:{prot:15,carb:15,grasa:10}, alto:{prot:15,carb:15,grasa:10},
+    comun:"100 g de quesillo + 15 g de maní o frutos secos + 100 g de plátano" },
+  { id:"almuerzo", nombre:"Almuerzo", hora:"14:00",
+    normal:{prot:40,carb:45,grasa:20}, alto:{prot:40,carb:85,grasa:20},
+    comun:"170 g de pechuga de pollo + 200 g de arroz blanco o papas (ya cocidos) + ensalada libre + 1 cdta de aceite de oliva",
+    domingo:"170-200 g de posta negra o lomo vetado (sin grasa visible) + 200 g de arroz blanco o papas (ya cocidos) + ensalada libre + 1 cdta de aceite de oliva",
+    altoTxt:"170 g de pechuga de pollo + 280 g de pasta integral (ya cocida) + ensalada libre + 1 cdta de aceite de oliva" },
+  { id:"preentreno", nombre:"Pre-entreno", hora:"antes del gym",
+    normal:{prot:15,carb:20,grasa:5}, alto:{prot:15,carb:25,grasa:5},
+    comun:"150 g de yogur griego + 15 g de miel + 10 g de chía",
+    altoTxt:"150 g de yogur griego + 20 g de miel + 10 g de chía" },
+  { id:"postentreno", nombre:"Post-entreno", hora:"después del gym",
+    normal:{prot:30,carb:25,grasa:3}, alto:{prot:30,carb:40,grasa:4},
+    comun:"25 g de galletas de arroz + 1 medida de batido de proteína con 250 g de leche sin lactosa",
+    altoTxt:"40 g de galletas de arroz + 1 medida de batido de proteína con 250 g de leche sin lactosa" },
+  { id:"cena", nombre:"Cena", hora:"20:30",
+    normal:{prot:20,carb:20,grasa:23}, alto:{prot:20,carb:20,grasa:23},
+    comun:"150 g de pechuga de pollo + ensalada libre + 130 g de camote (ya cocido) + 35 g de palta" }
+];
+
+/* Lunes=0 ... Domingo=6, igual que la rutina de entreno. Lunes, Jueves y
+   Sábado son sus 3 días de glúteo/pierna (igual que en app_sarafuentes.html,
+   donde el cardio también los evita) — quedan como día "alto". Domingo es
+   el único con carne roja permitida, igual que el resto de los planes del
+   gimnasio. */
+var PLAN_DIAS = [
+  { weekday:"Lunes", tipo:"alto", carneRoja:false },
+  { weekday:"Martes", tipo:"normal", carneRoja:false },
+  { weekday:"Miércoles", tipo:"normal", carneRoja:false },
+  { weekday:"Jueves", tipo:"alto", carneRoja:false },
+  { weekday:"Viernes", tipo:"normal", carneRoja:false },
+  { weekday:"Sábado", tipo:"alto", carneRoja:false },
+  { weekday:"Domingo", tipo:"normal", carneRoja:true }
+];
+
+function indiceHoy(){
+  var jsDay = new Date().getDay(); // 0 = domingo
+  return jsDay === 0 ? 6 : jsDay - 1;
+}
+var diaActual = indiceHoy();
+
+/* ═══ Suplementos — los mismos que toma Milton, en el mismo momento del
+   día, según la base de conocimiento técnico documentada. HMB no está en
+   esa base: se deja con una comida por precaución general, no por un
+   dato científico específico que tengamos. ═══════════════════════════ */
+var SUPLEMENTOS = [
+  { nombre:"Multivitamínico", dosis:"según envase", cuando:"Desayuno", motivo:"Con comida, para mejor tolerancia y absorción.", comidas:["desayuno"] },
+  { nombre:"Vitamina C", dosis:"según envase", cuando:"Desayuno", motivo:"Junto al multivitamínico, mismo momento.", comidas:["desayuno"] },
+  { nombre:"Omega 3", dosis:"250-500 mg", cuando:"Almuerzo", motivo:"Es una grasa — se absorbe mejor con una comida que lleve algo de grasa (el aceite de oliva de este almuerzo).", comidas:["almuerzo"] },
+  { nombre:"Citrato de potasio", dosis:"según envase", cuando:"Almuerzo", motivo:"Con comida, para no irritar el estómago.", comidas:["almuerzo"] },
+  { nombre:"HMB", dosis:"1 cápsula", cuando:"Almuerzo", motivo:"No está en la base de conocimiento técnico documentada — dosis y timing según el envase o la indicación de quien se lo recomendó.", comidas:["almuerzo"] },
+  { nombre:"Creatina", dosis:"3-5 g", cuando:"Post-entreno", motivo:"Se absorbe mejor con carbohidratos — coincide con la comida de después del entreno.", comidas:["postentreno"] },
+  { nombre:"Beta-alanina", dosis:"0,8-1,6 g por toma, repartida", cuando:"Desayuno, almuerzo y cena", motivo:"Tomada toda junta produce hormigueo (parestesias) — hay que fraccionarla en 2-3 tomas al día.", comidas:["desayuno","almuerzo","cena"] },
+  { nombre:"Citrato de magnesio", dosis:"según envase", cuando:"Cena / antes de dormir", motivo:"Ayuda a la relajación nocturna — es habitual tomarlo en la noche.", comidas:["cena"] }
+];
+
+function totalesDia(tipo){
+  var prot = 0, carb = 0, grasa = 0;
+  COMIDAS.forEach(function(c){
+    var m = c[tipo];
+    prot += m.prot; carb += m.carb; grasa += m.grasa;
+  });
+  var kcal = prot * 4 + carb * 4 + grasa * 9;
+  return { prot:prot, carb:carb, grasa:grasa, kcal:kcal };
+}
+
+function pintarTabs(){
+  var cont = $("diasTabs");
+  cont.innerHTML = "";
+  PLAN_DIAS.forEach(function(d, i){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.textContent = d.weekday.slice(0, 3);
+    b.setAttribute("aria-pressed", i === diaActual ? "true" : "false");
+    b.addEventListener("click", function(){ diaActual = i; pintarTodo(); });
+    cont.appendChild(b);
+  });
+}
+
+function pintarResumen(){
+  var dia = PLAN_DIAS[diaActual];
+  $("diaEtiqueta").textContent = dia.weekday + (dia.tipo === "alto" ? " — día alto (glúteo/pierna)" : " — día normal") + (dia.carneRoja ? " · con carne roja" : "");
+  var t = totalesDia(dia.tipo);
+  $("kcalTotal").textContent = t.kcal.toLocaleString("es-CL") + " kcal";
+  var protKcal = t.prot * 4, grasaKcal = t.grasa * 9, carbKcal = t.carb * 4;
+  $("protTotal").textContent = t.prot + " g (" + Math.round(protKcal / t.kcal * 100) + "%)";
+  $("grasaTotal").textContent = t.grasa + " g (" + Math.round(grasaKcal / t.kcal * 100) + "%)";
+  $("carbTotal").textContent = t.carb + " g (" + Math.round(carbKcal / t.kcal * 100) + "%)";
+  $("protBarra").style.width = (protKcal / t.kcal * 100) + "%";
+  $("grasaBarra").style.width = (grasaKcal / t.kcal * 100) + "%";
+  $("carbBarra").style.width = (carbKcal / t.kcal * 100) + "%";
+}
+
+/* ═══ Registro de comidas marcadas por día ══════════════════════════════ */
+var CHECK_KEY = "wgym_nutricion_sarafuentes_check_v1";
+function cargarCheck(){
+  try{ return JSON.parse(localStorage.getItem(CHECK_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function guardarCheck(obj){
+  try{ localStorage.setItem(CHECK_KEY, JSON.stringify(obj)); }catch(e){}
+}
+
+function pintarComidas(){
+  var dia = PLAN_DIAS[diaActual];
+  var check = cargarCheck();
+  var hoy = hoyISO();
+  var marcadasHoy = check[hoy] || [];
+
+  var cont = $("listaComidas");
+  cont.innerHTML = "";
+  COMIDAS.forEach(function(c){
+    var m = c[dia.tipo];
+    var texto = c.comun;
+    if(dia.carneRoja && c.domingo) texto = c.domingo;
+    else if(dia.tipo === "alto" && c.altoTxt) texto = c.altoTxt;
+
+    var suplesDeEsta = SUPLEMENTOS.filter(function(s){
+      return s.comidas && s.comidas.indexOf(c.id) !== -1;
+    });
+    var chipsHtml = "";
+    if(suplesDeEsta.length){
+      chipsHtml = '<div class="suples-comida">' + suplesDeEsta.map(function(s){
+        return '<span class="suple-mini">' + s.nombre + '</span>';
+      }).join("") + '</div>';
+    }
+
+    var hecha = marcadasHoy.indexOf(c.id) !== -1;
+    var div = document.createElement("div");
+    div.className = "comida";
+    div.setAttribute("data-hecha", hecha ? "si" : "no");
+    div.innerHTML =
+      '<button type="button" class="tick" data-id="' + c.id + '">✓</button>' +
+      '<div class="info">' +
+        '<div class="cab"><h3>' + c.nombre + '</h3><span class="hora">' + c.hora + '</span></div>' +
+        '<div class="macros">' + m.prot + 'g prot · ' + m.carb + 'g carb · ' + m.grasa + 'g grasa</div>' +
+        '<div class="menu">' + texto + '</div>' +
+        chipsHtml +
+      '</div>';
+    cont.appendChild(div);
+  });
+
+  cont.querySelectorAll(".tick").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var id = btn.getAttribute("data-id");
+      var chk = cargarCheck();
+      var lista = chk[hoy] || [];
+      var pos = lista.indexOf(id);
+      if(pos === -1) lista.push(id); else lista.splice(pos, 1);
+      chk[hoy] = lista;
+      guardarCheck(chk);
+      pintarComidas();
+      pintarMarcas();
+    });
+  });
+}
+
+function pintarSuplementos(){
+  var cont = $("listaSuplementos");
+  cont.innerHTML = "";
+  SUPLEMENTOS.forEach(function(s){
+    var div = document.createElement("div");
+    div.className = "suple";
+    div.innerHTML =
+      '<div class="cab"><span class="nombre">' + s.nombre + '</span><span class="cuando">' + s.cuando + '</span></div>' +
+      '<div class="dosis">' + s.dosis + '</div>' +
+      '<div class="motivo">' + s.motivo + '</div>';
+    cont.appendChild(div);
+  });
+}
+
+function pintarMarcas(){
+  var check = cargarCheck();
+  var hoy = hoyISO();
+  var marcadasHoy = (check[hoy] || []).length;
+  $("mHoy").textContent = marcadasHoy + "/" + COMIDAS.length;
+
+  /* Racha de días con las 6 comidas completas, contando hacia atrás. Si
+     hoy todavía no está completo no se corta la racha, se mira desde
+     ayer — igual que la racha de semanas del cronómetro de entreno. */
+  var diasCompletos = {};
+  Object.keys(check).forEach(function(f){
+    if((check[f] || []).length >= COMIDAS.length) diasCompletos[f] = true;
+  });
+  var arranque = diasCompletos[hoy] ? 0 : 1;
+  var racha = 0;
+  for(var k = arranque; k < 365; k++){
+    if(!diasCompletos[sumarDias(hoy, -k)]) break;
+    racha++;
+  }
+  $("mRacha").textContent = racha;
+}
+
+function pintarTodo(){
+  pintarTabs();
+  pintarResumen();
+  pintarComidas();
+}
+
+pintarTodo();
+pintarSuplementos();
+pintarMarcas();
+
+/* ═══ Tu objetivo: meta de cintura (la pone ella, nunca fija en el código)
+   y días en el plan, contados desde la primera vez que abrió esta app
+   en este teléfono. ═══════════════════════════════════════════════════ */
+var META_KEY = "wgym_meta_sarafuentes_v1";
+var INICIO_KEY = "wgym_inicio_sarafuentes_v1";
+
+(function cargarMetaCintura(){
+  try{
+    var m = JSON.parse(localStorage.getItem(META_KEY)) || {};
+    if(m.cintura != null) $("metaCintura").value = m.cintura;
+  }catch(e){}
+})();
+$("metaCintura").addEventListener("input", function(){
+  try{ localStorage.setItem(META_KEY, JSON.stringify({ cintura: $("metaCintura").value })); }catch(e){}
+});
+
+(function pintarDiasPlan(){
+  var inicio = null;
+  try{ inicio = localStorage.getItem(INICIO_KEY); }catch(e){}
+  if(!inicio){
+    inicio = hoyISO();
+    try{ localStorage.setItem(INICIO_KEY, inicio); }catch(e){}
+  }
+  var p1 = inicio.split("-"), p2 = hoyISO().split("-");
+  var d1 = new Date(+p1[0], +p1[1] - 1, +p1[2]);
+  var d2 = new Date(+p2[0], +p2[1] - 1, +p2[2]);
+  var dias = Math.round((d2 - d1) / 86400000) + 1;
+  $("diasPlan").textContent = dias;
+})();
+
+/* ═══ Seguimiento semanal de peso y cintura — casilleros vacíos, la
+   clienta anota su propio número cada semana; se guarda solo en el
+   localStorage de este teléfono, nunca en el código. ═══════════════ */
+var SEGUI_KEY = "wgym_seguimiento_sarafuentes_v1";
+function cargarSeguimiento(){
+  try{ return JSON.parse(localStorage.getItem(SEGUI_KEY)) || []; }
+  catch(e){ return []; }
+}
+function guardarSeguimiento(lista){
+  try{ localStorage.setItem(SEGUI_KEY, JSON.stringify(lista)); }catch(e){}
+}
+function fechaCorta(iso){
+  var p = iso.split("-");
+  return p[2] + "/" + p[1];
+}
+function pintarSeguimiento(){
+  var lista = cargarSeguimiento().slice().sort(function(a, b){ return a.fecha < b.fecha ? -1 : 1; });
+  var cont = $("seguiHistorial");
+  cont.innerHTML = "";
+  if(!lista.length){
+    cont.innerHTML = '<p class="pie-nota" style="margin-top:2px;text-align:left">Todavía no hay registros — anota tu peso y cintura de hoy para empezar.</p>';
+    return;
+  }
+  var ultimos = lista.slice(-6).reverse();
+  ultimos.forEach(function(r, i){
+    var anterior = ultimos[i + 1];
+    var deltaPeso = "", deltaCintura = "";
+    if(anterior){
+      if(r.peso != null && anterior.peso != null){
+        var dp = r.peso - anterior.peso;
+        deltaPeso = (dp > 0 ? "▲" : dp < 0 ? "▼" : "—") + Math.abs(dp).toFixed(1) + "kg";
+      }
+      if(r.cintura != null && anterior.cintura != null){
+        var dc = r.cintura - anterior.cintura;
+        deltaCintura = (dc > 0 ? "▲" : dc < 0 ? "▼" : "—") + Math.abs(dc).toFixed(1) + "cm";
+      }
+    }
+    var div = document.createElement("div");
+    div.className = "segui-fila";
+    div.innerHTML =
+      '<span class="segui-fecha">' + fechaCorta(r.fecha) + '</span>' +
+      '<span class="segui-dato">' + (r.peso != null ? r.peso + " kg" : "—") +
+        (deltaPeso ? ' <i class="segui-delta">' + deltaPeso + '</i>' : '') + '</span>' +
+      '<span class="segui-dato">' + (r.cintura != null ? r.cintura + " cm" : "—") +
+        (deltaCintura ? ' <i class="segui-delta">' + deltaCintura + '</i>' : '') + '</span>' +
+      '<button type="button" class="segui-borrar" data-fecha="' + r.fecha + '" aria-label="Borrar registro">✕</button>';
+    cont.appendChild(div);
+  });
+  cont.querySelectorAll(".segui-borrar").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var f = btn.getAttribute("data-fecha");
+      guardarSeguimiento(cargarSeguimiento().filter(function(r){ return r.fecha !== f; }));
+      pintarSeguimiento();
+    });
+  });
+}
+$("bSeguiGuardar").addEventListener("click", function(){
+  var peso = $("seguiPeso").value.trim().replace(",", ".");
+  var cintura = $("seguiCintura").value.trim().replace(",", ".");
+  if(!peso && !cintura) return;
+  var hoy = hoyISO();
+  var lista = cargarSeguimiento().filter(function(r){ return r.fecha !== hoy; });
+  lista.push({
+    fecha: hoy,
+    peso: peso ? parseFloat(peso) : null,
+    cintura: cintura ? parseFloat(cintura) : null
+  });
+  guardarSeguimiento(lista);
+  $("seguiPeso").value = "";
+  $("seguiCintura").value = "";
+  pintarSeguimiento();
+});
+pintarSeguimiento();
+
+try{
+  if(navigator.storage && navigator.storage.persist) navigator.storage.persist();
+}catch(e){}
+</script>
+</body>
+</html>
