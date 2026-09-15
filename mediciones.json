@@ -168,6 +168,21 @@
    ]
   },
   {
+   "n": "MONICA",
+   "a": "MONTEROS",
+   "sexo": "F",
+   "estatura": 160,
+   "registros": [
+    {
+     "fecha": "2026-09-15",
+     "edad": 46,
+     "peso": 70,
+     "grasa": 37.8,
+     "imc": 27.3
+    }
+   ]
+  },
+  {
    "n": "MARIA",
    "a": "OSES",
    "sexo": "F",
