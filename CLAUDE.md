@@ -648,6 +648,41 @@ sensible como diabetes.
   factores genéticos — útil para explicarle a un cliente por qué dos
   personas con la misma dieta no bajan de peso igual.
 
+### Referencia antropométrica: CHIREF, sujetos físicamente activos (Chile)
+
+- Estudio chileno (Rodríguez, Almagià, Yuing, Binvignat & Lizana, 2010,
+  *Int. J. Morphol.* 28(4):1159-1165) que midió con protocolo ISAK a 100
+  hombres y 79 mujeres de 20-29 años, sanos y físicamente activos (sin
+  factores de riesgo cardiovascular, IMC normal), entregando tablas de
+  referencia con promedio, desviación estándar y percentiles 5/15/25/
+  50/75/85/95% de perímetros, pliegues cutáneos y somatotipo.
+- Cintura mínima en mujeres activas: promedio 71,4 cm (DS 6,4), mediana
+  70,8 cm. Percentiles — 5%: 63,4 cm · 15%: 66,0 cm · 25%: 67,0 cm ·
+  50%: 70,8 cm · 75%: 75,1 cm · 85%: 77,5 cm · 95%: 84,2 cm.
+- Cintura mínima en hombres activos: promedio 79,0 cm (DS 6,7), mediana
+  78,3 cm. Percentiles — 5%: 71,1 cm · 15%: 73,3 cm · 25%: 75,1 cm ·
+  50%: 78,3 cm · 75%: 83,3 cm · 85%: 85,6 cm · 95%: 88,0 cm.
+- % de grasa corporal de referencia (método Kerr, 5 componentes):
+  mujeres activas 29,6% (DS 4,2); hombres activos 21,6% (DS 4,1).
+- IMC de referencia: hombres 23,0 kg/m² (DS 2,3), mujeres 22,5 kg/m²
+  (DS 3,2) — ambos dentro del rango "normal" OMS (18,5-24,9).
+- Somatotipo promedio (Heath-Carter): mujeres endo-mesomórfico (Endo
+  4,1 · Meso 4,2 · Ecto 2,1); hombres meso-endomórfico (Endo 2,7 · Meso
+  5,1 · Ecto 2,5) — en ambos predomina el componente mesomórfico
+  (robustez músculo-esquelética).
+- **Uso recomendado**: sirve para ubicar la cintura o el % de grasa de
+  un cliente activo dentro de una distribución real de personas
+  activas y sanas (no solo contra el umbral de riesgo OMS), y para
+  fijar metas de cintura con base en percentiles de gente activa en
+  vez de un número arbitrario — por ejemplo, moverse del percentil 50
+  hacia el 25 o el 15 como meta realista, nunca hacia el 5% como
+  objetivo por defecto.
+- **Limitación importante**: la muestra tiene 20-29 años — es la mejor
+  referencia de "persona físicamente activa" que tenemos, pero no está
+  ajustada a otras edades. Usarla como referencia direccional en
+  clientes fuera de ese rango etario, dejando claro que no es una
+  medición hecha en su mismo grupo de edad.
+
 ### Salud y poblaciones especiales: sobrepeso, obesidad y diabetes
 
 - Clasificación OMS por IMC: sobrepeso 25,0-29,9 kg/m²; obesidad ≥30
