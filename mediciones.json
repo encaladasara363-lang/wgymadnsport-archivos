@@ -183,6 +183,21 @@
    ]
   },
   {
+   "n": "BELEN",
+   "a": "OSES",
+   "sexo": "F",
+   "estatura": 166,
+   "registros": [
+    {
+     "fecha": "2026-09-15",
+     "edad": 17,
+     "peso": 77.3,
+     "grasa": 35.3,
+     "imc": 28
+    }
+   ]
+  },
+  {
    "n": "MARIA",
    "a": "OSES",
    "sexo": "F",
