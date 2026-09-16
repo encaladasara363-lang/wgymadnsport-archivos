@@ -40,13 +40,16 @@
         inset: 0;
         overflow: hidden;
         background: #0a0a0a;
+        perspective: 1000px;
       }
       .inner {
         position: absolute;
-        inset: -6%;
+        inset: -14%;
         background-size: cover;
         background-position: center;
-        filter: brightness(0.62) contrast(1.12) saturate(0.92);
+        filter: brightness(0.6) contrast(1.14) saturate(0.9);
+        transform-style: preserve-3d;
+        will-change: transform;
       }
       .scrim {
         position: absolute;
@@ -352,12 +355,29 @@
         1.4,
       );
 
-      // ---- Escenas de fotos: Ken Burns + texto ----
-      function photoScene(prefix, start) {
+      // ---- Escenas de fotos: planeo estilo dron + texto ----
+      // Cada foto es una toma fija de suelo, así que simulamos vuelo de dron con
+      // un plano inclinado (rotationX, como si la cámara mirara hacia abajo)
+      // que se va nivelando mientras la "cámara" planea en diagonal y se aleja.
+      function photoScene(prefix, start, drone) {
         tl.fromTo(
           `#${prefix}-inner`,
-          { scale: 1.04, xPercent: 0, yPercent: 0 },
-          { scale: 1.2, xPercent: -4, yPercent: -3, duration: 2.8, ease: "none" },
+          {
+            scale: drone.scaleFrom,
+            xPercent: drone.xFrom,
+            yPercent: drone.yFrom,
+            rotationX: drone.tiltFrom,
+            rotationZ: drone.rollFrom,
+          },
+          {
+            scale: drone.scaleTo,
+            xPercent: drone.xTo,
+            yPercent: drone.yTo,
+            rotationX: drone.tiltTo,
+            rotationZ: drone.rollTo,
+            duration: 2.8,
+            ease: "sine.inOut",
+          },
           start,
         );
         tl.fromTo(
@@ -373,9 +393,27 @@
           start + 0.45,
         );
       }
-      photoScene("ext", 2.8);
-      photoScene("equipo", 5.6);
-      photoScene("pesas", 8.4);
+      photoScene("ext", 2.8, {
+        scaleFrom: 1.16, scaleTo: 1.34,
+        xFrom: 0, xTo: -7,
+        yFrom: 5, yTo: -6,
+        tiltFrom: 11, tiltTo: 5,
+        rollFrom: 1.1, rollTo: -0.3,
+      });
+      photoScene("equipo", 5.6, {
+        scaleFrom: 1.14, scaleTo: 1.32,
+        xFrom: 1, xTo: 7,
+        yFrom: -3, yTo: 5,
+        tiltFrom: 8, tiltTo: 3,
+        rollFrom: -0.8, rollTo: 0.6,
+      });
+      photoScene("pesas", 8.4, {
+        scaleFrom: 1.15, scaleTo: 1.35,
+        xFrom: 3, xTo: -8,
+        yFrom: 1, yTo: -4,
+        tiltFrom: 9, tiltTo: 4,
+        rollFrom: 0.9, rollTo: -0.6,
+      });
 
       // ---- Escena 5: CTA ----
       const ctaStart = 11.2;
