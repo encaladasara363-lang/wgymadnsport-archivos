@@ -6,6 +6,10 @@ __pycache__/
 .claude/
 skills-lock.json
 
+# Capturas de prueba de proyectos HyperFrames (videos/*): son debug interno
+# para verificar la animacion antes de renderizar, no el video final
+videos/*/snapshots/
+
 # Materiales con datos bancarios: no se publican en el repositorio (es publico)
 cartel-transferencia.html
 cartel-transferencia.pdf
