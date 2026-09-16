@@ -1,4 +1,10 @@
 __pycache__/
+node_modules/
+
+# Herramientas de agente para HyperFrames (video), no son contenido del gimnasio
+/.agents/
+/.claude/
+/skills-lock.json
 
 # Materiales con datos bancarios: no se publican en el repositorio (es publico)
 cartel-transferencia.html

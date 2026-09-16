@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>WGYMADNSPORT — Promo Dron</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #060606;
+        font-family: Inter, sans-serif;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #060606;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- scenes (drone photo scenes) ---------- */
+      .scene-inner {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #060606;
+      }
+      .world {
+        position: absolute;
+        inset: 0;
+        transform-origin: 50% 50%;
+        will-change: transform;
+      }
+      .bg-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgba(6, 6, 6, 0.92) 0%,
+            rgba(6, 6, 6, 0.35) 32%,
+            rgba(6, 6, 6, 0.05) 55%,
+            rgba(6, 6, 6, 0.55) 100%
+          ),
+          radial-gradient(ellipse at 50% 35%, rgba(6, 6, 6, 0) 45%, rgba(6, 6, 6, 0.55) 100%);
+        pointer-events: none;
+      }
+      #scene-outro .scene-inner {
+        background: radial-gradient(ellipse at 50% 40%, #141414 0%, #060606 72%);
+      }
+
+      /* ---------- logo (intro + corner watermark) ---------- */
+      #logo-layer {
+        z-index: 40;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo-wrap {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 0 0 3px rgba(226, 27, 27, 0.55), 0 18px 46px rgba(0, 0, 0, 0.55);
+        will-change: transform, opacity;
+      }
+      .logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* ---------- headline ---------- */
+      #headline-layer {
+        z-index: 20;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 0 56px;
+        padding-top: 300px;
+      }
+      #headline {
+        width: 100%;
+        max-width: 960px;
+        text-align: center;
+        font-family: "Bebas Neue", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        color: #f5f5f5;
+        font-size: 108px;
+        line-height: 0.94;
+        letter-spacing: 0.01em;
+        text-shadow: 0 4px 4px rgba(0, 0, 0, 0.9), 0 10px 34px rgba(0, 0, 0, 0.75);
+        will-change: transform, opacity;
+      }
+      #headline .accent {
+        color: #ff6b6b;
+      }
+
+      /* ---------- services floating strip ---------- */
+      #services-layer {
+        z-index: 25;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 300px;
+      }
+      .services-bar {
+        position: relative;
+        width: 860px;
+        height: 88px;
+        border-radius: 999px;
+        background: rgba(10, 10, 10, 0.72);
+        border: 2px solid rgba(239, 43, 43, 0.85);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .svc {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-family: Inter, sans-serif;
+        font-weight: 700;
+        font-size: 34px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #f5f5f5;
+        opacity: 0;
+        will-change: opacity;
+      }
+      .svc .dot {
+        color: #ef2b2b;
+      }
+
+      /* ---------- address bar ---------- */
+      #address-layer {
+        z-index: 25;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 190px;
+      }
+      .address-bar {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 30px;
+        border-radius: 999px;
+        background: rgba(10, 10, 10, 0.6);
+        border: 1.5px solid rgba(245, 245, 245, 0.35);
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 26px;
+        letter-spacing: 0.06em;
+        color: #f5f5f5;
+        text-transform: uppercase;
+        opacity: 0;
+        will-change: opacity, transform;
+      }
+      .address-bar .pin {
+        color: #ef2b2b;
+        font-size: 28px;
+      }
+
+      /* ---------- outro ---------- */
+      #outro-layer {
+        z-index: 50;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 56px;
+      }
+      .outro-logo-wrap {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 0 0 4px rgba(226, 27, 27, 0.6), 0 24px 60px rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        transform: scale(0);
+        will-change: transform, opacity;
+      }
+      .outro-logo-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .cta-btn {
+        position: relative;
+        padding: 26px 52px;
+        border-radius: 999px;
+        background: #ef2b2b;
+        color: #fff;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 52px;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        box-shadow: 0 0 0 0 rgba(239, 43, 43, 0.55), 0 18px 50px rgba(0, 0, 0, 0.55);
+        opacity: 0;
+        transform: scale(0);
+        will-change: transform, opacity, box-shadow;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="14.5">
+      <!-- SCENE 1 — fachada / infraestructura general -->
+      <section class="clip" id="scene1" data-start="2.0" data-duration="3.3" data-track-index="0">
+        <div class="scene-inner">
+          <div class="world" id="world1" data-layout-allow-overflow>
+            <img class="bg-img" src="assets/foto-fachada.jpg" alt="" />
+          </div>
+          <div class="scrim"></div>
+        </div>
+      </section>
+
+      <!-- SCENE 2 — zona de máquinas -->
+      <section class="clip" id="scene2" data-start="5.3" data-duration="3.3" data-track-index="0">
+        <div class="scene-inner">
+          <div class="world" id="world2" data-layout-allow-overflow>
+            <img class="bg-img" src="assets/foto-maquinas.jpg" alt="" />
+          </div>
+          <div class="scrim"></div>
+        </div>
+      </section>
+
+      <!-- SCENE 3 — entrenamiento -->
+      <section class="clip" id="scene3" data-start="8.6" data-duration="2.9" data-track-index="0">
+        <div class="scene-inner">
+          <div class="world" id="world3" data-layout-allow-overflow>
+            <img class="bg-img" src="assets/foto-entrenamiento.jpg" alt="" />
+          </div>
+          <div class="scrim"></div>
+        </div>
+      </section>
+
+      <!-- SCENE OUTRO — dron detenido -->
+      <section class="clip" id="scene-outro" data-start="11.5" data-duration="3.0" data-track-index="0">
+        <div class="scene-inner"></div>
+      </section>
+
+      <!-- LOGO — intro flotante + marca de agua en esquina -->
+      <div class="clip" id="logo-layer" data-start="0" data-duration="11.5" data-track-index="10">
+        <div class="logo-wrap" id="logo-wrap">
+          <img class="logo-img" src="assets/logo.jpg" alt="WGYMADNSPORT" />
+        </div>
+      </div>
+
+      <!-- TITULAR -->
+      <div class="clip" id="headline-layer" data-start="2.3" data-duration="6.3" data-track-index="5">
+        <h1 id="headline">LA PERSEVERANCIA<br />ES EL SECRETO<br />DE TU <span class="accent">ÉXITO</span></h1>
+      </div>
+
+      <!-- FRANJA DE SERVICIOS -->
+      <div class="clip" id="services-layer" data-start="5.3" data-duration="6.2" data-track-index="6">
+        <div class="services-bar">
+          <span class="svc" id="svc0">PASES DIARIOS</span>
+          <span class="svc" id="svc1">PLANES <span class="dot">•</span> SEMANALES Y MENSUALES</span>
+          <span class="svc" id="svc2">SUPLEMENTOS</span>
+          <span class="svc" id="svc3">ROPA DEPORTIVA</span>
+        </div>
+      </div>
+
+      <!-- DIRECCIÓN -->
+      <div class="clip" id="address-layer" data-start="2.0" data-duration="9.5" data-track-index="6">
+        <div class="address-bar" id="address-bar"><span class="pin">&#9679;</span>21 DE MAYO 1520</div>
+      </div>
+
+      <!-- CIERRE COMERCIAL -->
+      <div class="clip" id="outro-layer" data-start="11.5" data-duration="3.0" data-track-index="20">
+        <div class="outro-logo-wrap" id="outro-logo">
+          <img src="assets/logo.jpg" alt="WGYMADNSPORT" />
+        </div>
+        <div class="cta-btn" id="cta-btn">¡Inscríbete Hoy!</div>
+      </div>
+    </div>
+
+    <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+      <filter id="streak1" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur id="streak1-blur" in="SourceGraphic" stdDeviation="0 0" />
+      </filter>
+      <filter id="streak2" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur id="streak2-blur" in="SourceGraphic" stdDeviation="0 0" />
+      </filter>
+      <filter id="streak3" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur id="streak3-blur" in="SourceGraphic" stdDeviation="0 0" />
+      </filter>
+    </svg>
+
+    <script>
+      document.getElementById("world1").style.filter = "url(#streak1)";
+      document.getElementById("world2").style.filter = "url(#streak2)";
+      document.getElementById("world3").style.filter = "url(#streak3)";
+
+      const tl = gsap.timeline({ paused: true });
+
+      /* ---------------- helper: drone push-in + pan camera ---------------- */
+      function driveCamera(worldEl, blurNode, { start, dur, scaleTo, x, y, peakBlur }) {
+        const cam = { scale: 1, x: 0, y: 0 };
+        const apply = () => {
+          worldEl.style.transform = `translate(${cam.x}px, ${cam.y}px) scale(${cam.scale})`;
+        };
+        apply();
+
+        const blur = { v: peakBlur };
+        const writeBlur = () => blurNode.setAttribute("stdDeviation", `${blur.v} 0`);
+        writeBlur();
+
+        tl.to(cam, { scale: scaleTo, x: x, y: y, duration: dur, ease: "power1.inOut", onUpdate: apply }, start);
+        tl.to(blur, { v: 0, duration: 0.35, ease: "power3.out", onUpdate: writeBlur }, start);
+      }
+
+      driveCamera(document.getElementById("world1"), document.getElementById("streak1-blur"), {
+        start: 2.0,
+        dur: 3.3,
+        scaleTo: 1.17,
+        x: -38,
+        y: 22,
+        peakBlur: 14,
+      });
+      driveCamera(document.getElementById("world2"), document.getElementById("streak2-blur"), {
+        start: 5.3,
+        dur: 3.3,
+        scaleTo: 1.18,
+        x: 42,
+        y: -18,
+        peakBlur: 18,
+      });
+      driveCamera(document.getElementById("world3"), document.getElementById("streak3-blur"), {
+        start: 8.6,
+        dur: 2.9,
+        scaleTo: 1.2,
+        x: -26,
+        y: -24,
+        peakBlur: 18,
+      });
+
+      /* ---------------- logo: pop in, hold, move to corner watermark, fade ---------------- */
+      const logoWrap = document.getElementById("logo-wrap");
+      const CORNER_DX = 396;
+      const CORNER_DY = -796;
+      const CORNER_SCALE = 0.42;
+
+      tl.fromTo(logoWrap, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.15);
+      tl.to(
+        logoWrap,
+        { x: CORNER_DX, y: CORNER_DY, scale: CORNER_SCALE, opacity: 0.38, duration: 0.75, ease: "power3.inOut" },
+        1.3,
+      );
+      tl.to(logoWrap, { opacity: 0, duration: 0.3, ease: "power2.out" }, 11.0);
+
+      /* ---------------- headline ---------------- */
+      tl.fromTo("#headline", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 2.3);
+      tl.to("#headline", { opacity: 0, duration: 0.3, ease: "power2.out" }, 8.3);
+
+      /* ---------------- services strip (4-way crossfade) ---------------- */
+      const svcWindows = [
+        { id: "#svc0", start: 5.3, end: 6.85 },
+        { id: "#svc1", start: 6.85, end: 8.4 },
+        { id: "#svc2", start: 8.4, end: 9.95 },
+        { id: "#svc3", start: 9.95, end: 11.5 },
+      ];
+      svcWindows.forEach((w, i) => {
+        tl.to(w.id, { opacity: 1, duration: 0.25, ease: "power2.out" }, w.start);
+        if (i < svcWindows.length - 1) {
+          tl.to(w.id, { opacity: 0, duration: 0.25, ease: "power2.in" }, w.end - 0.25);
+        }
+      });
+
+      /* ---------------- address bar ---------------- */
+      tl.fromTo("#address-bar", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 2.1);
+
+      /* ---------------- outro: logo settles big + CTA pulse ---------------- */
+      tl.fromTo(
+        "#outro-logo",
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" },
+        11.6,
+      );
+      tl.fromTo("#cta-btn", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "power3.out" }, 12.25);
+      tl.to(
+        "#cta-btn",
+        {
+          scale: 1.045,
+          boxShadow: "0 0 0 22px rgba(239,43,43,0), 0 18px 50px rgba(0,0,0,0.55)",
+          duration: 0.42,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: 3,
+        },
+        12.75,
+      );
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
