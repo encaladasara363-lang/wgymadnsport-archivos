@@ -1,5 +1,11 @@
 __pycache__/
 
+# Herramientas locales instaladas con `npx skills add` (HyperFrames, etc.):
+# tooling de desarrollo, no contenido del sitio del gimnasio
+.agents/
+.claude/
+skills-lock.json
+
 # Materiales con datos bancarios: no se publican en el repositorio (es publico)
 cartel-transferencia.html
 cartel-transferencia.pdf
