@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-15",
+ "actualizado": "2026-09-16",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -1113,6 +1113,14 @@
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46299
+  },
+  {
+   "n": "BELEN",
+   "a": "OSES",
+   "rut": "Sin Rut",
+   "plan": "Estudiante Profesor",
+   "monto": 28000,
+   "fv": 46310
   },
   {
    "n": "MARIA",
