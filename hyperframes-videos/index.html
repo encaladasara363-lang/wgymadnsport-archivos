@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>WGYMADNSPORT — Video publicitario vertical</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #0a0a0a;
+        font-family:
+          "Arial Black",
+          "Helvetica Neue",
+          Arial,
+          sans-serif;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #0a0a0a;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .kb-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #0a0a0a;
+      }
+      .inner {
+        position: absolute;
+        inset: -6%;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.62) contrast(1.12) saturate(0.92);
+      }
+      .scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(10, 10, 10, 0.82) 0%,
+          rgba(10, 10, 10, 0.18) 26%,
+          rgba(10, 10, 10, 0.1) 58%,
+          rgba(10, 10, 10, 0.92) 100%
+        );
+      }
+      .vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 50% 45%,
+          rgba(227, 6, 19, 0) 45%,
+          rgba(20, 4, 4, 0.55) 100%
+        );
+      }
+      .redglow {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at 50% 30%,
+          rgba(227, 6, 19, 0.28) 0%,
+          rgba(227, 6, 19, 0) 55%
+        );
+      }
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        opacity: 0;
+        margin-bottom: 26px;
+      }
+      .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #ff2130;
+        box-shadow: 0 0 16px #ff2130;
+        flex-shrink: 0;
+      }
+      .headline {
+        font-size: 84px;
+        color: #ffffff;
+        line-height: 1.02;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-shadow: 0 4px 30px rgba(0, 0, 0, 0.65);
+      }
+      .headline .accent {
+        color: #ff2130;
+      }
+      .sub {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-weight: 700;
+        font-size: 38px;
+        color: #d4af37;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-top: 18px;
+        opacity: 0;
+      }
+      .textblock {
+        position: absolute;
+        left: 70px;
+        right: 70px;
+        bottom: 210px;
+      }
+      .logo-badge {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow:
+          0 0 0 6px #e30613,
+          0 0 60px rgba(227, 6, 19, 0.7);
+        background: #0a0a0a;
+      }
+      .logo-badge img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .brand-name {
+        font-size: 96px;
+        color: #ffffff;
+        letter-spacing: 2px;
+        text-align: center;
+        text-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+      }
+      .brand-name .adn {
+        color: #ff2130;
+        text-shadow: 0 0 50px rgba(227, 6, 19, 0.55);
+      }
+      .tagline {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-weight: 700;
+        font-size: 40px;
+        color: #d4af37;
+        letter-spacing: 8px;
+      }
+      .cta-title {
+        font-size: 108px;
+        color: #ffffff;
+        letter-spacing: 2px;
+        text-align: center;
+        text-shadow: 0 0 45px rgba(227, 6, 19, 0.6);
+      }
+      .cta-button {
+        background: linear-gradient(135deg, #ff2130, #e30613);
+        color: #ffffff;
+        font-size: 46px;
+        letter-spacing: 3px;
+        padding: 24px 70px;
+        border-radius: 100px;
+        box-shadow: 0 0 60px rgba(227, 6, 19, 0.55);
+        text-transform: uppercase;
+      }
+      .cta-foot {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-weight: 600;
+        font-size: 32px;
+        color: #cfcfcf;
+        letter-spacing: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="14.2"
+      data-width="1080"
+      data-height="1920"
+      data-fps="30"
+    >
+      <!-- Scene 1 — Logo intro -->
+      <section
+        id="scene-logo"
+        class="clip"
+        data-start="0"
+        data-duration="2.8"
+        data-track-index="1"
+        style="background: #0a0a0a; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px"
+      >
+        <div class="redglow"></div>
+        <div id="logo-badge" class="logo-badge" style="opacity: 0">
+          <img
+            id="logo-img-intro"
+            src="assets/logo.jpg"
+            alt="Logo WGYMADNSPORT"
+            data-start="0"
+            data-duration="2.8"
+          />
+        </div>
+        <div id="brand-name" class="brand-name" style="opacity: 0">
+          WGYM<span class="adn">ADNSPORT</span>
+        </div>
+        <div id="brand-tag" class="tagline" style="opacity: 0">TOCOPILLA</div>
+      </section>
+
+      <!-- Scene 2 — Fachada real del gimnasio -->
+      <section id="scene-ext" class="clip" data-start="2.8" data-duration="2.8" data-track-index="1">
+        <div class="kb-wrap">
+          <div id="ext-inner" class="inner" data-layout-allow-overflow style="background-image: url('assets/gym-exterior.jpg')"></div>
+        </div>
+        <div class="scrim"></div>
+        <div class="vignette"></div>
+        <div class="textblock">
+          <div id="ext-eyebrow" class="eyebrow">
+            <div class="dot"></div>
+            <span
+              style="
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+                font-weight: 700;
+                font-size: 32px;
+                color: #ffffff;
+                letter-spacing: 4px;
+                text-transform: uppercase;
+              "
+              >GIMNASIO ADN SPORT</span
+            >
+          </div>
+          <div id="ext-headline" class="headline" style="opacity: 0">
+            TU GIMNASIO EN <span class="accent">TOCOPILLA</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 3 — Sala de equipos -->
+      <section id="scene-equipo" class="clip" data-start="5.6" data-duration="2.8" data-track-index="1">
+        <div class="kb-wrap">
+          <div id="equipo-inner" class="inner" data-layout-allow-overflow style="background-image: url('assets/gym-equipo.jpg')"></div>
+        </div>
+        <div class="scrim"></div>
+        <div class="vignette"></div>
+        <div class="textblock">
+          <div id="equipo-eyebrow" class="eyebrow">
+            <div class="dot"></div>
+            <span
+              style="
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+                font-weight: 700;
+                font-size: 32px;
+                color: #ffffff;
+                letter-spacing: 4px;
+                text-transform: uppercase;
+              "
+              >INSTALACIONES REALES</span
+            >
+          </div>
+          <div id="equipo-headline" class="headline" style="opacity: 0">EQUIPAMIENTO <span class="accent">COMPLETO</span></div>
+        </div>
+      </section>
+
+      <!-- Scene 4 — Zona de pesas -->
+      <section id="scene-pesas" class="clip" data-start="8.4" data-duration="2.8" data-track-index="1">
+        <div class="kb-wrap">
+          <div id="pesas-inner" class="inner" data-layout-allow-overflow style="background-image: url('assets/gym-pesas.jpg')"></div>
+        </div>
+        <div class="scrim"></div>
+        <div class="vignette"></div>
+        <div class="textblock">
+          <div id="pesas-eyebrow" class="eyebrow">
+            <div class="dot"></div>
+            <span
+              style="
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+                font-weight: 700;
+                font-size: 32px;
+                color: #ffffff;
+                letter-spacing: 4px;
+                text-transform: uppercase;
+              "
+              >TODAS LAS DISCIPLINAS</span
+            >
+          </div>
+          <div id="pesas-headline" class="headline" style="opacity: 0">MUSCULACIÓN · FUNCIONAL <span class="accent">· HIIT</span></div>
+        </div>
+      </section>
+
+      <!-- Scene 5 — Llamado a la acción -->
+      <section
+        id="scene-cta"
+        class="clip"
+        data-start="11.2"
+        data-duration="3"
+        data-track-index="1"
+        style="background: #0a0a0a; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 34px"
+      >
+        <div class="redglow"></div>
+        <div
+          id="cta-logo"
+          style="
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 0 4px #e30613, 0 0 40px rgba(227, 6, 19, 0.6);
+            opacity: 0;
+          "
+        >
+          <img
+            id="logo-img-cta"
+            src="assets/logo.jpg"
+            alt="Logo WGYMADNSPORT"
+            data-start="11.2"
+            data-duration="3"
+            style="width: 100%; height: 100%; object-fit: cover"
+          />
+        </div>
+        <div id="cta-title" class="cta-title" style="opacity: 0">ÚNETE HOY</div>
+        <div id="cta-button" class="cta-button" style="opacity: 0">RESERVA TU CUPO</div>
+        <div id="cta-foot" class="cta-foot" style="opacity: 0">WGYMADNSPORT · TOCOPILLA</div>
+      </section>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // ---- Escena 1: logo ----
+      tl.fromTo(
+        "#logo-badge",
+        { opacity: 0, scale: 0.5 },
+        { opacity: 1, scale: 1, duration: 0.7, ease: "back.out(1.6)" },
+        0.15,
+      );
+      tl.fromTo(
+        "#brand-name",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        1.0,
+      );
+      tl.fromTo(
+        "#brand-tag",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        1.4,
+      );
+
+      // ---- Escenas de fotos: Ken Burns + texto ----
+      function photoScene(prefix, start) {
+        tl.fromTo(
+          `#${prefix}-inner`,
+          { scale: 1.04, xPercent: 0, yPercent: 0 },
+          { scale: 1.2, xPercent: -4, yPercent: -3, duration: 2.8, ease: "none" },
+          start,
+        );
+        tl.fromTo(
+          `#${prefix}-eyebrow`,
+          { opacity: 0, x: -30 },
+          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" },
+          start + 0.25,
+        );
+        tl.fromTo(
+          `#${prefix}-headline`,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          start + 0.45,
+        );
+      }
+      photoScene("ext", 2.8);
+      photoScene("equipo", 5.6);
+      photoScene("pesas", 8.4);
+
+      // ---- Escena 5: CTA ----
+      const ctaStart = 11.2;
+      tl.fromTo(
+        "#cta-logo",
+        { opacity: 0, scale: 0.6 },
+        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
+        ctaStart + 0.1,
+      );
+      tl.fromTo(
+        "#cta-title",
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.8)" },
+        ctaStart + 0.4,
+      );
+      tl.fromTo(
+        "#cta-button",
+        { opacity: 0, scale: 0.7 },
+        { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.8)" },
+        ctaStart + 0.75,
+      );
+      tl.to(
+        "#cta-button",
+        { scale: 1.04, duration: 0.4, repeat: 3, yoyo: true, ease: "sine.inOut" },
+        ctaStart + 1.3,
+      );
+      tl.fromTo(
+        "#cta-foot",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power1.out" },
+        ctaStart + 1.05,
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
