@@ -15,6 +15,27 @@
   a Markdown estructurado (títulos, listas, párrafos cortos) antes de
   trabajar con él, para ahorrar tokens de contexto.
 
+## Publicación en redes sociales vía Metricool (regla permanente)
+
+La cuenta de Metricool del dueño (marca "Tienda WgymadnSport", brandId
+`6700545`, zona horaria `America/Santiago`) tiene conectadas las tres
+redes: **Instagram** (`wadnsport.tocopilla`, vía la página de Facebook
+"Wadnsport Tocopilla Gimnasio"), **Facebook** (esa misma página) y
+**TikTok** (`wadnsport.tocopil...`).
+
+Siempre que se programe o publique una pieza de contenido (post, flyer,
+aviso, video) para redes sociales del gimnasio, **publicarla en las
+tres redes a la vez por defecto** (Instagram, Facebook y TikTok) usando
+las herramientas de Metricool — no preguntar cada vez ni omitir TikTok
+salvo que el usuario pida explícitamente lo contrario para esa pieza.
+Adaptar el copy al tono de cada plataforma cuando haga falta, pero el
+alcance (las tres redes) es siempre el mismo.
+
+Antes de publicar contenido nuevo (no un ajuste de texto/hora a algo ya
+creado), mostrarle al usuario una vista previa o el link del planificador
+de Metricool y esperar su confirmación antes de dejarlo publicado — igual
+que con cualquier acción visible públicamente.
+
 ## Planilla de socios (regla permanente)
 
 `socios.json` (en la raíz del repo) es la **única planilla de socios** que
