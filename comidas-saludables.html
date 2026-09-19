@@ -150,15 +150,23 @@
   .ing-row .func{ font-size:22px; font-weight: 600; color:var(--ink-muted); text-align:right; }
 
   .macro-box{
-    background: var(--surface-2); border:1px solid var(--border); border-radius:16px; padding:20px;
-    margin: 26px 0; display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;
+    background: transparent; border: none; padding:0;
+    margin: 26px 0; display:flex; flex-direction:column; gap:0;
+  }
+  .macro-box-title{
+    font-size:26px; font-weight:800; color:var(--ink); margin-bottom:16px; font-family:'Fraunces',serif;
   }
   .macro-item{
-    text-align:center;
+    background: var(--surface-2); border:1px solid var(--border); border-radius:14px; padding:18px 20px;
+    margin-bottom:12px; display:flex; justify-content:space-between; align-items:flex-start;
   }
-  .macro-label{ font-size:18px; font-weight:700; color:var(--ink-muted); margin-bottom:6px; }
+  .macro-item-left{
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .macro-label{ font-size:18px; font-weight:700; color:var(--ink); }
   .macro-value{ font-size:32px; font-weight:800; color:var(--gold); font-variant-numeric: tabular-nums; }
-  .macro-unit{ font-size:16px; font-weight:600; color:var(--ink-muted); }
+  .macro-unit{ font-size:16px; font-weight:600; color:var(--gold); margin-left:2px; }
+  .macro-desc{ font-size:16px; font-weight:500; color:var(--ink-muted); }
 
   .steps{ display:flex; flex-direction:column; gap: 18px; counter-reset: step; }
   .step-group-title{ font-weight: 800; font-size: 24px; color: var(--accent); margin: 24px 0 12px; }
@@ -259,17 +267,34 @@
       </div>
 
       <div class="macro-box">
+        <div class="macro-box-title">Macros por porción (1/10)</div>
         <div class="macro-item">
-          <div class="macro-label">Proteína</div>
-          <div class="macro-value">23<span class="macro-unit">g</span></div>
+          <div class="macro-item-left">
+            <div class="macro-label">Calorías</div>
+            <div><span class="macro-value">56.5</span><span class="macro-unit">kcal</span></div>
+          </div>
+          <div class="macro-desc">Energía total</div>
         </div>
         <div class="macro-item">
-          <div class="macro-label">Carbohidratos</div>
-          <div class="macro-value">49<span class="macro-unit">g</span></div>
+          <div class="macro-item-left">
+            <div class="macro-label">Proteína</div>
+            <div><span class="macro-value">2.3</span><span class="macro-unit">g</span></div>
+          </div>
+          <div class="macro-desc">Estructura muscular</div>
         </div>
         <div class="macro-item">
-          <div class="macro-label">Grasas</div>
-          <div class="macro-value">23<span class="macro-unit">g</span></div>
+          <div class="macro-item-left">
+            <div class="macro-label">Carbohidratos</div>
+            <div><span class="macro-value">4.9</span><span class="macro-unit">g</span></div>
+          </div>
+          <div class="macro-desc">Energía rápida</div>
+        </div>
+        <div class="macro-item">
+          <div class="macro-item-left">
+            <div class="macro-label">Grasas</div>
+            <div><span class="macro-value">2.3</span><span class="macro-unit">g</span></div>
+          </div>
+          <div class="macro-desc">Absorción de nutrientes</div>
         </div>
       </div>
 
