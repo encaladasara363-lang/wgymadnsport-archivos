@@ -40,7 +40,8 @@
     background: var(--bg);
     color: var(--ink);
     font-family: 'Inter', system-ui, sans-serif;
-    font-size: 21px;
+    font-size: 26px;
+    font-weight: 600;
     padding-inline: 20px;
     padding-block: 44px;
     display: flex;
@@ -61,16 +62,16 @@
   .page-head .icon{ width:40px; height:40px; color: #fff; flex: none; }
   .head-text{ overflow: hidden; }
   .eyebrow{
-    font-size: 16px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    font-size: 20px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
     color: rgba(255,255,255,.85);
   }
   h1{
-    font-family: 'Fraunces', serif; font-weight: 700;
-    font-size: clamp(46px, 7.5vw, 72px);
+    font-family: 'Fraunces', serif; font-weight: 800;
+    font-size: clamp(56px, 9vw, 88px);
     line-height: 1.05; margin: 6px 0 14px; text-wrap: balance; color: #fff;
   }
   .tagline{
-    font-size: 21px; color: rgba(255,255,255,.92); max-width: 58ch; margin: 0; line-height: 1.55;
+    font-size: 26px; font-weight: 700; color: rgba(255,255,255,.92); max-width: 58ch; margin: 0; line-height: 1.55;
   }
 
   .status-bar{
@@ -79,10 +80,10 @@
     padding: 16px 22px; margin-bottom: 44px;
   }
   .status-count{
-    font-family:'Fraunces',serif; font-weight:600; font-size:32px; color:var(--accent-deep);
+    font-family:'Fraunces',serif; font-weight:800; font-size:40px; color:var(--accent-deep);
     font-variant-numeric: tabular-nums;
   }
-  .status-label{ font-size:16.5px; color:var(--ink-muted); }
+  .status-label{ font-size:22px; font-weight: 700; color:var(--ink-muted); }
   .status-bar .dot{ width:5px; height:5px; border-radius:50%; background:var(--ink-muted); opacity:.5; }
 
   .sections{ display:flex; flex-direction:column; gap: 34px; }
@@ -104,7 +105,7 @@
   .product > summary .folder-icon{ width:30px; height:30px; color:#fff; flex:none; }
   .product > summary .head-text{ flex: 1; min-width: 0; }
   .product > summary .head-text h2{
-    font-family:'Fraunces',serif; font-weight:600; font-size: 28px; margin:0; color:#fff;
+    font-family:'Fraunces',serif; font-weight:700; font-size: 36px; margin:0; color:#fff;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .product > summary .tag{
@@ -118,18 +119,18 @@
   .product[open] > summary .chevron{ transform: rotate(180deg); }
 
   .product-body{ padding: 30px 34px 34px; }
-  .product .sub{ font-size: 19.5px; color: var(--ink-muted); margin: -16px 0 24px; }
+  .product .sub{ font-size: 24px; font-weight: 700; color: var(--ink-muted); margin: -16px 0 24px; }
 
   .stats{
     display:grid; grid-template-columns: repeat(4,1fr); gap:14px;
     padding: 18px 0; margin-bottom: 26px; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
   }
-  .stat .k{ font-size:14px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted); display:block; margin-bottom:4px; }
-  .stat .v{ font-size:22px; font-weight:700; font-variant-numeric: tabular-nums; color:var(--ink); }
+  .stat .k{ font-size:18px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted); display:block; margin-bottom:4px; }
+  .stat .v{ font-size:28px; font-weight:800; font-variant-numeric: tabular-nums; color:var(--ink); }
 
   h3.section-h{
     display:flex; align-items:center; gap:10px;
-    font-family:'Fraunces',serif; font-weight:600; font-size:26px; color:var(--accent-deep);
+    font-family:'Fraunces',serif; font-weight:700; font-size:32px; color:var(--accent-deep);
     margin: 30px 0 14px;
   }
   h3.section-h .icon{ width:24px; height:24px; color:var(--accent); }
@@ -137,32 +138,32 @@
 
   .ingredients{ border:1px solid var(--border); border-radius:16px; overflow:hidden; }
   .ing-group{ margin-bottom: 20px; }
-  .ing-group-title{ font-weight: 600; font-size: 18px; color: var(--accent-deep); padding: 12px 18px 8px; background: var(--surface-2); margin: 0; }
+  .ing-group-title{ font-weight: 800; font-size: 24px; color: var(--accent-deep); padding: 12px 18px 8px; background: var(--surface-2); margin: 0; }
   .ing-row{
     display:grid; grid-template-columns: 1.5fr auto 1.2fr; gap:14px; align-items:center;
     padding: 15px 18px;
   }
   .ing-row:nth-child(odd){ background: var(--row-alt); }
-  .ing-row .name{ font-size:21.5px; font-weight:600; }
-  .ing-row .amount{ font-size:21.5px; font-weight:700; color:var(--accent); font-variant-numeric: tabular-nums; white-space:nowrap; }
-  .ing-row .func{ font-size:17px; color:var(--ink-muted); text-align:right; }
+  .ing-row .name{ font-size:26px; font-weight:700; }
+  .ing-row .amount{ font-size:26px; font-weight:800; color:var(--accent); font-variant-numeric: tabular-nums; white-space:nowrap; }
+  .ing-row .func{ font-size:22px; font-weight: 600; color:var(--ink-muted); text-align:right; }
 
   .steps{ display:flex; flex-direction:column; gap: 18px; counter-reset: step; }
-  .step-group-title{ font-weight: 600; font-size: 18px; color: var(--accent-deep); margin: 24px 0 12px; }
+  .step-group-title{ font-weight: 800; font-size: 24px; color: var(--accent-deep); margin: 24px 0 12px; }
   .step{ display:flex; gap:16px; align-items:flex-start; }
   .step .num{
     flex:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--accent);
     color:var(--accent); font-weight:700; font-size:17px; display:flex; align-items:center; justify-content:center;
     font-variant-numeric: tabular-nums;
   }
-  .step p{ margin:3px 0 0; font-size:21px; line-height:1.55; }
+  .step p{ margin:3px 0 0; font-size:26px; font-weight: 600; line-height:1.55; }
 
   .note{
     display:flex; gap:12px; background: var(--accent-soft); border-radius:14px; padding:18px 22px; margin-top: 26px;
   }
   .note .icon{ width:22px; height:22px; color:var(--accent-deep); flex:none; margin-top:2px; }
-  .note p{ margin:0; font-size:17.5px; line-height:1.5; color: var(--ink); }
-  .note strong{ color: var(--accent-deep); }
+  .note p{ margin:0; font-size:22px; font-weight: 700; line-height:1.5; color: var(--ink); }
+  .note strong{ color: var(--accent-deep); font-weight: 900; }
 
   .next{
     border:1.5px dashed var(--border); border-radius:24px; padding: 30px; text-align:center;
@@ -172,9 +173,9 @@
     width:38px; height:38px; border-radius:50%; border:1.5px dashed var(--border);
     display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:20px;
   }
-  .next p{ margin:0; font-size:17px; }
+  .next p{ margin:0; font-size:22px; font-weight: 700; }
 
-  footer.page{ margin-top:40px; font-size:15.5px; color:var(--ink-muted); text-align:center; }
+  footer.page{ margin-top:40px; font-size:20px; font-weight: 700; color:var(--ink-muted); text-align:center; }
 
   @media (max-width: 560px){
     body{ font-size:18px; }
