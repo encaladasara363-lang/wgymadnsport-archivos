@@ -736,3 +736,25 @@ sensible como diabetes.
   durante el ejercicio** — ese detalle no se pudo leer completo del
   manual fuente; para un cliente diabético, la pauta específica siempre
   debe venir de su propio equipo médico.
+
+## Catálogo de recetas — Comidas Saludables (regla permanente)
+
+`comidas-saludables.html` es el **catálogo único y oficial** de recetas nutritivas para WGYMADNSPORT.
+
+Sitio en vivo: https://encaladasara363-lang.github.io/wgymadnsport-archivos/comidas-saludables.html
+
+Siempre que el usuario pida agregar una nueva receta de comidas saludables (más allá de Empanadas de Carne Picada de Pino):
+
+1. **Agregar como nuevo `<details class="product">` dentro del `.sections`** — antes del bloque `.next` (que dice "Tu próxima receta aparecerá acá").
+2. **Estructura obligatoria por receta:**
+   - `<summary>` con nombre, categoría (tag) y ícono de carpeta
+   - `<p class="sub">` con descripción breve (1-2 líneas)
+   - **Sin bloques de stats ni macros** — solo descripción
+   - `<h3>Ingredientes</h3>` desglosado por grupos con funciones nutricionales
+   - `<h3>Preparación</h3>` en pasos numerados con técnica detallada
+   - `<div class="note">` con tip técnico o consejo final (opcional)
+3. **Mantener el mismo diseño visual WGYM ADN SPORT** — fondo negro, acentos rojo/dorado, tipografía Fraunces + Inter
+4. **Sin frameworks externos** — HTML + CSS puro, solo Google Fonts
+5. **Actualizar el contador en status-bar** — cambiar `<span class="status-count">` al número total de recetas y el nombre de la `status-label` a la última receta agregada
+6. **Publicar directamente en `main`** — no esperar PR ni rama de desarrollo, para que quede reflejada inmediatamente en el sitio en vivo
+7. **Confirmarle al usuario el link en vivo** y la receta agregada al cierre
