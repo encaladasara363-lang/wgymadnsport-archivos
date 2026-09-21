@@ -190,8 +190,10 @@ Cuando el aviso al dueño del gimnasio sea por Gmail (correo) sobre
 socios vencidos, el correo lleva **solo** a los que vencieron **en la
 última semana** (los 7 días corridos hasta hoy) — nadie vencido de
 antes, nadie por vencer todavía. Se listan **ordenados alfabéticamente
-por apellido**, sin agregar otros datos ni socios que no cumplan ese
-corte.
+por apellido**, y cada línea lleva **solo NOMBRE Y APELLIDO EN
+MAYÚSCULAS — nada de fecha de vencimiento ni ningún otro dato** (ni
+"venció el...", ni plan, ni monto). Sin agregar socios que no cumplan
+ese corte.
 
 ### El contador "día X de Y" es un dato aparte — también hay que sincronizarlo
 
