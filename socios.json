@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-16",
+ "actualizado": "2026-09-21",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -1528,7 +1528,7 @@
    "rut": "00.000.000-0",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46261
+   "fv": 46316
   },
   {
    "n": "LUDJAN",
