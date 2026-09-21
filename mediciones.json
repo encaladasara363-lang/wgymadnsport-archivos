@@ -1,10 +1,8 @@
 {
  "actualizado": "2026-09-15",
- "nota": "Mediciones de composicion corporal (Omron HBF-306). Solo aparecen los socios que se miden - los demas no necesitan estar aca. La lee tarjeta.html para mostrar la evolucion en la tarjeta virtual de cada socio medido.",
+ "nota": "Mediciones de composicion corporal (Omron HBF-306). Cada socio se identifica por un codigo 'id' unico (medId), nunca por nombre -- el nombre real vive solo en socios.json/tarjeta.html, nunca en este archivo. Solo aparecen los socios que se miden. La lee tarjeta.html (matcheando por data-medid de la fila del socio) para mostrar la evolucion en la tarjeta virtual.",
  "socios": [
   {
-   "n": "KEIDY",
-   "a": "ANDRADES",
    "sexo": "F",
    "estatura": 170,
    "registros": [
@@ -15,11 +13,10 @@
      "grasa": 32.6,
      "imc": 27.8
     }
-   ]
+   ],
+   "id": "a7e8c196"
   },
   {
-   "n": "CARLOS",
-   "a": "ARAYA",
    "sexo": "M",
    "estatura": 170,
    "registros": [
@@ -30,11 +27,10 @@
      "grasa": 13.7,
      "imc": 22.8
     }
-   ]
+   ],
+   "id": "3d9e1339"
   },
   {
-   "n": "ESTEFANNY",
-   "a": "BERMUDEZ",
    "sexo": "F",
    "estatura": 159,
    "registros": [
@@ -45,11 +41,10 @@
      "grasa": 30.6,
      "imc": 24.5
     }
-   ]
+   ],
+   "id": "f61857aa"
   },
   {
-   "n": "KEVIN",
-   "a": "BONILLA",
    "sexo": "M",
    "estatura": 170,
    "registros": [
@@ -60,11 +55,10 @@
      "grasa": 11.5,
      "imc": 23.4
     }
-   ]
+   ],
+   "id": "d248ab9f"
   },
   {
-   "n": "CELINDA",
-   "a": "BARJA",
    "sexo": "F",
    "estatura": 154,
    "registros": [
@@ -75,11 +69,10 @@
      "grasa": 21.7,
      "imc": 21.8
     }
-   ]
+   ],
+   "id": "a2ee2e98"
   },
   {
-   "n": "MACARENA",
-   "a": "ENCALADA",
    "sexo": "F",
    "estatura": 160,
    "registros": [
@@ -90,11 +83,10 @@
      "grasa": 23,
      "imc": 24.3
     }
-   ]
+   ],
+   "id": "672f7b5a"
   },
   {
-   "n": "SARA",
-   "a": "ENCALADA",
    "sexo": "F",
    "estatura": 167,
    "registros": [
@@ -105,11 +97,10 @@
      "grasa": 24.1,
      "imc": 23.3
     }
-   ]
+   ],
+   "id": "b72be41d"
   },
   {
-   "n": "CLAUDIA",
-   "a": "FERNANDEZ",
    "sexo": "F",
    "estatura": 158,
    "registros": [
@@ -120,11 +111,10 @@
      "grasa": 37,
      "imc": 31.6
     }
-   ]
+   ],
+   "id": "cc71d37d"
   },
   {
-   "n": "MILTON",
-   "a": "FUENTES",
    "sexo": "M",
    "estatura": 167,
    "registros": [
@@ -135,11 +125,10 @@
      "grasa": 22.8,
      "imc": 24.5
     }
-   ]
+   ],
+   "id": "15d46a3e"
   },
   {
-   "n": "FERNANDA",
-   "a": "GUERRA",
    "sexo": "F",
    "estatura": 168,
    "registros": [
@@ -150,11 +139,10 @@
      "grasa": 32.1,
      "imc": 27.8
     }
-   ]
+   ],
+   "id": "fe117710"
   },
   {
-   "n": "IDALBA",
-   "a": "MARTINEZ",
    "sexo": "F",
    "estatura": 170,
    "registros": [
@@ -165,11 +153,10 @@
      "grasa": 39,
      "imc": 30.7
     }
-   ]
+   ],
+   "id": "94bbbba8"
   },
   {
-   "n": "MONICA",
-   "a": "MONTEROS",
    "sexo": "F",
    "estatura": 160,
    "registros": [
@@ -180,11 +167,10 @@
      "grasa": 37.8,
      "imc": 27.3
     }
-   ]
+   ],
+   "id": "40bf815f"
   },
   {
-   "n": "BELEN",
-   "a": "OSES",
    "sexo": "F",
    "estatura": 166,
    "registros": [
@@ -195,11 +181,10 @@
      "grasa": 35.3,
      "imc": 28
     }
-   ]
+   ],
+   "id": "4d1d42ab"
   },
   {
-   "n": "MARIA",
-   "a": "OSES",
    "sexo": "F",
    "estatura": 164,
    "registros": [
@@ -210,11 +195,10 @@
      "grasa": 28.7,
      "imc": 26
     }
-   ]
+   ],
+   "id": "ae194348"
   },
   {
-   "n": "JEAN",
-   "a": "PIERRE",
    "sexo": "M",
    "estatura": 179,
    "registros": [
@@ -225,11 +209,10 @@
      "grasa": 13.7,
      "imc": 25.2
     }
-   ]
+   ],
+   "id": "f3c9a58d"
   },
   {
-   "n": "RODRIGO",
-   "a": "PLAZA",
    "sexo": "M",
    "estatura": 180,
    "registros": [
@@ -240,11 +223,10 @@
      "grasa": 22.4,
      "imc": 26.3
     }
-   ]
+   ],
+   "id": "412609ba"
   },
   {
-   "n": "MARYORY",
-   "a": "RAMIREZ",
    "sexo": "F",
    "estatura": 158,
    "registros": [
@@ -255,11 +237,10 @@
      "grasa": 26,
      "imc": 22.9
     }
-   ]
+   ],
+   "id": "54a207db"
   },
   {
-   "n": "MARTINA",
-   "a": "ROJAS",
    "sexo": "F",
    "estatura": 158,
    "registros": [
@@ -270,11 +251,10 @@
      "grasa": 29.9,
      "imc": 24.8
     }
-   ]
+   ],
+   "id": "aa712806"
   },
   {
-   "n": "DANIELA",
-   "a": "SALAZAR",
    "sexo": "F",
    "estatura": 154,
    "registros": [
@@ -285,11 +265,10 @@
      "grasa": 26.4,
      "imc": 24
     }
-   ]
+   ],
+   "id": "8136cbfd"
   },
   {
-   "n": "ANTONY",
-   "a": "SUAREZ",
    "sexo": "M",
    "estatura": 175,
    "registros": [
@@ -300,11 +279,10 @@
      "grasa": 16.4,
      "imc": 26.5
     }
-   ]
+   ],
+   "id": "39056e6e"
   },
   {
-   "n": "LAURA",
-   "a": "VERA",
    "sexo": "F",
    "estatura": 170,
    "registros": [
@@ -315,7 +293,8 @@
      "grasa": 33.8,
      "imc": 27.2
     }
-   ]
+   ],
+   "id": "5cdffb68"
   }
  ]
 }
