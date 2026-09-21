@@ -388,31 +388,33 @@ function sumarDias(iso, n){
    salud — nunca escribir aquí su peso, edad, estatura, % de grasa o
    cintura reales, solo el resultado ya calculado. Pasta integral solo
    los días de glúteo/pierna; carne roja solo el domingo; sí consume
-   batido de proteína (con leche sin lactosa), a diferencia de otros
-   clientes del gimnasio. */
+   proteína en polvo (a diferencia de otros clientes del gimnasio). El
+   post-entreno queda como última comida del día porque entrena de
+   noche — por eso aparece después de la cena en este arreglo, aunque
+   el orden de las pestañas de comidas sigue siendo el mismo. */
 var COMIDAS = [
   { id:"desayuno", nombre:"Desayuno", hora:"8:00",
-    normal:{prot:25,carb:35,grasa:20}, alto:{prot:25,carb:35,grasa:20},
-    comun:"50 g de avena + 15 g de mantequilla de maní + 40 g de arándanos y frutillas + 200 g de kéfir" },
+    normal:{prot:26,carb:28,grasa:14}, alto:{prot:26,carb:28,grasa:14},
+    comun:"50 g de avena + 100 g de huevo (2 unidades) + 40 g de arándanos y frutillas + 100 g de kéfir" },
   { id:"colacion", nombre:"Colación", hora:"11:00",
-    normal:{prot:15,carb:15,grasa:10}, alto:{prot:15,carb:15,grasa:10},
-    comun:"100 g de quesillo + 15 g de maní o frutos secos + 100 g de plátano" },
+    normal:{prot:6,carb:31,grasa:14}, alto:{prot:6,carb:31,grasa:14},
+    comun:"15 g de maní o frutos secos + 100 g de plátano + 3 cuadraditos de chocolate 85% cacao" },
   { id:"almuerzo", nombre:"Almuerzo", hora:"14:00",
-    normal:{prot:40,carb:45,grasa:20}, alto:{prot:40,carb:85,grasa:20},
-    comun:"170 g de pechuga de pollo + 200 g de arroz blanco o papas (ya cocidos) + ensalada libre + 1 cdta de aceite de oliva",
-    domingo:"170-200 g de posta negra o lomo vetado (sin grasa visible) + 200 g de arroz blanco o papas (ya cocidos) + ensalada libre + 1 cdta de aceite de oliva",
-    altoTxt:"170 g de pechuga de pollo + 280 g de pasta integral (ya cocida) + ensalada libre + 1 cdta de aceite de oliva" },
+    normal:{prot:43,carb:44,grasa:21}, alto:{prot:43,carb:68,grasa:21},
+    comun:"170 g de pechuga de pollo + 200 g de arroz blanco o papas (ya cocidos) + ensalada libre con 30 g de quesillo + 1 cdta de aceite de oliva",
+    domingo:"170-200 g de posta negra o lomo vetado (sin grasa visible) + 200 g de arroz blanco o papas (ya cocidos) + ensalada libre con 30 g de quesillo + 1 cdta de aceite de oliva",
+    altoTxt:"170 g de pechuga de pollo + 180 g de pasta integral (ya cocida) + 55 g de papas (ya cocidas) + ensalada libre con 30 g de quesillo + 1 cdta de aceite de oliva" },
   { id:"preentreno", nombre:"Pre-entreno", hora:"antes del gym",
-    normal:{prot:15,carb:20,grasa:5}, alto:{prot:15,carb:25,grasa:5},
-    comun:"150 g de yogur griego + 15 g de miel + 10 g de chía",
-    altoTxt:"150 g de yogur griego + 20 g de miel + 10 g de chía" },
-  { id:"postentreno", nombre:"Post-entreno", hora:"después del gym",
-    normal:{prot:30,carb:25,grasa:3}, alto:{prot:30,carb:40,grasa:4},
-    comun:"25 g de galletas de arroz + 1 medida de batido de proteína con 250 g de leche sin lactosa",
-    altoTxt:"40 g de galletas de arroz + 1 medida de batido de proteína con 250 g de leche sin lactosa" },
+    normal:{prot:15,carb:10,grasa:5}, alto:{prot:15,carb:10,grasa:5},
+    comun:"150 g de yogur griego + 10 g de chía" },
   { id:"cena", nombre:"Cena", hora:"20:30",
-    normal:{prot:20,carb:20,grasa:23}, alto:{prot:20,carb:20,grasa:23},
-    comun:"150 g de pechuga de pollo + ensalada libre + 130 g de camote (ya cocido) + 35 g de palta" }
+    normal:{prot:17,carb:9,grasa:7}, alto:{prot:17,carb:23,grasa:7},
+    comun:"150 g de pechuga de pollo + ensalada libre con 29 g de quesillo + 130 g de camote (ya cocido) + 35 g de palta",
+    altoTxt:"150 g de pechuga de pollo + ensalada libre con 29 g de quesillo + 130 g de camote (ya cocido) + 55 g de papas (ya cocidas) + 35 g de palta" },
+  { id:"postentreno", nombre:"Post-entreno", hora:"última comida del día",
+    normal:{prot:38,carb:38,grasa:20}, alto:{prot:38,carb:60,grasa:21},
+    comun:"25 g de galletas de arroz (3 unidades) + 15 g de miel + 15 g de mantequilla de maní + 1 scoop de proteína con 200 g de leche entera sin lactosa Colún",
+    altoTxt:"40 g de galletas de arroz (4-5 unidades) + 20 g de miel + 15 g de mantequilla de maní + 1 scoop de proteína con 200 g de leche entera sin lactosa Colún" }
 ];
 
 /* Lunes=0 ... Domingo=6, igual que la rutina de entreno. Lunes, Jueves y

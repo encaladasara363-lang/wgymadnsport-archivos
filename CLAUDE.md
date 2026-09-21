@@ -15,6 +15,27 @@
   a Markdown estructurado (títulos, listas, párrafos cortos) antes de
   trabajar con él, para ahorrar tokens de contexto.
 
+## Publicación en redes sociales vía Metricool (regla permanente)
+
+La cuenta de Metricool del dueño (marca "Tienda WgymadnSport", brandId
+`6700545`, zona horaria `America/Santiago`) tiene conectadas las tres
+redes: **Instagram** (`wadnsport.tocopilla`, vía la página de Facebook
+"Wadnsport Tocopilla Gimnasio"), **Facebook** (esa misma página) y
+**TikTok** (`wadnsport.tocopil...`).
+
+Siempre que se programe o publique una pieza de contenido (post, flyer,
+aviso, video) para redes sociales del gimnasio, **publicarla en las
+tres redes a la vez por defecto** (Instagram, Facebook y TikTok) usando
+las herramientas de Metricool — no preguntar cada vez ni omitir TikTok
+salvo que el usuario pida explícitamente lo contrario para esa pieza.
+Adaptar el copy al tono de cada plataforma cuando haga falta, pero el
+alcance (las tres redes) es siempre el mismo.
+
+Antes de publicar contenido nuevo (no un ajuste de texto/hora a algo ya
+creado), mostrarle al usuario una vista previa o el link del planificador
+de Metricool y esperar su confirmación antes de dejarlo publicado — igual
+que con cualquier acción visible públicamente.
+
 ## Planilla de socios (regla permanente)
 
 `socios.json` (en la raíz del repo) es la **única planilla de socios** que
@@ -178,8 +199,10 @@ Cuando el aviso al dueño del gimnasio sea por Gmail (correo) sobre
 socios vencidos, el correo lleva **solo** a los que vencieron **en la
 última semana** (los 7 días corridos hasta hoy) — nadie vencido de
 antes, nadie por vencer todavía. Se listan **ordenados alfabéticamente
-por apellido**, sin agregar otros datos ni socios que no cumplan ese
-corte.
+por apellido**, y cada línea lleva **solo NOMBRE Y APELLIDO EN
+MAYÚSCULAS — nada de fecha de vencimiento ni ningún otro dato** (ni
+"venció el...", ni plan, ni monto). Sin agregar socios que no cumplan
+ese corte.
 
 ### El contador "día X de Y" es un dato aparte — también hay que sincronizarlo
 
@@ -724,3 +747,25 @@ sensible como diabetes.
   durante el ejercicio** — ese detalle no se pudo leer completo del
   manual fuente; para un cliente diabético, la pauta específica siempre
   debe venir de su propio equipo médico.
+
+## Catálogo de recetas — Comidas Saludables (regla permanente)
+
+`comidas-saludables.html` es el **catálogo único y oficial** de recetas nutritivas para WGYMADNSPORT.
+
+Sitio en vivo: https://encaladasara363-lang.github.io/wgymadnsport-archivos/comidas-saludables.html
+
+Siempre que el usuario pida agregar una nueva receta de comidas saludables (más allá de Empanadas de Carne Picada de Pino):
+
+1. **Agregar como nuevo `<details class="product">` dentro del `.sections`** — antes del bloque `.next` (que dice "Tu próxima receta aparecerá acá").
+2. **Estructura obligatoria por receta:**
+   - `<summary>` con nombre, categoría (tag) y ícono de carpeta
+   - `<p class="sub">` con descripción breve (1-2 líneas)
+   - **Sin bloques de stats ni macros** — solo descripción
+   - `<h3>Ingredientes</h3>` desglosado por grupos con funciones nutricionales
+   - `<h3>Preparación</h3>` en pasos numerados con técnica detallada
+   - `<div class="note">` con tip técnico o consejo final (opcional)
+3. **Mantener el mismo diseño visual WGYM ADN SPORT** — fondo negro, acentos rojo/dorado, tipografía Fraunces + Inter
+4. **Sin frameworks externos** — HTML + CSS puro, solo Google Fonts
+5. **Actualizar el contador en status-bar** — cambiar `<span class="status-count">` al número total de recetas y el nombre de la `status-label` a la última receta agregada
+6. **Publicar directamente en `main`** — no esperar PR ni rama de desarrollo, para que quede reflejada inmediatamente en el sitio en vivo
+7. **Confirmarle al usuario el link en vivo** y la receta agregada al cierre
