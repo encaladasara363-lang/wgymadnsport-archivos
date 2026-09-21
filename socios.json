@@ -43,6 +43,14 @@
    "fv": 46290
   },
   {
+   "n": "JOSE",
+   "a": "ALBARADO",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46316
+  },
+  {
    "n": "JOAQUIN",
    "a": "ALBAYAY",
    "rut": "00.000.000-0",
@@ -89,6 +97,14 @@
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46307
+  },
+  {
+   "n": "ALANYS",
+   "a": "ANDRADES",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46316
   },
   {
    "n": "KEIDY",
@@ -241,6 +257,14 @@
    "plan": "Estudiante Profesor",
    "monto": 28000,
    "fv": 46296
+  },
+  {
+   "n": "FANY",
+   "a": "BUNTIN",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46316
   },
   {
    "n": "CLAUDIO",
