@@ -51,10 +51,18 @@ botón "📋 Copiar" de la ficha de un solo socio — ver más abajo):
 
 1. Editar `socios.json` fusionando los datos nuevos (nombre, apellido,
    plan, monto, fecha de vencimiento `fv`) con los existentes.
-2. **Conservar el RUT ya registrado** de cada socio si el dato nuevo no
-   trae RUT (el export de `control.html` siempre manda `"rut": "Sin Rut"`
-   porque esa herramienta no guarda RUT — nunca hay que borrar un RUT real
-   ya cargado en `socios.json`).
+2. **Nunca escribir un RUT real en `socios.json` ni en ningún archivo que
+   se publique en el sitio** (`tarjeta.html`, `entrenar-*.html`,
+   `rutina-*.html`, `control.html`, `pantalla.html`). El campo `"rut"`
+   siempre va como `"Sin Rut"`, aunque el dato que llegue (del botón
+   "📋 Copiar", de "Pasar la lista" o de cualquier otro origen) traiga un
+   RUT real — se descarta antes de guardar. Motivo: este repositorio es
+   público y esos archivos se sirven tal cual en el sitio en vivo; en
+   septiembre de 2026 se encontró que el RUT real de todos los socios
+   estaba expuesto sin protección en 16 archivos y se limpió por completo
+   (ver commit correspondiente). Si el dueño necesita llevar un registro
+   de RUT para algún trámite, debe guardarlo aparte, fuera de este
+   repositorio (papel, planilla privada, etc.), nunca en estos archivos.
 3. Mantener el archivo ordenado alfabéticamente por apellido y sin
    duplicados.
 4. Actualizar el campo `"actualizado"` con la fecha del día.
@@ -153,8 +161,9 @@ es exactamente lo mismo que pedir renovar/actualizar a esa persona: no
 hace falta preguntarle la fecha ni nada más, el objeto ya trae todo
 listo. Seguir el mismo proceso de siempre —
 1. Buscar a ese socio en `socios.json` por nombre + apellido y
-   actualizar `plan`/`monto`/`fv` con lo que llegó (conservando el RUT
-   real ya cargado si el que llega es genérico o "Sin Rut").
+   actualizar `plan`/`monto`/`fv` con lo que llegó, dejando siempre el
+   campo `"rut"` en `"Sin Rut"` (no se guarda RUT real en este archivo —
+   ver regla permanente de arriba).
 2. Regenerar `LISTA_BASE` (control.html) y `SOCIOS` (pantalla.html),
    subir versión, validar y publicar en `main`, igual que con
    cualquier otro cambio de `socios.json`.
