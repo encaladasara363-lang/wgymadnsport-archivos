@@ -619,9 +619,21 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  return '<div class="evo-meta"><p class="mt">Tu próxima meta</p>' +
  '<p class="mtxt">Para llegar a nivel <b>FITNESS</b> te faltan <b>'+falta+' puntos</b>: bajar tu % de grasa de '+grasa+'% a '+limite+'% o menos.</p></div>';
  }
- var medicionesPromise = fetch("mediciones.json?v=" + Date.now(), { cache:"no-store" })
+ function cargarMediciones(){
+ return fetch("mediciones.json?v=" + Date.now(), { cache:"no-store" })
  .then(function(r){ return r.ok ? r.json() : null; })
  .catch(function(){ return null; });
+ }
+ var medicionesPromise = cargarMediciones();
+ /* Un celular que vuelve a esta pestaña ya abierta (cambió de app y volvió)
+    nunca vuelve a pedir los datos por su cuenta: se queda con la foto del
+    momento en que la abrió, aunque se haya cargado una medición nueva hace
+    rato. "pageshow" se dispara también al restaurar la pestaña desde el
+    caché del navegador, así que ahí se repite todo de nuevo. */
+ window.addEventListener("pageshow", function(){
+ medicionesPromise = cargarMediciones();
+ if(socioActual) renderEvolucion(socioActual);
+ });
  function socioMedido(data, s){
  if(!data || !Array.isArray(data.socios)) return null;
  var medid = s.tr && s.tr.getAttribute ? s.tr.getAttribute("data-medid") : null;
