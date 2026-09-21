@@ -333,7 +333,8 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46316
+   "fv": 46316,
+   "medId": "10c755c8"
   },
   {
    "n": "RODRIGO",
