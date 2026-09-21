@@ -173,6 +173,52 @@ Esta es la forma preferida de avisar una renovación de UNA persona —
 más simple que pegar la lista completa de "Pasar la lista" para un
 solo cambio.
 
+### `mediciones.json` — mediciones de composición corporal, nunca con nombre real (regla permanente)
+
+`mediciones.json` (en la raíz del repo) guarda el historial de peso, %
+de grasa e IMC de los socios que se miden (medición gratis, plus del
+gimnasio). Lo lee `tarjeta.html` para mostrar "Tu evolución física" en
+la tarjeta virtual de cada socio medido.
+
+**Este archivo es público** (se sirve igual que `socios.json` en el
+sitio en vivo), así que en septiembre de 2026 se encontró expuesto el
+peso, % de grasa e IMC reales de 21 socios junto a su nombre completo —
+datos de salud, más sensibles todavía que el RUT. Se corrigió así, sin
+romper la función de "evolución física" para nadie:
+
+- Cada socio medido tiene un campo **`"medId"`** en su registro de
+  `socios.json` (un código random de 8 caracteres, ej. `"b72be41d"`).
+  `mediciones.json` identifica a cada socio **solo por ese `id`**, nunca
+  por `"n"`/`"a"` (nombre/apellido) — esos dos campos no deben volver a
+  aparecer en `mediciones.json` bajo ninguna circunstancia.
+- `tarjeta.html` arma su tabla de socios en vivo desde `socios.json` (ver
+  el `fetch("socios.json...")` que reconstruye `sociosTbody`); ahí cada
+  `<tr>` lleva un atributo `data-medid` cuando el socio tiene `medId`. La
+  función `socioMedido()` matchea por ese atributo contra el `id` de
+  `mediciones.json` — nunca por nombre.
+- `control-fisico.html` (la herramienta de la báscula, en la compu de
+  recepción) sigue buscando y guardando por nombre en su `localStorage`
+  local — eso no cambia, ese dato nunca sale de ese equipo. Lo único que
+  cambió es el botón **"📋 Copiar mediciones"**: antes de copiar, busca el
+  `medId` de cada socio en la lista de `socios.json` que ya tiene
+  cargada, y si un socio se mide por primera vez y todavía no tiene
+  `medId`, le genera uno nuevo ahí mismo y lo manda en el texto copiado.
+
+**Al fusionar un "📋 Copiar mediciones" nuevo:**
+1. El JSON que llega ya viene con `"id"`, nunca con nombre — pegarlo tal
+   cual en `mediciones.json`, fusionando por `id`.
+2. Si algún `id` del texto pegado **no existe todavía** en ningún socio
+   de `socios.json`, es un socio midiéndose por primera vez: agregarle el
+   campo `"medId"` con ese mismo código al registro correspondiente de
+   `socios.json` (buscándolo por nombre + apellido, como siempre) — sin
+   este paso, `tarjeta.html` no va a poder mostrarle su evolución.
+3. Publicar `mediciones.json` y `socios.json` juntos en `main`, igual que
+   cualquier otro cambio de socios.
+4. **Nunca** agregar `"n"`/`"a"` (nombre/apellido) a `mediciones.json`,
+   sea cual sea el origen del dato — ni copiado de `control-fisico.html`,
+   ni pedido directo del dueño de "poner el nombre para que sea más
+   fácil". El nombre real vive solo en `socios.json`/`tarjeta.html`.
+
 ### Borrar solo de la planilla a quien lleve 3 meses o más vencido (regla permanente)
 
 Cada vez que se edite `socios.json` por cualquier motivo (renovación,

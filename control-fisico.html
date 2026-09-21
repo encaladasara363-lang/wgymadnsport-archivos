@@ -596,12 +596,28 @@ document.getElementById("btnGuardar").addEventListener("click", function(){
  pintarHistorial(s);
 });
 
-/* ── copiar mediciones (igual esquema que mediciones.json) ───────────── */
+/* ── copiar mediciones: mismo esquema que mediciones.json (por id, nunca
+   por nombre — mediciones.json es publico y no debe llevar nombres reales).
+   El id sale de socios.json (medId); si un socio no tiene todavia, se le
+   genera uno nuevo acá mismo y viaja en el texto copiado para que se
+   guarde en socios.json la próxima vez que se publique. ───────────── */
+function medIdDe(n, a){
+ var kn = normName(n), ka = normName(a);
+ var s = listaSocios.filter(function(x){ return normName(x.n)===kn && normName(x.a)===ka; })[0];
+ if(s && s.medId) return s.medId;
+ /* Socio sin id todavía (primera vez que se mide): se genera uno nuevo. */
+ var hex = "0123456789abcdef", id = "";
+ for(var i = 0; i < 8; i++){ id += hex[Math.floor(Math.random() * 16)]; }
+ return id;
+}
 document.getElementById("btnCopiar").addEventListener("click", function(){
  var aviso = document.getElementById("copyMsg");
  var lista = datos.socios.filter(function(s){ return s.registros && s.registros.length; })
-  .sort(function(a,b){ return (a.a+a.n).localeCompare(b.a+b.n, "es"); });
- var txt = JSON.stringify({ actualizado: hoyISO(), nota:"Mediciones de composicion corporal (Omron HBF-306). Solo aparecen los socios que se miden.", socios: lista }, null, 1);
+  .sort(function(a,b){ return (a.a+a.n).localeCompare(b.a+b.n, "es"); })
+  .map(function(s){
+   return { id: medIdDe(s.n, s.a), sexo: s.sexo, estatura: s.estatura, registros: s.registros };
+  });
+ var txt = JSON.stringify({ actualizado: hoyISO(), nota:"Mediciones de composicion corporal (Omron HBF-306). Cada socio va por su codigo id (medId de socios.json), nunca por nombre. Solo aparecen los socios que se miden.", socios: lista }, null, 1);
  function ok(){
   aviso.hidden = false; aviso.removeAttribute("data-err");
   aviso.textContent = "¡Copiado! " + lista.length + " socios con mediciones. Pégamelo por chat.";
