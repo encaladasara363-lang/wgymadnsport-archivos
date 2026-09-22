@@ -334,6 +334,12 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <span class="dot-status"><span class="dot-live"></span> En vivo</span>
 </div>
 <div id="bandasFeed"></div>
+
+<div class="feed-head">
+<h2>Candados pedidos</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="candadosFeed"></div>
 </div>
 </div>
 
@@ -2021,6 +2027,56 @@ if(bandasFeedEl) bandasFeedEl.addEventListener("click", function(ev){
 });
 pollBandas();
 setInterval(pollBandas, 4000);
+
+/* ═══ Candados prestados ══════════════════════════════════════════════
+   Mismo panel que las bandas, pero para los candados de los casilleros. */
+function renderCandados(activos){
+ var el = document.getElementById("candadosFeed");
+ if(!el) return;
+ if(!activos || activos.length===0){
+  el.innerHTML = '<div class="feed-empty">Nadie ha pedido candado por ahora.</div>';
+  return;
+ }
+ el.innerHTML = activos.map(function(c){
+  return '<div class="banda-item"><span class="binfo">'+
+   '<span class="btxt"><span class="bname">'+escapeHtml(c.nombre)+' '+escapeHtml(c.apellido)+'</span><br>'+
+   '<span class="btime">Hace '+fmtMinBanda(c.retiro)+'</span></span></span>'+
+   '<button type="button" data-id="'+escapeHtml(c.id)+'">Devolver</button></div>';
+ }).join('');
+}
+var nPollCandados = 0;
+function pollCandados(){
+ if(!CHECKIN_URL) return;
+ nPollCandados++;
+ var cb = "wgymCandadoCb" + nPollCandados + "_" + Date.now();
+ var script = document.createElement("script");
+ window[cb] = function(data){
+  renderCandados(data && data.activos);
+  delete window[cb];
+  script.remove();
+ };
+ script.src = CHECKIN_URL + "?action=listarCandados&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+var candadosFeedEl = document.getElementById("candadosFeed");
+if(candadosFeedEl) candadosFeedEl.addEventListener("click", function(ev){
+ var btn = ev.target.closest("button[data-id]");
+ if(!btn) return;
+ btn.disabled = true;
+ var cb = "wgymDevCandado_" + Date.now();
+ var script = document.createElement("script");
+ window[cb] = function(){
+  delete window[cb];
+  script.remove();
+  pollCandados();
+ };
+ script.src = CHECKIN_URL + "?action=devolverCandado&id=" + encodeURIComponent(btn.getAttribute("data-id")) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
+ document.body.appendChild(script);
+});
+pollCandados();
+setInterval(pollCandados, 4000);
 
 /* ═══ Pasar la lista de este equipo a los celulares ═════════════════════
    Las renovaciones hechas acá quedan guardadas en este mismo equipo. Este
