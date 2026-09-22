@@ -43,12 +43,16 @@
 
   .tag{font-size:58px;padding:11px 44px;}
 
-  .bloques{margin-top:30px;width:100%;display:flex;flex-direction:column;gap:26px;}
-  .bloque{border:4px solid var(--ink);border-radius:14px;padding:28px 24px 26px;text-align:center;}
+  .bloques{margin-top:24px;width:100%;display:flex;flex-direction:column;gap:16px;}
+  .bloque{border:4px solid var(--ink);border-radius:14px;padding:18px 24px 16px;text-align:center;}
   .bloque .dia{font-weight:800;text-transform:uppercase;letter-spacing:.16em;
-    font-size:29px;color:var(--ink);margin-bottom:6px;}
+    font-size:25px;color:var(--ink);margin-bottom:4px;}
   .bloque .hora{font-family:'Anton','Arial Black',Impact,sans-serif;font-weight:900;
-    font-size:70px;line-height:1.05;color:var(--red);letter-spacing:.02em;}
+    font-size:56px;line-height:1.05;color:var(--red);letter-spacing:.02em;}
+  .bloque.cerrado{border-color:var(--steel);}
+  .bloque.cerrado .hora{color:var(--steel);font-size:40px;}
+  .sign-block .brand .tel{display:block;margin-top:4px;color:var(--ink);
+    font-weight:800;letter-spacing:.04em;font-size:13px;}
 
 </style></head><body>
   <div class="page-label">Cartel · Horarios de Atención · WGYMADNSPORT Tocopilla</div>
@@ -63,9 +67,10 @@
       <div class="bloque"><div class="dia">Lunes a Jueves</div><div class="hora">8:00 a 23:30</div></div>
       <div class="bloque"><div class="dia">Viernes</div><div class="hora">9:00 a 23:30</div></div>
       <div class="bloque"><div class="dia">Sábados y Feriados</div><div class="hora">10:00 a 22:00</div></div>
+      <div class="bloque cerrado"><div class="dia">Domingo</div><div class="hora">Cerrado</div></div>
     </div>
     <div class="spacer"></div>
     <div class="sign-block"><div class="role">La Administración</div>
-      <div class="brand"><b>WGYMADNSPORT</b>Tocopilla</div></div>
+      <div class="brand"><b>WGYMADNSPORT</b>Tocopilla<span class="tel">+56 9 9154 0156 &middot; +56 9 7519 6394</span></div></div>
   </div>
 </body></html>
