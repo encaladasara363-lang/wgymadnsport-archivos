@@ -36,6 +36,17 @@ creado), mostrarle al usuario una vista previa o el link del planificador
 de Metricool y esperar su confirmación antes de dejarlo publicado — igual
 que con cualquier acción visible públicamente.
 
+### Número de WhatsApp en toda publicación (regla permanente)
+
+El WhatsApp oficial y vigente del gimnasio es **+56 9 9154 0156** (el
+mismo que ya está en `index.html`, marcado ahí como "WhatsApp (solo
+WhatsApp)" y en el campo `telephone` del schema.org de la página). Todo
+post, flyer, cartel o pieza nueva que se cree para redes sociales o para
+imprimir debe incluir este número — nunca otro. Si aparece `+56 9 7519
+6394` en algún archivo existente (por ejemplo `cartel-qr-whatsapp.html`),
+es un número antiguo: al tocar cualquiera de esas piezas, actualizarlo al
+número vigente de una vez.
+
 ## Planilla de socios (regla permanente)
 
 `socios.json` (en la raíz del repo) es la **única planilla de socios** que
