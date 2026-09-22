@@ -207,6 +207,12 @@ Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te 
 <span class="dot-status"><span class="dot-live"></span> En vivo</span>
 </div>
 <div id="bandasFeed"></div>
+
+<div class="feed-head">
+<h2>Candados pedidos</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="candadosFeed"></div>
 </div>
 
 <div class="feed-head" id="ingresosHead">
@@ -222,20 +228,23 @@ const LOGO_B64 = "assets/logo.jpg";
 /* La lista de socios: la misma que usan las rutinas y la planilla de gestión.
    Con ella la pantalla decide sola si el que llegó puede pasar. */
 const SOCIOS = [
-{n:"MATIAS",a:"ABELLO",plan:"Full Mensual",fv:46285},
+{n:"MATIAS",a:"ABELLO",plan:"Full Mensual",fv:46316},
 {n:"ALEXIS",a:"ACUÑA",plan:"Full Mensual",fv:46290},
 {n:"EMYLY",a:"ADAOS",plan:"Estudiante Profesor",fv:46286},
 {n:"PABLO",a:"AGUILERA",plan:"Estudiante Profesor",fv:46298},
 {n:"ANTONELLA",a:"AGUIRRE",plan:"Full Mensual",fv:46290},
+{n:"JOSE",a:"ALBARADO",plan:"Full Mensual",fv:46316},
 {n:"JOAQUIN",a:"ALBAYAY",plan:"Estudiante Profesor",fv:46277},
 {n:"FRANCHESCA",a:"ALCAYAGA",plan:"Full Mensual",fv:46261},
 {n:"BRAYAN",a:"ALVARE",plan:"Tres Veces a La Semana",fv:46295},
 {n:"BRAYAN",a:"ALVAREZ",plan:"Tres Veces a La Semana",fv:46295},
 {n:"DEMIAN",a:"ALVAREZ",plan:"Estudiante Profesor",fv:46289},
 {n:"PEDRO",a:"ALVAREZ",plan:"Full Mensual",fv:46307},
+{n:"ALANYS",a:"ANDRADES",plan:"Full Mensual",fv:46316},
 {n:"KEIDY",a:"ANDRADES",plan:"Estudiante Profesor",fv:46304},
+{n:"VICTORIA",a:"ANGEL",plan:"Funcionario Público",fv:46316},
 {n:"JOCKSHUA",a:"ARANDA",plan:"Estudiante Profesor",fv:46292},
-{n:"KIMMEN",a:"ARANDA",plan:"Full Mensual",fv:46288},
+{n:"KIMMEN",a:"ARANDA",plan:"Full Mensual",fv:46318},
 {n:"ALONSO",a:"ARAYA",plan:"Tres Veces a La Semana",fv:46302},
 {n:"CARLOS",a:"ARAYA",plan:"Full Mensual",fv:46297},
 {n:"DANIEL",a:"ARAYA",plan:"Estudiante Profesor",fv:46295},
@@ -252,13 +261,15 @@ const SOCIOS = [
 {n:"HERMANN",a:"BORQUEZ",plan:"Mensual Turno",fv:46293},
 {n:"BETSY",a:"BRIONES",plan:"Full Mensual",fv:46277},
 {n:"MATTIAS",a:"BROWN",plan:"Estudiante Profesor",fv:46296},
+{n:"FANY",a:"BUNTIN",plan:"Full Mensual",fv:46316},
 {n:"CLAUDIO",a:"BUSTAMANTE",plan:"Plan Semanal",fv:46272},
 {n:"TOMAS",a:"CABALLERO",plan:"Mensual Turno",fv:46305},
 {n:"JUAN",a:"CACERES",plan:"Full Mensual",fv:46276},
 {n:"CHRISTIAN",a:"CAMPOS",plan:"Full Mensual",fv:46290},
 {n:"IGNACIO",a:"CANDIA",plan:"Mensual Turno",fv:46297},
 {n:"IGNASIO",a:"CANDIA",plan:"Mensual Turno",fv:46297},
-{n:"RODRIGO",a:"CARMONA",plan:"Estudiante Profesor",fv:46285},
+{n:"JESSICA",a:"CARMONA",plan:"Full Mensual",fv:46316},
+{n:"RODRIGO",a:"CARMONA",plan:"Estudiante Profesor",fv:46317},
 {n:"JAVIERA",a:"CARRASCO",plan:"Plan Semanal",fv:46272},
 {n:"JORGE",a:"CARRASCO",plan:"Mensual Turno",fv:46298},
 {n:"MILENKA",a:"CARRASCO",plan:"Full Mensual",fv:46293},
@@ -275,14 +286,15 @@ const SOCIOS = [
 {n:"HECTOR",a:"CONTRERAS",plan:"Mensual Turno",fv:46265},
 {n:"JAIRO",a:"CONTRERAS",plan:"Mensual Turno",fv:46248},
 {n:"JORGE",a:"CONTRERAS",plan:"Funcionario Público",fv:46244},
-{n:"MAXIMILIANO",a:"CONTRERAS",plan:"Estudiante Profesor",fv:46268},
+{n:"MAXIMILIANO",a:"CONTRERAS",plan:"Estudiante Profesor",fv:46316},
+{n:"MARIA",a:"CORDERO",plan:"Funcionario Público",fv:46316},
 {n:"VICTOR",a:"CORRY",plan:"Full Mensual",fv:46278},
 {n:"DANIEL",a:"CORTEZ",plan:"Mensual Turno",fv:46292},
 {n:"SONIA",a:"CUBA",plan:"Full Mensual",fv:46248},
 {n:"ANDREA",a:"CUELLA",plan:"Full Mensual",fv:46237},
 {n:"CAMILA",a:"CUELLA",plan:"Full Mensual",fv:46237},
 {n:"CAROLINA",a:"CUELLA",plan:"Funcionario Público",fv:46265},
-{n:"VALENTINA",a:"CUELLAR",plan:"Estudiante Profesor",fv:46268},
+{n:"VALENTINA",a:"CUELLAR",plan:"Estudiante Profesor",fv:46317},
 {n:"MILAN",a:"CVITANIC",plan:"Estudiante Profesor",fv:46266},
 {n:"TOMISLAV",a:"CVITANIC",plan:"Full Mensual",fv:46266},
 {n:"MANUEL",a:"DURAN",plan:"Funcionario Público",fv:46247},
@@ -293,8 +305,10 @@ const SOCIOS = [
 {n:"YESSICA",a:"ESCALERA",plan:"Mensual Turno",fv:46264},
 {n:"JUAN",a:"ESCALONA",plan:"Estudiante Profesor",fv:46275},
 {n:"JOSEFA",a:"ESCOBAR",plan:"Mensual Turno",fv:46304},
+{n:"BENJAMIN",a:"ESPINOZA",plan:"Full Mensual",fv:46317},
 {n:"JHON",a:"ESPINOZA",plan:"Estudiante Profesor",fv:46285},
 {n:"IVAN",a:"ESPIRITU",plan:"Mensual Turno",fv:46242},
+{n:"XIMENA",a:"FARFAN",plan:"Estudiante Profesor",fv:46316},
 {n:"CLAUDIA",a:"FERNANDEZ",plan:"Funcionario Público",fv:46303},
 {n:"GABRIEL",a:"FERNANDEZ",plan:"Estudiante Profesor",fv:46276},
 {n:"PAOLA",a:"FERRER",plan:"Estudiante Profesor",fv:46290},
@@ -305,15 +319,17 @@ const SOCIOS = [
 {n:"DEBORA",a:"GAJARDO",plan:"Full Mensual",fv:46261},
 {n:"CAMILO",a:"GALLEGILLOS",plan:"Full Mensual",fv:46250},
 {n:"LUIS",a:"GARCIA",plan:"Estudiante Profesor",fv:46277},
-{n:"ROSALIA",a:"GARMENDIA",plan:"Plan Especial",fv:46288},
+{n:"ROSALIA",a:"GARMENDIA",plan:"Plan Especial",fv:46318},
 {n:"BENJAMIN",a:"GODOY",plan:"Mensual Turno",fv:46257},
 {n:"JENNY",a:"GOMEZ",plan:"Mensual Turno",fv:46295},
 {n:"KATHERINE",a:"GOMEZ",plan:"Full Mensual",fv:46295},
+{n:"MACARENA",a:"GONZALEZ",plan:"Funcionario Público",fv:46316},
 {n:"SERGIO",a:"GUAPA",plan:"Full Mensual",fv:46272},
 {n:"FERNANDA",a:"GUERRA",plan:"Estudiante Profesor",fv:46304},
 {n:"RODRIGO",a:"GUMUCIO",plan:"Full Mensual",fv:46296},
 {n:"ANGEL",a:"GUTIERREZ",plan:"Full Mensual",fv:46309},
 {n:"MARIA JOSE",a:"HERNANDEZ",plan:"Tres Veces a La Semana",fv:46295},
+{n:"VALENTINA",a:"HERNANDEZ",plan:"Estudiante Profesor",fv:46316},
 {n:"ARACELY",a:"HERRERA",plan:"Mensual Turno",fv:46297},
 {n:"ISABEL",a:"HERRERA",plan:"Mensual Turno",fv:46297},
 {n:"MARIA",a:"HERRERA",plan:"Mensual Turno",fv:46253},
@@ -340,6 +356,7 @@ const SOCIOS = [
 {n:"VALERIA",a:"MACIAS",plan:"Full Mensual",fv:46295},
 {n:"RICARDO",a:"MAMANNI",plan:"Estudiante Profesor",fv:46264},
 {n:"ANA",a:"MARIA GONZALEZ",plan:"Mensual Tercera Edad",fv:46289},
+{n:"CLAUDIA",a:"MARIN",plan:"Estudiante Profesor",fv:46316},
 {n:"CONSTANZA",a:"MARIN",plan:"Funcionario Público",fv:46303},
 {n:"SEBASTIAN",a:"MARIN",plan:"Mensual Turno",fv:46325},
 {n:"DANIEL",a:"MARTINEZ",plan:"Full Mensual",fv:46247},
@@ -356,6 +373,7 @@ const SOCIOS = [
 {n:"Edita",a:"Morales",plan:"Estudiante Profesor",fv:46266},
 {n:"EYMILEE",a:"MUÑOZ",plan:"Full Mensual",fv:46305},
 {n:"TRAYSI",a:"MUÑOZ",plan:"Full Mensual",fv:46254},
+{n:"DANAE",a:"NECULPAN",plan:"Estudiante Profesor",fv:46316},
 {n:"HELMUT",a:"NIEDMANN",plan:"Estudiante Profesor",fv:46294},
 {n:"MARIA JOSE",a:"OBREQUE",plan:"Full Mensual",fv:46299},
 {n:"PEDRO",a:"OLIVARES",plan:"Funcionario Público",fv:46295},
@@ -369,7 +387,7 @@ const SOCIOS = [
 {n:"MAURA",a:"PALMA",plan:"Full Mensual",fv:46295},
 {n:"ARACELY",a:"PANIAGUA",plan:"Full Mensual",fv:46258},
 {n:"ALEJANDRO",a:"PARES",plan:"Full Mensual",fv:46241},
-{n:"TANYA",a:"PAULSEN",plan:"Full Mensual",fv:46302},
+{n:"TANYA",a:"PAULSEN",plan:"Full Mensual",fv:46307},
 {n:"ANDRES",a:"PAVES",plan:"Full Mensual",fv:46299},
 {n:"ANDRES",a:"PAVEZ",plan:"Mensual Turno",fv:46299},
 {n:"CAMILA",a:"PEÑA",plan:"Full Mensual",fv:46269},
@@ -404,6 +422,7 @@ const SOCIOS = [
 {n:"MIGUEL",a:"ROJAS",plan:"Tres Veces a La Semana",fv:46298},
 {n:"LUIS",a:"ROMO",plan:"Mensual Turno",fv:46297},
 {n:"JOSTIN",a:"ROSAS",plan:"Tres Veces a La Semana",fv:46276},
+{n:"NATALIA",a:"ROZAS",plan:"Funcionario Público",fv:46317},
 {n:"GABRIEL",a:"RUZ",plan:"Mensual Turno",fv:46258},
 {n:"VERONICA",a:"SALAS",plan:"Estudiante Profesor",fv:46236},
 {n:"DANIELA",a:"SALAZAR",plan:"Funcionario Público",fv:46301},
@@ -412,7 +431,7 @@ const SOCIOS = [
 {n:"MIRKO",a:"SAN MARTIN",plan:"Mensual Turno",fv:46271},
 {n:"ANA MARIA",a:"SANABRIA",plan:"Tres Veces a La Semana",fv:46295},
 {n:"IGNACIA",a:"SANCHEZ",plan:"Full Mensual",fv:46247},
-{n:"MARIA",a:"SEGOVIA",plan:"Full Mensual",fv:46261},
+{n:"MARIA",a:"SEGOVIA",plan:"Full Mensual",fv:46316},
 {n:"LUDJAN",a:"SORE",plan:"Estudiante Profesor",fv:46300},
 {n:"AARON",a:"SOZA",plan:"Tres Veces a La Semana",fv:46287},
 {n:"ANTONY",a:"SUAREZ",plan:"Estudiante Profesor",fv:46302},
@@ -436,16 +455,16 @@ const SOCIOS = [
 {n:"ALFREDO",a:"VENEGAS",plan:"Mensual Turno",fv:46291},
 {n:"LAURA",a:"VERA",plan:"Full Mensual",fv:46302},
 {n:"BASTIAN",a:"VERGARA",plan:"Tres Veces a La Semana",fv:46254},
-{n:"DARKO",a:"VICENCIO",plan:"Full Mensual",fv:46286},
+{n:"DARKO",a:"VICENCIO",plan:"Full Mensual",fv:46316},
 {n:"FRANCCINI",a:"VILLANUEVA",plan:"Full Mensual",fv:46255},
 {n:"CLAUDIA",a:"VILLEGAS",plan:"Tres Veces a La Semana",fv:46293},
 {n:"BASTIAN",a:"ZAPATA",plan:"Funcionario Público",fv:46305},
 {n:"JOFRE",a:"ZARUMA",plan:"Full Mensual",fv:46291},
-{n:"MARIA",a:"ZEPEDA",plan:"Funcionario Público",fv:46298}
+{n:"MARIA",a:"ZEPEDA",plan:"Funcionario Público",fv:46298},
 ];
 /* Sube este número cada vez que se regenera SOCIOS desde socios.json,
    para que esta pantalla también se fusione sola con lo publicado. */
-const SOCIOS_VERSION = 2026091603;
+const SOCIOS_VERSION = 2026092207;
 
 
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
@@ -959,10 +978,55 @@ document.getElementById("bandasFeed").addEventListener("click", function(ev){
  document.body.appendChild(script);
 });
 
+/* ---------- candados ---------- */
+function renderCandados(activos){
+ var el = document.getElementById("candadosFeed");
+ if(!activos || activos.length===0){
+  el.innerHTML = '<div class="feed-empty">Nadie ha pedido candado por ahora.</div>';
+  return;
+ }
+ el.innerHTML = activos.map(function(c){
+  return '<div class="banda-item"><span class="binfo">'+
+   '<span class="btxt"><span class="bname">'+escapeHtml(c.nombre)+' '+escapeHtml(c.apellido)+'</span><br>'+
+   '<span class="btime">Hace '+fmtMin(c.retiro)+'</span></span></span>'+
+   '<button type="button" data-id="'+escapeHtml(c.id)+'">Devolver</button></div>';
+ }).join('');
+}
+function pollCandados(){
+ pollCounter++;
+ var cb = "wgymCandadoCb" + pollCounter + "_" + Date.now();
+ window[cb] = function(data){
+  renderCandados(data && data.activos);
+  delete window[cb];
+  script.remove();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=listarCandados&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+document.getElementById("candadosFeed").addEventListener("click", function(ev){
+ var btn = ev.target.closest("button[data-id]");
+ if(!btn) return;
+ btn.disabled = true;
+ var cb = "wgymDevCandado_" + Date.now();
+ window[cb] = function(){
+  delete window[cb];
+  script.remove();
+  pollCandados();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=devolverCandado&id=" + encodeURIComponent(btn.getAttribute("data-id")) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
+ document.body.appendChild(script);
+});
+
 poll();
 pollBandas();
+pollCandados();
 setInterval(poll, 4000);
 setInterval(pollBandas, 4000);
+setInterval(pollCandados, 4000);
 
 /* Esta pantalla se queda abierta todo el día en una tablet, sin que nadie
    la recargue. Si mientras tanto se publica una lista nueva (renovaciones,

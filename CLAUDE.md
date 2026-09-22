@@ -63,10 +63,18 @@ botón "📋 Copiar" de la ficha de un solo socio — ver más abajo):
 
 1. Editar `socios.json` fusionando los datos nuevos (nombre, apellido,
    plan, monto, fecha de vencimiento `fv`) con los existentes.
-2. **Conservar el RUT ya registrado** de cada socio si el dato nuevo no
-   trae RUT (el export de `control.html` siempre manda `"rut": "Sin Rut"`
-   porque esa herramienta no guarda RUT — nunca hay que borrar un RUT real
-   ya cargado en `socios.json`).
+2. **Nunca escribir un RUT real en `socios.json` ni en ningún archivo que
+   se publique en el sitio** (`tarjeta.html`, `entrenar-*.html`,
+   `rutina-*.html`, `control.html`, `pantalla.html`). El campo `"rut"`
+   siempre va como `"Sin Rut"`, aunque el dato que llegue (del botón
+   "📋 Copiar", de "Pasar la lista" o de cualquier otro origen) traiga un
+   RUT real — se descarta antes de guardar. Motivo: este repositorio es
+   público y esos archivos se sirven tal cual en el sitio en vivo; en
+   septiembre de 2026 se encontró que el RUT real de todos los socios
+   estaba expuesto sin protección en 16 archivos y se limpió por completo
+   (ver commit correspondiente). Si el dueño necesita llevar un registro
+   de RUT para algún trámite, debe guardarlo aparte, fuera de este
+   repositorio (papel, planilla privada, etc.), nunca en estos archivos.
 3. Mantener el archivo ordenado alfabéticamente por apellido y sin
    duplicados.
 4. Actualizar el campo `"actualizado"` con la fecha del día.
@@ -165,8 +173,9 @@ es exactamente lo mismo que pedir renovar/actualizar a esa persona: no
 hace falta preguntarle la fecha ni nada más, el objeto ya trae todo
 listo. Seguir el mismo proceso de siempre —
 1. Buscar a ese socio en `socios.json` por nombre + apellido y
-   actualizar `plan`/`monto`/`fv` con lo que llegó (conservando el RUT
-   real ya cargado si el que llega es genérico o "Sin Rut").
+   actualizar `plan`/`monto`/`fv` con lo que llegó, dejando siempre el
+   campo `"rut"` en `"Sin Rut"` (no se guarda RUT real en este archivo —
+   ver regla permanente de arriba).
 2. Regenerar `LISTA_BASE` (control.html) y `SOCIOS` (pantalla.html),
    subir versión, validar y publicar en `main`, igual que con
    cualquier otro cambio de `socios.json`.
@@ -175,6 +184,52 @@ listo. Seguir el mismo proceso de siempre —
 Esta es la forma preferida de avisar una renovación de UNA persona —
 más simple que pegar la lista completa de "Pasar la lista" para un
 solo cambio.
+
+### `mediciones.json` — mediciones de composición corporal, nunca con nombre real (regla permanente)
+
+`mediciones.json` (en la raíz del repo) guarda el historial de peso, %
+de grasa e IMC de los socios que se miden (medición gratis, plus del
+gimnasio). Lo lee `tarjeta.html` para mostrar "Tu evolución física" en
+la tarjeta virtual de cada socio medido.
+
+**Este archivo es público** (se sirve igual que `socios.json` en el
+sitio en vivo), así que en septiembre de 2026 se encontró expuesto el
+peso, % de grasa e IMC reales de 21 socios junto a su nombre completo —
+datos de salud, más sensibles todavía que el RUT. Se corrigió así, sin
+romper la función de "evolución física" para nadie:
+
+- Cada socio medido tiene un campo **`"medId"`** en su registro de
+  `socios.json` (un código random de 8 caracteres, ej. `"b72be41d"`).
+  `mediciones.json` identifica a cada socio **solo por ese `id`**, nunca
+  por `"n"`/`"a"` (nombre/apellido) — esos dos campos no deben volver a
+  aparecer en `mediciones.json` bajo ninguna circunstancia.
+- `tarjeta.html` arma su tabla de socios en vivo desde `socios.json` (ver
+  el `fetch("socios.json...")` que reconstruye `sociosTbody`); ahí cada
+  `<tr>` lleva un atributo `data-medid` cuando el socio tiene `medId`. La
+  función `socioMedido()` matchea por ese atributo contra el `id` de
+  `mediciones.json` — nunca por nombre.
+- `control-fisico.html` (la herramienta de la báscula, en la compu de
+  recepción) sigue buscando y guardando por nombre en su `localStorage`
+  local — eso no cambia, ese dato nunca sale de ese equipo. Lo único que
+  cambió es el botón **"📋 Copiar mediciones"**: antes de copiar, busca el
+  `medId` de cada socio en la lista de `socios.json` que ya tiene
+  cargada, y si un socio se mide por primera vez y todavía no tiene
+  `medId`, le genera uno nuevo ahí mismo y lo manda en el texto copiado.
+
+**Al fusionar un "📋 Copiar mediciones" nuevo:**
+1. El JSON que llega ya viene con `"id"`, nunca con nombre — pegarlo tal
+   cual en `mediciones.json`, fusionando por `id`.
+2. Si algún `id` del texto pegado **no existe todavía** en ningún socio
+   de `socios.json`, es un socio midiéndose por primera vez: agregarle el
+   campo `"medId"` con ese mismo código al registro correspondiente de
+   `socios.json` (buscándolo por nombre + apellido, como siempre) — sin
+   este paso, `tarjeta.html` no va a poder mostrarle su evolución.
+3. Publicar `mediciones.json` y `socios.json` juntos en `main`, igual que
+   cualquier otro cambio de socios.
+4. **Nunca** agregar `"n"`/`"a"` (nombre/apellido) a `mediciones.json`,
+   sea cual sea el origen del dato — ni copiado de `control-fisico.html`,
+   ni pedido directo del dueño de "poner el nombre para que sea más
+   fácil". El nombre real vive solo en `socios.json`/`tarjeta.html`.
 
 ### Borrar solo de la planilla a quien lleve 3 meses o más vencido (regla permanente)
 
@@ -202,8 +257,10 @@ Cuando el aviso al dueño del gimnasio sea por Gmail (correo) sobre
 socios vencidos, el correo lleva **solo** a los que vencieron **en la
 última semana** (los 7 días corridos hasta hoy) — nadie vencido de
 antes, nadie por vencer todavía. Se listan **ordenados alfabéticamente
-por apellido**, sin agregar otros datos ni socios que no cumplan ese
-corte.
+por apellido**, y cada línea lleva **solo NOMBRE Y APELLIDO EN
+MAYÚSCULAS — nada de fecha de vencimiento ni ningún otro dato** (ni
+"venció el...", ni plan, ni monto). Sin agregar socios que no cumplan
+ese corte.
 
 ### El contador "día X de Y" es un dato aparte — también hay que sincronizarlo
 
@@ -748,3 +805,25 @@ sensible como diabetes.
   durante el ejercicio** — ese detalle no se pudo leer completo del
   manual fuente; para un cliente diabético, la pauta específica siempre
   debe venir de su propio equipo médico.
+
+## Catálogo de recetas — Comidas Saludables (regla permanente)
+
+`comidas-saludables.html` es el **catálogo único y oficial** de recetas nutritivas para WGYMADNSPORT.
+
+Sitio en vivo: https://encaladasara363-lang.github.io/wgymadnsport-archivos/comidas-saludables.html
+
+Siempre que el usuario pida agregar una nueva receta de comidas saludables (más allá de Empanadas de Carne Picada de Pino):
+
+1. **Agregar como nuevo `<details class="product">` dentro del `.sections`** — antes del bloque `.next` (que dice "Tu próxima receta aparecerá acá").
+2. **Estructura obligatoria por receta:**
+   - `<summary>` con nombre, categoría (tag) y ícono de carpeta
+   - `<p class="sub">` con descripción breve (1-2 líneas)
+   - **Sin bloques de stats ni macros** — solo descripción
+   - `<h3>Ingredientes</h3>` desglosado por grupos con funciones nutricionales
+   - `<h3>Preparación</h3>` en pasos numerados con técnica detallada
+   - `<div class="note">` con tip técnico o consejo final (opcional)
+3. **Mantener el mismo diseño visual WGYM ADN SPORT** — fondo negro, acentos rojo/dorado, tipografía Fraunces + Inter
+4. **Sin frameworks externos** — HTML + CSS puro, solo Google Fonts
+5. **Actualizar el contador en status-bar** — cambiar `<span class="status-count">` al número total de recetas y el nombre de la `status-label` a la última receta agregada
+6. **Publicar directamente en `main`** — no esperar PR ni rama de desarrollo, para que quede reflejada inmediatamente en el sitio en vivo
+7. **Confirmarle al usuario el link en vivo** y la receta agregada al cierre
