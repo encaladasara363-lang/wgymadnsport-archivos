@@ -529,6 +529,14 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <p class="band-msg" id="bandMsg" hidden></p>
  <p class="band-note">Recuerda <b>devolver la banda en recepción</b> al terminar de usarla.</p>
  </div>
+ <div class="band-box">
+ <button class="band-btn" id="lockBtn" type="button">
+ <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+ Pedir candado
+ </button>
+ <p class="band-msg" id="lockMsg" hidden></p>
+ <p class="band-note">Deja tu <b>llave en recepción</b> mientras entrenas y retírala al salir.</p>
+ </div>
  <footer class="footer2">
  <p class="slogan">ENTRENA CON ACTITUD</p>
  <p class="name">WGYMADNSPORT · Tocopilla</p>
@@ -1056,6 +1064,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  avisarIngreso(s);
  socioActual = s;
  resetBandBtn();
+ resetLockBtn();
  }
 
  /* ---------- pedir banda elástica ---------- */
@@ -1122,6 +1131,54 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  document.body.appendChild(script);
  }
  document.getElementById("bandBtn").addEventListener("click", pedirBanda);
+
+ /* ---------- pedir candado ---------- */
+ function resetLockBtn(){
+ var btn = document.getElementById("lockBtn");
+ var msg = document.getElementById("lockMsg");
+ btn.disabled = false;
+ btn.hidden = false;
+ msg.hidden = true;
+ }
+ function pedirCandado(){
+ if(!socioActual || !CHECKIN_URL) return;
+ var btn = document.getElementById("lockBtn");
+ var msg = document.getElementById("lockMsg");
+ btn.disabled = true;
+ var cb = "wgymCandado_" + Date.now();
+ var terminado = false;
+ window[cb] = function(data){
+ terminado = true;
+ delete window[cb];
+ script.remove();
+ if(data && data.ok){
+ btn.hidden = true;
+ msg.hidden = false;
+ msg.classList.remove("err");
+ msg.textContent = "Listo, avisamos a recepción. Retíralo en el mesón.";
+ } else {
+ btn.disabled = false;
+ msg.hidden = false;
+ msg.classList.add("err");
+ msg.textContent = "No se pudo avisar, prueba de nuevo o pide en el mesón.";
+ }
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=pedirCandado&nombre=" + encodeURIComponent(socioActual.nombre) +
+ "&apellido=" + encodeURIComponent(socioActual.apellido) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){
+ if(terminado) return;
+ delete window[cb];
+ script.remove();
+ btn.disabled = false;
+ msg.hidden = false;
+ msg.classList.add("err");
+ msg.textContent = "No se pudo avisar, prueba de nuevo o pide en el mesón.";
+ };
+ document.body.appendChild(script);
+ }
+ document.getElementById("lockBtn").addEventListener("click", pedirCandado);
+
  function tryLogin(texto){
  var socio = findSocioJunto(texto);
  if(socio){

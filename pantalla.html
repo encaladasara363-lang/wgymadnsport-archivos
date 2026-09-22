@@ -207,6 +207,12 @@ Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te 
 <span class="dot-status"><span class="dot-live"></span> En vivo</span>
 </div>
 <div id="bandasFeed"></div>
+
+<div class="feed-head">
+<h2>Candados pedidos</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="candadosFeed"></div>
 </div>
 
 <div class="feed-head" id="ingresosHead">
@@ -970,10 +976,55 @@ document.getElementById("bandasFeed").addEventListener("click", function(ev){
  document.body.appendChild(script);
 });
 
+/* ---------- candados ---------- */
+function renderCandados(activos){
+ var el = document.getElementById("candadosFeed");
+ if(!activos || activos.length===0){
+  el.innerHTML = '<div class="feed-empty">Nadie ha pedido candado por ahora.</div>';
+  return;
+ }
+ el.innerHTML = activos.map(function(c){
+  return '<div class="banda-item"><span class="binfo">'+
+   '<span class="btxt"><span class="bname">'+escapeHtml(c.nombre)+' '+escapeHtml(c.apellido)+'</span><br>'+
+   '<span class="btime">Hace '+fmtMin(c.retiro)+'</span></span></span>'+
+   '<button type="button" data-id="'+escapeHtml(c.id)+'">Devolver</button></div>';
+ }).join('');
+}
+function pollCandados(){
+ pollCounter++;
+ var cb = "wgymCandadoCb" + pollCounter + "_" + Date.now();
+ window[cb] = function(data){
+  renderCandados(data && data.activos);
+  delete window[cb];
+  script.remove();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=listarCandados&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+document.getElementById("candadosFeed").addEventListener("click", function(ev){
+ var btn = ev.target.closest("button[data-id]");
+ if(!btn) return;
+ btn.disabled = true;
+ var cb = "wgymDevCandado_" + Date.now();
+ window[cb] = function(){
+  delete window[cb];
+  script.remove();
+  pollCandados();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=devolverCandado&id=" + encodeURIComponent(btn.getAttribute("data-id")) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
+ document.body.appendChild(script);
+});
+
 poll();
 pollBandas();
+pollCandados();
 setInterval(poll, 4000);
 setInterval(pollBandas, 4000);
+setInterval(pollCandados, 4000);
 
 /* Esta pantalla se queda abierta todo el día en una tablet, sin que nadie
    la recargue. Si mientras tanto se publica una lista nueva (renovaciones,
