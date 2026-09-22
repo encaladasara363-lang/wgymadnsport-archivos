@@ -15,6 +15,33 @@
   a Markdown estructurado (títulos, listas, párrafos cortos) antes de
   trabajar con él, para ahorrar tokens de contexto.
 
+### Tipografía de titulares: Rubik Distressed (regla permanente, desde 09/2026)
+
+Desde septiembre de 2026, **Rubik Distressed** (Google Fonts, gratis) es la
+tipografía oficial de titulares/headlines de WGYMADNSPORT — reemplaza a
+Anton para títulos grandes (nombre de sección, frases motivacionales,
+"HORARIOS", etc.). Mantiene el look de letra gruesa con borde
+desgastado/pincel que el dueño aprobó.
+
+- El archivo de la fuente vive en `assets/font-rubik-distressed.ttf`
+  (descargado una vez de Google Fonts) — usarlo como fuente para generar
+  el `@font-face` en base64 embebido, igual que se hace con Anton y
+  Barlow Condensed en los carteles impresos existentes.
+- **Sigue usándose en mayúsculas** (`text-transform:uppercase`) — en
+  minúsculas pierde el efecto de letra rugosa/pincel.
+- Anton se mantiene solo para textos numéricos grandes (horas, precios,
+  cantidades) donde Rubik Distressed no calza tan bien; Barlow Condensed
+  sigue siendo la fuente de cuerpo/etiquetas pequeñas.
+- Paleta sin cambios: negro `#0A0A0B`/`#0D0D0F`, rojo `#E30613`, dorado
+  `#D4AF37`, blanco.
+- Ver `plantilla-post-horarios.html` como referencia de la plantilla ya
+  actualizada a este estilo (fondo con textura sutil, franja de 4
+  iconos de valores, franjas rojas de horario tipo pastilla, logo real
+  grande arriba a la izquierda, bloque de contacto con ambos números).
+- Al tocar otra pieza por otro motivo, aprovechar de migrarla a este
+  estilo si es razonable — no hace falta salir a rehacer todo el sitio
+  de una sola vez.
+
 ## Publicación en redes sociales vía Metricool (regla permanente)
 
 La cuenta de Metricool del dueño (marca "Tienda WgymadnSport", brandId
