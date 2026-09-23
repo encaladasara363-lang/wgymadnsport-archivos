@@ -45,23 +45,24 @@ desgastado/pincel que el dueño aprobó.
 ### Plantilla definitiva de redes sociales: `plantilla-redes/` (regla permanente, desde 09/2026)
 
 La dueña eligió como **plantilla definitiva para redes sociales** el póster
-vertical con título "HORARIOS", el hombre y la mujer con luz roja y el
-marco rojo con rayitas doradas. Para cada publicación nueva **solo cambia
-el texto dentro del marco**; todo lo demás queda fijo y no se rediseña:
+vertical 3:4 con el hombre y la mujer con luz roja y el marco rojo con
+rayitas doradas. Para cada publicación nueva **solo cambian el título y el
+texto dentro del marco**; todo lo demás queda fijo y no se rediseña:
 
-- Fijo: foto de fondo (`plantilla-redes/base/fondo.jpg`, con el título
-  "HORARIOS" ya incluido en la imagen), logo nuevo (`base/logo.png`, la W
-  con brazos + "ADN SPORT TOCOPILLA") con "GIMNASIO" dorado en letra ancha
-  debajo, rayitas doradas en esquinas y centros del marco, bloque
-  "INSTAGRAM · FACEBOOK · TIKTOK" + `@wadnsport.tocopilla` en dorado, y en
-  el pie los dos números de WhatsApp.
-- Variable: un JSON en `plantilla-redes/textos/` con `filas` (cada una
-  `{"izq","der"}` → blanco · rojo, `{"texto"}` → una línea blanca, y
-  `"gris": true` para días cerrados) y `frase` opcional (dorado cursiva).
-  Ver `textos/horarios.json` y `textos/ejemplo-aviso.json`.
+- Fijo: foto de fondo sin título (`plantilla-redes/base/fondo.jpg`), logo
+  nuevo (`base/logo.png`, la W con brazos + "ADN SPORT TOCOPILLA") con
+  "GIMNASIO" dorado en letra ancha debajo, rayitas doradas en esquinas y
+  centros del marco, bloque "INSTAGRAM · FACEBOOK · TIKTOK" +
+  `@wadnsport.tocopilla` en dorado, y en el pie los dos números de WhatsApp.
+- Variable: un JSON en `plantilla-redes/textos/` con `titulo` (arriba a la
+  izquierda, en Rubik Distressed blanco con resplandor rojo, se ajusta solo
+  al espacio), `filas` (cada una `{"izq","der"}` → blanco · rojo,
+  `{"texto"}` → una línea blanca, y `"gris": true` para días cerrados) y
+  `frase` opcional (dorado cursiva). Ver `textos/horarios.json` y
+  `textos/ejemplo-aviso.json`.
 - Generar con `python3 plantilla-redes/generar.py plantilla-redes/textos/<nombre>.json`
   (necesita Pillow). Sale `plantilla-redes/salidas/<nombre>.png` a
-  1696 × 2528 px. El tamaño de letra se ajusta solo para caber en el 85 %
+  1792 × 2400 px. El tamaño de letra se ajusta solo para caber en el 85 %
   del ancho del marco sin tocar sus bordes.
 - Cuando la usuaria pida "una publicación con este texto", crear el JSON,
   generar la imagen, mostrársela y, si la aprueba, publicarla con

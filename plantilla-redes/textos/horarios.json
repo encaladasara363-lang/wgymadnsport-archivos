@@ -1,9 +1,23 @@
 {
+  "titulo": "HORARIOS",
   "filas": [
-    {"izq": "LUNES A JUEVES", "der": "08:00 – 23:30"},
-    {"izq": "VIERNES", "der": "09:00 – 23:30"},
-    {"izq": "SÁBADOS Y FERIADOS", "der": "10:00 – 22:00"},
-    {"izq": "DOMINGO", "der": "CERRADO", "gris": true}
+    {
+      "izq": "LUNES A JUEVES",
+      "der": "08:00 – 23:30"
+    },
+    {
+      "izq": "VIERNES",
+      "der": "09:00 – 23:30"
+    },
+    {
+      "izq": "SÁBADOS Y FERIADOS",
+      "der": "10:00 – 22:00"
+    },
+    {
+      "izq": "DOMINGO",
+      "der": "CERRADO",
+      "gris": true
+    }
   ],
   "frase": "La perseverancia es el secreto de tu éxito"
 }

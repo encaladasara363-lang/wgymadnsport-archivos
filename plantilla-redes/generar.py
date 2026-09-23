@@ -1,16 +1,17 @@
 """Plantilla definitiva de redes sociales de WGYMADNSPORT.
 
-Todo lo fijo (foto con título "HORARIOS", logo + "GIMNASIO", rayitas
-doradas del marco, las 3 redes y los 2 números) sale siempre igual.
-Lo único que cambia en cada publicación es el texto de un archivo JSON.
+Todo lo fijo (foto, logo + "GIMNASIO", rayitas doradas del marco, las
+3 redes y los 2 números) sale siempre igual. Lo único que cambia en cada
+publicación es el título y el texto del marco, definidos en un JSON.
 
 Uso:
     python3 plantilla-redes/generar.py plantilla-redes/textos/horarios.json
 
-Genera plantilla-redes/salidas/<nombre-del-json>.png (1696 x 2528 px).
+Genera plantilla-redes/salidas/<nombre-del-json>.png (1792 x 2400 px).
 
 Formato del JSON:
     {
+      "titulo": "HORARIOS",                                    arriba a la izquierda
       "filas": [
         {"izq": "LUNES A JUEVES", "der": "08:00 – 23:30"},   blanco · rojo
         {"texto": "TEXTO DE UNA SOLA LÍNEA"},                  blanco
@@ -31,13 +32,15 @@ FONDO = os.path.join(AQUI, "base", "fondo.jpg")
 LOGO = os.path.join(AQUI, "base", "logo.png")
 
 BLANCO, ROJO, GRIS, DORADO = "#FFFFFF", "#E10600", "#9A9A9A", "#D4AF37"
-K = 2  # factor de escala sobre el fondo original de 848 x 1264
+K = 2  # factor de escala sobre el fondo original de 896 x 1200
 
-# Zona útil dentro del marco rojo (coordenadas del original 848 x 1264).
-# El marco va de x=32..826, y=586..1222; la parte baja queda para las redes.
-FX0, FX1 = 50, 790
-FY0, FY1 = 640, 1095
-Y_REDES, Y_USUARIO, Y_PIE = 1128, 1158, 1245
+# Zona útil dentro del marco rojo (coordenadas del original 896 x 1200).
+# El marco va de x=16..876, y=610..1158; la parte baja queda para las redes.
+FX0, FX1 = 40, 845
+FY0, FY1 = 668, 1070
+Y_REDES, Y_USUARIO, Y_PIE = 1092, 1122, 1180
+# Caja del título (arriba a la izquierda, sin tapar a las personas)
+TX0, TY0, TX1, TY1 = 26, 28, 415, 150
 
 REDES = "INSTAGRAM   ·   FACEBOOK   ·   TIKTOK"
 USUARIO = "@wadnsport.tocopilla"
@@ -46,10 +49,10 @@ SEP = " · "
 
 # Tramos del contorno rojo que se pintan de dorado (esquinas y centros)
 VENTANAS_DORADAS = [
-    (12, 574, 130, 612), (700, 574, 836, 645),
-    (12, 1140, 110, 1230), (740, 1195, 836, 1230),
-    (370, 580, 480, 592), (370, 1215, 480, 1228),
-    (12, 860, 26, 980), (818, 860, 836, 980),
+    (8, 600, 150, 690), (740, 600, 890, 760),
+    (8, 1060, 120, 1172), (700, 1120, 890, 1175),
+    (390, 612, 510, 626), (390, 1150, 510, 1166),
+    (8, 840, 28, 960), (866, 840, 890, 960),
 ]
 
 
@@ -65,7 +68,7 @@ def base():
         for y in range(y0 * K, y1 * K):
             for x in range(x0 * K, x1 * K):
                 r, g, b, a = px[x, y]
-                if r > 120 and r > 2.2 * g and r > 2.2 * b:
+                if r > 110 and r > 2.2 * g and r > 2.2 * b:
                     t = min(1.0, r / 225)
                     px[x, y] = (min(255, int(212 * t + g * 0.6)),
                                 min(255, int(175 * t + g * 0.6)),
@@ -76,10 +79,10 @@ def base():
 def poner_logo(out, d):
     W = out.width
     lg = Image.open(LOGO).convert("RGBA")
-    lw = round(W * 0.36)
+    lw = round(W * 0.30)
     lh = round(lg.height * lw / lg.width)
     lg = lg.resize((lw, lh), Image.LANCZOS)
-    x0, y0 = 22 * K, 140 * K
+    x0, y0 = 18 * K, 172 * K
     pad = 30 * K
     sh = Image.new("L", (lw + 2 * pad, lh + 2 * pad), 0)
     sh.paste(lg.getchannel("A").filter(ImageFilter.MaxFilter(21)), (pad, pad))
@@ -88,7 +91,7 @@ def poner_logo(out, d):
     negro.putalpha(sh)
     out.alpha_composite(negro, (x0 - pad, y0 - pad))
     out.alpha_composite(lg, (x0, y0))
-    gf = fuente("Barlow-ExtraBold.ttf", 24 * K)
+    gf = fuente("Barlow-ExtraBold.ttf", 21 * K)
     esp = 6 * K
     letras = "GIMNASIO"
     tw = sum(d.textlength(c, font=gf) for c in letras) + esp * (len(letras) - 1)
@@ -96,6 +99,30 @@ def poner_logo(out, d):
     for c in letras:
         d.text((gx, gy), c, font=gf, fill=DORADO, anchor="lt")
         gx += d.textlength(c, font=gf) + esp
+
+
+def poner_titulo(out, titulo):
+    """Título en Rubik Distressed (fuente oficial de titulares), blanco con
+    resplandor rojo tipo neón, arriba a la izquierda."""
+    if not titulo:
+        return
+    x0, y0, x1, y1 = TX0 * K, TY0 * K, TX1 * K, TY1 * K
+    tmp = ImageDraw.Draw(out)
+    size = (y1 - y0)
+    while size > 10:
+        tf = fuente("RubikDistressed-Regular.ttf", size)
+        l, t, r, b = tmp.textbbox((0, 0), titulo, font=tf, anchor="ls")
+        if r - l <= x1 - x0 and b - t <= y1 - y0:
+            break
+        size -= 2
+    base_y = y0 + (y1 - y0 + (b - t)) // 2 - b
+    glow = Image.new("RGBA", out.size, (0, 0, 0, 0))
+    ImageDraw.Draw(glow).text((x0 - l, base_y), titulo, font=tf, fill=(225, 6, 0, 255), anchor="ls")
+    for radio, veces in ((18 * K, 2), (6 * K, 1)):
+        g = glow.filter(ImageFilter.GaussianBlur(radio))
+        for _ in range(veces):
+            out.alpha_composite(g)
+    ImageDraw.Draw(out).text((x0 - l, base_y), titulo, font=tf, fill=BLANCO, anchor="ls")
 
 
 def texto_fila(f):
@@ -154,6 +181,8 @@ def generar(datos, salida):
     d.text((cx, Y_USUARIO * K), USUARIO, font=fuente("BarlowCondensed-Bold.ttf", 24 * K), fill=DORADO, anchor="mm")
     d.text((W // 2, Y_PIE * K), PIE, font=fuente("BarlowCondensed-Medium.ttf", 19 * K), fill=BLANCO, anchor="mm")
     poner_logo(out, d)
+
+    poner_titulo(out, datos.get("titulo", "").strip().upper())
 
     out.convert("RGB").save(salida)
     return salida
