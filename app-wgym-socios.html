@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+<meta name="theme-color" content="#0A0A0B">
+<meta name="description" content="App de socios WGYMADNSPORT Tocopilla: pase digital, control de vencimiento, rutina de 5 días, nutrición e hidratación, planes y contacto.">
+<title>App Socios · WGYMADNSPORT</title>
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icono-180.png?v=3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="WGYM SOCIOS">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Distressed&family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#0A0A0B; --bg2:#0D0D0F; --card:#16161A; --card2:#1D1D22; --line:#2A2A31;
+  --red:#E30613; --red2:#FF2D3A; --gold:#D4AF37; --txt:#F4F4F5; --mut:#A1A1AA;
+  --ok:#22C55E; --warn:#F5A524; --bad:#EF4444;
+  --fh:"Rubik Distressed","Anton",Impact,sans-serif;
+  --fn:"Anton",Impact,sans-serif;
+  --fc:"Barlow Condensed","Arial Narrow",sans-serif;
+  --fb:"Barlow",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+html,body{overflow-x:hidden}
+body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:15px;line-height:1.45;
+  background-image:radial-gradient(circle at 20% 0%,rgba(227,6,19,.14),transparent 45%),
+  radial-gradient(circle at 100% 30%,rgba(212,175,55,.06),transparent 40%);
+  min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,select{font:inherit;color:inherit}
+a{color:inherit}
+[hidden]{display:none!important}
+.wrap{max-width:520px;margin:0 auto;padding:0 16px}
+
+/* ---------- Login ---------- */
+#viewLogin{min-height:100vh;display:flex;align-items:center;padding:24px 16px;
+  background-image:radial-gradient(circle at 30% 10%,rgba(227,6,19,.18),transparent 50%),radial-gradient(circle at 90% 80%,rgba(212,175,55,.08),transparent 45%)}
+.li-box{max-width:420px;margin:0 auto;width:100%}
+.li-logo{width:110px;height:110px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 14px;border:3px solid var(--gold);
+  box-shadow:0 10px 30px rgba(212,175,55,.25)}
+.li-box h1{font-family:var(--fh);font-weight:400;text-transform:uppercase;text-align:center;font-size:clamp(26px,8vw,36px);line-height:1.05}
+.li-box h1 span{color:var(--red)}
+.li-box .sub{font-family:var(--fc);text-transform:uppercase;letter-spacing:2px;color:var(--gold);font-weight:600;font-size:13px;text-align:center;margin-top:6px}
+.li-card{margin-top:24px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.li-lbl{font-family:var(--fc);text-transform:uppercase;letter-spacing:1.5px;font-size:12px;color:var(--mut);display:block;margin-bottom:6px}
+.li-field{margin-bottom:14px}
+.li-field input{width:100%;background:#0F0F12;border:1px solid var(--line);border-radius:10px;padding:12px 13px;font-size:16px}
+.li-field input:focus{outline:none;border-color:var(--gold)}
+.li-btn{width:100%;margin-top:4px;padding:14px;border-radius:12px;background:linear-gradient(160deg,var(--red),#8E0610);
+  font-family:var(--fc);font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:16px;box-shadow:0 8px 22px rgba(227,6,19,.3)}
+.li-btn:active{transform:scale(.98)}
+.li-err{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);
+  color:#FCA5A5;font-family:var(--fc);font-size:13px;text-align:center}
+.li-nota{margin-top:14px;text-align:center;font-size:12.5px;color:var(--mut)}
+
+/* ---------- App shell ---------- */
+#viewApp{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+header.app{padding:16px 0 10px;text-align:center}
+header.app .logo{width:64px;height:64px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px;border:2px solid var(--gold)}
+header.app h1{font-family:var(--fh);font-weight:400;text-transform:uppercase;font-size:clamp(20px,6vw,26px);line-height:1}
+header.app h1 span{color:var(--red)}
+header.app .saludo{font-family:var(--fc);text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-weight:600;font-size:14px;margin-top:4px}
+
+.rule{height:3px;display:flex;gap:10px;justify-content:center;margin:14px auto 0;max-width:280px}
+.rule i{flex:1;background:var(--gold);border-radius:2px}.rule i:nth-child(2){flex:.18;background:var(--red)}
+
+main.tab{padding:16px 0 20px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card h2{font-family:var(--fh);font-weight:400;text-transform:uppercase;font-size:20px;margin-bottom:4px}
+.card .lead{font-family:var(--fc);text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:600;font-size:12px}
+
+/* Banner de vencimiento */
+.banner{border-radius:14px;padding:12px 14px;margin-bottom:14px;border:1px solid;display:flex;gap:10px;align-items:flex-start}
+.banner .ic{font-size:20px;line-height:1.2}
+.banner p{font-family:var(--fc);font-weight:700;text-transform:uppercase;font-size:14px;letter-spacing:.3px}
+.banner small{display:block;font-family:var(--fb);font-weight:400;text-transform:none;letter-spacing:0;color:var(--mut);font-size:12.5px;margin-top:2px}
+.banner.ok{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.4);color:#86EFAC}
+.banner.warn{background:rgba(245,165,36,.12);border-color:rgba(245,165,36,.45);color:#FCD34D}
+.banner.bad{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.45);color:#FCA5A5}
+
+/* Pase QR */
+.qr-wrap{display:flex;flex-direction:column;align-items:center;padding:22px 0 6px}
+.qr-frame{position:relative;padding:14px;border-radius:20px;background:linear-gradient(160deg,var(--card2),var(--card));
+  border:1px solid var(--line);box-shadow:0 0 0 0 rgba(212,175,55,.5);animation:qrGlow 2.4s ease-in-out infinite}
+@keyframes qrGlow{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.35)}50%{box-shadow:0 0 26px 4px rgba(212,175,55,.35)}}
+#qrCanvas{display:block;border-radius:8px}
+.qr-caption{margin-top:12px;font-family:var(--fc);text-transform:uppercase;letter-spacing:1.5px;font-size:12.5px;color:var(--mut);text-align:center}
+.qr-caption b{color:var(--txt);font-family:var(--fc);font-weight:700}
+.qr-expirado{text-align:center;padding:28px 10px}
+.qr-expirado .ic{font-size:44px}
+.qr-expirado h3{font-family:var(--fh);font-weight:400;text-transform:uppercase;color:var(--red2);font-size:24px;margin-top:6px}
+.qr-expirado p{color:var(--mut);margin-top:6px;font-size:14px}
+
+.frase{margin-top:16px;text-align:center;padding:16px;border-radius:14px;background:rgba(212,175,55,.06);border:1px dashed rgba(212,175,55,.35)}
+.frase p{font-family:var(--fc);font-style:normal;font-size:15px;color:#E9D9A8;line-height:1.4}
+.frase small{display:block;margin-top:8px;font-family:var(--fc);text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-size:11.5px}
+
+.btn{font-family:var(--fc);font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:14px;
+  padding:11px 16px;border-radius:11px;background:var(--card2);border:1px solid var(--line);display:inline-flex;align-items:center;gap:6px}
+.btn.red{background:linear-gradient(160deg,var(--red),#8E0610);border-color:var(--red)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#0A0A0B}
+.btn.block{width:100%;justify-content:center}
+.btn.sm{padding:8px 12px;font-size:12.5px}
+.btn:active{transform:scale(.97)}
+
+/* Cronómetro de sesión */
+.crono-card{display:flex;align-items:center;gap:10px}
+.crono-card .t{font-family:var(--fn);font-size:34px;letter-spacing:1px;margin-right:auto;min-width:110px}
+.crono-card .lbl{font-family:var(--fc);text-transform:uppercase;font-size:11px;letter-spacing:1.5px;color:var(--mut)}
+
+/* Selector de días */
+.dias-sel{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px}
+.dias-sel button{padding:10px 4px 9px;border-radius:12px;background:var(--card);border:1px solid var(--line);text-align:center}
+.dias-sel button small{display:block;font-family:var(--fc);text-transform:uppercase;font-size:11px;letter-spacing:1px;color:var(--mut)}
+.dias-sel button b{font-family:var(--fn);font-weight:400;font-size:22px;line-height:1.1}
+.dias-sel button.on{background:linear-gradient(160deg,var(--red),#8E0610);border-color:var(--red)}
+.dias-sel button.on small{color:#FFE3E5}
+
+.bloqueo{text-align:center;padding:30px 12px}
+.bloqueo .ic{font-size:44px}
+.bloqueo h3{font-family:var(--fh);font-weight:400;text-transform:uppercase;color:var(--red2);font-size:24px;margin:8px 0 4px}
+.bloqueo p{color:var(--mut);font-size:14px;margin-bottom:16px}
+
+.dia-tit{font-family:var(--fc);text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:700;color:var(--gold)}
+.dia-h2{font-family:var(--fh);font-weight:400;text-transform:uppercase;font-size:clamp(20px,6vw,26px);line-height:1.05;margin-top:2px;margin-bottom:14px}
+
+.ej{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
+.ej-top{display:flex;gap:10px;align-items:flex-start}
+.ej .num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--red);display:grid;place-items:center;font-family:var(--fn);font-size:16px}
+.ej h3{font-family:var(--fc);font-weight:700;text-transform:uppercase;font-size:17px;line-height:1.15;letter-spacing:.2px}
+.ej .zona{font-family:var(--fc);text-transform:uppercase;font-size:11.5px;color:var(--mut);letter-spacing:.5px;margin-top:2px}
+.ej .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ej .tag{font-family:var(--fc);text-transform:uppercase;font-size:11.5px;font-weight:600;letter-spacing:.6px;
+  padding:4px 8px;border-radius:7px;background:#232329;color:var(--mut)}
+.ej .tag b{font-family:var(--fn);font-weight:400;font-size:14px;color:var(--txt);margin-right:2px}
+.ej .tecnica{margin-top:10px;font-size:13.5px;color:#D4D4D8;line-height:1.45}
+.alerta{margin-top:10px;display:flex;gap:8px;padding:9px 10px;border-radius:10px;
+  background:rgba(227,6,19,.1);border:1px solid rgba(227,6,19,.4);border-left:4px solid var(--red)}
+.alerta .ic{flex:none;font-size:17px;line-height:1.2}
+.alerta p{font-size:12.5px;font-weight:600;text-transform:uppercase;line-height:1.35}
+.links{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.links a{font-family:var(--fc);font-weight:700;text-transform:uppercase;letter-spacing:.5px;font-size:12px;
+  padding:8px 11px;border-radius:9px;background:#0F0F12;border:1px solid var(--line);text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+
+.series{margin-top:12px;display:grid;gap:6px}
+.series .cols{display:grid;grid-template-columns:26px 1fr 1fr 60px;gap:6px;font-family:var(--fc);text-transform:uppercase;
+  font-size:11px;letter-spacing:1px;color:var(--mut);text-align:center}
+.series .fila{display:grid;grid-template-columns:26px 1fr 1fr 60px;gap:6px;align-items:center}
+.series input{width:100%;min-width:0;background:#0F0F12;border:1px solid var(--line);border-radius:9px;padding:8px 6px;
+  font-family:var(--fn);font-size:15px;text-align:center}
+.series input::placeholder{color:#55555C;font-family:var(--fc);font-size:12px;text-transform:uppercase}
+.series input:focus{outline:none;border-color:var(--gold)}
+.series .sn{font-family:var(--fn);color:var(--mut);text-align:center;font-size:15px}
+.rm-chip{font-family:var(--fc);font-size:10.5px;font-weight:700;text-align:center;border-radius:7px;padding:6px 3px;text-transform:uppercase}
+.rm-chip.low{background:rgba(161,161,170,.18);color:#D4D4D8}
+.rm-chip.light{background:rgba(34,197,94,.18);color:#86EFAC}
+.rm-chip.mid{background:rgba(212,175,55,.2);color:#F0DFA0}
+.rm-chip.sub{background:rgba(245,165,36,.2);color:#FCD34D}
+.rm-chip.max{background:rgba(239,68,68,.2);color:#FCA5A5}
+.rm-chip.off{background:transparent;color:#55555C}
+
+.ej-acc{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.chart-wrap{margin-top:12px;background:#0F0F12;border-radius:10px;padding:8px}
+.chart-wrap canvas{display:block;width:100%;height:90px}
+.chart-empty{font-family:var(--fc);text-transform:uppercase;font-size:11.5px;color:var(--mut);text-align:center;padding:8px 0}
+
+/* Muro de PRs */
+.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pr-item{background:#0F0F12;border:1px solid var(--line);border-radius:12px;padding:10px}
+.pr-item label{display:block;font-family:var(--fc);text-transform:uppercase;letter-spacing:.5px;font-size:11.5px;color:var(--mut);margin-bottom:6px}
+.pr-item .row{display:flex;align-items:baseline;gap:5px}
+.pr-item input{width:100%;background:none;border:0;border-bottom:1px solid var(--line);padding:4px 0;font-family:var(--fn);font-size:22px}
+.pr-item input:focus{outline:none;border-color:var(--gold)}
+.pr-item .kg{font-family:var(--fc);color:var(--mut);font-size:12px;text-transform:uppercase}
+.pr-saved{font-size:11px;color:var(--ok);font-family:var(--fc);text-transform:uppercase;letter-spacing:.5px;height:14px;margin-top:4px;opacity:0;transition:opacity .3s}
+.pr-saved.on{opacity:1}
+
+/* Nutrición */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{margin-bottom:10px}
+.field label{display:block;font-family:var(--fc);text-transform:uppercase;letter-spacing:1px;font-size:11.5px;color:var(--mut);margin-bottom:5px}
+.field input,.field select{width:100%;background:#0F0F12;border:1px solid var(--line);border-radius:9px;padding:10px;font-size:15px}
+.field input:focus,.field select:focus{outline:none;border-color:var(--gold)}
+.seg{display:flex;gap:6px;margin-bottom:10px}
+.seg button{flex:1;padding:9px 4px;border-radius:9px;background:#0F0F12;border:1px solid var(--line);font-family:var(--fc);
+  text-transform:uppercase;font-size:12.5px;font-weight:700;letter-spacing:.5px}
+.seg button.on{background:var(--gold);color:#0A0A0B;border-color:var(--gold)}
+.resultado{margin-top:12px;background:#0F0F12;border-radius:12px;padding:14px;display:grid;gap:8px}
+.resultado .fila{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--fc);text-transform:uppercase;font-size:13px;color:var(--mut);letter-spacing:.4px}
+.resultado .fila b{font-family:var(--fn);font-weight:400;font-size:20px;color:var(--txt)}
+.resultado .fila b.gold{color:var(--gold)}
+
+.receta{background:#0F0F12;border-radius:12px;padding:12px 13px;margin-bottom:10px}
+.receta h4{font-family:var(--fc);font-weight:700;text-transform:uppercase;font-size:14.5px;letter-spacing:.3px}
+.receta p{font-size:13px;color:var(--mut);margin-top:4px;line-height:1.4}
+
+/* WGYM Music */
+.playlist{background:#0F0F12;border-radius:14px;padding:14px;margin-bottom:12px;border:1px solid var(--line);
+  display:flex;align-items:center;gap:12px}
+.playlist .art{flex:none;width:52px;height:52px;border-radius:12px;display:grid;place-items:center;font-size:24px}
+.playlist .art.pt{background:linear-gradient(160deg,var(--red),#8E0610)}
+.playlist .art.ca{background:linear-gradient(160deg,var(--gold),#8A6B1E)}
+.playlist .art.pe{background:linear-gradient(160deg,#2A2A31,#111)}
+.playlist .info{flex:1;min-width:0}
+.playlist h4{font-family:var(--fc);font-weight:700;text-transform:uppercase;font-size:15px;letter-spacing:.3px}
+.playlist p{font-size:12px;color:var(--mut);margin-top:2px}
+.playlist a{flex:none;font-family:var(--fc);font-weight:700;text-transform:uppercase;letter-spacing:.5px;font-size:11.5px;
+  padding:9px 12px;border-radius:10px;background:#1DB954;color:#04140A;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+
+/* Planes/Contacto */
+.horario-fila{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-family:var(--fc);
+  text-transform:uppercase;font-size:13.5px;letter-spacing:.4px}
+.horario-fila:last-child{border-bottom:0}
+.horario-fila b{font-family:var(--fn);font-weight:400;color:var(--gold);font-size:14.5px}
+.tarifa-fila{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+.tarifa-fila:last-child{border-bottom:0}
+.tarifa-fila span{font-family:var(--fc);text-transform:uppercase;font-size:13.5px;letter-spacing:.3px}
+.tarifa-fila b{font-family:var(--fn);font-weight:400;font-size:19px;color:var(--txt)}
+.contacto-dir{font-size:13.5px;color:var(--mut);margin-top:4px;line-height:1.5}
+.tel-list{display:grid;gap:8px;margin-top:12px}
+.tel-list a{display:flex;align-items:center;gap:8px;background:#0F0F12;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+  text-decoration:none;font-family:var(--fc);font-weight:700;text-transform:uppercase;font-size:13.5px}
+.firma-admin{margin-top:12px;text-align:right;font-family:var(--fc);text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-size:12px}
+
+.logout{text-align:center;margin-top:6px}
+.logout button{font-family:var(--fc);text-transform:uppercase;letter-spacing:1px;font-size:12px;color:var(--mut);text-decoration:underline}
+
+/* Nav inferior */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(13,13,15,.96);backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:520px;margin:0 auto}
+nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;border-radius:12px}
+nav.tabs button .ic{font-size:19px;line-height:1}
+nav.tabs button span{font-family:var(--fc);text-transform:uppercase;font-size:10.5px;letter-spacing:.5px;color:var(--mut)}
+nav.tabs button.on{background:rgba(227,6,19,.14)}
+nav.tabs button.on .ic{filter:drop-shadow(0 0 6px rgba(227,6,19,.5))}
+nav.tabs button.on span{color:var(--red2);font-weight:700}
+
+/* Aviso de descanso terminado */
+.aviso{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:rgba(227,6,19,.93);text-align:center;padding:24px}
+.aviso.on{display:grid;animation:flash .5s ease 3}
+@keyframes flash{50%{background:rgba(10,10,11,.95)}}
+.aviso h2{font-family:var(--fh);font-weight:400;text-transform:uppercase;font-size:clamp(34px,11vw,54px);line-height:1}
+.aviso p{font-family:var(--fc);text-transform:uppercase;letter-spacing:2px;font-size:16px;margin:10px 0 20px}
+.aviso .btn{background:#fff;color:#0A0A0B;font-size:16px;padding:12px 24px}
+
+.barra-desc{position:fixed;left:0;right:0;bottom:76px;z-index:35;background:#111114;border-top:2px solid var(--gold);
+  padding:9px 16px;display:none}
+.barra-desc.on{display:block}
+.barra-desc .wrap{display:flex;align-items:center;gap:10px;padding:0;max-width:520px}
+.barra-desc .t{font-family:var(--fn);font-size:26px;color:var(--gold);min-width:66px}
+.barra-desc .n{font-family:var(--fc);text-transform:uppercase;font-size:12.5px;letter-spacing:.5px;color:var(--mut);margin-right:auto;line-height:1.15}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="viewLogin">
+  <div class="li-box">
+    <img class="li-logo" src="assets/logo.jpg" alt="WGYMADNSPORT" onerror="this.style.display='none'">
+    <h1>WGYM<span>ADN</span>SPORT</h1>
+    <p class="sub">App de socios · Tocopilla</p>
+    <div class="li-card">
+      <div class="li-field">
+        <label class="li-lbl">Nombre</label>
+        <input id="liNombre" type="text" autocomplete="given-name" placeholder="Ej: María">
+      </div>
+      <div class="li-field">
+        <label class="li-lbl">Apellido</label>
+        <input id="liApellido" type="text" autocomplete="family-name" placeholder="Ej: Chiessa">
+      </div>
+      <button class="li-btn" id="liBtn">Ingresar a la App</button>
+      <p class="li-err" id="liErr" hidden></p>
+    </div>
+    <p class="li-nota">Tu nombre debe estar en la planilla de socios del gimnasio. Si no te reconoce, consulta en recepción.</p>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="viewApp" hidden>
+  <header class="app">
+    <img class="logo" src="assets/logo.jpg" alt="" onerror="this.style.display='none'">
+    <h1>WGYM<span>ADN</span>SPORT</h1>
+    <p class="saludo" id="saludoNombre">¡Hola!</p>
+    <div class="rule"><i></i><i></i><i></i></div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- TAB: Pase QR -->
+    <main class="tab" id="tabQr">
+      <div id="bannerVenc"></div>
+      <div class="card" id="qrCard">
+        <div class="qr-wrap">
+          <div class="qr-frame"><canvas id="qrCanvas" width="220" height="220"></canvas></div>
+          <p class="qr-caption">Muéstralo en el mesón al ingresar<br><b id="qrNombre">—</b></p>
+        </div>
+      </div>
+      <div class="frase">
+        <p id="fraseTexto">—</p>
+        <small>— La Administración</small>
+      </div>
+    </main>
+
+    <!-- TAB: Rutinas -->
+    <main class="tab" id="tabRutinas" hidden>
+      <div class="card crono-card">
+        <div>
+          <span class="lbl">Cronómetro de sesión</span>
+          <div class="t" id="cronoT">00:00</div>
+        </div>
+        <button class="btn sm" id="cronoBtn">Iniciar</button>
+        <button class="btn sm" id="cronoResetBtn">Reset</button>
+      </div>
+
+      <div id="rutinaBody"></div>
+    </main>
+
+    <!-- TAB: Nutrición -->
+    <main class="tab" id="tabNutricion" hidden>
+      <div class="card">
+        <span class="lead">Calculadora</span>
+        <h2>Macronutrientes</h2>
+        <div class="seg" id="segSexo">
+          <button data-v="F" class="on">Mujer</button>
+          <button data-v="M">Hombre</button>
+        </div>
+        <div class="grid2">
+          <div class="field"><label>Peso (kg)</label><input id="nutPeso" type="number" inputmode="decimal" placeholder="Ej: 60"></div>
+          <div class="field"><label>Estatura (cm)</label><input id="nutAltura" type="number" inputmode="numeric" placeholder="Ej: 160"></div>
+          <div class="field"><label>Edad</label><input id="nutEdad" type="number" inputmode="numeric" placeholder="Ej: 28"></div>
+          <div class="field">
+            <label>Actividad</label>
+            <select id="nutActividad">
+              <option value="1">Reposo</option>
+              <option value="1.5">Muy ligera</option>
+              <option value="2.5" selected>Ligera</option>
+              <option value="5">Moderada</option>
+              <option value="7">Intensa</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn red block" id="nutCalcBtn">Calcular</button>
+        <div class="resultado" id="nutResultado" hidden></div>
+      </div>
+
+      <div class="card">
+        <span class="lead">Calculadora</span>
+        <h2>Hidratación</h2>
+        <div class="field"><label>Minutos de entrenamiento</label><input id="hidMin" type="number" inputmode="numeric" placeholder="Usa el cronómetro de Rutinas o escribe los minutos"></div>
+        <button class="btn red block" id="hidCalcBtn">Calcular</button>
+        <div class="resultado" id="hidResultado" hidden></div>
+      </div>
+
+      <div class="card">
+        <span class="lead">Recetario fit</span>
+        <h2>Ideas de la Administración</h2>
+        <div id="recetario"></div>
+      </div>
+    </main>
+
+    <!-- TAB: WGYM Music -->
+    <main class="tab" id="tabMusica" hidden>
+      <div class="card">
+        <span class="lead">WGYM Music</span>
+        <h2>Playlists oficiales</h2>
+        <p style="font-size:13px;color:var(--mut);margin-top:2px;margin-bottom:12px">Escucha música mientras entrenas — enlaces directos a Spotify.</p>
+        <div id="playlistsBox"></div>
+      </div>
+    </main>
+
+    <!-- TAB: Planes / Contacto -->
+    <main class="tab" id="tabPlanes" hidden>
+      <div class="card">
+        <span class="lead">Horarios</span>
+        <h2>Atención</h2>
+        <div class="horario-fila"><span>Lunes a Jueves</span><b>08:00 – 23:30</b></div>
+        <div class="horario-fila"><span>Viernes</span><b>09:00 – 23:30</b></div>
+        <div class="horario-fila"><span>Sábado y festivo</span><b>10:00 – 22:00</b></div>
+        <div class="horario-fila"><span>Domingo</span><b>Cerrado</b></div>
+      </div>
+
+      <div class="card">
+        <span class="lead">Tarifas</span>
+        <h2>Planes</h2>
+        <div class="tarifa-fila"><span>Full</span><b>$33.000</b></div>
+        <div class="tarifa-fila"><span>3x/Estudiante</span><b>$28.000</b></div>
+        <div class="tarifa-fila"><span>Turno/3ra edad</span><b>$23.000</b></div>
+        <div class="tarifa-fila"><span>Diario</span><b>$4.000</b></div>
+      </div>
+
+      <div class="card">
+        <span class="lead">Ubicación y contacto</span>
+        <h2>WGYMADNSPORT Tocopilla</h2>
+        <p class="contacto-dir">21 de Mayo 1520, Tocopilla</p>
+        <div class="tel-list">
+          <a id="waBtn1" target="_blank" rel="noopener">💬 WhatsApp +56 9 7519 6394</a>
+          <a id="waBtn2" target="_blank" rel="noopener">💬 WhatsApp +56 9 9154 0156</a>
+        </div>
+        <p class="firma-admin">— La Administración</p>
+      </div>
+
+      <div class="logout"><button id="logoutBtn">Cambiar de socio / cerrar sesión</button></div>
+    </main>
+
+  </div>
+</div>
+
+<!-- Barra flotante de descanso -->
+<div class="barra-desc" id="barraDesc">
+  <div class="wrap">
+    <div class="t" id="barraT">0:00</div>
+    <div class="n" id="barraN">Descanso</div>
+    <button class="btn sm" id="barraStop">Saltar</button>
+  </div>
+</div>
+
+<!-- Aviso fin de descanso -->
+<div class="aviso" id="aviso">
+  <div>
+    <h2>¡A seguir!</h2>
+    <p id="avisoN">Descanso terminado</p>
+    <button class="btn" id="avisoCerrar">Continuar</button>
+  </div>
+</div>
+
+<!-- Nav inferior -->
+<nav class="tabs" id="navTabs" hidden>
+  <div class="wrap">
+    <button data-tab="qr" class="on"><span class="ic">🪪</span><span>Pase QR</span></button>
+    <button data-tab="rutinas"><span class="ic">🏋️</span><span>Rutinas</span></button>
+    <button data-tab="nutricion"><span class="ic">🥗</span><span>Nutrición</span></button>
+    <button data-tab="musica"><span class="ic">🎵</span><span>Music</span></button>
+    <button data-tab="planes"><span class="ic">📍</span><span>Planes</span></button>
+  </div>
+</nav>
+
+<script>
+(function(){
+"use strict";
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+
+/* ═══ Utilidades compartidas (mismo criterio que tarjeta.html) ═══════════ */
+function normName(s){
+  return (s||"").toString().trim().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ");
+}
+function distanciaNombre(a,b){
+  if(a===b) return 0;
+  var la=a.length, lb=b.length;
+  if(Math.abs(la-lb)>4) return 99;
+  var fila=[],i,j;
+  for(j=0;j<=lb;j++) fila[j]=j;
+  for(i=1;i<=la;i++){
+    var ant=fila[0]; fila[0]=i;
+    for(j=1;j<=lb;j++){
+      var tmp=fila[j];
+      fila[j]=Math.min(fila[j]+1, fila[j-1]+1, ant+(a.charAt(i-1)===b.charAt(j-1)?0:1));
+      ant=tmp;
+    }
+  }
+  return fila[lb];
+}
+function claveNombre(s){ return normName(s).replace(/\s+/g,""); }
+function margen(q){ return q.length<=8 ? 1 : (q.length<=14 ? 2 : 3); }
+function serialHoy(){ return Math.floor((Date.now() - Date.UTC(1899,11,30)) / 86400000); }
+
+var sociosPromise = fetch("socios.json?v="+Date.now(), {cache:"no-store"})
+  .then(function(r){ return r.ok ? r.json() : null; })
+  .catch(function(){ return null; });
+
+function buscarSocio(nombre, apellido, cb){
+  sociosPromise.then(function(data){
+    if(!data || !Array.isArray(data.socios)){ cb(null); return; }
+    var n=normName(nombre), a=normName(apellido);
+    if(!n || !a){ cb(null); return; }
+    var exacto = data.socios.filter(function(s){ return normName(s.n)===n && normName(s.a)===a; });
+    if(exacto.length){ cb(exacto[0]); return; }
+    var q = claveNombre(nombre+apellido), mejor=null, mejorD=99, empate=false;
+    data.socios.forEach(function(s){
+      var d = distanciaNombre(q, claveNombre(s.n+s.a));
+      if(d<mejorD){ mejorD=d; mejor=s; empate=false; }
+      else if(d===mejorD) empate=true;
+    });
+    if(mejor && mejorD<=margen(q) && !empate){ cb(mejor); return; }
+    cb(null);
+  });
+}
+
+/* ═══ Login / sesión ═══════════════════════════════════════════════════ */
+var SOCIO_KEY = "wgym_socio_actual_v1";
+var SOCIO = null; /* {n,a,fv,dias} */
+
+function slug(n,a){ return claveNombre((n||"")+"_"+(a||"")).toLowerCase().replace(/[^a-z0-9]+/g,"_"); }
+
+function mostrarError(msg){
+  var e=document.getElementById("liErr");
+  e.textContent = msg; e.hidden=false;
+}
+document.getElementById("liBtn").addEventListener("click", function(){
+  var n=document.getElementById("liNombre").value.trim();
+  var a=document.getElementById("liApellido").value.trim();
+  if(!n || !a){ mostrarError("Escribe tu nombre y apellido."); return; }
+  document.getElementById("liErr").hidden=true;
+  buscarSocio(n,a,function(s){
+    if(!s){ mostrarError("No te encontramos en la lista de socios. Consulta en recepción."); return; }
+    localStorage.setItem(SOCIO_KEY, JSON.stringify({n:s.n, a:s.a}));
+    entrarConSocio(s.n, s.a);
+  });
+});
+
+function entrarConSocio(n, a){
+  buscarSocio(n, a, function(s){
+    if(!s){ mostrarLogin(); return; }
+    var dias = Number(s.fv) - serialHoy();
+    SOCIO = {n:s.n, a:s.a, fv:s.fv, dias:dias};
+    document.getElementById("viewLogin").hidden = true;
+    document.getElementById("viewApp").hidden = false;
+    document.getElementById("navTabs").hidden = false;
+    document.getElementById("saludoNombre").textContent = "¡Hola, "+cap(s.n)+" "+cap(s.a)+"!";
+    document.getElementById("qrNombre").textContent = cap(s.n)+" "+cap(s.a);
+    dibujarQR(s.n+s.a);
+    renderBanner();
+    renderRutinaBloqueo();
+    renderFrase();
+  });
+}
+function cap(s){
+  return String(s||"").toLowerCase().replace(/(^|\s)([a-záéíóúñ])/g, function(m,sp,c){ return sp+c.toUpperCase(); });
+}
+function mostrarLogin(){
+  localStorage.removeItem(SOCIO_KEY);
+  document.getElementById("viewApp").hidden = true;
+  document.getElementById("navTabs").hidden = true;
+  document.getElementById("viewLogin").hidden = false;
+}
+document.getElementById("logoutBtn").addEventListener("click", mostrarLogin);
+
+(function initSesion(){
+  try{
+    var raw = localStorage.getItem(SOCIO_KEY);
+    if(raw){
+      var s = JSON.parse(raw);
+      if(s && s.n && s.a){ entrarConSocio(s.n, s.a); return; }
+    }
+  }catch(e){}
+  mostrarLogin();
+})();
+
+/* ═══ Banner de vencimiento + bloqueo de rutinas ═══════════════════════ */
+function renderBanner(){
+  var box = document.getElementById("bannerVenc");
+  var qrCard = document.getElementById("qrCard");
+  if(!SOCIO) return;
+  if(SOCIO.dias <= 0){
+    box.innerHTML =
+      '<div class="banner bad"><span class="ic">⛔</span><div><p>Tu plan expiró</p>'+
+      '<small>Renueva con la Administración para volver a tener acceso.</small></div></div>';
+    qrCard.innerHTML =
+      '<div class="qr-expirado"><div class="ic">🔒</div><h3>Acceso no disponible</h3>'+
+      '<p>Tu membresía está vencida. Contáctanos para renovarla.</p>'+
+      '<a class="btn red block" style="margin-top:14px;text-decoration:none" target="_blank" rel="noopener" '+
+      'href="https://wa.me/56975196394?text='+encodeURIComponent("Hola! Quiero renovar mi membresía de WGYMADNSPORT ("+cap(SOCIO.n)+" "+cap(SOCIO.a)+")")+'">💬 Renovar por WhatsApp</a></div>';
+  } else if(SOCIO.dias <= 7){
+    box.innerHTML =
+      '<div class="banner warn"><span class="ic">⚠️</span><div><p>Quedan '+SOCIO.dias+' día'+(SOCIO.dias===1?'':'s')+' de tu membresía</p>'+
+      '<small>Renueva a tiempo con la Administración para no perder tu acceso.</small></div></div>';
+  } else {
+    box.innerHTML =
+      '<div class="banner ok"><span class="ic">✅</span><div><p>Acceso al día</p>'+
+      '<small>Te quedan '+SOCIO.dias+' días de tu membresía.</small></div></div>';
+  }
+}
+
+/* ═══ Frase motivacional del día ═══════════════════════════════════════ */
+var FRASES = [
+  "El cuerpo logra lo que la mente cree.",
+  "No cuentes los días, haz que los días cuenten.",
+  "Cada repetición te acerca a la versión que quieres ser.",
+  "La constancia vence al talento cuando el talento no entrena.",
+  "El único entrenamiento malo es el que no hiciste.",
+  "Tu único límite es el que decidas aceptar hoy.",
+  "Pequeños esfuerzos diarios construyen grandes resultados.",
+  "Disciplina es elegir entre lo que quieres ahora y lo que quieres más.",
+  "Hoy entrenas para el tú del futuro.",
+  "El progreso no siempre se ve en la balanza, se siente en el esfuerzo."
+];
+function diaDelAnio(){
+  var d=new Date(), ini=new Date(d.getFullYear(),0,0);
+  return Math.floor((d-ini)/86400000);
+}
+function renderFrase(){
+  document.getElementById("fraseTexto").textContent = "“"+FRASES[diaDelAnio()%FRASES.length]+"”";
+}
+
+/* ═══ QR simulado (decorativo, no escaneable) ═══════════════════════════ */
+function hashStr(s){
+  var h=0; s=String(s||"");
+  for(var i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))>>>0; }
+  return h || 1;
+}
+function dibujarQR(seed){
+  var c=document.getElementById("qrCanvas"), ctx=c.getContext("2d");
+  var size=c.width, mods=15, cell=size/mods;
+  ctx.fillStyle="#0A0A0B"; ctx.fillRect(0,0,size,size);
+  var h=hashStr(seed);
+  function rnd(){ h^=h<<13; h^=h>>>17; h^=h<<5; h=h>>>0; return h/4294967295; }
+  ctx.fillStyle="#D4AF37";
+  for(var y=0;y<mods;y++){
+    for(var x=0;x<mods;x++){
+      var esquina=(x<4&&y<4)||(x>mods-5&&y<4)||(x<4&&y>mods-5);
+      if(esquina) continue;
+      if(rnd()>0.55) ctx.fillRect(x*cell, y*cell, cell-1, cell-1);
+    }
+  }
+  function buscador(cx,cy){
+    ctx.fillStyle="#D4AF37"; ctx.fillRect(cx*cell,cy*cell,4*cell-1,4*cell-1);
+    ctx.fillStyle="#0A0A0B"; ctx.fillRect((cx+0.7)*cell,(cy+0.7)*cell,2.6*cell,2.6*cell);
+    ctx.fillStyle="#D4AF37"; ctx.fillRect((cx+1.3)*cell,(cy+1.3)*cell,1.4*cell,1.4*cell);
+  }
+  buscador(0,0); buscador(mods-4,0); buscador(0,mods-4);
+}
+
+/* ═══ Navegación de pestañas ═══════════════════════════════════════════ */
+var TABS=["qr","rutinas","nutricion","musica","planes"];
+document.getElementById("navTabs").addEventListener("click", function(ev){
+  var b=ev.target.closest("button[data-tab]");
+  if(!b) return;
+  irATab(b.getAttribute("data-tab"));
+});
+function irATab(tab){
+  TABS.forEach(function(t){
+    document.getElementById("tab"+t.charAt(0).toUpperCase()+t.slice(1)).hidden = (t!==tab);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("nav.tabs button"), function(b){
+    b.classList.toggle("on", b.getAttribute("data-tab")===tab);
+  });
+}
+
+/* ═══ Cronómetro de sesión (persistente) ═══════════════════════════════ */
+var CRONO_KEY="wgym_crono_v1";
+var crono={running:false, elapsed:0, startedAt:0, timer:null};
+function cronoCargar(){
+  try{
+    var raw=localStorage.getItem(CRONO_KEY);
+    if(raw){
+      var d=JSON.parse(raw);
+      crono.elapsed = d.elapsed||0;
+      if(d.running && d.startedAt){ crono.running=true; crono.startedAt=d.startedAt; cronoTick(); crono.timer=setInterval(cronoTick,1000); }
+    }
+  }catch(e){}
+  cronoPintar();
+}
+function cronoGuardar(){
+  try{ localStorage.setItem(CRONO_KEY, JSON.stringify({running:crono.running, elapsed:crono.elapsed, startedAt:crono.startedAt})); }catch(e){}
+}
+function cronoTick(){
+  var extra = crono.running ? Math.floor((Date.now()-crono.startedAt)/1000) : 0;
+  cronoPintar(crono.elapsed+extra);
+}
+function cronoPintar(v){
+  var s = v!=null ? v : crono.elapsed;
+  document.getElementById("cronoT").textContent = String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+}
+function vibrarCorto(){ try{ if(navigator.vibrate) navigator.vibrate(20); }catch(e){} }
+document.getElementById("cronoBtn").addEventListener("click", function(){
+  vibrarCorto();
+  if(!crono.running){
+    crono.running=true; crono.startedAt=Date.now();
+    crono.timer=setInterval(cronoTick,1000);
+    this.textContent="Pausar";
+  } else {
+    crono.running=false;
+    crono.elapsed += Math.floor((Date.now()-crono.startedAt)/1000);
+    clearInterval(crono.timer);
+    this.textContent="Iniciar";
+  }
+  cronoGuardar(); cronoPintar();
+});
+document.getElementById("cronoResetBtn").addEventListener("click", function(){
+  vibrarCorto();
+  crono.running=false; crono.elapsed=0; crono.startedAt=0;
+  clearInterval(crono.timer);
+  document.getElementById("cronoBtn").textContent="Iniciar";
+  cronoGuardar(); cronoPintar(0);
+});
+function cronoMinutosActuales(){
+  var extra = crono.running ? Math.floor((Date.now()-crono.startedAt)/1000) : 0;
+  return Math.round((crono.elapsed+extra)/60);
+}
+cronoCargar();
+
+/* ═══ Sonido/vibración de descanso (AudioContext dentro del toque) ══════ */
+var sonido=null, desc={fin:0, nombre:"", timer:null};
+function despertarSonido(){
+  try{
+    if(!sonido){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) sonido=new AC(); }
+    if(sonido && sonido.state==="suspended") sonido.resume();
+  }catch(e){}
+}
+function pitar(){
+  despertarSonido();
+  try{
+    if(sonido && sonido.state==="running"){
+      var t0=sonido.currentTime;
+      for(var i=0;i<6;i++){
+        var o=sonido.createOscillator(), g=sonido.createGain();
+        o.type="square"; o.frequency.value=(i%2===0)?1046:1568;
+        var t=t0+i*0.26;
+        g.gain.setValueAtTime(0.0001,t);
+        g.gain.exponentialRampToValueAtTime(0.9,t+0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+        o.connect(g); g.connect(sonido.destination); o.start(t); o.stop(t+0.24);
+      }
+    }
+  }catch(e){}
+  try{ if(navigator.vibrate) navigator.vibrate([260,110,260,110,260,110,500]); }catch(e){}
+}
+function iniciarDescanso(segundos, nombre){
+  despertarSonido();
+  pararDescanso();
+  desc.fin=Date.now()+segundos*1000; desc.nombre=nombre;
+  document.getElementById("barraN").textContent=nombre;
+  document.getElementById("barraDesc").classList.add("on");
+  desc.timer=setInterval(tickDescanso,250); tickDescanso();
+}
+function tickDescanso(){
+  var r=Math.max(0, Math.ceil((desc.fin-Date.now())/1000));
+  document.getElementById("barraT").textContent=Math.floor(r/60)+":"+String(r%60).padStart(2,"0");
+  if(r<=0){
+    var n=desc.nombre; pararDescanso(); pitar();
+    document.getElementById("avisoN").textContent=n;
+    document.getElementById("aviso").classList.add("on");
+  }
+}
+function pararDescanso(){
+  clearInterval(desc.timer); desc.timer=null;
+  document.getElementById("barraDesc").classList.remove("on");
+}
+document.getElementById("barraStop").addEventListener("click", pararDescanso);
+document.getElementById("avisoCerrar").addEventListener("click", function(){
+  document.getElementById("aviso").classList.remove("on");
+});
+
+/* ═══ Rutina de 5 días (mujer, cuerpo completo, sin repetir ejercicios) ══
+   Mismos ejercicios, orden, técnica y alertas biomecánicas que la rutina
+   oficial de 5 días de WGYMADNSPORT (ver entrenar-principiante5.html) —
+   nunca se cambian ni reordenan por fuera de ese archivo. Solo cambia la
+   forma de referenciar la demostración: en vez de un video curado, cada
+   ejercicio trae un enlace de búsqueda (siempre vigente) a animaciones de
+   la técnica y a resultados recientes de YouTube. */
+var RUTINA=[
+ {dia:1,tipo:"fuerza",titulo:"Fuerza A · cuerpo completo",ejercicios:[
+  {nombre:"Bicicleta de spinning · calentamiento",series:3,repeticiones:"2-3 min",descanso:0,tiempo:true,
+   tecnica:"Ajusta el sillín a la altura de la cadera; pedalea suave con hombros relajados y mirada al frente; sube un poco la resistencia en cada bloque.",
+   zona:"Calentamiento",alerta:"No partas con resistencia alta: los 3 bloques van de suave a moderado."},
+  {nombre:"Prensa de piernas",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:90,
+   tecnica:"Apoya toda la planta del pie; flexiona rodillas con control y empuja sin bloquearlas.",
+   zona:"Rodilla y zona lumbar",alerta:"No bloquees las rodillas arriba y no bajes tanto que la pelvis se despegue del respaldo."},
+  {nombre:"Press de pecho en máquina",series:3,repeticiones:"8-12",repMin:8,repMax:12,descanso:90,
+   tecnica:"Ajusta el asiento a la altura del pecho; empuja sin elevar los hombros y vuelve lento.",
+   zona:"Hombro",alerta:"Mantén los hombros abajo y atrás; codos a unos 45° del cuerpo, nunca abiertos en cruz."},
+  {nombre:"Remo sentado en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
+   tecnica:"Mantén el tronco estable; lleva la empuñadura hacia el abdomen y junta suavemente las escápulas.",
+   zona:"Columna lumbar",alerta:"No balancees el tronco hacia atrás para tirar: la espalda queda recta y quieta."},
+  {nombre:"Puente de glúteos",series:3,repeticiones:"12",repMin:12,repMax:12,descanso:60,
+   tecnica:"Con pies apoyados y rodillas flexionadas, eleva la pelvis contrayendo glúteos sin arquear la espalda.",
+   zona:"Columna lumbar",alerta:"Sube hasta alinear hombros, cadera y rodillas; si arqueas la zona lumbar, subiste de más."},
+  {nombre:"Plancha de antebrazos",series:3,repeticiones:"20-30 s",descanso:60,tiempo:true,
+   tecnica:"Alinea hombros, caderas y tobillos; aprieta abdomen y respira sin hundir la zona lumbar.",
+   zona:"Columna lumbar",alerta:"Si la cadera se hunde o duele la zona lumbar, termina la serie: vale más la técnica que el tiempo."}
+ ]},
+ {dia:2,tipo:"cardio",titulo:"Cardio suave y movilidad",ejercicios:[
+  {nombre:"Bicicleta de spinning · ritmo continuo",series:3,repeticiones:"7-8 min",descanso:60,tiempo:true,
+   tecnica:"Pedalea a una intensidad que permita mantener una conversación sin jadear; entre bloques, 1 minuto de pedaleo muy suave.",
+   zona:"Intensidad",alerta:"Si no puedes hablar mientras pedaleas, baja la resistencia o la cadencia."},
+  {nombre:"Bicicleta de spinning · cadencia variable",series:3,repeticiones:"4-5 min",descanso:60,tiempo:true,
+   tecnica:"Siempre sentada, alterna 1 minuto de pedaleo algo más rápido con 1 minuto suave; resistencia baja y rodillas alineadas con los pies.",
+   zona:"Rodilla",alerta:"Con el pedal abajo la rodilla queda apenas flexionada; si se estira del todo, el sillín está muy alto."},
+  {nombre:"Dead bug",series:3,repeticiones:"8 por lado",repMin:8,repMax:8,descanso:45,
+   tecnica:"Boca arriba, baja brazo y pierna contrarios sin despegar la zona lumbar del suelo.",
+   zona:"Columna lumbar",alerta:"La zona lumbar queda pegada al suelo todo el tiempo; si se despega, acorta el recorrido."},
+  {nombre:"Movilidad gato-vaca",series:3,repeticiones:"6-8 ciclos",descanso:30,tiempo:true,
+   tecnica:"En cuadrupedia, redondea y extiende suavemente la columna al ritmo de la respiración.",
+   zona:"Columna",alerta:"Movimiento lento y sin forzar el final del rango: nunca rebotes."}
+ ]},
+ {dia:3,tipo:"fuerza",titulo:"Fuerza B · cuerpo completo",ejercicios:[
+  {nombre:"Bicicleta de spinning · calentamiento",series:3,repeticiones:"2-3 min",descanso:0,tiempo:true,
+   tecnica:"Pedalea suave antes de las series de trabajo; sube un poco la resistencia en cada bloque.",
+   zona:"Calentamiento",alerta:"No te saltes el calentamiento: prepara rodillas y cadera para la sentadilla."},
+  {nombre:"Sentadilla con mancuernas",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
+   tecnica:"Sujeta mancuernas livianas a los lados; baja entre las caderas y sube empujando el suelo.",
+   zona:"Rodilla",alerta:"Las rodillas siguen la línea de la punta de los pies: no dejes que se vayan hacia adentro."},
+  {nombre:"Jalón al pecho en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
+   tecnica:"Lleva la barra hacia la parte alta del pecho con codos hacia abajo; evita balancearte.",
+   zona:"Hombro",alerta:"Nunca bajes la barra por detrás de la nuca; siempre por delante, hacia el pecho."},
+  {nombre:"Curl femoral acostada",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
+   tecnica:"Ajusta la máquina a tu altura; flexiona las rodillas sin levantar la pelvis del banco.",
+   zona:"Columna lumbar",alerta:"La pelvis queda pegada al banco: si se levanta, el peso está muy alto."},
+  {nombre:"Press de hombros en máquina",series:3,repeticiones:"8-10",repMin:8,repMax:10,descanso:75,
+   tecnica:"Empuja las asas por encima de la cabeza sin encoger los hombros; baja con control.",
+   zona:"Hombro y zona lumbar",alerta:"No arquees la zona lumbar al empujar: espalda apoyada y abdomen firme."},
+  {nombre:"Pallof press en polea",series:3,repeticiones:"10 por lado",repMin:10,repMax:10,descanso:45,
+   tecnica:"De lado a la polea, extiende las manos frente al pecho sin permitir que gire el torso.",
+   zona:"Columna",alerta:"El torso no rota: si la polea te gira, baja la carga."}
+ ]},
+ {dia:4,tipo:"cardio",titulo:"Cardio suave y estabilidad",ejercicios:[
+  {nombre:"Bicicleta de spinning · ritmo continuo",series:3,repeticiones:"8-10 min",descanso:60,tiempo:true,
+   tecnica:"Mantén una cadencia constante y respiración cómoda; regula la resistencia según tolerancia; entre bloques, 1 minuto de pedaleo muy suave.",
+   zona:"Intensidad",alerta:"No subas tanto la resistencia que tengas que pararte o balancear el cuerpo: el trabajo es sentada."},
+  {nombre:"Bicicleta de spinning · pedaleo suave",series:3,repeticiones:"3 min",descanso:30,tiempo:true,
+   tecnica:"Pedalea a ritmo fácil con resistencia baja, espalda larga y hombros relajados; baja un poco la resistencia en cada bloque.",
+   zona:"Rodilla",alerta:"Rodillas alineadas con los pies; que no se abran ni se cierren al pedalear."},
+  {nombre:"Estiramiento de pantorrilla",series:3,repeticiones:"20 s por lado",descanso:30,tiempo:true,
+   tecnica:"Apoya manos en pared, deja un pie atrás y acerca la cadera manteniendo su talón en el suelo.",
+   zona:"Tobillo",alerta:"Estira sin dolor y sin rebotes: tensión suave y sostenida."},
+  {nombre:"Plancha lateral con apoyo",series:3,repeticiones:"15-20 s por lado",descanso:45,tiempo:true,
+   tecnica:"Apoya antebrazo y rodillas si es necesario; eleva la cadera sin girar el torso.",
+   zona:"Hombro",alerta:"El codo queda justo debajo del hombro; no dejes que el hombro se hunda."}
+ ]},
+ {dia:5,tipo:"fuerza",titulo:"Fuerza C · cuerpo completo",ejercicios:[
+  {nombre:"Bicicleta de spinning · calentamiento",series:3,repeticiones:"2-3 min",descanso:0,tiempo:true,
+   tecnica:"Calienta pedaleando a ritmo fácil antes de comenzar las pesas; sube un poco la resistencia en cada bloque.",
+   zona:"Calentamiento",alerta:"Hoy hay peso muerto: calienta bien antes de cargar la cadera."},
+  {nombre:"Subida a plataforma baja",series:3,repeticiones:"8 por pierna",repMin:8,repMax:8,descanso:75,
+   tecnica:"Sube a un escalón bajo apoyando todo el pie; impulsa con la pierna de arriba y baja con control.",
+   zona:"Rodilla",alerta:"La rodilla de apoyo no se va hacia adentro; apoya el pie completo en el escalón."},
+  {nombre:"Peso muerto con mancuernas",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
+   tecnica:"Con una mancuerna en cada mano frente a los muslos, empuja la cadera atrás con espalda neutra y baja las mancuernas pegadas a las piernas; sube extendiendo caderas, sin tirar con los brazos.",
+   zona:"Columna lumbar",alerta:"Nunca redondees la espalda: la bisagra es de cadera, no de columna."},
+  {nombre:"Press de pecho en polea",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:75,
+   tecnica:"Con un pie adelante, empuja las asas al frente manteniendo tronco estable y hombros bajos.",
+   zona:"Hombro",alerta:"No dejes que las asas se vayan muy atrás del pecho al volver; controla el recorrido."},
+  {nombre:"Jalón unilateral en polea",series:3,repeticiones:"10 por brazo",repMin:10,repMax:10,descanso:60,
+   tecnica:"Tira del codo hacia las costillas sin inclinar el tronco; vuelve despacio.",
+   zona:"Hombro",alerta:"Arriba estira sin que el hombro suba a la oreja; baja el omóplato antes de tirar."},
+  {nombre:"Elevación de talones",series:3,repeticiones:"12-15",repMin:12,repMax:15,descanso:45,
+   tecnica:"Eleva talones sin rebotar; pausa arriba y baja lento manteniendo el equilibrio.",
+   zona:"Tobillo",alerta:"Sin rebotes abajo: el tendón de Aquiles trabaja controlado."},
+  {nombre:"Extensión de tríceps con cuerda",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
+   tecnica:"Mantén codos junto al torso; estira los brazos y vuelve sin mover hombros.",
+   zona:"Codo",alerta:"Los codos quedan pegados al cuerpo; si se mueven hacia adelante, sobra peso."}
+ ]}
+];
+
+var diaActual=1;
+
+function urlAnimacion(nombre){
+  return "https://www.google.com/search?tbm=isch&q="+encodeURIComponent(nombre+" animación técnica de ejecución correcta");
+}
+function urlYoutube(nombre){
+  return "https://www.youtube.com/results?search_query="+encodeURIComponent(nombre+" técnica de ejecución");
+}
+
+/* %1RM (Brzycki) contra la escala de Martin, igual que el resto del sitio. */
+function claseRM(pct){
+  if(pct<30) return {c:"off",t:"—"};
+  if(pct<50) return {c:"low",t:"ESCASA"};
+  if(pct<70) return {c:"light",t:"LEVE"};
+  if(pct<80) return {c:"mid",t:"MEDIA"};
+  if(pct<90) return {c:"sub",t:"SUBMÁX."};
+  return {c:"max",t:"MÁXIMA"};
+}
+function pct1rm(reps){
+  reps=Number(reps);
+  if(!reps || reps<=0 || reps>10) return null;
+  return Math.max(0, 102.78 - 2.78*reps);
+}
+
+function histKey(){ return "wgym_hist_"+slug(SOCIO.n,SOCIO.a)+"_v1"; }
+function cargarHist(){
+  try{ return JSON.parse(localStorage.getItem(histKey())||"{}"); }catch(e){ return {}; }
+}
+function guardarHist(h){
+  try{ localStorage.setItem(histKey(), JSON.stringify(h)); }catch(e){}
+}
+
+function renderRutinaBloqueo(){
+  var body=document.getElementById("rutinaBody");
+  if(SOCIO && SOCIO.dias<=0){
+    body.innerHTML =
+      '<div class="card"><div class="bloqueo"><div class="ic">🔒</div><h3>Rutinas bloqueadas</h3>'+
+      '<p>Tu plan está vencido. Renueva con la Administración para volver a entrenar con la app.</p>'+
+      '<a class="btn red block" style="text-decoration:none" target="_blank" rel="noopener" '+
+      'href="https://wa.me/56975196394?text='+encodeURIComponent("Hola! Quiero renovar mi membresía de WGYMADNSPORT.")+'">💬 Renovar por WhatsApp</a></div></div>';
+    return;
+  }
+  renderRutina();
+}
+
+function renderRutina(){
+  var body=document.getElementById("rutinaBody");
+  var html='<div class="dias-sel" id="diasSel">';
+  for(var i=1;i<=5;i++){
+    html += '<button data-dia="'+i+'" class="'+(i===diaActual?"on":"")+'"><small>Día</small><b>'+i+'</b></button>';
+  }
+  html += '</div><div id="diaBody"></div>';
+  body.innerHTML = html;
+  document.getElementById("diasSel").addEventListener("click", function(ev){
+    var b=ev.target.closest("button[data-dia]"); if(!b) return;
+    diaActual = Number(b.getAttribute("data-dia"));
+    Array.prototype.forEach.call(document.querySelectorAll("#diasSel button"), function(x){
+      x.classList.toggle("on", Number(x.getAttribute("data-dia"))===diaActual);
+    });
+    renderDia();
+  });
+  renderDia();
+}
+
+function renderDia(){
+  var d = RUTINA[diaActual-1];
+  var hist = cargarHist();
+  var html = '<div class="card"><p class="dia-tit">'+d.tipo+'</p><h2 class="dia-h2">'+d.titulo+'</h2>';
+  d.ejercicios.forEach(function(e, idx){
+    var k = "d"+d.dia+"_e"+idx;
+    var registros = hist[k] || [];
+    html += '<div class="ej" data-k="'+k+'">';
+    html += '<div class="ej-top"><div class="num">'+(idx+1)+'</div><div>';
+    html += '<h3>'+e.nombre+'</h3><p class="zona">'+e.zona+'</p></div></div>';
+    html += '<div class="tags"><span class="tag">Series <b>'+e.series+'</b></span><span class="tag">Reps <b>'+e.repeticiones+'</b></span>'+
+      '<span class="tag">Descanso <b>'+(e.descanso>0 ? e.descanso+"s" : "—")+'</b></span></div>';
+    html += '<p class="tecnica">'+e.tecnica+'</p>';
+    html += '<div class="alerta"><span class="ic">⚠️</span><p>'+e.alerta+'</p></div>';
+    html += '<div class="links">'+
+      '<a href="'+urlAnimacion(e.nombre)+'" target="_blank" rel="noopener">🎞️ Ver animación</a>'+
+      '<a href="'+urlYoutube(e.nombre)+'" target="_blank" rel="noopener">▶️ Buscar en YouTube</a></div>';
+
+    if(!e.tiempo){
+      html += '<div class="series"><div class="cols"><span>#</span><span>Peso (kg)</span><span>Reps</span><span>%1RM</span></div>';
+      for(var s=1;s<=e.series;s++){
+        html += '<div class="fila" data-serie="'+s+'"><span class="sn">'+s+'</span>'+
+          '<input type="number" inputmode="decimal" placeholder="kg" data-campo="peso">'+
+          '<input type="number" inputmode="numeric" placeholder="reps" data-campo="reps">'+
+          '<span class="rm-chip off" data-campo="rm">—</span></div>';
+      }
+      html += '</div><div class="ej-acc"><button class="btn sm" data-accion="descanso">Iniciar descanso</button>'+
+        '<button class="btn sm gold" data-accion="guardar">Guardar registro</button></div>';
+    } else {
+      html += '<div class="ej-acc"><button class="btn sm" data-accion="descanso">Iniciar descanso</button></div>';
+    }
+
+    html += '<div class="chart-wrap">'+
+      (registros.length ? '<canvas data-chart="'+k+'" width="400" height="90"></canvas>' :
+        '<p class="chart-empty">Guarda tu primer registro para ver tu evolución de carga.</p>')+
+      '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  document.getElementById("diaBody").innerHTML = html;
+
+  Array.prototype.forEach.call(document.querySelectorAll(".ej"), function(card){
+    var k = card.getAttribute("data-k");
+    var d2 = RUTINA[diaActual-1];
+    var idx = Number(k.split("_e")[1]);
+    var ejercicio = d2.ejercicios[idx];
+
+    Array.prototype.forEach.call(card.querySelectorAll('[data-campo="reps"]'), function(inp){
+      inp.addEventListener("input", function(){
+        var fila = inp.closest(".fila");
+        var chip = fila.querySelector('[data-campo="rm"]');
+        var pct = pct1rm(inp.value);
+        if(pct==null){ chip.className="rm-chip off"; chip.textContent="—"; return; }
+        var c = claseRM(pct);
+        chip.className = "rm-chip "+c.c;
+        chip.textContent = Math.round(pct)+"% "+c.t;
+      });
+    });
+
+    var btnDesc = card.querySelector('[data-accion="descanso"]');
+    if(btnDesc) btnDesc.addEventListener("click", function(){
+      if(ejercicio.descanso>0) iniciarDescanso(ejercicio.descanso, ejercicio.nombre);
+    });
+
+    var btnGuardar = card.querySelector('[data-accion="guardar"]');
+    if(btnGuardar) btnGuardar.addEventListener("click", function(){
+      var filas=[];
+      Array.prototype.forEach.call(card.querySelectorAll(".fila"), function(fila){
+        var peso=fila.querySelector('[data-campo="peso"]').value;
+        var reps=fila.querySelector('[data-campo="reps"]').value;
+        if(peso!=="" || reps!==""){ filas.push({peso:peso?Number(peso):null, reps:reps?Number(reps):null}); }
+      });
+      if(!filas.length) return;
+      var maxPeso = filas.reduce(function(m,f){ return f.peso!=null && f.peso>m ? f.peso : m; }, 0);
+      var hist = cargarHist();
+      var lista = hist[k] || [];
+      lista.push({fecha:new Date().toISOString().slice(0,10), max:maxPeso, series:filas});
+      hist[k]=lista; guardarHist(hist);
+      btnGuardar.textContent="¡Guardado!";
+      setTimeout(function(){ renderDia(); }, 500);
+    });
+  });
+
+  dibujarGraficos();
+}
+
+function dibujarGraficos(){
+  var hist = cargarHist();
+  Array.prototype.forEach.call(document.querySelectorAll("canvas[data-chart]"), function(cv){
+    var k = cv.getAttribute("data-chart");
+    var regs = hist[k] || [];
+    if(!regs.length) return;
+    var ctx = cv.getContext("2d");
+    var w=cv.width, h=cv.height, pad=8;
+    ctx.clearRect(0,0,w,h);
+    var vals = regs.map(function(r){ return r.max||0; });
+    var max = Math.max.apply(null, vals.concat([1]));
+    var stepX = (w-pad*2) / Math.max(1, vals.length-1);
+    ctx.strokeStyle="#D4AF37"; ctx.lineWidth=2; ctx.beginPath();
+    vals.forEach(function(v,i){
+      var x = pad + i*stepX;
+      var y = h-pad - (v/max)*(h-pad*2);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+    ctx.fillStyle="#E30613";
+    vals.forEach(function(v,i){
+      var x = pad + i*stepX;
+      var y = h-pad - (v/max)*(h-pad*2);
+      ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fill();
+    });
+    ctx.fillStyle="#A1A1AA"; ctx.font="10px sans-serif"; ctx.textAlign="left";
+    ctx.fillText(vals[0]+" kg", pad, 12);
+    ctx.textAlign="right";
+    ctx.fillText(vals[vals.length-1]+" kg", w-pad, 12);
+  });
+}
+
+/* ═══ Muro de PRs (editable) ═══════════════════════════════════════════ */
+var PR_LISTA=["Sentadilla","Press de banca","Peso muerto","Press militar","Remo con barra","Prensa de piernas"];
+function prKey(){ return "wgym_pr_"+slug(SOCIO.n,SOCIO.a)+"_v1"; }
+function renderPRs(){
+  var box=document.getElementById("prBox");
+  if(!box) return;
+  var pr={}; try{ pr=JSON.parse(localStorage.getItem(prKey())||"{}"); }catch(e){}
+  var html='<div class="pr-grid">';
+  PR_LISTA.forEach(function(nombre,i){
+    html += '<div class="pr-item"><label>'+nombre+'</label><div class="row">'+
+      '<input type="number" inputmode="decimal" data-pr="'+i+'" value="'+(pr[nombre]!=null?pr[nombre]:"")+'" placeholder="0">'+
+      '<span class="kg">kg</span></div><div class="pr-saved" data-saved="'+i+'">Guardado</div></div>';
+  });
+  html += '</div>';
+  box.innerHTML = html;
+  Array.prototype.forEach.call(box.querySelectorAll("input[data-pr]"), function(inp){
+    inp.addEventListener("change", function(){
+      var i = Number(inp.getAttribute("data-pr"));
+      var pr={}; try{ pr=JSON.parse(localStorage.getItem(prKey())||"{}"); }catch(e){}
+      pr[PR_LISTA[i]] = inp.value ? Number(inp.value) : null;
+      try{ localStorage.setItem(prKey(), JSON.stringify(pr)); }catch(e){}
+      var flag=box.querySelector('[data-saved="'+i+'"]');
+      flag.classList.add("on");
+      setTimeout(function(){ flag.classList.remove("on"); }, 1200);
+    });
+  });
+}
+
+/* ═══ Nutrición: macros e hidratación ═══════════════════════════════════
+   Fórmulas de la base de conocimiento técnico de WGYMADNSPORT: Harris-
+   Benedict para TMB, factor de actividad orientativo, y proteína 1.2-2.0
+   g/kg/día. Hidratación: 150-250 ml cada 10-15 min de ejercicio. */
+var sexoNut="F";
+document.getElementById("segSexo").addEventListener("click", function(ev){
+  var b=ev.target.closest("button"); if(!b) return;
+  sexoNut=b.getAttribute("data-v");
+  Array.prototype.forEach.call(this.querySelectorAll("button"), function(x){ x.classList.toggle("on", x===b); });
+});
+document.getElementById("nutCalcBtn").addEventListener("click", function(){
+  var peso=Number(document.getElementById("nutPeso").value);
+  var alt=Number(document.getElementById("nutAltura").value);
+  var edad=Number(document.getElementById("nutEdad").value);
+  var fact=Number(document.getElementById("nutActividad").value);
+  if(!peso || !alt || !edad){ return; }
+  var tmb = sexoNut==="M"
+    ? (66 + 13.7*peso + 5*alt - 6.8*edad)
+    : (65.5 + 9.6*peso + 1.7*alt - 4.7*edad);
+  var tee = Math.round(tmb*fact);
+  var protMin=Math.round(peso*1.2), protMax=Math.round(peso*2.0);
+  var box=document.getElementById("nutResultado");
+  box.hidden=false;
+  box.innerHTML =
+    '<div class="fila"><span>Metabolismo basal (TMB)</span><b>'+Math.round(tmb)+' kcal</b></div>'+
+    '<div class="fila"><span>Gasto estimado total</span><b class="gold">'+tee+' kcal</b></div>'+
+    '<div class="fila"><span>Proteína recomendada</span><b>'+protMin+'–'+protMax+' g/día</b></div>';
+});
+document.getElementById("hidCalcBtn").addEventListener("click", function(){
+  var min = Number(document.getElementById("hidMin").value) || cronoMinutosActuales();
+  if(!min){ return; }
+  var mlMin = Math.round(min/12.5*150), mlMax=Math.round(min/12.5*250);
+  var box=document.getElementById("hidResultado");
+  box.hidden=false;
+  box.innerHTML =
+    '<div class="fila"><span>Duración</span><b>'+min+' min</b></div>'+
+    '<div class="fila"><span>Agua recomendada</span><b class="gold">'+mlMin+'–'+mlMax+' ml</b></div>'+
+    '<div class="fila"><span>Referencia</span><b>150-250 ml cada 10-15 min</b></div>';
+});
+document.getElementById("hidMin").addEventListener("focus", function(){
+  if(!this.value && cronoMinutosActuales()>0) this.value = cronoMinutosActuales();
+});
+
+/* ═══ Recetario fit ══════════════════════════════════════════════════════ */
+var RECETAS=[
+  {n:"Yogurt griego con avena y frutos rojos", d:"Proteína y carbohidratos de buena calidad para antes o después de entrenar."},
+  {n:"Huevos revueltos con palta y tomate", d:"Snack salado, rápido de preparar, alto en proteína y grasas buenas."},
+  {n:"Batido de plátano, leche y avena", d:"Ideal post-entreno: carbohidratos para recuperar glucógeno y algo de proteína."},
+  {n:"Atún con arroz integral y verduras al vapor", d:"Comida completa, fácil de llevar al gimnasio en un táper."}
+];
+document.getElementById("recetario").innerHTML = RECETAS.map(function(r){
+  return '<div class="receta"><h4>'+r.n+'</h4><p>'+r.d+'</p></div>';
+}).join("");
+
+/* ═══ WGYM Music ═══════════════════════════════════════════════════════
+   Enlaces de búsqueda a Spotify (siempre vigentes, nunca un ID de
+   playlist fijo que después puede desaparecer o cambiar de dueño). */
+var PLAYLISTS=[
+  {n:"Power Training", d:"Ritmo alto para levantar con fuerza y energía.", art:"pt", icon:"💪",
+   q:"power training workout gym motivación"},
+  {n:"Cardio", d:"Para spinning, trote y sesiones de intensidad continua.", art:"ca", icon:"🔥",
+   q:"cardio workout running música motivación"},
+  {n:"Pesas", d:"Sesiones de fuerza y pesas, cuerpo completo.", art:"pe", icon:"🏋️",
+   q:"gym weights workout música entrenamiento"}
+];
+document.getElementById("playlistsBox").innerHTML = PLAYLISTS.map(function(p){
+  var url = "https://open.spotify.com/search/"+encodeURIComponent(p.q);
+  return '<div class="playlist"><div class="art '+p.art+'">'+p.icon+'</div>'+
+    '<div class="info"><h4>'+p.n+'</h4><p>'+p.d+'</p></div>'+
+    '<a href="'+url+'" target="_blank" rel="noopener">🎧 Spotify</a></div>';
+}).join("");
+
+/* ═══ Contacto ══════════════════════════════════════════════════════════ */
+document.getElementById("waBtn1").href = "https://wa.me/56975196394?text="+encodeURIComponent("Hola! Escribo desde la app de WGYMADNSPORT.");
+document.getElementById("waBtn2").href = "https://wa.me/56991540156?text="+encodeURIComponent("Hola! Escribo desde la app de WGYMADNSPORT.");
+
+/* Muro de PRs se agrega dentro de la pestaña de Rutinas, bajo los días */
+(function agregarMuroPR(){
+  var main = document.getElementById("tabRutinas");
+  var card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = '<span class="lead">Muro de récords</span><h2>Tus PRs</h2><div id="prBox"></div>';
+  main.appendChild(card);
+})();
+
+var _origEntrar = entrarConSocio;
+entrarConSocio = function(n,a){
+  _origEntrar(n,a);
+  setTimeout(renderPRs, 0);
+};
+
+})();
+</script>
+</body>
+</html>
