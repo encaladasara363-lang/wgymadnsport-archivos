@@ -61,9 +61,16 @@
   .nota p{font-weight:800;font-size:4.4mm;letter-spacing:.04em;color:var(--txt);line-height:1.5;}
   .nota p b{color:var(--gold);}
 
-  @media print{ body{background:#000;} @page{size:A4 portrait;margin:0;} }
+  html,body,.hoja{-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  @media print{ body{background:#000;} @page{size:A4 portrait;margin:0;} .btn-imprimir{display:none;} }
+
+  .btn-imprimir{position:fixed;top:6mm;right:6mm;z-index:9;font-family:var(--fc);font-weight:800;
+      text-transform:uppercase;letter-spacing:.04em;font-size:16px;padding:12px 22px;
+      border-radius:99px;border:2px solid var(--gold);background:var(--red);color:#fff;
+      box-shadow:0 4px 14px rgba(0,0,0,.5);cursor:pointer;}
 </style></head>
 <body>
+<button class="btn-imprimir" onclick="window.print()">🖨 Imprimir</button>
 <div class="hoja">
   <div class="filo"></div>
 
