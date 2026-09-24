@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0A0A0B">
-<meta name="description" content="Rutina de 5 días para mujer principiante de WGYMADNSPORT Tocopilla: ejercicios con video demostrativo, series, repeticiones, descansos, técnica y registro de tu progreso.">
+<meta name="description" content="Rutina de 5 días para mujer principiante de WGYMADNSPORT Tocopilla: ejercicios con demostración, series, repeticiones, descansos, técnica y registro de tu progreso.">
 <title>Rutina 5 Días Principiante · WGYMADNSPORT</title>
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icono-180.png?v=3">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -111,16 +111,22 @@ details.reglas li::marker{color:var(--red2);font-family:var(--fn)}
 .tag b{font-family:var(--fn);font-weight:400;font-size:15px;color:var(--txt);margin-right:3px}
 .tag.g b{color:var(--gold)}
 
-.demo{position:relative;margin:14px 14px 0;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:16/10;cursor:pointer}
-.demo video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.demo{position:relative;margin:14px 14px 0;border-radius:12px;overflow:hidden;background:#fff;aspect-ratio:4/3}
+.demo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .45s}
+.demo img.b{opacity:0}
+.demo.alt img.a{opacity:0}.demo.alt img.b{opacity:1}
 .demo .pos{position:absolute;left:8px;bottom:8px;font-family:var(--fc);font-weight:700;text-transform:uppercase;font-size:12px;
   letter-spacing:1px;background:rgba(10,10,11,.85);padding:4px 8px;border-radius:6px}
 .demo .pos em{font-style:normal;color:var(--gold)}
-.demo .pausa{position:absolute;right:8px;top:8px;font-family:var(--fc);font-weight:700;font-size:12px;text-transform:uppercase;
+.demo .pausa{position:absolute;right:8px;bottom:8px;font-family:var(--fc);font-weight:700;font-size:12px;text-transform:uppercase;
   letter-spacing:1px;background:rgba(10,10,11,.85);padding:4px 8px;border-radius:6px}
 .demo .sinimg{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:20px;background:var(--card2);
   font-family:var(--fc);text-transform:uppercase;color:var(--mut);letter-spacing:1px;font-size:14px}
-.demo.err .sinimg{display:grid;background:rgba(13,13,15,.72);color:#fff}
+.demo.err .sinimg{display:grid}
+.ytlink{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px 14px 0;padding:10px;border-radius:10px;
+  background:#1F0A0C;border:1px solid rgba(227,6,19,.5);color:#fff;text-decoration:none;font-family:var(--fc);font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;font-size:14px}
+.ytlink:active{transform:scale(.98)}
 
 .alerta{margin:12px 14px 0;display:flex;gap:10px;padding:10px 12px;border-radius:10px;
   background:rgba(227,6,19,.1);border:1px solid rgba(227,6,19,.45);border-left:4px solid var(--red)}
@@ -263,7 +269,7 @@ footer p a{color:var(--gold)}
       <a href="https://wa.me/56991540156"><b>●</b> +56 9 9154 0156</a>
       <a href="https://wa.me/56975196394"><b>●</b> +56 9 7519 6394</a>
     </div>
-    <p>Videos grabados en WGYMADNSPORT por nuestra entrenadora. Son orientativos: confirma tu técnica con un instructor en sala.</p>
+    <p>Las imágenes y videos son orientativos; confirma tu técnica con un instructor en sala.</p>
   </footer>
 </main>
 
@@ -300,121 +306,121 @@ footer p a{color:var(--gold)}
 
 <script>
 "use strict";
-/* ═══ Datos de la rutina ═════════════════════════════════════════════════
-   Cada ejercicio usa un video propio del gimnasio (assets/<video>.mp4)
-   grabado por la entrenadora de WGYMADNSPORT, para que todas las
-   demostraciones sean de mujer y de la misma persona. Se agregó a cada
-   ejercicio: "alerta" (riesgo biomecánico), "zona" y repMin/repMax para
-   calcular intensidad. Nada de datos de salud. */
-var VID = "assets/", POSTER = "assets/demos/";
+/* ═══ Datos de la rutina (estructura JSON entregada por el gimnasio) ═══════
+   Se agregó a cada ejercicio: "alerta" (punto de riesgo biomecánico),
+   "zona" y repMin/repMax para calcular intensidad. Nada de datos de salud. */
+/* Las demostraciones viven en el mismo sitio (assets/demos), copiadas de
+   free-exercise-db: así cargan siempre que cargue la app, sin depender de
+   GitHub raw (bloqueado en algunas redes móviles y WebView). */
+var IMG = "assets/demos/";
+function yt(e){ return "https://www.youtube.com/results?search_query=" + encodeURIComponent(e.nombre + " mujer técnica correcta gimnasio"); }
 var RUTINA = {
   nombre:"Rutina de 5 días para mujer principiante",
   reglas:[
     "Días 1, 3 y 5: fuerza de cuerpo completo; días 2 y 4: cardio suave y movilidad. Sábado y domingo: descanso o paseo opcional.",
-    "Cada ejercicio de fuerza, core y movilidad lleva 3 series. La caminata y la bicicleta son bloques continuos de cardio (1 bloque).",
     "Elegir una carga con la que queden aproximadamente 2 a 3 repeticiones posibles al terminar cada serie; priorizar técnica y control.",
-    "En las primeras 1 a 2 semanas se pueden hacer solo 1 o 2 series por ejercicio si la fatiga es alta; progresar hasta 3.",
+    "Cada ejercicio lleva 3 series; la caminata y la bicicleta son un bloque continuo de cardio. En las primeras 1 a 2 semanas se pueden hacer solo 1 o 2 series si la fatiga es alta; progresar hasta 3.",
     "Aumentar la carga ligeramente cuando se completa el máximo de repeticiones de todas las series con técnica estable.",
     "Detener el ejercicio ante dolor agudo, mareo o molestias fuera de lo habitual y consultar a un profesional de salud si corresponde.",
-    "Los videos son orientativos; comprobar la técnica con un instructor presencial."
+    "Las imágenes muestran dos posiciones orientativas; comprobar la técnica con un instructor presencial."
   ],
   dias:[
     {dia:1,tipo:"fuerza",titulo:"Fuerza A · cuerpo completo",ejercicios:[
-      {v:"calentamiento_trotadora",nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
+      {id:"Walking_Treadmill",nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
        tecnica:"Camina a ritmo cómodo, hombros relajados y mirada al frente.",
        zona:"Calentamiento",alerta:"No te afirmes de las barandas: camina erguida y sube la velocidad de a poco."},
-      {v:"zancada_trx",nombre:"Zancada con apoyo en TRX",series:3,repeticiones:"8-10 por pierna",repMin:8,repMax:10,descanso:90,
-       tecnica:"Sujeta las manillas del TRX, da un paso atrás y baja la rodilla trasera hacia el suelo; sube empujando con la pierna de adelante.",
-       zona:"Rodilla",alerta:"La rodilla de adelante sigue la línea del pie y no se va hacia adentro; usa el TRX solo como apoyo, no para tirar."},
-      {v:"press_banca_mancuernas_mujer",nombre:"Press de banca con mancuernas",series:3,repeticiones:"8-12",repMin:8,repMax:12,descanso:90,
-       tecnica:"Acostada en el banco con los pies firmes, baja las mancuernas a los lados del pecho y empuja hacia arriba sin chocarlas.",
-       zona:"Hombro",alerta:"Codos a unos 45° del cuerpo, nunca abiertos en cruz; hombros pegados al banco."},
-      {v:"remo_sentado",nombre:"Remo sentado en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
+      {id:"Leg_Press",nombre:"Prensa de piernas",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:90,
+       tecnica:"Apoya toda la planta del pie; flexiona rodillas con control y empuja sin bloquearlas.",
+       zona:"Rodilla y zona lumbar",alerta:"No bloquees las rodillas arriba y no bajes tanto que la pelvis se despegue del respaldo."},
+      {id:"Leverage_Chest_Press",nombre:"Press de pecho en máquina",series:3,repeticiones:"8-12",repMin:8,repMax:12,descanso:90,
+       tecnica:"Ajusta el asiento a la altura del pecho; empuja sin elevar los hombros y vuelve lento.",
+       zona:"Hombro",alerta:"Mantén los hombros abajo y atrás; codos a unos 45° del cuerpo, nunca abiertos en cruz."},
+      {id:"Seated_Cable_Rows",nombre:"Remo sentado en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
        tecnica:"Mantén el tronco estable; lleva la empuñadura hacia el abdomen y junta suavemente las escápulas.",
        zona:"Columna lumbar",alerta:"No balancees el tronco hacia atrás para tirar: la espalda queda recta y quieta."},
-      {v:"peso_muerto_kettlebell",nombre:"Peso muerto con mancuerna",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:90,
-       tecnica:"Pies al ancho de caderas, sujeta una mancuerna con ambas manos entre las piernas; lleva la cadera atrás con espalda neutra y sube apretando glúteos.",
-       zona:"Columna lumbar",alerta:"Nunca redondees la espalda: la bisagra es de cadera, no de columna."},
-      {v:"plancha_abdominal",nombre:"Plancha de antebrazos",series:3,repeticiones:"20-30 s",descanso:60,tiempo:true,
+      {id:"Butt_Lift_Bridge",nombre:"Puente de glúteos",series:3,repeticiones:"12",repMin:12,repMax:12,descanso:60,
+       tecnica:"Con pies apoyados y rodillas flexionadas, eleva la pelvis contrayendo glúteos sin arquear la espalda.",
+       zona:"Columna lumbar",alerta:"Sube hasta alinear hombros, cadera y rodillas; si arqueas la zona lumbar, subiste de más."},
+      {id:"Plank",nombre:"Plancha de antebrazos",series:3,repeticiones:"20-30 s",descanso:60,tiempo:true,
        tecnica:"Alinea hombros, caderas y tobillos; aprieta abdomen y respira sin hundir la zona lumbar.",
        zona:"Columna lumbar",alerta:"Si la cadera se hunde o duele la zona lumbar, termina la serie: vale más la técnica que el tiempo."}
     ]},
     {dia:2,tipo:"cardio",titulo:"Cardio suave y movilidad",ejercicios:[
-      {v:"calentamiento_trotadora",nombre:"Caminata en cinta",series:1,repeticiones:"20-25 min",descanso:0,tiempo:true,
+      {id:"Walking_Treadmill",nombre:"Caminata en cinta",series:1,repeticiones:"20-25 min",descanso:0,tiempo:true,
        tecnica:"Camina a intensidad que permita mantener una conversación sin jadear.",
        zona:"Intensidad",alerta:"Si no puedes hablar mientras caminas, baja la velocidad o la inclinación."},
-      {v:"calentamiento_bicicleta",nombre:"Bicicleta de spinning",series:1,repeticiones:"10-15 min",descanso:60,tiempo:true,
-       tecnica:"Ajusta el sillín a la altura de la cadera; pedalea suave con resistencia baja y el tronco levemente inclinado.",
+      {id:"Bicycling_Stationary",nombre:"Bicicleta de spinning",series:1,repeticiones:"10-15 min",descanso:60,tiempo:true,
+       tecnica:"Ajusta el sillín a la altura de la cadera; pedalea suave con resistencia baja, con rodillas alineadas con los pies.",
        zona:"Rodilla",alerta:"Con el pedal abajo la rodilla queda apenas flexionada; si se estira del todo, el sillín está muy alto."},
-      {v:"elevacion_piernas",nombre:"Elevación de piernas en colchoneta",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:45,
-       tecnica:"Boca arriba con las manos bajo los glúteos, sube las piernas juntas y bájalas lento sin tocar el suelo.",
-       zona:"Columna lumbar",alerta:"La zona lumbar queda pegada a la colchoneta; si se despega, flexiona las rodillas o acorta el recorrido."},
-      {v:"estiramiento_espalda_brazo",nombre:"Movilidad de espalda y brazos con banda",series:3,repeticiones:"8-10 ciclos",descanso:30,tiempo:true,
-       tecnica:"Toma la banda con los brazos estirados al ancho de hombros y llévala por encima de la cabeza y de vuelta, al ritmo de la respiración.",
-       zona:"Hombro",alerta:"Movimiento lento y sin forzar: si el hombro molesta, abre más el agarre."}
+      {id:"Dead_Bug",nombre:"Dead bug",series:3,repeticiones:"8 por lado",repMin:8,repMax:8,descanso:45,
+       tecnica:"Boca arriba, baja brazo y pierna contrarios sin despegar la zona lumbar del suelo.",
+       zona:"Columna lumbar",alerta:"La zona lumbar queda pegada al suelo todo el tiempo; si se despega, acorta el recorrido."},
+      {id:"Cat_Stretch",nombre:"Movilidad gato-vaca",series:3,repeticiones:"6-8 ciclos",descanso:30,tiempo:true,
+       tecnica:"En cuadrupedia, redondea y extiende suavemente la columna al ritmo de la respiración.",
+       zona:"Columna",alerta:"Movimiento lento y sin forzar el final del rango: nunca rebotes."}
     ]},
     {dia:3,tipo:"fuerza",titulo:"Fuerza B · cuerpo completo",ejercicios:[
-      {v:"calentamiento_trotadora",nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
+      {id:"Walking_Treadmill",nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
        tecnica:"Camina suave antes de las series de trabajo.",
        zona:"Calentamiento",alerta:"No te saltes el calentamiento: prepara rodillas y cadera para la sentadilla."},
-      {v:"sentadilla",nombre:"Sentadilla con mancuerna",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
-       tecnica:"Sujeta una mancuerna frente al pecho; baja llevando la cadera atrás y abajo y sube empujando el suelo.",
+      {id:"Dumbbell_Squat",nombre:"Sentadilla con mancuernas",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
+       tecnica:"Sujeta mancuernas livianas a los lados; baja entre las caderas y sube empujando el suelo.",
        zona:"Rodilla",alerta:"Las rodillas siguen la línea de la punta de los pies: no dejes que se vayan hacia adentro."},
-      {v:"jalon_pecho",nombre:"Jalón al pecho en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
+      {id:"Wide-Grip_Lat_Pulldown",nombre:"Jalón al pecho en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
        tecnica:"Lleva la barra hacia la parte alta del pecho con codos hacia abajo; evita balancearte.",
        zona:"Hombro",alerta:"Nunca bajes la barra por detrás de la nuca; siempre por delante, hacia el pecho."},
-      {v:"curl_femoral_mujer",nombre:"Curl femoral acostada",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
+      {id:"Lying_Leg_Curls",nombre:"Curl femoral acostada",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
        tecnica:"Ajusta la máquina a tu altura; flexiona las rodillas sin levantar la pelvis del banco.",
        zona:"Columna lumbar",alerta:"La pelvis queda pegada al banco: si se levanta, el peso está muy alto."},
-      {v:"press_militar",nombre:"Press de hombros con mancuernas",series:3,repeticiones:"8-10",repMin:8,repMax:10,descanso:75,
-       tecnica:"Sentada con la espalda apoyada, empuja las mancuernas por encima de la cabeza sin encoger los hombros; baja con control.",
+      {id:"Leverage_Shoulder_Press",nombre:"Press de hombros en máquina",series:3,repeticiones:"8-10",repMin:8,repMax:10,descanso:75,
+       tecnica:"Empuja las asas por encima de la cabeza sin encoger los hombros; baja con control.",
        zona:"Hombro y zona lumbar",alerta:"No arquees la zona lumbar al empujar: espalda apoyada y abdomen firme."},
-      {v:"face_pull",nombre:"Face pull en polea",series:3,repeticiones:"12",repMin:12,repMax:12,descanso:45,
-       tecnica:"Con la cuerda a la altura de la cara, tira hacia la frente separando las manos y juntando las escápulas.",
-       zona:"Hombro",alerta:"Codos altos y hombros lejos de las orejas; carga liviana, es un ejercicio de postura."}
+      {id:"Pallof_Press",nombre:"Pallof press en polea",series:3,repeticiones:"10 por lado",repMin:10,repMax:10,descanso:45,
+       tecnica:"De lado a la polea, extiende las manos frente al pecho sin permitir que gire el torso.",
+       zona:"Columna",alerta:"El torso no rota: si la polea te gira, baja la carga."}
     ]},
     {dia:4,tipo:"cardio",titulo:"Cardio suave y estabilidad",ejercicios:[
-      {v:"calentamiento_trotadora",nombre:"Caminata en cinta",series:1,repeticiones:"25-30 min",descanso:0,tiempo:true,
+      {id:"Walking_Treadmill",nombre:"Caminata en cinta",series:1,repeticiones:"25-30 min",descanso:0,tiempo:true,
        tecnica:"Mantén un paso constante y respiración cómoda; regula inclinación y velocidad según tolerancia.",
        zona:"Intensidad",alerta:"Con inclinación alta no te cuelgues de las barandas: mejor baja la pendiente."},
-      {v:"calentamiento_bicicleta",nombre:"Bicicleta de spinning",series:1,repeticiones:"10 min",descanso:60,tiempo:true,
+      {id:"Bicycling_Stationary",nombre:"Bicicleta de spinning",series:1,repeticiones:"10 min",descanso:60,tiempo:true,
        tecnica:"Pedalea a ritmo fácil con resistencia baja, espalda larga y hombros relajados.",
        zona:"Rodilla",alerta:"Rodillas alineadas con los pies; que no se abran ni se cierren al pedalear."},
-      {v:"estiramiento_final",nombre:"Estiramiento de piernas",series:3,repeticiones:"20 s por lado",descanso:30,tiempo:true,
-       tecnica:"Estira cuádriceps, isquiotibiales y pantorrillas manteniendo cada posición sin rebotar.",
-       zona:"Rodilla y tobillo",alerta:"Estira sin dolor y sin rebotes: tensión suave y sostenida."},
-      {v:"abdominales_colchoneta",nombre:"Abdominales en colchoneta",series:3,repeticiones:"12-15",repMin:12,repMax:15,descanso:45,
-       tecnica:"Boca arriba, contrae el abdomen para elevar piernas y tronco de forma controlada y vuelve lento.",
-       zona:"Columna lumbar",alerta:"No tires del cuello con las manos; la zona lumbar no se arquea al bajar."}
+      {id:"Calf_Stretch_Hands_Against_Wall",nombre:"Estiramiento de pantorrilla",series:3,repeticiones:"20 s por lado",descanso:30,tiempo:true,
+       tecnica:"Apoya manos en pared, deja un pie atrás y acerca la cadera manteniendo su talón en el suelo.",
+       zona:"Tobillo",alerta:"Estira sin dolor y sin rebotes: tensión suave y sostenida."},
+      {id:"Side_Bridge",nombre:"Plancha lateral con apoyo",series:3,repeticiones:"15-20 s por lado",descanso:45,tiempo:true,
+       tecnica:"Apoya antebrazo y rodillas si es necesario; eleva la cadera sin girar el torso.",
+       zona:"Hombro",alerta:"El codo queda justo debajo del hombro; no dejes que el hombro se hunda."}
     ]},
     {dia:5,tipo:"fuerza",titulo:"Fuerza C · cuerpo completo",ejercicios:[
-      {v:"calentamiento_trotadora",nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
+      {id:"Walking_Treadmill",nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
        tecnica:"Calienta a ritmo fácil antes de comenzar las pesas.",
        zona:"Calentamiento",alerta:"Hoy hay peso muerto: calienta bien antes de cargar la cadera."},
-      {v:"step_up",nombre:"Subida a plataforma baja",series:3,repeticiones:"8 por pierna",repMin:8,repMax:8,descanso:75,
+      {id:"Step-up_with_Knee_Raise",nombre:"Subida a plataforma baja",series:3,repeticiones:"8 por pierna",repMin:8,repMax:8,descanso:75,
        tecnica:"Sube a un escalón bajo apoyando todo el pie; impulsa con la pierna de arriba y baja con control.",
        zona:"Rodilla",alerta:"La rodilla de apoyo no se va hacia adentro; apoya el pie completo en el escalón."},
-      {v:"peso_muerto_kettlebell",nombre:"Peso muerto con mancuerna",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
-       tecnica:"Sujeta una mancuerna con ambas manos entre las piernas; empuja la cadera atrás con espalda neutra y sube extendiendo caderas, sin tirar con los brazos.",
+      {id:"Stiff-Legged_Dumbbell_Deadlift",nombre:"Peso muerto con mancuernas",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
+       tecnica:"Con una mancuerna en cada mano frente a los muslos, empuja la cadera atrás con espalda neutra y baja las mancuernas pegadas a las piernas; sube extendiendo caderas, sin tirar con los brazos.",
        zona:"Columna lumbar",alerta:"Nunca redondees la espalda: la bisagra es de cadera, no de columna."},
-      {v:"apertura_mancuerna",nombre:"Aperturas con mancuernas",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
-       tecnica:"Acostada en el banco, abre los brazos con los codos levemente flexionados hasta sentir el pecho estirado y vuelve juntando arriba.",
-       zona:"Hombro",alerta:"No bajes los codos más allá de la línea del cuerpo; peso liviano y recorrido controlado."},
-      {v:"remo_una_mano",nombre:"Remo con mancuerna a una mano",series:3,repeticiones:"10 por brazo",repMin:10,repMax:10,descanso:60,
-       tecnica:"Apoya mano y rodilla en el banco; tira del codo hacia la cadera sin girar el tronco y vuelve despacio.",
-       zona:"Columna lumbar",alerta:"Espalda recta y paralela al suelo: no gires el tronco para subir la mancuerna."},
-      {v:"elevacion_talones",nombre:"Elevación de talones",series:3,repeticiones:"12-15",repMin:12,repMax:15,descanso:45,
+      {id:"Cable_Chest_Press",nombre:"Press de pecho en polea",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:75,
+       tecnica:"Con un pie adelante, empuja las asas al frente manteniendo tronco estable y hombros bajos.",
+       zona:"Hombro",alerta:"No dejes que las asas se vayan muy atrás del pecho al volver; controla el recorrido."},
+      {id:"One_Arm_Lat_Pulldown",nombre:"Jalón unilateral en polea",series:3,repeticiones:"10 por brazo",repMin:10,repMax:10,descanso:60,
+       tecnica:"Tira del codo hacia las costillas sin inclinar el tronco; vuelve despacio.",
+       zona:"Hombro",alerta:"Arriba estira sin que el hombro suba a la oreja; baja el omóplato antes de tirar."},
+      {id:"Standing_Calf_Raises",nombre:"Elevación de talones",series:3,repeticiones:"12-15",repMin:12,repMax:15,descanso:45,
        tecnica:"Eleva talones sin rebotar; pausa arriba y baja lento manteniendo el equilibrio.",
        zona:"Tobillo",alerta:"Sin rebotes abajo: el tendón de Aquiles trabaja controlado."},
-      {v:"extension_triceps",nombre:"Extensión de tríceps en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
-       tecnica:"Mantén codos junto al torso; estira los brazos hacia abajo y vuelve sin mover los hombros.",
+      {id:"Triceps_Pushdown_-_Rope_Attachment",nombre:"Extensión de tríceps con cuerda",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
+       tecnica:"Mantén codos junto al torso; estira los brazos y vuelve sin mover hombros.",
        zona:"Codo",alerta:"Los codos quedan pegados al cuerpo; si se mueven hacia adelante, sobra peso."}
     ]}
   ]
 };
 
 /* ═══ Guardado local (solo en este teléfono) ═══════════════════════════════ */
-var KEY = "wgym_principiante5_v2";
+var KEY = "wgym_principiante5_v1";
 var S = {dia:1, crono:{acum:0,inicio:null}, reg:{}, vistos:{}, hechos:{}};
 try{ var g = JSON.parse(localStorage.getItem(KEY)); if(g) for(var k in g) S[k] = g[k]; }catch(e){}
 function guardar(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
@@ -482,10 +488,11 @@ function pintarDia(){
       '<span class="tag"><b>'+esc(e.repeticiones)+'</b></span>'+
       (e.descanso ? '<span class="tag g"><b>'+e.descanso+'</b>s descanso</span>' : '<span class="tag">Sin descanso</span>')+
       '</div></div></div>'+
-      '<div class="demo" data-i="'+i+'"><video muted loop playsinline preload="none" poster="'+POSTER+e.v+'.webp?v=1" aria-label="Video: '+esc(e.nombre)+'">'+
-      '<source src="'+VID+e.v+'.mp4" type="video/mp4"></video>'+
-      '<span class="pos">▶ <em>Video</em> técnica</span><span class="pausa">Toca para pausar</span>'+
-      '<div class="sinimg">No se pudo cargar el video.<br>Pide al instructor que te muestre la técnica.</div></div>'+
+      '<div class="demo" data-i="'+i+'"><img class="a" loading="lazy" alt="'+esc(e.nombre)+' · posición inicial" src="'+IMG+e.id+'-0.webp?v=1">'+
+      '<img class="b" loading="lazy" alt="'+esc(e.nombre)+' · posición final" src="'+IMG+e.id+'-1.webp?v=1">'+
+      '<span class="pos">Posición <em>1</em> / 2</span><span class="pausa">Toca para pausar</span>'+
+      '<div class="sinimg">No se pudo cargar la imagen.<br>Mira el video con el botón de abajo.</div></div>'+
+      '<a class="ytlink" href="'+yt(e)+'" target="_blank" rel="noopener">▶ Ver video en YouTube (mujeres)</a>'+
       '<div class="alerta'+(nuevo?" nuevo":"")+'"><span class="ic">⚠️</span><p><small>Cuidado · '+esc(e.zona)+'</small>'+esc(e.alerta)+'</p></div>'+
       '<div class="tec"><label>Técnica</label><p>'+esc(e.tecnica)+'</p></div>'+
       '<div class="series">'+
@@ -519,25 +526,20 @@ function progreso(){
   var p = $("prog"); if(p) p.style.width = (t ? ok / t * 100 : 0) + "%";
 }
 
-/* Demostración: cada video se carga y reproduce solo cuando está en
-   pantalla (ahorra datos móviles) y se pausa al salir de ella. */
-var demoPausa = {}, demoObs = null;
+/* Demostración: alterna las dos posiciones de free-exercise-db */
+var demoTimer = null, demoPausa = {};
 function animarDemos(){
-  if(demoObs) demoObs.disconnect();
-  var vids = document.querySelectorAll(".demo video");
-  vids.forEach(function(v){
-    v.addEventListener("error", function(){ v.closest(".demo").classList.add("err"); }, true);
-    var src = v.querySelector("source"); if(src) src.addEventListener("error", function(){ v.closest(".demo").classList.add("err"); });
+  clearInterval(demoTimer);
+  document.querySelectorAll(".demo img").forEach(function(img){
+    img.addEventListener("error", function(){ img.closest(".demo").classList.add("err"); });
   });
-  if(!("IntersectionObserver" in window)){ vids.forEach(function(v){ v.preload = "metadata"; }); return; }
-  demoObs = new IntersectionObserver(function(ents){
-    ents.forEach(function(en){
-      var v = en.target, i = v.closest(".demo").dataset.i;
-      if(en.isIntersecting && !demoPausa[i]){ var p = v.play(); if(p && p.catch) p.catch(function(){}); }
-      else if(!en.isIntersecting) v.pause();
+  demoTimer = setInterval(function(){
+    document.querySelectorAll(".demo").forEach(function(dm){
+      if(demoPausa[dm.dataset.i] || dm.classList.contains("err")) return;
+      dm.classList.toggle("alt");
+      dm.querySelector(".pos em").textContent = dm.classList.contains("alt") ? "2" : "1";
     });
-  }, {threshold:.35});
-  vids.forEach(function(v){ demoObs.observe(v); });
+  }, 1400);
 }
 
 /* ═══ Eventos ═══════════════════════════════════════════════════════════ */
@@ -555,9 +557,9 @@ $("dia").addEventListener("input", function(ev){
 $("dia").addEventListener("click", function(ev){
   var t = ev.target.closest("button, .demo"); if(!t) return;
   if(t.classList.contains("demo")){
-    var i = t.dataset.i, v = t.querySelector("video"); demoPausa[i] = !demoPausa[i];
+    var i = t.dataset.i; demoPausa[i] = !demoPausa[i];
     t.querySelector(".pausa").textContent = demoPausa[i] ? "Pausado · toca para seguir" : "Toca para pausar";
-    if(demoPausa[i]) v.pause(); else { var pr = v.play(); if(pr && pr.catch) pr.catch(function(){}); }
+    if(demoPausa[i]){ t.classList.toggle("alt"); t.querySelector(".pos em").textContent = t.classList.contains("alt") ? "2" : "1"; }
     return;
   }
   if(t.classList.contains("chk")){
