@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0A0A0B">
-<meta name="description" content="Rutina de 5 días para mujer principiante de WGYMADNSPORT Tocopilla: ejercicios con videos de entrenadoras, series, repeticiones, descansos, técnica y registro de tu progreso.">
+<meta name="description" content="Rutina de 5 días para mujer principiante de WGYMADNSPORT Tocopilla: ejercicios con demostración animada, series, repeticiones, descansos, técnica y registro de tu progreso.">
 <title>Rutina 5 Días Principiante · WGYMADNSPORT</title>
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icono-180.png?v=3">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -111,15 +111,19 @@ details.reglas li::marker{color:var(--red2);font-family:var(--fn)}
 .tag b{font-family:var(--fn);font-weight:400;font-size:15px;color:var(--txt);margin-right:3px}
 .tag.g b{color:var(--gold)}
 
-.ytlink.grande{margin-top:14px;padding:18px 16px;min-height:84px}
-.ytlink.grande .play{width:52px;height:52px;font-size:20px;box-shadow:0 8px 24px rgba(227,6,19,.45)}
-.ytlink{display:flex;align-items:center;gap:12px;margin:10px 14px 0;padding:11px 14px;border-radius:12px;
-  background:#1F0A0C;border:1px solid rgba(227,6,19,.5);color:#fff;text-decoration:none;font-family:var(--fc);font-weight:700;
-  text-transform:uppercase;letter-spacing:1px;font-size:15px;line-height:1.15}
-.ytlink small{font-weight:600;font-size:12px;color:#FFB3B8;letter-spacing:.8px}
-.ytlink .play{flex:none;width:38px;height:38px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-size:15px;padding-left:3px}
-  background:radial-gradient(circle at 50% 35%,rgba(227,6,19,.35),transparent 65%),#150708;font-size:17px}
-.ytlink:active{transform:scale(.98)}
+.player{position:relative;margin:14px 14px 0;border-radius:14px;overflow:hidden;
+  background:radial-gradient(circle at 50% 30%,#FFFFFF,#E9E9EC 75%);border:1px solid var(--line);cursor:pointer}
+.player .fig{display:block;width:100%;height:auto;aspect-ratio:200/140}
+.pbig{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:66px;height:66px;border-radius:50%;
+  background:rgba(227,6,19,.92);color:#fff;font-size:26px;padding-left:5px;box-shadow:0 10px 30px rgba(227,6,19,.45)}
+.player.on .pbig{display:none}
+.pbar{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(10,10,11,.9)}
+.pbtn{flex:none;width:32px;height:32px;border-radius:50%;background:var(--red);color:#fff;font-size:13px}
+.ptrack{flex:1;height:5px;border-radius:9px;background:#3A3A42;overflow:hidden}
+.ptrack i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold))}
+.pfase{font-family:var(--fc);font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:12px;color:var(--gold);min-width:44px}
+.pyt{font-family:var(--fc);font-weight:700;text-transform:uppercase;letter-spacing:.8px;font-size:11.5px;color:#fff;text-decoration:none;
+  padding:5px 8px;border-radius:7px;background:#2A2A31;border:1px solid #3A3A42}
 
 .alerta{margin:12px 14px 0;display:flex;gap:10px;padding:10px 12px;border-radius:10px;
   background:rgba(227,6,19,.1);border:1px solid rgba(227,6,19,.45);border-left:4px solid var(--red)}
@@ -262,7 +266,7 @@ footer p a{color:var(--gold)}
       <a href="https://wa.me/56991540156"><b>●</b> +56 9 9154 0156</a>
       <a href="https://wa.me/56975196394"><b>●</b> +56 9 7519 6394</a>
     </div>
-    <p>Los videos de YouTube son orientativos; confirma tu técnica con un instructor en sala.</p>
+    <p>Las demostraciones son orientativas; confirma tu técnica con un instructor en sala.</p>
   </footer>
 </main>
 
@@ -313,102 +317,348 @@ var RUTINA = {
     "Cada ejercicio lleva 3 series; la caminata y la bicicleta son un bloque continuo de cardio. En las primeras 1 a 2 semanas se pueden hacer solo 1 o 2 series si la fatiga es alta; progresar hasta 3.",
     "Aumentar la carga ligeramente cuando se completa el máximo de repeticiones de todas las series con técnica estable.",
     "Detener el ejercicio ante dolor agudo, mareo o molestias fuera de lo habitual y consultar a un profesional de salud si corresponde.",
-    "Los videos de YouTube son orientativos; comprobar la técnica con un instructor presencial."
+    "Las demostraciones son orientativas; comprobar la técnica con un instructor presencial."
   ],
   dias:[
     {dia:1,tipo:"fuerza",titulo:"Fuerza A · cuerpo completo",ejercicios:[
-      {nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
+      {demo:"cinta",nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
        tecnica:"Camina a ritmo cómodo, hombros relajados y mirada al frente.",
        zona:"Calentamiento",alerta:"No te afirmes de las barandas: camina erguida y sube la velocidad de a poco."},
-      {nombre:"Prensa de piernas",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:90,
+      {demo:"prensa",nombre:"Prensa de piernas",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:90,
        tecnica:"Apoya toda la planta del pie; flexiona rodillas con control y empuja sin bloquearlas.",
        zona:"Rodilla y zona lumbar",alerta:"No bloquees las rodillas arriba y no bajes tanto que la pelvis se despegue del respaldo."},
-      {nombre:"Press de pecho en máquina",series:3,repeticiones:"8-12",repMin:8,repMax:12,descanso:90,
+      {demo:"pressPechoMaquina",nombre:"Press de pecho en máquina",series:3,repeticiones:"8-12",repMin:8,repMax:12,descanso:90,
        tecnica:"Ajusta el asiento a la altura del pecho; empuja sin elevar los hombros y vuelve lento.",
        zona:"Hombro",alerta:"Mantén los hombros abajo y atrás; codos a unos 45° del cuerpo, nunca abiertos en cruz."},
-      {nombre:"Remo sentado en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
+      {demo:"remoSentado",nombre:"Remo sentado en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
        tecnica:"Mantén el tronco estable; lleva la empuñadura hacia el abdomen y junta suavemente las escápulas.",
        zona:"Columna lumbar",alerta:"No balancees el tronco hacia atrás para tirar: la espalda queda recta y quieta."},
-      {nombre:"Puente de glúteos",series:3,repeticiones:"12",repMin:12,repMax:12,descanso:60,
+      {demo:"puenteGluteos",nombre:"Puente de glúteos",series:3,repeticiones:"12",repMin:12,repMax:12,descanso:60,
        tecnica:"Con pies apoyados y rodillas flexionadas, eleva la pelvis contrayendo glúteos sin arquear la espalda.",
        zona:"Columna lumbar",alerta:"Sube hasta alinear hombros, cadera y rodillas; si arqueas la zona lumbar, subiste de más."},
-      {nombre:"Plancha de antebrazos",series:3,repeticiones:"20-30 s",descanso:60,tiempo:true,
+      {demo:"plancha",nombre:"Plancha de antebrazos",series:3,repeticiones:"20-30 s",descanso:60,tiempo:true,
        tecnica:"Alinea hombros, caderas y tobillos; aprieta abdomen y respira sin hundir la zona lumbar.",
        zona:"Columna lumbar",alerta:"Si la cadera se hunde o duele la zona lumbar, termina la serie: vale más la técnica que el tiempo."}
     ]},
     {dia:2,tipo:"cardio",titulo:"Cardio suave y movilidad",ejercicios:[
-      {nombre:"Caminata en cinta",series:1,repeticiones:"20-25 min",descanso:0,tiempo:true,
+      {demo:"cinta",nombre:"Caminata en cinta",series:1,repeticiones:"20-25 min",descanso:0,tiempo:true,
        tecnica:"Camina a intensidad que permita mantener una conversación sin jadear.",
        zona:"Intensidad",alerta:"Si no puedes hablar mientras caminas, baja la velocidad o la inclinación."},
-      {nombre:"Bicicleta de spinning",series:1,repeticiones:"10-15 min",descanso:60,tiempo:true,
+      {demo:"spinning",nombre:"Bicicleta de spinning",series:1,repeticiones:"10-15 min",descanso:60,tiempo:true,
        tecnica:"Ajusta el sillín a la altura de la cadera; pedalea suave con resistencia baja, con rodillas alineadas con los pies.",
        zona:"Rodilla",alerta:"Con el pedal abajo la rodilla queda apenas flexionada; si se estira del todo, el sillín está muy alto."},
-      {nombre:"Dead bug",series:3,repeticiones:"8 por lado",repMin:8,repMax:8,descanso:45,
+      {demo:"deadBug",nombre:"Dead bug",series:3,repeticiones:"8 por lado",repMin:8,repMax:8,descanso:45,
        tecnica:"Boca arriba, baja brazo y pierna contrarios sin despegar la zona lumbar del suelo.",
        zona:"Columna lumbar",alerta:"La zona lumbar queda pegada al suelo todo el tiempo; si se despega, acorta el recorrido."},
-      {nombre:"Movilidad gato-vaca",series:3,repeticiones:"6-8 ciclos",descanso:30,tiempo:true,
+      {demo:"gatoVaca",nombre:"Movilidad gato-vaca",series:3,repeticiones:"6-8 ciclos",descanso:30,tiempo:true,
        tecnica:"En cuadrupedia, redondea y extiende suavemente la columna al ritmo de la respiración.",
        zona:"Columna",alerta:"Movimiento lento y sin forzar el final del rango: nunca rebotes."}
     ]},
     {dia:3,tipo:"fuerza",titulo:"Fuerza B · cuerpo completo",ejercicios:[
-      {nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
+      {demo:"cinta",nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
        tecnica:"Camina suave antes de las series de trabajo.",
        zona:"Calentamiento",alerta:"No te saltes el calentamiento: prepara rodillas y cadera para la sentadilla."},
-      {nombre:"Sentadilla con mancuernas",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
+      {demo:"sentadillaMancuernas",nombre:"Sentadilla con mancuernas",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
        tecnica:"Sujeta mancuernas livianas a los lados; baja entre las caderas y sube empujando el suelo.",
        zona:"Rodilla",alerta:"Las rodillas siguen la línea de la punta de los pies: no dejes que se vayan hacia adentro."},
-      {nombre:"Jalón al pecho en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
+      {demo:"jalonPecho",nombre:"Jalón al pecho en polea",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:75,
        tecnica:"Lleva la barra hacia la parte alta del pecho con codos hacia abajo; evita balancearte.",
        zona:"Hombro",alerta:"Nunca bajes la barra por detrás de la nuca; siempre por delante, hacia el pecho."},
-      {nombre:"Curl femoral acostada",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
+      {demo:"curlFemoral",nombre:"Curl femoral acostada",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
        tecnica:"Ajusta la máquina a tu altura; flexiona las rodillas sin levantar la pelvis del banco.",
        zona:"Columna lumbar",alerta:"La pelvis queda pegada al banco: si se levanta, el peso está muy alto."},
-      {nombre:"Press de hombros en máquina",series:3,repeticiones:"8-10",repMin:8,repMax:10,descanso:75,
+      {demo:"pressHombros",nombre:"Press de hombros en máquina",series:3,repeticiones:"8-10",repMin:8,repMax:10,descanso:75,
        tecnica:"Empuja las asas por encima de la cabeza sin encoger los hombros; baja con control.",
        zona:"Hombro y zona lumbar",alerta:"No arquees la zona lumbar al empujar: espalda apoyada y abdomen firme."},
-      {nombre:"Pallof press en polea",series:3,repeticiones:"10 por lado",repMin:10,repMax:10,descanso:45,
+      {demo:"pallof",nombre:"Pallof press en polea",series:3,repeticiones:"10 por lado",repMin:10,repMax:10,descanso:45,
        tecnica:"De lado a la polea, extiende las manos frente al pecho sin permitir que gire el torso.",
        zona:"Columna",alerta:"El torso no rota: si la polea te gira, baja la carga."}
     ]},
     {dia:4,tipo:"cardio",titulo:"Cardio suave y estabilidad",ejercicios:[
-      {nombre:"Caminata en cinta",series:1,repeticiones:"25-30 min",descanso:0,tiempo:true,
+      {demo:"cinta",nombre:"Caminata en cinta",series:1,repeticiones:"25-30 min",descanso:0,tiempo:true,
        tecnica:"Mantén un paso constante y respiración cómoda; regula inclinación y velocidad según tolerancia.",
        zona:"Intensidad",alerta:"Con inclinación alta no te cuelgues de las barandas: mejor baja la pendiente."},
-      {nombre:"Bicicleta de spinning",series:1,repeticiones:"10 min",descanso:60,tiempo:true,
+      {demo:"spinning",nombre:"Bicicleta de spinning",series:1,repeticiones:"10 min",descanso:60,tiempo:true,
        tecnica:"Pedalea a ritmo fácil con resistencia baja, espalda larga y hombros relajados.",
        zona:"Rodilla",alerta:"Rodillas alineadas con los pies; que no se abran ni se cierren al pedalear."},
-      {nombre:"Estiramiento de pantorrilla",series:3,repeticiones:"20 s por lado",descanso:30,tiempo:true,
+      {demo:"estiramientoPantorrilla",nombre:"Estiramiento de pantorrilla",series:3,repeticiones:"20 s por lado",descanso:30,tiempo:true,
        tecnica:"Apoya manos en pared, deja un pie atrás y acerca la cadera manteniendo su talón en el suelo.",
        zona:"Tobillo",alerta:"Estira sin dolor y sin rebotes: tensión suave y sostenida."},
-      {nombre:"Plancha lateral con apoyo",series:3,repeticiones:"15-20 s por lado",descanso:45,tiempo:true,
+      {demo:"planchaLateral",nombre:"Plancha lateral con apoyo",series:3,repeticiones:"15-20 s por lado",descanso:45,tiempo:true,
        tecnica:"Apoya antebrazo y rodillas si es necesario; eleva la cadera sin girar el torso.",
        zona:"Hombro",alerta:"El codo queda justo debajo del hombro; no dejes que el hombro se hunda."}
     ]},
     {dia:5,tipo:"fuerza",titulo:"Fuerza C · cuerpo completo",ejercicios:[
-      {nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
+      {demo:"cinta",nombre:"Caminata en cinta",series:1,repeticiones:"5-8 min",descanso:0,tiempo:true,
        tecnica:"Calienta a ritmo fácil antes de comenzar las pesas.",
        zona:"Calentamiento",alerta:"Hoy hay peso muerto: calienta bien antes de cargar la cadera."},
-      {nombre:"Subida a plataforma baja",series:3,repeticiones:"8 por pierna",repMin:8,repMax:8,descanso:75,
+      {demo:"subidaPlataforma",nombre:"Subida a plataforma baja",series:3,repeticiones:"8 por pierna",repMin:8,repMax:8,descanso:75,
        tecnica:"Sube a un escalón bajo apoyando todo el pie; impulsa con la pierna de arriba y baja con control.",
        zona:"Rodilla",alerta:"La rodilla de apoyo no se va hacia adentro; apoya el pie completo en el escalón."},
-      {nombre:"Peso muerto con mancuernas",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
+      {demo:"pesoMuertoMancuernas",nombre:"Peso muerto con mancuernas",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:90,
        tecnica:"Con una mancuerna en cada mano frente a los muslos, empuja la cadera atrás con espalda neutra y baja las mancuernas pegadas a las piernas; sube extendiendo caderas, sin tirar con los brazos.",
        zona:"Columna lumbar",alerta:"Nunca redondees la espalda: la bisagra es de cadera, no de columna."},
-      {nombre:"Press de pecho en polea",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:75,
+      {demo:"pressPechoPolea",nombre:"Press de pecho en polea",series:3,repeticiones:"10",repMin:10,repMax:10,descanso:75,
        tecnica:"Con un pie adelante, empuja las asas al frente manteniendo tronco estable y hombros bajos.",
        zona:"Hombro",alerta:"No dejes que las asas se vayan muy atrás del pecho al volver; controla el recorrido."},
-      {nombre:"Jalón unilateral en polea",series:3,repeticiones:"10 por brazo",repMin:10,repMax:10,descanso:60,
+      {demo:"jalonUnilateral",nombre:"Jalón unilateral en polea",series:3,repeticiones:"10 por brazo",repMin:10,repMax:10,descanso:60,
        tecnica:"Tira del codo hacia las costillas sin inclinar el tronco; vuelve despacio.",
        zona:"Hombro",alerta:"Arriba estira sin que el hombro suba a la oreja; baja el omóplato antes de tirar."},
-      {nombre:"Elevación de talones",series:3,repeticiones:"12-15",repMin:12,repMax:15,descanso:45,
+      {demo:"elevacionTalones",nombre:"Elevación de talones",series:3,repeticiones:"12-15",repMin:12,repMax:15,descanso:45,
        tecnica:"Eleva talones sin rebotar; pausa arriba y baja lento manteniendo el equilibrio.",
        zona:"Tobillo",alerta:"Sin rebotes abajo: el tendón de Aquiles trabaja controlado."},
-      {nombre:"Extensión de tríceps con cuerda",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
+      {demo:"tricepsCuerda",nombre:"Extensión de tríceps con cuerda",series:3,repeticiones:"10-12",repMin:10,repMax:12,descanso:60,
        tecnica:"Mantén codos junto al torso; estira los brazos y vuelve sin mover hombros.",
        zona:"Codo",alerta:"Los codos quedan pegados al cuerpo; si se mueven hacia adelante, sobra peso."}
     ]}
   ]
 };
+
+/* ═══ Demostraciones ilustradas: la misma mujer en todos los ejercicios ════
+   Figura vectorial (SVG) animada entre dos posiciones, dibujada en la misma
+   app: no depende de internet ni de imágenes externas. Cada pose define
+   cadera (hp), hombro (s), muñecas (w1/w2) y tobillos (a1/a2); codos y
+   rodillas se calculan solos (cinemática inversa) con largos fijos. */
+var FIG = (function(){
+  var L = {muslo:27, pierna:26, brazo:21, antebrazo:19};
+  var C = {piel:"#E0A98B", piel2:"#C58D70", top:"#E30613", calza:"#1C1C22", calza2:"#50505C",
+           pelo:"#3B2416", zapa:"#FFFFFF", borde:"#1C1C22", maq:"#9CA3AF", maq2:"#4B5563", piso:"#D4D4D8"};
+  function sub(a,b){ return [a[0]-b[0], a[1]-b[1]]; }
+  function add(a,b){ return [a[0]+b[0], a[1]+b[1]]; }
+  function mul(a,k){ return [a[0]*k, a[1]*k]; }
+  function len(a){ return Math.sqrt(a[0]*a[0]+a[1]*a[1]) || 1; }
+  function nor(a){ var l = len(a); return [a[0]/l, a[1]/l]; }
+  function rot(v,g){ var r = g*Math.PI/180, c = Math.cos(r), s = Math.sin(r); return [v[0]*c - v[1]*s, v[0]*s + v[1]*c]; }
+  /* Articulación intermedia (codo o rodilla) hacia el lado "pref" */
+  function ik(p, q, l1, l2, pref){
+    var d = sub(q, p), D = len(d), u = nor(d);
+    if(D >= l1 + l2 - 0.01){ return add(p, mul(u, l1 * D / (l1 + l2))); }
+    var x = (l1*l1 - l2*l2 + D*D) / (2*D), h = Math.sqrt(Math.max(0, l1*l1 - x*x));
+    var n = [-u[1], u[0]];
+    if(n[0]*pref[0] + n[1]*pref[1] < 0) n = [-n[0], -n[1]];
+    return add(add(p, mul(u, x)), mul(n, h));
+  }
+  function P(p){ return p[0].toFixed(1) + "," + p[1].toFixed(1); }
+  function ln(a, b, w, c, extra){ return '<line x1="'+a[0].toFixed(1)+'" y1="'+a[1].toFixed(1)+'" x2="'+b[0].toFixed(1)+'" y2="'+b[1].toFixed(1)+'" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round"'+(extra||"")+'/>'; }
+  function ci(p, r, c, extra){ return '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+r+'" fill="'+c+'"'+(extra||"")+'/>'; }
+  function mix(a, b, t){
+    if(typeof a === "number") return a + (b - a) * t;
+    if(Array.isArray(a) && typeof a[0] === "number") return [a[0] + (b[0]-a[0])*t, a[1] + (b[1]-a[1])*t];
+    return t < 0.5 ? a : b;
+  }
+  function interp(A, B, t){
+    var o = {}, k;
+    for(k in A) o[k] = (k in B) ? mix(A[k], B[k], t) : A[k];
+    for(k in B) if(!(k in o)) o[k] = B[k];
+    return o;
+  }
+  /* Calcula todas las articulaciones a partir de la pose */
+  function joints(p){
+    var f = p.face || 1, J = {hp:p.hp, s:p.s, face:f};
+    var tdir = nor(sub(p.s, p.hp));
+    J.n = add(p.s, mul(tdir, 4.5));
+    var hd = rot(tdir, (p.hd || 0) * f);
+    J.h = add(J.n, mul(hd, 8.5));
+    J.u = hd;
+    J.w1 = p.w1; J.w2 = p.w2 || add(p.w1, [-2.5, -1]);
+    J.a1 = p.a1; J.a2 = p.a2 || add(p.a1, [-2.5, -1.5]);
+    var s2 = add(p.s, [-2, -1]), hp2 = add(p.hp, [-2, -1]);
+    J.s2 = s2; J.hp2 = hp2;
+    J.e1 = ik(p.s, J.w1, L.brazo, L.antebrazo, p.eb || [0,1]);
+    J.e2 = ik(s2, J.w2, L.brazo, L.antebrazo, p.eb2 || p.eb || [0,1]);
+    J.k1 = ik(p.hp, J.a1, L.muslo, L.pierna, p.kb || [f,0]);
+    J.k2 = ik(hp2, J.a2, L.muslo, L.pierna, p.kb2 || p.kb || [f,0]);
+    J.t1 = add(J.a1, mul(nor(p.ft || [f, 0.25]), 8));
+    J.t2 = add(J.a2, mul(nor(p.ft2 || p.ft || [f, 0.25]), 8));
+    J.m = p.m || [0,0];
+    return J;
+  }
+  function dibujarFigura(J){
+    var o = "";
+    /* extremidades del fondo */
+    o += ln(J.s2, J.e2, 6.5, C.piel2) + ln(J.e2, J.w2, 5.5, C.piel2) + ci(J.w2, 3.2, C.piel2);
+    o += ln(J.hp2, J.k2, 10.5, C.calza2) + ln(J.k2, J.a2, 8, C.calza2);
+    o += ln(J.a2, J.t2, 7, C.borde) + ln(J.a2, J.t2, 4.6, "#E4E4E7");
+    /* tronco: top rojo, abdomen y calza */
+    var mid = mul(add(J.n, J.hp), 0.5), ctrl = add(mid, J.m);
+    var d = 'M'+P(J.n)+' Q'+P(ctrl)+' '+P(J.hp);
+    o += '<path d="'+d+'" pathLength="100" fill="none" stroke="'+C.top+'" stroke-width="16" stroke-linecap="round" stroke-dasharray="58 100"/>';
+    o += '<path d="'+d+'" pathLength="100" fill="none" stroke="'+C.piel+'" stroke-width="14" stroke-dasharray="0 58 22 100"/>';
+    o += '<path d="'+d+'" pathLength="100" fill="none" stroke="'+C.calza+'" stroke-width="16" stroke-linecap="round" stroke-dasharray="0 80 20 100"/>';
+    o += ci(J.hp, 7.6, C.calza);
+    /* pierna cercana */
+    o += ln(J.hp, J.k1, 11, C.calza) + ln(J.k1, J.a1, 8.5, C.calza);
+    o += ln(J.a1, J.t1, 7.5, C.borde) + ln(J.a1, J.t1, 5, C.zapa);
+    /* cabeza con cola de caballo */
+    var f = J.face, u = J.u, cara = mul([-u[1], u[0]], f), atras = mul(cara, -1);
+    o += ln(J.s, J.n, 6, C.piel);
+    var anc = add(add(J.h, mul(atras, 6.5)), mul(u, 2.5));
+    var fin = add(add(anc, mul(atras, 4)), [0, 10]);
+    var cc = add(add(anc, mul(atras, 6)), [0, 2]);
+    o += '<path d="M'+P(anc)+' Q'+P(cc)+' '+P(fin)+'" fill="none" stroke="'+C.pelo+'" stroke-width="5" stroke-linecap="round"/>';
+    o += ci(J.h, 8.6, C.pelo);
+    o += ci(add(add(J.h, mul(cara, 1.9)), mul(u, -0.9)), 7.1, C.piel);
+    o += ci(add(add(J.h, mul(cara, 4.6)), mul(u, 0.8)), 0.9, C.borde);
+    /* brazo cercano */
+    o += ln(J.s, J.e1, 7, C.piel) + ln(J.e1, J.w1, 6, C.piel) + ci(J.w1, 3.4, C.piel);
+    o += ci(J.s, 4.2, C.top);
+    return o;
+  }
+  /* ── utilidades de accesorios ── */
+  function piso(){ return ln([6,128],[194,128],2,C.piso); }
+  function mancuerna(w){ return ci(w, 5.2, C.borde) + ci(w, 2, "#6B7280"); }
+  function cable(de, a){ return ln(de, a, 1.4, C.borde) + ci(de, 3.2, C.maq2); }
+  function agarre(w){ return ln(add(w,[0,-5]), add(w,[0,5]), 3.5, C.maq2); }
+  function colchoneta(){ return ln([16,128],[184,128],4,"#E30613",' opacity=".55"'); }
+  function asiento(x1, x2, y, respaldo){
+    var o = ln([x1,y],[x2,y],6,C.maq2) + ln([(x1+x2)/2, y+3],[(x1+x2)/2,128],4,C.maq);
+    if(respaldo) o += ln([x1-2,y],respaldo,7,C.maq2);
+    return o;
+  }
+
+  /* ── Poses por ejercicio (A = inicio, B = final) ── */
+  var E = {};
+  E.cinta = {
+    A:{hp:[100,74], s:[102,41], a1:[112,122], a2:[86,121], ft2:[1,0.7], w1:[93,79], w2:[112,76], eb:[1,0]},
+    B:{hp:[100,74], s:[102,41], a1:[86,121], a2:[112,122], ft:[1,0.7], ft2:[1,0.25], w1:[112,76], w2:[93,79], eb:[1,0]},
+    fondo:function(){ return ln([40,127],[168,127],6,C.maq2) + ln([160,125],[150,62],5,C.maq) + ln([140,58],[164,58],7,C.maq2) + ln([150,70],[128,72],4,C.maq); }
+  };
+  E.prensa = (function(){
+    var d = nor([0.69,-0.72]), q = [0.72,0.69];
+    function placa(J){ var c = add(J.a1, mul(d,4)); return ln(add(c, mul(q,-15)), add(c, mul(q,11)), 5, C.maq2) + ln(c, add(c, mul(d,26)), 4, C.maq); }
+    return {
+      A:{hp:[72,112], s:[52,84], a1:[94,89], kb:[-1,-1], ft:[-0.72,-0.69], w1:[76,108], eb:[0,1]},
+      B:{hp:[72,112], s:[52,84], a1:[107,76], kb:[-1,-1], ft:[-0.72,-0.69], w1:[76,108], eb:[0,1]},
+      fondo:function(J){ return ln([20,129],[190,129],4,C.maq2) + ln([88,128],[182,30],5,C.maq) + ln([44,86],[64,118],8,C.maq2) + ln([64,118],[86,122],6,C.maq2) + ln([74,121],[74,128],4,C.maq) + placa(J); }
+    };
+  })();
+  E.pressPechoMaquina = {
+    A:{hp:[86,95], s:[84,61], a1:[108,122], kb:[1,-1], w1:[97,64], eb:[-1,0]},
+    B:{hp:[86,95], s:[84,61], a1:[108,122], kb:[1,-1], w1:[122,62], eb:[0,1]},
+    fondo:function(){ return asiento(76,100,100,[72,50]) + piso(); },
+    frente:function(J){ return ln([80,24], J.w1, 4, C.maq) + agarre(J.w1); }
+  };
+  E.remoSentado = {
+    A:{hp:[84,106], s:[89,72], a1:[142,108], kb:[0,-1], ft:[0.3,-1], w1:[128,82], eb:[0,1]},
+    B:{hp:[84,106], s:[81,72], a1:[142,108], kb:[0,-1], ft:[0.3,-1], w1:[93,92], eb:[-1,0]},
+    fondo:function(){ return ln([56,113],[124,113],6,C.maq2) + ln([64,116],[64,128],4,C.maq) + ln([116,116],[116,128],4,C.maq) + ln([150,96],[150,126],5,C.maq2) + piso(); },
+    frente:function(J){ return cable([170,112], J.w1) + agarre(J.w1); }
+  };
+  E.puenteGluteos = {
+    A:{hp:[92,120], s:[52,121], a1:[126,122], kb:[0,-1], ft:[1,0.2], w1:[88,124], eb:[0,-1]},
+    B:{hp:[94,100], s:[53,118], a1:[126,122], kb:[0,-1], ft:[1,0.2], w1:[88,124], eb:[0,-1]},
+    fondo:function(){ return colchoneta(); }
+  };
+  E.plancha = {
+    A:{hp:[94,107], s:[134,100], a1:[42,118], kb:[0,-1], ft:[-0.3,1], w1:[157,126], eb:[-1,1], hd:-8},
+    B:{hp:[94,105], s:[134,99], a1:[42,118], kb:[0,-1], ft:[-0.3,1], w1:[157,126], eb:[-1,1], hd:-8},
+    fondo:function(){ return colchoneta(); }
+  };
+  E.spinning = (function(){
+    var c = [100,108];
+    function bici(){ return ln([48,128],[152,128],5,C.maq2) + ln([100,108],[86,72],5,C.maq) + ln([78,70],[96,70],5,C.borde) + ln([112,120],[132,68],5,C.maq) + ln([128,65],[144,65],5,C.borde) + ci([140,108],15,"none",' stroke="'+C.maq2+'" stroke-width="4"') + ln([100,108],[140,108],3,C.maq); }
+    return {
+      A:{hp:[88,67], s:[110,43], a1:[104,95], a2:[93,114], kb:[1,0], ft:[1,0.3], w1:[138,65], eb:[0,1], hd:-10},
+      B:{hp:[88,67], s:[110,43], a1:[93,114], a2:[104,95], kb:[1,0], ft:[1,0.3], w1:[138,65], eb:[0,1], hd:-10},
+      fondo:function(){ return bici(); },
+      frente:function(J){ return ci(c, 3, C.borde) + ln(c, add(J.a1,[3,3]), 3, C.borde); }
+    };
+  })();
+  E.deadBug = {
+    A:{hp:[100,120], s:[62,120], w1:[64,84], w2:[60,85], eb:[1,0], a1:[124,96], a2:[122,95], kb:[0,-1], ft:[1,0.1]},
+    B:{hp:[100,120], s:[62,120], w1:[28,118], w2:[60,85], eb:[0,-1], eb2:[1,0], a1:[124,96], a2:[152,116], kb:[0,-1], ft:[1,0.1]},
+    fondo:function(){ return colchoneta(); }
+  };
+  E.gatoVaca = {
+    A:{hp:[70,98], s:[116,88], m:[0,-20], a1:[44,126], kb:[1,1], ft:[-1,0.2], w1:[118,127], eb:[1,0], hd:55},
+    B:{hp:[70,98], s:[116,88], m:[0,12], a1:[44,126], kb:[1,1], ft:[-1,0.2], w1:[118,127], eb:[1,0], hd:-25},
+    fondo:function(){ return colchoneta(); }
+  };
+  E.sentadillaMancuernas = {
+    A:{hp:[100,74], s:[102,40], a1:[100,124], kb:[1,0], w1:[102,83], eb:[1,0]},
+    B:{hp:[84,100], s:[102,72], a1:[100,124], kb:[1,0], w1:[105,97], eb:[1,0]},
+    fondo:function(){ return piso(); },
+    frente:function(J){ return mancuerna(J.w1); }
+  };
+  function jalon(unilateral){
+    var A = {hp:[92,96], s:[88,62], a1:[116,122], kb:[1,-1], w1:[97,20], eb:[1,0]};
+    var B = {hp:[92,96], s:[87,62], a1:[116,122], kb:[1,-1], w1:[99,60], eb:[-1,1]};
+    if(unilateral){ A.w2 = B.w2 = [106,90]; A.eb2 = B.eb2 = [0,1]; A.w1 = [99,18]; B.w1 = [94,66]; }
+    return {A:A, B:B,
+      fondo:function(){ return asiento(80,104,101) + ln([140,128],[140,6],6,C.maq) + ln([104,6],[142,6],4,C.maq) + piso(); },
+      frente:function(J){ return cable([104,8], J.w1) + (unilateral ? agarre(J.w1) : ln(add(J.w1,[-3,0]), add(J.w1,[3,0]), 4, C.maq2)) + ci(add(J.k1,[1,-7]), 5.5, C.maq2); }
+    };
+  }
+  E.jalonPecho = jalon(false);
+  E.jalonUnilateral = jalon(true);
+  E.curlFemoral = (function(){
+    function rodillo(J){ var v = nor(sub(J.a1, J.k1)); return ci(add(J.a1, mul([-v[1], v[0]], -6)), 5.5, C.maq2); }
+    return {
+      A:{hp:[90,92], s:[132,90], a1:[38,93], kb:[0,1], ft:[-0.2,1], w1:[150,102], eb:[0,1], hd:-20},
+      B:{hp:[90,92], s:[132,90], a1:[72,70], kb:[-1,1], ft:[-1,0.4], w1:[150,102], eb:[0,1], hd:-20},
+      fondo:function(){ return ln([36,100],[152,100],7,C.maq2) + ln([60,104],[60,128],4,C.maq) + ln([130,104],[130,128],4,C.maq) + piso(); },
+      frente:function(J){ return rodillo(J); }
+    };
+  })();
+  E.pressHombros = {
+    A:{hp:[88,95], s:[86,61], a1:[110,122], kb:[1,-1], w1:[97,56], eb:[0,1]},
+    B:{hp:[88,95], s:[86,61], a1:[110,122], kb:[1,-1], w1:[93,22], eb:[1,0]},
+    fondo:function(){ return asiento(78,102,100,[76,44]) + piso(); },
+    frente:function(J){ return ln([62,34], J.w1, 4, C.maq) + agarre(J.w1); }
+  };
+  E.pallof = {
+    A:{hp:[100,76], s:[101,42], a1:[108,124], a2:[93,124], kb:[1,0], w1:[111,57], eb:[0,1]},
+    B:{hp:[100,76], s:[101,42], a1:[108,124], a2:[93,124], kb:[1,0], w1:[139,55], eb:[0,1]},
+    fondo:function(){ return ln([30,128],[30,30],6,C.maq) + piso(); },
+    frente:function(J){ return cable([33,60], J.w1) + agarre(J.w1); }
+  };
+  E.estiramientoPantorrilla = {
+    A:{hp:[112,76], s:[134,46], a1:[74,124], a2:[140,124], kb:[1,0], ft:[1,0.1], w1:[163,49], eb:[0,1]},
+    B:{hp:[117,77], s:[139,48], a1:[74,124], a2:[140,124], kb:[1,0], ft:[1,0.1], w1:[163,49], eb:[0,1]},
+    fondo:function(){ return ln([168,128],[168,8],7,C.maq) + piso(); }
+  };
+  E.planchaLateral = {
+    A:{face:-1, hp:[98,119], s:[138,106], a1:[48,124], kb:[0,-1], ft:[-0.1,1], w1:[157,127], eb:[-1,1], w2:[102,112], eb2:[0,-1]},
+    B:{face:-1, hp:[98,104], s:[138,103], a1:[48,124], kb:[0,-1], ft:[-0.1,1], w1:[157,127], eb:[-1,1], w2:[102,97], eb2:[0,-1]},
+    fondo:function(){ return colchoneta(); }
+  };
+  E.subidaPlataforma = {
+    A:{hp:[100,76], s:[102,42], a1:[122,106], a2:[92,124], kb:[1,0], w1:[101,85], w2:[98,84], eb:[1,0]},
+    B:{hp:[122,60], s:[124,26], a1:[124,106], a2:[144,84], kb:[1,0], kb2:[1,-1], w1:[123,69], w2:[120,68], eb:[1,0]},
+    fondo:function(){ return '<rect x="108" y="108" width="46" height="20" rx="3" fill="'+C.maq2+'"/>' + piso(); }
+  };
+  E.pesoMuertoMancuernas = {
+    A:{hp:[100,74], s:[102,40], a1:[100,124], kb:[1,0], w1:[103,82], eb:[1,0]},
+    B:{hp:[88,76], s:[118,60], a1:[100,124], kb:[1,0], w1:[119,99], eb:[1,0], hd:-15},
+    fondo:function(){ return piso(); },
+    frente:function(J){ return mancuerna(J.w1); }
+  };
+  E.pressPechoPolea = {
+    A:{hp:[100,76], s:[103,42], a1:[114,124], a2:[84,122], ft2:[1,0.6], kb:[1,0], w1:[112,58], eb:[-1,0]},
+    B:{hp:[100,76], s:[104,42], a1:[114,124], a2:[84,122], ft2:[1,0.6], kb:[1,0], w1:[140,56], eb:[0,1]},
+    fondo:function(){ return ln([40,128],[40,26],6,C.maq) + piso(); },
+    frente:function(J){ return cable([43,58], J.w1) + agarre(J.w1); }
+  };
+  E.elevacionTalones = {
+    A:{hp:[97,68], s:[99,34], a1:[96,118], ft:[1,-0.5], kb:[1,0], w1:[128,60], eb:[0,1]},
+    B:{hp:[99,56], s:[101,22], a1:[98,104], ft:[0.55,1], kb:[1,0], w1:[128,50], eb:[0,1]},
+    fondo:function(){ return '<rect x="100" y="115" width="26" height="13" rx="2" fill="'+C.maq2+'"/>' + ln([132,128],[132,30],5,C.maq) + piso(); }
+  };
+  E.tricepsCuerda = {
+    A:{hp:[100,74], s:[105,41], a1:[100,124], kb:[1,0], w1:[118,57], eb:[-1,1]},
+    B:{hp:[100,74], s:[105,41], a1:[100,124], kb:[1,0], w1:[110,80], eb:[-1,0]},
+    fondo:function(){ return ln([140,128],[140,6],6,C.maq) + ln([124,6],[142,6],4,C.maq) + piso(); },
+    frente:function(J){ return cable([126,8], J.w1) + ln(J.w1, add(J.w1,[-2,6]), 3, C.borde) + ln(J.w1, add(J.w1,[3,6]), 3, C.borde); }
+  };
+
+  function svg(id, t){
+    var e = E[id]; if(!e) return "";
+    var k = t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2)/2;
+    var J = joints(interp(e.A, e.B, k));
+    return (e.fondo ? e.fondo(J) : piso()) + dibujarFigura(J) + (e.frente ? e.frente(J) : "");
+  }
+  return {svg:svg, tiene:function(id){ return !!E[id]; }};
+})();
 
 /* ═══ Guardado local (solo en este teléfono) ═══════════════════════════════ */
 var KEY = "wgym_principiante5_v1";
@@ -479,8 +729,13 @@ function pintarDia(){
       '<span class="tag"><b>'+esc(e.repeticiones)+'</b></span>'+
       (e.descanso ? '<span class="tag g"><b>'+e.descanso+'</b>s descanso</span>' : '<span class="tag">Sin descanso</span>')+
       '</div></div></div>'+
-      '<a class="ytlink grande" href="'+yt(e)+'" target="_blank" rel="noopener">'+
-      '<span class="play">▶</span><span>Ver técnica con entrenadora<br><small>Videos de mujeres · YouTube</small></span></a>'+
+      '<div class="player" data-i="'+i+'" data-demo="'+e.demo+'">'+
+        '<svg class="fig" viewBox="0 0 200 140" role="img" aria-label="Demostración: '+esc(e.nombre)+'">'+FIG.svg(e.demo, 0)+'</svg>'+
+        '<button class="pbig" aria-label="Reproducir demostración">▶</button>'+
+        '<div class="pbar"><button class="pbtn" aria-label="Reproducir o pausar">▶</button>'+
+        '<div class="ptrack"><i></i></div><span class="pfase">Inicio</span>'+
+        '<a class="pyt" href="'+yt(e)+'" target="_blank" rel="noopener" aria-label="Más videos de mujeres en YouTube">YouTube</a></div>'+
+      '</div>'+
       '<div class="alerta'+(nuevo?" nuevo":"")+'"><span class="ic">⚠️</span><p><small>Cuidado · '+esc(e.zona)+'</small>'+esc(e.alerta)+'</p></div>'+
       '<div class="tec"><label>Técnica</label><p>'+esc(e.tecnica)+'</p></div>'+
       '<div class="series">'+
@@ -502,7 +757,7 @@ function pintarDia(){
          (e.descanso ? '<button class="btn desc" data-rest="'+i+'">⏱ Descanso '+e.descanso+' s</button>' : "")+'</div></article>';
   });
   $("dia").innerHTML = h;
-  guardar(); progreso();
+  guardar(); progreso(); prepararPlayers();
 }
 function progreso(){
   var d = RUTINA.dias[S.dia-1], t = 0, ok = 0;
@@ -512,6 +767,47 @@ function progreso(){
     var el = $("ej"+i); if(el) el.classList.toggle("hecho", c === r.sets.length);
   });
   var p = $("prog"); if(p) p.style.width = (t ? ok / t * 100 : 0) + "%";
+}
+
+/* ═══ Reproductor de demostraciones ═══════════════════════════════════════
+   Anima la figura entre la posición inicial y final (ida y vuelta, con una
+   pausa corta en cada extremo). Solo corre mientras está en pantalla. */
+var PERIODO = 3200, reproduciendo = {}, visibles = {}, obsPlayer = null, rafId = 0;
+function faseDe(ms){
+  var x = (ms % PERIODO) / PERIODO;
+  if(x < 0.12) return 0; if(x < 0.5) return (x - 0.12) / 0.38;
+  if(x < 0.62) return 1; return 1 - (x - 0.62) / 0.38;
+}
+function cuadro(now){
+  rafId = 0; var alguno = false;
+  document.querySelectorAll(".player.on").forEach(function(pl){
+    var i = pl.dataset.i; if(!visibles[i]) return;
+    alguno = true;
+    var r = reproduciendo[i], ms = now - r.inicio, t = faseDe(ms);
+    pl.querySelector(".fig").innerHTML = FIG.svg(pl.dataset.demo, t);
+    pl.querySelector(".ptrack i").style.width = ((ms % PERIODO) / PERIODO * 100) + "%";
+    pl.querySelector(".pfase").textContent = t < 0.5 ? "Inicio" : "Final";
+  });
+  if(alguno) rafId = requestAnimationFrame(cuadro);
+}
+function animar(){ if(!rafId) rafId = requestAnimationFrame(cuadro); }
+function alternarPlayer(pl){
+  var i = pl.dataset.i, on = !pl.classList.contains("on");
+  pl.classList.toggle("on", on);
+  pl.querySelector(".pbtn").textContent = on ? "❚❚" : "▶";
+  if(on){ var r = reproduciendo[i]; reproduciendo[i] = {inicio: performance.now() - (r ? r.pausa : 0)}; animar(); }
+  else if(reproduciendo[i]) reproduciendo[i].pausa = performance.now() - reproduciendo[i].inicio;
+}
+function prepararPlayers(){
+  reproduciendo = {}; visibles = {};
+  if(obsPlayer) obsPlayer.disconnect();
+  var pls = document.querySelectorAll(".player");
+  if(!("IntersectionObserver" in window)){ pls.forEach(function(pl){ visibles[pl.dataset.i] = true; }); return; }
+  obsPlayer = new IntersectionObserver(function(ents){
+    ents.forEach(function(en){ visibles[en.target.dataset.i] = en.isIntersecting; });
+    animar();
+  }, {threshold:.2});
+  pls.forEach(function(pl){ obsPlayer.observe(pl); });
 }
 
 /* ═══ Eventos ═══════════════════════════════════════════════════════════ */
@@ -527,6 +823,8 @@ $("dia").addEventListener("input", function(ev){
   $("int"+t.dataset.i+"_"+t.dataset.n).innerHTML = intensidad(s.p, s.r);
 });
 $("dia").addEventListener("click", function(ev){
+  if(ev.target.closest(".pyt")) return;
+  var pl = ev.target.closest(".player"); if(pl){ alternarPlayer(pl); return; }
   var t = ev.target.closest("button"); if(!t) return;
   if(t.classList.contains("chk")){
     var r = regDe(S.dia, +t.dataset.i), s = r.sets[+t.dataset.n];
