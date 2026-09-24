@@ -51,8 +51,7 @@ header{
   border-bottom:3px solid var(--rojo);position:sticky;top:0;z-index:30;
   padding-top:calc(14px + env(safe-area-inset-top));
 }
-header .logo{width:42px;height:42px;border-radius:50%;flex:0 0 auto;
-  border:2px solid var(--dorado);object-fit:cover;background:#fff}
+header .logo{height:46px;width:auto;flex:0 0 auto;object-fit:contain}
 header .quien{flex:1;min-width:0}
 /* El titulo de arriba lleva el nombre completo de la rutina, el mismo de la
    portada, asi que puede ocupar dos lineas en un telefono angosto. */
@@ -86,9 +85,7 @@ main{padding:18px 16px 40px}
 
 /* ── Ingreso ──────────────────────────────────────────────────────────── */
 .ingreso{padding:34px 20px 40px;text-align:center}
-.ingreso .marca{width:104px;height:104px;border-radius:50%;margin:0 auto 20px;
-  border:3px solid var(--dorado);object-fit:cover;background:#fff;display:block;
-  box-shadow:0 0 0 7px rgba(212,175,55,.12)}
+.ingreso .marca{width:min(78%,280px);height:auto;margin:0 auto 20px;object-fit:contain;display:block}
 .ingreso h2{font-family:'Anton',Impact,sans-serif;font-size:31px;line-height:1.02;
   text-transform:uppercase;margin-bottom:11px}
 .ingreso h2 span{color:var(--rojo-vivo)}
