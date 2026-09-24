@@ -237,26 +237,52 @@ romper la función de "evolución física" para nadie:
   `mediciones.json` — nunca por nombre.
 - `control-fisico.html` (la herramienta de la báscula, en la compu de
   recepción) sigue buscando y guardando por nombre en su `localStorage`
-  local — eso no cambia, ese dato nunca sale de ese equipo. Lo único que
-  cambió es el botón **"📋 Copiar mediciones"**: antes de copiar, busca el
-  `medId` de cada socio en la lista de `socios.json` que ya tiene
-  cargada, y si un socio se mide por primera vez y todavía no tiene
-  `medId`, le genera uno nuevo ahí mismo y lo manda en el texto copiado.
+  local — eso no cambia, ese dato nunca sale de ese equipo.
 
-**Al fusionar un "📋 Copiar mediciones" nuevo:**
-1. El JSON que llega ya viene con `"id"`, nunca con nombre — pegarlo tal
-   cual en `mediciones.json`, fusionando por `id`.
-2. Si algún `id` del texto pegado **no existe todavía** en ningún socio
-   de `socios.json`, es un socio midiéndose por primera vez: agregarle el
-   campo `"medId"` con ese mismo código al registro correspondiente de
-   `socios.json` (buscándolo por nombre + apellido, como siempre) — sin
+### El botón "📋 Copiar esta medición" — de a un socio por vez (regla permanente, desde 09/2026)
+
+`control-fisico.html` copia **una sola medición a la vez** (la que se
+acaba de guardar con "Guardar registro"), nunca un lote con todos los
+socios medidos. Antes existía un botón "📋 Copiar mediciones" que
+exportaba TODOS los socios medidos juntos y, para cualquiera sin
+`medId` todavía, le generaba uno random en cada click — como el botón
+no recuerda qué le mandó a Claude en la vuelta anterior, la MISMA
+persona terminaba con un `medId` distinto cada vez que se apretaba el
+botón antes de que ese `medId` se publicara en `socios.json`. Eso
+causó mediciones cruzadas entre socias reales (ej. Valentina Hernandez
+viendo en su celular los datos de Ximena Farfan). El botón de a uno
+elimina el problema: cada texto copiado corresponde a un solo evento
+de guardado, así que nunca hay ambigüedad de a quién pertenece.
+
+El texto que copia el botón trae, antes del JSON, una primera línea
+**"Socio: NOMBRE APELLIDO"** — es una ayuda para que Claude sepa a
+quién pegarle el `medId` sin tener que preguntar, pero **nunca** se
+traslada esa línea ni el nombre a `mediciones.json`: se usa solo para
+identificar al socio al fusionar, y se descarta antes de guardar.
+
+**Al fusionar un "📋 Copiar esta medición" nuevo (con su línea "Socio: ..."):**
+1. Leer el nombre de la primera línea para saber a quién corresponde.
+2. El JSON trae un solo socio con un solo registro y ya viene con
+   `"id"` — pegarlo tal cual en `mediciones.json`, fusionando por `id`
+   (agregando el registro nuevo al array `registros` de ese `id` si ya
+   existía, o creando la entrada si es la primera medición de esa
+   persona).
+3. Si ese `id` **no existe todavía** en ningún socio de `socios.json`,
+   buscar al socio nombrado en la línea "Socio: ..." por nombre +
+   apellido y agregarle el campo `"medId"` con ese mismo código — sin
    este paso, `tarjeta.html` no va a poder mostrarle su evolución.
-3. Publicar `mediciones.json` y `socios.json` juntos en `main`, igual que
-   cualquier otro cambio de socios.
-4. **Nunca** agregar `"n"`/`"a"` (nombre/apellido) a `mediciones.json`,
-   sea cual sea el origen del dato — ni copiado de `control-fisico.html`,
-   ni pedido directo del dueño de "poner el nombre para que sea más
-   fácil". El nombre real vive solo en `socios.json`/`tarjeta.html`.
+4. Publicar `mediciones.json` y `socios.json` juntos en `main`, igual
+   que cualquier otro cambio de socios.
+5. **Nunca** agregar `"n"`/`"a"` (nombre/apellido) a `mediciones.json`,
+   sea cual sea el origen del dato — ni la línea "Socio: ..." del
+   propio botón, ni pedido directo del dueño de "poner el nombre para
+   que sea más fácil". El nombre real vive solo en
+   `socios.json`/`tarjeta.html`.
+6. Si alguna vez llega un JSON del formato viejo (un lote con varios
+   socios y sin línea "Socio: ..."), tratarlo con la misma cautela de
+   siempre: cada `id` sin nombre asociado es una identidad que hay que
+   confirmar con el dueño antes de enlazarla en `socios.json` — nunca
+   asumirla por descarte ni por parecido de edad/estatura.
 
 ### Borrar solo de la planilla a quien lleve 3 meses o más vencido (regla permanente)
 
