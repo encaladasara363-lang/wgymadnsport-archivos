@@ -368,20 +368,6 @@
   },
   {
    "sexo": "F",
-   "estatura": 164,
-   "registros": [
-    {
-     "fecha": "2026-09-24",
-     "edad": 35,
-     "peso": 83,
-     "grasa": 39.3,
-     "imc": 30.9
-    }
-   ],
-   "id": "5a2fce06"
-  },
-  {
-   "sexo": "F",
    "estatura": 161,
    "registros": [
     {
@@ -390,6 +376,20 @@
      "peso": 90.1,
      "grasa": 39.4,
      "imc": 34.7
+    }
+   ],
+   "id": "5a2fce06"
+  },
+  {
+   "sexo": "F",
+   "estatura": 164,
+   "registros": [
+    {
+     "fecha": "2026-09-24",
+     "edad": 35,
+     "peso": 83,
+     "grasa": 39.3,
+     "imc": 30.9
     }
    ],
    "id": "1df6a732"
