@@ -215,6 +215,20 @@ main.tab{padding:16px 0 20px}
 .playlist a{flex:none;font-family:var(--fc);font-weight:700;text-transform:uppercase;letter-spacing:.5px;font-size:11.5px;
   padding:9px 12px;border-radius:10px;background:#1DB954;color:#04140A;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
 
+/* Comunidad / redes sociales */
+.comunidad{margin-top:16px;text-align:center;padding:18px 16px;border-radius:16px;
+  background:linear-gradient(160deg,rgba(227,6,19,.14),rgba(212,175,55,.08));border:1px solid rgba(212,175,55,.3)}
+.comunidad h3{font-family:var(--fh);font-weight:400;text-transform:uppercase;font-size:clamp(19px,6vw,24px);line-height:1.1}
+.comunidad h3 span{color:var(--red2)}
+.comunidad p{font-family:var(--fc);text-transform:uppercase;letter-spacing:.5px;color:var(--mut);font-size:12.5px;margin-top:6px}
+.redes-grid{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.redes-grid a{display:flex;align-items:center;gap:7px;padding:10px 14px;border-radius:11px;text-decoration:none;
+  font-family:var(--fc);font-weight:700;text-transform:uppercase;letter-spacing:.5px;font-size:12.5px}
+.redes-grid a.ig{background:linear-gradient(135deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5)}
+.redes-grid a.fb{background:#1877F2;color:#fff}
+.redes-grid a.tk{background:#010101;color:#fff;border:1px solid #2A2A31}
+.redes-grid a .ic{font-size:16px}
+
 /* Planes/Contacto */
 .horario-fila{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-family:var(--fc);
   text-transform:uppercase;font-size:13.5px;letter-spacing:.4px}
@@ -270,12 +284,8 @@ nav.tabs button.on span{color:var(--red2);font-weight:700}
     <p class="sub">App de socios · Tocopilla</p>
     <div class="li-card">
       <div class="li-field">
-        <label class="li-lbl">Nombre</label>
-        <input id="liNombre" type="text" autocomplete="given-name" placeholder="Ej: María">
-      </div>
-      <div class="li-field">
-        <label class="li-lbl">Apellido</label>
-        <input id="liApellido" type="text" autocomplete="family-name" placeholder="Ej: Chiessa">
+        <label class="li-lbl">Nombre y Apellido</label>
+        <input id="liNombreCompleto" type="text" autocomplete="name" placeholder="Ej: María Chiessa">
       </div>
       <button class="li-btn" id="liBtn">Ingresar a la App</button>
       <p class="li-err" id="liErr" hidden></p>
@@ -307,6 +317,16 @@ nav.tabs button.on span{color:var(--red2);font-weight:700}
       <div class="frase">
         <p id="fraseTexto">—</p>
         <small>— La Administración</small>
+      </div>
+
+      <div class="comunidad">
+        <h3>Únete a la <span>comunidad</span> WGYM</h3>
+        <p>Síguenos y sé parte de una comunidad que entrena con actitud</p>
+        <div class="redes-grid">
+          <a class="ig" href="https://www.instagram.com/wadnsport.tocopilla" target="_blank" rel="noopener"><span class="ic">📷</span>Instagram</a>
+          <a class="fb" href="https://www.facebook.com/share/1Cs1fQfYGA/?mibextid=wwXIfr" target="_blank" rel="noopener"><span class="ic">👍</span>Facebook</a>
+          <a class="tk" href="https://www.tiktok.com/@wadnsport.tocopil" target="_blank" rel="noopener"><span class="ic">🎵</span>TikTok</a>
+        </div>
       </div>
     </main>
 
@@ -476,21 +496,48 @@ var sociosPromise = fetch("socios.json?v="+Date.now(), {cache:"no-store"})
   .then(function(r){ return r.ok ? r.json() : null; })
   .catch(function(){ return null; });
 
-function buscarSocio(nombre, apellido, cb){
+function buscarSocioPorPar(nombre, apellido, data){
+  var n=normName(nombre), a=normName(apellido);
+  if(!n || !a) return null;
+  var exacto = data.socios.filter(function(s){ return normName(s.n)===n && normName(s.a)===a; });
+  if(exacto.length) return exacto[0];
+  var q = claveNombre(nombre+apellido), mejor=null, mejorD=99, empate=false;
+  data.socios.forEach(function(s){
+    var d = distanciaNombre(q, claveNombre(s.n+s.a));
+    if(d<mejorD){ mejorD=d; mejor=s; empate=false; }
+    else if(d===mejorD) empate=true;
+  });
+  return (mejor && mejorD<=margen(q) && !empate) ? mejor : null;
+}
+/* La socia escribe todo junto en un solo casillero (igual que en
+   tarjeta.html): hay que adivinar dónde termina el nombre y empieza el
+   apellido, probando todos los cortes posibles, incluso al revés. */
+function buscarSocioJunto(texto, data){
+  var palabras = String(texto||"").trim().split(/\s+/).filter(Boolean);
+  if(!palabras.length) return null;
+  if(palabras.length===1) return buscarSocioPorPar(palabras[0], palabras[0], data);
+  var i, s;
+  for(i=1;i<palabras.length;i++){
+    s = buscarSocioPorPar(palabras.slice(0,i).join(" "), palabras.slice(i).join(" "), data);
+    if(s) return s;
+  }
+  for(i=1;i<palabras.length;i++){
+    s = buscarSocioPorPar(palabras.slice(i).join(" "), palabras.slice(0,i).join(" "), data);
+    if(s) return s;
+  }
+  return buscarSocioPorPar(palabras[0], palabras.slice(1).join(" "), data);
+}
+function buscarSocio(nombreCompleto, cb){
   sociosPromise.then(function(data){
     if(!data || !Array.isArray(data.socios)){ cb(null); return; }
-    var n=normName(nombre), a=normName(apellido);
-    if(!n || !a){ cb(null); return; }
-    var exacto = data.socios.filter(function(s){ return normName(s.n)===n && normName(s.a)===a; });
-    if(exacto.length){ cb(exacto[0]); return; }
-    var q = claveNombre(nombre+apellido), mejor=null, mejorD=99, empate=false;
-    data.socios.forEach(function(s){
-      var d = distanciaNombre(q, claveNombre(s.n+s.a));
-      if(d<mejorD){ mejorD=d; mejor=s; empate=false; }
-      else if(d===mejorD) empate=true;
-    });
-    if(mejor && mejorD<=margen(q) && !empate){ cb(mejor); return; }
-    cb(null);
+    cb(buscarSocioJunto(nombreCompleto, data));
+  });
+}
+/* Para re-buscar a alguien cuyo n/a exacto ya se conoce (sesión guardada). */
+function buscarSocioExacto(n, a, cb){
+  sociosPromise.then(function(data){
+    if(!data || !Array.isArray(data.socios)){ cb(null); return; }
+    cb(buscarSocioPorPar(n, a, data));
   });
 }
 
@@ -505,11 +552,10 @@ function mostrarError(msg){
   e.textContent = msg; e.hidden=false;
 }
 document.getElementById("liBtn").addEventListener("click", function(){
-  var n=document.getElementById("liNombre").value.trim();
-  var a=document.getElementById("liApellido").value.trim();
-  if(!n || !a){ mostrarError("Escribe tu nombre y apellido."); return; }
+  var texto=document.getElementById("liNombreCompleto").value.trim();
+  if(!texto){ mostrarError("Escribe tu nombre y apellido."); return; }
   document.getElementById("liErr").hidden=true;
-  buscarSocio(n,a,function(s){
+  buscarSocio(texto,function(s){
     if(!s){ mostrarError("No te encontramos en la lista de socios. Consulta en recepción."); return; }
     localStorage.setItem(SOCIO_KEY, JSON.stringify({n:s.n, a:s.a}));
     entrarConSocio(s.n, s.a);
@@ -517,7 +563,7 @@ document.getElementById("liBtn").addEventListener("click", function(){
 });
 
 function entrarConSocio(n, a){
-  buscarSocio(n, a, function(s){
+  buscarSocioExacto(n, a, function(s){
     if(!s){ mostrarLogin(); return; }
     var dias = Number(s.fv) - serialHoy();
     SOCIO = {n:s.n, a:s.a, fv:s.fv, dias:dias};
