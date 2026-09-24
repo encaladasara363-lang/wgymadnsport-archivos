@@ -43,8 +43,8 @@ a{color:inherit}
 #viewLogin{min-height:100vh;display:flex;align-items:center;padding:24px 16px;
   background-image:radial-gradient(circle at 30% 10%,rgba(227,6,19,.18),transparent 50%),radial-gradient(circle at 90% 80%,rgba(212,175,55,.08),transparent 45%)}
 .li-box{max-width:420px;margin:0 auto;width:100%}
-.li-logo{width:110px;height:110px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 14px;border:3px solid var(--gold);
-  box-shadow:0 10px 30px rgba(212,175,55,.25)}
+.li-logo{width:min(80%,300px);height:auto;object-fit:contain;display:block;margin:0 auto 10px;
+  background:#fff;border-radius:16px;padding:10px;box-shadow:0 10px 30px rgba(212,175,55,.25)}
 .li-box h1{font-family:var(--fh);font-weight:400;text-transform:uppercase;text-align:center;font-size:clamp(26px,8vw,36px);line-height:1.05}
 .li-box h1 span{color:var(--red)}
 .li-box .sub{font-family:var(--fc);text-transform:uppercase;letter-spacing:2px;color:var(--gold);font-weight:600;font-size:13px;text-align:center;margin-top:6px}
@@ -63,7 +63,8 @@ a{color:inherit}
 /* ---------- App shell ---------- */
 #viewApp{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 header.app{padding:16px 0 10px;text-align:center}
-header.app .logo{width:64px;height:64px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px;border:2px solid var(--gold)}
+header.app .logo{width:min(50%,180px);height:auto;object-fit:contain;display:block;margin:0 auto 6px;
+  background:#fff;border-radius:12px;padding:6px}
 header.app h1{font-family:var(--fh);font-weight:400;text-transform:uppercase;font-size:clamp(20px,6vw,26px);line-height:1}
 header.app h1 span{color:var(--red)}
 header.app .saludo{font-family:var(--fc);text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-weight:600;font-size:14px;margin-top:4px}
@@ -107,6 +108,7 @@ main.tab{padding:16px 0 20px}
   padding:11px 16px;border-radius:11px;background:var(--card2);border:1px solid var(--line);display:inline-flex;align-items:center;gap:6px}
 .btn.red{background:linear-gradient(160deg,var(--red),#8E0610);border-color:var(--red)}
 .btn.gold{background:var(--gold);border-color:var(--gold);color:#0A0A0B}
+.btn.white{background:#FFFFFF;border-color:#FFFFFF;color:#0A0A0B}
 .btn.block{width:100%;justify-content:center}
 .btn.sm{padding:8px 12px;font-size:12.5px}
 .btn:active{transform:scale(.97)}
@@ -898,9 +900,6 @@ var RUTINA=[
 
 var diaActual=1;
 
-function urlAnimacion(nombre){
-  return "https://www.google.com/search?tbm=isch&q="+encodeURIComponent(nombre+" animación técnica de ejecución correcta");
-}
 function urlYoutube(nombre){
   return "https://www.youtube.com/results?search_query="+encodeURIComponent(nombre+" técnica de ejecución");
 }
@@ -975,7 +974,6 @@ function renderDia(){
     html += '<p class="tecnica">'+e.tecnica+'</p>';
     html += '<div class="alerta"><span class="ic">⚠️</span><p>'+e.alerta+'</p></div>';
     html += '<div class="links">'+
-      '<a href="'+urlAnimacion(e.nombre)+'" target="_blank" rel="noopener">🎞️ Ver animación</a>'+
       '<a href="'+urlYoutube(e.nombre)+'" target="_blank" rel="noopener">▶️ Buscar en YouTube</a></div>';
 
     if(!e.tiempo){
@@ -986,10 +984,10 @@ function renderDia(){
           '<input type="number" inputmode="numeric" placeholder="reps" data-campo="reps">'+
           '<span class="rm-chip off" data-campo="rm">—</span></div>';
       }
-      html += '</div><div class="ej-acc"><button class="btn sm" data-accion="descanso">Iniciar descanso</button>'+
+      html += '</div><div class="ej-acc"><button class="btn sm white" data-accion="descanso">Iniciar descanso</button>'+
         '<button class="btn sm gold" data-accion="guardar">Guardar registro</button></div>';
     } else {
-      html += '<div class="ej-acc"><button class="btn sm" data-accion="descanso">Iniciar descanso</button></div>';
+      html += '<div class="ej-acc"><button class="btn sm white" data-accion="descanso">Iniciar descanso</button></div>';
     }
 
     html += '<div class="chart-wrap">'+
