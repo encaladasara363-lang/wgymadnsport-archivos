@@ -288,8 +288,7 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 <div class="wrap">
 
  <div class="aviso">
-  <p>Cargá acá los números que te muestra el <b>Omron HBF‑306</b> apenas termina de medir. Solo aparecen los socios que efectivamente se miden — el resto de la planilla sigue igual. Cuando quieras que la evolución se vea en la tarjeta del socio, tocá <b>Copiar mediciones</b> y pegámelo por chat.</p>
-  <button class="btn-copy" id="btnCopiar" type="button">📋 Copiar mediciones</button>
+  <p>Cargá acá los números que te muestra el <b>Omron HBF‑306</b> apenas termina de medir. Solo aparecen los socios que efectivamente se miden — el resto de la planilla sigue igual. Después de guardar, tocá <b>Copiar esta medición</b> (aparece debajo del botón Guardar) y pegámelo por chat — uno a la vez, socio por socio, para que nunca se mezclen dos mediciones.</p>
  </div>
  <p class="copy-msg" id="copyMsg" hidden></p>
 
@@ -326,6 +325,7 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 
   <button class="btn-guardar" id="btnGuardar" type="button">Guardar registro</button>
   <p class="guardado-msg" id="guardadoMsg" hidden></p>
+  <button class="btn-copy" id="btnCopiarUno" type="button" hidden style="width:100%;margin-top:10px;text-align:center">📋 Copiar esta medición</button>
  </div>
 
  <div class="hist" id="hist" hidden>
@@ -491,7 +491,7 @@ qSocio.addEventListener("keydown", function(ev){
 });
 
 /* ── panel de carga ────────────────────────────────────────────────── */
-var socioActual = null, sexoActual = null;
+var socioActual = null, sexoActual = null, ultimoGuardado = null;
 var panel = document.getElementById("panel");
 var hist = document.getElementById("hist");
 var inEdad = document.getElementById("inEdad"), inEstatura = document.getElementById("inEstatura"),
@@ -505,6 +505,8 @@ function elegir(s){
  document.getElementById("panelNombre").textContent = s.n + " " + s.a;
  panel.hidden = false;
  document.getElementById("guardadoMsg").hidden = true;
+ document.getElementById("btnCopiarUno").hidden = true;
+ ultimoGuardado = null;
 
  var previo = socioGuardado(s.n, s.a);
  var ultimo = previo && previo.registros.length ? previo.registros[previo.registros.length - 1] : null;
@@ -592,8 +594,11 @@ document.getElementById("btnGuardar").addEventListener("click", function(){
 
  var msg = document.getElementById("guardadoMsg");
  msg.hidden = false;
- msg.textContent = "Registro guardado en este equipo. No te olvides de tocar \"Copiar mediciones\" cuando termines la ronda.";
+ msg.textContent = "Registro guardado en este equipo. Tocá \"Copiar esta medición\" y pegámelo por chat.";
  pintarHistorial(s);
+
+ ultimoGuardado = { socio: s, registro: registro };
+ document.getElementById("btnCopiarUno").hidden = false;
 });
 
 /* ── copiar mediciones: mismo esquema que mediciones.json (por id, nunca
@@ -610,17 +615,25 @@ function medIdDe(n, a){
  for(var i = 0; i < 8; i++){ id += hex[Math.floor(Math.random() * 16)]; }
  return id;
 }
-document.getElementById("btnCopiar").addEventListener("click", function(){
+document.getElementById("btnCopiarUno").addEventListener("click", function(){
+ if(!ultimoGuardado) return;
  var aviso = document.getElementById("copyMsg");
- var lista = datos.socios.filter(function(s){ return s.registros && s.registros.length; })
-  .sort(function(a,b){ return (a.a+a.n).localeCompare(b.a+b.n, "es"); })
-  .map(function(s){
-   return { id: medIdDe(s.n, s.a), sexo: s.sexo, estatura: s.estatura, registros: s.registros };
-  });
- var txt = JSON.stringify({ actualizado: hoyISO(), nota:"Mediciones de composicion corporal (Omron HBF-306). Cada socio va por su codigo id (medId de socios.json), nunca por nombre. Solo aparecen los socios que se miden.", socios: lista }, null, 1);
+ var s = ultimoGuardado.socio;
+ var nombre = s.n + " " + s.a;
+ var payload = {
+  id: medIdDe(s.n, s.a),
+  sexo: s.sexo,
+  estatura: s.estatura,
+  registros: [ultimoGuardado.registro]
+ };
+ var json = JSON.stringify({ actualizado: hoyISO(), nota:"Mediciones de composicion corporal (Omron HBF-306). Cada socio va por su codigo id (medId de socios.json), nunca por nombre. Solo aparecen los socios que se miden.", socios: [payload] }, null, 1);
+ /* La linea "Socio: ..." es solo para que Claude sepa a quien pegarle el
+    medId al fusionar por chat -- nunca debe terminar guardada dentro de
+    mediciones.json (ese archivo es publico y jamas lleva nombres). */
+ var txt = "Socio: " + nombre + "\n\n" + json;
  function ok(){
   aviso.hidden = false; aviso.removeAttribute("data-err");
-  aviso.textContent = "¡Copiado! " + lista.length + " socios con mediciones. Pégamelo por chat.";
+  aviso.textContent = "¡Copiado! Medición de " + nombre + ". Pégamelo por chat.";
  }
  function aMano(){
   aviso.hidden = false; aviso.setAttribute("data-err","1");
