@@ -18,9 +18,12 @@
         display:flex;flex-direction:column;align-items:center;text-align:center;
         padding:10mm 12mm 8mm;color:var(--txt);}
 
-  .filo{position:absolute;top:0;left:0;right:0;height:6mm;background:var(--red);}
+  /* Franjas con margen de seguridad: casi ninguna impresora imprime hasta
+     el borde físico de la hoja (recorta unos milímetros siempre), así que
+     se despegan 4mm del borde para que nunca queden cortadas. */
+  .filo{position:absolute;top:4mm;left:4mm;right:4mm;height:6mm;background:var(--red);}
   .filo::after{content:"";position:absolute;right:0;top:0;height:6mm;width:70mm;background:var(--gold);}
-  .pie{position:absolute;bottom:0;left:0;right:0;height:6mm;background:var(--gold);}
+  .pie{position:absolute;bottom:4mm;left:4mm;right:4mm;height:6mm;background:var(--gold);}
   .pie::after{content:"";position:absolute;left:0;bottom:0;height:6mm;width:70mm;background:var(--red);}
 
   .logo{width:80mm;height:auto;margin-top:2mm;filter:drop-shadow(0 4mm 6mm rgba(227,6,19,.35));}
