@@ -128,9 +128,7 @@ details.reglas li::marker{color:var(--red2);font-family:var(--fn)}
   text-transform:uppercase;letter-spacing:1px;font-size:15px;line-height:1.15}
 .ytlink small{font-weight:600;font-size:12px;color:#FFB3B8;letter-spacing:.8px}
 .ytlink .play{flex:none;width:38px;height:38px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-size:15px;padding-left:3px}
-.ytlink.grande{margin-top:14px;padding:22px 16px;flex-direction:column;justify-content:center;text-align:center;min-height:150px;
   background:radial-gradient(circle at 50% 35%,rgba(227,6,19,.35),transparent 65%),#150708;font-size:17px}
-.ytlink.grande .play{width:62px;height:62px;font-size:24px;box-shadow:0 8px 24px rgba(227,6,19,.45)}
 .ytlink:active{transform:scale(.98)}
 
 .alerta{margin:12px 14px 0;display:flex;gap:10px;padding:10px 12px;border-radius:10px;
@@ -318,9 +316,6 @@ footer p a{color:var(--gold)}
    free-exercise-db: así cargan siempre que cargue la app, sin depender de
    GitHub raw (bloqueado en algunas redes móviles y WebView). */
 var IMG = "assets/demos/";
-/* Solo se muestran fotos donde la demostración la hace una mujer; en el
-   resto, el botón de YouTube ocupa ese lugar (búsqueda de videos de mujeres). */
-var FOTO_MUJER = {"Dead_Bug":1, "Pallof_Press":1};
 function yt(e){ return "https://www.youtube.com/results?search_query=" + encodeURIComponent(e.nombre + " mujer técnica correcta"); }
 var RUTINA = {
   nombre:"Rutina de 5 días para mujer principiante",
@@ -496,11 +491,11 @@ function pintarDia(){
       '<span class="tag"><b>'+esc(e.repeticiones)+'</b></span>'+
       (e.descanso ? '<span class="tag g"><b>'+e.descanso+'</b>s descanso</span>' : '<span class="tag">Sin descanso</span>')+
       '</div></div></div>'+
-      (FOTO_MUJER[e.id] ? '<div class="demo" data-i="'+i+'"><img class="a" loading="lazy" alt="'+esc(e.nombre)+' · posición inicial" src="'+IMG+e.id+'-0.webp?v=1">'+
+      '<div class="demo" data-i="'+i+'"><img class="a" loading="lazy" alt="'+esc(e.nombre)+' · posición inicial" src="'+IMG+e.id+'-0.webp?v=1">'+
       '<img class="b" loading="lazy" alt="'+esc(e.nombre)+' · posición final" src="'+IMG+e.id+'-1.webp?v=1">'+
       '<span class="pos">Posición <em>1</em> / 2</span><span class="pausa">Toca para pausar</span>'+
-      '<div class="sinimg">No se pudo cargar la imagen.<br>Mira el video con el botón de abajo.</div></div>' : '')+
-      '<a class="ytlink'+(FOTO_MUJER[e.id] ? '' : ' grande')+'" href="'+yt(e)+'" target="_blank" rel="noopener">'+
+      '<div class="sinimg">No se pudo cargar la imagen.<br>Mira el video con el botón de abajo.</div></div>'+
+      '<a class="ytlink" href="'+yt(e)+'" target="_blank" rel="noopener">'+
       '<span class="play">▶</span><span>Ver video de una mujer<br><small>haciendo este ejercicio · YouTube</small></span></a>'+
       '<div class="alerta'+(nuevo?" nuevo":"")+'"><span class="ic">⚠️</span><p><small>Cuidado · '+esc(e.zona)+'</small>'+esc(e.alerta)+'</p></div>'+
       '<div class="tec"><label>Técnica</label><p>'+esc(e.tecnica)+'</p></div>'+
