@@ -13,48 +13,44 @@
 
   /* Una hoja A4 vertical, fondo negro, estilo póster para pegar en el gimnasio. */
   .hoja{position:relative;width:210mm;height:297mm;background:var(--bg);margin:0 auto;overflow:hidden;
-        background-image:radial-gradient(circle at 22% 6%,rgba(227,6,19,.22),transparent 46%),
-                          radial-gradient(circle at 96% 30%,rgba(212,175,55,.10),transparent 42%);
+        background-image:radial-gradient(circle at 22% 6%,rgba(227,6,19,.26),transparent 46%),
+                          radial-gradient(circle at 96% 30%,rgba(212,175,55,.12),transparent 42%);
         display:flex;flex-direction:column;align-items:center;text-align:center;
-        padding:16mm 16mm 12mm;color:var(--txt);}
+        padding:10mm 12mm 8mm;color:var(--txt);}
 
-  .filo{position:absolute;top:0;left:0;right:0;height:5mm;background:var(--red);}
-  .filo::after{content:"";position:absolute;right:0;top:0;height:5mm;width:60mm;background:var(--gold);}
-  .pie{position:absolute;bottom:0;left:0;right:0;height:5mm;background:var(--gold);}
-  .pie::after{content:"";position:absolute;left:0;bottom:0;height:5mm;width:60mm;background:var(--red);}
+  .filo{position:absolute;top:0;left:0;right:0;height:6mm;background:var(--red);}
+  .filo::after{content:"";position:absolute;right:0;top:0;height:6mm;width:70mm;background:var(--gold);}
+  .pie{position:absolute;bottom:0;left:0;right:0;height:6mm;background:var(--gold);}
+  .pie::after{content:"";position:absolute;left:0;bottom:0;height:6mm;width:70mm;background:var(--red);}
 
-  .logo{width:56mm;height:auto;margin-top:2mm;filter:drop-shadow(0 3mm 5mm rgba(227,6,19,.3));}
+  .logo{width:88mm;height:auto;margin-top:2mm;filter:drop-shadow(0 4mm 6mm rgba(227,6,19,.35));}
 
-  .marca{margin-top:3mm;font-weight:800;letter-spacing:.24em;font-size:4mm;color:var(--gold);text-transform:uppercase;}
+  .marca{margin-top:2mm;font-weight:800;letter-spacing:.22em;font-size:5mm;color:var(--gold);text-transform:uppercase;}
 
-  h1{margin-top:5mm;font-family:var(--fh);font-weight:400;text-transform:uppercase;
-     font-size:15mm;line-height:.96;letter-spacing:.01em;}
+  h1{margin-top:4mm;font-family:var(--fh);font-weight:400;text-transform:uppercase;
+     font-size:25mm;line-height:.94;letter-spacing:.01em;}
   h1 span{display:block;color:var(--red);}
 
-  .sub{margin-top:4mm;font-family:var(--fc);font-weight:700;text-transform:uppercase;
-       letter-spacing:.16em;font-size:4.4mm;color:var(--mut);}
+  .sub{margin-top:4mm;font-family:var(--fc);font-weight:800;text-transform:uppercase;
+       letter-spacing:.16em;font-size:5.6mm;color:var(--mut);}
 
-  .qr-frame{margin-top:7mm;padding:5mm;background:#FFF;border-radius:7mm;
-            box-shadow:0 5mm 12mm rgba(0,0,0,.45), 0 0 0 2mm var(--gold);}
-  .qr-frame img{display:block;width:72mm;height:72mm;}
+  .qr-frame{margin-top:5mm;padding:4.5mm;background:#FFF;border-radius:7mm;
+            box-shadow:0 6mm 14mm rgba(0,0,0,.5), 0 0 0 2.4mm var(--gold);}
+  .qr-frame img{display:block;width:90mm;height:90mm;}
 
-  .comoa{margin-top:6mm;font-weight:800;letter-spacing:.04em;font-size:5mm;line-height:1.3;max-width:150mm;}
+  .comoa{margin-top:5mm;font-weight:800;letter-spacing:.03em;font-size:6mm;line-height:1.25;max-width:160mm;}
   .comoa b{color:var(--red);}
 
-  .listo{margin-top:4mm;font-weight:600;font-size:4mm;line-height:1.45;color:#D4D4D8;max-width:145mm;}
+  .listo{margin-top:2mm;font-weight:700;font-size:4.4mm;line-height:1.35;color:#D4D4D8;max-width:150mm;}
   .listo b{color:var(--gold);}
 
-  .rule{height:1mm;display:flex;gap:6mm;justify-content:center;margin:7mm auto 0;max-width:110mm;width:100%;}
+  .rule{height:1.2mm;display:flex;gap:6mm;justify-content:center;margin:6mm auto 0;max-width:110mm;width:100%;}
   .rule i{flex:1;background:var(--gold);border-radius:1mm;}
   .rule i:nth-child(2){flex:.16;background:var(--red);}
 
-  .nota{margin-top:auto;padding-top:5mm;width:100%;max-width:170mm;
-        display:flex;align-items:center;justify-content:space-between;gap:6mm;}
-  .nota p{font-weight:700;font-size:4mm;letter-spacing:.03em;color:var(--mut);line-height:1.4;text-align:left;}
-  .nota p b{color:var(--txt);}
-  .nota .firma{text-align:right;font-weight:800;letter-spacing:.14em;font-size:3.6mm;color:var(--mut);}
-  .nota .firma b{display:block;color:var(--gold);font-size:5.4mm;letter-spacing:.05em;
-                 font-family:var(--fc);font-weight:800;}
+  .nota{margin-top:auto;padding-top:4mm;width:100%;text-align:center;}
+  .nota p{font-weight:800;font-size:4.4mm;letter-spacing:.04em;color:var(--txt);line-height:1.5;}
+  .nota p b{color:var(--gold);}
 
   @media print{ body{background:#000;} @page{size:A4 portrait;margin:0;} }
 </style></head>
@@ -78,8 +74,7 @@
   <div class="rule"><i></i><i></i><i></i></div>
 
   <div class="nota">
-    <p>Membresía, planes y horarios en el mesón.<br><b>21 de Mayo 1520, Tocopilla</b></p>
-    <div class="firma">TU RUTINA, SIEMPRE CONTIGO<b>WGYM SOCIOS</b></div>
+    <p><b>21 de Mayo 1520, Tocopilla</b> · Membresía y planes en el mesón</p>
   </div>
 
   <div class="pie"></div>
