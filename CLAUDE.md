@@ -414,6 +414,15 @@ alimentación WGYMADNSPORT), seguir siempre este proceso:
     `navigator.vibrate`. Ver `pitar()` en `entrenar-sara.html` como
     referencia ya probada.
 
+### `entrenar-principiante5.html` — no tocar ejercicios ni usar los videos del gimnasio (regla permanente)
+
+La rutina de 5 días para mujer principiante se mantiene con los ejercicios
+y el orden que entregó la dueña (fotos de `assets/demos/` + botón "Ver
+video en YouTube (mujeres)"). **Nunca** reemplazar sus demostraciones por
+los videos `assets/*.mp4` del gimnasio ni cambiar, quitar o reordenar
+ejercicios para calzar con algún video: solo aplicar exactamente los
+cambios que ella pida, ejercicio por ejercicio.
+
 ### Estándares de Fitness Profesional — inteligencia añadida a la app
 ### (regla permanente)
 
