@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-23",
+ "actualizado": "2026-09-24",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -1369,7 +1369,7 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46289,
+   "fv": 46319,
    "medId": "f3c9a58d"
   },
   {
