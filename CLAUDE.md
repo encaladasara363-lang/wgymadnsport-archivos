@@ -417,12 +417,14 @@ alimentación WGYMADNSPORT), seguir siempre este proceso:
 ### `entrenar-principiante5.html` — no tocar ejercicios ni usar los videos del gimnasio (regla permanente)
 
 La rutina de 5 días para mujer principiante se mantiene con los ejercicios
-y el orden que entregó la dueña: fotos de `assets/demos/` en TODOS los
-ejercicios (nunca quitarlas: la dueña quiere ver siempre la imagen) +
-botón "Ver video de una mujer" que busca en YouTube. **Nunca** reemplazar sus demostraciones por
-los videos `assets/*.mp4` del gimnasio ni cambiar, quitar o reordenar
-ejercicios para calzar con algún video: solo aplicar exactamente los
-cambios que ella pida, ejercicio por ejercicio.
+y el orden que entregó la dueña. Demostraciones **solo con mujeres y solo
+por YouTube**: cada ejercicio tiene un botón "Ver técnica con entrenadora"
+que busca en YouTube `<ejercicio> técnica correcta mujer entrenadora
+principiante`. Sin fotos ni videos guardados en el repo: nunca volver a
+usar las imágenes de free-exercise-db (casi todas de hombres) ni los videos
+`assets/*.mp4` del gimnasio. Solo poner un enlace a un video puntual si se
+comprobó que lo muestra una mujer. No cambiar, quitar ni reordenar
+ejercicios: aplicar solo lo que la dueña pida.
 
 ### Estándares de Fitness Profesional — inteligencia añadida a la app
 ### (regla permanente)
