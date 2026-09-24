@@ -116,6 +116,8 @@ main.tab{padding:16px 0 20px}
 .btn:active{transform:scale(.97)}
 
 /* Cronómetro de sesión */
+.rutina-titulo{font-family:var(--fh);font-weight:400;text-transform:uppercase;text-align:center;
+  font-size:clamp(24px,7vw,32px);line-height:1.05;margin:4px 0 14px;color:var(--txt)}
 .crono-card{display:flex;align-items:center;gap:10px}
 .crono-card .t{font-family:var(--fn);font-size:41.5px;letter-spacing:1px;margin-right:auto;min-width:110px}
 .crono-card .lbl{font-family:var(--fc);text-transform:uppercase;font-size:13.5px;letter-spacing:1.5px;color:var(--mut)}
@@ -330,6 +332,7 @@ nav.tabs button.on span{color:var(--red2);font-weight:700}
 
     <!-- TAB: Rutinas -->
     <main class="tab" id="tabRutinas" hidden>
+      <h2 class="rutina-titulo">Rutina Principiante 5 Días</h2>
       <div class="card crono-card">
         <div>
           <span class="lbl">Cronómetro de sesión</span>
