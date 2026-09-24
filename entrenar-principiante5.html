@@ -126,7 +126,10 @@ details.reglas li::marker{color:var(--red2);font-family:var(--fn)}
 .fpasos li{counter-increment:p;display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;color:#E4E4E7;font-size:14.5px;line-height:1.45}
 .fpasos li::before{content:counter(p,decimal-leading-zero);font-family:var(--fn);font-size:17px;color:var(--gold);line-height:1.2;
   border-right:1px solid #33333B;padding-right:6px}
-.fyt{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px;margin-top:10px;padding:12px 14px 12px 18px;
+.fvid{position:relative;aspect-ratio:16/9;background:#000;border-bottom:1px solid var(--line)}
+.fvid-bg{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--fc);text-transform:uppercase;letter-spacing:1.5px;font-size:13px;color:var(--mut)}
+.fvid iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.fyt{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px;padding:12px 14px 12px 18px;
   border-top:1px solid var(--line);text-decoration:none;color:var(--txt);background:rgba(255,255,255,.02)}
 .fyt span{font-family:var(--fc);font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:14px}
 .fyt em{grid-row:2;font-style:normal;font-size:12px;color:var(--mut)}
@@ -299,7 +302,7 @@ footer p a{color:var(--gold)}
       <a href="https://wa.me/56991540156"><b>●</b> +56 9 9154 0156</a>
       <a href="https://wa.me/56975196394"><b>●</b> +56 9 7519 6394</a>
     </div>
-    <p>Las demostraciones son orientativas; confirma tu técnica con un instructor en sala.</p>
+    <p>Los videos son de canales públicos de YouTube y sirven como referencia; confirma tu técnica con un instructor en sala.</p>
   </footer>
 </main>
 
@@ -361,9 +364,24 @@ footer p a{color:var(--gold)}
 /* ═══ Datos de la rutina (estructura JSON entregada por el gimnasio) ═══════
    Se agregó a cada ejercicio: "alerta" (punto de riesgo biomecánico),
    "zona" y repMin/repMax para calcular intensidad. Nada de datos de salud. */
-/* Demostración: cada ejercicio abre en YouTube una búsqueda de videos de
-   mujeres (entrenadoras) mostrando la técnica correcta para principiantes. */
-function yt(e){ return "https://www.youtube.com/results?search_query=" + encodeURIComponent(e.nombre + " técnica correcta mujer entrenadora principiante"); }
+/* Demostración: un video de YouTube incrustado por ejercicio (clave = "demo").
+   Para cambiar un video basta con reemplazar su código de 11 caracteres. */
+var VIDEOS = {
+  spinning:"UVSMBe-AwP8", prensa:"ccDlOeZ90hs", pressPechoMaquina:"lw4uUkBl_HE", remoSentado:"JtTusrYzAos",
+  puenteGluteos:"v_9dS-l3GWU", plancha:"QU45oICbzPM", deadBug:"0JFVLaTLzHg", gatoVaca:"3dGnK7u8Xsk",
+  sentadillaMancuernas:"NOrLydR-Qo8", jalonPecho:"eSlKErmf5WU", curlFemoral:"9xbBr5Ytl8c", pressHombros:"Dtow4JuFkJA",
+  pallof:"W8Yf1uyUnoM", estiramientoPantorrilla:"TyZAmDcD6mM", planchaLateral:"YT790baO37o", subidaPlataforma:"uv_R6xPD1aM",
+  pesoMuertoMancuernas:"9j_L1KgpK8Y", pressPechoPolea:"LtiByr-e3dg", jalonUnilateral:"qUmBAKXevS4",
+  elevacionTalones:"iBLMXdrnQWU", tricepsCuerda:"jFLB0KjVGqk"
+};
+function video(e){
+  var id = VIDEOS[e.demo];
+  return '<div class="fvid"><span class="fvid-bg">Cargando video…</span>'+
+    '<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&modestbranding=1&playsinline=1" title="Técnica: '+esc(e.nombre)+'" '+
+    'loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen '+
+    'referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+
+    '<a class="fyt" href="https://www.youtube.com/watch?v='+id+'" target="_blank" rel="noopener"><span>Ver en YouTube</span><em>Si el video no carga aquí, ábrelo directo</em><i>›</i></a>';
+}
 var RUTINA = {
   nombre:"Rutina de 5 días para mujer principiante",
   reglas:[
@@ -557,11 +575,10 @@ function pintarDia(){
       '<span class="tag"><b>'+esc(e.repeticiones)+'</b></span>'+
       (e.descanso ? '<span class="tag g"><b>'+e.descanso+'</b>s descanso</span>' : '<span class="tag">Sin descanso</span>')+
       '</div></div></div>'+
-      '<div class="ficha"><div class="fmeta">'+
+      '<div class="ficha">'+video(e)+'<div class="fmeta">'+
         '<div><small>Músculo principal</small><b>'+esc((FICHA[e.demo]||["—"])[0])+'</b></div>'+
         '<div><small>Equipo</small><b>'+esc((FICHA[e.demo]||["","—"])[1])+'</b></div></div>'+
         '<div class="fpasos"><small>Ejecución</small><ol>'+pasos(e.tecnica).map(function(x){ return "<li>"+esc(x)+"</li>"; }).join("")+'</ol></div>'+
-        '<a class="fyt" href="'+yt(e)+'" target="_blank" rel="noopener"><span>Ver la técnica en video</span><em>Entrenadoras · YouTube</em><i>›</i></a>'+
       '</div>'+
       '<div class="alerta'+(nuevo?" nuevo":"")+'"><span class="ic">⚠️</span><p><small>Cuidado · '+esc(e.zona)+'</small>'+esc(e.alerta)+'</p></div>'+
       '<div class="series">'+
