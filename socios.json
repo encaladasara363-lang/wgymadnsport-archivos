@@ -345,6 +345,14 @@
    "fv": 46317
   },
   {
+   "n": "ANGIE",
+   "a": "CARRASCO",
+   "rut": "Sin Rut",
+   "plan": "Estudiante Profesor",
+   "monto": 28000,
+   "fv": 46320
+  },
+  {
    "n": "JAVIERA",
    "a": "CARRASCO",
    "rut": "Sin Rut",
@@ -918,6 +926,14 @@
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46289
+  },
+  {
+   "n": "AGUSTIN",
+   "a": "JERONIMO",
+   "rut": "Sin Rut",
+   "plan": "Estudiante Profesor",
+   "monto": 28000,
+   "fv": 46320
   },
   {
    "n": "CAMILA",
