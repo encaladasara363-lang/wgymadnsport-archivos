@@ -37,9 +37,14 @@
   .sub{margin-top:3mm;font-family:var(--fc);font-weight:800;text-transform:uppercase;
        letter-spacing:.16em;font-size:5.6mm;color:var(--mut);}
 
-  .qr-frame{margin-top:5mm;padding:4.5mm;background:#FFF;border-radius:7mm;
+  .qr-frame{position:relative;margin-top:8mm;padding:4.5mm;background:#FFF;border-radius:7mm;
             box-shadow:0 6mm 14mm rgba(0,0,0,.5), 0 0 0 2.4mm var(--gold);}
   .qr-frame img{display:block;width:90mm;height:90mm;}
+
+  .qr-badge{position:absolute;top:-5mm;left:50%;transform:translateX(-50%);white-space:nowrap;
+      background:var(--red);color:#fff;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+      font-size:4.2mm;padding:2mm 6mm;border-radius:99px;border:.6mm solid var(--gold);
+      box-shadow:0 3mm 6mm rgba(0,0,0,.45);}
 
   .comoa{margin-top:5mm;font-weight:800;letter-spacing:.03em;font-size:6mm;line-height:1.25;max-width:160mm;}
   .comoa b{color:var(--red);}
@@ -81,6 +86,7 @@
   <div class="sub">APP OFICIAL DE SOCIOS</div>
 
   <div class="qr-frame">
+    <div class="qr-badge">Rutina Principiante</div>
     <img src="data:image/png;base64,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">
   </div>
 
