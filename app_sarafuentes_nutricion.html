@@ -392,20 +392,24 @@ function sumarDias(iso, n){
    Calculado con Harris-Benedict mujeres + actividad "activo" (entrena 6
    días/semana) → mantención (TDEE) ≈ 2.320 kcal. Sara pidió el déficit
    real aunque haya que bajar porciones, así que la proteína se mantiene
-   FIJA y alta (≈149 g/día, >2,3 g/kg — bien arriba del óptimo de 2,0-2,2
+   FIJA y alta (≈156 g/día, >2,4 g/kg — bien arriba del óptimo de 2,0-2,2
    g/kg para fuerza documentado) y el recorte real va todo a carbohidrato
-   y grasa: días de pierna (lunes, miércoles, sábado) quedan en ~2.050
-   kcal (déficit ~270 kcal) y días de tren superior (martes, jueves,
-   viernes) en ~1.850 kcal (déficit ~470 kcal, cerca del techo de 500
+   y grasa: días de pierna (lunes, miércoles, sábado) quedan en ~2.060
+   kcal (déficit ~260 kcal) y días de tren superior (martes, jueves,
+   viernes) en ~1.890 kcal (déficit ~430 kcal, dentro del techo de 500
    kcal documentado — no se sube más para no arriesgar el músculo). El
    domingo es descanso — sin entreno a las 22h no hay batido post-entreno,
-   así que ese día queda naturalmente más bajo (~1.410 kcal) sin
+   así que ese día queda naturalmente más bajo (~1.350 kcal) sin
    necesidad de recortar nada más ahí. El promedio semanal cierra en un
-   déficit real de ~450 kcal/día bajo la mantención, dentro del rango de
+   déficit real de ~430 kcal/día bajo la mantención, dentro del rango de
    250-500 kcal documentado para pérdida de grasa sostenida sin perder
-   masa muscular. Esto es un programa nutricional calculado, no un dato
-   de salud — nunca escribir aquí su peso, edad, estatura, % de grasa o
-   cintura reales, solo el resultado ya calculado. */
+   masa muscular. El almuerzo lleva 50 g de quesillo en la ensalada (a
+   pedido de Sara) en vez del aceite de oliva de antes — la grasa del
+   quesillo ya cubre esa parte, así que sacarlo y bajar un poco la papa
+   deja el total casi igual que antes de agregarlo. Esto es un programa
+   nutricional calculado, no un dato de salud — nunca escribir aquí su
+   peso, edad, estatura, % de grasa o cintura reales, solo el resultado
+   ya calculado. */
 var COMIDAS = [
   { id:"desayuno", nombre:"Desayuno", hora:"8:30",
     normal:{prot:20,carb:14,grasa:15}, alto:{prot:20,carb:30,grasa:24},
@@ -416,10 +420,10 @@ var COMIDAS = [
     normal:{prot:9,carb:24,grasa:11}, alto:{prot:9,carb:24,grasa:11},
     comun:"150 g de yogurt natural + 10 g de chía + ½ plátano o 1 manzana + 12 g de almendras, nueces o mix de frutos secos" },
   { id:"almuerzo", nombre:"Almuerzo", hora:"15:30",
-    normal:{prot:45,carb:27,grasa:13}, alto:{prot:45,carb:35,grasa:14},
-    comun:"200 g de pechuga de pollo + 100 g de papa o papa camote (ya cocida) + 4 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 cucharada de mostaza",
-    altoTxt:"200 g de pechuga de pollo + 130 g de papa o papa camote (ya cocida) + 8 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 cucharada de mostaza",
-    domingo:"100 g de pasta integral cocida + 200 g de carne (posta o similar, sin grasa visible) + ensalada libre de pepino y morrón" },
+    normal:{prot:52,carb:21,grasa:17}, alto:{prot:52,carb:31,grasa:14},
+    comun:"200 g de pechuga de pollo + 70 g de papa o papa camote (ya cocida) + 50 g de quesillo + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 cucharada de mostaza",
+    altoTxt:"200 g de pechuga de pollo + 110 g de papa o papa camote (ya cocida) + 50 g de quesillo + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 cucharada de mostaza",
+    domingo:"100 g de pasta integral cocida + 200 g de carne (posta o similar, sin grasa visible) + 50 g de quesillo + ensalada libre de pepino y morrón" },
   { id:"cena", nombre:"Cena", hora:"20:30",
     normal:{prot:45,carb:27,grasa:13}, alto:{prot:45,carb:35,grasa:14},
     comun:"200 g de pechuga de pollo + 100 g de papa o papa camote (ya cocida) + 4 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 taza de café cargado",
