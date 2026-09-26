@@ -85,8 +85,10 @@ mismo diseño (a pedido explícito: "quiero mantener una línea"). Copiar
 `cartel-qr-mujeres-movimiento.html` (o `cartel-qr-perdida-grasa.html`,
 la segunda referencia ya con foto) tal cual, y cambiar solo:
 
-- Título/subtítulo/badge (mismo patrón: "Rutina de N Días de NOMBRE",
-  badge "N Días · Nivel").
+- Título/subtítulo (mismo patrón: "Rutina de N Días de NOMBRE").
+- El badge sobre el QR (`.qr-badge`) lleva **solo el nivel**
+  ("Principiante", "Intermedia", etc.) — nunca "N Días · Nivel", el
+  dueño pidió sacar la cantidad de días de ahí.
 - El QR (regenerar apuntando al archivo de la rutina correspondiente,
   PNG plano `ERROR_CORRECT_M`, sin logo incrustado — el logo ya está
   arriba del cartel).
@@ -96,6 +98,15 @@ la segunda referencia ya con foto) tal cual, y cambiar solo:
   un mockup de celular ni una captura de pantalla de la app. Se puede
   sacar directo del array de imágenes de ejercicios del archivo de la
   rutina (`EXERCISE_IMAGES`/`POSE_IMAGES`, según cuál tenga esa app).
+  **Variar el ejercicio elegido de un cartel a otro** (a pedido
+  explícito del dueño: "que valla variando") — nunca repetir el mismo
+  tipo de ejercicio/misma máquina en dos carteles seguidos solo porque
+  fue la primera imagen del array. Antes de elegir, mirar qué ejercicio
+  se usó en el cartel anterior más reciente (ej. `cartel-qr-mujeres-movimiento.html`
+  usa prensa de piernas, `cartel-qr-perdida-grasa.html` usa hip thrust —
+  ambas de piernas, sería mejor la próxima vez elegir uno de tren
+  superior, core o cardio) y preferir un grupo muscular distinto, para
+  que la colección de carteles en el gimnasio se vea variada.
   Con `.qr-frame img` a 62mm y `.foto-frame img` a 56×70mm (object-fit
   cover) ambas tarjetas entran lado a lado sin volver a topar la franja
   de color de abajo — si se agranda cualquiera de las dos, volver a
