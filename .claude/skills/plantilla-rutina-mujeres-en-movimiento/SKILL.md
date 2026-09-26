@@ -90,10 +90,21 @@ la segunda referencia ya con foto) tal cual, y cambiar solo:
   un mockup de celular ni una captura de pantalla de la app. Se puede
   sacar directo del array de imágenes de ejercicios del archivo de la
   rutina (`EXERCISE_IMAGES`/`POSE_IMAGES`, según cuál tenga esa app).
-  Con `.qr-frame img` a 74mm y `.foto-frame img` a 66×83mm (object-fit
+  Con `.qr-frame img` a 62mm y `.foto-frame img` a 56×70mm (object-fit
   cover) ambas tarjetas entran lado a lado sin volver a topar la franja
   de color de abajo — si se agranda cualquiera de las dos, volver a
   verificar con captura que `.nota p` sigue por sobre `.pie`.
+- **Banner "🔥 Dentro de tu app"** (`.logros`/`.logros-tag`/`.logros-fila`/
+  `.logro`): franja destacada con fondo degradado rojo/dorado y borde
+  dorado, entre `.chips` y `.rule`, con las tres funciones gamificadas
+  del dashboard en una sola línea: "⚖️ Registra tu peso · 🏆 Mis récords
+  · 🥇 Gana tu medalla". Copiar tal cual (mismo texto, no hace falta
+  adaptarlo por rutina). Es un elemento más que compite por el espacio
+  vertical ya ajustado de la hoja — si el cartel de referencia cambia de
+  tamaño de fuente/imágenes, volver a probar con captura que `.logros`,
+  `.nota` y `.pie` no se pisen ni se corten (ya pasó una vez: agregar
+  este bloque sin achicar nada más empujó `.nota` fuera del área visible
+  de `.hoja`).
 
 ## Antes de publicar
 
