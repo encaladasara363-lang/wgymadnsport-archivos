@@ -162,6 +162,11 @@ main{padding:18px 16px 46px}
   padding:9px 11px;font-size:15px;line-height:1.45;color:var(--blanco);margin-bottom:11px}
 .alerta b{color:var(--rojo-vivo);display:block;font-size:12.5px;text-transform:uppercase;
   letter-spacing:.08em;margin-bottom:2px;font-family:'Inter',sans-serif}
+.video-link{display:inline-flex;align-items:center;gap:7px;background:var(--negro-suave);
+  border:1.5px solid var(--dorado);border-radius:10px;padding:9px 13px;margin-bottom:11px;
+  color:var(--dorado);font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
+  text-transform:uppercase;letter-spacing:.03em;text-decoration:none}
+.video-link:active{transform:scale(.99)}
 .descansar{
   display:block;width:100%;cursor:pointer;background:var(--negro-suave);
   border:1.5px solid var(--linea);border-radius:10px;color:var(--blanco);padding:11px 12px;
@@ -515,8 +520,10 @@ var RUTINA = [
     exercises: [
       { name:"Press militar con mancuernas", sets:"1 × 6-10 AL FALLO", rest:150, rm:"alta", rmTxt:"AL FALLO", repMin:6, repMax:10, tip:"No arquees la zona lumbar para ganar rango de movimiento." },
       { name:"Elevación lateral", sets:"1 × 10-15 AL FALLO", rest:90, rm:"alta", rmTxt:"AL FALLO", repMin:10, repMax:15, tip:"Sin encoger el trapecio al subir los brazos — lidera el movimiento con el codo, no con la muñeca." },
-      { name:"Rueda abdominal (rollout)", sets:"1 × AL FALLO (máx. control)", rest:60, rm:"—", rmTxt:"—", repMin:null, repMax:null, tip:"Cadera y hombros alineados — si sientes que la zona lumbar se hunde al extender los brazos hacia adelante, ese es tu límite: vuelve antes de perder esa alineación." },
-      { name:"Elevación de piernas", sets:"1 × AL FALLO", rest:60, rm:"—", rmTxt:"—", repMin:null, repMax:null, tip:"Zona lumbar pegada al piso o al banco durante todo el movimiento — así se marca el abdomen sin forzar la espalda baja." }
+      { name:"Activación de transverso (vacuum)", sets:"3 × 10-15 seg", rest:30, rm:"—", rmTxt:"—", repMin:null, repMax:null, tip:"Mete el ombligo hacia la columna como si te fueras a abrochar un pantalón apretado, sin aguantar la respiración — es la base para activar la faja abdominal profunda antes del resto de los ejercicios. Segura aunque tengas diástasis, porque no genera presión hacia afuera.", video:"https://www.youtube.com/watch?v=2adOhKSDG_c" },
+      { name:"Dead bug (bicho muerto)", sets:"3 × 8-10 por lado", rest:45, rm:"—", rmTxt:"—", repMin:null, repMax:null, tip:"Zona lumbar siempre pegada al piso — si se despega o ves que se forma un bulto en el centro del abdomen, achica el rango de la pierna/brazo hasta que se mantenga plano. Ese bulto es la señal de que el ejercicio está exigiendo más de lo que la línea media aguanta hoy.", video:"https://www.youtube.com/watch?v=0JFVLaTLzHg" },
+      { name:"Plancha (plank)", sets:"3 × 20-40 seg", rest:45, rm:"—", rmTxt:"—", repMin:null, repMax:null, tip:"Cadera alineada con los hombros, sin subirla ni dejarla caer — si se forma un domo en el centro del abdomen, apoya las rodillas en el piso hasta dominar la versión completa sin ese abultamiento.", video:"https://www.youtube.com/watch?v=RsF2o1vsSsw" },
+      { name:"Plancha lateral", sets:"3 × 20-30 seg por lado", rest:45, rm:"—", rmTxt:"—", repMin:null, repMax:null, tip:"Cadera elevada en línea recta con hombro y tobillo, sin dejarla caer — trabaja los oblicuos sin flexionar la columna hacia adelante, un movimiento más seguro que el crunch para la línea media.", video:"https://www.youtube.com/watch?v=kyOeSuh7LLo" }
     ]
   },
   {
@@ -657,6 +664,7 @@ function pintarDia(){
         '<button type="button" class="tick" id="hecho-' + i + '" data-hecho="' + (entradaHoy ? "si" : "no") + '">✓</button>' +
       '</div>' +
       '<p class="rm1-nota" id="rm1-' + i + '"></p>' +
+      (ex.video ? '<a class="video-link" href="' + ex.video + '" target="_blank" rel="noopener">▶ Ver ejecución en video</a>' : '') +
       '<div class="alerta"><b>Alerta biomecánica</b>' + ex.tip + '</div>' +
       '<button class="descansar" data-seg="' + ex.rest + '">Descansar ' + ex.rest + ' seg</button>';
     cont.appendChild(div);
