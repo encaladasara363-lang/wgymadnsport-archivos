@@ -84,7 +84,7 @@ main{padding:18px 16px 46px}
   text-transform:uppercase;letter-spacing:.01em;color:var(--dorado);margin-bottom:2px}
 .paso p{font-size:15px;line-height:1.4;color:var(--blanco)}
 
-.meta-personal{display:flex;gap:12px;align-items:flex-end;margin-bottom:16px;
+.meta-personal{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:16px;
   padding-top:14px;border-top:1px solid rgba(255,255,255,.12)}
 .meta-personal .campito{flex:1}
 .meta-personal label{display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
@@ -266,6 +266,14 @@ main{padding:18px 16px 46px}
             <span class="unidad">cm</span>
           </div>
           <span class="hint-meta">Sugerencia: 66 cm — percentil 15 de mujeres físicamente activas (estudio CHIREF, Chile), la meta más baja que se recomienda como objetivo real sin pasarse a un caso atípico (el percentil 5%, 63,4 cm, no se usa como meta por defecto). La muestra de ese estudio tiene 20-29 años, así que úsalo solo como referencia direccional, no como medición hecha en tu grupo de edad — escribe la tuya si prefieres otra meta</span>
+        </div>
+        <div class="campito">
+          <label for="metaPeso">Tu meta de peso</label>
+          <div class="conunidad">
+            <input type="text" inputmode="decimal" id="metaPeso" placeholder="60" autocomplete="off">
+            <span class="unidad">kg</span>
+          </div>
+          <span class="hint-meta">Sugerencia: 60-61 kg — bajar 3-4 kg en 10-12 semanas, al ritmo del déficit real de tu plan (~462 kcal/día promedio). La cintura sigue siendo la métrica más confiable: si mantienes o suben músculo, la balanza puede bajar menos que esto y aun así ir bien — escribe la tuya si prefieres otra meta</span>
         </div>
         <div class="dias-plan">
           <div class="v num" id="diasPlan">0</div>
@@ -623,20 +631,33 @@ pintarTodo();
 pintarSuplementos();
 pintarMarcas();
 
-/* ═══ Tu objetivo: meta de cintura (la pone ella, nunca fija en el código)
-   y días en el plan, contados desde la primera vez que abrió esta app
-   en este teléfono. ═══════════════════════════════════════════════════ */
+/* ═══ Tu objetivo: metas de cintura y peso (las pone ella, nunca fijas en
+   el código) y días en el plan, contados desde la primera vez que abrió
+   esta app en este teléfono. ═══════════════════════════════════════════ */
 var META_KEY = "wgym_meta_saraencalada_v1";
 var INICIO_KEY = "wgym_inicio_saraencalada_v1";
 
-(function cargarMetaCintura(){
+function cargarMeta(){
+  try{ return JSON.parse(localStorage.getItem(META_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function guardarMeta(cambios){
   try{
-    var m = JSON.parse(localStorage.getItem(META_KEY)) || {};
-    if(m.cintura != null) $("metaCintura").value = m.cintura;
+    var m = cargarMeta();
+    Object.keys(cambios).forEach(function(k){ m[k] = cambios[k]; });
+    localStorage.setItem(META_KEY, JSON.stringify(m));
   }catch(e){}
+}
+(function cargarMetas(){
+  var m = cargarMeta();
+  if(m.cintura != null) $("metaCintura").value = m.cintura;
+  if(m.peso != null) $("metaPeso").value = m.peso;
 })();
 $("metaCintura").addEventListener("input", function(){
-  try{ localStorage.setItem(META_KEY, JSON.stringify({ cintura: $("metaCintura").value })); }catch(e){}
+  guardarMeta({ cintura: $("metaCintura").value });
+});
+$("metaPeso").addEventListener("input", function(){
+  guardarMeta({ peso: $("metaPeso").value });
 });
 
 (function pintarDiasPlan(){
