@@ -360,6 +360,14 @@ plantilla `app_milton.html` de la sección siguiente).
   `cartel-qr-perdida-grasa.html` tal cual para el cartel nuevo (es la
   referencia más reciente, ya con foto junto al QR y el banner de
   logros).
+- El dueño manda el archivo con la rutina ya armada (ejercicios,
+  series, descansos, tips e imágenes) y solo pide "adaptarla" a este
+  diseño: **nunca tocar, reemplazar ni buscar otras imágenes de los
+  ejercicios de esa rutina** — se transplantan tal cual del archivo
+  que mandó al array de imágenes de la app nueva. Lo único que cambia
+  es el diseño/estructura alrededor, nunca el contenido ni las fotos
+  de cada ejercicio. (Esto es aparte de la foto del cartel QR impreso,
+  que sí se elige por separado y debe variar — ver el punto siguiente.)
 - El cartel QR incluye siempre, en una sola línea dentro de la franja
   roja/dorada "🔥 Dentro de tu app": "⚖️ Registra tu peso · 🏆 Mis
   récords · 🥇 Gana tu medalla" — mismo texto exacto, sin adaptarlo por

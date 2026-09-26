@@ -20,15 +20,31 @@ Para una rutina nueva con este mismo diseño: **copiar
 únicamente lo de abajo — nunca rediseñar desde cero, y nunca tocar
 `socios.json`.
 
+**El dueño manda el archivo de la rutina (con sus ejercicios, series,
+descansos, tips e imágenes ya definidos) y espera que Claude solo la
+"adapte" a este diseño — nunca que rediseñe o reemplace lo que ya
+viene en ese archivo.** En particular, **las imágenes de los
+ejercicios de esa rutina nunca se tocan**: se transplantan tal cual
+(mismo archivo/base64/URL) al array de imágenes correspondiente
+(`EXERCISE_IMAGES`/`POSE_IMAGES`), nunca se buscan fotos nuevas, se
+recortan, se editan ni se reemplazan por otras — a diferencia de la
+foto del cartel QR impreso (esa sí se elige aparte y debe variar de un
+cartel a otro, ver más abajo). Lo único que cambia es la estructura,
+el diseño visual y el armado alrededor (PLAN, claves de localStorage,
+textos), nunca el contenido ni las imágenes que trae la rutina
+original.
+
 ## Qué cambiar por cada rutina nueva
 
 1. **Nombre del archivo**: uno descriptivo en la raíz del repo (mismo
    patrón que `mujeres-en-movimiento.html`).
 2. **`<title>`**, el `<h1>`/subtítulo del hero y el nombre que aparece en
    `.welcome-eyebrow`/`.welcome-sub` si corresponde a otro programa.
-3. **El array `PLAN`**: los días, ejercicios, series, descansos y tips
-   biomecánicos de la rutina nueva (aplicar la "Base de conocimiento
-   técnico" de `CLAUDE.md` para armarlo).
+3. **El array `PLAN`**: los días, ejercicios, series, descansos, tips
+   biomecánicos e **imágenes** de la rutina nueva, transplantados tal
+   cual del archivo que mandó el dueño (aplicar la "Base de
+   conocimiento técnico" de `CLAUDE.md` solo para completar algo que
+   ese archivo no traiga, nunca para reemplazar lo que sí trae).
 4. **Claves de `localStorage`** (`key()`, y cualquier otra clave tipo
    `wgym_..._v1`): cambiar el sufijo para que no se mezcle con el
    progreso guardado de otra rutina en el mismo celular.
