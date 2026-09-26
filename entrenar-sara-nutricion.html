@@ -377,45 +377,45 @@ function sumarDias(iso, n){
 
 /* ═══ Plan de comidas ════════════════════════════════════════════════════
    Calculado con Harris-Benedict mujeres + actividad "activo" (entrena 6
-   días/semana) → mantención (TDEE) ≈ 2.320 kcal. Sara pidió un déficit
-   real sin perder masa muscular, así que la proteína queda FIJA en 150 g
-   todos los días (>2,3 g/kg — bien arriba del óptimo de 2,0-2,2 g/kg para
-   fuerza documentado) y lo único que cambia entre tipos de día es
-   carbohidrato y algo de grasa: días de pierna (lunes, miércoles, sábado)
-   quedan más arriba (~2.150 kcal, déficit chico, más combustible para el
-   volumen de pierna) y días de tren superior (martes, jueves, viernes)
-   quedan más abajo (~1.980 kcal, déficit más marcado). El domingo es
-   descanso — sin entreno a las 22h no hay batido post-entreno, así que
-   ese día queda naturalmente más bajo (~1.570 kcal) sin necesidad de
-   recortar nada más: el promedio semanal cierra en un déficit real de
-   ~330 kcal/día bajo la mantención, dentro del rango de 250-500 kcal
-   documentado para pérdida de grasa sostenida. Esto es un programa
-   nutricional calculado, no un dato de salud — nunca escribir aquí su
-   peso, edad, estatura, % de grasa o cintura reales, solo el resultado
-   ya calculado. */
+   días/semana) → mantención (TDEE) ≈ 2.320 kcal. Sara pidió el déficit
+   real aunque haya que bajar porciones, así que la proteína se mantiene
+   FIJA y alta (≈149 g/día, >2,3 g/kg — bien arriba del óptimo de 2,0-2,2
+   g/kg para fuerza documentado) y el recorte real va todo a carbohidrato
+   y grasa: días de pierna (lunes, miércoles, sábado) quedan en ~2.050
+   kcal (déficit ~270 kcal) y días de tren superior (martes, jueves,
+   viernes) en ~1.850 kcal (déficit ~470 kcal, cerca del techo de 500
+   kcal documentado — no se sube más para no arriesgar el músculo). El
+   domingo es descanso — sin entreno a las 22h no hay batido post-entreno,
+   así que ese día queda naturalmente más bajo (~1.410 kcal) sin
+   necesidad de recortar nada más ahí. El promedio semanal cierra en un
+   déficit real de ~450 kcal/día bajo la mantención, dentro del rango de
+   250-500 kcal documentado para pérdida de grasa sostenida sin perder
+   masa muscular. Esto es un programa nutricional calculado, no un dato
+   de salud — nunca escribir aquí su peso, edad, estatura, % de grasa o
+   cintura reales, solo el resultado ya calculado. */
 var COMIDAS = [
   { id:"desayuno", nombre:"Desayuno", hora:"8:30",
-    normal:{prot:20,carb:20,grasa:17}, alto:{prot:20,carb:30,grasa:24},
-    comun:"1 lámina de pan integral + 1 rebanada de jamón + 1 rebanada de queso + 2 huevos duros + 1 taza de café cargado + 2 cuadraditos de chocolate 85% cacao",
+    normal:{prot:20,carb:14,grasa:15}, alto:{prot:20,carb:30,grasa:24},
+    comun:"1 lámina de pan integral + 1 rebanada de jamón + 1 rebanada de queso + 2 huevos duros + 1 taza de café cargado",
     altoTxt:"2 láminas de pan integral + 1 rebanada de jamón + 1 rebanada de queso + ½ palta + 2 huevos duros + 1 taza de café cargado + 3 cuadraditos de chocolate 85% cacao",
     domingo:"2 láminas de pan integral + 1 rebanada de jamón + 1 rebanada de queso + ½ palta + 2 huevos duros + 1 taza de café cargado + 3 cuadraditos de chocolate 85% cacao" },
   { id:"colacion", nombre:"Colación", hora:"11:40",
-    normal:{prot:10,carb:26,grasa:13}, alto:{prot:10,carb:26,grasa:13},
-    comun:"150 g de yogurt natural + 10 g de chía + ½ plátano o 1 manzana + 15 g de almendras, nueces o mix de frutos secos" },
+    normal:{prot:9,carb:24,grasa:11}, alto:{prot:9,carb:24,grasa:11},
+    comun:"150 g de yogurt natural + 10 g de chía + ½ plátano o 1 manzana + 12 g de almendras, nueces o mix de frutos secos" },
   { id:"almuerzo", nombre:"Almuerzo", hora:"15:30",
-    normal:{prot:45,carb:28,grasa:14}, alto:{prot:45,carb:38,grasa:16},
-    comun:"200 g de pechuga de pollo + 100 g de papa o papa camote (ya cocida) + 5 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 cucharada de mostaza",
-    altoTxt:"200 g de pechuga de pollo + 150 g de papa o papa camote (ya cocida) + 10 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 cucharada de mostaza",
+    normal:{prot:45,carb:27,grasa:13}, alto:{prot:45,carb:35,grasa:14},
+    comun:"200 g de pechuga de pollo + 100 g de papa o papa camote (ya cocida) + 4 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 cucharada de mostaza",
+    altoTxt:"200 g de pechuga de pollo + 130 g de papa o papa camote (ya cocida) + 8 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 cucharada de mostaza",
     domingo:"100 g de pasta integral cocida + 200 g de carne (posta o similar, sin grasa visible) + ensalada libre de pepino y morrón" },
   { id:"cena", nombre:"Cena", hora:"20:30",
-    normal:{prot:45,carb:28,grasa:14}, alto:{prot:45,carb:38,grasa:16},
-    comun:"200 g de pechuga de pollo + 100 g de papa o papa camote (ya cocida) + 5 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 taza de café cargado",
-    altoTxt:"200 g de pechuga de pollo + 150 g de papa o papa camote (ya cocida) + 10 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 taza de café cargado",
+    normal:{prot:45,carb:27,grasa:13}, alto:{prot:45,carb:35,grasa:14},
+    comun:"200 g de pechuga de pollo + 100 g de papa o papa camote (ya cocida) + 4 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 taza de café cargado",
+    altoTxt:"200 g de pechuga de pollo + 130 g de papa o papa camote (ya cocida) + 8 g de aceite de oliva + ½ pepino + 50 g de morrón + 2 tomates cherry + ½ cebolla + vinagre de manzana + 1 taza de café cargado",
     domingo:"200 g de pechuga de pollo + ensalada libre de pepino y morrón + 1 taza de café cargado" },
   { id:"postentreno", nombre:"Post-entreno", hora:"23:30", soloEntreno:true,
-    normal:{prot:30,carb:68,grasa:20}, alto:{prot:30,carb:78,grasa:14},
-    comun:"1 scoop de proteína + creatina + 5 g de miel + 5 g de mantequilla de maní + 100 g de leche entera + 50 g de yogur griego + 5 g de chía + 15 g de avena",
-    altoTxt:"1 scoop de proteína + creatina + 2 galletas de arroz + 10 g de miel + 10 g de mantequilla de maní + 100 g de leche entera + 50 g de yogur griego + 5 g de chía + 30 g de avena" }
+    normal:{prot:30,carb:58,grasa:21}, alto:{prot:30,carb:71,grasa:12},
+    comun:"1 scoop de proteína + creatina + 5 g de miel + 3 g de mantequilla de maní + 100 g de leche entera + 50 g de yogur griego + 5 g de chía + 12 g de avena",
+    altoTxt:"1 scoop de proteína + creatina + 1 galleta de arroz + 8 g de miel + 8 g de mantequilla de maní + 100 g de leche entera + 50 g de yogur griego + 5 g de chía + 25 g de avena" }
 ];
 
 /* Lunes=0 ... Domingo=6. Lunes, Miércoles y Sábado son sus días de pierna
