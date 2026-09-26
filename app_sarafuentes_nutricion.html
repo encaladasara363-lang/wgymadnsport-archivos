@@ -456,7 +456,7 @@ var SUPLEMENTOS = [
   { nombre:"Beta-alanina", dosis:"2 g + 2 g (mañana y antes de entrenar)", cuando:"Desayuno y antes del entreno de las 22h", motivo:"La guía técnica recomienda 0,8-1,6 g por toma para evitar el hormigueo típico de esta dosis — si te da hormigueo con los 2 g juntos, puedes fraccionar cualquiera de las dos tomas en dos. La toma de antes de entrenar no aplica el domingo, que es descanso.", comidas:["desayuno"] },
   { nombre:"Omega 3", dosis:"250-500 mg", cuando:"Almuerzo", motivo:"Es una grasa — se absorbe mejor con una comida que lleve algo de grasa (el aceite de oliva de este almuerzo).", comidas:["almuerzo"] },
   { nombre:"Citrato de potasio", dosis:"según envase", cuando:"Almuerzo", motivo:"Con comida, para no irritar el estómago.", comidas:["almuerzo"] },
-  { nombre:"Creatina", dosis:"3-5 g", cuando:"Post-entreno", motivo:"Se absorbe bien con el batido de después del entreno. No aplica el domingo, que es descanso.", comidas:["postentreno"] }
+  { nombre:"Creatina", dosis:"3-5 g", cuando:"Post-entreno (entre semana) y con la cena el domingo", motivo:"La creatina funciona por saturación muscular acumulada, no por tomarla justo antes o después de entrenar — conviene tomarla todos los días, incluido el domingo de descanso, para mantener el nivel estable.", comidas:["postentreno"], domingoComidas:["cena"] }
 ];
 
 function totalesDia(dia){
@@ -522,7 +522,8 @@ function pintarComidas(){
     else if(dia.tipo === "alto" && c.altoTxt) texto = c.altoTxt;
 
     var suplesDeEsta = SUPLEMENTOS.filter(function(s){
-      return s.comidas && s.comidas.indexOf(c.id) !== -1 && !(dia.descanso && c.id === "postentreno");
+      var lista = (dia.descanso && s.domingoComidas) ? s.domingoComidas : s.comidas;
+      return lista && lista.indexOf(c.id) !== -1;
     });
     var chipsHtml = "";
     if(suplesDeEsta.length){
