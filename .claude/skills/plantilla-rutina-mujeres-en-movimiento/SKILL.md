@@ -1,9 +1,15 @@
 ---
 name: plantilla-rutina-mujeres-en-movimiento
-description: Plantilla oficial de diseño para crear nuevas apps de rutina de socios/as (login por nombre y apellido contra socios.json, bienvenida animada personalizada, dashboard con comparación semanal, cronómetro, resumen al terminar) y su cartel QR a juego. Usar cuando el dueño del gimnasio pida una app de rutina nueva "con el mismo diseño" o "como Mujeres en Movimiento".
+description: Plantilla oficial y OBLIGATORIA de diseño para crear cualquier app de rutina nueva de socios/as (login por nombre y apellido contra socios.json, bienvenida animada personalizada, dashboard con comparación semanal, cronómetro, resumen al terminar) y su cartel QR a juego. Usar siempre que el dueño del gimnasio mande o pida una rutina nueva para una socia (no VIP) — es el diseño único desde 09/2026, no hace falta que lo pida explícitamente "con el mismo diseño".
 ---
 
 # Plantilla de app de rutina: mismo diseño que "Mujeres en Movimiento"
+
+**Regla permanente (ver CLAUDE.md → "Diseño único de app y cartel QR
+para toda rutina nueva de socias"): esta plantilla se usa siempre para
+cualquier rutina nueva de socia, aunque el dueño no lo pida
+explícitamente.** Solo los clientes VIP/exclusivos usan otra plantilla
+(`app_milton.html`).
 
 Archivo de referencia (ya pulido a fondo, con todos los ajustes que pidió
 el dueño): `mujeres-en-movimiento.html`, en la raíz del repo.

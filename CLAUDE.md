@@ -343,6 +343,41 @@ export todavía, pedírselo (apretar de nuevo "📋 Copiar lista" y pegar el
 resultado) — sin él no hay forma de saber los días reales que ya lleva
 marcados cada socio en el equipo que el usuario toma como el bueno.
 
+## Diseño único de app y cartel QR para toda rutina nueva de socias (regla permanente)
+
+Desde 09/2026, **cualquier rutina nueva que el dueño mande o pida para
+una socia** (no solo cuando lo pida explícitamente "con el mismo
+diseño") se construye siempre con la plantilla ya pulida de "Mujeres en
+Movimiento" — tanto la app (`entrenar-<nombre>.html`) como su cartel QR
+para imprimir (`cartel-qr-<nombre>.html`). No es una opción a elegir
+caso a caso: es el diseño único y obligatorio de ahora en adelante para
+toda rutina de socia que no sea de un cliente VIP (los VIP siguen la
+plantilla `app_milton.html` de la sección siguiente).
+
+- Seguir al pie de la letra la skill `plantilla-rutina-mujeres-en-movimiento`
+  (`.claude/skills/plantilla-rutina-mujeres-en-movimiento/SKILL.md`):
+  copiar `mujeres-en-movimiento.html` tal cual para la app nueva, y
+  `cartel-qr-perdida-grasa.html` tal cual para el cartel nuevo (es la
+  referencia más reciente, ya con foto junto al QR y el banner de
+  logros).
+- El cartel QR incluye siempre, en una sola línea dentro de la franja
+  roja/dorada "🔥 Dentro de tu app": "⚖️ Registra tu peso · 🏆 Mis
+  récords · 🥇 Gana tu medalla" — mismo texto exacto, sin adaptarlo por
+  rutina.
+- La pastilla sobre el QR (`.qr-badge`) lleva **solo el nivel**
+  ("Principiante", "Intermedia", etc.), nunca "N Días · Nivel" — el
+  dueño pidió sacar la cantidad de días de ahí en ambos carteles
+  existentes.
+- El pie de la app (`<footer>`) dice siempre "DONDE HAY CALIDAD NO HAY
+  COMPETENCIA" en mayúsculas y color amarillo (`--yellow`) — no
+  "La Administración" ni ningún otro texto.
+- La app **no lleva** el bloque "MAPA DE TU ENTRENAMIENTO" (se sacó a
+  pedido del dueño en ambas rutinas existentes — ver guard de
+  `renderExerciseMap()` en la skill).
+- Antes de publicar un cartel QR nuevo, verificar con captura que el
+  banner de logros no empuje `.nota`/`.pie` fuera de la hoja (ya pasó
+  una vez) — la skill documenta los tamaños de referencia que sí caben.
+
 ## Rutinas de entrenamiento para clientes exclusivos (regla permanente)
 
 Cuando el usuario pida una app de entrenamiento personalizada para un
