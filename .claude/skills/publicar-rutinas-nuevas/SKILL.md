@@ -1,5 +1,5 @@
 ---
-name: renovar-socios
+name: publicar-rutinas-nuevas
 description: Renovar, agregar o actualizar socios de WGYMADNSPORT en socios.json, control.html y pantalla.html, y publicar el cambio en el sitio en vivo. Usar cuando el dueño del gimnasio pegue una ficha de socio (formato "📋 Copiar" de una sola persona) o el JSON completo de "📋 Copiar lista" de control.html, o pida renovar/agregar/borrar socios vencidos.
 ---
 
