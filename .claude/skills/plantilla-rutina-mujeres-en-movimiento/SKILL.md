@@ -1,6 +1,6 @@
 ---
 name: plantilla-rutina-mujeres-en-movimiento
-description: Plantilla oficial de diseño para crear nuevas apps de rutina de socios/as (login por nombre y apellido contra socios.json, bienvenida animada personalizada, dashboard con comparación semanal, mapa de 5 ejercicios, cronómetro, resumen al terminar). Usar cuando el dueño del gimnasio pida una app de rutina nueva "con el mismo diseño" o "como Mujeres en Movimiento".
+description: Plantilla oficial de diseño para crear nuevas apps de rutina de socios/as (login por nombre y apellido contra socios.json, bienvenida animada personalizada, dashboard con comparación semanal, cronómetro, resumen al terminar) y su cartel QR a juego. Usar cuando el dueño del gimnasio pida una app de rutina nueva "con el mismo diseño" o "como Mujeres en Movimiento".
 ---
 
 # Plantilla de app de rutina: mismo diseño que "Mujeres en Movimiento"
@@ -61,13 +61,39 @@ Para una rutina nueva con este mismo diseño: **copiar
   comparativo `#weekCompare`/`semanaAnteriorCompletados()` que compara
   esta semana contra la semana inmediatamente anterior (se oculta solo
   si todavía no hay una semana previa registrada).
-- **Mapa de 5 ejercicios** (`.exercise-map`/`.map-points`, grid de 5) y
-  **resumen al terminar** (`#sessionSummary`, "RESUMEN DEL
-  ENTRENAMIENTO") durante el modo entrenamiento.
+- **Resumen al terminar** (`#sessionSummary`, "RESUMEN DEL
+  ENTRENAMIENTO") durante el modo entrenamiento. (El bloque "MAPA DE TU
+  ENTRENAMIENTO" con números tocables que aparecía sobre la lista de
+  ejercicios se sacó a pedido del dueño — `renderExerciseMap()` queda
+  con un guard `if(!$("mapPoints"))return` en vez de borrarse, así no
+  hace falta tocar sus llamadas si en algún momento se reincorpora.)
 - **Cronómetro de sesión**, **registro de peso corporal semanal** y
   **compartir tarjeta de progreso** (canvas → imagen).
 - **Diseño visual**: negro casi puro, acento rojo/dorado (`--yellow:#ffd841`),
   tipografía del sistema, mismos estilos de tarjeta/pill/badge.
+
+## El cartel QR también sigue una sola línea
+
+El dueño quiere que **todos** los carteles QR para imprimir usen el
+mismo diseño (a pedido explícito: "quiero mantener una línea"). Copiar
+`cartel-qr-mujeres-movimiento.html` (o `cartel-qr-perdida-grasa.html`,
+la segunda referencia ya con foto) tal cual, y cambiar solo:
+
+- Título/subtítulo/badge (mismo patrón: "Rutina de N Días de NOMBRE",
+  badge "N Días · Nivel").
+- El QR (regenerar apuntando al archivo de la rutina correspondiente,
+  PNG plano `ERROR_CORRECT_M`, sin logo incrustado — el logo ya está
+  arriba del cartel).
+- **La foto junto al QR**: dentro de `.medio`, una tarjeta `.foto-frame`
+  (mismo borde dorado/sombra que `.qr-frame`) con una foto real de la
+  app mostrando a alguien ejecutando un ejercicio de esa rutina — nunca
+  un mockup de celular ni una captura de pantalla de la app. Se puede
+  sacar directo del array de imágenes de ejercicios del archivo de la
+  rutina (`EXERCISE_IMAGES`/`POSE_IMAGES`, según cuál tenga esa app).
+  Con `.qr-frame img` a 74mm y `.foto-frame img` a 66×83mm (object-fit
+  cover) ambas tarjetas entran lado a lado sin volver a topar la franja
+  de color de abajo — si se agranda cualquiera de las dos, volver a
+  verificar con captura que `.nota p` sigue por sobre `.pie`.
 
 ## Antes de publicar
 
