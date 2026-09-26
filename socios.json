@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-24",
+ "actualizado": "2026-09-26",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -1139,7 +1139,7 @@
   {
    "n": "RODRIGO",
    "a": "MOLINA",
-   "rut": "22.150.537.9",
+   "rut": "Sin Rut",
    "plan": "Estudiante Profesor",
    "monto": 28000,
    "fv": 46303
@@ -1188,7 +1188,7 @@
   {
    "n": "EYMILEE",
    "a": "MUÑOZ",
-   "rut": "20-991-328-3",
+   "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46305
@@ -1295,7 +1295,7 @@
   {
    "n": "MAURA",
    "a": "PALMA",
-   "rut": "24-172.701-7",
+   "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46295
@@ -1557,7 +1557,7 @@
    "rut": "Sin Rut",
    "plan": "Plan Semanal",
    "monto": 15000,
-   "fv": 46272
+   "fv": 46298
   },
   {
    "n": "ANDREA",
