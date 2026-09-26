@@ -368,6 +368,11 @@ plantilla `app_milton.html` de la sección siguiente).
   ("Principiante", "Intermedia", etc.), nunca "N Días · Nivel" — el
   dueño pidió sacar la cantidad de días de ahí en ambos carteles
   existentes.
+- La foto junto al QR (`.foto-frame`) **tiene que variar de un cartel a
+  otro** — nunca repetir el mismo ejercicio/grupo muscular en dos
+  carteles seguidos (a pedido explícito del dueño: "que valla
+  variando"). Revisar qué ejercicio usaron los carteles ya publicados
+  antes de elegir uno nuevo y preferir uno de otro grupo muscular.
 - El pie de la app (`<footer>`) dice siempre "DONDE HAY CALIDAD NO HAY
   COMPETENCIA" en mayúsculas y color amarillo (`--yellow`) — no
   "La Administración" ni ningún otro texto.
