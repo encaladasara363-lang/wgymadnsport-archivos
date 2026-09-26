@@ -3,7 +3,11 @@ node_modules/
 
 # Herramientas de agente para HyperFrames (video), no son contenido del gimnasio
 /.agents/
-/.claude/
+/.claude/*
+!/.claude/skills/
+/.claude/skills/*
+!/.claude/skills/renovar-socios/
+!/.claude/skills/renovar-socios/SKILL.md
 /skills-lock.json
 
 # Materiales con datos bancarios: no se publican en el repositorio (es publico)
