@@ -127,6 +127,14 @@ la segunda referencia ya con foto) tal cual, y cambiar solo:
   cover) ambas tarjetas entran lado a lado sin volver a topar la franja
   de color de abajo — si se agranda cualquiera de las dos, volver a
   verificar con captura que `.nota p` sigue por sobre `.pie`.
+  **Si la foto es de cuerpo completo de pie** (persona parada de pies a
+  cabeza, retrato vertical alto) el recorte automático de `cover`
+  centrado puede cortarle la cabeza, porque el marco es más ancho en
+  proporción que la foto — pasó con `cartel-qr-mujeres3.html`. Agregar
+  `style="object-position:top center"` al `<img>` de `.foto-frame` en
+  esos casos, para que el recorte se coma piernas/pies en vez de la
+  cabeza, y siempre revisar con captura que la cabeza completa (con
+  margen) quede visible antes de publicar.
 - **Banner "🔥 Dentro de tu app"** (`.logros`/`.logros-tag`/`.logros-fila`/
   `.logro`): franja destacada con fondo degradado rojo/dorado y borde
   dorado, entre `.chips` y `.rule`, con las tres funciones gamificadas
