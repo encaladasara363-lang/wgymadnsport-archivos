@@ -16,7 +16,7 @@
         background-image:radial-gradient(circle at 22% 6%,rgba(227,6,19,.26),transparent 46%),
                           radial-gradient(circle at 96% 30%,rgba(212,175,55,.12),transparent 42%);
         display:flex;flex-direction:column;align-items:center;text-align:center;
-        padding:10mm 12mm 8mm;color:var(--txt);}
+        padding:10mm 12mm 15mm;color:var(--txt);}
 
   /* Franjas con margen de seguridad: casi ninguna impresora imprime hasta
      el borde físico de la hoja (recorta unos milímetros siempre), así que
@@ -52,17 +52,17 @@
   .listo{margin-top:2mm;font-weight:700;font-size:4.4mm;line-height:1.35;color:#D4D4D8;max-width:150mm;}
   .listo b{color:var(--gold);}
 
-  .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:3mm;margin-top:5mm;max-width:170mm;}
+  .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:3mm;margin-top:3mm;max-width:180mm;}
   .chip{font-weight:800;text-transform:uppercase;font-size:4mm;letter-spacing:.04em;
         padding:2.6mm 5mm;border-radius:99px;background:rgba(212,175,55,.12);
         border:.5mm solid var(--gold);color:var(--txt);}
   .chip b{color:var(--gold);}
 
-  .rule{height:1.2mm;display:flex;gap:6mm;justify-content:center;margin:6mm auto 0;max-width:110mm;width:100%;}
+  .rule{height:1.2mm;display:flex;gap:6mm;justify-content:center;margin:3mm auto 0;max-width:110mm;width:100%;}
   .rule i{flex:1;background:var(--gold);border-radius:1mm;}
   .rule i:nth-child(2){flex:.16;background:var(--red);}
 
-  .nota{margin-top:auto;padding-top:4mm;width:100%;text-align:center;}
+  .nota{margin-top:auto;padding-top:2mm;width:100%;text-align:center;}
   .nota p{font-weight:800;font-size:4.4mm;letter-spacing:.04em;color:var(--txt);line-height:1.5;}
   .nota p b{color:var(--gold);}
 
@@ -86,7 +86,7 @@
   <div class="sub">MUJERES EN MOVIMIENTO</div>
 
   <div class="qr-frame">
-    <div class="qr-badge">Programa Semanal</div>
+    <div class="qr-badge">Rutina Intermedia</div>
     <img src="data:image/png;base64,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FQAyogJARlQAyIgKABlRASAjKgBkRAWATLb9deLGHZtte1xvvYbVNtq2basbt6Qmr2F17jf+vrY9GxVvKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQGd3+OnHj7lCl2mW6cd/pxh2kyWPedt+3nVf1XZNuvF8nvKkAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQGbd9tcn27bvVPnkfadt203b9tO2Pc837u9tu6feVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgY/vrMpM7WifsIL3Ptv20yV246ty3/S4meVMBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgMy67a+3bjdVOz83fs6JyX2nye868dattm3XuVJdnxvvxQlvKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQGd3+2rbhM2ly5+fEtr2gyls3xCafjRPbNqm2beKd2HYNK95UAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASDz9TzPbx8DAC/hTQWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASDzP5DlrLl79wz/AAAAAElFTkSuQmCC">
   </div>
 
