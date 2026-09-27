@@ -384,11 +384,17 @@ function sumarDias(iso, n){
    Rehecho por completo con la comida real que describió Milton. Calculado
    con Harris-Benedict hombres + actividad "activo" (6 días Heavy Duty) →
    mantención (TDEE) ≈ 2.964 kcal. Las comidas se repiten igual Lunes a
-   Sábado (ya no hay día "alto" distinto) — la proteína queda naturalmente
-   muy alta (≈244 g/día, 3,1 g/kg) por las porciones reales de pollo que
-   come, muy por sobre el mínimo de 2,0-2,2 g/kg para proteger músculo en
-   déficit. El domingo es descanso: sin pre ni post-entreno, con la comida
-   especial de carne + pasta en el almuerzo en vez de pollo + arroz.
+   Sábado (ya no hay día "alto" distinto). La primera versión daba
+   ≈244 g/día de proteína (3,1 g/kg) — dentro del rango deportivo amplio
+   documentado (1,8-4,4 g/kg) pero muy por sobre el óptimo de 2,0-2,2 g/kg
+   para fuerza/potencia, sin beneficio extra de más músculo y con la
+   grasa/carbohidrato reemplazados innecesariamente. Se bajó el pollo del
+   almuerzo, post-entreno y cena y se subió arroz en su lugar, manteniendo
+   las mismas calorías y el mismo déficit: ahora ≈190 g/día (2,44 g/kg),
+   igual de protector para el músculo y con más carbohidrato para rendir
+   en un entreno Heavy Duty de 6 días. El domingo es descanso: sin pre ni
+   post-entreno, con la comida especial de carne + pasta en el almuerzo
+   en vez de pollo + arroz.
    Esto es un programa nutricional calculado, no un dato de salud — nunca
    escribir aquí su peso, edad, estatura, % de grasa o cintura reales,
    solo el resultado ya calculado. Sin pescado ni batidos de proteína (no
@@ -401,18 +407,18 @@ var COMIDAS = [
     normal:{prot:7,carb:24,grasa:6},
     comun:"30 g de arándanos + 15 g de miel + 200 g de kéfir" },
   { id:"almuerzo", nombre:"Almuerzo", hora:"15:00",
-    normal:{prot:86,carb:90,grasa:9}, domingoMacro:{prot:78,carb:30,grasa:32},
-    comun:"250 g de pollo + 320 g de arroz (ya cocido) + ensalada libre",
+    normal:{prot:58,carb:118,grasa:5}, domingoMacro:{prot:78,carb:30,grasa:32},
+    comun:"150 g de pollo + 420 g de arroz (ya cocido) + ensalada libre",
     domingo:"280 g de carne (posta o similar, sin grasa visible) + 100 g de pasta cocida + ensalada libre + 5 g de mantequilla sin sal" },
   { id:"preentreno", nombre:"Pre-entreno", hora:"20:00", soloEntreno:true,
     normal:{prot:14,carb:16,grasa:8},
     comun:"150 g de yogur griego + 30 g de arándanos + 15 g de miel" },
   { id:"postentreno", nombre:"Post-entreno", hora:"23:30", soloEntreno:true,
-    normal:{prot:48,carb:55,grasa:11},
-    comun:"55 g de harina tostada + 30 g de arándanos + 200 ml de leche + 120 g de pollo" },
+    normal:{prot:35,carb:78,grasa:10},
+    comun:"85 g de harina tostada + 30 g de arándanos + 200 ml de leche + 70 g de pollo" },
   { id:"cena", nombre:"Cena", hora:"20:00",
-    normal:{prot:56,carb:36,grasa:10},
-    comun:"130 g de arroz + 170 g de pollo + 200 g de ensalada libre + 5 g de mantequilla sin sal" }
+    normal:{prot:43,carb:56,grasa:8},
+    comun:"200 g de arroz + 120 g de pollo + 200 g de ensalada libre + 5 g de mantequilla sin sal" }
 ];
 
 /* Lunes=0 ... Domingo=6, igual que la rutina de entreno. Domingo es su
