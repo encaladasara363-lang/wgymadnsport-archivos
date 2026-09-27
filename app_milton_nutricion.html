@@ -169,6 +169,10 @@ main{padding:18px 16px 46px}
   cursor:pointer;display:grid;place-items:center;margin-top:2px;
 }
 .comida[data-hecha="si"] .tick{background:var(--verde);border-color:var(--verde);color:#08301F}
+.comida .tick[disabled]{cursor:not-allowed;opacity:.35}
+.aviso-preview{display:inline-block;margin-bottom:14px;padding:6px 14px;border-radius:999px;
+  background:rgba(79,163,209,.14);border:1px solid var(--azul);color:var(--azul);
+  font-family:'Inter',sans-serif;font-weight:700;font-size:13.5px}
 .comida .info{flex:1;min-width:0}
 .comida .cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:3px}
 .comida h3{font-family:'Inter',sans-serif;font-weight:800;font-size:16.5px;
@@ -321,6 +325,7 @@ main{padding:18px 16px 46px}
     <!-- ══ Menú del día ═════════════════════════════════════════════════ -->
     <div class="card">
       <span class="etq">Menú de hoy</span>
+      <span class="aviso-preview" id="avisoPreview" hidden>Vista previa — el check ✓ solo funciona en el día de hoy</span>
       <div id="listaComidas"></div>
     </div>
 
@@ -375,51 +380,51 @@ function sumarDias(iso, n){
 }
 
 /* ═══ Plan de comidas ════════════════════════════════════════════════════
-   Calculado para el objetivo de recomposición corporal de Milton (bajar
-   grasa, subir músculo, marcar abdomen), con Harris-Benedict + actividad
-   "activo" (soldador + entrena 6 días). El jueves (día de pierna, el de
-   mayor volumen de la semana) queda con más calorías y carbohidratos que
-   el resto — el resto de los días bajan un poco para compensar y que el
-   promedio semanal se mantenga. Esto es un programa nutricional
-   calculado, no un dato de salud — nunca escribir aquí su peso, edad,
-   estatura, % de grasa o cintura reales, solo el resultado ya calculado.
-   Sin pescado ni batidos de proteína (no los consume): todo con comida
-   real. Incluye kéfir, arándanos, quesillo, galletas de arroz, harina
-   tostada y ensalada libre, que sí consume. */
+   Rehecho por completo con la comida real que describió Milton. Calculado
+   con Harris-Benedict hombres + actividad "activo" (6 días Heavy Duty) →
+   mantención (TDEE) ≈ 2.964 kcal. Las comidas se repiten igual Lunes a
+   Sábado (ya no hay día "alto" distinto) — la proteína queda naturalmente
+   muy alta (≈244 g/día, 3,1 g/kg) por las porciones reales de pollo que
+   come, muy por sobre el mínimo de 2,0-2,2 g/kg para proteger músculo en
+   déficit. El domingo es descanso: sin pre ni post-entreno, con la comida
+   especial de carne + pasta en el almuerzo en vez de pollo + arroz.
+   Esto es un programa nutricional calculado, no un dato de salud — nunca
+   escribir aquí su peso, edad, estatura, % de grasa o cintura reales,
+   solo el resultado ya calculado. Sin pescado ni batidos de proteína (no
+   los consume): todo con comida real. */
 var COMIDAS = [
   { id:"desayuno", nombre:"Desayuno", hora:"8:00",
-    normal:{prot:30,carb:55,grasa:15}, alto:{prot:32,carb:75,grasa:13},
-    comun:"70 g de avena o harina tostada + 150 g de huevo (3 unidades) + 30 g de arándanos + 200 g de kéfir" },
+    normal:{prot:33,carb:31,grasa:29},
+    comun:"3 huevos + 2 láminas de pan de molde + 1 lámina de queso sin lactosa + 1 lámina de jamón + ¼ de palta + 1 café cargado (500 ml)" },
   { id:"colacion", nombre:"Colación", hora:"11:30",
-    normal:{prot:5,carb:20,grasa:6}, alto:{prot:5,carb:30,grasa:4},
-    comun:"50 g de quesillo + 30 g de arándanos + 25 g de galletas de arroz (2-3 unidades)" },
+    normal:{prot:7,carb:24,grasa:6},
+    comun:"30 g de arándanos + 15 g de miel + 200 g de kéfir" },
   { id:"almuerzo", nombre:"Almuerzo", hora:"15:00",
-    normal:{prot:50,carb:70,grasa:18}, alto:{prot:55,carb:95,grasa:16},
-    comun:"200 g de pollo o pavo + 280 g de arroz o papa (ya cocidos) + ensalada libre + 5 g de mantequilla sin sal",
-    domingo:"200-230 g de posta negra o lomo vetado (sin grasa visible) + 280 g de arroz o papa (ya cocidos) + ensalada libre + 5 g de mantequilla sin sal",
-    juevesAlto:"200-230 g de pollo o pavo + 320 g de pasta integral (ya cocida) + ensalada libre + 5 g de mantequilla sin sal" },
-  { id:"preentreno", nombre:"Pre-entreno", hora:"20:00",
-    normal:{prot:15,carb:45,grasa:3}, alto:{prot:18,carb:65,grasa:3},
-    comun:"150 g de yogur griego + 30 g de arándanos + 25 g de galletas de arroz (2-3 unidades) o 15 g de miel" },
-  { id:"postentreno", nombre:"Post-entreno", hora:"23:30",
-    normal:{prot:35,carb:50,grasa:3}, alto:{prot:38,carb:70,grasa:3},
-    comun:"120 g de pollo o pavo + 200 g de arroz blanco (ya cocido) o 55 g de harina tostada con 200 g de leche + 30 g de arándanos" },
+    normal:{prot:86,carb:90,grasa:9}, domingoMacro:{prot:78,carb:30,grasa:32},
+    comun:"250 g de pollo + 320 g de arroz (ya cocido) + ensalada libre",
+    domingo:"280 g de carne (posta o similar, sin grasa visible) + 100 g de pasta cocida + ensalada libre + 5 g de mantequilla sin sal" },
+  { id:"preentreno", nombre:"Pre-entreno", hora:"20:00", soloEntreno:true,
+    normal:{prot:14,carb:16,grasa:8},
+    comun:"150 g de yogur griego + 30 g de arándanos + 15 g de miel" },
+  { id:"postentreno", nombre:"Post-entreno", hora:"23:30", soloEntreno:true,
+    normal:{prot:48,carb:55,grasa:11},
+    comun:"55 g de harina tostada + 30 g de arándanos + 200 ml de leche + 120 g de pollo" },
   { id:"cena", nombre:"Cena", hora:"20:00",
-    normal:{prot:25,carb:80,grasa:23}, alto:{prot:22,carb:75,grasa:24},
-    comun:"150 g de pavo o pollo + ensalada libre surtida + 130 g de arroz o camote (ya cocidos) + 35 g de palta + 15 g de chocolate 85% cacao (3 cuadraditos)" }
+    normal:{prot:56,carb:36,grasa:10},
+    comun:"130 g de arroz + 170 g de pollo + 200 g de ensalada libre + 5 g de mantequilla sin sal" }
 ];
 
-/* Lunes=0 ... Domingo=6, igual que la rutina de entreno. Jueves (índice 3)
-   es el día "alto" en calorías; domingo (índice 6) es el único con carne
-   roja permitida. */
+/* Lunes=0 ... Domingo=6, igual que la rutina de entreno. Domingo es su
+   único día de descanso (sin entreno, sin pre ni post-entreno) y el
+   único con carne roja permitida. */
 var PLAN_DIAS = [
-  { weekday:"Lunes", tipo:"normal", carneRoja:false },
-  { weekday:"Martes", tipo:"normal", carneRoja:false },
-  { weekday:"Miércoles", tipo:"normal", carneRoja:false },
-  { weekday:"Jueves", tipo:"alto", carneRoja:false },
-  { weekday:"Viernes", tipo:"normal", carneRoja:false },
-  { weekday:"Sábado", tipo:"normal", carneRoja:false },
-  { weekday:"Domingo", tipo:"normal", carneRoja:true }
+  { weekday:"Lunes", carneRoja:false, descanso:false },
+  { weekday:"Martes", carneRoja:false, descanso:false },
+  { weekday:"Miércoles", carneRoja:false, descanso:false },
+  { weekday:"Jueves", carneRoja:false, descanso:false },
+  { weekday:"Viernes", carneRoja:false, descanso:false },
+  { weekday:"Sábado", carneRoja:false, descanso:false },
+  { weekday:"Domingo", carneRoja:true, descanso:true }
 ];
 
 function indiceHoy(){
@@ -428,25 +433,32 @@ function indiceHoy(){
 }
 var diaActual = indiceHoy();
 
+/* Comidas que corresponden ese día — en descanso (domingo) se excluye el
+   pre-entreno y el post-entreno, porque no hay entreno ese día. */
+function comidasDelDia(dia){
+  return COMIDAS.filter(function(c){ return !(dia.descanso && c.soloEntreno); });
+}
+
 /* ═══ Suplementos — colocados en el momento del día que más rinden,
    según la base de conocimiento técnico documentada. HMB no está en esa
    base: se deja con una comida por precaución general, no por un dato
-   científico específico que tengamos. ═══════════════════════════════ */
+   científico específico que tengamos. La creatina se pasa a la cena el
+   domingo, ya que no hay post-entreno ese día. ═══════════════════════ */
 var SUPLEMENTOS = [
   { nombre:"Multivitamínico", dosis:"según envase", cuando:"Desayuno", motivo:"Con comida, para mejor tolerancia y absorción.", comidas:["desayuno"] },
-  { nombre:"Vitamina C", dosis:"según envase", cuando:"Desayuno", motivo:"Junto al multivitamínico, mismo momento.", comidas:["desayuno"] },
-  { nombre:"Omega 3", dosis:"250-500 mg", cuando:"Almuerzo", motivo:"Es una grasa — se absorbe mejor con una comida que lleve algo de grasa (la mantequilla de este almuerzo). Cubre además lo que dejó de aportar el pescado que ya no come.", comidas:["almuerzo"] },
-  { nombre:"Citrato de potasio", dosis:"según envase", cuando:"Almuerzo", motivo:"Con comida, para no irritar el estómago.", comidas:["almuerzo"] },
+  { nombre:"Vitamina C", dosis:"500 mg", cuando:"Desayuno", motivo:"Junto al multivitamínico, mismo momento.", comidas:["desayuno"] },
+  { nombre:"Beta-alanina", dosis:"2 g + 2 g", cuando:"Desayuno y cena", motivo:"Fraccionada en dos tomas fijas del día — la guía técnica recomienda 0,8-1,6 g por toma para evitar el hormigueo (parestesias); si le da hormigueo con los 2 g juntos, puede partir cualquiera de las dos tomas en dos.", comidas:["desayuno","cena"] },
+  { nombre:"Omega 3", dosis:"1 cápsula + 1 cápsula", cuando:"Almuerzo y cena", motivo:"Es una grasa — se absorbe mejor con una comida que lleve algo de grasa. Cubre además lo que dejó de aportar el pescado que ya no come.", comidas:["almuerzo","cena"] },
+  { nombre:"Citrato de potasio", dosis:"1 cápsula", cuando:"Almuerzo", motivo:"Con comida, para no irritar el estómago.", comidas:["almuerzo"] },
   { nombre:"HMB", dosis:"1 cápsula", cuando:"Almuerzo", motivo:"No está en la base de conocimiento técnico documentada — dosis y timing según el envase o la indicación de quien se lo recomendó.", comidas:["almuerzo"] },
-  { nombre:"Creatina", dosis:"3-5 g", cuando:"Post-entreno", motivo:"Se absorbe mejor con carbohidratos — coincide con la comida de después del entreno.", comidas:["postentreno"] },
-  { nombre:"Beta-alanina", dosis:"0,8-1,6 g por toma, repartida", cuando:"Desayuno, almuerzo y cena", motivo:"Tomada toda junta produce hormigueo (parestesias) — hay que fraccionarla en 2-3 tomas al día.", comidas:["desayuno","almuerzo","cena"] },
+  { nombre:"Creatina", dosis:"5 g", cuando:"Post-entreno (entre semana) y con la cena el domingo", motivo:"La creatina funciona por saturación muscular acumulada, no solo por la toma post-entreno — conviene tomarla todos los días, incluido el domingo de descanso, para mantener el nivel estable.", comidas:["postentreno"], domingoComidas:["cena"] },
   { nombre:"Citrato de magnesio", dosis:"según envase", cuando:"Cena / antes de dormir", motivo:"Ayuda a la relajación nocturna — es habitual tomarlo en la noche.", comidas:["cena"] }
 ];
 
-function totalesDia(tipo){
+function totalesDia(dia){
   var prot = 0, carb = 0, grasa = 0;
-  COMIDAS.forEach(function(c){
-    var m = c[tipo];
+  comidasDelDia(dia).forEach(function(c){
+    var m = (dia.carneRoja && c.domingoMacro) ? c.domingoMacro : c.normal;
     prot += m.prot; carb += m.carb; grasa += m.grasa;
   });
   var kcal = prot * 4 + carb * 4 + grasa * 9;
@@ -468,8 +480,8 @@ function pintarTabs(){
 
 function pintarResumen(){
   var dia = PLAN_DIAS[diaActual];
-  $("diaEtiqueta").textContent = dia.weekday + (dia.tipo === "alto" ? " — día alto (pierna)" : " — día bajo (tren superior)") + (dia.carneRoja ? " · con carne roja" : "");
-  var t = totalesDia(dia.tipo);
+  $("diaEtiqueta").textContent = dia.weekday + (dia.descanso ? " — descanso" : "") + (dia.carneRoja ? " · con carne roja" : "");
+  var t = totalesDia(dia);
   $("kcalTotal").textContent = t.kcal.toLocaleString("es-CL") + " kcal";
   var protKcal = t.prot * 4, grasaKcal = t.grasa * 9, carbKcal = t.carb * 4;
   $("protTotal").textContent = t.prot + " g (" + Math.round(protKcal / t.kcal * 100) + "%)";
@@ -492,20 +504,27 @@ function guardarCheck(obj){
 
 function pintarComidas(){
   var dia = PLAN_DIAS[diaActual];
+  var esHoy = diaActual === indiceHoy();
   var check = cargarCheck();
   var hoy = hoyISO();
   var marcadasHoy = check[hoy] || [];
 
   var cont = $("listaComidas");
   cont.innerHTML = "";
-  COMIDAS.forEach(function(c){
-    var m = c[dia.tipo];
-    var texto = c.comun;
-    if(dia.carneRoja && c.domingo) texto = c.domingo;
-    else if(dia.tipo === "alto" && c.juevesAlto) texto = c.juevesAlto;
+
+  /* El check de "ya comí" es del día real de hoy, no de la pestaña que
+     estés mirando — como los ids de las comidas se repiten en los 7
+     días, el tick solo se activa en la pestaña de hoy; las demás son
+     solo vista previa del menú. */
+  $("avisoPreview").hidden = esHoy;
+
+  comidasDelDia(dia).forEach(function(c){
+    var m = (dia.carneRoja && c.domingoMacro) ? c.domingoMacro : c.normal;
+    var texto = (dia.carneRoja && c.domingo) ? c.domingo : c.comun;
 
     var suplesDeEsta = SUPLEMENTOS.filter(function(s){
-      return s.comidas && s.comidas.indexOf(c.id) !== -1;
+      var lista = (dia.descanso && s.domingoComidas) ? s.domingoComidas : s.comidas;
+      return lista && lista.indexOf(c.id) !== -1;
     });
     var chipsHtml = "";
     if(suplesDeEsta.length){
@@ -514,12 +533,12 @@ function pintarComidas(){
       }).join("") + '</div>';
     }
 
-    var hecha = marcadasHoy.indexOf(c.id) !== -1;
+    var hecha = esHoy && marcadasHoy.indexOf(c.id) !== -1;
     var div = document.createElement("div");
     div.className = "comida";
     div.setAttribute("data-hecha", hecha ? "si" : "no");
     div.innerHTML =
-      '<button type="button" class="tick" data-id="' + c.id + '">✓</button>' +
+      '<button type="button" class="tick" data-id="' + c.id + '"' + (esHoy ? "" : " disabled") + '>✓</button>' +
       '<div class="info">' +
         '<div class="cab"><h3>' + c.nombre + '</h3><span class="hora">' + c.hora + '</span></div>' +
         '<div class="macros">' + m.prot + 'g prot · ' + m.carb + 'g carb · ' + m.grasa + 'g grasa</div>' +
@@ -528,6 +547,8 @@ function pintarComidas(){
       '</div>';
     cont.appendChild(div);
   });
+
+  if(!esHoy) return;
 
   cont.querySelectorAll(".tick").forEach(function(btn){
     btn.addEventListener("click", function(){
@@ -562,14 +583,24 @@ function pintarMarcas(){
   var check = cargarCheck();
   var hoy = hoyISO();
   var marcadasHoy = (check[hoy] || []).length;
-  $("mHoy").textContent = marcadasHoy + "/" + COMIDAS.length;
+  var diaHoyInfo = PLAN_DIAS[indiceHoy()];
+  var totalHoy = comidasDelDia(diaHoyInfo).length;
+  $("mHoy").textContent = marcadasHoy + "/" + totalHoy;
 
-  /* Racha de días con las 6 comidas completas, contando hacia atrás. Si
-     hoy todavía no está completo no se corta la racha, se mira desde
-     ayer — igual que la racha de semanas del cronómetro de entreno. */
+  /* Racha de días completos, contando hacia atrás. El total de comidas
+     esperadas varía según el día de la semana (domingo tiene dos menos,
+     por el descanso), así que se recalcula para cada fecha. Si hoy
+     todavía no está completo no se corta la racha, se mira desde ayer. */
+  function esperadasParaFecha(iso){
+    var p = iso.split("-");
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    var jsDay = d.getDay();
+    var idx = jsDay === 0 ? 6 : jsDay - 1;
+    return comidasDelDia(PLAN_DIAS[idx]).length;
+  }
   var diasCompletos = {};
   Object.keys(check).forEach(function(f){
-    if((check[f] || []).length >= COMIDAS.length) diasCompletos[f] = true;
+    if((check[f] || []).length >= esperadasParaFecha(f)) diasCompletos[f] = true;
   });
   var arranque = diasCompletos[hoy] ? 0 : 1;
   var racha = 0;
@@ -620,9 +651,9 @@ $("metaCintura").addEventListener("input", function(){
   $("diasPlan").textContent = dias;
 })();
 
-/* ═══ Seguimiento semanal de peso y cintura — casilleros vacíos, la
-   clienta anota su propio número cada semana; se guarda solo en el
-   localStorage de este teléfono, nunca en el código. ═══════════════ */
+/* ═══ Seguimiento semanal de peso y cintura — casilleros vacíos, él
+   anota su propio número cada semana; se guarda solo en el localStorage
+   de este teléfono, nunca en el código. ═══════════════════════════════ */
 var SEGUI_KEY = "wgym_seguimiento_milton_v1";
 function cargarSeguimiento(){
   try{ return JSON.parse(localStorage.getItem(SEGUI_KEY)) || []; }
