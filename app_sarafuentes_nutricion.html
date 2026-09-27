@@ -175,6 +175,10 @@ main{padding:18px 16px 46px}
   cursor:pointer;display:grid;place-items:center;margin-top:2px;
 }
 .comida[data-hecha="si"] .tick{background:var(--verde);border-color:var(--verde);color:#08301F}
+.comida .tick[disabled]{cursor:not-allowed;opacity:.35}
+.aviso-preview{display:inline-block;margin-bottom:14px;padding:6px 14px;border-radius:999px;
+  background:rgba(79,163,209,.14);border:1px solid var(--azul);color:var(--azul);
+  font-family:'Inter',sans-serif;font-weight:700;font-size:13.5px}
 .comida .info{flex:1;min-width:0}
 .comida .cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:3px}
 .comida h3{font-family:'Inter',sans-serif;font-weight:800;font-size:16.5px;
@@ -335,6 +339,7 @@ main{padding:18px 16px 46px}
     <!-- ══ Menú del día ═════════════════════════════════════════════════ -->
     <div class="card">
       <span class="etq">Menú de hoy</span>
+      <span class="aviso-preview" id="avisoPreview" hidden>Vista previa — el check ✓ solo funciona en el día de hoy</span>
       <div id="listaComidas"></div>
     </div>
 
@@ -527,12 +532,22 @@ function guardarCheck(obj){
 
 function pintarComidas(){
   var dia = PLAN_DIAS[diaActual];
+  var esHoy = diaActual === indiceHoy();
   var check = cargarCheck();
   var hoy = hoyISO();
   var marcadasHoy = check[hoy] || [];
 
   var cont = $("listaComidas");
   cont.innerHTML = "";
+
+  /* El check de "ya comí" es del día real de hoy, no de la pestaña que
+     estés mirando — como los ids de las comidas (desayuno, almuerzo...)
+     se repiten en los 7 días, marcar uno mientras miras otra pestaña
+     hacía que apareciera marcado en todas. Por eso el tick solo se
+     activa en la pestaña que corresponde a hoy; en las demás (que son
+     solo para previsualizar el menú de otro día) queda deshabilitado. */
+  $("avisoPreview").hidden = esHoy;
+
   comidasDelDia(dia).forEach(function(c){
     var m = c[dia.tipo];
     var texto = c.comun;
@@ -550,12 +565,12 @@ function pintarComidas(){
       }).join("") + '</div>';
     }
 
-    var hecha = marcadasHoy.indexOf(c.id) !== -1;
+    var hecha = esHoy && marcadasHoy.indexOf(c.id) !== -1;
     var div = document.createElement("div");
     div.className = "comida";
     div.setAttribute("data-hecha", hecha ? "si" : "no");
     div.innerHTML =
-      '<button type="button" class="tick" data-id="' + c.id + '">✓</button>' +
+      '<button type="button" class="tick" data-id="' + c.id + '"' + (esHoy ? "" : " disabled") + '>✓</button>' +
       '<div class="info">' +
         '<div class="cab"><h3>' + c.nombre + '</h3><span class="hora">' + c.hora + '</span></div>' +
         '<div class="macros">' + m.prot + 'g prot · ' + m.carb + 'g carb · ' + m.grasa + 'g grasa</div>' +
@@ -564,6 +579,8 @@ function pintarComidas(){
       '</div>';
     cont.appendChild(div);
   });
+
+  if(!esHoy) return;
 
   cont.querySelectorAll(".tick").forEach(function(btn){
     btn.addEventListener("click", function(){
