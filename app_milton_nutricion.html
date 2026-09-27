@@ -79,7 +79,7 @@ main{padding:18px 16px 46px}
   text-transform:uppercase;letter-spacing:.01em;color:var(--dorado);margin-bottom:2px}
 .paso p{font-size:15px;line-height:1.4;color:var(--blanco)}
 
-.meta-personal{display:flex;gap:12px;align-items:flex-end;margin-bottom:16px;
+.meta-personal{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:16px;
   padding-top:14px;border-top:1px solid rgba(255,255,255,.12)}
 .meta-personal .campito{flex:1}
 .meta-personal label{display:block;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;
@@ -261,10 +261,18 @@ main{padding:18px 16px 46px}
         <div class="campito">
           <label for="metaCintura">Tu meta de cintura</label>
           <div class="conunidad">
-            <input type="text" inputmode="decimal" id="metaCintura" placeholder="86" autocomplete="off">
+            <input type="text" inputmode="decimal" id="metaCintura" placeholder="75" autocomplete="off">
             <span class="unidad">cm</span>
           </div>
-          <span class="hint-meta">Sugerencia: 86 cm en 20 semanas — percentil 85 de hombres físicamente activos (estudio CHIREF, Chile) — escribe la tuya si quieres otra</span>
+          <span class="hint-meta">Sugerencia: 75 cm en 16-20 semanas — percentil 25 de hombres físicamente activos (estudio CHIREF, Chile) — escribe la tuya si quieres otra</span>
+        </div>
+        <div class="campito">
+          <label for="metaPeso">Tu meta de peso</label>
+          <div class="conunidad">
+            <input type="text" inputmode="decimal" id="metaPeso" placeholder="71" autocomplete="off">
+            <span class="unidad">kg</span>
+          </div>
+          <span class="hint-meta">Sugerencia: ~71 kg en 16-20 semanas, al ritmo del déficit real de tu plan (~427 kcal/día promedio) — la cintura sigue siendo la métrica más confiable, la balanza puede bajar menos si el músculo se mantiene o sube</span>
         </div>
         <div class="dias-plan">
           <div class="v num" id="diasPlan">0</div>
@@ -633,14 +641,27 @@ pintarMarcas();
 var META_KEY = "wgym_meta_milton_v1";
 var INICIO_KEY = "wgym_inicio_milton_v1";
 
-(function cargarMetaCintura(){
+function cargarMeta(){
+  try{ return JSON.parse(localStorage.getItem(META_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function guardarMeta(cambios){
   try{
-    var m = JSON.parse(localStorage.getItem(META_KEY)) || {};
-    if(m.cintura != null) $("metaCintura").value = m.cintura;
+    var m = cargarMeta();
+    Object.keys(cambios).forEach(function(k){ m[k] = cambios[k]; });
+    localStorage.setItem(META_KEY, JSON.stringify(m));
   }catch(e){}
+}
+(function cargarMetas(){
+  var m = cargarMeta();
+  if(m.cintura != null) $("metaCintura").value = m.cintura;
+  if(m.peso != null) $("metaPeso").value = m.peso;
 })();
 $("metaCintura").addEventListener("input", function(){
-  try{ localStorage.setItem(META_KEY, JSON.stringify({ cintura: $("metaCintura").value })); }catch(e){}
+  guardarMeta({ cintura: $("metaCintura").value });
+});
+$("metaPeso").addEventListener("input", function(){
+  guardarMeta({ peso: $("metaPeso").value });
 });
 
 (function pintarDiasPlan(){
