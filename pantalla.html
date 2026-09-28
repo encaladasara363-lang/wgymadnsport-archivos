@@ -172,12 +172,48 @@ header.top h1 span{ color:var(--rojo); }
  .feed-item .fvenc, .feed-item .fturno, .feed-item .fveces{ font-size:10.5px; }
  .feed-item .ftime{ font-size:11px; }
 }
+
+/* Tablet de la puerta usada acostada (horizontal): antes el contenido se
+   quedaba angosto y centrado (max-width:720px) dejando franjas negras
+   enormes a los lados y obligando a desplazarse mucho para ver todo, lo
+   que en la tablet se sentía como que "se cortaba" la pantalla. Acá se
+   estira para ocupar todo el ancho real del aparato y se arma en 3
+   columnas (ingresos · último ingreso · bandas y candados) para que
+   entre mucho más de un vistazo, sin agrandar el celular en modo
+   vertical (pointer:coarse + ancho de tablet acostada, nunca de un
+   teléfono en la mano). */
+@media (min-width:820px) and (orientation:landscape) and (pointer:coarse){
+ header.top{
+  display:flex; align-items:center; justify-content:center; gap:18px;
+  padding:14px 28px; text-align:left;
+ }
+ header.top .logo{ width:60px; margin:0; }
+ header.top .headtext{ display:flex; flex-direction:column; gap:2px; }
+ header.top .gymname{ margin:0; }
+ header.top h1{ font-size:19px; }
+
+ .wrap{
+  max-width:1500px; width:100%;
+  padding:20px 32px 28px;
+  grid-template-columns:1fr 1.05fr 1fr;
+  grid-template-areas:
+   "notice notice notice"
+   "ihead  hero   bandas"
+   "ifeed  hero   bandas";
+  gap:0 22px;
+ }
+ #ingresosHead{ grid-area:ihead; }
+ #feed{ grid-area:ifeed; max-height:calc(100vh - 250px); overflow-y:auto; padding-right:4px; }
+ #bandasSection{ max-height:calc(100vh - 190px); overflow-y:auto; padding-right:4px; }
+}
 </style>
 
 <header class="top">
 <img class="logo" id="topLogoImg" alt="WGYMADNSPORT">
+<div class="headtext">
 <p class="gymname">WGYMADNSPORT Tocopilla</p>
 <h1>Pantalla de <span>Ingresos</span></h1>
+</div>
 </header>
 
 <div class="wrap">
