@@ -219,6 +219,14 @@ header.top h1 span{ color:var(--rojo); }
  }
  #ingresosHead{ grid-area:ihead; }
  #feed{ grid-area:ifeed; max-height:calc(100vh - 220px); overflow-y:auto; padding-right:4px; }
+ /* La columna de "Ingresos recientes" queda angosta acá (una de tres),
+    y nombre + vencimiento + hora apretados en una sola fila se
+    cortaban feo, partiendo palabras a la mitad. Cada dato pasa a su
+    propia línea: el cajón crece de alto lo que haga falta, pero se
+    lee de corrido. */
+ .feed-item{ flex-direction:column; align-items:stretch; gap:6px; }
+ .feed-item .finfo{ flex-wrap:wrap; row-gap:4px; }
+ .feed-item .ftime{ align-self:flex-end; }
  #bandasSection{ max-height:calc(100vh - 160px); overflow-y:auto; padding-right:4px; }
  .hero{ padding:20px 22px; min-height:0; }
  .hero .kicker{ margin:0 0 8px; }
