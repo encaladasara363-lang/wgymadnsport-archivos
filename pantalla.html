@@ -192,7 +192,15 @@ header.top h1 span{ color:var(--rojo); }
     desbordar -- y adentro, cada columna (ingresos, último ingreso,
     bandas/candados) hace su propio scroll interno si su contenido no
     entra, en vez de empujar a las demás columnas fuera de la pantalla. */
- html, body{ height:100%; overflow:hidden; }
+ /* height:100% (o 100vh) mide el alto MÁXIMO teórico de la pantalla,
+    como si la barra de dirección del navegador no estuviera -- pero en
+    esta tablet esa barra queda fija arriba y sí ocupa espacio real, así
+    que ese cálculo daba una página más alta que lo que en verdad se ve,
+    y lo de más abajo quedaba tapado por la barra. 100dvh mide el alto
+    REAL visible en cada momento (le resta la barra si está mostrándose)
+    -- se deja 100vh primero solo como respaldo para un navegador
+    viejísimo que no entienda dvh. */
+ html, body{ height:100vh; height:100dvh; min-height:0; overflow:hidden; }
  body{ display:flex; flex-direction:column; }
  header.top{
   display:flex; align-items:center; justify-content:center; gap:18px;
