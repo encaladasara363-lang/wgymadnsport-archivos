@@ -228,15 +228,20 @@ header.top h1 span{ color:var(--rojo); }
  .feed-item .finfo{ flex-wrap:wrap; row-gap:4px; }
  .feed-item .ftime{ align-self:flex-end; }
  #bandasSection{ max-height:calc(100vh - 160px); overflow-y:auto; padding-right:4px; }
- .hero{ padding:20px 22px; min-height:0; }
- .hero .kicker{ margin:0 0 8px; }
- .hero .name{ font-size:26px; margin:0 0 4px; }
- .hero .time{ font-size:13px; }
- .hero .venc{ font-size:clamp(16px, 3.6vw, 22px); margin-top:8px; padding:7px 12px; }
- .hero .venc .venc-dias{ font-size:clamp(18px, 5vw, 28px); margin-top:3px; }
- .hero .fallo{ font-size:19px; margin:0 0 6px; }
- .hero .plan{ font-size:18px; margin:8px 0 0; }
- .hero .turno{ margin-top:6px; font-size:clamp(13px, 2.8vw, 22px); padding:6px 12px; }
+ /* Estos números se habían achicado bastante de más como precaución,
+    por si el contenido no entraba en la pantalla. Ahora que el botón
+    de pantalla completa ya resuelve eso de raíz (nada queda tapado
+    por la barra del navegador), se agranda de nuevo para aprovechar
+    mejor el espacio real disponible. */
+ .hero{ padding:30px 26px; min-height:0; }
+ .hero .kicker{ margin:0 0 10px; }
+ .hero .name{ font-size:34px; margin:0 0 6px; }
+ .hero .time{ font-size:14px; }
+ .hero .venc{ font-size:clamp(19px, 5vw, 27px); margin-top:10px; padding:9px 14px; }
+ .hero .venc .venc-dias{ font-size:clamp(22px, 7.5vw, 36px); margin-top:5px; }
+ .hero .fallo{ font-size:23px; margin:0 0 8px; }
+ .hero .plan{ font-size:24px; margin:10px 0 0; }
+ .hero .turno{ margin-top:8px; font-size:clamp(14px, 3.6vw, 30px); padding:7px 13px; }
 }
 </style>
 
