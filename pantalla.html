@@ -20,6 +20,7 @@
  --line:#2A2A2A;
 }
 *{box-sizing:border-box;}
+[hidden]{display:none !important;}
 body{
  margin:0;
  background:var(--negro);
@@ -297,6 +298,8 @@ const LOGO_B64 = "assets/logo-oficial.webp";
 
 
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
+/* Permite que las tablets que aún tienen la página antigua abierta se recarguen una sola vez. */
+const SOCIOS_VERSION = 2026092807;
 </script>
 <script>
 (function(){
@@ -599,20 +602,38 @@ function cargarLista(){ return false; }
    Código.gs). Se llama al arrancar y cada un par de minutos, en silencio
    -- así esta pantalla nunca necesita recargarse entera para enterarse
    de un socio nuevo o una renovación. */
+var solicitandoSocios = false;
+var pedidoSocios = 0;
 function cargarSociosDesdeApi(despues){
  if(!CHECKIN_URL){ if(despues) despues(); return; }
- var cb = "wgymSocios_" + Date.now();
- window[cb] = function(data){
-  delete window[cb]; script.remove();
-  if(data && Array.isArray(data.socios)){
+ if(solicitandoSocios){ if(despues) despues(); return; }
+ solicitandoSocios = true;
+ var cb = "wgymSocios_" + (++pedidoSocios) + "_" + Date.now();
+ var script = document.createElement("script");
+ var terminado = false;
+ var reloj = setTimeout(function(){ terminar(null); }, 10000);
+ function terminar(data){
+  if(terminado) return;
+  terminado = true;
+  solicitandoSocios = false;
+  clearTimeout(reloj);
+  delete window[cb];
+  script.remove();
+  if(data && Array.isArray(data.socios) && data.socios.length){
    lista = data.socios.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:isoDeSerial(s.fv) }; });
    pintarOrigen();
+   /* Actualiza de inmediato la tarjeta y los ingresos ya visibles, sin
+      esperar otro escaneo ni recargar o hacer parpadear la pantalla. */
+   if(ultimasFilas.length){
+    showHero(ultimasFilas[0]);
+    renderFeed(ultimasFilas);
+   }
   }
   if(despues) despues();
- };
- var script = document.createElement("script");
+ }
+ window[cb] = terminar;
  script.src = CHECKIN_URL + "?action=listarSocios&callback=" + cb + "&_=" + Date.now();
- script.onerror = function(){ delete window[cb]; script.remove(); if(despues) despues(); };
+ script.onerror = function(){ terminar(null); };
  document.body.appendChild(script);
 }
 
@@ -911,7 +932,19 @@ cargarSociosDesdeApi(function(){
  setInterval(poll, 4000);
  setInterval(pollBandas, 4000);
  setInterval(pollCandados, 4000);
- setInterval(cargarSociosDesdeApi, 2 * 60 * 1000);
+ setInterval(cargarSociosDesdeApi, 10 * 1000);
+  /* Solo una publicación de código nuevo recarga la pantalla. Los cambios
+     normales de socios llegan arriba desde la planilla sin recargar. */
+  setInterval(function(){
+   fetch(location.pathname + "?v=" + Date.now(), {cache:"no-store"})
+    .then(function(r){ return r.text(); })
+    .then(function(html){
+     var m = html.match(/const SOCIOS_VERSION\s*=\s*(\d+)/);
+     if(m && Number(m[1]) > SOCIOS_VERSION)
+      location.replace(location.pathname + "?v=" + Date.now());
+    })
+    .catch(function(){});
+  }, 60000);
 });
 })();
 </script>
