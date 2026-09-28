@@ -299,7 +299,7 @@ const LOGO_B64 = "assets/logo-oficial.webp";
 
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 /* Permite que las tablets que aún tienen la página antigua abierta se recarguen una sola vez. */
-const SOCIOS_VERSION = 2026092807;
+const SOCIOS_VERSION = 2026092808;
 </script>
 <script>
 (function(){
@@ -674,7 +674,7 @@ function veredictoDe(r){
  }
  if(dias < 0){
   var haceTxt = "hace " + Math.abs(dias) + (Math.abs(dias)===1?" día":" días");
-  return { v:"bad", fallo:"Acceso denegado · membresía vencida",
+  return { v:"bad", fallo:"Ingreso registrado · membresía vencida",
            detalle:"Venció el " + vence + " · " + haceTxt,
            fechaTxt:"Venció el " + vence, diasTxt:haceTxt,
            corto:null, cls:"danger", plan:s.plan };

@@ -1029,7 +1029,7 @@ function veredicto(s){
  var d = diasPara(s.v, s.plan);
  if(d === null) return { v:"nadie", fallo:"Esta ficha no tiene fecha",
   detalle:"Ábrela y ponle el vencimiento", corto:"Sin fecha", cls:"", plan:s.plan };
- if(e === "vencido") return { v:"bad", fallo:"Acceso denegado · membresía vencida",
+ if(e === "vencido") return { v:"bad", fallo:"Ingreso registrado · membresía vencida",
   detalle:"Venció el "+fechaCL(s.v)+" · hace "+Math.abs(diasPara(s.v, s.plan))+(Math.abs(diasPara(s.v, s.plan))===1?" día":" días"),
   corto:null, cls:"danger", plan:s.plan };
  if(e === "porvencer") return { v:"warn", fallo:"Pasa, pero avísale",
