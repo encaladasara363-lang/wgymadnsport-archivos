@@ -43,9 +43,7 @@ header.top h1 span{ color:var(--rojo); }
  text-align:center;
  min-height:180px;
  display:flex; flex-direction:column; align-items:center; justify-content:center;
- transition:box-shadow .3s ease;
 }
-.hero.flash{ box-shadow:0 0 0 4px var(--rojo), 0 0 40px 6px rgba(227,6,19,.5); }
 .hero .kicker{ font-size:12px; font-weight:800; letter-spacing:.16em; color:var(--dorado); text-transform:uppercase; margin:0 0 12px; }
 .hero .name{ font-size:38px; font-weight:900; text-transform:uppercase; line-height:1.15; margin:0 0 8px; }
 .hero .time{ font-size:15px; color:var(--gris-soft); font-weight:600; }
@@ -64,13 +62,10 @@ header.top h1 span{ color:var(--rojo); }
 .hero .turno[data-t="tope"]{ color:var(--dorado); border-color:var(--dorado); background:rgba(212,175,55,.14); }
 .hero[data-v="ok"]{ border-color:#5CA85C; }
 .hero[data-v="ok"] .fallo{ color:#5CA85C; }
-.hero[data-v="ok"].flash{ box-shadow:0 0 0 4px #5CA85C, 0 0 40px 6px rgba(92,168,92,.45); }
 .hero[data-v="warn"]{ border-color:var(--dorado); }
 .hero[data-v="warn"] .fallo{ color:var(--dorado); }
-.hero[data-v="warn"].flash{ box-shadow:0 0 0 4px var(--dorado), 0 0 40px 6px rgba(212,175,55,.45); }
 .hero[data-v="bad"]{ border-color:#E85C5C; }
 .hero[data-v="bad"] .fallo{ color:#E85C5C; }
-.hero[data-v="bad"].flash{ box-shadow:0 0 0 4px var(--rojo), 0 0 40px 8px rgba(227,6,19,.55); }
 .hero[data-v="nadie"]{ border-color:var(--line); }
 .hero[data-v="nadie"] .fallo{ color:var(--gris-soft); font-size:20px; }
 @media (max-width:520px){ .hero .name{ font-size:30px; } .hero .fallo{ font-size:21px; }
@@ -885,14 +880,6 @@ function showHero(r){
  if(d.plan){ planEl.hidden = false; planEl.textContent = d.plan; }
  else { planEl.hidden = true; }
 }
-function flashHero(r){
- showHero(r);
- var hero = document.getElementById("hero");
- hero.classList.remove("flash");
- void hero.offsetWidth;
- hero.classList.add("flash");
-}
-
 function handleData(data){
  var rows = data.rows || [];
  ultimasFilas = rows;
@@ -907,7 +894,7 @@ function handleData(data){
  if(rows.length > 0){
   var newest = rows[0];
   if(!firstPoll && !seenKeys[keyOf(newest)]){
-   flashHero(newest);
+   showHero(newest);
   } else if(firstPoll || cambioLista){
    /* La lista cambió: recalcula el veredicto sin destellar de nuevo. */
    showHero(newest);
