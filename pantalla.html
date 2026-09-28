@@ -500,7 +500,7 @@ const SOCIOS = [
 ];
 /* Sube este número cada vez que se regenera SOCIOS desde socios.json,
    para que esta pantalla también se fusione sola con lo publicado. */
-const SOCIOS_VERSION = 2026092804;
+const SOCIOS_VERSION = 2026092805;
 
 
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
@@ -679,6 +679,9 @@ function inicioCalculado(s){
  /* Sigue siendo el MISMO ciclo mientras hoy no haya pasado todavia la fecha
     de vencimiento que tenia guardada — aunque esa fecha se haya corregido
     despues sin que el socio haya renovado de verdad (ver control.html). */
+ /* Claudia renovó el 28-09-2026. El mes nuevo empieza ese día también en la tablet. */
+ if(llaveSocio(s) === "CLAUDIA|VILLEGAS" && s.v === "2026-10-28" &&
+    (!c || !fechaValida(c.desde) || c.desde < "2026-09-28")) return "2026-09-28";
  if(c && fechaValida(c.desde) && fechaValida(c.v) && hoyISO() <= c.v) return c.desde;
  var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v, s);
  /* El ciclo nunca puede arrancar despues de hoy: si el calculo por defecto
