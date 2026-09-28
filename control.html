@@ -405,249 +405,6 @@ La <a href="pantalla.html">pantalla de ingresos</a> es la que va a la vista de l
 const LOGO_B64 = "assets/logo-oficial.webp";
 /* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
-/* Lista base publicada en el sitio. Si edito socios acá, sube este número
-   y la página te ofrece traer la lista nueva sin pisar lo tuyo. */
-const LISTA_VERSION = 2026092803;
-const LISTA_BASE = [
-{n:"MATIAS",a:"ABELLO",plan:"Full Mensual",m:33000,v:"2026-10-21"},
-{n:"ALEXIS",a:"ACUÑA",plan:"Full Mensual",m:33000,v:"2026-09-25"},
-{n:"EMYLY",a:"ADAOS",plan:"Estudiante Profesor",m:28000,v:"2026-09-21"},
-{n:"PABLO",a:"AGUILERA",plan:"Estudiante Profesor",m:28000,v:"2026-10-03"},
-{n:"ANTONELLA",a:"AGUIRRE",plan:"Full Mensual",m:33000,v:"2026-09-25"},
-{n:"JOSE",a:"ALBARADO",plan:"Full Mensual",m:33000,v:"2026-10-21"},
-{n:"JOAQUIN",a:"ALBAYAY",plan:"Estudiante Profesor",m:28000,v:"2026-09-12"},
-{n:"FRANCHESCA",a:"ALCAYAGA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
-{n:"BRAYAN",a:"ALVARE",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-30"},
-{n:"BRAYAN",a:"ALVAREZ",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-30"},
-{n:"DEMIAN",a:"ALVAREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-24"},
-{n:"PEDRO",a:"ALVAREZ",plan:"Full Mensual",m:33000,v:"2026-10-12"},
-{n:"KEIDY",a:"ANDRADE",plan:"Estudiante Profesor",m:28000,v:"2026-10-09"},
-{n:"ALANYS",a:"ANDRADES",plan:"Full Mensual",m:33000,v:"2026-10-21"},
-{n:"VICTORIA",a:"ANGEL",plan:"Funcionario Público",m:28000,v:"2026-10-21"},
-{n:"JOCKSHUA",a:"ARANDA",plan:"Estudiante Profesor",m:28000,v:"2026-09-27"},
-{n:"KIMMEN",a:"ARANDA",plan:"Full Mensual",m:33000,v:"2026-10-23"},
-{n:"ALONSO",a:"ARAYA",plan:"Tres Veces a La Semana",m:23000,v:"2026-10-07"},
-{n:"CARLOS",a:"ARAYA",plan:"Full Mensual",m:33000,v:"2026-10-02"},
-{n:"DANIEL",a:"ARAYA",plan:"Estudiante Profesor",m:28000,v:"2026-09-30"},
-{n:"GUILLERMO",a:"ARAYA",plan:"Estudiante Profesor",m:28000,v:"2026-10-04"},
-{n:"PAULINA",a:"ARAYA",plan:"Funcionario Público",m:28000,v:"2026-09-30"},
-{n:"CHRISTIAN",a:"AROS",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
-{n:"KRYSHNA",a:"ARTEAGA",plan:"Funcionario Público",m:28000,v:"2026-08-09"},
-{n:"CELINDA",a:"BARJA",plan:"Full Mensual",m:33000,v:"2026-10-14"},
-{n:"ESTEFANNY",a:"BERMUDEZ",plan:"Funcionario Público",m:28000,v:"2026-10-14"},
-{n:"VICTORIA",a:"BEROIZA",plan:"Estudiante Profesor",m:28000,v:"2026-09-27"},
-{n:"KEVIN",a:"BONILLA",plan:"Mensual Turno",m:23000,v:"2026-10-11"},
-{n:"ENZO",a:"BORDON",plan:"Full Mensual",m:33000,v:"2026-10-01"},
-{n:"LUCIANO",a:"BORDON",plan:"Estudiante Profesor",m:28000,v:"2026-10-03"},
-{n:"HERMANN",a:"BORQUEZ",plan:"Mensual Turno",m:23000,v:"2026-09-28"},
-{n:"BETSY",a:"BRIONES",plan:"Full Mensual",m:33000,v:"2026-09-12"},
-{n:"MATTIAS",a:"BROWN",plan:"Estudiante Profesor",m:28000,v:"2026-10-01"},
-{n:"FANY",a:"BUNTIN",plan:"Full Mensual",m:33000,v:"2026-10-21"},
-{n:"CLAUDIO",a:"BUSTAMANTE",plan:"Plan Semanal",m:15000,v:"2026-09-07"},
-{n:"TOMAS",a:"CABALLERO",plan:"Mensual Turno",m:23000,v:"2026-10-10"},
-{n:"JUAN",a:"CACERES",plan:"Full Mensual",m:33000,v:"2026-10-26"},
-{n:"CHRISTIAN",a:"CAMPOS",plan:"Full Mensual",m:33000,v:"2026-09-25"},
-{n:"IGNACIO",a:"CANDIA",plan:"Mensual Turno",m:23000,v:"2026-10-02"},
-{n:"IGNASIO",a:"CANDIA",plan:"Mensual Turno",m:23000,v:"2026-10-02"},
-{n:"JESSICA",a:"CARMONA",plan:"Full Mensual",m:33000,v:"2026-10-21"},
-{n:"RODRIGO",a:"CARMONA",plan:"Estudiante Profesor",m:28000,v:"2026-10-22"},
-{n:"ANGIE",a:"CARRASCO",plan:"Estudiante Profesor",m:28000,v:"2026-10-25"},
-{n:"JAVIERA",a:"CARRASCO",plan:"Plan Semanal",m:15000,v:"2026-09-07"},
-{n:"JORGE",a:"CARRASCO",plan:"Mensual Turno",m:23000,v:"2026-10-03"},
-{n:"MILENKA",a:"CARRASCO",plan:"Full Mensual",m:33000,v:"2026-09-28"},
-{n:"CAROLINA",a:"CARVAJAL",plan:"Full Mensual",m:33000,v:"2026-10-25"},
-{n:"DANIELA",a:"CARVAJAL",plan:"Full Mensual",m:33000,v:"2026-09-03"},
-{n:"SARA",a:"CARVAJAL",plan:"Mensual Turno",m:23000,v:"2026-09-30"},
-{n:"GISELA",a:"CASTILLO",plan:"Full Mensual",m:33000,v:"2026-09-10"},
-{n:"KATHIA",a:"CEBEÑO",plan:"Full Mensual",m:33000,v:"2026-09-12"},
-{n:"JOSE",a:"CHOCK",plan:"Full Mensual",m:33000,v:"2026-09-10"},
-{n:"DIEGO",a:"CLARK",plan:"Mensual Turno",m:23000,v:"2026-09-27"},
-{n:"FAVIO",a:"CLAVELO",plan:"Funcionario Público",m:28000,v:"2026-08-25"},
-{n:"ULISES",a:"CONDORI",plan:"Estudiante Profesor",m:28000,v:"2026-10-01"},
-{n:"PATRICIO",a:"CONTADOR",plan:"Mensual Tercera Edad",m:23000,v:"2026-10-28"},
-{n:"HECTOR",a:"CONTRERAS",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
-{n:"JAIRO",a:"CONTRERAS",plan:"Mensual Turno",m:23000,v:"2026-08-14"},
-{n:"JORGE",a:"CONTRERAS",plan:"Funcionario Público",m:28000,v:"2026-08-10"},
-{n:"MAXIMILIANO",a:"CONTRERAS",plan:"Estudiante Profesor",m:28000,v:"2026-10-21"},
-{n:"MARIA",a:"CORDERO",plan:"Funcionario Público",m:28000,v:"2026-10-21"},
-{n:"VICTOR",a:"CORRY",plan:"Full Mensual",m:33000,v:"2026-09-13"},
-{n:"DANIEL",a:"CORTEZ",plan:"Mensual Turno",m:23000,v:"2026-09-27"},
-{n:"SONIA",a:"CUBA",plan:"Full Mensual",m:33000,v:"2026-08-14"},
-{n:"ANDREA",a:"CUELLA",plan:"Full Mensual",m:33000,v:"2026-08-03"},
-{n:"CAMILA",a:"CUELLA",plan:"Full Mensual",m:33000,v:"2026-08-03"},
-{n:"CAROLINA",a:"CUELLA",plan:"Funcionario Público",m:28000,v:"2026-08-31"},
-{n:"VALENTINA",a:"CUELLAR",plan:"Estudiante Profesor",m:28000,v:"2026-10-22"},
-{n:"MILAN",a:"CVITANIC",plan:"Estudiante Profesor",m:28000,v:"2026-09-01"},
-{n:"TOMISLAV",a:"CVITANIC",plan:"Full Mensual",m:33000,v:"2026-09-01"},
-{n:"MANUEL",a:"DURAN",plan:"Funcionario Público",m:28000,v:"2026-08-13"},
-{n:"MACARENA",a:"ENCALADA",plan:"Full Mensual",m:33000,v:"2027-12-09"},
-{n:"MARILYN",a:"ENCALADA",plan:"Full Mensual",m:33000,v:"2026-12-08"},
-{n:"SARA",a:"ENCALADA",plan:"Full Mensual",m:33000,v:"2027-12-08"},
-{n:"ALDO",a:"ENCINA",plan:"Mensual Turno",m:23000,v:"2026-09-04"},
-{n:"YESSICA",a:"ESCALERA",plan:"Mensual Turno",m:23000,v:"2026-08-30"},
-{n:"JUAN",a:"ESCALONA",plan:"Estudiante Profesor",m:28000,v:"2026-10-22"},
-{n:"JOSEFA",a:"ESCOBAR",plan:"Mensual Turno",m:23000,v:"2026-10-09"},
-{n:"BENJAMIN",a:"ESPINOZA",plan:"Full Mensual",m:33000,v:"2026-10-22"},
-{n:"JHON",a:"ESPINOZA",plan:"Estudiante Profesor",m:28000,v:"2026-10-21"},
-{n:"IVAN",a:"ESPIRITU",plan:"Mensual Turno",m:23000,v:"2026-08-08"},
-{n:"XIMENA",a:"FARFAN",plan:"Estudiante Profesor",m:28000,v:"2026-10-21"},
-{n:"CLAUDIA",a:"FERNANDEZ",plan:"Funcionario Público",m:28000,v:"2026-10-08"},
-{n:"GABRIEL",a:"FERNANDEZ",plan:"Estudiante Profesor",m:28000,v:"2026-10-22"},
-{n:"PAOLA",a:"FERRER",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
-{n:"ROBERTO",a:"FIGUEROA",plan:"Full Mensual",m:33000,v:"2026-09-04"},
-{n:"MATIAS",a:"FLORES",plan:"Funcionario Público",m:28000,v:"2026-09-29"},
-{n:"MILTON",a:"FUENTES",plan:"Full Mensual",m:33000,v:"2027-09-20"},
-{n:"IAN",a:"GAETE",plan:"Estudiante Profesor",m:28000,v:"2026-10-10"},
-{n:"DEBORA",a:"GAJARDO",plan:"Full Mensual",m:33000,v:"2026-08-27"},
-{n:"CAMILO",a:"GALLEGILLOS",plan:"Full Mensual",m:33000,v:"2026-08-16"},
-{n:"LUIS",a:"GARCIA",plan:"Estudiante Profesor",m:28000,v:"2026-09-12"},
-{n:"ROSALIA",a:"GARMENDIA",plan:"Plan Especial",m:20000,v:"2026-10-23"},
-{n:"BENJAMIN",a:"GODOY",plan:"Mensual Turno",m:23000,v:"2026-08-23"},
-{n:"JENNY",a:"GOMEZ",plan:"Mensual Turno",m:23000,v:"2026-09-30"},
-{n:"KATHERINE",a:"GOMEZ",plan:"Full Mensual",m:33000,v:"2026-09-30"},
-{n:"MACARENA",a:"GONZALEZ",plan:"Funcionario Público",m:28000,v:"2026-10-21"},
-{n:"SERGIO",a:"GUAPA",plan:"Full Mensual",m:33000,v:"2026-09-07"},
-{n:"FERNANDA",a:"GUERRA",plan:"Estudiante Profesor",m:28000,v:"2026-10-09"},
-{n:"RODRIGO",a:"GUMUCIO",plan:"Full Mensual",m:33000,v:"2026-10-01"},
-{n:"ANGEL",a:"GUTIERREZ",plan:"Full Mensual",m:33000,v:"2026-10-14"},
-{n:"MARIA JOSE",a:"HERNANDEZ",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-30"},
-{n:"VALENTINA",a:"HERNANDEZ",plan:"Estudiante Profesor",m:28000,v:"2026-10-21"},
-{n:"ARACELY",a:"HERRERA",plan:"Mensual Turno",m:23000,v:"2026-10-02"},
-{n:"ISABEL",a:"HERRERA",plan:"Mensual Turno",m:23000,v:"2026-10-02"},
-{n:"MARIA",a:"HERRERA",plan:"Mensual Turno",m:23000,v:"2026-08-19"},
-{n:"NICOLE",a:"HERRERA",plan:"Full Mensual",m:33000,v:"2026-09-10"},
-{n:"NINA",a:"HERRERA",plan:"Full Mensual",m:33000,v:"2026-09-10"},
-{n:"ISABEL",a:"HERRERRA",plan:"Mensual Turno",m:23000,v:"2026-10-02"},
-{n:"LUISA",a:"HIDALGO",plan:"Full Mensual",m:33000,v:"2026-10-14"},
-{n:"WENDY",a:"HUAYTA",plan:"Full Mensual",m:33000,v:"2026-09-12"},
-{n:"CHRISTIAN",a:"IBACETA",plan:"Mensual Turno",m:23000,v:"2026-10-22"},
-{n:"KATHERINE",a:"IGLESIAS",plan:"Estudiante Profesor",m:28000,v:"2026-10-11"},
-{n:"EINER",a:"JAIMES",plan:"Full Mensual",m:33000,v:"2026-09-24"},
-{n:"AGUSTIN",a:"JERONIMO",plan:"Estudiante Profesor",m:28000,v:"2026-10-25"},
-{n:"CAMILA",a:"JUICA",plan:"Full Mensual",m:33000,v:"2027-03-17"},
-{n:"CAMILO",a:"JUICA",plan:"Mensual Turno",m:23000,v:"2026-10-16"},
-{n:"KRYS",a:"JUICA",plan:"Full Mensual",m:33000,v:"2027-09-30"},
-{n:"MAURICIO",a:"JUICA",plan:"Full Mensual",m:33000,v:"2027-08-20"},
-{n:"GERARDO",a:"LEPE",plan:"Full Mensual",m:33000,v:"2026-09-10"},
-{n:"ANTONELLA",a:"LLANQUE",plan:"Full Mensual",m:33000,v:"2026-08-14"},
-{n:"ELIZABETH",a:"LLIULLI",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-20"},
-{n:"GLORIA",a:"LOPEZ",plan:"Tres Veces a La Semana",m:23000,v:"2026-10-14"},
-{n:"LUNA",a:"LOPEZ",plan:"Full Mensual",m:33000,v:"2026-09-04"},
-{n:"MILAGROS",a:"LOPEZ",plan:"Full Mensual",m:33000,v:"2026-08-27"},
-{n:"PAMELA",a:"LOPEZ",plan:"Funcionario Público",m:28000,v:"2026-10-12"},
-{n:"ROSA",a:"LUCERO",plan:"Mensual Tercera Edad",m:23000,v:"2026-09-09"},
-{n:"JOSE",a:"LUIS",plan:"Full Mensual",m:33000,v:"2026-10-15"},
-{n:"VALERIA",a:"MACIAS",plan:"Full Mensual",m:33000,v:"2026-09-30"},
-{n:"RICARDO",a:"MAMANNI",plan:"Estudiante Profesor",m:28000,v:"2026-08-30"},
-{n:"ANA",a:"MARIA GONZALEZ",plan:"Mensual Tercera Edad",m:23000,v:"2026-10-24"},
-{n:"CLAUDIA",a:"MARIN",plan:"Estudiante Profesor",m:28000,v:"2026-10-21"},
-{n:"CONSTANZA",a:"MARIN",plan:"Funcionario Público",m:28000,v:"2026-10-08"},
-{n:"SEBASTIAN",a:"MARIN",plan:"Mensual Turno",m:23000,v:"2026-10-30"},
-{n:"DANIEL",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-08-13"},
-{n:"FERNANDA",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-09-24"},
-{n:"IDALBA",a:"MARTINEZ",plan:"Full Mensual",m:33000,v:"2026-09-12"},
-{n:"LUIS",a:"MARTINEZ",plan:"Mensual Tercera Edad",m:23000,v:"2026-09-10"},
-{n:"MAYUMY",a:"MARTINEZ",plan:"Funcionario Público",m:28000,v:"2026-10-07"},
-{n:"GABRIEL",a:"MOLINA",plan:"Mensual Turno",m:23000,v:"2026-09-26"},
-{n:"RODRIGO",a:"MOLINA",plan:"Estudiante Profesor",m:28000,v:"2026-10-08"},
-{n:"VICTOR",a:"MOLINA",plan:"Full Mensual",m:33000,v:"2026-09-27"},
-{n:"MIGUEL",a:"MONSALVES",plan:"Mensual Turno",m:23000,v:"2026-08-27"},
-{n:"MONICA",a:"MONTEROS",plan:"Tres Veces a La Semana",m:28000,v:"2026-10-15"},
-{n:"CARLA",a:"MORALES",plan:"Full Mensual",m:33000,v:"2026-08-23"},
-{n:"Edita",a:"Morales",plan:"Estudiante Profesor",m:28000,v:"2026-09-01"},
-{n:"EYMILEE",a:"MUÑOZ",plan:"Full Mensual",m:33000,v:"2026-10-10"},
-{n:"TRAYSI",a:"MUÑOZ",plan:"Full Mensual",m:33000,v:"2026-08-20"},
-{n:"ANDRES",a:"NAVEA",plan:"Full Mensual",m:33000,v:"2026-10-26"},
-{n:"DANAE",a:"NECULPAN",plan:"Estudiante Profesor",m:28000,v:"2026-10-21"},
-{n:"HELMUT",a:"NIEDMANN",plan:"Estudiante Profesor",m:28000,v:"2026-09-29"},
-{n:"MARIA JOSE",a:"OBREQUE",plan:"Full Mensual",m:33000,v:"2026-10-04"},
-{n:"Sebastian",a:"OLIVA",plan:"Estudiante Profesor",m:28000,v:"2026-08-15"},
-{n:"PEDRO",a:"OLIVARES",plan:"Funcionario Público",m:28000,v:"2026-09-30"},
-{n:"AlEXANDER",a:"ONTANEDA",plan:"Full Mensual",m:33000,v:"2026-09-27"},
-{n:"MAURICIO",a:"ONTANEDA",plan:"Full Mensual",m:33000,v:"2026-10-04"},
-{n:"BELEN",a:"OSES",plan:"Estudiante Profesor",m:28000,v:"2026-10-15"},
-{n:"MARIA",a:"OSES",plan:"Estudiante Profesor",m:28000,v:"2026-10-01"},
-{n:"NICOLAS",a:"PACHECO",plan:"Mensual Turno",m:23000,v:"2026-09-04"},
-{n:"GERMAN",a:"PALMA",plan:"Plan Especial",m:20000,v:"2026-08-18"},
-{n:"MAURA",a:"PALMA",plan:"Full Mensual",m:33000,v:"2026-09-30"},
-{n:"ARACELY",a:"PANIAGUA",plan:"Full Mensual",m:33000,v:"2026-08-24"},
-{n:"ALEJANDRO",a:"PARES",plan:"Full Mensual",m:33000,v:"2026-08-07"},
-{n:"TANYA",a:"PAULSEN",plan:"Full Mensual",m:33000,v:"2026-10-12"},
-{n:"ANDRES",a:"PAVES",plan:"Full Mensual",m:33000,v:"2026-10-04"},
-{n:"ANDRES",a:"PAVEZ",plan:"Mensual Turno",m:23000,v:"2026-10-04"},
-{n:"BASTIAN",a:"PERALTA",plan:"Estudiante Profesor",m:28000,v:"2026-07-04"},
-{n:"YANETH",a:"PERCCA",plan:"Full Mensual",m:33000,v:"2026-08-27"},
-{n:"ALAN",a:"PEREIRA",plan:"Funcionario Público",m:28000,v:"2026-09-10"},
-{n:"ANTONIO",a:"PEREZ",plan:"Full Mensual",m:33000,v:"2026-08-20"},
-{n:"CAMILA",a:"PEÑA",plan:"Full Mensual",m:33000,v:"2026-09-04"},
-{n:"JEAN",a:"PIERRE",plan:"Full Mensual",m:33000,v:"2026-10-24"},
-{n:"YAJAIRA",a:"PINEDA",plan:"Full Mensual",m:33000,v:"2026-09-10"},
-{n:"CRISTOBAL",a:"PIZARRO",plan:"Estudiante Profesor",m:28000,v:"2026-10-22"},
-{n:"GABRIEL",a:"PIÑOL",plan:"Mensual Turno",m:23000,v:"2026-10-08"},
-{n:"RODRIGO",a:"PLAZA",plan:"Tres Veces a La Semana",m:23000,v:"2026-10-07"},
-{n:"IVAN",a:"POZHO",plan:"Full Mensual",m:33000,v:"2026-09-10"},
-{n:"MICHEL",a:"QUINZACARA",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
-{n:"ALAN",a:"RAMIREZ",plan:"Estudiante Profesor",m:28000,v:"2026-10-25"},
-{n:"MARYORY",a:"RAMIREZ",plan:"Tres Veces a La Semana",m:28000,v:"2026-10-09"},
-{n:"MAURICIO",a:"RAMIREZ",plan:"Mensual Turno",m:23000,v:"2026-09-06"},
-{n:"MAYORI",a:"RAMIREZ",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-04"},
-{n:"OBRAIN",a:"RAMIREZ",plan:"Full Mensual",m:33000,v:"2026-09-19"},
-{n:"CLAUDIA",a:"RAMOS",plan:"Full Mensual",m:33000,v:"2026-09-12"},
-{n:"SARAH",a:"RAMOS",plan:"Full Mensual",m:33000,v:"2026-09-12"},
-{n:"SAMUEL",a:"REES",plan:"Full Mensual",m:33000,v:"2026-09-10"},
-{n:"JUAN",a:"REYES",plan:"Mensual Turno",m:23000,v:"2026-10-06"},
-{n:"LUIS",a:"RIOS",plan:"Mensual Turno",m:23000,v:"2026-10-23"},
-{n:"SEBASTIAN",a:"RIVERA",plan:"Estudiante Profesor",m:28000,v:"2026-10-24"},
-{n:"DEYBIS",a:"ROCHA",plan:"Full Mensual",m:33000,v:"2026-10-07"},
-{n:"JOSE",a:"RODRIGUEZ",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-30"},
-{n:"KATHERINE",a:"RODRIGUEZ",plan:"Full Mensual",m:33000,v:"2026-08-07"},
-{n:"MARGARITA",a:"RODRIGUEZ",plan:"Plan Semanal",m:15000,v:"2026-10-03"},
-{n:"ANDREA",a:"ROJAS",plan:"Tres Veces a La Semana",m:28000,v:"2026-10-25"},
-{n:"FRANCISCA",a:"ROJAS",plan:"Plan Especial",m:20000,v:"2026-09-30"},
-{n:"MARTINA",a:"ROJAS",plan:"Estudiante Profesor",m:28000,v:"2026-10-09"},
-{n:"MIGUEL",a:"ROJAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-10-03"},
-{n:"LUIS",a:"ROMO",plan:"Mensual Turno",m:23000,v:"2026-10-02"},
-{n:"JOSTIN",a:"ROSAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-11"},
-{n:"NATALIA",a:"ROZAS",plan:"Funcionario Público",m:28000,v:"2026-10-22"},
-{n:"GABRIEL",a:"RUZ",plan:"Mensual Turno",m:23000,v:"2026-08-24"},
-{n:"VERONICA",a:"SALAS",plan:"Estudiante Profesor",m:28000,v:"2026-08-02"},
-{n:"DANIELA",a:"SALAZAR",plan:"Funcionario Público",m:28000,v:"2026-10-06"},
-{n:"DIEGO",a:"SALAZAR",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
-{n:"NINA",a:"SALAZAR",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-17"},
-{n:"MIRKO",a:"SAN MARTIN",plan:"Mensual Turno",m:23000,v:"2026-09-06"},
-{n:"ANA MARIA",a:"SANABRIA",plan:"Tres Veces a La Semana",m:23000,v:"2026-09-30"},
-{n:"IGNACIA",a:"SANCHEZ",plan:"Full Mensual",m:33000,v:"2026-08-13"},
-{n:"MARIA",a:"SEGOVIA",plan:"Full Mensual",m:33000,v:"2026-10-21"},
-{n:"LUDJAN",a:"SORE",plan:"Estudiante Profesor",m:28000,v:"2026-10-05"},
-{n:"AARON",a:"SOZA",plan:"Tres Veces a La Semana",m:23000,v:"2026-10-23"},
-{n:"ANTONY",a:"SUAREZ",plan:"Estudiante Profesor",m:28000,v:"2026-10-07"},
-{n:"JHANKARLA",a:"SUAREZ",plan:"Estudiante Profesor",m:28000,v:"2026-09-10"},
-{n:"AKASH",a:"THADANI",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-03"},
-{n:"PAUL",a:"TORO",plan:"Mensual Turno",m:23000,v:"2026-09-13"},
-{n:"AMBER",a:"TORRES",plan:"Plan Semanal",m:15000,v:"2026-09-07"},
-{n:"MARIA",a:"TORRES",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-20"},
-{n:"DONNA",a:"URIZAR",plan:"Estudiante Profesor",m:28000,v:"2026-09-14"},
-{n:"MAURICIO",a:"URQUIETA",plan:"Mensual Turno",m:23000,v:"2026-10-02"},
-{n:"ANTONIO",a:"VALENCIA",plan:"Mensual Turno",m:23000,v:"2026-10-02"},
-{n:"TOMAS",a:"VALENZUELA",plan:"Estudiante Profesor",m:28000,v:"2026-09-25"},
-{n:"JOHAN",a:"VALLE",plan:"Mensual Turno",m:23000,v:"2026-08-31"},
-{n:"ALEXIS",a:"VARAS",plan:"Funcionario Público",m:28000,v:"2026-08-14"},
-{n:"ANDREA",a:"VARAS",plan:"Estudiante Profesor",m:28000,v:"2026-10-08"},
-{n:"NELSON",a:"VARAS",plan:"Full Mensual",m:33000,v:"2026-10-07"},
-{n:"JAIME",a:"VEGA",plan:"Mensual Turno",m:23000,v:"2026-10-15"},
-{n:"YOHANNA",a:"VEGA",plan:"Tres Veces a La Semana",m:28000,v:"2026-09-26"},
-{n:"GABRIELA",a:"VELARDE",plan:"Estudiante Profesor",m:28000,v:"2026-09-01"},
-{n:"LORETO",a:"VELIZ",plan:"Funcionario Público",m:28000,v:"2026-09-27"},
-{n:"ALFREDO",a:"VENEGAS",plan:"Mensual Turno",m:23000,v:"2026-09-26"},
-{n:"LAURA",a:"VERA",plan:"Full Mensual",m:33000,v:"2026-10-07"},
-{n:"BASTIAN",a:"VERGARA",plan:"Tres Veces a La Semana",m:23000,v:"2026-08-20"},
-{n:"DARKO",a:"VICENCIO",plan:"Full Mensual",m:33000,v:"2026-10-21"},
-{n:"FRANCCINI",a:"VILLANUEVA",plan:"Full Mensual",m:33000,v:"2026-08-21"},
-{n:"CLAUDIA",a:"VILLEGAS",plan:"Tres Veces a La Semana",m:23000,v:"2026-10-28"},
-{n:"BASTIAN",a:"ZAPATA",plan:"Funcionario Público",m:28000,v:"2026-10-10"},
-{n:"JOFRE",a:"ZARUMA",plan:"Full Mensual",m:33000,v:"2026-09-26"},
-{n:"MARIA",a:"ZEPEDA",plan:"Funcionario Público",m:28000,v:"2026-10-03"},
-];
 </script>
 
 
@@ -664,14 +421,22 @@ var PRECIO = { "Full Mensual":33000, "Mensual Turno":23000, "Tres Veces a La Sem
 
 document.getElementById("topLogo").src = LOGO_B64;
 
-/* ── guardado en este equipo ────────────────────────────────────────── */
-function copiaBase(){
- return LISTA_BASE.map(function(s, i){
-  return { id:"b"+i, n:s.n, a:s.a, plan:s.plan, m:s.m, v:s.v };
- });
+/* ── fuente compartida: Apps Script / Google Sheet ─────────────────────
+   Antes cada equipo se quedaba con su propia copia (LISTA_BASE) guardada
+   en este navegador, y había que ir juntándola a mano con lo publicado.
+   Ahora control.html, pantalla.html y la tarjeta del socio leen y
+   escriben la MISMA hoja "Socios" a través del Apps Script -- no hay
+   copia local que se pueda desincronizar. Lo único que sigue viviendo
+   solo en este equipo es la asistencia/ciclos (el contador "día X de
+   Y"), que nunca formó parte de esta migración. */
+function fechaValida(v){
+ var p = String(v || "").split("-");
+ if(p.length !== 3 || p[0].length !== 4) return false;
+ var f = new Date(+p[0], +p[1]-1, +p[2]);
+ return !isNaN(f) && f.getFullYear() > 2000;
 }
 /* Si una fecha quedó al revés (26-09-2026 en vez de 2026-09-26), la endereza.
-   Con el año en el lugar equivocado, todos los socios salían vencidos. */
+   Solo lo sigue usando el importador de respaldo .json/.csv, más abajo. */
 function arreglarFecha(v){
  var s = String(v || "").trim();
  var p = s.split("-");
@@ -680,123 +445,132 @@ function arreglarFecha(v){
  if(p[2].length === 4) return p[2] + "-" + p[1] + "-" + p[0];
  return s;
 }
-function fechaValida(v){
- var p = String(v || "").split("-");
- if(p.length !== 3 || p[0].length !== 4) return false;
- var f = new Date(+p[0], +p[1]-1, +p[2]);
- return !isNaN(f) && f.getFullYear() > 2000;
+/* El sitio guarda el vencimiento como serial (tipo Excel, días desde el
+   30-12-1899) y acá adentro se trabaja siempre con la fecha ISO
+   (aaaa-mm-dd) -- son las mismas dos conversiones que ya usan
+   tarjeta.html y pantalla.html. */
+function serialAIso_(fv){
+ var d = new Date(Date.UTC(1899, 11, 30) + Number(fv) * 86400000);
+ return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+
+        "-"+String(d.getUTCDate()).padStart(2,"0");
 }
-/* Repara la lista guardada: endereza las fechas dadas vuelta y rellena las
-   que quedaron vacías con la fecha publicada en el sitio. Sin esto, un socio
-   sin fecha aparecía como VENCIDO aunque estuviera al día. */
-function enderezar(lista){
- var delSitio = {};
- LISTA_BASE.forEach(function(s){ delSitio[(s.n + "|" + s.a).toUpperCase()] = s; });
- var arreglados = 0;
- lista.forEach(function(s){
-  var bueno = arreglarFecha(s.v);
-  if(bueno !== s.v){ s.v = bueno; arreglados++; }
-  if(!fechaValida(s.v)){
-   var base = delSitio[(s.n + "|" + s.a).toUpperCase()];
-   if(base && fechaValida(base.v)){
-    s.v = base.v;
-    if(!s.plan) s.plan = base.plan;
-    if(!s.m) s.m = base.m;
-    arreglados++;
-   }
-  }
- });
- return arreglados;
+/* La vuelta contraria: de "aaaa-mm-dd" al serial que entiende el Apps
+   Script. Hay otra igual, "aSerial", más abajo -- pero vive adentro del
+   cierre del botón "📋 Copiar lista" y no se puede usar desde acá. */
+function isoASerial_(iso){
+ var p = String(iso || "").trim().split("-");
+ if(p.length !== 3) return 0;
+ var d = Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+ return Math.round((d - Date.UTC(1899, 11, 30)) / 86400000);
 }
 
-var guardado = null;
-try{ guardado = JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){}
-var socios = (guardado && Array.isArray(guardado.socios) && guardado.socios.length)
- ? guardado.socios : copiaBase();
-/* Sin numero de version, la copia guardada es de antes de que existiera el
-   aviso: hay que tratarla como vieja. Si se le pone la version de hoy, el
-   equipo cree que esta al dia para siempre y nunca trae las renovaciones. */
-var versionVista = (guardado && typeof guardado.version === "number") ? guardado.version : 0;
-var seArreglaron = enderezar(socios);
+var socios = [];
+var cargandoSocios = true;
 
 function guardar(){
- try{
-  localStorage.setItem(KEY, JSON.stringify({ version:versionVista, socios:socios }));
- }catch(e){
-  alert("No pude guardar en este equipo. Puede que el navegador esté en modo privado.");
- }
-}
-if(!guardado || seArreglaron) guardar();
-
-/* Cuando el sitio trae una lista mas nueva, se juntan las dos en vez de
-   reemplazar una por otra: de cada socio queda la fecha mas adelantada, se
-   agregan los socios nuevos, y no se pierde ninguna renovacion hecha en este
-   mismo equipo. Antes esto no pasaba y en el meson el socio salia vencido
-   aunque en su celular apareciera al dia. */
-function juntarConElSitio(){
- var mios = {};
- socios.forEach(function(s){ mios[(s.n + "|" + s.a).toUpperCase()] = s; });
- var nuevos = 0, corridos = 0;
- LISTA_BASE.forEach(function(b, i){
-  var m = mios[(b.n + "|" + b.a).toUpperCase()];
-  if(!m){
-   socios.push({ id:"s"+i+"_"+Date.now().toString(36), n:b.n, a:b.a, plan:b.plan, m:b.m, v:b.v });
-   nuevos++;
-   return;
-  }
-  /* Las fechas van en aaaa-mm-dd, asi que la mas grande es la mas adelante.
-     Cuando el sitio trae una fecha mas nueva -- o la MISMA fecha con otro
-     plan o monto -- quiere decir que esta ficha ya se puso al dia
-     (renovacion, cambio de plan, correccion de monto) del lado de
-     socios.json, asi que ahi tambien se toman su plan y su monto, no solo
-     la fecha. Antes esto comparaba con ">" estricto: si la fecha no habia
-     cambiado, una correccion de monto/plan publicada nunca llegaba a un
-     equipo que ya tenia esa ficha guardada (aunque fuera con el dato
-     viejo). Con ">=" alcanza con que el sitio no vaya ATRAS para que gane
-     -- y solo se respeta el plan de este equipo cuando su fecha es
-     estrictamente mas nueva (una renovacion hecha aca que todavia no se
-     le conto a Claude). */
-  if(fechaValida(b.v) && (!fechaValida(m.v) || b.v >= m.v)){
-   var cambio = (m.v !== b.v) || (m.plan !== b.plan) || (Number(m.m) !== Number(b.m));
-   m.v = b.v; m.plan = b.plan; m.m = b.m;
-   if(cambio) corridos++;
-  }else{
-   if(!m.plan) m.plan = b.plan;
-   if(!m.m) m.m = b.m;
-  }
- });
- return { nuevos:nuevos, corridos:corridos };
-}
-if(guardado && LISTA_VERSION > versionVista){
- var traido = juntarConElSitio();
- versionVista = LISTA_VERSION;
- guardar();
- if(traido.nuevos || traido.corridos){
-  var av = document.getElementById("avisoLista");
-  av.hidden = false;
-  var partes = [];
-  if(traido.corridos) partes.push("<b>" + traido.corridos +
-   (traido.corridos === 1 ? " socio</b> con su fecha al día" : " socios</b> con su fecha al día"));
-  if(traido.nuevos) partes.push("<b>" + traido.nuevos +
-   (traido.nuevos === 1 ? " socio nuevo</b>" : " socios nuevos</b>"));
-  document.getElementById("avisoTexto").innerHTML =
-   "Se actualizó la lista de este equipo con " + partes.join(" y ") +
-   ". No se borró nada de lo que renovaste acá.";
-  document.getElementById("usarSitio").hidden = true;
-  document.getElementById("seguirMia").textContent = "Entendido";
-  document.getElementById("seguirMia").addEventListener("click", function(){ av.hidden = true; });
- }
+ /* Ya no es la fuente de verdad -- es solo una copia de respaldo para que,
+    si por algún motivo no hay señal, esta pantalla no quede en blanco. */
+ try{ localStorage.setItem(KEY, JSON.stringify({ socios:socios })); }catch(e){}
 }
 
-/* Al arrancar queda anotado, socio por socio, desde cuando le corre su mes:
-   a los que ya estaban con el criterio de siempre, y a los que se renovaron
-   desde otro lado, desde hoy. Va abajo del todo para que la lista ya venga
-   junta con la del sitio. */
-setTimeout(function(){
- try{ fusionarSociosDuplicados(); }catch(e){}
+function socioDeLaApi_(s){
+ return { id:"s_"+(s.n+"|"+s.a).toUpperCase().replace(/[^A-Z0-9]/g, "_"),
+  n:s.n, a:s.a, plan:s.plan, m:Number(s.monto)||0, v:serialAIso_(s.fv), medid:s.medid||"" };
+}
+
+/* Trae la lista completa desde el Apps Script (sin clave: ver la nota en
+   Código.gs de por qué listarSocios queda abierta). Usa el mismo truco de
+   <script src> que bandas/candados, porque es una lectura (GET) y así no
+   depende de que el navegador soporte bien CORS con fetch. */
+function cargarSocios(despues){
+ var av = document.getElementById("avisoLista");
+ if(!CHECKIN_URL){ cargandoSocios = false; if(despues) despues(); return; }
+ var cb = "wgymSocios_" + Date.now();
+ var listo = false;
+ var reloj = setTimeout(function(){
+  if(listo) return; listo = true; delete window[cb];
+  fallback("Sin conexión con el sitio -- mostrando la última copia guardada en este equipo.");
+ }, 8000);
+ function fallback(msg){
+  cargandoSocios = false;
+  var guardado = null;
+  try{ guardado = JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){}
+  if(guardado && Array.isArray(guardado.socios) && guardado.socios.length){
+   socios = guardado.socios;
+  }
+  if(msg && av){
+   av.hidden = false;
+   document.getElementById("avisoTexto").textContent = msg;
+   document.getElementById("usarSitio").hidden = true;
+   document.getElementById("seguirMia").textContent = "Entendido";
+   document.getElementById("seguirMia").addEventListener("click", function(){ av.hidden = true; });
+  }
+  pintar();
+  if(despues) despues();
+ }
+ window[cb] = function(data){
+  if(listo) return; listo = true; clearTimeout(reloj); delete window[cb]; script.remove();
+  if(!data || !Array.isArray(data.socios)){ fallback("El sitio respondió algo raro -- mostrando la última copia guardada."); return; }
+  socios = data.socios.map(socioDeLaApi_);
+  cargandoSocios = false;
+  guardar();
+  pintar();
+  if(despues) despues();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=listarSocios&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){
+  if(listo) return; listo = true; clearTimeout(reloj); delete window[cb];
+  fallback("No se pudo conectar con el sitio -- mostrando la última copia guardada en este equipo.");
+ };
+ document.body.appendChild(script);
+}
+
+/* ── clave de administración (nunca guardada, nunca en el HTML) ────────
+   Vive solo en esta variable, en la memoria de esta pestaña, mientras
+   esté abierta. Se pide una vez y se reutiliza hasta que se recargue la
+   página o el sitio diga que está mala. */
+var claveAdmin = null;
+function pedirClaveAdmin(){
+ if(claveAdmin) return claveAdmin;
+ claveAdmin = prompt("Clave de administración, para guardar o borrar socios:") || "";
+ return claveAdmin;
+}
+
+/* Guarda (alta o edición) o borra un socio en el sitio. Va por POST --
+   nunca por la URL de un <script src> -- para que la clave no quede en
+   el historial del navegador ni en los registros del servidor. cb(ok)
+   avisa si funcionó o no. */
+function llamarSocioApi_(action, params, cb){
+ if(!CHECKIN_URL){ cb(false, "no configurado"); return; }
+ var cuerpo = new URLSearchParams(Object.assign({ action:action }, params));
+ fetch(CHECKIN_URL, { method:"POST", body:cuerpo })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+   if(data && data.ok){ cb(true, data); return; }
+   if(data && data.error === "clave incorrecta") claveAdmin = null;
+   cb(false, (data && data.error) || "no se pudo guardar");
+  })
+  .catch(function(){ cb(false, "sin conexión"); });
+}
+function guardarSocioApi(s, cb){
+ var clave = pedirClaveAdmin();
+ if(!clave){ cb(false, "sin clave"); return; }
+ llamarSocioApi_("guardarSocio", {
+  clave:clave, nombre:s.n, apellido:s.a, plan:s.plan, monto:s.m,
+  fv:isoASerial_(s.v), medid:s.medid || ""
+ }, cb);
+}
+function borrarSocioApi(s, cb){
+ var clave = pedirClaveAdmin();
+ if(!clave){ cb(false, "sin clave"); return; }
+ llamarSocioApi_("borrarSocio", { clave:clave, nombre:s.n, apellido:s.a }, cb);
+}
+
+cargarSocios(function(){
  try{ pasarLosDiasDelNombreViejo(); }catch(e){}
  try{ anotarCiclos(); }catch(e){}
-}, 0);
+});
 
 /* ── planes con dias contados ───────────────────────────────────────────
    Hay dos planes que no dan el mes corrido sino una cantidad de dias:
@@ -847,36 +621,6 @@ function pasarLosDiasDelNombreViejo(){
  if(cambio) guardarAsistencia();
 }
 
-/* Fusiones puntuales de fichas duplicadas (2026-09-28): estas 4 personas
-   quedaron con dos filas en este equipo -- una bien escrita y otra con
-   una variante -- porque se agregaron pensando que eran socias nuevas.
-   Se borra la fila con la variante y se deja solo la correcta, con los
-   datos ya al día que publica el sitio (LISTA_BASE). Los días de
-   asistencia de ambas ya se juntaron arriba, en RENOMBRES. */
-var FUSIONES_SOCIOS = [
- { quitar:"ANA|MARIA SANABRIA", dejar:"ANA MARIA|SANABRIA" },
- { quitar:"KEIDY|ANDRADES", dejar:"KEIDY|ANDRADE" },
- { quitar:"MACARENA|GONSALEZ", dejar:"MACARENA|GONZALEZ" },
- { quitar:"MARIA|JOSE HERNANDEZ", dejar:"MARIA JOSE|HERNANDEZ" }
-];
-function fusionarSociosDuplicados(){
- var porClave = {};
- socios.forEach(function(s){ porClave[(s.n + "|" + s.a).toUpperCase()] = s; });
- var delSitio = {};
- LISTA_BASE.forEach(function(b){ delSitio[(b.n + "|" + b.a).toUpperCase()] = b; });
- var cambio = false;
- FUSIONES_SOCIOS.forEach(function(f){
-  var quitar = porClave[f.quitar];
-  var dejar = porClave[f.dejar];
-  if(!quitar || !dejar) return;
-  var i = socios.indexOf(quitar);
-  if(i > -1) socios.splice(i, 1);
-  var base = delSitio[f.dejar];
-  if(base){ dejar.plan = base.plan; dejar.m = base.m; dejar.v = base.v; }
-  cambio = true;
- });
- if(cambio) guardar();
-}
 function llaveSocio(s){ return (s.n + "|" + s.a).toUpperCase(); }
 function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
 function esSemanal(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
@@ -1624,10 +1368,17 @@ function pintarTabla(){
 }
 function borrar(s){
  if(!confirm("¿Eliminar a " + s.n + " " + s.a + " de la lista? No se puede deshacer.")) return;
- var i = socios.findIndex(function(x){ return x.id === s.id; });
- if(i > -1) socios.splice(i, 1);
- if(socioEnHero && socioEnHero.id === s.id) socioEnHero = null;
- guardar(); pintar();
+ borrarSocioApi(s, function(ok, info){
+  if(!ok){
+   alert(info === "sin clave" ? "No borré nada: hace falta la clave de administración."
+    : "No se pudo borrar en el sitio (" + info + "). No se tocó nada acá tampoco.");
+   return;
+  }
+  var i = socios.findIndex(function(x){ return x.id === s.id; });
+  if(i > -1) socios.splice(i, 1);
+  if(socioEnHero && socioEnHero.id === s.id) socioEnHero = null;
+  guardar(); pintar();
+ });
 }
 
 /* ── ficha ──────────────────────────────────────────────────────────── */
@@ -1834,23 +1585,37 @@ function abrirFicha(s){
   var p = partirNombre(iN.value), n = p.n, a = p.a;
   if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe el nombre y el apellido."; iN.focus(); return; }
   if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
-  var quien;
-  if(nuevo){
-   quien = { id:idNuevo(), n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value };
-   socios.push(quien);
-  }else{
-   s.n = n; s.a = a; s.plan = sel.value; s.m = soloDigitos(iM.value); s.v = iV.value;
-   quien = s;
-  }
-  /* Queda anotado desde cuando le corre el mes: lo que ella puso a mano, o
-     lo que corresponde por la fecha nueva. Al socio nuevo, desde hoy. */
-  if(planCuentaDias(quien)){
-   if(desdeAMano && fechaValida(desdeAMano)) fijarInicioCiclo(quien, desdeAMano);
-   else if(nuevo && hoyISO() <= quien.v) fijarInicioCiclo(quien, hoyISO());
-   else anotarCiclos();
-  }
-  cerrar(); guardar(); pintar();
-  if(socioEnHero && !nuevo && socioEnHero.id === s.id) mostrarHero(s.n+" "+s.a, null, s);
+  var datos = { n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value, medid:(s && s.medid) || "" };
+  var aviso = velo.querySelector("#fAviso");
+  var btnGuardar = velo.querySelector("#fGuardar");
+  btnGuardar.disabled = true;
+  aviso.style.color = "";
+  aviso.textContent = "Guardando en el sitio...";
+  guardarSocioApi(datos, function(ok, info){
+   btnGuardar.disabled = false;
+   if(!ok){
+    aviso.textContent = info === "sin clave" ? "No se guardó: hace falta la clave de administración."
+     : "No se pudo guardar en el sitio (" + info + "). No se perdió nada, intenta de nuevo.";
+    return;
+   }
+   var quien;
+   if(nuevo){
+    quien = { id:idNuevo(), n:datos.n, a:datos.a, plan:datos.plan, m:datos.m, v:datos.v, medid:datos.medid };
+    socios.push(quien);
+   }else{
+    s.n = datos.n; s.a = datos.a; s.plan = datos.plan; s.m = datos.m; s.v = datos.v;
+    quien = s;
+   }
+   /* Queda anotado desde cuando le corre el mes: lo que ella puso a mano, o
+      lo que corresponde por la fecha nueva. Al socio nuevo, desde hoy. */
+   if(planCuentaDias(quien)){
+    if(desdeAMano && fechaValida(desdeAMano)) fijarInicioCiclo(quien, desdeAMano);
+    else if(nuevo && hoyISO() <= quien.v) fijarInicioCiclo(quien, hoyISO());
+    else anotarCiclos();
+   }
+   cerrar(); guardar(); pintar();
+   if(socioEnHero && !nuevo && socioEnHero.id === quien.id) mostrarHero(quien.n+" "+quien.a, null, quien);
+  });
  }
  /* Copia solo esta ficha (no la lista completa) en el mismo formato que
     entiende socios.json, para que sea fácil pegársela a Claude cuando
@@ -1930,13 +1695,12 @@ var archivo = document.getElementById("archivo");
 document.getElementById("bCargar").addEventListener("click", function(){ archivo.click(); });
 
 document.getElementById("bSitio").addEventListener("click", function(){
- if(!confirm("Se reemplaza tu lista por la que está publicada en el sitio (" +
-             LISTA_BASE.length + " socios).\n\n¿Seguimos?")) return;
- socios = copiaBase();
+ if(!confirm("Se descarta cualquier cambio sin guardar y se vuelve a traer la lista tal como está en el sitio ahora mismo.\n\n¿Seguimos?")) return;
  filtro = "";
  document.getElementById("qLista").value = "";
- guardar(); pintar();
- alert("Listo: quedaron " + socios.length + " socios con las fechas del sitio.");
+ cargarSocios(function(){
+  alert("Listo: quedaron " + socios.length + " socios, tal como están publicados.");
+ });
 });
 
 function filasCSV(texto){

@@ -644,7 +644,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  });
  function socioMedido(data, s){
  if(!data || !Array.isArray(data.socios)) return null;
- var medid = s.tr && s.tr.getAttribute ? s.tr.getAttribute("data-medid") : null;
+ var medid = s.medid || (s.tr && s.tr.getAttribute ? s.tr.getAttribute("data-medid") : null);
  if(!medid) return null;
  return data.socios.filter(function(m){ return m.id === medid; })[0] || null;
  }
@@ -770,73 +770,71 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  }
 
  /* ---------- gate: find socio (no vencimiento check — la tarjeta nunca bloquea) ---------- */
- /* Compara nombres aunque vengan mal escritos: cuenta cuántas letras hay que
-    cambiar para pasar de uno al otro. Así "YOHAANNA" encuentra a "YOHANNA". */
- function distanciaNombre(a, b){
-   if(a === b) return 0;
-   var la = a.length, lb = b.length;
-   if(Math.abs(la - lb) > 4) return 99;
-   var fila = [], i, j;
-   for(j = 0; j <= lb; j++) fila[j] = j;
-   for(i = 1; i <= la; i++){
-     var ant = fila[0];
-     fila[0] = i;
-     for(j = 1; j <= lb; j++){
-       var tmp = fila[j];
-       fila[j] = Math.min(fila[j] + 1, fila[j-1] + 1,
-                          ant + (a.charAt(i-1) === b.charAt(j-1) ? 0 : 1));
-       ant = tmp;
-     }
-   }
-   return fila[lb];
+ /* Antes esto buscaba en una lista de los 238 socios bajada entera al
+    celular apenas se abría la tarjeta -- cualquiera podía verla completa
+    con solo mirar el código de la página. Ahora se le pregunta al Apps
+    Script por UNA sola ficha a la vez (nombre + apellido exactos, sin
+    tildes/mayúsculas), y el servidor nunca sugiere el más parecido si no
+    la encuentra -- así no sirve para ir armando la lista completa
+    probando nombres. El costo: ya no perdona errores de tipeo como antes
+    (antes "YOHAANNA" encontraba a "YOHANNA" por parecido; ahora hay que
+    escribirlo tal cual). */
+ function buscarSocioApi(nombre, apellido, cb){
+ if(!CHECKIN_URL){ cb(null); return; }
+ var cb_ = "wgymBuscar_" + Date.now() + "_" + Math.floor(Math.random()*1000);
+ var terminado = false;
+ window[cb_] = function(data){
+ if(terminado) return; terminado = true;
+ delete window[cb_]; script.remove();
+ cb(data && data.ok && data.socio ? data.socio : null);
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=buscarSocio&nombre=" + encodeURIComponent(nombre) +
+ "&apellido=" + encodeURIComponent(apellido) + "&callback=" + cb_ + "&_=" + Date.now();
+ script.onerror = function(){
+ if(terminado) return; terminado = true; delete window[cb_];
+ cb(null);
+ };
+ document.body.appendChild(script);
  }
- function claveNombre(s){ return normName(s).replace(/\s+/g, ""); }
- /* Cuántas letras de diferencia se le perdonan según el largo del nombre. */
- function margen(q){ return q.length <= 8 ? 1 : (q.length <= 14 ? 2 : 3); }
  /* El socio escribe todo junto en un solo casillero, así que hay que adivinar
     dónde termina el nombre y empieza el apellido. Se prueban todos los cortes,
     porque los hay compuestos de los dos lados: ANA MARIA GONZALEZ tiene el
-    nombre corto y el apellido largo, y MARIA JOSE OBREQUE al revés. */
- function findSocioJunto(texto){
+    nombre corto y el apellido largo, y MARIA JOSE OBREQUE al revés -- en el
+    mismo orden que antes, solo que ahora cada intento es una consulta al
+    servidor, una por una, hasta la primera que encuentre algo. */
+ function candidatosDeTexto_(texto){
  var palabras = String(texto || "").trim().split(/\s+/).filter(Boolean);
- if(!palabras.length) return null;
- if(palabras.length === 1) return findSocio(palabras[0], palabras[0]);
- for(var i = 1; i < palabras.length; i++){
- var s = findSocio(palabras.slice(0, i).join(" "), palabras.slice(i).join(" "));
- if(s) return s;
+ var candidatos = [];
+ if(!palabras.length) return candidatos;
+ if(palabras.length === 1){ candidatos.push([palabras[0], palabras[0]]); return candidatos; }
+ var i, j;
+ for(i = 1; i < palabras.length; i++){
+ candidatos.push([palabras.slice(0, i).join(" "), palabras.slice(i).join(" ")]);
  }
- /* Hay gente que lo escribe al revés, primero el apellido. Se prueba también
-    así antes de decirle que no está. */
- for(var j = 1; j < palabras.length; j++){
- var r = findSocio(palabras.slice(j).join(" "), palabras.slice(0, j).join(" "));
- if(r) return r;
+ /* Hay gente que lo escribe al revés, primero el apellido. */
+ for(j = 1; j < palabras.length; j++){
+ candidatos.push([palabras.slice(j).join(" "), palabras.slice(0, j).join(" ")]);
  }
- return findSocio(palabras[0], palabras.slice(1).join(" "));
+ candidatos.push([palabras[0], palabras.slice(1).join(" ")]);
+ return candidatos;
  }
- function findSocio(nombre, apellido){
- var n = normName(nombre), a = normName(apellido);
- if(!n || !a) return null;
- var lista = allSocios();
- var q = claveNombre(nombre + apellido);
- /* Primero, escrito tal cual. */
- var exacto = lista.filter(function(s){ return normName(s.nombre)===n && normName(s.apellido)===a; });
- if(exacto.length) return exacto[0];
- /* Si no, el más parecido, siempre que no haya dos igual de parecidos. */
- var mejor = null, mejorD = 99, empate = false;
- lista.forEach(function(s){
- var d = distanciaNombre(q, claveNombre(s.nombre + s.apellido));
- if(d < mejorD){ mejorD = d; mejor = s; empate = false; }
- else if(d === mejorD){ empate = true; }
+ function findSocioJunto(texto, cb){
+ var candidatos = candidatosDeTexto_(texto);
+ if(!candidatos.length){ cb(null); return; }
+ var i = 0;
+ function siguiente(){
+ if(i >= candidatos.length){ cb(null); return; }
+ var par = candidatos[i++];
+ buscarSocioApi(par[0], par[1], function(s){
+ if(s) cb(s); else siguiente();
  });
- if(mejor && mejorD <= margen(q) && !empate) return mejor;
- /* Último intento: si el apellido calza exacto y hay un solo socio con ese
- apellido, basta con que el nombre se le parezca. */
- var mismoApellido = lista.filter(function(s){ return normName(s.apellido) === a; });
- if(mismoApellido.length === 1 &&
- distanciaNombre(claveNombre(nombre), claveNombre(mismoApellido[0].nombre)) <= 3){
- return mismoApellido[0];
  }
- return null;
+ siguiente();
+ }
+ function socioApiATarjeta_(s){
+ return { nombre:s.n, apellido:s.a, rut:"Sin Rut", plan:s.plan, monto:Number(s.monto)||0,
+ vencimiento:fechaDeSerial(s.fv), tieneRutina:false, medid:s.medid || "" };
  }
  /* El plan por turno da 14 días de gimnasio al mes, no un mes corrido.
     El celular del socio se acuerda de los días en que abrió su tarjeta con
@@ -1179,19 +1177,25 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  }
  document.getElementById("lockBtn").addEventListener("click", pedirCandado);
 
+ var buscandoSocio = false;
  function tryLogin(texto){
- var socio = findSocioJunto(texto);
- if(socio){
- unlockCardView(socio);
- return true;
+ if(buscandoSocio) return false;
+ if(!String(texto || "").trim()){ document.getElementById("gateError").hidden = false; return false; }
+ buscandoSocio = true;
+ var btn = document.getElementById("gateBtn");
+ btn.disabled = true;
+ findSocioJunto(texto, function(s){
+ buscandoSocio = false;
+ btn.disabled = false;
+ if(s){
+ unlockCardView(socioApiATarjeta_(s));
+ return;
  }
  document.getElementById("gateError").hidden = false;
- return false;
+ });
+ return true;
  }
 
- /* ---------- routing ---------- */
- function initRoute(){
- }
  var cajaNombre = document.getElementById("gateNombre");
  document.getElementById("gateBtn").addEventListener("click", function(){
  tryLogin(cajaNombre.value);
@@ -1204,7 +1208,5 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  document.getElementById("gateError").hidden = true;
  });
 
- /* ---------- go ---------- */
- refrescarSocios(initRoute);
 })();
 </script>  
