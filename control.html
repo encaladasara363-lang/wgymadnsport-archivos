@@ -490,7 +490,7 @@ function cargarSocios(despues){
  var reloj = setTimeout(function(){
   if(listo) return; listo = true; delete window[cb];
   fallback("Sin conexión con el sitio -- mostrando la última copia guardada en este equipo.");
- }, 8000);
+ }, 20000);
  function fallback(msg){
   cargandoSocios = false;
   var guardado = null;
@@ -515,6 +515,8 @@ function cargarSocios(despues){
   cargandoSocios = false;
   guardar();
   pintar();
+  /* Recalcula también el último ingreso visible cuando llega la lista. */
+  if(filas.length){ var r = filas[0]; mostrarHero(r.nombre+" "+r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido)); }
   if(despues) despues();
  };
  var script = document.createElement("script");
