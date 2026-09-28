@@ -528,27 +528,45 @@ function cargarSocios(despues){
  document.body.appendChild(script);
 }
 
-/* ── sin clave de administración (a pedido del dueño, 09/2026) ─────────
-   La página ya no pide clave para guardar o borrar socios. Si el Apps
-   Script todavía la exige (responde "clave incorrecta"), recién ahí se
-   pide una vez y se reintenta, para que guardar no quede trabado mientras
-   se quita la revisión de clave del lado del Apps Script. La clave nunca
-   se guarda: vive solo en esta variable mientras la pestaña esté abierta. */
+/* ── clave de administración, recordada en este equipo (09/2026) ───────
+   A pedido del dueño: se pide UNA sola vez en la compu de recepción y
+   queda guardada en el localStorage de ESE equipo, así no la vuelve a
+   pedir. Nunca va escrita en este archivo (que es público). Si el sitio
+   responde "clave incorrecta" (por ejemplo, porque se cambió), se borra
+   la guardada, se pide de nuevo y se reintenta una vez. */
+var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";
 var claveAdmin = "";
+try{ claveAdmin = localStorage.getItem(CLAVE_ADMIN_LS) || ""; }catch(e){}
+function recordarClaveAdmin_(c){
+ claveAdmin = c || "";
+ try{
+  if(claveAdmin) localStorage.setItem(CLAVE_ADMIN_LS, claveAdmin);
+  else localStorage.removeItem(CLAVE_ADMIN_LS);
+ }catch(e){}
+}
+function pedirClaveAdmin_(texto){
+ recordarClaveAdmin_(prompt(texto) || "");
+ return claveAdmin;
+}
 
 /* Guarda (alta o edición) o borra un socio en el sitio. Va por POST --
-   nunca por la URL de un <script src>. cb(ok) avisa si funcionó o no. */
+   nunca por la URL de un <script src> -- para que la clave no quede en
+   el historial del navegador. cb(ok) avisa si funcionó o no. */
 function llamarSocioApi_(action, params, cb, reintento){
  if(!CHECKIN_URL){ cb(false, "no configurado"); return; }
+ if(!claveAdmin && !pedirClaveAdmin_("Clave de administración (se pide solo esta vez en este equipo):")){
+  cb(false, "sin clave"); return;
+ }
  var cuerpo = new URLSearchParams(Object.assign({ action:action, clave:claveAdmin }, params));
  fetch(CHECKIN_URL, { method:"POST", body:cuerpo })
   .then(function(r){ return r.json(); })
   .then(function(data){
    if(data && data.ok){ cb(true, data); return; }
    if(data && data.error === "clave incorrecta"){
-    claveAdmin = "";
-    var c = reintento ? "" : (prompt("El sitio todavía pide la clave de administración para guardar o borrar socios:") || "");
-    if(c){ claveAdmin = c; llamarSocioApi_(action, params, cb, true); return; }
+    recordarClaveAdmin_("");
+    if(!reintento && pedirClaveAdmin_("La clave guardada no funcionó. Escribe la clave de administración:")){
+     llamarSocioApi_(action, params, cb, true); return;
+    }
    }
    cb(false, (data && data.error) || "no se pudo guardar");
   })
