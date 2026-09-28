@@ -183,9 +183,20 @@ header.top h1 span{ color:var(--rojo); }
    vertical (pointer:coarse + ancho de tablet acostada, nunca de un
    teléfono en la mano). */
 @media (min-width:820px) and (orientation:landscape) and (pointer:coarse){
+ /* Nadie hace scroll en esta pantalla -- queda fija mirando la puerta.
+    Si el contenido sale más alto que la pantalla real del aparato, lo
+    que sobra simplemente no se ve nunca (mismo síntoma de "se corta"
+    que el ancho de arriba, pero en vertical). Acá se obliga a que la
+    página entera ocupe EXACTO el alto disponible: el header mide lo
+    que mida solo, y .wrap se lleva todo el resto (flex:1) sin
+    desbordar -- y adentro, cada columna (ingresos, último ingreso,
+    bandas/candados) hace su propio scroll interno si su contenido no
+    entra, en vez de empujar a las demás columnas fuera de la pantalla. */
+ html, body{ height:100%; overflow:hidden; }
+ body{ display:flex; flex-direction:column; }
  header.top{
   display:flex; align-items:center; justify-content:center; gap:18px;
-  padding:14px 28px; text-align:left;
+  padding:14px 28px; text-align:left; flex:none;
  }
  header.top .logo{ width:60px; margin:0; }
  header.top .headtext{ display:flex; flex-direction:column; gap:2px; }
@@ -196,15 +207,21 @@ header.top h1 span{ color:var(--rojo); }
   max-width:1500px; width:100%;
   padding:20px 32px 28px;
   grid-template-columns:1fr 1.05fr 1fr;
+  grid-template-rows:auto auto 1fr;
   grid-template-areas:
    "notice notice notice"
    "ihead  hero   bandas"
    "ifeed  hero   bandas";
   gap:0 22px;
+  align-items:stretch;
+  flex:1 1 auto;
+  min-height:0;
+  overflow:hidden;
  }
  #ingresosHead{ grid-area:ihead; }
- #feed{ grid-area:ifeed; max-height:calc(100vh - 250px); overflow-y:auto; padding-right:4px; }
- #bandasSection{ max-height:calc(100vh - 190px); overflow-y:auto; padding-right:4px; }
+ #feed{ grid-area:ifeed; min-height:0; overflow-y:auto; padding-right:4px; }
+ .hero{ min-height:0; overflow-y:auto; }
+ #bandasSection{ min-height:0; overflow-y:auto; padding-right:4px; }
 }
 </style>
 
