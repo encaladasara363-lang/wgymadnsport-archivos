@@ -71,7 +71,7 @@
    "a": "ALVARE",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46295
   },
   {
@@ -144,7 +144,7 @@
    "a": "ARAYA",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46302
   },
   {
@@ -510,7 +510,7 @@
    "rut": "Sin Rut",
    "plan": "Mensual Turno",
    "monto": 23000,
-   "fv": 46292
+   "fv": 46323
   },
   {
    "n": "SONIA",
@@ -988,7 +988,7 @@
    "a": "LLIULLI",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46285
   },
   {
@@ -996,7 +996,7 @@
    "a": "LOPEZ",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46309
   },
   {
@@ -1426,7 +1426,7 @@
    "a": "PLAZA",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46302,
    "medId": "412609ba"
   },
@@ -1476,7 +1476,7 @@
    "a": "RAMIREZ",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46269
   },
   {
@@ -1548,7 +1548,7 @@
    "a": "RODRIGUEZ",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46295
   },
   {
@@ -1597,7 +1597,7 @@
    "a": "ROJAS",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46298
   },
   {
@@ -1613,7 +1613,7 @@
    "a": "ROSAS",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46276
   },
   {
@@ -1662,7 +1662,7 @@
    "a": "SALAZAR",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46251
   },
   {
@@ -1678,7 +1678,7 @@
    "a": "SANABRIA",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46295
   },
   {
@@ -1710,7 +1710,7 @@
    "a": "SOZA",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46318
   },
   {
@@ -1759,7 +1759,7 @@
    "a": "TORRES",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46254
   },
   {
@@ -1880,7 +1880,7 @@
    "a": "VERGARA",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46254
   },
   {
@@ -1904,7 +1904,7 @@
    "a": "VILLEGAS",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
-   "monto": 23000,
+   "monto": 28000,
    "fv": 46323
   },
   {
