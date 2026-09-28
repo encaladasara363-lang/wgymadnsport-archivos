@@ -593,7 +593,7 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  document.getElementById("cardLogoImg").src = LOGO_B64;
   
  /* La ficha de cada socio llega en vivo desde el Apps Script compartido
-    (buscarSocioApi más abajo) — ya no hay tabla local de respaldo. */
+    (cargarSociosTarjeta más abajo) — ya no hay tabla local de respaldo. */
  function dosDigitos(n){ return (n < 10 ? "0" : "") + n; }
  function fechaDeSerial(fv){
  var d = new Date(Date.UTC(1899, 11, 30) + Number(fv) * 86400000);
@@ -614,43 +614,47 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  }
 
  /* ---------- gate: find socio (no vencimiento check — la tarjeta nunca bloquea) ---------- */
- /* Antes esto buscaba en una lista de los 238 socios bajada entera al
-    celular apenas se abría la tarjeta -- cualquiera podía verla completa
-    con solo mirar el código de la página. Ahora se le pregunta al Apps
-    Script por UNA sola ficha a la vez (nombre + apellido exactos, sin
-    tildes/mayúsculas), y el servidor nunca sugiere el más parecido si no
-    la encuentra -- así no sirve para ir armando la lista completa
-    probando nombres. El costo: ya no perdona errores de tipeo como antes
-    (antes "YOHAANNA" encontraba a "YOHANNA" por parecido; ahora hay que
-    escribirlo tal cual). */
- function buscarSocioApi(nombre, apellido, cb){
- if(!CHECKIN_URL){ cb(null); return; }
- var cb_ = "wgymBuscar_" + Date.now() + "_" + Math.floor(Math.random()*1000);
+ /* Antes se le preguntaba al Apps Script por UNA ficha a la vez, probando
+    cada corte posible de nombre/apellido uno por uno -- con mala señal
+    cada intento sumaba varios segundos, y con nombres compuestos hacían
+    falta dos o tres consultas seguidas antes de acertar, así que entrar
+    se sentía lento o pegado. Ahora se baja la lista completa UNA sola
+    vez apenas se abre la página (igual que ya hacen control.html y
+    pantalla.html con listarSocios -- el mismo dato sin RUT que ya es
+    público hoy en socios.json, así que esto no expone nada nuevo) y la
+    búsqueda de ahí en más es instantánea, contra esa copia en memoria:
+    no hay una consulta nueva por cada corte de nombre que se prueba. */
+ function cargarSociosTarjeta(){
+ return new Promise(function(resolve){
+ if(!CHECKIN_URL){ resolve([]); return; }
+ var cb_ = "wgymSociosTarjeta_" + Date.now();
  var terminado = false;
- function terminar(resultado){
+ function terminar(lista){
  if(terminado) return; terminado = true;
  clearTimeout(reloj); delete window[cb_]; script.remove();
- cb(resultado);
+ resolve(lista);
  }
  /* Con mala señal el <script src> nunca dispara onerror -- se queda
- cargando para siempre. Con este límite, a los 12 s se da por no
- encontrado y el botón se libera solo, sin que quede pegado. */
- var reloj = setTimeout(function(){ terminar(null); }, 12000);
+ cargando para siempre. Con este límite, a los 12 s se da por vacía
+ y el login cae al aviso de "no encontramos" en vez de quedar pegado. */
+ var reloj = setTimeout(function(){ terminar([]); }, 12000);
  window[cb_] = function(data){
- terminar(data && data.ok && data.socio ? data.socio : null);
+ terminar(data && Array.isArray(data.socios) ? data.socios : []);
  };
  var script = document.createElement("script");
- script.src = CHECKIN_URL + "?action=buscarSocio&nombre=" + encodeURIComponent(nombre) +
- "&apellido=" + encodeURIComponent(apellido) + "&callback=" + cb_ + "&_=" + Date.now();
- script.onerror = function(){ terminar(null); };
+ script.src = CHECKIN_URL + "?action=listarSocios&callback=" + cb_ + "&_=" + Date.now();
+ script.onerror = function(){ terminar([]); };
  document.body.appendChild(script);
+ });
  }
+ var sociosTarjetaPromise = cargarSociosTarjeta();
+ /* Si vuelve a esta pestaña después de un rato (cambió de app y volvió),
+    trae la lista de nuevo por si hubo una renovación mientras tanto. */
+ window.addEventListener("pageshow", function(){ sociosTarjetaPromise = cargarSociosTarjeta(); });
  /* El socio escribe todo junto en un solo casillero, así que hay que adivinar
     dónde termina el nombre y empieza el apellido. Se prueban todos los cortes,
     porque los hay compuestos de los dos lados: ANA MARIA GONZALEZ tiene el
-    nombre corto y el apellido largo, y MARIA JOSE OBREQUE al revés -- en el
-    mismo orden que antes, solo que ahora cada intento es una consulta al
-    servidor, una por una, hasta la primera que encuentre algo. */
+    nombre corto y el apellido largo, y MARIA JOSE OBREQUE al revés. */
  function candidatosDeTexto_(texto){
  var palabras = String(texto || "").trim().split(/\s+/).filter(Boolean);
  var candidatos = [];
@@ -670,15 +674,15 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  function findSocioJunto(texto, cb){
  var candidatos = candidatosDeTexto_(texto);
  if(!candidatos.length){ cb(null); return; }
- var i = 0;
- function siguiente(){
- if(i >= candidatos.length){ cb(null); return; }
- var par = candidatos[i++];
- buscarSocioApi(par[0], par[1], function(s){
- if(s) cb(s); else siguiente();
- });
+ sociosTarjetaPromise.then(function(lista){
+ for(var i = 0; i < candidatos.length; i++){
+ var nombre = normName(candidatos[i][0]), apellido = normName(candidatos[i][1]);
+ for(var j = 0; j < lista.length; j++){
+ if(normName(lista[j].n) === nombre && normName(lista[j].a) === apellido){ cb(lista[j]); return; }
  }
- siguiente();
+ }
+ cb(null);
+ });
  }
  function socioApiATarjeta_(s){
  return { nombre:s.n, apellido:s.a, rut:"Sin Rut", plan:s.plan, monto:Number(s.monto)||0,
