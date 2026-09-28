@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-24",
+ "actualizado": "2026-09-28",
  "nota": "Mediciones de composicion corporal (Omron HBF-306). Cada socio se identifica por un codigo 'id' unico (medId), nunca por nombre -- el nombre real vive solo en socios.json/tarjeta.html, nunca en este archivo. Solo aparecen los socios que se miden. La lee tarjeta.html (matcheando por data-medid de la fila del socio) para mostrar la evolucion en la tarjeta virtual.",
  "socios": [
   {
@@ -393,6 +393,20 @@
     }
    ],
    "id": "a4206a00"
+  },
+  {
+   "id": "1c6b6756",
+   "sexo": "M",
+   "estatura": 172,
+   "registros": [
+    {
+     "fecha": "2026-09-28",
+     "edad": 16,
+     "peso": 65,
+     "grasa": 14.8,
+     "imc": 22
+    }
+   ]
   }
  ]
 }

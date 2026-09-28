@@ -553,8 +553,24 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  if(!data || !Array.isArray(data.socios) || !s.medid) return null;
  return data.socios.filter(function(m){ return m.id === s.medid; })[0] || null;
  }
+ /* La hoja compartida del Apps Script no siempre trae el medId: al fusionar
+    una medición nueva por chat, el código queda solo en socios.json. Si la
+    ficha llega sin medid, se busca ahí por nombre y apellido. */
+ function medIdDeSociosJson_(s){
+ return fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
+ .then(function(r){ return r.json(); })
+ .then(function(d){
+ var x = (d && d.socios || []).filter(function(m){
+ return normName(m.n) === normName(s.nombre) && normName(m.a) === normName(s.apellido);
+ })[0];
+ return (x && x.medId) || "";
+ })["catch"](function(){ return ""; });
+ }
  function renderEvolucion(s){
- medicionesPromise.then(function(data){
+ var medidPromise = s.medid ? Promise.resolve(s.medid) : medIdDeSociosJson_(s);
+ Promise.all([medicionesPromise, medidPromise]).then(function(res){
+ var data = res[0];
+ if(res[1]) s.medid = res[1];
  var box = document.getElementById("evoCard");
  var m = socioMedido(data, s);
  if(!m || !m.registros || !m.registros.length){
