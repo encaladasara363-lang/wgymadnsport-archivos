@@ -27,7 +27,9 @@ body{
  font-family:'Segoe UI', Arial, sans-serif;
  min-height:100vh;
 }
-header.top{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%); border-bottom:3px solid var(--rojo); padding:22px 20px; text-align:center; }
+header.top{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%); border-bottom:3px solid var(--rojo); padding:22px 20px; text-align:center; position:relative; }
+.fs-btn{ position:absolute; top:12px; right:14px; background:var(--surface); border:1px solid var(--line); color:var(--dorado); border-radius:8px; padding:8px 11px; font-size:16px; line-height:1; cursor:pointer; }
+.fs-btn:active{ background:var(--surface-2); }
 header.top .logo{ width:min(78%,260px); height:auto; object-fit:contain; margin-bottom:8px; }
 header.top .gymname{ font-size:13px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 4px; }
 header.top h1{ font-size:22px; margin:0; font-weight:800; text-transform:uppercase; }
@@ -231,6 +233,7 @@ header.top h1 span{ color:var(--rojo); }
 </style>
 
 <header class="top">
+<button id="btnFullscreen" class="fs-btn" type="button" title="Pantalla completa">⛶</button>
 <img class="logo" id="topLogoImg" alt="WGYMADNSPORT">
 <div class="headtext">
 <p class="gymname">WGYMADNSPORT Tocopilla</p>
@@ -850,6 +853,36 @@ document.getElementById("candadosFeed").addEventListener("click", function(ev){
  script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
  document.body.appendChild(script);
 });
+
+/* Botón de pantalla completa: la tablet de la puerta no puede esconder
+   la barra de dirección del navegador por su cuenta (eso le quita
+   espacio real a la pantalla), pero el navegador SÍ puede entrar a modo
+   pantalla completa de verdad -- sin esa barra -- si alguien lo toca
+   una vez. Basta con tocarlo al dejar la tablet instalada; se queda
+   así aunque pasen los días, salvo que alguien la reinicie. */
+var btnFS = document.getElementById("btnFullscreen");
+if(btnFS){
+ function enFullscreen(){ return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+ function pintarBotonFS(){
+  btnFS.textContent = enFullscreen() ? "⤡" : "⛶";
+  btnFS.title = enFullscreen() ? "Salir de pantalla completa" : "Pantalla completa";
+ }
+ btnFS.addEventListener("click", function(){
+  if(enFullscreen()){
+   (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document);
+  }else{
+   var el = document.documentElement;
+   var pedir = el.requestFullscreen || el.webkitRequestFullscreen;
+   if(pedir){
+    var resultado = pedir.call(el);
+    if(resultado && resultado.catch) resultado.catch(function(){});
+   }
+  }
+ });
+ document.addEventListener("fullscreenchange", pintarBotonFS);
+ document.addEventListener("webkitfullscreenchange", pintarBotonFS);
+ pintarBotonFS();
+}
 
 /* Esta pantalla se queda abierta todo el día en una tablet, sin que nadie
    la recargue. Antes eso significaba quedarse con la copia de socios del
