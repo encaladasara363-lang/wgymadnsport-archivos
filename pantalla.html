@@ -183,28 +183,22 @@ header.top h1 span{ color:var(--rojo); }
    vertical (pointer:coarse + ancho de tablet acostada, nunca de un
    teléfono en la mano). */
 @media (min-width:820px) and (orientation:landscape) and (pointer:coarse){
- /* Nadie hace scroll en esta pantalla -- queda fija mirando la puerta.
-    Si el contenido sale más alto que la pantalla real del aparato, lo
-    que sobra simplemente no se ve nunca (mismo síntoma de "se corta"
-    que el ancho de arriba, pero en vertical). Acá se obliga a que la
-    página entera ocupe EXACTO el alto disponible: el header mide lo
-    que mida solo, y .wrap se lleva todo el resto (flex:1) sin
-    desbordar -- y adentro, cada columna (ingresos, último ingreso,
-    bandas/candados) hace su propio scroll interno si su contenido no
-    entra, en vez de empujar a las demás columnas fuera de la pantalla. */
- /* height:100% (o 100vh) mide el alto MÁXIMO teórico de la pantalla,
-    como si la barra de dirección del navegador no estuviera -- pero en
-    esta tablet esa barra queda fija arriba y sí ocupa espacio real, así
-    que ese cálculo daba una página más alta que lo que en verdad se ve,
-    y lo de más abajo quedaba tapado por la barra. 100dvh mide el alto
-    REAL visible en cada momento (le resta la barra si está mostrándose)
-    -- se deja 100vh primero solo como respaldo para un navegador
-    viejísimo que no entienda dvh. */
- html, body{ height:100vh; height:100dvh; min-height:0; overflow:hidden; }
- body{ display:flex; flex-direction:column; }
+ /* Se intentó antes obligar a la página a medir EXACTO el alto de la
+    pantalla (con overflow:hidden + 100dvh) para que nadie tuviera que
+    hacer scroll -- pero en esta tablet (navegador Samsung Internet)
+    ese cálculo salió mal y cortó todavía más contenido, esta vez
+    también por arriba. Un forzado de alto que puede fallar así, sin
+    aviso y de forma distinta según el navegador, es más peligroso que
+    el problema que quería resolver: si el cálculo se equivoca, el
+    contenido queda inalcanzable (no hay scroll) en vez de solo
+    requerir un empujoncito. Por eso ahora la página vuelve a poder
+    hacer scroll normal si hace falta -- nunca más desaparece nada -- y
+    en cambio se achica la tarjeta del medio (menos padding, letras más
+    chicas) para que en la gran mayoría de tablets alcance a entrar
+    sin necesidad de moverse. */
  header.top{
   display:flex; align-items:center; justify-content:center; gap:18px;
-  padding:14px 28px; text-align:left; flex:none;
+  padding:14px 28px; text-align:left;
  }
  header.top .logo{ width:60px; margin:0; }
  header.top .headtext{ display:flex; flex-direction:column; gap:2px; }
@@ -213,23 +207,26 @@ header.top h1 span{ color:var(--rojo); }
 
  .wrap{
   max-width:1500px; width:100%;
-  padding:20px 32px 28px;
+  padding:16px 32px 20px;
   grid-template-columns:1fr 1.05fr 1fr;
-  grid-template-rows:auto auto 1fr;
   grid-template-areas:
    "notice notice notice"
    "ihead  hero   bandas"
    "ifeed  hero   bandas";
   gap:0 22px;
-  align-items:stretch;
-  flex:1 1 auto;
-  min-height:0;
-  overflow:hidden;
  }
  #ingresosHead{ grid-area:ihead; }
- #feed{ grid-area:ifeed; min-height:0; overflow-y:auto; padding-right:4px; }
- .hero{ min-height:0; overflow-y:auto; }
- #bandasSection{ min-height:0; overflow-y:auto; padding-right:4px; }
+ #feed{ grid-area:ifeed; max-height:calc(100vh - 220px); overflow-y:auto; padding-right:4px; }
+ #bandasSection{ max-height:calc(100vh - 160px); overflow-y:auto; padding-right:4px; }
+ .hero{ padding:20px 22px; min-height:0; }
+ .hero .kicker{ margin:0 0 8px; }
+ .hero .name{ font-size:26px; margin:0 0 4px; }
+ .hero .time{ font-size:13px; }
+ .hero .venc{ font-size:clamp(16px, 3.6vw, 22px); margin-top:8px; padding:7px 12px; }
+ .hero .venc .venc-dias{ font-size:clamp(18px, 5vw, 28px); margin-top:3px; }
+ .hero .fallo{ font-size:19px; margin:0 0 6px; }
+ .hero .plan{ font-size:18px; margin:8px 0 0; }
+ .hero .turno{ margin-top:6px; font-size:clamp(13px, 2.8vw, 22px); padding:6px 12px; }
 }
 </style>
 
