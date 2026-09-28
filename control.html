@@ -733,6 +733,11 @@ function inicioCalculado(s){
     hacia perder los dias que ya llevaba usados este mes. Solo cuando hoy
     ya pasó la fecha que tenia guardada se considera que empieza un ciclo
     nuevo de verdad (una renovacion). */
+ /* Claudia renovó el 28-09-2026: se conserva su historial, pero el nuevo
+    plan cuenta solo los ingresos desde la renovación, incluso si el equipo
+    ya había guardado el vencimiento nuevo con el inicio anterior. */
+ if(llaveSocio(s) === "CLAUDIA|VILLEGAS" && s.v === "2026-10-28" &&
+    (!c || !fechaValida(c.desde) || c.desde < "2026-09-28")) return "2026-09-28";
  if(c && fechaValida(c.desde) && fechaValida(c.v) && hoyISO() <= c.v) return c.desde;
  var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v, s);
  /* El ciclo nunca puede arrancar despues de hoy: si el calculo por defecto
@@ -1586,6 +1591,7 @@ function abrirFicha(s){
   if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe el nombre y el apellido."; iN.focus(); return; }
   if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
   var datos = { n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value, medid:(s && s.medid) || "" };
+  var vencimientoAnterior = nuevo ? "" : s.v;
   var aviso = velo.querySelector("#fAviso");
   var btnGuardar = velo.querySelector("#fGuardar");
   btnGuardar.disabled = true;
@@ -1611,6 +1617,9 @@ function abrirFicha(s){
    if(planCuentaDias(quien)){
     if(desdeAMano && fechaValida(desdeAMano)) fijarInicioCiclo(quien, desdeAMano);
     else if(nuevo && hoyISO() <= quien.v) fijarInicioCiclo(quien, hoyISO());
+    else if(!nuevo && fechaValida(vencimientoAnterior) && quien.v > vencimientoAnterior &&
+            mesAtras(quien.v) >= vencimientoAnterior && hoyISO() <= quien.v)
+     fijarInicioCiclo(quien, hoyISO());
     else anotarCiclos();
    }
    cerrar(); guardar(); pintar();

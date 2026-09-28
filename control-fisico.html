@@ -439,9 +439,46 @@ document.querySelector('.tab-sexo[data-tab="F"]').setAttribute("data-active", "1
 
 /* ── lista de socios (solo para buscar nombres, viene de socios.json) ── */
 var listaSocios = [];
+/* Al abrir esta página, las mediciones publicadas se reflejan también en
+   el historial de este equipo. La ficha publicada prevalece si había una
+   medición local equivocada en la misma fecha; otros días se conservan. */
+function incorporarPublicadas(publicadas){
+ if(!publicadas || !Array.isArray(publicadas.socios)) return;
+ var porId = {};
+ listaSocios.forEach(function(s){ if(s.medId) porId[s.medId] = s; });
+ var cambio = false;
+ publicadas.socios.forEach(function(p){
+  var ficha = porId[p.id];
+  if(!ficha || !Array.isArray(p.registros)) return;
+  var local = socioGuardado(ficha.n, ficha.a);
+  if(!local){
+   local = { n:ficha.n, a:ficha.a, sexo:p.sexo, estatura:p.estatura, registros:[] };
+   datos.socios.push(local); cambio = true;
+  }
+  if(!Array.isArray(local.registros)){ local.registros = []; cambio = true; }
+  if(local.sexo !== p.sexo){ local.sexo = p.sexo; cambio = true; }
+  if(local.estatura !== p.estatura){ local.estatura = p.estatura; cambio = true; }
+  p.registros.forEach(function(r){
+   var i = local.registros.findIndex(function(x){ return x.fecha === r.fecha; });
+   if(i < 0){ local.registros.push(r); cambio = true; }
+   else if(JSON.stringify(local.registros[i]) !== JSON.stringify(r)){
+    local.registros[i] = r; cambio = true;
+   }
+  });
+  if(cambio) local.registros.sort(function(a,b){ return a.fecha.localeCompare(b.fecha); });
+ });
+ if(cambio) guardarLocal();
+ if(socioActual) pintarHistorial(socioGuardado(socioActual.n, socioActual.a));
+}
 fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
  .then(function(r){ return r.ok ? r.json() : null; })
- .then(function(d){ if(d && Array.isArray(d.socios)) listaSocios = d.socios; })
+ .then(function(d){
+  if(!d || !Array.isArray(d.socios)) return;
+  listaSocios = d.socios;
+  return fetch("mediciones.json?v=" + Date.now(), { cache:"no-store" })
+   .then(function(r){ return r.ok ? r.json() : null; })
+   .then(incorporarPublicadas);
+ })
  .catch(function(){});
 
 function calzan(q){
