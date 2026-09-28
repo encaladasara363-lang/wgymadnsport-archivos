@@ -421,6 +421,20 @@
      "imc": 21.8
     }
    ]
+  },
+  {
+   "id": "a4f0efc2",
+   "sexo": "F",
+   "estatura": 168,
+   "registros": [
+    {
+     "fecha": "2026-09-28",
+     "edad": 16,
+     "peso": 83.3,
+     "grasa": 36.1,
+     "imc": 29.5
+    }
+   ]
   }
  ]
 }
