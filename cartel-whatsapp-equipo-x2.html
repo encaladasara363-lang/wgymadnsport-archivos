@@ -49,11 +49,11 @@ h1 .l2{display:block;color:#D4AF37;font-size:64pt}
 
 
 @page{size:A4 landscape;margin:0}
-.pliego{width:297mm;height:210mm;margin:10mm auto;display:flex;background:#fff;position:relative}
+.pliego{width:297mm;height:210mm;margin:10mm auto;display:flex;background:#0D0D0F;position:relative}
 .marco{width:148.5mm;height:210mm;overflow:hidden;position:relative}
 .marco .hoja{margin:0;transform:scale(.70711);transform-origin:top left}
 .corte{position:absolute;left:148.5mm;top:0;bottom:0;border-left:.3mm dashed #999;z-index:3}
-@media print{.pliego{margin:0}}
+@media print{html,body{margin:0;padding:0;background:#0D0D0F}.pliego{margin:0;page-break-after:avoid}}
 @media screen and (max-width:1150px){.pliego{transform:scale(.33);transform-origin:top center;margin-bottom:-135mm}}
 </style>
 </head>
