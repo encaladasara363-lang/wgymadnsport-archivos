@@ -946,3 +946,28 @@ Siempre que el usuario pida agregar una nueva receta de comidas saludables (más
 5. **Actualizar el contador en status-bar** — cambiar `<span class="status-count">` al número total de recetas y el nombre de la `status-label` a la última receta agregada
 6. **Publicar directamente en `main`** — no esperar PR ni rama de desarrollo, para que quede reflejada inmediatamente en el sitio en vivo
 7. **Confirmarle al usuario el link en vivo** y la receta agregada al cierre
+
+## Carteles de avisos para imprimir: diseño BLANCO A5 (regla permanente, desde 09/2026)
+
+Cuando el dueño pida un cartel de aviso ("Información", "Transferir", etc.)
+para imprimir, usar **siempre este diseño**, idéntico a los carteles que ya
+tiene pegados en el mesón: fondo **blanco**, barra superior roja/negra con
+línea dorada, logo redondo, "WGYMADNSPORT · TOCOPILLA", pastilla roja
+inclinada con sombra negra (Anton), texto grande en Anton (rojo para lo
+destacado) y pie "La Administración" / "WGYMADNSPORT Tocopilla".
+
+- **No usar** el fondo oscuro con bordes dorados (el dueño lo rechazó para
+  estos avisos) ni la paleta blanca con Inter/Courier (primeros intentos
+  fallidos). Los datos de transferencia van con letra lo más grande
+  posible y el número de cuenta en caja negra con texto blanco.
+- Plantilla lista: `plantilla-carteles-avisos.html` (Transferir Mercado
+  Pago + edad mínima, dos carteles A5 lado a lado en hoja A4 horizontal,
+  línea punteada para cortar). Para un cartel nuevo, copiarla y cambiar
+  solo el contenido; los carteles base A4 completos (`cartel-*.html`,
+  ej. `cartel-edad-minima.html`) tienen el mismo diseño.
+- Entregar en **PDF y PNG**, verificando antes con captura que nada se
+  corte. Generar con `node scripts/generar-carteles-avisos.js` (Playwright).
+- Datos vigentes de transferencia: Sara Encalada Varas, RUT 15.005.638-1;
+  Mercado Pago (Vista) 1027574868; Falabella (Corriente) 19992903080;
+  correo wadnsporttocopilla@gmail.com. Confirmar con el dueño antes de
+  cambiar cualquiera.
