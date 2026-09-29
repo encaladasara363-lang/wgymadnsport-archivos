@@ -725,5 +725,52 @@ publicarHist.addEventListener("click",async function(){
  s.medId=medid;msg.textContent="Historial enviado. Abre de nuevo la tarjeta QR del socio.";
  }catch(e){if(e.message==="clave incorrecta")try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){} msg.textContent="No se completó el envío: "+e.message;}finally{this.disabled=false;}
 });
+/* Borrar una medición por fecha y sincronizar la tarjeta QR. */
+var CLAVE_BORRADAS="wgym_mediciones_borradas_v1";
+function fechasBorradas(medid){try{return (JSON.parse(localStorage.getItem(CLAVE_BORRADAS)||"{}")||{})[medid]||[];}catch(e){return [];}}
+function guardarBorradas(medid,fechas){
+ var mapa={};try{mapa=JSON.parse(localStorage.getItem(CLAVE_BORRADAS)||"{}")||{};}catch(e){}
+ mapa[medid]=fechas;try{localStorage.setItem(CLAVE_BORRADAS,JSON.stringify(mapa));}catch(e){}
+ var s=socioActual;if(!s||medIdDe(s.n,s.a)!==medid)return;
+ var local=socioGuardado(s.n,s.a);
+ if(local){local.registros=local.registros.filter(function(r){return fechas.indexOf(r.fecha)<0;});guardarLocal();pintarHistorial(local);}
+}
+var pintarHistorialOriginal=pintarHistorial;
+pintarHistorial=function(previo){
+ var s=socioActual,ocultas=s?fechasBorradas(medIdDe(s.n,s.a)):[];
+ if(previo&&ocultas.length){previo.registros=previo.registros.filter(function(r){return ocultas.indexOf(r.fecha)<0;});guardarLocal();}
+ pintarHistorialOriginal(previo);
+ if(!previo||!previo.registros||!previo.registros.length)return;
+ var filas=document.querySelectorAll("#histBody tr"),registros=previo.registros.slice().reverse();
+ Array.prototype.forEach.call(filas,function(tr,i){
+  var b=document.createElement("button");b.type="button";b.textContent="Borrar";b.dataset.fecha=registros[i].fecha;
+  b.style.cssText="margin-left:8px;border:1px solid #e85c5c;border-radius:6px;background:transparent;color:#e85c5c;font-family:inherit;font-size:12px;font-weight:800;padding:4px 7px;cursor:pointer";
+  tr.cells[0].appendChild(b);
+ });
+};
+var leerMedicionesOriginal=leerMediciones_;
+leerMediciones_=function(medid){return leerMedicionesOriginal(medid).then(function(res){
+ if(res&&res.ok&&Array.isArray(res.fechasEliminadas))guardarBorradas(medid,res.fechasEliminadas);
+ return res;
+});};
+var elegirOriginal=elegir;
+elegir=function(s){elegirOriginal(s);leerMediciones_(medIdDe(s.n,s.a));};
+document.getElementById("histBody").addEventListener("click",async function(ev){
+ var b=ev.target.closest("button[data-fecha]"),s=socioActual;if(!b||!s||b.disabled)return;
+ var fecha=b.dataset.fecha,medid=medIdDe(s.n,s.a),msg=document.getElementById("guardadoMsg");
+ if(!confirm("¿Borrar la medición del "+fechaLegible(fecha)+" de "+s.n+" "+s.a+"? Dejará de verse en su tarjeta QR."))return;
+ var clave="";try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
+ if(!clave)clave=prompt("Clave de mediciones:")||"";
+ if(!clave)return;
+ b.disabled=true;msg.hidden=false;msg.textContent="Borrando medición...";
+ try{
+  var respuesta=await fetch(MEDICIONES_URL,{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({clave:clave,medid:medid,fecha:fecha})});
+  var resultado=await respuesta.json();if(!respuesta.ok||!resultado.ok)throw Error(resultado.error||"no se pudo borrar");
+  var comprobacion=await leerMediciones_(medid);
+  if(!comprobacion||!comprobacion.ok||comprobacion.fechasEliminadas.indexOf(fecha)<0)throw Error("no se pudo confirmar el borrado");
+  try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
+  msg.textContent="Medición del "+fechaLegible(fecha)+" borrada de la tarjeta QR.";
+ }catch(e){if(e.message==="clave incorrecta")try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){}msg.textContent="No se borró: "+e.message;b.disabled=false;}
+});
 })();
 </script>
