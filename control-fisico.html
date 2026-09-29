@@ -290,7 +290,6 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
  <div class="aviso">
   <p>Cargá acá los números que te muestra el <b>Omron HBF‑306</b> apenas termina de medir. Solo aparecen los socios que efectivamente se miden — el resto de la planilla sigue igual. Después de guardar, la medición aparece en la tarjeta QR del socio. No necesitas copiarla por chat.</p>
  </div>
- <p class="copy-msg" id="copyMsg" hidden></p>
 
  <div class="buscador">
   <input type="text" id="qSocio" placeholder="Buscar socio por nombre o apellido…" autocomplete="off" autocapitalize="words">
@@ -325,7 +324,6 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 
   <button class="btn-guardar" id="btnGuardar" type="button">Guardar registro</button>
   <p class="guardado-msg" id="guardadoMsg" hidden></p>
-  <button class="btn-copy" id="btnCopiarUno" type="button" hidden style="display:none">📋 Copiar esta medición</button>
  </div>
 
  <div class="hist" id="hist" hidden>
@@ -546,7 +544,7 @@ qSocio.addEventListener("keydown", function(ev){
 });
 
 /* ── panel de carga ────────────────────────────────────────────────── */
-var socioActual = null, sexoActual = null, ultimoGuardado = null;
+var socioActual = null, sexoActual = null;
 var panel = document.getElementById("panel");
 var hist = document.getElementById("hist");
 var inEdad = document.getElementById("inEdad"), inEstatura = document.getElementById("inEstatura"),
@@ -560,8 +558,6 @@ function elegir(s){
  document.getElementById("panelNombre").textContent = s.n + " " + s.a;
  panel.hidden = false;
  document.getElementById("guardadoMsg").hidden = true;
- document.getElementById("btnCopiarUno").hidden = true;
- ultimoGuardado = null;
 
  var previo = socioGuardado(s.n, s.a);
  var ultimo = previo && previo.registros.length ? previo.registros[previo.registros.length - 1] : null;
@@ -689,11 +685,7 @@ document.getElementById("btnGuardar").addEventListener("click", function(){
  .then(function(){boton.disabled=false;});
 });
 
-/* ── copiar mediciones: mismo esquema que mediciones.json (por id, nunca
-   por nombre — mediciones.json es publico y no debe llevar nombres reales).
-   El id sale de socios.json (medId); si un socio no tiene todavia, se le
-   genera uno nuevo acá mismo y viaja en el texto copiado para que se
-   guarde en socios.json la próxima vez que se publique. ───────────── */
+/* Identificador compartido con la tarjeta virtual. */
 function medIdDe(n, a){
  var kn = normName(n), ka = normName(a);
  var s = listaSocios.filter(function(x){ return normName(x.n)===kn && normName(x.a)===ka; })[0];
@@ -704,39 +696,5 @@ function medIdDe(n, a){
  for(var i=0;i<texto.length;i++) h=Math.imul(h^texto.charCodeAt(i),16777619);
  return ("00000000"+(h>>>0).toString(16)).slice(-8);
 }
-document.getElementById("btnCopiarUno").addEventListener("click", function(){
- if(!ultimoGuardado) return;
- var aviso = document.getElementById("copyMsg");
- var s = ultimoGuardado.socio;
- var nombre = s.n + " " + s.a;
- var payload = {
-  id: medIdDe(s.n, s.a),
-  sexo: s.sexo,
-  estatura: s.estatura,
-  registros: [ultimoGuardado.registro]
- };
- var json = JSON.stringify({ actualizado: hoyISO(), nota:"Mediciones de composicion corporal (Omron HBF-306). Cada socio va por su codigo id (medId de socios.json), nunca por nombre. Solo aparecen los socios que se miden.", socios: [payload] }, null, 1);
- /* La linea "Socio: ..." es solo para que Claude sepa a quien pegarle el
-    medId al fusionar por chat -- nunca debe terminar guardada dentro de
-    mediciones.json (ese archivo es publico y jamas lleva nombres). */
- var txt = "Socio: " + nombre + "\n\n" + json;
- function ok(){
-  aviso.hidden = false; aviso.removeAttribute("data-err");
-  aviso.textContent = "¡Copiado! Medición de " + nombre + ". Pégamelo por chat.";
- }
- function aMano(){
-  aviso.hidden = false; aviso.setAttribute("data-err","1");
-  aviso.textContent = "No pude copiarlo solo. Apretá Ctrl + C ahora.";
-  var ta = document.createElement("textarea");
-  ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
-  document.body.appendChild(ta); ta.select();
-  setTimeout(function(){ document.body.removeChild(ta); }, 15000);
- }
- try{
-  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok, aMano); }
-  else{ aMano(); }
- }catch(e){ aMano(); }
-});
-
 })();
 </script>
