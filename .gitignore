@@ -29,3 +29,4 @@ rutina-*.json
 rutina-*.html
 rutina-*.pdf
 !herramientas/rutina-ejemplo.json
+plantillas/salida/

@@ -968,14 +968,23 @@ la derecha. **Dos carteles por hoja A4 vertical**, en PDF y PNG.
 - Los datos de transferencia van con la letra lo más grande posible, en
   dos columnas (nombre/RUT, banco/tipo de cuenta) y el número de cuenta
   en caja negra con borde dorado y texto blanco enorme.
-- Plantilla lista: `plantilla-carteles-avisos.html` (8 avisos en 4 hojas:
+- Plantilla lista: `plantillas/carteles-avisos.html` (8 avisos en 4 hojas:
   Transferir Mercado Pago y Falabella, mensualidad al día, fecha de pago,
   planes sin congelar, sin niños, edad mínima y Tarjeta Virtual). Para un
   aviso nuevo, copiar un `<div class="cartel">` y cambiar solo el texto.
-- Generar con `node scripts/generar-carteles-avisos.js` (Playwright): deja
-  `carteles-avisos.pdf` y un PNG por hoja. Antes de entregar, mirar la
+- Generar con `node plantillas/generar-carteles-avisos.js` (Playwright): deja
+  `plantillas/salida/carteles-avisos.pdf` y un PNG por hoja. Antes de entregar, mirar la
   captura y confirmar que nada se corte ni se salga del marco.
 - Datos vigentes de transferencia: Sara Encalada Varas, RUT 15.005.638-1;
   Mercado Pago (Vista) 1027574868; Falabella (Corriente) 19992903080;
   correo wadnsporttocopilla@gmail.com. Confirmar con el dueño antes de
   cambiar cualquiera.
+
+## Carpeta `plantillas/` (regla permanente)
+
+Todo diseño que el dueño apruebe y pida guardar "para siempre" va en la
+carpeta `plantillas/` de la raíz del repo, como archivo autocontenido
+(fuentes y logo embebidos) más su script de generación si lo necesita.
+Antes de rehacer un diseño desde cero, revisar primero si ya existe ahí y
+partir de esa plantilla. Hoy contiene: `carteles-avisos.html` (avisos
+oscuros, 2 por hoja A4) y `generar-carteles-avisos.js`.
