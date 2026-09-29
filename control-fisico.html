@@ -288,9 +288,8 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 <div class="wrap">
 
  <div class="aviso">
-  <p>Cargá acá los números que te muestra el <b>Omron HBF‑306</b> apenas termina de medir. Solo aparecen los socios que efectivamente se miden — el resto de la planilla sigue igual. Después de guardar, tocá <b>Copiar esta medición</b> (aparece debajo del botón Guardar) y pegámelo por chat — uno a la vez, socio por socio, para que nunca se mezclen dos mediciones.</p>
+  <p>Cargá acá los números que te muestra el <b>Omron HBF‑306</b> apenas termina de medir. Solo aparecen los socios que efectivamente se miden — el resto de la planilla sigue igual. Después de guardar, la medición aparece en la tarjeta QR del socio. No necesitas copiarla por chat.</p>
  </div>
- <p class="copy-msg" id="copyMsg" hidden></p>
 
  <div class="buscador">
   <input type="text" id="qSocio" placeholder="Buscar socio por nombre o apellido…" autocomplete="off" autocapitalize="words">
@@ -325,11 +324,10 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 
   <button class="btn-guardar" id="btnGuardar" type="button">Guardar registro</button>
   <p class="guardado-msg" id="guardadoMsg" hidden></p>
-  <button class="btn-copy" id="btnCopiarUno" type="button" hidden style="width:100%;margin-top:10px;text-align:center">📋 Copiar esta medición</button>
  </div>
 
  <div class="hist" id="hist" hidden>
-  <h3>Historial de este socio (en este equipo)</h3>
+  <h3>Historial de este socio</h3>
   <div style="overflow-x:auto">
    <table>
     <thead><tr><th>Fecha</th><th>Peso</th><th>% Grasa</th><th>IMC</th></tr></thead>
@@ -342,6 +340,8 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 
 <script>
 const LOGO_B64 = "assets/logo-oficial.webp";
+const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
+const MEDICIONES_URL = "https://wgymadnsport-mediciones.encaladasara363.chatgpt.site/api/mediciones";
 document.getElementById("logoImg").src = LOGO_B64;
 
 (function(){
@@ -470,16 +470,32 @@ function incorporarPublicadas(publicadas){
  if(cambio) guardarLocal();
  if(socioActual) pintarHistorial(socioGuardado(socioActual.n, socioActual.a));
 }
-fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
- .then(function(r){ return r.ok ? r.json() : null; })
- .then(function(d){
-  if(!d || !Array.isArray(d.socios)) return;
-  listaSocios = d.socios;
-  return fetch("mediciones.json?v=" + Date.now(), { cache:"no-store" })
-   .then(function(r){ return r.ok ? r.json() : null; })
-   .then(incorporarPublicadas);
- })
- .catch(function(){});
+function leerApi_(action, params){
+ return new Promise(function(resolve){
+  var cb="wgymMed_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  var tag=document.createElement("script"), done=false;
+  var timer=setTimeout(function(){finish(null);},12000);
+  function finish(x){if(done)return;done=true;clearTimeout(timer);delete window[cb];tag.remove();resolve(x);}
+  window[cb]=finish;
+  tag.src=CHECKIN_URL+"?action="+action+"&callback="+cb+"&_="+Date.now()+
+   (params?"&"+new URLSearchParams(params).toString():"");
+  tag.onerror=function(){finish(null);};
+  document.body.appendChild(tag);
+ });
+}
+Promise.all([
+ fetch("socios.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}),
+ leerApi_("listarSocios")
+]).then(function(res){
+ var antigua=res[0]&&res[0].socios||[], api=res[1]&&res[1].socios||[];
+ var ids={};
+ antigua.forEach(function(s){ids[normName(s.n+" "+s.a)]=s.medId||"";});
+ listaSocios=api.length?api.map(function(s){
+  return {n:s.n,a:s.a,medId:s.medid||ids[normName(s.n+" "+s.a)]||""};
+ }):antigua;
+ return fetch("mediciones.json?v="+Date.now(),{cache:"no-store"})
+  .then(function(r){return r.ok?r.json():null;}).then(incorporarPublicadas);
+}).catch(function(){});
 
 function calzan(q){
  q = normName(q);
@@ -528,7 +544,7 @@ qSocio.addEventListener("keydown", function(ev){
 });
 
 /* ── panel de carga ────────────────────────────────────────────────── */
-var socioActual = null, sexoActual = null, ultimoGuardado = null;
+var socioActual = null, sexoActual = null;
 var panel = document.getElementById("panel");
 var hist = document.getElementById("hist");
 var inEdad = document.getElementById("inEdad"), inEstatura = document.getElementById("inEstatura"),
@@ -542,8 +558,6 @@ function elegir(s){
  document.getElementById("panelNombre").textContent = s.n + " " + s.a;
  panel.hidden = false;
  document.getElementById("guardadoMsg").hidden = true;
- document.getElementById("btnCopiarUno").hidden = true;
- ultimoGuardado = null;
 
  var previo = socioGuardado(s.n, s.a);
  var ultimo = previo && previo.registros.length ? previo.registros[previo.registros.length - 1] : null;
@@ -556,6 +570,11 @@ function elegir(s){
  inPeso.value = ""; inGrasa.value = ""; inImc.value = "";
  actualizarChips();
  pintarHistorial(previo);
+ leerMediciones_(s.medId||medIdDe(s.n,s.a)).then(function(x){
+  if(socioActual===s && x && x.ok && x.socio &&
+     x.socio.registros && x.socio.registros.length)
+   incorporarPublicadas({socios:[x.socio]});
+ });
  panel.scrollIntoView({ behavior:"smooth", block:"start" });
 }
 
@@ -593,98 +612,89 @@ function pintarHistorial(previo){
  body.innerHTML = filas;
 }
 
+function confirmarMedicion_(medid,esperada,intento){
+ return leerMediciones_(medid).then(function(res){
+  var registros=res&&res.ok&&res.socio&&res.socio.registros||[];
+  var existe=registros.some(function(r){
+   return r.fecha===esperada.fecha &&
+    ["peso","grasa","imc"].every(function(k){
+     return r[k]==null ? esperada[k]==null : Number(r[k])===esperada[k];
+    });
+  });
+  if(existe) return true;
+  if(intento>=3) return false;
+  return new Promise(function(resolve){setTimeout(resolve,1500);}).then(function(){
+   return confirmarMedicion_(medid,esperada,intento+1);
+  });
+ });
+}
+function leerMediciones_(medid){
+ return fetch(MEDICIONES_URL+"?medid="+encodeURIComponent(medid)+"&_="+Date.now(),
+  {cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
+}
+
 document.getElementById("btnGuardar").addEventListener("click", function(){
- if(!socioActual){ return; }
- if(!sexoActual){ alert("Elegí Mujer u Hombre antes de guardar."); return; }
- if(inPeso.value === "" && inGrasa.value === "" && inImc.value === ""){
-  alert("Cargá al menos un dato antes de guardar."); return;
+ if(!socioActual || this.disabled) return;
+ var s=socioActual, boton=this, msg=document.getElementById("guardadoMsg");
+ if(!sexoActual || !inEdad.value || !inEstatura.value ||
+    (inPeso.value==="" && inGrasa.value==="" && inImc.value==="")){
+  msg.hidden=false; msg.textContent="Completa sexo, edad, estatura y al menos un resultado."; return;
  }
- /* Evita que un doble toque en la pantalla guarde el mismo registro
-    dos veces — el botón se reactiva solo al tiro después. */
- if(this.disabled) return;
- this.disabled = true;
- var boton = this;
- setTimeout(function(){ boton.disabled = false; }, 1200);
- var registro = {
-  fecha: hoyISO(),
-  edad: Number(inEdad.value) || null,
-  peso: inPeso.value !== "" ? Number(inPeso.value) : null,
-  grasa: inGrasa.value !== "" ? Number(inGrasa.value) : null,
-  imc: inImc.value !== "" ? Number(inImc.value) : null
- };
- var s = socioGuardado(socioActual.n, socioActual.a);
- if(!s){
-  s = { n: socioActual.n, a: socioActual.a, sexo: sexoActual, registros: [] };
-  datos.socios.push(s);
- }
- s.sexo = sexoActual;
- if(inEstatura.value !== ""){
-  var est = Number(inEstatura.value);
-  /* Si lo escriben como "1.67" (metros, como se acostumbra a decir la
-     estatura), se pasa solo a centímetros — el Omron y esta ficha
-     siempre guardan en cm. */
-  if(est > 0 && est < 3) est = Math.round(est * 100);
-  s.estatura = est;
- }
- s.registros.push(registro);
- guardarLocal();
-
- var msg = document.getElementById("guardadoMsg");
- msg.hidden = false;
- msg.textContent = "Registro guardado en este equipo. Tocá \"Copiar esta medición\" y pegámelo por chat.";
- pintarHistorial(s);
-
- ultimoGuardado = { socio: s, registro: registro };
- document.getElementById("btnCopiarUno").hidden = false;
+ var est=Number(inEstatura.value);
+ if(est>0 && est<3) est=Math.round(est*100);
+ var clave="";
+ try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
+ if(!clave) clave=prompt("Clave de mediciones (solo la primera vez):")||"";
+ if(!clave){msg.hidden=false;msg.textContent="No se guardó: falta la clave de administración.";return;}
+ var registro={fecha:hoyISO(),edad:Number(inEdad.value),
+  peso:inPeso.value===""?null:Number(inPeso.value),
+  grasa:inGrasa.value===""?null:Number(inGrasa.value),
+  imc:inImc.value===""?null:Number(inImc.value)};
+ var idPropuesto=s.medId||medIdDe(s.n,s.a);
+ var params={clave:clave,
+  medid:idPropuesto,
+  sexo:sexoActual,estatura:est,fecha:registro.fecha,edad:registro.edad,
+  peso:registro.peso==null?"":registro.peso,
+  grasa:registro.grasa==null?"":registro.grasa,
+  imc:registro.imc==null?"":registro.imc};
+ boton.disabled=true; msg.hidden=false; msg.textContent="Guardando en el sitio...";
+ fetch(MEDICIONES_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(params)})
+ .then(function(r){return r.json();})
+ .then(function(r){
+  if(!r.ok) throw Error(r.error||"no se pudo guardar");
+  return confirmarMedicion_(idPropuesto,registro,0);
+ })
+ .then(function(confirmado){
+  if(!confirmado) throw Error("no se pudo confirmar el guardado");
+  try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
+  s.medId=idPropuesto;
+  var local=socioGuardado(s.n,s.a);
+  if(!local){local={n:s.n,a:s.a,sexo:sexoActual,registros:[]};datos.socios.push(local);}
+  local.sexo=sexoActual;local.estatura=est;
+  var indice=local.registros.findIndex(function(x){return x.fecha===registro.fecha;});
+  if(indice<0)local.registros.push(registro);else local.registros[indice]=registro;
+  local.registros.sort(function(a,b){return a.fecha.localeCompare(b.fecha);});
+  guardarLocal();pintarHistorial(local);
+  msg.textContent="Medición guardada. Ya está disponible en la tarjeta QR.";
+  inPeso.value="";inGrasa.value="";inImc.value="";
+ })
+ .catch(function(err){
+  if(err.message==="clave incorrecta") try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(e){}
+  msg.textContent="No se guardó en el sitio: "+err.message+". Los datos siguen en pantalla.";
+ })
+ .then(function(){boton.disabled=false;});
 });
 
-/* ── copiar mediciones: mismo esquema que mediciones.json (por id, nunca
-   por nombre — mediciones.json es publico y no debe llevar nombres reales).
-   El id sale de socios.json (medId); si un socio no tiene todavia, se le
-   genera uno nuevo acá mismo y viaja en el texto copiado para que se
-   guarde en socios.json la próxima vez que se publique. ───────────── */
+/* Identificador compartido con la tarjeta virtual. */
 function medIdDe(n, a){
  var kn = normName(n), ka = normName(a);
  var s = listaSocios.filter(function(x){ return normName(x.n)===kn && normName(x.a)===ka; })[0];
  if(s && s.medId) return s.medId;
- /* Socio sin id todavía (primera vez que se mide): se genera uno nuevo. */
- var hex = "0123456789abcdef", id = "";
- for(var i = 0; i < 8; i++){ id += hex[Math.floor(Math.random() * 16)]; }
- return id;
+ /* Para socios nuevos sin MedId en la hoja, ambas páginas calculan el mismo
+    identificador estable a partir del nombre; no se guarda el nombre en Sites. */
+ var texto=normName(n+" "+a), h=2166136261;
+ for(var i=0;i<texto.length;i++) h=Math.imul(h^texto.charCodeAt(i),16777619);
+ return ("00000000"+(h>>>0).toString(16)).slice(-8);
 }
-document.getElementById("btnCopiarUno").addEventListener("click", function(){
- if(!ultimoGuardado) return;
- var aviso = document.getElementById("copyMsg");
- var s = ultimoGuardado.socio;
- var nombre = s.n + " " + s.a;
- var payload = {
-  id: medIdDe(s.n, s.a),
-  sexo: s.sexo,
-  estatura: s.estatura,
-  registros: [ultimoGuardado.registro]
- };
- var json = JSON.stringify({ actualizado: hoyISO(), nota:"Mediciones de composicion corporal (Omron HBF-306). Cada socio va por su codigo id (medId de socios.json), nunca por nombre. Solo aparecen los socios que se miden.", socios: [payload] }, null, 1);
- /* La linea "Socio: ..." es solo para que Claude sepa a quien pegarle el
-    medId al fusionar por chat -- nunca debe terminar guardada dentro de
-    mediciones.json (ese archivo es publico y jamas lleva nombres). */
- var txt = "Socio: " + nombre + "\n\n" + json;
- function ok(){
-  aviso.hidden = false; aviso.removeAttribute("data-err");
-  aviso.textContent = "¡Copiado! Medición de " + nombre + ". Pégamelo por chat.";
- }
- function aMano(){
-  aviso.hidden = false; aviso.setAttribute("data-err","1");
-  aviso.textContent = "No pude copiarlo solo. Apretá Ctrl + C ahora.";
-  var ta = document.createElement("textarea");
-  ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
-  document.body.appendChild(ta); ta.select();
-  setTimeout(function(){ document.body.removeChild(ta); }, 15000);
- }
- try{
-  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok, aMano); }
-  else{ aMano(); }
- }catch(e){ aMano(); }
-});
-
 })();
 </script>
