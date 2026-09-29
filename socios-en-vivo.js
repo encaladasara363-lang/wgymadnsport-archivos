@@ -1,31 +1,29 @@
-/* La rutina consulta el mismo registro en vivo que Caja y la tarjeta QR. */
+/* Las rutinas consultan a un socio por nombre sin descargar la nómina completa. */
 (function(){
 "use strict";
+var endpoint="https://wgymadnsport-mediciones.encaladasara363.chatgpt.site/api/verificar-socio";
 var originalFetch=window.fetch.bind(window);
-var base="https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
-function listaViva(){
- return new Promise(function(resolve){
-  var cb="wgymRutinas_"+Date.now()+"_"+Math.floor(Math.random()*100000),script=document.createElement("script"),hecho=false;
-  function terminar(data){
-   if(hecho)return;hecho=true;clearTimeout(reloj);delete window[cb];script.remove();
-   resolve(data&&Array.isArray(data.socios)&&data.socios.length?data:null);
-  }
-  var reloj=setTimeout(function(){terminar(null);},8000);
-  window[cb]=terminar;
-  script.onerror=function(){terminar(null);};
-  script.src=base+"?action=listarSocios&callback="+cb+"&_="+Date.now();
-  document.head.appendChild(script);
- });
+function verificar(nombre){
+ var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},3300);
+ return originalFetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({nombre:nombre}),signal:controller.signal,cache:"no-store"})
+ .then(function(r){if(!r.ok)throw Error("Registro no disponible");return r.json();})
+ .then(function(data){if(!data.ok)throw Error("Registro no disponible");return data.socio||null;})
+ .finally(function(){clearTimeout(timer);});
 }
+window.wgymVerificarSocio=verificar;
 window.fetch=function(input,options){
  var url=typeof input==="string"?input:(input&&input.url)||"";
  if(/^(?:\.\/)?socios\.json(?:[?#]|$)/.test(url)){
-  return listaViva().then(function(data){
-   if(data)return new Response(JSON.stringify(data),{status:200,headers:{"Content-Type":"application/json"}});
-   return originalFetch(input,options);
-  });
+  var field=document.getElementById("member");
+  var name=field&&field.value.trim();
+  if(name){
+   return verificar(name).then(function(socio){
+    return new Response(JSON.stringify({socios:socio?[socio]:[]}),
+      {status:200,headers:{"Content-Type":"application/json"}});
+   });
+  }
  }
  return originalFetch(input,options);
 };
 })();
-
