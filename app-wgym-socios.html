@@ -271,6 +271,7 @@ nav.tabs button.on span{color:var(--red2);font-weight:700}
 .barra-desc .t{font-family:var(--fn);font-size:31.5px;color:var(--gold);min-width:66px}
 .barra-desc .n{font-family:var(--fc);text-transform:uppercase;font-size:15px;letter-spacing:.5px;color:var(--mut);margin-right:auto;line-height:1.15}
 </style>
+<script src="socios-en-vivo.js?v=1"></script>
 </head>
 <body>
 
@@ -526,16 +527,14 @@ function buscarSocioJunto(texto, data){
   return buscarSocioPorPar(palabras[0], palabras.slice(1).join(" "), data);
 }
 function buscarSocio(nombreCompleto, cb){
-  sociosPromise.then(function(data){
-    if(!data || !Array.isArray(data.socios)){ cb(null); return; }
-    cb(buscarSocioJunto(nombreCompleto, data));
+  window.wgymVerificarSocio(nombreCompleto).then(cb).catch(function(){
+    sociosPromise.then(function(data){ cb(data && Array.isArray(data.socios) ? buscarSocioJunto(nombreCompleto, data) : null); });
   });
 }
-/* Para re-buscar a alguien cuyo n/a exacto ya se conoce (sesión guardada). */
+/* Una sesión guardada también reconsulta el vencimiento actualizado. */
 function buscarSocioExacto(n, a, cb){
-  sociosPromise.then(function(data){
-    if(!data || !Array.isArray(data.socios)){ cb(null); return; }
-    cb(buscarSocioPorPar(n, a, data));
+  window.wgymVerificarSocio(n+" "+a).then(cb).catch(function(){
+    sociosPromise.then(function(data){ cb(data && Array.isArray(data.socios) ? buscarSocioPorPar(n, a, data) : null); });
   });
 }
 

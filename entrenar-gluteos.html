@@ -363,6 +363,7 @@ input[type=text]:focus-visible{outline:2px solid var(--rojo);outline-offset:2px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<script src="socios-en-vivo.js?v=1"></script>
 </head>
 <body>
 
@@ -1258,13 +1259,18 @@ function mostrar(cual){
 }
 
 /* ═══ Ingreso ══════════════════════════════════════════════════════════ */
-function entrar(){
+async function entrar(){
  var t = $("iNombre").value.trim().replace(/\s+/g, " ");
  var av = $("avisoIngreso");
  if(t.length < 3){
   av.textContent = "Escribe tu nombre y tu apellido.";
   av.hidden = false; $("iNombre").focus(); return;
  }
+ try {
+  var vigente = await window.wgymVerificarSocio(t);
+  SOCIOS.length=0;
+  if(vigente) SOCIOS.push(vigente);
+ } catch(e) { /* Si falla el registro, conservamos la lista local de respaldo. */ }
  var s = buscarPorNombreCompleto(t);
  if(!s){
   av.innerHTML = "No encontramos ese nombre entre los socios. " +
