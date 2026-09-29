@@ -696,5 +696,34 @@ function medIdDe(n, a){
  for(var i=0;i<texto.length;i++) h=Math.imul(h^texto.charCodeAt(i),16777619);
  return ("00000000"+(h>>>0).toString(16)).slice(-8);
 }
+/* Enviar el historial guardado en este computador a la tarjeta QR. */
+var publicarHist=document.createElement("button");
+publicarHist.type="button"; publicarHist.className="btn-copy";
+publicarHist.textContent="Enviar historial a su tarjeta QR";
+publicarHist.style.cssText="width:100%;margin-top:12px;text-align:center";
+hist.appendChild(publicarHist);
+publicarHist.addEventListener("click",async function(){
+ var s=socioActual,local=s&&socioGuardado(s.n,s.a);
+ if(!local||!local.registros||!local.registros.length)return;
+ var msg=document.getElementById("guardadoMsg"),clave="";
+ try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
+ if(!clave)clave=prompt("Clave de mediciones (solo la primera vez):")||"";
+ if(!clave){msg.hidden=false;msg.textContent="Falta la clave de administración.";return;}
+ var medid=s.medId||medIdDe(s.n,s.a),est=Number(local.estatura);
+ if(est>0&&est<3)est=Math.round(est*100);
+ var regs=local.registros.filter(function(r){return r.fecha&&Number(r.edad)>0&&[r.peso,r.grasa,r.imc].some(function(v){return v!=null&&v!=="";});});
+ if(!local.sexo||!est||!regs.length){msg.hidden=false;msg.textContent="Faltan sexo, estatura o edad en este historial.";return;}
+ this.disabled=true;msg.hidden=false;msg.textContent="Enviando historial...";
+ try{for(var i=0;i<regs.length;i++){
+  var r=regs[i],payload={clave:clave,medid:medid,sexo:local.sexo,estatura:est,fecha:r.fecha,edad:Number(r.edad),peso:r.peso==null?"":Number(r.peso),grasa:r.grasa==null?"":Number(r.grasa),imc:r.imc==null?"":Number(r.imc)};
+  var respuesta=await fetch(MEDICIONES_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+  var resultado=await respuesta.json();
+  if(!respuesta.ok||!resultado.ok)throw Error(resultado.error||"no se pudo guardar");
+  if(!await confirmarMedicion_(medid,r,0))throw Error("no se pudo confirmar el guardado");
+ }
+ try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
+ s.medId=medid;msg.textContent="Historial enviado. Abre de nuevo la tarjeta QR del socio.";
+ }catch(e){if(e.message==="clave incorrecta")try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){} msg.textContent="No se completó el envío: "+e.message;}finally{this.disabled=false;}
+});
 })();
 </script>
