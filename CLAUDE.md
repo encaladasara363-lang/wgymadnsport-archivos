@@ -947,26 +947,34 @@ Siempre que el usuario pida agregar una nueva receta de comidas saludables (más
 6. **Publicar directamente en `main`** — no esperar PR ni rama de desarrollo, para que quede reflejada inmediatamente en el sitio en vivo
 7. **Confirmarle al usuario el link en vivo** y la receta agregada al cierre
 
-## Carteles de avisos para imprimir: diseño BLANCO A5 (regla permanente, desde 09/2026)
+## Carteles de avisos para imprimir: diseño OSCURO, 2 por hoja A4 (regla permanente, desde 09/2026)
 
-Cuando el dueño pida un cartel de aviso ("Información", "Transferir", etc.)
-para imprimir, usar **siempre este diseño**, idéntico a los carteles que ya
-tiene pegados en el mesón: fondo **blanco**, barra superior roja/negra con
-línea dorada, logo redondo, "WGYMADNSPORT · TOCOPILLA", pastilla roja
-inclinada con sombra negra (Anton), texto grande en Anton (rojo para lo
-destacado) y pie "La Administración" / "WGYMADNSPORT Tocopilla".
+Cuando el dueño pida un cartel de aviso ("Información", "Transferir",
+"Tarjeta Virtual", etc.) para imprimir, usar **siempre este diseño**,
+idéntico a la captura de la Tarjeta Virtual que el dueño mostró y aprobó:
+fondo **oscuro** (degradado rojo oscuro a casi negro), marco redondeado
+**dorado**, **franja roja/dorada arriba Y abajo** del cartel, logo oficial
+(`assets/logo-oficial.webp`) arriba, "WGYMADNSPORT · TOCOPILLA" en dorado,
+pastilla roja con borde dorado (Rubik Distressed) para "INFORMACIÓN" /
+"TRANSFERIR", texto blanco grande con lo destacado en rojo, y pie con
+"La Administración" a la izquierda y "WGYMADNSPORT / TOCOPILLA" dorado a
+la derecha. **Dos carteles por hoja A4 vertical**, en PDF y PNG.
 
-- **No usar** el fondo oscuro con bordes dorados (el dueño lo rechazó para
-  estos avisos) ni la paleta blanca con Inter/Courier (primeros intentos
-  fallidos). Los datos de transferencia van con letra lo más grande
-  posible y el número de cuenta en caja negra con texto blanco.
-- Plantilla lista: `plantilla-carteles-avisos.html` (Transferir Mercado
-  Pago + edad mínima, dos carteles A5 lado a lado en hoja A4 horizontal,
-  línea punteada para cortar). Para un cartel nuevo, copiarla y cambiar
-  solo el contenido; los carteles base A4 completos (`cartel-*.html`,
-  ej. `cartel-edad-minima.html`) tienen el mismo diseño.
-- Entregar en **PDF y PNG**, verificando antes con captura que nada se
-  corte. Generar con `node scripts/generar-carteles-avisos.js` (Playwright).
+- **No usar** el diseño blanco (barra superior roja/negra, Anton) para
+  avisos nuevos ni ninguno de los primeros intentos fallidos (fondo gris,
+  bordes gruesos, QR de mentira). Si el cartel lleva QR, tiene que ser un
+  QR real (generar con la librería `qrcode`) y probar que apunta al link
+  correcto; nunca dibujar uno a mano.
+- Los datos de transferencia van con la letra lo más grande posible, en
+  dos columnas (nombre/RUT, banco/tipo de cuenta) y el número de cuenta
+  en caja negra con borde dorado y texto blanco enorme.
+- Plantilla lista: `plantilla-carteles-avisos.html` (8 avisos en 4 hojas:
+  Transferir Mercado Pago y Falabella, mensualidad al día, fecha de pago,
+  planes sin congelar, sin niños, edad mínima y Tarjeta Virtual). Para un
+  aviso nuevo, copiar un `<div class="cartel">` y cambiar solo el texto.
+- Generar con `node scripts/generar-carteles-avisos.js` (Playwright): deja
+  `carteles-avisos.pdf` y un PNG por hoja. Antes de entregar, mirar la
+  captura y confirmar que nada se corte ni se salga del marco.
 - Datos vigentes de transferencia: Sara Encalada Varas, RUT 15.005.638-1;
   Mercado Pago (Vista) 1027574868; Falabella (Corriente) 19992903080;
   correo wadnsporttocopilla@gmail.com. Confirmar con el dueño antes de
