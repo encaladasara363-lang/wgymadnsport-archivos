@@ -711,17 +711,35 @@ function renderEvolucion(s){
  candidatos.push([palabras[0], palabras.slice(1).join(" ")]);
  return candidatos;
  }
+ function buscarEnLista_(lista, candidatos){
+ for(var i = 0; i < candidatos.length; i++){
+ var nombre = normName(candidatos[i][0]), apellido = normName(candidatos[i][1]);
+ for(var j = 0; j < lista.length; j++){
+ if(normName(lista[j].n) === nombre && normName(lista[j].a) === apellido) return lista[j];
+ }
+ }
+ return null;
+ }
+ /* Respaldo: si el socio no aparece en la hoja del Apps Script (no quedó
+    cargado ahí, o la hoja no respondió a tiempo con mala señal), se busca
+    en socios.json, la planilla publicada del sitio (sin RUT). Así un socio
+    vigente nunca queda afuera de su tarjeta por un problema de la hoja. */
+ function sociosJsonComoApi_(){
+ return fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
+ .then(function(r){ return r.json(); })
+ .then(function(d){
+ return (d && d.socios || []).map(function(s){
+ return { n:s.n, a:s.a, plan:s.plan, monto:s.monto, fv:s.fv, medid:s.medId || "" };
+ });
+ })["catch"](function(){ return []; });
+ }
  function findSocioJunto(texto, cb){
  var candidatos = candidatosDeTexto_(texto);
  if(!candidatos.length){ cb(null); return; }
  sociosTarjetaPromise.then(function(lista){
- for(var i = 0; i < candidatos.length; i++){
- var nombre = normName(candidatos[i][0]), apellido = normName(candidatos[i][1]);
- for(var j = 0; j < lista.length; j++){
- if(normName(lista[j].n) === nombre && normName(lista[j].a) === apellido){ cb(lista[j]); return; }
- }
- }
- cb(null);
+ var s = buscarEnLista_(lista, candidatos);
+ if(s){ cb(s); return; }
+ sociosJsonComoApi_().then(function(lista2){ cb(buscarEnLista_(lista2, candidatos)); });
  });
  }
  function socioApiATarjeta_(s){
