@@ -566,13 +566,40 @@ const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X2
  return (x && x.medId) || "";
  })["catch"](function(){ return ""; });
  }
- function renderEvolucion(s){
- var medidPromise = s.medid ? Promise.resolve(s.medid) : medIdDeSociosJson_(s);
- Promise.all([medicionesPromise, medidPromise]).then(function(res){
- var data = res[0];
- if(res[1]) s.medid = res[1];
- var box = document.getElementById("evoCard");
- var m = socioMedido(data, s);
+ function leerMedicionesEnVivo_(medid){
+ return new Promise(function(resolve){
+  if(!medid){resolve(null);return;}
+  var cb="wgymTarjetaMed_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  var tag=document.createElement("script"),done=false;
+  var timer=setTimeout(function(){finish(null);},12000);
+  function finish(x){if(done)return;done=true;clearTimeout(timer);delete window[cb];tag.remove();resolve(x);}
+  window[cb]=finish;
+  tag.src=CHECKIN_URL+"?action=medicionesSocio&medid="+encodeURIComponent(medid)+
+   "&callback="+cb+"&_="+Date.now();
+  tag.onerror=function(){finish(null);};
+  document.body.appendChild(tag);
+ });
+}
+function unirMediciones_(historicas,nuevas){
+ if(!historicas) return nuevas;
+ if(!nuevas) return historicas;
+ var porFecha={};
+ (historicas.registros||[]).forEach(function(x){porFecha[x.fecha]=x;});
+ (nuevas.registros||[]).forEach(function(x){porFecha[x.fecha]=x;});
+ return {id:nuevas.id||historicas.id,sexo:nuevas.sexo||historicas.sexo,
+  estatura:nuevas.estatura||historicas.estatura,
+  registros:Object.keys(porFecha).sort().map(function(f){return porFecha[f];})};
+}
+function renderEvolucion(s){
+ var medidPromise=s.medid?Promise.resolve(s.medid):medIdDeSociosJson_(s);
+ medidPromise.then(function(medid){
+  if(medid) s.medid=medid;
+  return Promise.all([medicionesPromise,leerMedicionesEnVivo_(medid)]);
+ }).then(function(res){
+ var box=document.getElementById("evoCard");
+ var historicas=socioMedido(res[0],s);
+ var nuevas=res[1]&&res[1].ok?res[1].socio:null;
+ var m=unirMediciones_(historicas,nuevas);
  if(!m || !m.registros || !m.registros.length){
  box.hidden = false;
  cajaRangoAuto(s, box, false);
