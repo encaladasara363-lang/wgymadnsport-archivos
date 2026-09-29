@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-28",
+ "actualizado": "2026-09-29",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -106,6 +106,14 @@
    "monto": 28000,
    "fv": 46304,
    "medId": "a7e8c196"
+  },
+  {
+   "n": "NATALIA",
+   "a": "ANDRADE",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46324
   },
   {
    "n": "ALANYS",
