@@ -615,6 +615,23 @@ function pintarHistorial(previo){
  body.innerHTML = filas;
 }
 
+function confirmarMedicion_(medid,esperada,intento){
+ return leerApi_("medicionesSocio",{medid:medid}).then(function(res){
+  var registros=res&&res.ok&&res.socio&&res.socio.registros||[];
+  var existe=registros.some(function(r){
+   return r.fecha===esperada.fecha &&
+    ["peso","grasa","imc"].every(function(k){
+     return r[k]==null ? esperada[k]==null : Number(r[k])===esperada[k];
+    });
+  });
+  if(existe) return true;
+  if(intento>=3) return false;
+  return new Promise(function(resolve){setTimeout(resolve,1500);}).then(function(){
+   return confirmarMedicion_(medid,esperada,intento+1);
+  });
+ });
+}
+
 document.getElementById("btnGuardar").addEventListener("click", function(){
  if(!socioActual || this.disabled) return;
  var s=socioActual, boton=this, msg=document.getElementById("guardadoMsg");
@@ -632,19 +649,22 @@ document.getElementById("btnGuardar").addEventListener("click", function(){
   peso:inPeso.value===""?null:Number(inPeso.value),
   grasa:inGrasa.value===""?null:Number(inGrasa.value),
   imc:inImc.value===""?null:Number(inImc.value)};
+ var idPropuesto=s.medId||medIdDe(s.n,s.a);
  var params=new URLSearchParams({action:"guardarMedicion",clave:clave,
-  nombre:s.n,apellido:s.a,medid:s.medId||medIdDe(s.n,s.a),
+  nombre:s.n,apellido:s.a,medid:idPropuesto,
   sexo:sexoActual,estatura:est,fecha:registro.fecha,edad:registro.edad,
   peso:registro.peso==null?"":registro.peso,
   grasa:registro.grasa==null?"":registro.grasa,
   imc:registro.imc==null?"":registro.imc});
  boton.disabled=true; msg.hidden=false; msg.textContent="Guardando en el sitio...";
- fetch(CHECKIN_URL,{method:"POST",body:params})
- .then(function(r){return r.json();})
- .then(function(res){
-  if(!res || !res.ok) throw Error(res&&res.error||"no se pudo guardar");
+ /* Apps Script redirige la respuesta de POST a otro origen. Enviamos el
+    formulario y confirmamos leyendo de vuelta por la ruta JSONP pública. */
+ fetch(CHECKIN_URL,{method:"POST",mode:"no-cors",body:params})
+ .then(function(){return confirmarMedicion_(idPropuesto,registro,0);})
+ .then(function(confirmado){
+  if(!confirmado) throw Error("no se pudo confirmar el guardado");
   try{localStorage.setItem("wgym_clave_admin_v1",clave);}catch(e){}
-  s.medId=res.medid;
+  s.medId=idPropuesto;
   var local=socioGuardado(s.n,s.a);
   if(!local){local={n:s.n,a:s.a,sexo:sexoActual,registros:[]};datos.socios.push(local);}
   local.sexo=sexoActual;local.estatura=est;
