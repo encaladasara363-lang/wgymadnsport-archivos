@@ -1102,5 +1102,18 @@ function renderEvolucion(s){
  document.getElementById("gateError").hidden = true;
  });
 
+/* Respetar los borrados aunque una medición siga en el archivo histórico. */
+var leerEnVivoOriginal=leerMedicionesEnVivo_;
+leerMedicionesEnVivo_=function(id){return leerEnVivoOriginal(id).then(function(res){
+ if(res&&res.socio)res.socio.fechasEliminadas=res.fechasEliminadas||[];
+ return res;
+});};
+var unirMedicionesOriginal=unirMediciones_;
+unirMediciones_=function(historicas,nuevas){
+ var unidas=unirMedicionesOriginal(historicas,nuevas);
+ if(unidas&&nuevas&&nuevas.fechasEliminadas)
+  unidas.registros=unidas.registros.filter(function(r){return nuevas.fechasEliminadas.indexOf(r.fecha)<0;});
+ return unidas;
+};
 })();
 </script>  
