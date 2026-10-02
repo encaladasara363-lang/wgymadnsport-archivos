@@ -7,7 +7,7 @@
    - socio que solo está en la hoja → se agrega;
    - socio que está en los dos → se queda la fecha de vencimiento más
      adelantada (nunca se acorta una membresía);
-   - si la hoja no responde en 6 s, la rutina sigue con socios.json sola.
+   - si la hoja no responde en 12 s (igual que la tarjeta QR), la rutina sigue con socios.json sola.
    La hoja se pide apenas abre la página, así ya está lista al ingresar.
    Solo se LEE la lista (sin RUT); no se envía ningún dato a la hoja. */
 (function(){
@@ -27,7 +27,7 @@ function leerHoja(){
    if(!lista.length)hojaPromise=null; /* falló: se reintenta al ingresar */
    resolve(lista);
   }
-  var reloj=setTimeout(function(){fin([]);},6000);
+  var reloj=setTimeout(function(){fin([]);},12000);
   window[cb]=function(d){fin(d&&Array.isArray(d.socios)?d.socios:[]);};
   script=document.createElement("script");
   script.src=HOJA+"?action=listarSocios&callback="+cb+"&_="+Date.now();
