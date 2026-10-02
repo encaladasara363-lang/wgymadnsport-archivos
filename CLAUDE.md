@@ -256,11 +256,10 @@ repositorio: los cambios los aplica la dueña.
   el servicio debe implementar está en
   `docs/servicio-mediciones-pin.md`. La dueña ve cualquier tarjeta sin
   PIN gracias a su clave de mediciones guardada en sus equipos.
-- **`mediciones.json` (público) debe quedar vacío** una vez que la
-  dueña apriete "Subir mediciones antiguas al servicio (una sola vez)"
-  en `control-fisico.html` y confirme que salió "Listo": ahí vaciar
-  `socios` a `[]` (dejar `actualizado`/`nota`). Mientras tenga datos,
-  el PIN no protege esas mediciones antiguas.
+- **`mediciones.json` (público) quedó vacío el 02-10-2026**: la dueña
+  subió las 32 mediciones antiguas al servicio (confirmadas) y se
+  vació el archivo. No volver a escribir mediciones ahí; el historial
+  de git todavía conserva las versiones antiguas.
 
 ### El botón "📋 Copiar esta medición" — de a un socio por vez (regla permanente, desde 09/2026)
 
