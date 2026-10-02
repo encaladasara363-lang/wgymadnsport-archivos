@@ -184,6 +184,21 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .evo-row b{ color:var(--blanco); font-weight:800; }
 
 .band-box{ margin:14px 16px 0; }
+.pago-card{ margin:14px 16px 0; background:var(--card); border:1px solid var(--dorado); border-radius:14px; padding:16px; }
+.pago-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 6px; }
+.pago-monto{ font-size:34px; font-weight:900; color:var(--blanco); line-height:1.1; margin:0; }
+.pago-plan{ font-size:12.5px; color:var(--gris-soft); font-weight:700; margin:2px 0 12px; }
+.pago-btn{ display:block; width:100%; box-sizing:border-box; border-radius:12px; padding:13px; font-weight:900; font-size:14px; letter-spacing:.05em; text-transform:uppercase; cursor:pointer; text-align:center; text-decoration:none; margin-top:8px; }
+.pago-btn.principal{ background:var(--rojo); color:#fff; border:1px solid var(--dorado); }
+.pago-btn.sec{ background:transparent; color:var(--dorado); border:1px solid var(--dorado); }
+.pago-btn.wsp{ background:#1F8E4E; color:#fff; border:1px solid #25D366; }
+.pago-datos{ margin-top:12px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:4px 12px; }
+.pago-datos .fila{ display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px; }
+.pago-datos .fila:last-child{ border-bottom:none; }
+.pago-datos .fila span{ color:var(--gris-soft); font-weight:600; }
+.pago-datos .fila b{ color:var(--blanco); font-weight:800; text-align:right; word-break:break-all; }
+.pago-nota{ font-size:11.5px; color:var(--gris-soft); margin:10px 0 0; line-height:1.45; }
+.pago-ok{ font-size:12.5px; color:var(--good); font-weight:800; min-height:16px; margin:6px 0 0; text-align:center; }
 .band-btn{
   width:100%; background:var(--rojo); color:var(--blanco); border:none; border-radius:12px;
   padding:15px 16px; font-size:13.5px; font-weight:900; letter-spacing:.05em; text-transform:uppercase;
@@ -329,6 +344,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <p class="sub">tu acceso digital al gimnasio</p>
  </header>
  <div class="member-card" id="memberCard"></div>
+ <div class="pago-card" id="pagoCard" hidden></div>
  <div class="evo-card" id="evoCard" hidden></div>
  <div class="band-box">
  <div class="band-colors" id="bandColors">
@@ -1057,11 +1073,90 @@ function renderEvolucion(s){
  }
  intentar();
  }
+ /* ---------- pagar mensualidad (10/2026) ----------
+    Precios oficiales por plan: el monto se toma de esta lista según el
+    plan del socio (si el plan no está aquí, se usa el monto de su ficha).
+    Para cambiar un precio o la cuenta, editar SOLO estas dos tablas.
+    Los datos de la cuenta son los de la dueña, publicados a propósito
+    para recibir transferencias (no son datos de socios). */
+ var PRECIOS_PLANES = [
+  { re:/full/,                  precio:33000 },
+  { re:/(3|tres) veces/,        precio:28000 },
+  { re:/funcionari/,            precio:28000 },
+  { re:/tercera edad/,          precio:23000 },
+  { re:/turno/,                 precio:23000 },
+  { re:/estudiante|profesor/,   precio:28000 },
+  { re:/\bsemanal\b/,           precio:15000 },
+  { re:/diario/,                precio:4000 }
+ ];
+ var CUENTA_PAGO = {
+  banco:"Banco Falabella", tipo:"Cuenta Corriente", numero:"19992903080",
+  titular:"Sara Encalada", rut:"15.005.638-1", correo:"encaladasara363@gmail.com",
+  whatsapp:"56975196394"
+ };
+ function precioDePlan(s){
+  var plan = normName(s.plan || "").toLowerCase();
+  for(var i = 0; i < PRECIOS_PLANES.length; i++){
+   if(PRECIOS_PLANES[i].re.test(plan)) return PRECIOS_PLANES[i].precio;
+  }
+  return Number(s.monto) > 0 ? Number(s.monto) : 0;
+ }
+ function pesos(n){ return "$" + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+ function copiarTexto(txt){
+  if(navigator.clipboard && window.isSecureContext){
+   return navigator.clipboard.writeText(txt)["catch"](function(){ return copiarTextoViejo(txt); });
+  }
+  return copiarTextoViejo(txt);
+ }
+ function copiarTextoViejo(txt){
+  return new Promise(function(ok, mal){
+   var t = document.createElement("textarea");
+   t.value = txt; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
+   document.body.appendChild(t); t.select(); t.setSelectionRange(0, txt.length);
+   var hecho = false; try{ hecho = document.execCommand("copy"); }catch(e){}
+   t.remove(); hecho ? ok() : mal(Error("no se pudo copiar"));
+  });
+ }
+ function renderPago(s){
+  var box = document.getElementById("pagoCard");
+  var monto = precioDePlan(s);
+  if(!monto){ box.hidden = true; return; }
+  var c = CUENTA_PAGO, nombre = s.nombre + " " + s.apellido, plan = s.plan || "Plan";
+  var asunto = nombre + " - " + plan;
+  var filas = [["Banco", c.banco], ["Tipo de cuenta", c.tipo], ["N° de cuenta", c.numero],
+   ["Titular", c.titular], ["RUT", c.rut], ["Correo", c.correo], ["Monto", pesos(monto)], ["Comentario", asunto]];
+  var textoCopia = filas.map(function(f){ return f[0] + ": " + f[1]; }).join("\n");
+  var wsp = "https://wa.me/" + c.whatsapp + "?text=" + encodeURIComponent(
+   "Hola, soy " + nombre + ". Pagué mi " + plan + " de " + pesos(monto) + " por transferencia. Te envío el comprobante.");
+  box.hidden = false;
+  box.innerHTML =
+   '<p class="pago-kicker">Tu mensualidad</p>' +
+   '<p class="pago-monto">' + pesos(monto) + '</p>' +
+   '<p class="pago-plan">' + escapeHtml(plan) + '</p>' +
+   '<button type="button" class="pago-btn principal" id="pagoAbrir">💳 Pagar mensualidad</button>' +
+   '<div id="pagoDetalle" hidden>' +
+    '<div class="pago-datos">' + filas.map(function(f){ return '<div class="fila"><span>' + escapeHtml(f[0]) + '</span><b>' + escapeHtml(f[1]) + '</b></div>'; }).join("") + '</div>' +
+    '<button type="button" class="pago-btn sec" id="pagoCopiar">📋 Copiar datos</button>' +
+    '<p class="pago-ok" id="pagoOk"></p>' +
+    '<a class="pago-btn wsp" href="' + wsp + '" target="_blank" rel="noopener">Enviar comprobante por WhatsApp</a>' +
+    '<p class="pago-nota">Transfiere desde la app de tu banco con estos datos y envía el comprobante por WhatsApp. Tu plan se renueva cuando recepción confirme el pago.</p>' +
+   '</div>';
+  box.querySelector("#pagoAbrir").addEventListener("click", function(){
+   var det = box.querySelector("#pagoDetalle"); det.hidden = !det.hidden;
+   this.textContent = det.hidden ? "💳 Pagar mensualidad" : "Ocultar datos de pago";
+  });
+  box.querySelector("#pagoCopiar").addEventListener("click", function(){
+   var ok = box.querySelector("#pagoOk");
+   copiarTexto(textoCopia).then(function(){ ok.style.color = ""; ok.textContent = "✅ Datos copiados. Pégalos en la app de tu banco."; })
+   ["catch"](function(){ ok.style.color = "var(--danger)"; ok.textContent = "No se pudo copiar. Copia los datos a mano."; });
+  });
+ }
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
  anotarDia(s);
  renderCard(s);
+ renderPago(s);
  renderEvolucion(s);
  avisarIngreso(s);
  socioActual = s;

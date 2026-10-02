@@ -212,6 +212,24 @@ Esta es la forma preferida de avisar una renovación de UNA persona —
 más simple que pegar la lista completa de "Pasar la lista" para un
 solo cambio.
 
+### Botón "Pagar mensualidad" en la tarjeta (desde 10/2026)
+
+`tarjeta.html` muestra a cada socio "Tu mensualidad" con el precio de
+su plan y un botón "Pagar mensualidad" con los datos de transferencia
+(📋 Copiar datos + enviar comprobante por WhatsApp a Sara,
++56 9 7519 6394). Precios oficiales en `PRECIOS_PLANES` (Full Mensual
+$33.000; 3 Veces por Semana, Funcionarios Públicos y Estudiante/Profesor
+$28.000; Tercera Edad y Turno $23.000; Semanal $15.000; Pase Diario
+$4.000); un plan que no esté ahí (ej. Plan Especial) usa el `monto` de
+la ficha. La cuenta está en `CUENTA_PAGO`: es la cuenta de la propia
+dueña (Banco Falabella), publicada a propósito por ella para recibir
+transferencias; la regla de "nunca escribir un RUT real" es para los
+RUT de los socios, no para estos datos de cobro. El pago NO renueva
+solo: la dueña registra la renovación en el mesón como siempre. Se
+evaluó Mercado Pago (links de pago por plan) y se dejó para más
+adelante; si se agrega, nunca poner claves/tokens en el repo, solo los
+links públicos.
+
 ### `mediciones.json` — mediciones de composición corporal, nunca con nombre real (regla permanente)
 
 `mediciones.json` (en la raíz del repo) guarda el historial de peso, %
