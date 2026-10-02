@@ -271,7 +271,7 @@ nav.tabs button.on span{color:var(--red2);font-weight:700}
 .barra-desc .t{font-family:var(--fn);font-size:31.5px;color:var(--gold);min-width:66px}
 .barra-desc .n{font-family:var(--fc);text-transform:uppercase;font-size:15px;letter-spacing:.5px;color:var(--mut);margin-right:auto;line-height:1.15}
 </style>
-<script src="socios-en-vivo.js?v=1"></script>
+<script src="socios-hoja.js?v=4"></script>
 </head>
 <body>
 
@@ -601,7 +601,7 @@ function renderBanner(){
   var box = document.getElementById("bannerVenc");
   var qrCard = document.getElementById("qrCard");
   if(!SOCIO) return;
-  if(SOCIO.dias <= 0){
+  if(SOCIO.dias < 0){
     box.innerHTML =
       '<div class="banner bad"><span class="ic">⛔</span><div><p>Tu plan expiró</p>'+
       '<small>Renueva con la Administración para volver a tener acceso.</small></div></div>';
@@ -612,7 +612,7 @@ function renderBanner(){
       'href="https://wa.me/56975196394?text='+encodeURIComponent("Hola! Quiero renovar mi membresía de WGYMADNSPORT ("+cap(SOCIO.n)+" "+cap(SOCIO.a)+")")+'">💬 Renovar por WhatsApp</a></div>';
   } else if(SOCIO.dias <= 7){
     box.innerHTML =
-      '<div class="banner warn"><span class="ic">⚠️</span><div><p>Quedan '+SOCIO.dias+' día'+(SOCIO.dias===1?'':'s')+' de tu membresía</p>'+
+      '<div class="banner warn"><span class="ic">⚠️</span><div><p>'+(SOCIO.dias===0?'Tu membresía vence hoy':'Quedan '+SOCIO.dias+' día'+(SOCIO.dias===1?'':'s')+' de tu membresía')+'</p>'+
       '<small>Renueva a tiempo con la Administración para no perder tu acceso.</small></div></div>';
   } else {
     box.innerHTML =
@@ -896,7 +896,7 @@ function guardarHist(h){
 
 function renderRutinaBloqueo(){
   var body=document.getElementById("rutinaBody");
-  if(SOCIO && SOCIO.dias<=0){
+  if(SOCIO && SOCIO.dias<0){
     body.innerHTML =
       '<div class="card"><div class="bloqueo"><div class="ic">🔒</div><h3>Rutinas bloqueadas</h3>'+
       '<p>Tu plan está vencido. Renueva con la Administración para volver a entrenar con la app.</p>'+

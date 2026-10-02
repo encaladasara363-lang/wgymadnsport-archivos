@@ -96,9 +96,16 @@ function hoySerial(){
    persona se queda la de fecha más adelantada. */
 function ponerPrimero(lista){
  var campo=document.getElementById("member");
- var escrito=norm(campo&&campo.value);
+ var elegido=elegir(lista,campo&&campo.value);
+ return elegido?[elegido].concat(lista):lista;
+}
+/* Busca al socio que corresponde a lo escrito (ver reglas arriba). Devuelve
+   una copia de su ficha (con el nombre tal como lo escribió si no fue
+   exacto) o null si no hay una sola persona que calce. */
+function elegir(lista,texto){
+ var escrito=norm(texto);
  var palabras=escrito.split(" ").filter(Boolean);
- if(palabras.length<2)return lista;
+ if(palabras.length<2)return null;
  var exactos=lista.filter(function(s){return norm(s.n+" "+s.a)===escrito||norm(s.a+" "+s.n)===escrito;});
  var parecidos=lista.filter(function(s){return calza(palabras,s);});
  var hoy=hoySerial();
@@ -110,11 +117,11 @@ function ponerPrimero(lista){
   var v=todos.filter(vigente),mv=v.reduce(function(a,b){return Number(b.fv)>Number(a.fv)?b:a;});
   if(todos.every(function(c){return calza(norm(c.n+" "+c.a).split(" "),mv);})){
    var c2=Object.assign({},mv);c2.n=exactos[0].n;c2.a=exactos[0].a;
-   return [c2].concat(lista);
+   return c2;
   }
  }
  var cands=exactos.length?exactos:parecidos;
- if(!cands.length)return lista;
+ if(!cands.length)return null;
  function mayorFv(l){return l.reduce(function(a,b){return Number(b.fv)>Number(a.fv)?b:a;});}
  /* ¿Todas las fichas son de la misma persona, escrita casi igual
     (ej. IGLESIA en la planilla e IGLESIAS en la hoja)? */
@@ -123,13 +130,13 @@ function ponerPrimero(lista){
  if(!exactos.length&&!unaPersona(cands,mejor)){
   /* Dos personas parecidas: si solo una está vigente, es ella. */
   var vig=cands.filter(vigente);
-  if(!vig.length)return lista;
+  if(!vig.length)return null;
   mejor=mayorFv(vig);
-  if(!unaPersona(vig,mejor))return lista;
+  if(!unaPersona(vig,mejor))return null;
  }
  var copia=Object.assign({},mejor);
  if(!exactos.length){copia.n=palabras[0];copia.a=palabras.slice(1).join(" ");}
- return [copia].concat(lista);
+ return copia;
 }
 window.fetch=function(input,options){
  var url=typeof input==="string"?input:(input&&input.url)||"";
@@ -147,6 +154,21 @@ window.fetch=function(input,options){
  return originalFetch(input,options);
 };
 window.wgymLeerHojaSocios=leerHoja;
+/* Consulta de un socio por nombre, para las páginas que antes usaban
+   socios-en-vivo.js (app de socios, Glúteos, Hombre 5 Días): misma
+   respuesta (la ficha del socio, o null si no está), pero leyendo la hoja
+   de Google + socios.json, con las mismas reglas de nombre parecido. */
+window.wgymVerificarSocio=function(nombre){
+ return Promise.all([
+  originalFetch("socios.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.json();}).catch(function(){return {socios:[]};}),
+  leerHoja()
+ ]).then(function(res){
+  var j=res[0]||{},base=Array.isArray(j)?j:(j.socios||[]);
+  var todos=juntar(base,res[1]);
+  if(!todos.length)throw Error("Sin lista de socios");
+  return elegir(todos,nombre);
+ });
+};
 leerHoja();
 /* Si vuelve a la pestaña tras un rato, trae la hoja de nuevo (renovaciones). */
 window.addEventListener("pageshow",function(e){if(e.persisted){hojaPromise=null;leerHoja();}});
