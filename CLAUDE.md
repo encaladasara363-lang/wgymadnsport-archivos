@@ -343,6 +343,29 @@ export todavía, pedírselo (apretar de nuevo "📋 Copiar lista" y pegar el
 resultado) — sin él no hay forma de saber los días reales que ya lleva
 marcados cada socio en el equipo que el usuario toma como el bueno.
 
+## Rutinas: contenido en JSON, nunca editar a mano el HTML (regla permanente, desde 10/2026)
+
+Las apps de rutina se están migrando, de a una, a esta estructura
+(ver detalle en la skill `plantilla-rutina-mujeres-en-movimiento`):
+`rutinas/<id>.json` (contenido) + `img/rutinas/<id>/` (fotos) +
+`motor-rutina.js` (app compartida) + `validar-rutina.js`. Migradas:
+**Mujeres en Movimiento**. Las demás siguen con el formato antiguo
+(un HTML grande con todo adentro) hasta que se migren.
+
+- Cuando la dueña pida cambiar una rutina migrada (ejercicio, series,
+  descanso, tip), se edita **solo su JSON**, nunca el HTML ni el motor.
+- Antes de publicar, siempre `node scripts/validar-rutinas.js`; si
+  marca algún problema, no publicar. GitHub corre la misma revisión
+  ("Validar rutinas") en cada cambio.
+- Nunca cambiar `claveProgreso` de una rutina publicada (se perdería el
+  progreso guardado de los socios).
+- Al migrar otra rutina: las fotos y textos se trasladan tal cual
+  (mismos bytes), se mantiene el mismo nombre de página (los QR
+  impresos no cambian) y la misma clave de progreso, y se prueba que el
+  progreso guardado con la versión antigua aparezca igual en la nueva.
+- Le recomendamos a la dueña no copiar y pegar directamente en GitHub:
+  los cambios de rutina se los pide a Claude en palabras simples.
+
 ## Diseño único de app y cartel QR para toda rutina nueva de socias (regla permanente)
 
 Desde 09/2026, **cualquier rutina nueva que el dueño mande o pida para

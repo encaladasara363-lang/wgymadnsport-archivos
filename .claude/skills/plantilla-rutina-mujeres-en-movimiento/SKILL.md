@@ -15,18 +15,50 @@ Archivo de referencia (ya pulido a fondo, con todos los ajustes que pidió
 el dueño): `mujeres-en-movimiento.html`, en la raíz del repo.
 Sitio en vivo: https://encaladasara363-lang.github.io/wgymadnsport-archivos/mujeres-en-movimiento.html
 
-Para una rutina nueva con este mismo diseño: **copiar
-`mujeres-en-movimiento.html` tal cual** a un archivo nuevo y cambiar
-únicamente lo de abajo — nunca rediseñar desde cero, y nunca tocar
-`socios.json`.
+### Estructura desde 10/2026: contenido separado del código
+
+Desde 10/2026 la app está partida en piezas (antes era un solo HTML de
+~8 MB con las fotos en base64, que se rompía al editarlo a mano):
+
+- `rutinas/<id>.json` — **el contenido**: días, ejercicios, series,
+  descansos, tips y la ruta de las 2 fotos (inicio/final) de cada
+  ejercicio, más `nombre` y `claveProgreso` (clave de `localStorage`;
+  **nunca cambiarla en una rutina publicada**, ahí está el progreso de
+  los socios). Campo opcional por ejercicio: `formato`
+  (`ancho`/`alto`/`plancha`) para fotos que no son verticales.
+- `img/rutinas/<id>/` — las fotos como archivos (`dN-eM-inicio.webp`,
+  `dN-eM-final.webp`, `logo.png`, `portada.png`).
+- `motor-rutina.js` — la app (ingreso, cronómetro, series, récords,
+  peso, compartir), **una sola copia para todas las rutinas migradas**.
+  Toma la cantidad de días y de series del JSON.
+- `validar-rutina.js` — revisa el JSON; la página nunca usa una rutina
+  incompleta (si llega mal, usa la última buena guardada en ese
+  celular).
+- `<id>.html` — solo diseño (CSS) y marcado; carga
+  `<script src="motor-rutina.js?v=N" data-rutina="rutinas/<id>.json">`.
+
+**Para cambiar una rutina ya publicada**: editar solo su JSON y correr
+`node scripts/validar-rutinas.js` antes de publicar (GitHub lo vuelve a
+correr solo, en "Validar rutinas"). Si se cambia el orden de los
+ejercicios de un día, el progreso guardado queda asociado a la
+posición (día/ejercicio/serie), no al nombre — avisarlo.
+**Si se toca `motor-rutina.js`**, subir su `?v=` en todas las páginas
+que lo usan y probar todas.
+
+Para una rutina nueva con este mismo diseño: copiar
+`mujeres-en-movimiento.html` a `<id>.html` (cambiando `data-rutina`,
+textos y rutas de logo/portada), crear `rutinas/<id>.json` con el
+contenido y `img/rutinas/<id>/` con sus fotos, y cambiar únicamente lo
+de abajo — nunca rediseñar desde cero, y nunca tocar `socios.json`.
 
 **El dueño manda el archivo de la rutina (con sus ejercicios, series,
 descansos, tips e imágenes ya definidos) y espera que Claude solo la
 "adapte" a este diseño — nunca que rediseñe o reemplace lo que ya
 viene en ese archivo.** En particular, **las imágenes de los
 ejercicios de esa rutina nunca se tocan**: se transplantan tal cual
-(mismo archivo/base64/URL) al array de imágenes correspondiente
-(`EXERCISE_IMAGES`/`POSE_IMAGES`), nunca se buscan fotos nuevas, se
+(mismo archivo, guardado en `img/rutinas/<id>/` y referenciado en el
+campo `img` del JSON; en apps antiguas aún sin migrar, en
+`EXERCISE_IMAGES`/`POSE_IMAGES`), nunca se buscan fotos nuevas, se
 recortan, se editan ni se reemplazan por otras — a diferencia de la
 foto del cartel QR impreso (esa sí se elige aparte y debe variar de un
 cartel a otro, ver más abajo). Lo único que cambia es la estructura,
@@ -40,13 +72,13 @@ original.
    patrón que `mujeres-en-movimiento.html`).
 2. **`<title>`**, el `<h1>`/subtítulo del hero y el nombre que aparece en
    `.welcome-eyebrow`/`.welcome-sub` si corresponde a otro programa.
-3. **El array `PLAN`**: los días, ejercicios, series, descansos, tips
+3. **El JSON `rutinas/<id>.json`** (en apps antiguas, el array `PLAN`): los días, ejercicios, series, descansos, tips
    biomecánicos e **imágenes** de la rutina nueva, transplantados tal
    cual del archivo que mandó el dueño (aplicar la "Base de
    conocimiento técnico" de `CLAUDE.md` solo para completar algo que
    ese archivo no traiga, nunca para reemplazar lo que sí trae).
-4. **Claves de `localStorage`** (`key()`, y cualquier otra clave tipo
-   `wgym_..._v1`): cambiar el sufijo para que no se mezcle con el
+4. **Claves de `localStorage`** (`claveProgreso` del JSON; en apps
+   antiguas `key()` y cualquier otra clave tipo `wgym_..._v1`): cambiar el sufijo para que no se mezcle con el
    progreso guardado de otra rutina en el mismo celular.
 5. **Textos de bienvenida** (`#welcomeName`, `.welcome-sub`) si el saludo
    debe mencionar otro nombre de programa — pero MANTENER "Bienvenido a

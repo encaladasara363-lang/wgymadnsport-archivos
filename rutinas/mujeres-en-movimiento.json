@@ -1,0 +1,363 @@
+{
+  "version": 1,
+  "id": "mujeres-en-movimiento",
+  "nombre": "MUJERES EN MOVIMIENTO",
+  "claveProgreso": "wgym_mujeres_movimiento_v1_",
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Piernas · cuádriceps",
+      "focus": "Fuerza de piernas + bicicleta",
+      "warmup": "Bicicleta de spinning suave — 6 minutos",
+      "exercises": [
+        {
+          "name": "Prensa de piernas",
+          "sets": "3 × 8-10",
+          "rest": "90 seg",
+          "tip": "Baja hasta donde puedas mantener espalda y pelvis apoyadas; evita bloquear rodillas.",
+          "equip": "Prensa",
+          "muscle": "Cuádriceps · glúteos",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d1-e1-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d1-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Sentadilla en Smith",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Ajusta la posición de pies y baja con control; mantén rodillas alineadas con los pies.",
+          "equip": "Barra guiada",
+          "muscle": "Cuádriceps · glúteos",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d1-e2-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d1-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Extensión de cuádriceps",
+          "sets": "3 × 12-15",
+          "rest": "60 seg",
+          "tip": "Alinea rodilla con el eje de la máquina; sube sin impulso y baja lentamente.",
+          "equip": "Máquina",
+          "muscle": "Cuádriceps",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d1-e3-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d1-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Elevación de talones",
+          "sets": "3 × 12-15",
+          "rest": "45 seg",
+          "tip": "Sube y baja en todo el recorrido disponible sin rebotar.",
+          "equip": "Máquina",
+          "muscle": "Pantorrillas",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d1-e4-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d1-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Zancadas con mancuernas",
+          "sets": "3 × 10 por pierna",
+          "rest": "60 seg",
+          "equip": "Mancuernas",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Da un paso cómodo y desciende con control; mantén la rodilla alineada con el pie.",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d1-e5-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d1-e5-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 10 minutos a ritmo cómodo; aumenta gradualmente si te sientes bien."
+    },
+    {
+      "weekday": "Martes",
+      "title": "Espalda y pecho",
+      "focus": "Tren superior + remadora",
+      "warmup": "Remadora suave — 6 minutos",
+      "exercises": [
+        {
+          "name": "Jalón al pecho",
+          "sets": "3 × 8-10",
+          "rest": "90 seg",
+          "tip": "Lleva agarres hacia el pecho sin tirar con la zona lumbar; controla la subida. El video muestra el patrón de jalón, no la máquina exacta.",
+          "equip": "Máquina",
+          "muscle": "Dorsales",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d2-e1-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d2-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Press de pecho sentado",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Mantén espalda apoyada y muñecas alineadas; empuja sin bloquear codos. El video muestra el patrón de press.",
+          "equip": "Máquina",
+          "muscle": "Pectorales · tríceps",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d2-e2-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d2-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Remo bajo",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Inicia retrayendo omóplatos, acerca los agarres sin balancear el tronco.",
+          "equip": "Máquina",
+          "muscle": "Espalda media",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d2-e3-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d2-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Face pull en polea",
+          "sets": "3 × 12-15",
+          "rest": "60 seg",
+          "tip": "Tira hacia la frente con codos altos sin arquear la zona lumbar.",
+          "equip": "Polea",
+          "muscle": "Deltoides posteriores",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d2-e4-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d2-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Curl de bíceps con mancuernas",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "Mancuernas",
+          "muscle": "Bíceps",
+          "tip": "Mantén los codos cerca del cuerpo y evita balancear el tronco.",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d2-e5-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d2-e5-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Remadora — 8 minutos de esfuerzo moderado, técnica fluida, sin buscar máxima velocidad."
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Glúteos y femorales",
+      "focus": "Cadena posterior + trotadora curva",
+      "warmup": "Trotadora curva caminando — 6 minutos",
+      "exercises": [
+        {
+          "name": "Hip thrust con barra",
+          "sets": "3 × 8-10",
+          "rest": "90 seg",
+          "tip": "Apoya la parte alta de la espalda en un banco estable; eleva la pelvis hasta alinear tronco y muslos, sin hiperextender la espalda.",
+          "equip": "Barra · banco",
+          "muscle": "Glúteos",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d3-e1-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d3-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Peso muerto rumano con mancuernas",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Lleva la cadera atrás con rodillas suaves y espalda neutra; baja hasta sentir tensión sin perder control.",
+          "equip": "Mancuernas",
+          "muscle": "Femoral · glúteos",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d3-e2-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d3-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Curl femoral a una pierna",
+          "sets": "3 × 10-12 por pierna",
+          "rest": "60 seg",
+          "tip": "De pie, apoya el torso en el soporte y fija la pelvis. Flexiona una rodilla llevando la palanca hacia atrás sin balancear la espalda; baja con control.",
+          "equip": "Máquina",
+          "muscle": "Isquiotibiales",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d3-e3-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d3-e3-final.webp"
+          ],
+          "formato": "alto"
+        },
+        {
+          "name": "Extensión de glúteo a una pierna en polea",
+          "sets": "3 × 12-15 por pierna",
+          "rest": "60 seg",
+          "tip": "Coloca la tobillera en la polea baja, sujeta la estructura y lleva una pierna hacia atrás desde la cadera sin arquear la espalda. Regresa despacio.",
+          "equip": "Polea baja · tobillera",
+          "muscle": "Glúteo mayor",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d3-e4-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d3-e4-final.webp"
+          ],
+          "formato": "ancho"
+        },
+        {
+          "name": "Puente de glúteos en suelo",
+          "sets": "3 × 15",
+          "rest": "60 seg",
+          "equip": "Colchoneta",
+          "muscle": "Glúteos",
+          "tip": "Apoya los pies al ancho de caderas; eleva la pelvis contrayendo glúteos sin arquear la zona lumbar.",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d3-e5-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d3-e5-final.webp"
+          ],
+          "formato": "ancho"
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos caminando a ritmo estable; usa apoyo al iniciar y al detenerte."
+    },
+    {
+      "weekday": "Jueves",
+      "title": "Hombros y espalda",
+      "focus": "Tren superior + bicicleta",
+      "warmup": "Bicicleta de spinning suave — 6 minutos",
+      "exercises": [
+        {
+          "name": "Press militar",
+          "sets": "3 × 8-10",
+          "rest": "90 seg",
+          "tip": "Mantén espalda y pelvis apoyadas; sube sin encoger hombros ni bloquear codos.",
+          "equip": "Máquina",
+          "muscle": "Deltoides · tríceps",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d4-e1-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d4-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Remo frontal",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Lleva los agarres hacia ti con el pecho estable; junta omóplatos sin impulso.",
+          "equip": "Máquina",
+          "muscle": "Espalda media",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d4-e2-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d4-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Elevación lateral con mancuernas",
+          "sets": "3 × 12-15",
+          "rest": "60 seg",
+          "tip": "Eleva con codos suaves hasta altura cómoda del hombro, sin balancearte.",
+          "equip": "Mancuernas",
+          "muscle": "Deltoides laterales",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d4-e3-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d4-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Extensión de tríceps en polea",
+          "sets": "3 × 12-15",
+          "rest": "60 seg",
+          "tip": "Mantén codos cerca del cuerpo y evita usar el tronco para mover la carga.",
+          "equip": "Polea",
+          "muscle": "Tríceps",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d4-e4-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d4-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Pájaros con mancuernas",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "Mancuernas",
+          "muscle": "Deltoides posteriores · espalda alta",
+          "tip": "Inclina el tronco con espalda neutra y abre los brazos con poco peso y control.",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d4-e5-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d4-e5-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 8 minutos a intensidad moderada."
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Cuerpo completo",
+      "focus": "Repaso de fuerza + cardio",
+      "warmup": "Remadora suave — 6 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla goblet con mancuerna",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "equip": "Mancuerna",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Sujeta una mancuerna frente al pecho; baja entre las caderas manteniendo pecho erguido y talones apoyados.",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d5-e1-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d5-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Press de pecho con mancuernas en banco",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "equip": "Banco · mancuernas",
+          "muscle": "Pecho · tríceps",
+          "tip": "Apoya espalda y pies; baja las mancuernas con control a los lados del pecho y empuja hacia arriba.",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d5-e2-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d5-e2-final.webp"
+          ],
+          "formato": "ancho"
+        },
+        {
+          "name": "Remo unilateral con mancuerna",
+          "sets": "3 × 10 por lado",
+          "rest": "60 seg",
+          "equip": "Banco · mancuerna",
+          "muscle": "Espalda · bíceps",
+          "tip": "Apoya una mano y una rodilla en el banco; tira de la mancuerna hacia la cadera sin girar el tronco.",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d5-e3-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d5-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Peso muerto sumo con mancuerna",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "equip": "Mancuerna",
+          "muscle": "Glúteos · aductores",
+          "tip": "Abre los pies más que las caderas, mantén la mancuerna entre las piernas y extiende caderas y rodillas sin redondear la espalda.",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d5-e4-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d5-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Plancha frontal",
+          "sets": "3 × 30-40 seg",
+          "rest": "60 seg",
+          "equip": "Colchoneta",
+          "muscle": "Abdomen · estabilidad",
+          "tip": "Empuja el suelo con los antebrazos y mantén caderas y hombros alineados; respira normalmente.",
+          "img": [
+            "img/rutinas/mujeres-en-movimiento/d5-e5-inicio.webp",
+            "img/rutinas/mujeres-en-movimiento/d5-e5-final.webp"
+          ],
+          "formato": "plancha"
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Elige remadora, bicicleta o trotadora curva — 10 minutos a ritmo moderado."
+    }
+  ]
+}
