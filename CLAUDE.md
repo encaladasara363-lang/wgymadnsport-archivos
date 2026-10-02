@@ -239,6 +239,29 @@ romper la función de "evolución física" para nadie:
   recepción) sigue buscando y guardando por nombre en su `localStorage`
   local — eso no cambia, ese dato nunca sale de ese equipo.
 
+### Servicio de mediciones y PIN opcional (desde 10/2026)
+
+Desde fines de 09/2026 las mediciones nuevas ya no pasan por Claude:
+`control-fisico.html` las guarda directo en el servicio de la dueña
+(`MEDICIONES_URL`, `...chatgpt.site/api/mediciones`) con la clave de
+mediciones (`localStorage` `wgym_clave_mediciones_v1`), y
+`tarjeta.html` las lee de ahí (más el archivo antiguo
+`mediciones.json`). El código de ese servicio NO está en este
+repositorio: los cambios los aplica la dueña.
+
+- **PIN opcional por socio:** `tarjeta.html` ofrece "Proteger mis
+  mediciones con PIN" y `control-fisico.html` tiene "Quitar PIN de este
+  socio". Solo se activa cuando el servicio responde
+  `pinSoportado:true`; mientras no, todo funciona como antes. Lo que
+  el servicio debe implementar está en
+  `docs/servicio-mediciones-pin.md`. La dueña ve cualquier tarjeta sin
+  PIN gracias a su clave de mediciones guardada en sus equipos.
+- **`mediciones.json` (público) debe quedar vacío** una vez que la
+  dueña apriete "Subir mediciones antiguas al servicio (una sola vez)"
+  en `control-fisico.html` y confirme que salió "Listo": ahí vaciar
+  `socios` a `[]` (dejar `actualizado`/`nota`). Mientras tenga datos,
+  el PIN no protege esas mediciones antiguas.
+
 ### El botón "📋 Copiar esta medición" — de a un socio por vez (regla permanente, desde 09/2026)
 
 `control-fisico.html` copia **una sola medición a la vez** (la que se

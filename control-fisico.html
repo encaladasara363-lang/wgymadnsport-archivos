@@ -628,9 +628,19 @@ function confirmarMedicion_(medid,esperada,intento){
   });
  });
 }
-function leerMediciones_(medid){
+function pedirMed_(medid,cab){
  return fetch(MEDICIONES_URL+"?medid="+encodeURIComponent(medid)+"&_="+Date.now(),
-  {cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
+  {cache:"no-store",headers:cab||{}}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
+}
+/* Si el socio protegió sus mediciones con PIN, el mesón las lee con la
+   clave de mediciones (la misma que ya usa para guardar). */
+function leerMediciones_(medid){
+ return pedirMed_(medid).then(function(res){
+  if(!res||!res.protegido||res.socio)return res;
+  var clave="";try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
+  if(!clave)return res;
+  return pedirMed_(medid,{"X-Wgym-Clave":clave}).then(function(r2){return r2&&r2.ok?r2:res;});
+ });
 }
 
 document.getElementById("btnGuardar").addEventListener("click", function(){
@@ -771,6 +781,80 @@ document.getElementById("histBody").addEventListener("click",async function(ev){
   try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
   msg.textContent="Medición del "+fechaLegible(fecha)+" borrada de la tarjeta QR.";
  }catch(e){if(e.message==="clave incorrecta")try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){}msg.textContent="No se borró: "+e.message;b.disabled=false;}
+});
+function claveMed_(){
+ var clave="";try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
+ if(!clave)clave=prompt("Clave de mediciones:")||"";
+ return clave;
+}
+/* Quitar el PIN de un socio que lo olvidó (10/2026). Solo aparece cuando el
+   socio elegido tiene sus mediciones protegidas con PIN. */
+var quitarPin=document.createElement("button");
+quitarPin.type="button";quitarPin.className="btn-copy";quitarPin.hidden=true;
+quitarPin.textContent="🔓 Quitar PIN de este socio (lo olvidó)";
+quitarPin.style.cssText="width:100%;margin-top:12px;text-align:center";
+hist.parentNode.insertBefore(quitarPin,hist.nextSibling);
+var leerConPin_=leerMediciones_;
+leerMediciones_=function(medid){return leerConPin_(medid).then(function(res){
+ var s=socioActual;if(s&&medIdDe(s.n,s.a)===medid)quitarPin.hidden=!(res&&res.protegido);
+ return res;
+});};
+quitarPin.addEventListener("click",async function(){
+ var s=socioActual,msg=document.getElementById("guardadoMsg");if(!s)return;
+ if(!confirm("¿Quitar el PIN de "+s.n+" "+s.a+"? Podrá crear uno nuevo desde su tarjeta QR."))return;
+ var clave=claveMed_();if(!clave)return;
+ var medid=medIdDe(s.n,s.a);this.disabled=true;msg.hidden=false;msg.textContent="Quitando PIN...";
+ try{
+  var r=await fetch(MEDICIONES_URL+"/pin",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({clave:clave,medid:medid})});
+  var j=await r.json();if(!r.ok||!j.ok)throw Error(j.error||"no se pudo quitar");
+  try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
+  msg.textContent="PIN quitado. "+s.n+" ya puede crear uno nuevo desde su tarjeta QR.";
+  await leerMediciones_(medid);
+ }catch(e){if(e.message==="clave incorrecta")try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){}msg.textContent="No se quitó el PIN: "+e.message;}
+ finally{this.disabled=false;}
+});
+/* Una sola vez: pasar las mediciones antiguas del archivo público
+   mediciones.json al servicio de mediciones, para poder vaciar ese archivo
+   (cualquiera puede descargarlo, así que el PIN no lo protege). */
+var migrar=document.createElement("button");
+migrar.type="button";migrar.className="btn-copy";
+migrar.textContent="Subir mediciones antiguas al servicio (una sola vez)";
+migrar.style.cssText="display:block;width:min(100%,640px);margin:28px auto 40px;text-align:center;opacity:.8";
+document.body.appendChild(migrar);
+migrar.addEventListener("click",async function(){
+ if(!confirm("Se subirán al servicio las mediciones antiguas de mediciones.json. ¿Continuar?"))return;
+ var clave=claveMed_();if(!clave)return;
+ var boton=this;boton.disabled=true;
+ var ok=0,total=0,fallas=[];
+ try{
+  var d=await (await fetch("mediciones.json?v="+Date.now(),{cache:"no-store"})).json();
+  var lista=(d&&d.socios)||[];
+  lista.forEach(function(x){total+=(x.registros||[]).length;});
+  for(var i=0;i<lista.length;i++){
+   var x=lista[i];
+   for(var k=0;k<(x.registros||[]).length;k++){
+    var r=x.registros[k];
+    boton.textContent="Subiendo "+(ok+fallas.length+1)+" de "+total+"...";
+    try{
+     var payload={clave:clave,medid:x.id,sexo:x.sexo,estatura:Number(x.estatura),fecha:r.fecha,edad:Number(r.edad),
+      peso:r.peso==null?"":Number(r.peso),grasa:r.grasa==null?"":Number(r.grasa),imc:r.imc==null?"":Number(r.imc)};
+     var resp=await fetch(MEDICIONES_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+     var j=await resp.json();
+     if(!resp.ok||!j.ok)throw Error(j.error||"no se pudo guardar");
+     var esperada={fecha:r.fecha,peso:r.peso==null?null:Number(r.peso),grasa:r.grasa==null?null:Number(r.grasa),imc:r.imc==null?null:Number(r.imc)};
+     if(!await confirmarMedicion_(x.id,esperada,0))throw Error("no se pudo confirmar");
+     ok++;
+    }catch(e){
+     if(e.message==="clave incorrecta"){try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(z){}throw e;}
+     fallas.push(x.id+" "+r.fecha+": "+e.message);
+    }
+   }
+  }
+  try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
+  alert(fallas.length?("Subidas y confirmadas: "+ok+" de "+total+".\n\nNo se pudieron subir:\n"+fallas.join("\n")+"\n\nMándale este mensaje a Claude."):
+   ("Listo: las "+ok+" mediciones antiguas quedaron en el servicio y confirmadas.\nAvísale a Claude para vaciar mediciones.json."));
+ }catch(e){alert("No se completó: "+e.message);}
+ boton.disabled=false;boton.textContent="Subir mediciones antiguas al servicio (una sola vez)";
 });
 })();
 </script>

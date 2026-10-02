@@ -172,6 +172,13 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .evo-ref-btn{ width:100%; padding:10px; border-radius:8px; border:none; background:var(--azul); color:#fff; font-weight:800; font-size:13px; cursor:pointer; margin-top:2px; }
 .evo-ref-aviso{ font-size:11.5px; color:var(--danger); margin:6px 0 0; min-height:14px; }
 .evo-ref-editar{ background:none; border:none; color:var(--azul); font-size:11.5px; font-weight:700; text-decoration:underline; cursor:pointer; padding:0; margin-top:10px; display:block; }
+.evo-pin{ margin:14px 0 0; border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--surface); }
+.evo-pin .mt{ font-size:10.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--dorado); margin:0 0 6px; }
+.evo-pin p{ margin:0 0 8px; font-size:12.5px; color:var(--gris); line-height:1.45; }
+.evo-pin input{ width:100%; box-sizing:border-box; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; margin:0 0 8px; color:var(--blanco); font-size:18px; letter-spacing:.4em; text-align:center; }
+.evo-pin button{ width:100%; border:1px solid var(--dorado); background:transparent; color:var(--dorado); border-radius:10px; padding:10px; font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; cursor:pointer; }
+.evo-pin .err{ color:var(--danger); font-weight:700; font-size:12px; min-height:16px; margin:0; }
+.evo-pin-ok{ margin:12px 0 0; font-size:11.5px; color:var(--gris-soft); font-weight:700; }
 .evo-row{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:12.5px; }
 .evo-row span{ color:var(--gris-soft); font-weight:600; }
 .evo-row b{ color:var(--blanco); font-weight:800; }
@@ -572,10 +579,90 @@ const MEDICIONES_URL = "https://wgymadnsport-mediciones.encaladasara363.chatgpt.
  for(var i=0;i<texto.length;i++) h=Math.imul(h^texto.charCodeAt(i),16777619);
  return ("00000000"+(h>>>0).toString(16)).slice(-8);
  }
- function leerMedicionesEnVivo_(medid){
- if(!medid) return Promise.resolve(null);
+ /* PIN opcional de las mediciones (10/2026). Cada socio puede proteger su
+   evolución física con un PIN de 4 dígitos; quien no lo activa sigue viendo
+   todo solo con su nombre. El PIN lo revisa el servicio de mediciones (no
+   esta página): si un medid tiene PIN, el servicio responde
+   {protegido:true} sin datos, salvo que llegue el PIN correcto
+   (X-Wgym-Pin) o la clave de mediciones del mesón (X-Wgym-Clave), que la
+   dueña ya tiene guardada en sus equipos. Si el servicio todavía no
+   maneja PIN (no responde pinSoportado), todo funciona como antes. */
+var CLAVE_MED_ADMIN = "wgym_clave_mediciones_v1";
+function pinGuardado_(medid){ try{ return localStorage.getItem("wgym_pin_med_"+medid) || ""; }catch(e){ return ""; } }
+function guardarPin_(medid, pin){ try{ if(pin) localStorage.setItem("wgym_pin_med_"+medid, pin); else localStorage.removeItem("wgym_pin_med_"+medid); }catch(e){} }
+function claveAdminMed_(){ try{ return localStorage.getItem(CLAVE_MED_ADMIN) || ""; }catch(e){ return ""; } }
+function pedirMediciones_(medid, cabeceras){
  return fetch(MEDICIONES_URL+"?medid="+encodeURIComponent(medid)+"&_="+Date.now(),
-  {cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
+  {cache:"no-store", headers:cabeceras||{}})
+ .then(function(r){ return r.json()["catch"](function(){ return null; }).then(function(j){ return r.ok ? j : (j && j.error ? j : null); }); })
+ ["catch"](function(){ return null; });
+}
+function leerMedicionesEnVivo_(medid){
+ if(!medid) return Promise.resolve(null);
+ /* Primero sin cabeceras (así funciona igual con el servicio antiguo). */
+ return pedirMediciones_(medid).then(function(res){
+  if(!res || !res.protegido || res.socio) return res;
+  var pin = pinGuardado_(medid), clave = claveAdminMed_(), cab = {};
+  if(pin) cab["X-Wgym-Pin"] = pin;
+  if(clave) cab["X-Wgym-Clave"] = clave;
+  if(!pin && !clave) return res;
+  return pedirMediciones_(medid, cab).then(function(r2){
+   if(r2 && r2.ok && r2.socio) return r2;
+   if(r2 && r2.error === "pin incorrecto") guardarPin_(medid, "");
+   return { ok:true, protegido:true, pinSoportado:true, error:(r2 && r2.error) || "" };
+  });
+ });
+}
+function cajaPinBloqueo_(error){
+ var msg = error === "pin incorrecto" ? "PIN incorrecto. Inténtalo de nuevo." :
+           error === "bloqueado" ? "Demasiados intentos. Espera 15 minutos y vuelve a intentarlo." :
+           error ? "No se pudo comprobar el PIN. Revisa tu conexión." : "";
+ return '<p class="evo-kicker">Tu evolución física</p>' +
+  '<div class="evo-pin"><p class="mt">🔒 Mediciones protegidas</p>' +
+  '<p>Escribe tu PIN de 4 dígitos para ver tu evolución. Este celular lo recordará.</p>' +
+  '<input type="password" inputmode="numeric" maxlength="4" autocomplete="off" id="evoPinIn" placeholder="••••">' +
+  '<p class="err" id="evoPinErr">'+msg+'</p>' +
+  '<button type="button" id="evoPinVer">Ver mis mediciones</button>' +
+  '<p style="margin:8px 0 0;font-size:11.5px;color:var(--gris-soft)">¿Olvidaste tu PIN? Pide en recepción que lo quiten y crea uno nuevo.</p></div>';
+}
+function cajaPinCrear_(){
+ return '<div class="evo-pin" id="evoPinCrear"><p class="mt">🔒 Proteger mis mediciones (opcional)</p>' +
+  '<p>Si creas un PIN, nadie más podrá ver tu peso ni tu % de grasa escribiendo tu nombre. Tu QR de ingreso y tu rutina siguen igual, sin PIN.</p>' +
+  '<div id="evoPinForm" hidden>' +
+  '<input type="password" inputmode="numeric" maxlength="4" autocomplete="off" id="evoPinN1" placeholder="PIN (4 dígitos)">' +
+  '<input type="password" inputmode="numeric" maxlength="4" autocomplete="off" id="evoPinN2" placeholder="Repite el PIN">' +
+  '<p class="err" id="evoPinErr2"></p></div>' +
+  '<button type="button" id="evoPinCrearBtn">Crear PIN</button></div>';
+}
+function conectarPinBloqueo_(box, s){
+ var boton = box.querySelector("#evoPinVer"), campo = box.querySelector("#evoPinIn");
+ function enviar(){
+  var pin = campo.value.trim();
+  if(!/^\d{4}$/.test(pin)){ box.querySelector("#evoPinErr").textContent = "El PIN tiene 4 números."; return; }
+  guardarPin_(s.medid, pin); boton.disabled = true; boton.textContent = "Revisando...";
+  renderEvolucion(s);
+ }
+ boton.addEventListener("click", enviar);
+ campo.addEventListener("keydown", function(e){ if(e.key === "Enter") enviar(); });
+}
+function conectarPinCrear_(box, s){
+ var boton = box.querySelector("#evoPinCrearBtn"), form = box.querySelector("#evoPinForm"), err = box.querySelector("#evoPinErr2");
+ boton.addEventListener("click", function(){
+  if(form.hidden){ form.hidden = false; boton.textContent = "Guardar PIN"; box.querySelector("#evoPinN1").focus(); return; }
+  var a = box.querySelector("#evoPinN1").value.trim(), b = box.querySelector("#evoPinN2").value.trim();
+  if(!/^\d{4}$/.test(a)){ err.textContent = "El PIN debe tener 4 números."; return; }
+  if(a !== b){ err.textContent = "Los dos PIN no coinciden."; return; }
+  boton.disabled = true; boton.textContent = "Guardando..."; err.textContent = "";
+  fetch(MEDICIONES_URL+"/pin", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ medid:s.medid, pin:a }) })
+  .then(function(r){ return r.json(); })
+  .then(function(r){
+   if(!r || !r.ok) throw Error(r && r.error || "no se pudo guardar");
+   guardarPin_(s.medid, a); renderEvolucion(s);
+  })["catch"](function(e){
+   err.textContent = e.message === "ya tiene pin" ? "Ya tienes un PIN. Si lo olvidaste, pide en recepción que lo quiten." : "No se pudo guardar el PIN: " + e.message;
+   boton.disabled = false; boton.textContent = "Guardar PIN";
+  });
+ });
 }
 function unirMediciones_(historicas,nuevas){
  if(!historicas) return nuevas;
@@ -594,8 +681,13 @@ function renderEvolucion(s){
   return Promise.all([medicionesPromise,leerMedicionesEnVivo_(medid)]);
  }).then(function(res){
  var box=document.getElementById("evoCard");
- var historicas=socioMedido(res[0],s);
- var nuevas=res[1]&&res[1].ok?res[1].socio:null;
+ var vivo=res[1];
+ if(vivo&&vivo.protegido&&!vivo.socio){
+  box.hidden=false; box.innerHTML=cajaPinBloqueo_(vivo.error); conectarPinBloqueo_(box,s); return;
+ }
+ /* Con PIN activo no se mezcla el archivo público antiguo. */
+ var historicas=vivo&&vivo.protegido?null:socioMedido(res[0],s);
+ var nuevas=vivo&&vivo.ok?vivo.socio:null;
  var m=unirMediciones_(historicas,nuevas);
  if(!m || !m.registros || !m.registros.length){
  box.hidden = false;
@@ -625,7 +717,9 @@ function renderEvolucion(s){
  '<p class="evo-fecha">Última medición: '+dmy(ultimo.fecha)+'</p>' +
  rangoSaludable(m.sexo, ultimo.edad, ultimo.peso, ultimo.imc) +
  metaFitness(m.sexo, ultimo.grasa) +
- (historial ? '<p class="evo-hist-tit">Historial completo ('+regs.length+' mediciones)</p><div class="evo-hist">'+historial+'</div>' : '');
+ (historial ? '<p class="evo-hist-tit">Historial completo ('+regs.length+' mediciones)</p><div class="evo-hist">'+historial+'</div>' : '') +
+ (vivo&&vivo.pinSoportado ? (vivo.protegido ? '<p class="evo-pin-ok">🔒 Tus mediciones están protegidas con PIN.</p>' : cajaPinCrear_()) : '');
+ if(vivo&&vivo.pinSoportado&&!vivo.protegido) conectarPinCrear_(box,s);
  });
  }
 
