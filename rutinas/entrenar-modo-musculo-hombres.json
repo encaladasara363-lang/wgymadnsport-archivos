@@ -1,0 +1,364 @@
+{
+  "version": 1,
+  "id": "entrenar-modo-musculo-hombres",
+  "nombre": "MODO MÚSCULO · HOMBRES",
+  "nombreTam": 42,
+  "claveProgreso": "wgym_modo_musculo_hombres_v1_",
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Pecho",
+      "focus": "Pectorales · 60 min",
+      "warmup": "Bicicleta de spinning suave — 6 minutos",
+      "exercises": [
+        {
+          "name": "Press de pecho en banca plana en Smith",
+          "sets": "3 × 8-12",
+          "rest": "90 seg",
+          "equip": "Banco plano · Smith",
+          "muscle": "Pectorales · tríceps",
+          "tip": "Ajusta el banco bajo la barra, apoya ambos pies y baja al centro del pecho con control; empuja hacia arriba sin despegar la espalda.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e1-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Press inclinado con mancuernas",
+          "sets": "3 × 8-12",
+          "rest": "90 seg",
+          "equip": "Banco inclinado · mancuernas",
+          "muscle": "Pectoral superior · tríceps",
+          "tip": "Baja las mancuernas al nivel del pecho superior y empuja con la espalda apoyada.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e2-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Flexiones de brazos",
+          "sets": "3 × 8-15",
+          "rest": "75 seg",
+          "equip": "Suelo · colchoneta",
+          "muscle": "Pectorales",
+          "tip": "Separa las manos ligeramente más que los hombros y baja en bloque hasta acercar el pecho al suelo.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e3-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Aperturas de pecho en polea",
+          "sets": "3 × 10-15",
+          "rest": "75 seg",
+          "equip": "Poleas",
+          "muscle": "Pectorales",
+          "tip": "Da un paso al frente y junta las manos delante del pecho con codos suavemente flexionados.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e4-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Aperturas con mancuernas en banco plano",
+          "sets": "3 × 10-15",
+          "rest": "75 seg",
+          "equip": "Banco · mancuernas",
+          "muscle": "Pectorales",
+          "tip": "Con codos suaves, abre los brazos a los lados del pecho y júntalos en un arco controlado.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e5-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d1-e5-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 8 minutos suaves"
+    },
+    {
+      "weekday": "Martes",
+      "title": "Espalda",
+      "focus": "Dorsales y espalda media · 60 min",
+      "warmup": "Remadora suave — 6 minutos",
+      "exercises": [
+        {
+          "name": "Dominadas con agarre pronado",
+          "sets": "3 × 6-10",
+          "rest": "90 seg",
+          "equip": "Barra de dominadas",
+          "muscle": "Dorsales · bíceps",
+          "tip": "Desde brazos extendidos, sube el pecho hacia la barra sin balancear el tronco; usa asistencia si es necesario.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e1-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Remo inclinado con barra",
+          "sets": "3 × 8-12",
+          "rest": "90 seg",
+          "equip": "Barra · discos",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Inclina el torso con espalda neutra y lleva la barra hacia las costillas bajas.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e2-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Jalón de brazos rectos en polea",
+          "sets": "3 × 10-15",
+          "rest": "75 seg",
+          "equip": "Polea alta · barra",
+          "muscle": "Dorsales",
+          "tip": "Baja la barra hacia los muslos manteniendo una ligera flexión de codos y el torso quieto.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e3-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Jalón unilateral en polea alta",
+          "sets": "3 × 10-12 por lado",
+          "rest": "75 seg",
+          "equip": "Polea alta · asa",
+          "muscle": "Dorsales",
+          "tip": "Lleva el codo de un brazo hacia la cadera manteniendo el torso estable.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e4-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Pullover con mancuerna en banco",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "equip": "Banco · mancuerna",
+          "muscle": "Dorsales · pectorales",
+          "tip": "Con ambos pies firmes, lleva una mancuerna detrás de la cabeza con control y vuelve sobre el pecho.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e5-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d2-e5-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Remadora — 8 minutos suaves"
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Piernas completas",
+      "focus": "Único día de piernas · 60 min",
+      "warmup": "Bicicleta de spinning suave — 6 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla búlgara con mancuernas",
+          "sets": "3 × 8-10 por pierna",
+          "rest": "90 seg",
+          "equip": "Banco · mancuernas",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Apoya el empeine trasero en el banco y baja con control sobre la pierna delantera.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e1-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Prensa de piernas a una pierna",
+          "sets": "3 × 10-12 por pierna",
+          "rest": "90 seg",
+          "equip": "Prensa inclinada",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Coloca un pie centrado en la plataforma, mantén la pelvis apoyada y empuja sin bloquear la rodilla.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e2-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Buenos días con barra",
+          "sets": "3 × 8-12",
+          "rest": "90 seg",
+          "equip": "Barra",
+          "muscle": "Isquiotibiales · glúteos",
+          "tip": "Con la barra estable sobre la parte alta de la espalda, lleva la cadera atrás y mantén la espalda neutra.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e3-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e3-final.webp"
+          ],
+          "formato": "alto"
+        },
+        {
+          "name": "Subida al banco con mancuernas",
+          "sets": "3 × 10 por pierna",
+          "rest": "75 seg",
+          "equip": "Banco estable · mancuernas",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Sube al banco impulsándote con la pierna que está arriba y baja lentamente.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e4-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e4-final.webp"
+          ],
+          "formato": "ancho"
+        },
+        {
+          "name": "Elevación de talones sentado con mancuernas",
+          "sets": "3 × 12-15",
+          "rest": "60 seg",
+          "equip": "Banco · mancuernas · plataforma",
+          "muscle": "Pantorrillas",
+          "tip": "Apoya las mancuernas sobre los muslos, sube los talones y baja sin rebotar.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e5-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d3-e5-final.webp"
+          ],
+          "formato": "ancho"
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 6 minutos suaves"
+    },
+    {
+      "weekday": "Jueves",
+      "title": "Hombros",
+      "focus": "Deltoides y trapecios · 60 min",
+      "warmup": "Trotadora curva suave — 6 minutos",
+      "exercises": [
+        {
+          "name": "Press Arnold sentado",
+          "sets": "3 × 8-12",
+          "rest": "90 seg",
+          "equip": "Banco · mancuernas",
+          "muscle": "Hombros",
+          "tip": "Parte con palmas hacia el rostro y gira las manos al empujar por encima de la cabeza.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e1-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Elevación lateral unilateral en polea",
+          "sets": "3 × 12-15 por lado",
+          "rest": "60 seg",
+          "equip": "Polea baja · asa",
+          "muscle": "Deltoides laterales",
+          "tip": "Eleva el brazo a un lado hasta la altura del hombro sin girar el torso.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e2-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Elevación frontal con mancuernas",
+          "sets": "3 × 12-15",
+          "rest": "60 seg",
+          "equip": "Mancuernas",
+          "muscle": "Deltoides anteriores",
+          "tip": "Sube ambos brazos al frente hasta la altura de los hombros sin balancearte.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e3-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Encogimiento de hombros con mancuernas",
+          "sets": "3 × 10-15",
+          "rest": "75 seg",
+          "equip": "Mancuernas",
+          "muscle": "Trapecios",
+          "tip": "Con los brazos rectos, eleva los hombros hacia las orejas, pausa y baja con control; evita girarlos.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e4-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Remo al mentón con cuerda en polea baja",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "equip": "Polea baja · cuerda",
+          "muscle": "Hombros · trapecios",
+          "tip": "Lleva la cuerda hacia la parte alta del pecho con los codos hacia los lados, sin subir más allá de un rango cómodo.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e5-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d4-e5-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos cómodos"
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Brazos y abdomen",
+      "focus": "Bíceps, tríceps y abdomen · 60 min",
+      "warmup": "Remadora suave — 6 minutos",
+      "exercises": [
+        {
+          "name": "Curl martillo con mancuernas",
+          "sets": "3 × 10-12",
+          "rest": "60 seg",
+          "equip": "Mancuernas",
+          "muscle": "Bíceps · braquial",
+          "tip": "Mantén las palmas mirándose y los codos junto al torso durante toda la subida.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e1-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Curl de bíceps en polea baja",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "equip": "Polea baja · barra recta",
+          "muscle": "Bíceps",
+          "tip": "Con agarre supino y codos fijos junto al tronco, lleva la barra hacia el pecho.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e2-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e2-final.webp"
+          ],
+          "formato": "ancho"
+        },
+        {
+          "name": "Extensión de tríceps sobre la cabeza en polea",
+          "sets": "3 × 10-15",
+          "rest": "60 seg",
+          "equip": "Polea · cuerda",
+          "muscle": "Tríceps",
+          "tip": "Colócate de espaldas a la polea y extiende los codos sin mover la parte superior de los brazos.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e3-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Fondos de tríceps en banco",
+          "sets": "3 × 8-12",
+          "rest": "75 seg",
+          "equip": "Banco estable",
+          "muscle": "Tríceps",
+          "tip": "Apoya las manos en el banco y flexiona los codos en un rango cómodo, manteniendo la espalda cerca del borde.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e4-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Crunch de abdomen en polea alta",
+          "sets": "3 × 12-15",
+          "rest": "60 seg",
+          "equip": "Polea alta · cuerda",
+          "muscle": "Abdomen",
+          "tip": "Arrodíllate, fija las caderas y acerca las costillas a la pelvis sin tirar con los brazos.",
+          "img": [
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e5-inicio.webp",
+            "img/rutinas/entrenar-modo-musculo-hombres/d5-e5-final.webp"
+          ],
+          "formato": "plancha"
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Remadora — 8 minutos suaves"
+    }
+  ]
+}

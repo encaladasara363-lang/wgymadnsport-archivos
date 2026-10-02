@@ -1,0 +1,259 @@
+{
+  "version": 1,
+  "id": "entrenar-pulso-firme",
+  "nombre": "A PULSO FIRME",
+  "claveProgreso": "wgym_hombres_pulso_firme_v1_",
+  "diasSemana": [
+    0,
+    2,
+    4
+  ],
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Pecho · hombros · tríceps",
+      "focus": "Empuje avanzado · 60 minutos",
+      "warmup": "Movilidad y series de aproximación — 6 minutos",
+      "exercises": [
+        {
+          "name": "Press banca plano en Smith",
+          "sets": "4 × 4-6",
+          "rest": "180 seg",
+          "equip": "Smith · banco plano",
+          "muscle": "Pectorales · tríceps",
+          "tip": "Coloca el banco alineado con la barra, pies apoyados. Baja al centro del pecho y empuja con control.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d1-e1-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d1-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Press de pecho sentado en máquina",
+          "sets": "4 × 4-6",
+          "rest": "180 seg",
+          "equip": "Máquina de press sentado",
+          "muscle": "Pectorales · tríceps",
+          "tip": "Ajusta el asiento para que los agarres queden a la altura del pecho; mantén espalda apoyada.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d1-e2-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d1-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Press inclinado con mancuernas",
+          "sets": "4 × 8-10",
+          "rest": "90 seg",
+          "equip": "Banco inclinado · mancuernas",
+          "muscle": "Pectoral superior",
+          "tip": "Fija los pies y baja las mancuernas a los lados del pecho alto; sube sin chocar los pesos.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d1-e3-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d1-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Press militar sentado en máquina",
+          "sets": "4 × 6-8",
+          "rest": "120 seg",
+          "equip": "Máquina de hombros",
+          "muscle": "Deltoides · tríceps",
+          "tip": "Siéntate de frente, espalda y pelvis apoyadas; empuja sin arquear la zona lumbar.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d1-e4-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d1-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Elevación lateral con mancuernas",
+          "sets": "4 × 10-12",
+          "rest": "60 seg",
+          "equip": "Mancuernas",
+          "muscle": "Deltoides laterales",
+          "tip": "Eleva lateralmente con codos suaves y sin balancear el tronco; controla la bajada.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d1-e5-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d1-e5-final.webp"
+          ]
+        },
+        {
+          "name": "Extensión de tríceps con cuerda",
+          "sets": "4 × 8-12",
+          "rest": "75 seg",
+          "equip": "Polea alta · cuerda",
+          "muscle": "Tríceps",
+          "tip": "Codos cerca del torso; extiende y separa los extremos de la cuerda abajo.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d1-e6-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d1-e6-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio opcional",
+      "cooldown": "Elige bicicleta, remadora o trotadora curva — 10 minutos opcionales."
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Espalda · bíceps · trapecios",
+      "focus": "Tirón avanzado · 60 minutos",
+      "warmup": "Movilidad y series de aproximación — 6 minutos",
+      "exercises": [
+        {
+          "name": "Jalón al pecho agarre ancho",
+          "sets": "4 × 4-6",
+          "rest": "180 seg",
+          "equip": "Polea alta · barra",
+          "muscle": "Dorsales",
+          "tip": "Tira la barra hacia la parte alta del pecho; lleva codos abajo sin balancear el tronco.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d2-e1-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d2-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Remo frontal en máquina",
+          "sets": "4 × 5-6",
+          "rest": "150 seg",
+          "equip": "Máquina de remo frontal",
+          "muscle": "Espalda media",
+          "tip": "Pecho estable en el apoyo; lleva las asas hacia las costillas sin impulso.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d2-e2-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d2-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Remo bajo sentado en polea",
+          "sets": "4 × 8-10",
+          "rest": "90 seg",
+          "equip": "Polea baja · agarre cerrado",
+          "muscle": "Dorsales · romboides",
+          "tip": "Mantén el tronco estable y tira hacia el abdomen; evita inclinarte hacia atrás.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d2-e3-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d2-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Jalón de brazos rectos en polea",
+          "sets": "4 × 8-12",
+          "rest": "75 seg",
+          "equip": "Polea alta · barra",
+          "muscle": "Dorsales",
+          "tip": "Con codos apenas flexionados, lleva la barra hacia los muslos sin mover el tronco.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d2-e4-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d2-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Encogimiento de trapecios con mancuernas",
+          "sets": "4 × 8-12",
+          "rest": "75 seg",
+          "equip": "Mancuernas pesadas",
+          "muscle": "Trapecios",
+          "tip": "Eleva ambos hombros en línea recta, pausa y baja con control; evita girarlos.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d2-e5-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d2-e5-final.webp"
+          ]
+        },
+        {
+          "name": "Curl de bíceps con mancuernas",
+          "sets": "4 × 8-12",
+          "rest": "75 seg",
+          "equip": "Mancuernas",
+          "muscle": "Bíceps",
+          "tip": "Mantén codos próximos al cuerpo y eleva sin balancear la espalda.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d2-e6-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d2-e6-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio opcional",
+      "cooldown": "Elige bicicleta, remadora o trotadora curva — 10 minutos opcionales."
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Piernas · pantorrillas · abdomen",
+      "focus": "Tren inferior avanzado · 60 minutos",
+      "warmup": "Movilidad y series de aproximación — 6 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla en Smith",
+          "sets": "4 × 4-6",
+          "rest": "180 seg",
+          "equip": "Smith · barra guiada",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Coloca los pies estables; baja controlado manteniendo rodillas alineadas y talones apoyados.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d3-e1-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d3-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Prensa de piernas inclinada",
+          "sets": "4 × 4-6",
+          "rest": "180 seg",
+          "equip": "Prensa inclinada",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Espalda y pelvis apoyadas; baja hasta un rango controlado sin despegar la cadera.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d3-e2-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d3-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Peso muerto rumano con mancuernas",
+          "sets": "4 × 6-8",
+          "rest": "120 seg",
+          "equip": "Mancuernas pesadas",
+          "muscle": "Femorales · glúteos",
+          "tip": "Lleva la cadera atrás y baja las mancuernas cerca de las piernas con espalda neutra.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d3-e3-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d3-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Curl femoral a una pierna",
+          "sets": "4 × 8-10 por pierna",
+          "rest": "90 seg",
+          "equip": "Máquina femoral unilateral",
+          "muscle": "Isquiotibiales",
+          "tip": "Apoya el torso; flexiona una rodilla contra la palanca sin mover la cadera ni balancearte.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d3-e4-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d3-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Elevación de talones en Smith",
+          "sets": "4 × 10-12",
+          "rest": "60 seg",
+          "equip": "Smith · plataforma baja",
+          "muscle": "Pantorrillas",
+          "tip": "Con piernas casi rectas, sube sobre la punta de los pies y baja lento sin rebotar.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d3-e5-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d3-e5-final.webp"
+          ]
+        },
+        {
+          "name": "Crunch abdominal en polea alta",
+          "sets": "4 × 10-12",
+          "rest": "60 seg",
+          "equip": "Polea alta · cuerda",
+          "muscle": "Abdomen",
+          "tip": "De rodillas, sujeta ambos extremos de la cuerda cerca de la cabeza y acerca costillas a pelvis.",
+          "img": [
+            "img/rutinas/entrenar-pulso-firme/d3-e6-inicio.webp",
+            "img/rutinas/entrenar-pulso-firme/d3-e6-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio opcional",
+      "cooldown": "Elige bicicleta, remadora o trotadora curva — 10 minutos opcionales."
+    }
+  ]
+}

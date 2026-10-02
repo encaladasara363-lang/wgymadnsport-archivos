@@ -1,0 +1,247 @@
+{
+  "version": 1,
+  "id": "entrenar-mujeres3",
+  "nombre": "BAJA DE PESO MUJERES",
+  "claveProgreso": "wgym_mujeres3_v1_",
+  "diasSemana": [
+    0,
+    2,
+    4
+  ],
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Cuerpo completo A",
+      "focus": "Primer contacto con las máquinas · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla en silla (asistida)",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "cuerpo",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Ponte de espaldas a una silla o banco. Baja como si te fueras a sentar, toca apenas el asiento con los glúteos y vuelve a subir sin dejarte caer. Te ayuda a aprender el movimiento de la sentadilla sin miedo a perder el equilibrio.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d1-e1-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d1-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Aperturas con mancuernas en banco",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Pectorales",
+          "tip": "Acostada en el banco, mancuernas arriba con un leve quiebre en el codo fijo todo el movimiento. Abre los brazos hacia los lados bajando hasta sentir el estiramiento en el pecho, sin pasarte, y junta arriba apretando.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d1-e2-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d1-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Remo sentado en polea",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Espalda recta, pecho afuera. Tira de la barra o las manijas hacia la cintura llevando los codos atrás y apretando los omóplatos, y vuelve controlada sin dejar que el peso te estire de golpe.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d1-e3-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d1-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevaciones laterales con mancuernas",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Deltoides laterales",
+          "tip": "Mancuernas livianas. Sube los brazos hacia los lados hasta la altura de los hombros, con un leve quiebre en el codo, y baja controlado. No uses impulso con la espalda.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d1-e4-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d1-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Curl de bíceps con mancuernas",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Bíceps",
+          "tip": "De pie, codos pegados al cuerpo. Sube la mancuerna girando la muñeca hacia arriba y baja controlado hasta estirar el brazo completo. No balancees el cuerpo para ayudarte.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d1-e5-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d1-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Plancha con rodillas apoyadas",
+          "sets": "3 × 20 seg",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Abdomen · core",
+          "tip": "Apoya rodillas, antebrazos y la punta de los pies. Cuerpo en línea recta desde la cabeza hasta las rodillas, guata apretada. Es la versión más fácil de la plancha para empezar a fortalecer el centro.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d1-e6-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d1-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos suaves"
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Cuerpo completo B",
+      "focus": "Sumando movimientos nuevos · 60 min",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Extensión de cuádriceps en máquina",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "Sentada, espalda apoyada en el respaldo. Estira las rodillas hasta casi quedar rectas y baja controlado, sin soltar el peso de golpe. Como estás sentada y apoyada, no hay que preocuparse del equilibrio.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d2-e1-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d2-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Puente de glúteo",
+          "sets": "3 × 15",
+          "rest": "60 seg",
+          "equip": "cuerpo",
+          "muscle": "Glúteos",
+          "tip": "Acostada boca arriba, rodillas dobladas y pies apoyados en el piso. Sube la cadera apretando los glúteos hasta formar una línea recta entre hombros y rodillas, aguanta un segundo arriba y baja controlado.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d2-e2-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d2-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Extensión de tríceps en polea",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Tríceps",
+          "tip": "Codos pegados al cuerpo y fijos durante todo el movimiento. Estira los brazos hacia abajo apretando el tríceps y vuelve controlado, sin que la barra suba de golpe.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d2-e3-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d2-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Jalón al pecho en polea",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Dorsales",
+          "tip": "Sentada, piernas afirmadas bajo el soporte. Tira la barra hacia el pecho llevando los codos hacia abajo y atrás, sin balancear el cuerpo para ayudarte, y vuelve controlada.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d2-e4-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d2-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Curl femoral en máquina",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Isquiotibiales",
+          "tip": "Siéntate o acuéstate en la máquina según el modelo, dobla las rodillas llevando el peso hacia los glúteos y vuelve controlada, sin despegar la cadera del asiento.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d2-e5-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d2-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Abdominales (crunch)",
+          "sets": "3 × 15",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Abdomen · core",
+          "tip": "Acostada boca arriba, rodillas dobladas y manos livianas cerca de las orejas, sin tirar del cuello. Sube los hombros despegando la espalda baja del piso y baja controlado.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d2-e6-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d2-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 8 minutos suaves"
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Cuerpo completo C",
+      "focus": "Cierre de semana · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Prensa de piernas",
+          "sets": "3 × 12",
+          "rest": "75 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Pies a la altura de los hombros sobre la plataforma. Baja sin despegar la espalda del respaldo y sin estirar del todo las rodillas al subir. Al ir sentada y con la espalda apoyada, es de las más seguras para partir.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d3-e1-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d3-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Hip thrust con disco",
+          "sets": "3 × 12",
+          "rest": "75 seg",
+          "equip": "disco",
+          "muscle": "Glúteos",
+          "tip": "Espalda alta apoyada en el banco, disco sobre la cadera sujeto con las manos. Empuja con los talones y aprieta los glúteos arriba hasta quedar recta, baja controlada. Empieza sin peso hasta sentir el movimiento.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d3-e2-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d3-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Press de banca con mancuernas",
+          "sets": "3 × 10",
+          "rest": "75 seg",
+          "equip": "mancuerna",
+          "muscle": "Pectorales · tríceps",
+          "tip": "Acostada en el banco, baja las mancuernas a los lados del pecho y sube sin bloquear los codos de golpe arriba. Al estar acostada y con la espalda apoyada, es un movimiento bien controlado.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d3-e3-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d3-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevación de piernas acostada",
+          "sets": "3 × 12",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Abdomen inferior",
+          "tip": "Acostada boca arriba, manos a los costados para apoyo. Sube las piernas estiradas o con las rodillas dobladas (más fácil) hasta formar un ángulo recto y baja controlada, sin dejarlas caer de golpe.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d3-e4-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d3-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Flexión en la pared",
+          "sets": "3 × 12",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Pectorales · tríceps",
+          "tip": "De pie frente a la pared, manos apoyadas a la altura de los hombros. Dobla los codos acercando el pecho a la pared y empuja para volver. Es la forma más fácil de aprender el movimiento de flexión antes de hacerlo en el piso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres3/d3-e5-inicio.jpg",
+            "img/rutinas/entrenar-mujeres3/d3-e5-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos suaves"
+    }
+  ]
+}

@@ -1,0 +1,363 @@
+{
+  "version": 1,
+  "id": "entrenar-full-body-principiantes",
+  "nombre": "FULL BODY MUJERES",
+  "claveProgreso": "wgym_full_body_principiantes_v1_",
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Piernas, pecho y espalda",
+      "focus": "5 ejercicios · 3 series · descanso según cada movimiento",
+      "warmup": "Preparación articular suave — 5 minutos",
+      "exercises": [
+        {
+          "name": "Prensa de piernas",
+          "sets": "3 × 10-12",
+          "rest": "90 seg",
+          "tip": "Apoya toda la planta del pie; flexiona rodillas con control y empuja sin bloquearlas.",
+          "equip": "Prensa",
+          "muscle": "Cuádriceps · glúteos",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d1-e1-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d1-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Press de pecho en máquina",
+          "sets": "3 × 8-12",
+          "rest": "90 seg",
+          "tip": "Ajusta el asiento a la altura del pecho; empuja sin elevar los hombros y vuelve lento.",
+          "equip": "Máquina",
+          "muscle": "Pectorales · tríceps",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d1-e2-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d1-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Remo sentado en polea",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Mantén el tronco estable; lleva la empuñadura hacia el abdomen y junta suavemente las escápulas.",
+          "equip": "Polea",
+          "muscle": "Espalda media",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d1-e3-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d1-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Puente de glúteos",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "tip": "Con pies apoyados y rodillas flexionadas, eleva la pelvis contrayendo glúteos sin arquear la espalda.",
+          "equip": "Colchoneta",
+          "muscle": "Glúteos",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d1-e4-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d1-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Plancha de antebrazos",
+          "sets": "3 × 20-30 s",
+          "rest": "60 seg",
+          "tip": "Alinea hombros, caderas y tobillos; aprieta abdomen y respira sin hundir la zona lumbar.",
+          "equip": "Colchoneta",
+          "muscle": "Abdomen",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d1-e5-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d1-e5-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio opcional",
+      "cooldown": "Elige bicicleta, remadora o trotadora curva — 10 minutos opcionales."
+    },
+    {
+      "weekday": "Martes",
+      "title": "Fuerza y estabilidad",
+      "focus": "5 ejercicios · 3 series · descanso según cada movimiento",
+      "warmup": "Preparación articular suave — 5 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla con mancuernas",
+          "sets": "3 × 10",
+          "rest": "90 seg",
+          "tip": "Sujeta mancuernas livianas a los lados; baja entre las caderas y sube empujando el suelo.",
+          "equip": "Mancuernas",
+          "muscle": "Cuádriceps · glúteos",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d2-e1-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d2-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Jalón al pecho en polea",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Lleva la barra hacia la parte alta del pecho con codos hacia abajo; evita balancearte.",
+          "equip": "Polea",
+          "muscle": "Dorsales",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d2-e2-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d2-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Curl femoral acostada",
+          "sets": "3 × 10-12",
+          "rest": "60 seg",
+          "tip": "Ajusta la máquina a tu altura; flexiona las rodillas sin levantar la pelvis del banco.",
+          "equip": "Máquina",
+          "muscle": "Isquiotibiales",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d2-e3-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d2-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Press de hombros en máquina",
+          "sets": "3 × 8-10",
+          "rest": "75 seg",
+          "tip": "Empuja las asas por encima de la cabeza sin encoger los hombros; baja con control.",
+          "equip": "Máquina",
+          "muscle": "Hombros · tríceps",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d2-e4-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d2-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Pallof press en polea",
+          "sets": "3 × 10 por lado",
+          "rest": "45 seg",
+          "tip": "De lado a la polea, extiende las manos frente al pecho sin permitir que gire el torso.",
+          "equip": "Polea",
+          "muscle": "Abdomen",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d2-e5-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d2-e5-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio opcional",
+      "cooldown": "Elige bicicleta, remadora o trotadora curva — 10 minutos opcionales."
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Cuerpo completo",
+      "focus": "5 ejercicios · 3 series · descanso según cada movimiento",
+      "warmup": "Preparación articular suave — 5 minutos",
+      "exercises": [
+        {
+          "name": "Subida a plataforma baja",
+          "sets": "3 × 8 por pierna",
+          "rest": "75 seg",
+          "tip": "Sube a un escalón bajo apoyando todo el pie; impulsa con la pierna de arriba y baja con control.",
+          "equip": "Plataforma",
+          "muscle": "Cuádriceps · glúteos",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d3-e1-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d3-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Peso muerto con mancuernas",
+          "sets": "3 × 10",
+          "rest": "90 seg",
+          "tip": "Con una mancuerna en cada mano frente a los muslos, empuja la cadera atrás con espalda neutra y baja las mancuernas pegadas a las piernas; sube extendiendo caderas, sin tirar con los brazos.",
+          "equip": "Mancuernas",
+          "muscle": "Glúteos · femorales",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d3-e2-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d3-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Press de pecho en polea",
+          "sets": "3 × 10",
+          "rest": "75 seg",
+          "tip": "Con un pie adelante, empuja las asas al frente manteniendo tronco estable y hombros bajos.",
+          "equip": "Polea",
+          "muscle": "Pectorales",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d3-e3-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d3-e3-final.webp"
+          ],
+          "formato": "alto"
+        },
+        {
+          "name": "Elevación de talones",
+          "sets": "3 × 12-15",
+          "rest": "45 seg",
+          "tip": "Eleva talones sin rebotar; pausa arriba y baja lento manteniendo el equilibrio.",
+          "equip": "Máquina",
+          "muscle": "Pantorrillas",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d3-e4-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d3-e4-final.webp"
+          ],
+          "formato": "ancho"
+        },
+        {
+          "name": "Extensión de tríceps con cuerda",
+          "sets": "3 × 10-12",
+          "rest": "60 seg",
+          "tip": "Mantén codos junto al torso; estira los brazos y vuelve sin mover hombros.",
+          "equip": "Polea",
+          "muscle": "Tríceps",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d3-e5-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d3-e5-final.webp"
+          ],
+          "formato": "ancho"
+        }
+      ],
+      "cooldownTitle": "Cardio opcional",
+      "cooldown": "Elige bicicleta, remadora o trotadora curva — 10 minutos opcionales."
+    },
+    {
+      "weekday": "Jueves",
+      "title": "Movilidad y abdomen",
+      "focus": "5 ejercicios · 3 series · descanso según cada movimiento",
+      "warmup": "Preparación articular suave — 5 minutos",
+      "exercises": [
+        {
+          "name": "Paso lateral con banda en los tobillos",
+          "sets": "3 × 12 por lado",
+          "rest": "45 seg",
+          "tip": "Banda alrededor de ambos tobillos. Da pasos cortos hacia un lado con rodillas levemente flexionadas, sin juntar por completo los pies.",
+          "equip": "Banda elástica",
+          "muscle": "Glúteo medio",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d4-e1-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d4-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Dead bug",
+          "sets": "3 × 8 por lado",
+          "rest": "45 seg",
+          "tip": "Boca arriba, baja brazo y pierna contrarios sin despegar la zona lumbar del suelo.",
+          "equip": "Colchoneta",
+          "muscle": "Abdomen",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d4-e2-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d4-e2-final.webp"
+          ]
+        },
+        {
+          "name": "Plancha lateral con apoyo",
+          "sets": "3 × 15-20 s por lado",
+          "rest": "45 seg",
+          "tip": "Apoya antebrazo y rodillas si es necesario; eleva la cadera sin girar el torso.",
+          "equip": "Colchoneta",
+          "muscle": "Oblicuos",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d4-e3-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d4-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Movilidad gato-vaca",
+          "sets": "3 × 6-8 ciclos",
+          "rest": "30 seg",
+          "tip": "En cuadrupedia, redondea y extiende suavemente la columna al ritmo de la respiración.",
+          "equip": "Colchoneta",
+          "muscle": "Columna · movilidad",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d4-e4-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d4-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Estiramiento de pantorrilla",
+          "sets": "3 × 20 s por lado",
+          "rest": "30 seg",
+          "tip": "Apoya manos en pared, deja un pie atrás y acerca la cadera manteniendo su talón en el suelo.",
+          "equip": "Pared",
+          "muscle": "Pantorrillas",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d4-e5-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d4-e5-final.webp"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio opcional",
+      "cooldown": "Elige bicicleta, remadora o trotadora curva — 10 minutos opcionales."
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Glúteos y cuerpo completo",
+      "focus": "5 ejercicios · 3 series · descanso según cada movimiento",
+      "warmup": "Preparación articular suave — 5 minutos",
+      "exercises": [
+        {
+          "name": "Hip thrust con barra",
+          "sets": "3 × 10-12",
+          "rest": "90 seg",
+          "tip": "Apoya la espalda alta en un banco firme, barra acolchada sobre la pelvis. Sube hasta alinear tronco y muslos y baja con control.",
+          "equip": "Barra y banco",
+          "muscle": "Glúteos",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d5-e1-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d5-e1-final.webp"
+          ]
+        },
+        {
+          "name": "Sentadilla goblet con mancuerna",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Sujeta una mancuerna frente al pecho, baja con el pecho erguido y los talones apoyados.",
+          "equip": "Mancuerna",
+          "muscle": "Cuádriceps · glúteos",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d5-e2-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d5-e2-final.webp"
+          ],
+          "formato": "ancho"
+        },
+        {
+          "name": "Remo frontal en máquina",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Con el pecho estable, lleva las asas hacia ti y aproxima los omóplatos sin impulso.",
+          "equip": "Máquina",
+          "muscle": "Espalda media",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d5-e3-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d5-e3-final.webp"
+          ]
+        },
+        {
+          "name": "Peso muerto sumo con mancuerna",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Con pies más separados que las caderas, baja la mancuerna entre las piernas y sube extendiendo la cadera.",
+          "equip": "Mancuerna",
+          "muscle": "Glúteos · aductores",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d5-e4-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d5-e4-final.webp"
+          ]
+        },
+        {
+          "name": "Press de pecho con mancuernas en banco",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "tip": "Apoya espalda y pies, baja las mancuernas a los lados del pecho y empuja con control.",
+          "equip": "Banco y mancuernas",
+          "muscle": "Pectorales · tríceps",
+          "img": [
+            "img/rutinas/entrenar-full-body-principiantes/d5-e5-inicio.webp",
+            "img/rutinas/entrenar-full-body-principiantes/d5-e5-final.webp"
+          ],
+          "formato": "plancha"
+        }
+      ],
+      "cooldownTitle": "Cardio opcional",
+      "cooldown": "Elige bicicleta, remadora o trotadora curva — 10 minutos opcionales."
+    }
+  ]
+}

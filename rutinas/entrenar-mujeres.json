@@ -1,0 +1,273 @@
+{
+  "version": 1,
+  "id": "entrenar-mujeres",
+  "nombre": "PRINCIPIANTE MUJERES",
+  "claveProgreso": "wgym_entrena_mujeres_v1_",
+  "visual": "video",
+  "cardio": "texto",
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Piernas y Glúteos",
+      "focus": "Tren inferior · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla con mancuerna",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Sostén una mancuerna o kettlebell pegada al pecho; baja como si te sentaras en una silla, rodillas hacia afuera, y sube empujando con los talones. ¿Muy exigente? Practica primero sin peso, apoyada en una silla, tocando apenas con los glúteos.",
+          "video": "assets/sentadilla.mp4?v=5"
+        },
+        {
+          "name": "Extensión de piernas en máquina",
+          "sets": "3 × 12-15",
+          "rest": "45 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "Siéntate con la espalda apoyada, extiende las rodillas sin bloquearlas de golpe y baja controlado.",
+          "video": "assets/extension_piernas.mp4?v=5"
+        },
+        {
+          "name": "Curl femoral en máquina",
+          "sets": "3 × 12-15",
+          "rest": "45 seg",
+          "equip": "maquina",
+          "muscle": "Isquiotibiales",
+          "tip": "Dobla las rodillas llevando el rodillo hacia los glúteos, controla la vuelta sin soltar de golpe.",
+          "video": "assets/curl_femoral_mujer.mp4?v=5"
+        },
+        {
+          "name": "Zancadas con TRX",
+          "sets": "3 × 10 por pierna",
+          "rest": "60 seg",
+          "equip": "trx",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Sujétate de las correas TRX para mantener el equilibrio; paso largo al frente, baja la rodilla trasera casi al suelo y sube empujando con el talón delantero. ¿Muy exigente? Sostente con ambas manos y da pasos más cortos.",
+          "video": "assets/zancada_trx.mp4?v=5"
+        },
+        {
+          "name": "Elevación de talones de pie",
+          "sets": "3 × 15-20",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Pantorrillas",
+          "tip": "De pie, sube lo más alto posible apoyado en las puntas de los pies y baja controlado.",
+          "video": "assets/elevacion_talones.mp4?v=5"
+        }
+      ],
+      "cooldownTitle": "Estiramiento final",
+      "cooldown": "Estira cuádriceps, isquiotibiales y gemelos 20-30 seg por lado.",
+      "cooldownVideo": "assets/estiramiento_final.mp4?v=5"
+    },
+    {
+      "weekday": "Martes",
+      "title": "Espalda y Bíceps",
+      "focus": "Tracción superior · 60 min",
+      "warmup": "Calentamiento 8 minutos en bicicleta",
+      "exercises": [
+        {
+          "name": "Jalón al pecho en polea",
+          "sets": "3 × 10-12",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Dorsales",
+          "tip": "Tira la barra hacia el pecho llevando los codos hacia abajo, sin balancear el cuerpo.",
+          "video": "assets/jalon_pecho.mp4?v=5"
+        },
+        {
+          "name": "Remo sentado en polea",
+          "sets": "3 × 10-12",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Espalda recta, tira el agarre hacia el abdomen apretando los omóplatos, sin encorvarte.",
+          "video": "assets/remo_sentado.mp4?v=5"
+        },
+        {
+          "name": "Curl de bíceps en banco Scott",
+          "sets": "3 × 10-12",
+          "rest": "45 seg",
+          "equip": "maquina",
+          "muscle": "Bíceps",
+          "tip": "Codos apoyados; sube y baja controlado sin balancear el cuerpo para ayudarte con impulso.",
+          "video": "assets/curl_biceps_scott.mp4?v=5"
+        },
+        {
+          "name": "Curl de bíceps con mancuernas",
+          "sets": "3 × 10-12",
+          "rest": "45 seg",
+          "equip": "mancuerna",
+          "muscle": "Bíceps",
+          "tip": "Codos pegados al cuerpo; sube y baja sin balancear la espalda.",
+          "video": "assets/curl_biceps_mancuerna.mp4?v=5"
+        },
+        {
+          "name": "Remo con mancuerna a una mano",
+          "sets": "3 × 10-12 por lado",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Apoya una rodilla y una mano en el banco, espalda recta; tira la mancuerna hacia la cadera llevando el codo hacia atrás.",
+          "video": "assets/remo_una_mano.mp4?v=5"
+        }
+      ],
+      "cooldownTitle": "Estiramiento final",
+      "cooldown": "Estira espalda y brazos 20-30 seg por lado.",
+      "cooldownVideo": "assets/estiramiento_espalda_brazo.mp4?v=5"
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Pecho y Tríceps",
+      "focus": "Empuje superior · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Press de banca con mancuernas",
+          "sets": "3 × 10-12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Pectorales · tríceps",
+          "tip": "Baja las mancuernas controlada hasta la altura del pecho y empuja sin bloquear los codos de golpe.",
+          "video": "assets/press_banca_mancuernas_mujer.mp4?v=5"
+        },
+        {
+          "name": "Aperturas con mancuernas en banco",
+          "sets": "3 × 12-15",
+          "rest": "45 seg",
+          "equip": "mancuerna",
+          "muscle": "Pectorales",
+          "tip": "Acostado en el banco, codos ligeramente flexionados; abre y junta los brazos como abrazando un árbol.",
+          "video": "assets/apertura_mancuerna.mp4?v=5"
+        },
+        {
+          "name": "Extensión de tríceps en polea",
+          "sets": "3 × 12-15",
+          "rest": "45 seg",
+          "equip": "polea",
+          "muscle": "Tríceps",
+          "tip": "Codos pegados al cuerpo, empuja la barra hacia abajo sin mover los hombros.",
+          "video": "assets/extension_triceps.mp4?v=5"
+        },
+        {
+          "name": "Press cerrado con disco",
+          "sets": "3 × 10-12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Tríceps · pectorales",
+          "tip": "Acostado en el banco, igual que el press de banca pero con los codos pegados al cuerpo; empuja las mancuernas hacia arriba sintiendo el trabajo en el tríceps.",
+          "video": "assets/press_cerrado_disco.mp4?v=5"
+        }
+      ],
+      "cooldownTitle": "Estiramiento final",
+      "cooldown": "Estira pecho y tríceps 20-30 seg por lado.",
+      "cooldownVideo": "assets/estiramiento_pecho_triceps_mujer.mp4?v=5"
+    },
+    {
+      "weekday": "Jueves",
+      "title": "Hombros y Abdomen",
+      "focus": "Estabilidad y core · 60 min",
+      "warmup": "Calentamiento con bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Press militar con mancuernas",
+          "sets": "3 × 10-12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Hombros",
+          "tip": "Sentado, empuja las mancuernas hacia arriba sin arquear la espalda baja.",
+          "video": "assets/press_militar.mp4?v=5"
+        },
+        {
+          "name": "Elevaciones laterales con mancuernas",
+          "sets": "3 × 12-15",
+          "rest": "45 seg",
+          "equip": "mancuerna",
+          "muscle": "Deltoides laterales",
+          "tip": "Brazos casi rectos; sube hasta la altura de los hombros y baja controlado, sin impulso.",
+          "video": "assets/elevacion_lateral.mp4?v=5"
+        },
+        {
+          "name": "Plancha abdominal",
+          "sets": "3 × 20-30 seg",
+          "rest": "45 seg",
+          "equip": "colchoneta",
+          "muscle": "Abdomen · core",
+          "tip": "Cuerpo alineado de la cabeza a los talones, aprieta el abdomen todo el tiempo. ¿Muy exigente? Apóyate en las rodillas en vez de en los pies.",
+          "video": "assets/plancha_abdominal.mp4?v=5"
+        },
+        {
+          "name": "Elevación de piernas acostada",
+          "sets": "3 × 12-15",
+          "rest": "45 seg",
+          "equip": "colchoneta",
+          "muscle": "Abdomen inferior",
+          "tip": "Acostada boca arriba, manos bajo la cadera; sube las piernas rectas y baja controlado sin tocar el suelo. ¿Muy exigente? Dobla un poco las rodillas para hacerlo más fácil.",
+          "video": "assets/elevacion_piernas.mp4?v=5"
+        }
+      ],
+      "cooldownTitle": "Estiramiento final",
+      "cooldown": "Estira hombros y espalda baja 20-30 seg por lado.",
+      "cooldownVideo": "assets/estiramiento_hombro_espalda.mp4?v=5"
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Full Body y Cardio",
+      "focus": "Repaso general de la semana · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Peso muerto con kettlebell",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Isquiotibiales · glúteos",
+          "tip": "Kettlebell frente a los muslos, espalda recta; baja empujando la cadera hacia atrás y sube apretando los glúteos.",
+          "video": "assets/peso_muerto_kettlebell.mp4?v=5"
+        },
+        {
+          "name": "Face pull en polea (cuerda)",
+          "sets": "3 × 12-15",
+          "rest": "45 seg",
+          "equip": "polea",
+          "muscle": "Deltoides posterior · trapecios",
+          "tip": "Tira la cuerda hacia la cara separando las manos, codos altos, apretando los omóplatos.",
+          "video": "assets/face_pull.mp4?v=5"
+        },
+        {
+          "name": "Step-ups en step",
+          "sets": "3 × 10 por pierna",
+          "rest": "60 seg",
+          "equip": "step",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Sube completo al step apoyando todo el pie, sin impulsarte con la pierna de atrás. ¿Muy exigente? Usa un escalón más bajo.",
+          "video": "assets/step_up.mp4?v=5"
+        },
+        {
+          "name": "Abdominales en colchoneta",
+          "sets": "3 × 15",
+          "rest": "45 seg",
+          "equip": "colchoneta",
+          "muscle": "Abdomen · core",
+          "tip": "Acostada, rodillas dobladas, manos cruzadas en el pecho; sube los hombros del suelo apretando el abdomen y baja controlado.",
+          "video": "assets/abdominales_colchoneta.mp4?v=5"
+        },
+        {
+          "name": "Estiramiento general",
+          "sets": "30 seg por grupo muscular",
+          "rest": "—",
+          "equip": "colchoneta",
+          "muscle": "Cuerpo completo",
+          "tip": "Estira cuerpo completo con calma antes del cardio final.",
+          "video": "assets/estiramiento_final.mp4?v=5",
+          "series": 1
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 10-15 minutos, ritmo constante y cómodo para cerrar la semana.",
+      "cooldownVideo": "assets/calentamiento_bicicleta.mp4?v=5"
+    }
+  ]
+}

@@ -345,12 +345,21 @@ marcados cada socio en el equipo que el usuario toma como el bueno.
 
 ## Rutinas: contenido en JSON, nunca editar a mano el HTML (regla permanente, desde 10/2026)
 
-Las apps de rutina se están migrando, de a una, a esta estructura
-(ver detalle en la skill `plantilla-rutina-mujeres-en-movimiento`):
-`rutinas/<id>.json` (contenido) + `img/rutinas/<id>/` (fotos) +
-`motor-rutina.js` (app compartida) + `validar-rutina.js`. Migradas:
-**Mujeres en Movimiento**. Las demás siguen con el formato antiguo
-(un HTML grande con todo adentro) hasta que se migren.
+Las 12 rutinas de los carteles QR usan esta estructura (ver detalle
+en la skill `plantilla-rutina-mujeres-en-movimiento`):
+`rutinas/<id>.json` (contenido) + `img/rutinas/<id>/` (fotos; logos y
+portadas compartidos en `img/rutinas/comun/`) + `motor-rutina.js` (app
+compartida) + `validar-rutina.js`. Migradas en 10/2026:
+`mujeres-en-movimiento` y los 11 `entrenar-*` de los carteles
+(full-body-principiantes, hombre6, hombres, hombres3,
+intermedio-mujeres, modo-musculo-hombres, mujeres, mujeres3, mujeres5,
+mujeres-perdida-grasa, pulso-firme). Los `entrenar-*` de clientes
+(sara, milton, luisa, eymilee, principiante5, gluteos, hombre5) y las
+`app_*` VIP siguen con el formato antiguo.
+- Opciones del JSON (todas opcionales): `visual` (pares/imagen/video),
+  `cardio` (elegir/texto), `cardioTitulo`, `diasSemana`, `letrasDia`,
+  `nombreTam`; por ejercicio `img`/`video`, `formato`, `series` (cuando
+  `sets` no empieza con la cantidad de series, ej. "30 seg").
 
 - Cuando la dueña pida cambiar una rutina migrada (ejercicio, series,
   descanso, tip), se edita **solo su JSON**, nunca el HTML ni el motor.

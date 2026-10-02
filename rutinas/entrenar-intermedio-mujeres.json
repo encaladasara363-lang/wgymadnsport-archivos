@@ -1,0 +1,192 @@
+{
+  "version": 1,
+  "id": "entrenar-intermedio-mujeres",
+  "nombre": "ENFOCADA EN GLÚTEOS",
+  "claveProgreso": "wgym_intermedio_mujeres_v1_",
+  "visual": "video",
+  "cardio": "texto",
+  "cardioTitulo": "CIERRE",
+  "diasSemana": [
+    0,
+    2,
+    4
+  ],
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Pierna y Glúteos",
+      "focus": "Glúteo · 55 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Zancada con TRX",
+          "sets": "3 × 12 por pierna",
+          "rest": "60 seg",
+          "equip": "trx",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Desplante en suspensión que mejora la fuerza de una pierna a la vez, la estabilidad de la cadera y el equilibrio. ¿Muy exigente? Haz zancadas normales con los dos pies en el suelo para ganar estabilidad.",
+          "video": "assets/dia_1_zancada_con_trx_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Sentadilla hack invertida",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Variante de sentadilla en máquina donde te colocas mirando hacia el respaldo. Al permitir más flexión de cadera, el esfuerzo se va de forma segura a glúteos y femorales. ¿Muy exigente? Practica el movimiento con menos peso, o haz sentadillas libres con tu propio peso.",
+          "video": "assets/dia_1_sentadilla_hack_invertida_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Abducción en máquina",
+          "sets": "4 × 12",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Glúteo medio",
+          "tip": "Ejercicio guiado que aísla los glúteos, sobre todo el medio y el menor, empujando las almohadillas hacia afuera contra la resistencia. ¿Muy exigente? Baja el peso de la máquina y concéntrate en aguantar un segundo la apertura máxima.",
+          "video": "assets/dia_1_abduccion_en_maquina_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Peso muerto rumano",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "barra",
+          "muscle": "Isquiotibiales · glúteos",
+          "tip": "Trabaja fuerte glúteos y femorales con una bisagra de cadera, manteniendo las rodillas casi fijas. ¿Muy exigente? Practica primero el movimiento de bisagra sin peso, empujando los glúteos hacia una pared.",
+          "video": "assets/dia_1_peso_muerto_rumano_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Pantorrillas en máquina sentado",
+          "sets": "3 × 15",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Pantorrillas",
+          "tip": "Aísla el sóleo, el músculo profundo de la pantorrilla, extendiendo el tobillo con las rodillas dobladas a 90 grados. ¿Muy exigente? Baja la carga y empuja solo con la almohadilla del pie, no con los dedos.",
+          "video": "assets/dia_1_pantorrillas_en_maquina_sentado_intermedio.mp4?v=1"
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Cierra con 10 minutos de trotadora a ritmo suave.",
+      "cooldownVideo": "assets/dia_1_cardio_final_intermedio.mp4?v=1"
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Cuerpo Completo",
+      "focus": "Tren superior y abdomen · 55 min",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Abdominales en polea",
+          "sets": "4 × 15",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Abdomen · core",
+          "tip": "Flexión de torso con resistencia constante. De rodillas se protege la zona lumbar. ¿Muy exigente? Baja el peso y concéntrate en llevar las costillas hacia la cadera, en vez de jalar con los brazos.",
+          "video": "assets/dia_2_abdominales_en_polea_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Remo bajo en polea",
+          "sets": "3 × 15",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Trabaja dorsal ancho y trapecio jalando el manillar hacia el abdomen. Mejora la postura y la fuerza de tracción. ¿Muy exigente? Baja el peso para no tener que balancear el torso hacia atrás al jalar.",
+          "video": "assets/dia_2_remo_bajo_en_polea_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Remo con mancuerna",
+          "sets": "3 × 12 por brazo",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Tracción de un brazo a la vez. Llega más profundo al dorsal ancho y corrige diferencias de fuerza entre un lado y otro. ¿Muy exigente? Usa una mancuerna más liviana y guía el codo hacia la cadera, en vez de subir el peso en vertical.",
+          "video": "assets/dia_2_remo_con_mancuerna_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Tríceps en polea con cuerda",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Tríceps",
+          "tip": "Aísla las tres cabezas del tríceps. Separa las manos al final del recorrido para apretar bien el músculo. ¿Muy exigente? Baja el peso y mantén los codos pegados a los costados, sin mover los hombros.",
+          "video": "assets/dia_2_triceps_en_polea_con_cuerda_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Press militar",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Hombros",
+          "tip": "Empuje vertical que desarrolla hombro y tríceps, y exige harta firmeza del abdomen. ¿Muy exigente? Hazlo sentada en un banco con respaldo, así no tienes que estabilizar con la espalda baja.",
+          "video": "assets/dia_2_press_militar_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Hombro posterior",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Deltoides posterior",
+          "tip": "En el pec deck, parada de frente a la máquina, abre los brazos hacia atrás manteniéndolos alineados. Aísla el deltoides posterior. ¿Muy exigente? Baja el peso y piensa en empujar hacia afuera, en vez de jalar hacia atrás.",
+          "video": "assets/dia_2_hombro_posterior_intermedio.mp4?v=1"
+        }
+      ],
+      "cooldownTitle": "Elongación",
+      "cooldown": "Estira espalda, hombros y brazos 30 seg por lado.",
+      "cooldownVideo": "assets/dia_2_cierre_intermedio.mp4?v=1"
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Piernas",
+      "focus": "Cuádriceps · 55 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla hack",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "La máquina te sostiene el peso, así que puedes bajar profundo y cansar bien el cuádriceps sin arriesgar la técnica. ¿Muy exigente? Baja solo hasta 90 grados hasta que ganes fuerza y confianza en las rodillas.",
+          "video": "assets/dia_3_sentadilla_hack_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Extensión de cuádriceps",
+          "sets": "4 × 12",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "Aísla por completo el cuádriceps extendiendo la rodilla, con tensión pareja en todo el recorrido. ¿Muy exigente? Acorta el recorrido y no bajes del todo si sientes molestia en la rodilla.",
+          "video": "assets/dia_3_extension_de_cuadriceps_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Búlgara",
+          "sets": "3 × 12 por pierna",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Con el pie de atrás apoyado en un banco. Desafía el equilibrio y carga el trabajo en cuádriceps y glúteo de la pierna de adelante. ¿Muy exigente? Hazla solo con tu peso, sin mancuernas, hasta dominar el equilibrio.",
+          "video": "assets/dia_3_bulgara_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Femoral a un pie",
+          "sets": "3 × 12 por pierna",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Isquiotibiales",
+          "tip": "Aísla el femoral de una pierna a la vez flexionando la rodilla. Sirve para emparejar la fuerza entre las dos. ¿Muy exigente? Baja la carga al mínimo y mantén la cadera pegada al rodillo, sin arquear la espalda baja.",
+          "video": "assets/dia_3_femoral_a_un_pie_intermedio.mp4?v=1"
+        },
+        {
+          "name": "Hack invertida",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "De frente al respaldo de la máquina. La mayor flexión de cadera lleva el trabajo a glúteos y femorales. ¿Muy exigente? Usa la máquina sin discos para asimilar primero la postura y el recorrido.",
+          "video": "assets/dia_3_hack_invertida_intermedio.mp4?v=1"
+        }
+      ],
+      "cooldownTitle": "Elongación",
+      "cooldown": "Estira cuádriceps, femoral y glúteo 30 seg por lado."
+    }
+  ]
+}

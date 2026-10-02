@@ -1,0 +1,465 @@
+{
+  "version": 1,
+  "id": "entrenar-mujeres-perdida-grasa",
+  "nombre": "PÉRDIDA DE GRASA",
+  "claveProgreso": "wgym_perdida_grasa_v1_",
+  "visual": "imagen",
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Cuerpo Completo A",
+      "focus": "Adaptación",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla en silla (asistida)",
+          "sets": "3 × 15",
+          "rest": "45 seg",
+          "equip": "Peso corporal",
+          "muscle": "Cuádriceps · Glúteos",
+          "tip": "Ponte de espaldas a una silla o banco. Baja como si te fueras a sentar, toca apenas el asiento con los glúteos y vuelve a subir sin dejarte caer. Aprende el movimiento de la sentadilla sin miedo a perder el equilibrio.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d1-e1.jpg"
+          ]
+        },
+        {
+          "name": "Aperturas con mancuernas en banco",
+          "sets": "3 × 12",
+          "rest": "45 seg",
+          "equip": "Mancuernas",
+          "muscle": "Pectoral",
+          "tip": "Acostada en el banco, mancuernas arriba con un leve quiebre en el codo fijo todo el movimiento. Abre los brazos hacia los lados bajando hasta sentir el estiramiento en el pecho, sin pasarte, y junta arriba apretando.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d1-e2.jpg"
+          ]
+        },
+        {
+          "name": "Remo sentado en polea",
+          "sets": "3 × 12",
+          "rest": "45 seg",
+          "equip": "Polea",
+          "muscle": "Dorsales",
+          "tip": "Espalda recta, pecho afuera. Tira de las manijas hacia la cintura llevando los codos atrás y apretando los omóplatos, y vuelve controlada sin dejar que el peso te estire de golpe.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d1-e3.jpg"
+          ]
+        },
+        {
+          "name": "Puente de glúteo",
+          "sets": "3 × 15",
+          "rest": "40 seg",
+          "equip": "Peso corporal",
+          "muscle": "Glúteos",
+          "tip": "Acostada boca arriba, rodillas dobladas. Sube la cadera apretando el glúteo hasta quedar recta de hombro a rodilla, y baja controlada sin dejarte caer.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d1-e4.jpg"
+          ]
+        },
+        {
+          "name": "Abdominales (crunch)",
+          "sets": "3 × 15",
+          "rest": "40 seg",
+          "equip": "Peso corporal",
+          "muscle": "Abdomen",
+          "tip": "Rodillas dobladas, manos livianas cerca de las orejas sin tirar del cuello. Sube los hombros despegando la espalda baja del piso y baja controlada.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d1-e5.jpg"
+          ]
+        },
+        {
+          "name": "Elevación de talones de pie",
+          "sets": "3 × 15",
+          "rest": "30 seg",
+          "equip": "Peso corporal",
+          "muscle": "Pantorrillas",
+          "tip": "De pie, sube en punta de pie apretando la pantorrilla arriba un segundo, y baja estirando bien el talón. Puedes apoyarte de algo para el equilibrio.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d1-e6.jpg"
+          ]
+        }
+      ],
+      "cooldown": "Trotadora — 8 minutos a ritmo suave para bajar las pulsaciones.",
+      "cooldownTitle": "Cardio final"
+    },
+    {
+      "weekday": "Martes",
+      "title": "Tren Superior · Mancuerna",
+      "focus": "Empuje y tirón con mancuernas",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Press de banca con mancuernas",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "Mancuernas",
+          "muscle": "Pectoral",
+          "tip": "Con un peso liviano y 12 repeticiones ya se logra buen estímulo de pecho sin arriesgar la técnica — la prioridad en esta fase es aprender el movimiento limpio, según el Manual de Hipertrofia de Iriarte para nivel principiante. Baja controlada hasta el pecho y empuja sin trabar el codo de golpe.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d2-e1.jpg"
+          ]
+        },
+        {
+          "name": "Elevaciones laterales con mancuernas",
+          "sets": "3 × 12",
+          "rest": "40 seg",
+          "equip": "Mancuernas",
+          "muscle": "Deltoides lateral",
+          "tip": "Brazos casi rectos, sube hasta la altura del hombro liderando con el codo, no con la mano. Baja controlada sin dejar caer el peso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d2-e2.jpg"
+          ]
+        },
+        {
+          "name": "Curl de bíceps con mancuernas",
+          "sets": "3 × 12",
+          "rest": "40 seg",
+          "equip": "Mancuernas",
+          "muscle": "Bíceps",
+          "tip": "Codos pegados al cuerpo, sube sin balancear la espalda y aprieta arriba. Baja controlada hasta casi estirar el brazo.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d2-e3.jpg"
+          ]
+        },
+        {
+          "name": "Remo con mancuerna a una mano",
+          "sets": "3 × 10 por lado",
+          "rest": "45 seg",
+          "equip": "Mancuernas",
+          "muscle": "Dorsales",
+          "tip": "Apoya una rodilla y una mano en el banco, tira la mancuerna hacia la cadera llevando el codo atrás. Trabajar un lado a la vez ayuda a corregir diferencias entre tu espalda derecha e izquierda.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d2-e4.jpg"
+          ]
+        },
+        {
+          "name": "Extensión de tríceps con mancuerna",
+          "sets": "3 × 12",
+          "rest": "40 seg",
+          "equip": "Mancuernas",
+          "muscle": "Tríceps",
+          "tip": "Codo apuntando al techo y fijo, extiende el antebrazo hacia arriba y baja controlada sintiendo el estiramiento detrás del brazo.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d2-e5.jpg"
+          ]
+        },
+        {
+          "name": "Plancha con rodillas apoyadas",
+          "sets": "3 × 20 seg",
+          "rest": "40 seg",
+          "equip": "Peso corporal",
+          "muscle": "Abdomen · Core",
+          "tip": "Apoya rodillas, antebrazos y la punta de los pies. Cuerpo en línea recta desde la cabeza hasta las rodillas, guata apretada — es la versión más fácil de la plancha para empezar a fortalecer el centro.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d2-e6.jpg"
+          ]
+        }
+      ],
+      "cooldown": "Bicicleta — 8 minutos a ritmo suave para bajar las pulsaciones.",
+      "cooldownTitle": "Cardio final"
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Cuerpo Completo B",
+      "focus": "Máquinas guiadas",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Prensa de piernas",
+          "sets": "3 × 15",
+          "rest": "60 seg",
+          "equip": "Máquina",
+          "muscle": "Cuádriceps · Glúteos",
+          "tip": "La máquina guía el movimiento, así puedes concentrarte solo en empujar con el talón sin preocuparte del equilibrio — ideal para aprender el patrón de la sentadilla con seguridad.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d3-e1.jpg"
+          ]
+        },
+        {
+          "name": "Extensión de cuádriceps en máquina",
+          "sets": "3 × 15",
+          "rest": "45 seg",
+          "equip": "Máquina",
+          "muscle": "Cuádriceps",
+          "tip": "Espalda pegada al respaldo, extiende hasta el tope apretando un segundo arriba, y baja controlada sin soltar de golpe.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d3-e2.jpg"
+          ]
+        },
+        {
+          "name": "Curl femoral en máquina",
+          "sets": "3 × 12",
+          "rest": "45 seg",
+          "equip": "Máquina",
+          "muscle": "Isquiotibiales",
+          "tip": "Boca abajo, cadera pegada a la máquina. Flexiona la rodilla llevando el talón hacia el glúteo y baja en tres segundos.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d3-e3.jpg"
+          ]
+        },
+        {
+          "name": "Jalón al pecho en polea",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "Polea",
+          "muscle": "Dorsales",
+          "tip": "Sentada, muslos fijos bajo los apoyos. Tira la barra hacia el pecho llevando los codos hacia abajo y atrás, sin tirarte hacia atrás con el cuerpo.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d3-e4.jpg"
+          ]
+        },
+        {
+          "name": "Abducción de cadera en máquina",
+          "sets": "3 × 15",
+          "rest": "40 seg",
+          "equip": "Máquina",
+          "muscle": "Glúteo medio",
+          "tip": "Sentada, espalda pegada al respaldo. Abre las piernas hacia afuera apretando el glúteo medio, sin ayudarte con impulso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d3-e5.jpg"
+          ]
+        },
+        {
+          "name": "Elevación de piernas acostada",
+          "sets": "3 × 12",
+          "rest": "40 seg",
+          "equip": "Peso corporal",
+          "muscle": "Abdomen",
+          "tip": "Acostada boca arriba, manos bajo la cadera. Sube las piernas casi rectas sin despegar la espalda baja del piso, y baja controlada.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d3-e6.jpg"
+          ]
+        }
+      ],
+      "cooldown": "Trotadora — 8 minutos a ritmo suave para bajar las pulsaciones.",
+      "cooldownTitle": "Cardio final"
+    },
+    {
+      "weekday": "Jueves",
+      "title": "Glúteo y Pierna",
+      "focus": "Metabólico",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Hip thrust con disco",
+          "sets": "3 × 12",
+          "rest": "50 seg",
+          "equip": "Disco",
+          "muscle": "Glúteos",
+          "tip": "Espalda apoyada en un banco, disco sobre la cadera. Sube apretando el glúteo hasta quedar recta, y baja controlada sin que la cadera toque el piso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d4-e1.jpg"
+          ]
+        },
+        {
+          "name": "Zancada estática con mancuernas",
+          "sets": "3 × 10 por pierna",
+          "rest": "45 seg",
+          "equip": "Mancuernas",
+          "muscle": "Cuádriceps · Glúteos",
+          "tip": "Un pie adelante y otro atrás, baja hasta que la rodilla de atrás casi roce el piso y sube empujando con el talón de adelante.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d4-e2.jpg"
+          ]
+        },
+        {
+          "name": "Sentadilla goblet con disco",
+          "sets": "3 × 12",
+          "rest": "45 seg",
+          "equip": "Disco",
+          "muscle": "Cuádriceps · Glúteos",
+          "tip": "Sostén el disco contra el pecho con ambas manos. Baja hasta que los codos rocen las rodillas por dentro y sube empujando con los talones.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d4-e3.jpg"
+          ]
+        },
+        {
+          "name": "Step-ups en step",
+          "sets": "3 × 10 por pierna",
+          "rest": "45 seg",
+          "equip": "Step",
+          "muscle": "Cuádriceps · Glúteos",
+          "tip": "Sube completa una pierna al step sin impulsarte con la de abajo, y baja controlada. Trabaja el equilibrio junto con el glúteo y el cuádriceps.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d4-e4.jpg"
+          ]
+        },
+        {
+          "name": "Peso muerto con kettlebell",
+          "sets": "3 × 12",
+          "rest": "50 seg",
+          "equip": "Kettlebell",
+          "muscle": "Isquiotibiales · Glúteos",
+          "tip": "Kettlebell pegada a las piernas, rodilla casi recta. Empuja la cadera hacia atrás bajando la pesa pegada a las piernas hasta sentir el estiramiento del isquiotibial, y sube empujando la cadera adelante.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d4-e5.jpg"
+          ]
+        },
+        {
+          "name": "Plancha lateral con rodilla apoyada",
+          "sets": "3 × 20 seg por lado",
+          "rest": "40 seg",
+          "equip": "Peso corporal",
+          "muscle": "Oblicuos",
+          "tip": "Apoyada en un antebrazo y la rodilla del mismo lado, sube la cadera hasta quedar en línea recta. Versión más fácil de la plancha lateral para fortalecer el oblicuo sin forzar.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d4-e6.jpg"
+          ]
+        }
+      ],
+      "cooldown": "Bicicleta — 8 minutos a ritmo suave para bajar las pulsaciones.",
+      "cooldownTitle": "Cardio final"
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Tren Superior · Polea",
+      "focus": "Empuje, tirón y hombro",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Face pull en polea (cuerda)",
+          "sets": "3 × 15",
+          "rest": "40 seg",
+          "equip": "Polea",
+          "muscle": "Deltoides posterior",
+          "tip": "Polea a la altura de la cara, tira separando las manos con los codos altos. Peso liviano: acá vale más la técnica limpia que cargar fuerte, y cuida la postura de los hombros.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d5-e1.jpg"
+          ]
+        },
+        {
+          "name": "Extensión de tríceps en polea",
+          "sets": "3 × 15",
+          "rest": "40 seg",
+          "equip": "Polea",
+          "muscle": "Tríceps",
+          "tip": "Codos pegados al cuerpo, extiende hacia abajo apretando el tríceps y sube controlada sin que el codo se despegue del costado.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d5-e2.jpg"
+          ]
+        },
+        {
+          "name": "Aperturas en polea de pie",
+          "sets": "3 × 12",
+          "rest": "45 seg",
+          "equip": "Polea",
+          "muscle": "Pectoral",
+          "tip": "De pie entre las poleas, codo con una flexión suave y fija. Junta las manos adelante del pecho apretando, y vuelve controlada sintiendo el estiramiento.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d5-e3.jpg"
+          ]
+        },
+        {
+          "name": "Curl de bíceps en polea",
+          "sets": "3 × 15",
+          "rest": "40 seg",
+          "equip": "Polea",
+          "muscle": "Bíceps",
+          "tip": "De pie frente a la polea baja, codos pegados al cuerpo. Sube apretando arriba, sin balancear la espalda para ayudarte.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d5-e4.jpg"
+          ]
+        },
+        {
+          "name": "Press militar con mancuernas",
+          "sets": "3 × 12",
+          "rest": "50 seg",
+          "equip": "Mancuernas",
+          "muscle": "Deltoides",
+          "tip": "Sentada, espalda apoyada, mancuernas a la altura de los hombros. Empuja hacia arriba sin arquear la espalda para subir el peso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d5-e5.jpg"
+          ]
+        },
+        {
+          "name": "Elevación frontal con disco",
+          "sets": "3 × 12",
+          "rest": "40 seg",
+          "equip": "Disco",
+          "muscle": "Deltoides anterior",
+          "tip": "Disco tomado con ambas manos, sube al frente hasta la altura del hombro sin balancear el torso, y baja controlada.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d5-e6.jpg"
+          ]
+        }
+      ],
+      "cooldown": "Trotadora — 8 minutos a ritmo suave para bajar las pulsaciones.",
+      "cooldownTitle": "Cardio final"
+    },
+    {
+      "weekday": "Sábado",
+      "title": "Cuerpo Completo C",
+      "focus": "Cierre de semana",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla con silla y pausa",
+          "sets": "3 × 12",
+          "rest": "45 seg",
+          "equip": "Peso corporal",
+          "muscle": "Cuádriceps · Glúteos",
+          "tip": "Igual que el lunes, pero aguanta dos segundos apenas tocas el asiento antes de subir — la pausa suma más tiempo bajo tensión al cuádriceps sin necesitar más peso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d6-e1.jpg"
+          ]
+        },
+        {
+          "name": "Curl de bíceps en banco Scott",
+          "sets": "3 × 12",
+          "rest": "45 seg",
+          "equip": "Máquina",
+          "muscle": "Bíceps",
+          "tip": "El banco fija el brazo y no deja que la espalda ayude nada — aísla el bíceps por completo. Sube sin despegar el brazo del banco.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d6-e2.jpg"
+          ]
+        },
+        {
+          "name": "Press cerrado con disco",
+          "sets": "3 × 12",
+          "rest": "50 seg",
+          "equip": "Disco",
+          "muscle": "Tríceps · Pectoral",
+          "tip": "Disco sostenido con ambas manos sobre el pecho, codos apuntando a los pies. Empuja hasta extender, apretando el tríceps arriba.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d6-e3.jpg"
+          ]
+        },
+        {
+          "name": "Remo en máquina",
+          "sets": "3 × 12",
+          "rest": "50 seg",
+          "equip": "Máquina",
+          "muscle": "Dorsales",
+          "tip": "Pecho apoyado en el respaldo, tira hacia atrás juntando los omóplatos sin despegar el pecho de la máquina.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d6-e4.jpg"
+          ]
+        },
+        {
+          "name": "Dead bug (abdomen)",
+          "sets": "3 × 10 por lado",
+          "rest": "40 seg",
+          "equip": "Peso corporal",
+          "muscle": "Abdomen · Core",
+          "tip": "Acostada boca arriba, brazos y piernas al aire como un insecto patas arriba. Baja un brazo y la pierna contraria sin que la espalda baja se despegue del piso, y vuelve al centro.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d6-e5.jpg"
+          ]
+        },
+        {
+          "name": "Superman (extensión lumbar suave)",
+          "sets": "3 × 12",
+          "rest": "40 seg",
+          "equip": "Peso corporal",
+          "muscle": "Lumbar",
+          "tip": "Boca abajo, sube brazos y piernas apenas del piso al mismo tiempo, aprieta un segundo y baja controlada. Cierra la semana fortaleciendo la espalda baja sin cargar nada de peso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres-perdida-grasa/d6-e6.jpg"
+          ]
+        }
+      ],
+      "cooldown": "Bicicleta — 8 minutos a ritmo suave para bajar las pulsaciones.",
+      "cooldownTitle": "Cardio final"
+    }
+  ]
+}

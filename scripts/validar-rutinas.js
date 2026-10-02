@@ -15,8 +15,8 @@ for(const f of fs.readdirSync(dir).filter(f=>f.endsWith(".json")).sort()){
  if(r){
   problemas=validarRutina(r);
   if(r.id&&r.id+".json"!==f)problemas.push("El \"id\" ("+r.id+") no coincide con el nombre del archivo.");
-  (r.dias||[]).forEach((d,di)=>(d.exercises||[]).forEach((x,ei)=>(Array.isArray(x.img)?x.img:[]).forEach(p=>{
-   if(typeof p==="string"&&!fs.existsSync(path.join(raiz,p)))problemas.push("Día "+(di+1)+", ejercicio "+(ei+1)+": no existe la foto "+p);
+  (r.dias||[]).forEach((d,di)=>(d.exercises||[]).forEach((x,ei)=>(Array.isArray(x.img)?x.img:[]).concat(x.video?[x.video]:[],ei===0&&d.cooldownVideo?[d.cooldownVideo]:[]).forEach(p=>{
+   if(typeof p==="string"&&!/^https?:/.test(p)&&!fs.existsSync(path.join(raiz,p.split("?")[0])))problemas.push("Día "+(di+1)+", ejercicio "+(ei+1)+": no existe el archivo "+p);
   })));
  }
  console.log((problemas.length?"✗ ":"✓ ")+f);

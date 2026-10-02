@@ -30,7 +30,13 @@ Desde 10/2026 la app está partida en piezas (antes era un solo HTML de
   `dN-eM-final.webp`, `logo.png`, `portada.png`).
 - `motor-rutina.js` — la app (ingreso, cronómetro, series, récords,
   peso, compartir), **una sola copia para todas las rutinas migradas**.
-  Toma la cantidad de días y de series del JSON.
+  Toma la cantidad de días y de series del JSON. Opciones del JSON para
+  las variantes de las rutinas antiguas: `visual` ("pares" fotos
+  inicio/final, "imagen" una foto, "video" con `video` por ejercicio),
+  `cardio` ("elegir" máquina o "texto" con `cooldownVideo` opcional),
+  `cardioTitulo`, `diasSemana` (ej. [0,2,4] = lun/mié/vie), `letrasDia`,
+  `nombreTam`; por ejercicio `series` si `sets` no empieza con la
+  cantidad (ej. "30 seg por grupo muscular").
 - `validar-rutina.js` — revisa el JSON; la página nunca usa una rutina
   incompleta (si llega mal, usa la última buena guardada en ese
   celular).

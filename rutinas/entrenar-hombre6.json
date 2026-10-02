@@ -1,0 +1,500 @@
+{
+  "version": 1,
+  "id": "entrenar-hombre6",
+  "nombre": "HOMBRE 6 DÍAS INTERMEDIO",
+  "claveProgreso": "wgym_hombre6_v1_",
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Empuje A",
+      "focus": "Pecho, hombro y tríceps · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Press de banca con mancuernas",
+          "sets": "4 × 6-8",
+          "rest": "3 min",
+          "equip": "mancuerna",
+          "muscle": "Pectorales · tríceps",
+          "tip": "Con el 75-80% de tu peso máximo y entre 6 y 8 repeticiones estás en el rango que más hipertrofia produce, según la metodología de entrenamiento de fuerza de Pérez Caballero. Baja hasta rozar el pecho y empuja fuerte sin trabar el codo de golpe.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d1-e1-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d1-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Press inclinado con mancuernas",
+          "sets": "3 × 8-10",
+          "rest": "2 min",
+          "equip": "mancuerna",
+          "muscle": "Pectoral superior · tríceps",
+          "tip": "El banco inclinado desplaza el trabajo hacia la parte superior del pectoral, la que el press plano no alcanza a exprimir del todo.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d1-e2-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d1-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Press militar con mancuernas",
+          "sets": "3 × 8-10",
+          "rest": "2 min",
+          "equip": "mancuerna",
+          "muscle": "Hombros",
+          "tip": "El deltoide anterior necesita un empuje vertical para trabajar en su ángulo natural. Costillas abajo, sin arquear la espalda para ayudarte a subir el peso.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d1-e3-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d1-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Aperturas en polea",
+          "sets": "3 × 12-15",
+          "rest": "75 seg",
+          "equip": "polea",
+          "muscle": "Pectorales",
+          "tip": "La polea mantiene tensión constante en todo el recorrido, incluso arriba, donde una mancuerna ya no tiene tensión — cierra mejor el pecho que un ejercicio con mancuernas.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d1-e4-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d1-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevaciones laterales con mancuernas",
+          "sets": "4 × 12-15",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Deltoides laterales",
+          "tip": "El deltoide medial es el que redondea el hombro de costado, y necesita su propio ejercicio porque ningún press lo exprime igual.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d1-e5-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d1-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Extensión de tríceps en polea",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Tríceps",
+          "tip": "Cierra el tríceps ya pre-fatigado por los press anteriores. Codos pegados al cuerpo durante todo el movimiento.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d1-e6-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d1-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos suaves"
+    },
+    {
+      "weekday": "Martes",
+      "title": "Tirón A",
+      "focus": "Espalda y bíceps · 60 min",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Dominada asistida",
+          "sets": "4 × 6-8",
+          "rest": "3 min",
+          "equip": "maquina",
+          "muscle": "Dorsales · bíceps",
+          "tip": "Da todo el rango de movimiento posible al dorsal ancho: desde completamente estirado colgado hasta completamente contraído arriba. ¿Muy exigente? Sube más el nivel de asistencia de la máquina.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d2-e1-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d2-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Remo con barra",
+          "sets": "4 × 8",
+          "rest": "2 min",
+          "equip": "barra",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Con el torso inclinado a 45 grados, la espalda media recibe tensión alta con cargas pesadas — el ejercicio que más aporta al grosor de la espalda.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d2-e2-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d2-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Jalón al pecho en polea",
+          "sets": "3 × 10-12",
+          "rest": "2 min",
+          "equip": "polea",
+          "muscle": "Dorsales",
+          "tip": "El dorsal ancho necesita un tirón vertical de arriba hacia abajo, algo que ningún remo horizontal le da igual.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d2-e3-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d2-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Remo en máquina",
+          "sets": "3 × 10-12",
+          "rest": "90 seg",
+          "equip": "maquina",
+          "muscle": "Espalda media · dorsales",
+          "tip": "La máquina fija la trayectoria y permite cargar espalda media sin gastar energía en estabilizar el torso.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d2-e4-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d2-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Curl de bíceps con barra Z",
+          "sets": "3 × 8-10",
+          "rest": "90 seg",
+          "equip": "barra",
+          "muscle": "Bíceps",
+          "tip": "La barra Z permite cargar más peso que la mancuerna sin forzar la muñeca. Sin balancear la espalda para subir el peso.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d2-e5-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d2-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Face pull en polea",
+          "sets": "3 × 15",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Deltoides posterior · trapecios",
+          "tip": "El deltoide posterior casi no recibe trabajo directo en el resto de la semana, y es clave para que el hombro no quede descompensado con tanto empuje y tirón. Peso liviano: acá vale más la técnica limpia.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d2-e6-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d2-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 8 minutos suaves"
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Pierna A",
+      "focus": "Cuádriceps · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla en máquina Smith",
+          "sets": "4 × 6-8",
+          "rest": "3 min",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "La máquina fija la trayectoria, así toda la tensión queda en el cuádriceps sin que la zona lumbar tenga que estabilizar nada — se puede cargar más peso con más seguridad que en una sentadilla libre.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d3-e1-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d3-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Prensa de piernas",
+          "sets": "4 × 8-10",
+          "rest": "2 min",
+          "equip": "maquina",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Segundo ejercicio de cuádriceps: menos peso, más repeticiones, para sumar volumen sin cansar la espalda.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d3-e2-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d3-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Sentadilla búlgara con mancuernas",
+          "sets": "3 × 10 por pierna",
+          "rest": "90 seg",
+          "equip": "mancuerna",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Trabajando una pierna a la vez, el cuádriceps de adelante llega a un estiramiento más profundo que en la sentadilla bilateral. ¿Muy exigente? Baja el pie de atrás de un banco más bajo.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d3-e3-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d3-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Extensión de cuádriceps en máquina",
+          "sets": "3 × 12-15",
+          "rest": "75 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "Es el único ejercicio de la sesión que aísla el cuádriceps al 100%. Aprieta arriba un segundo antes de bajar.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d3-e4-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d3-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Curl femoral en máquina",
+          "sets": "3 × 10-12",
+          "rest": "90 seg",
+          "equip": "maquina",
+          "muscle": "Isquiotibiales",
+          "tip": "Aísla el isquiotibial sin que la cadera ayude. Baja en tres segundos para exprimir la tensión en la parte más estirada.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d3-e5-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d3-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevación de talones de pie",
+          "sets": "4 × 15",
+          "rest": "45 seg",
+          "equip": "maquina",
+          "muscle": "Pantorrillas",
+          "tip": "El gemelo necesita el rango completo para crecer: baja estirando bien el talón y sube apretando arriba un segundo.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d3-e6-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d3-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos suaves"
+    },
+    {
+      "weekday": "Jueves",
+      "title": "Empuje B",
+      "focus": "Pecho, hombro y tríceps — ángulos distintos · 60 min",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Press de banca con barra",
+          "sets": "4 × 6-8",
+          "rest": "3 min",
+          "equip": "barra",
+          "muscle": "Pectorales · tríceps",
+          "tip": "Es el ejercicio que más carga total permite mover para el pectoral: con más carga hay más tensión mecánica, el motor principal del crecimiento.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d4-e1-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d4-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Press inclinado con barra",
+          "sets": "3 × 8-10",
+          "rest": "2 min",
+          "equip": "barra",
+          "muscle": "Pectoral superior · tríceps",
+          "tip": "Misma zona del pectoral que el lunes, distinto implemento: la barra permite cargar más peso total que las mancuernas.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d4-e2-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d4-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Aperturas con mancuernas en banco",
+          "sets": "3 × 12-15",
+          "rest": "75 seg",
+          "equip": "mancuerna",
+          "muscle": "Pectorales",
+          "tip": "Acostado en el banco, con un leve quiebre fijo en el codo todo el movimiento. Abre hasta sentir el estiramiento en el pecho, sin pasarte, y junta arriba apretando.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d4-e3-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d4-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevación frontal con disco",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "disco",
+          "muscle": "Deltoides anteriores",
+          "tip": "El deltoide anterior ya trabajó el lunes en el press militar, pero un ángulo distinto — aislado, sin ayuda del tríceps — completa el desarrollo del hombro.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d4-e4-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d4-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Press francés con mancuerna",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "equip": "mancuerna",
+          "muscle": "Tríceps",
+          "tip": "Detrás de la nuca, el tríceps llega a un estiramiento que la extensión en polea del lunes no alcanza. Codos apuntando al techo, sin abrirlos.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d4-e5-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d4-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Plancha abdominal",
+          "sets": "3 × 40 seg",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Abdomen · core",
+          "tip": "Cierra la sesión con el abdomen como estabilizador: cuerpo en línea recta, sin dejar caer ni subir la cadera. Nunca lleva giros con carga — el oblicuo cargado engrosa la cintura, no la marca.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d4-e6-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d4-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 8 minutos suaves"
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Tirón B",
+      "focus": "Espalda, bíceps y zona posterior — ángulos distintos · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Remo con mancuerna a una mano",
+          "sets": "4 × 10 por lado",
+          "rest": "2 min",
+          "equip": "mancuerna",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Trabajar un lado a la vez corrige las diferencias entre tu espalda derecha e izquierda, algo que el remo con barra del martes no puede hacer.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d5-e1-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d5-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Remo sentado en polea",
+          "sets": "3 × 10-12",
+          "rest": "90 seg",
+          "equip": "polea",
+          "muscle": "Espalda media · dorsales",
+          "tip": "La polea mantiene tensión constante incluso al final del recorrido, donde una barra libre ya perdió tracción. Aprieta los omóplatos un segundo en cada repetición.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d5-e2-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d5-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Peso muerto rumano con barra",
+          "sets": "4 × 8",
+          "rest": "150 seg",
+          "equip": "barra",
+          "muscle": "Isquiotibiales · glúteos",
+          "tip": "El isquiotibial y la espalda baja reciben su mayor tensión cuando están estirados — abajo, con la cadera atrás. Si la espalda baja se te redondea, ese es tu límite de rango por hoy.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d5-e3-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d5-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Curl martillo con mancuernas",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Bíceps · braquial",
+          "tip": "El agarre neutro mete al braquial, el músculo que empuja al bíceps hacia afuera y redondea más el brazo — distinto estímulo que la barra Z del martes.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d5-e4-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d5-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Hiperextensión",
+          "sets": "3 × 12",
+          "rest": "75 seg",
+          "equip": "maquina",
+          "muscle": "Zona lumbar · isquiotibiales",
+          "tip": "Suma volumen de espalda baja y glúteo sin cargar más peso sobre la columna. Sube con el glúteo, no arqueando de más arriba.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d5-e5-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d5-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Rueda abdominal",
+          "sets": "3 × 8-10",
+          "rest": "75 seg",
+          "equip": "cuerpo",
+          "muscle": "Abdomen · core",
+          "tip": "De los pocos ejercicios que le dan al abdomen tensión mecánica real con una carga que se puede ir aumentando — rodando más lejos. ¿Muy exigente? Rueda menos lejos, o hazla apoyado en las rodillas contra la pared.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d5-e6-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d5-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos suaves"
+    },
+    {
+      "weekday": "Sábado",
+      "title": "Pierna B",
+      "focus": "Glúteo, isquios y abdomen · 60 min",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Hip thrust con barra",
+          "sets": "4 × 8-10",
+          "rest": "150 seg",
+          "equip": "barra",
+          "muscle": "Glúteos",
+          "tip": "El glúteo recibe su mayor tensión contraído arriba, completando el rango que el peso muerto rumano del viernes trabaja estirado.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d6-e1-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d6-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Patada de glúteo en máquina",
+          "sets": "3 × 12-15 por pierna",
+          "rest": "90 seg",
+          "equip": "maquina",
+          "muscle": "Glúteos",
+          "tip": "Aísla el glúteo en extensión de cadera, sin que la espalda baja tenga que estabilizar nada.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d6-e2-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d6-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Abducción de cadera en máquina",
+          "sets": "3 × 15-20",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Glúteo medio",
+          "tip": "El glúteo medio es el punto débil que casi nadie entrena directo. Sin impulso: el movimiento sale solo de la cadera.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d6-e3-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d6-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Zancada caminando con mancuernas",
+          "sets": "3 × 10 por pierna",
+          "rest": "90 seg",
+          "equip": "mancuerna",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Suma equilibrio y estabilidad de cadera al cierre de la sesión de pierna, con buen rango de movimiento sin necesitar mucho peso.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d6-e4-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d6-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Pantorrillas en máquina sentado",
+          "sets": "3 × 15",
+          "rest": "45 seg",
+          "equip": "maquina",
+          "muscle": "Pantorrillas",
+          "tip": "Con la rodilla flexionada trabaja el sóleo, el gemelo de abajo, que la máquina de pie del miércoles no alcanza a exprimir igual.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d6-e5-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d6-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevación de piernas colgada",
+          "sets": "3 × 12-15",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Abdomen inferior",
+          "tip": "Cierra la semana con el abdomen inferior: la pelvis se enrolla completa hacia arriba, no solo suben las piernas rectas.",
+          "img": [
+            "img/rutinas/entrenar-hombre6/d6-e6-inicio.jpg",
+            "img/rutinas/entrenar-hombre6/d6-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 8 minutos suaves"
+    }
+  ]
+}

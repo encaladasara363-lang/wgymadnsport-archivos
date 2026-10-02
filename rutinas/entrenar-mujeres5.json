@@ -1,0 +1,418 @@
+{
+  "version": 1,
+  "id": "entrenar-mujeres5",
+  "nombre": "MUJERES 5 DÍAS INTERMEDIO",
+  "claveProgreso": "wgym_mujeres5_v1_",
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Pierna · Cuádriceps",
+      "focus": "Cuádriceps · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla en máquina Hack",
+          "sets": "4 × 6-8",
+          "rest": "3 min",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "Con el 75-80% de tu peso máximo y entre 6 y 8 repeticiones estás en el rango que más hipertrofia produce sin arriesgar tanto como cargar al tope, según la metodología de entrenamiento de fuerza de Pérez Caballero. Espalda pegada al respaldo, baja hasta que el muslo pase la paralela y sube empujando con el talón.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d1-e1-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d1-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Prensa de piernas",
+          "sets": "4 × 8-10",
+          "rest": "2 min",
+          "equip": "maquina",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Segundo ejercicio de cuádriceps: menos peso, más repeticiones, para sumar volumen sin cansar la espalda. Pies a la altura de las caderas, baja controlada y no trabes la rodilla al subir.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d1-e2-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d1-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Sentadilla búlgara con mancuernas",
+          "sets": "3 × 10 por pierna",
+          "rest": "90 seg",
+          "equip": "mancuerna",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Trabajando una pierna a la vez, el cuádriceps de adelante llega a un estiramiento más profundo que en la sentadilla bilateral — el estiramiento bajo carga es de los estímulos más fuertes para crecer. ¿Muy exigente? Baja el pie de atrás de un banco más bajo, o hazla sin apoyo.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d1-e3-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d1-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Extensión de cuádriceps",
+          "sets": "3 × 12-15",
+          "rest": "75 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "Es el único ejercicio de la sesión que aísla el cuádriceps al 100%. Aprieta arriba un segundo antes de bajar, sin soltar de golpe.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d1-e4-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d1-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Zancada caminando con mancuernas",
+          "sets": "3 × 10 por pierna",
+          "rest": "90 seg",
+          "equip": "mancuerna",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Suma equilibrio y estabilidad de cadera al estímulo de cuádriceps, cerrando la sesión con volumen sin necesitar más peso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d1-e5-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d1-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevación de talones de pie",
+          "sets": "4 × 15",
+          "rest": "45 seg",
+          "equip": "maquina",
+          "muscle": "Pantorrillas",
+          "tip": "El gemelo necesita el rango completo para crecer: baja estirando bien el talón y sube apretando arriba un segundo.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d1-e6-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d1-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos suaves"
+    },
+    {
+      "weekday": "Martes",
+      "title": "Tren Superior · Empuje",
+      "focus": "Pecho, hombro y tríceps · 60 min",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Press de banca con mancuernas",
+          "sets": "4 × 6-8",
+          "rest": "3 min",
+          "equip": "mancuerna",
+          "muscle": "Pectorales · tríceps",
+          "tip": "Es el ejercicio que más carga total permite mover para el pectoral: con 75-80% de tu máximo y pocas repeticiones se logra la tensión mecánica que más lo hace crecer. Baja hasta rozar el pecho y empuja fuerte sin trabar el codo de golpe.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d2-e1-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d2-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Press inclinado con mancuernas",
+          "sets": "3 × 8-10",
+          "rest": "2 min",
+          "equip": "mancuerna",
+          "muscle": "Pectoral superior · tríceps",
+          "tip": "El banco inclinado desplaza el trabajo hacia la parte superior del pectoral, la que el press plano no alcanza a exprimir del todo.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d2-e2-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d2-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Press militar con mancuernas",
+          "sets": "3 × 8-10",
+          "rest": "2 min",
+          "equip": "mancuerna",
+          "muscle": "Hombros · tríceps",
+          "tip": "El deltoide anterior necesita un empuje vertical para trabajar en su ángulo natural. Costillas abajo, sin arquear la espalda para ayudarte a subir el peso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d2-e3-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d2-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Aperturas en polea",
+          "sets": "3 × 12-15",
+          "rest": "75 seg",
+          "equip": "polea",
+          "muscle": "Pectorales",
+          "tip": "La polea mantiene tensión constante en todo el recorrido, incluso arriba, donde una mancuerna ya no tiene tensión — cierra mejor la sesión de pecho que un ejercicio con mancuernas.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d2-e4-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d2-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Extensión de tríceps en polea",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Tríceps",
+          "tip": "Cierra el tríceps ya pre-fatigado por los press anteriores. Codos pegados al cuerpo durante todo el movimiento.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d2-e5-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d2-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Plancha abdominal",
+          "sets": "3 × 40 seg",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Abdomen · core",
+          "tip": "Cierra la sesión con el abdomen como estabilizador: cuerpo en línea recta, sin dejar caer ni subir la cadera. Nunca lleva giros con carga — el oblicuo cargado engrosa la cintura, no la marca.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d2-e6-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d2-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 8 minutos suaves"
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Pierna · Glúteo e Isquios",
+      "focus": "Glúteo · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Peso muerto rumano con barra",
+          "sets": "4 × 8",
+          "rest": "150 seg",
+          "equip": "barra",
+          "muscle": "Isquiotibiales · glúteos",
+          "tip": "El glúteo y el isquiotibial reciben su mayor tensión cuando están estirados — abajo, con la cadera atrás — y este ejercicio los pone justo ahí con carga alta. Si la espalda baja se te redondea, ese es tu límite de rango por hoy.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d3-e1-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d3-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Hip thrust con barra",
+          "sets": "4 × 8-10",
+          "rest": "150 seg",
+          "equip": "barra",
+          "muscle": "Glúteos",
+          "tip": "Complementa al peso muerto rumano: mientras aquel exprime el glúteo estirado, el hip thrust lo exprime contraído arriba. Entre los dos cubren todo el rango donde el glúteo puede crecer.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d3-e2-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d3-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Curl femoral tumbado",
+          "sets": "3 × 10-12",
+          "rest": "90 seg",
+          "equip": "maquina",
+          "muscle": "Isquiotibiales",
+          "tip": "Aísla el isquiotibial sin que la cadera ayude. Baja en tres segundos para exprimir la tensión en la parte más estirada del músculo.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d3-e3-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d3-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Abducción de cadera en máquina",
+          "sets": "3 × 15-20",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Glúteo medio",
+          "tip": "El glúteo medio es el punto débil que casi nadie entrena directo, y es el que redondea la cadera de costado. Sin impulso: el movimiento sale solo de la cadera.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d3-e4-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d3-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Hiperextensión con foco en glúteo",
+          "sets": "3 × 12",
+          "rest": "75 seg",
+          "equip": "maquina",
+          "muscle": "Glúteos · isquiotibiales",
+          "tip": "Subiendo con el glúteo y no con la espalda, suma volumen de glúteo sin sobrecargar más la zona lumbar en un día que ya tuvo dos ejercicios de cadera pesados.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d3-e5-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d3-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Puente de glúteo",
+          "sets": "3 × 15",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Glúteos",
+          "tip": "Cierre liviano de glúteo con el propio peso del cuerpo, para llegar sin cansar de más a la próxima sesión de pierna.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d3-e6-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d3-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos suaves"
+    },
+    {
+      "weekday": "Jueves",
+      "title": "Tren Superior · Tirón",
+      "focus": "Espalda y bíceps · 60 min",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Remo con barra",
+          "sets": "4 × 8",
+          "rest": "2 min",
+          "equip": "barra",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Con el torso inclinado a 45 grados, la espalda media recibe tensión alta con cargas pesadas — el ejercicio que más aporta al grosor de la espalda. Tira hacia el ombligo, sin pararte para ayudarte con impulso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d4-e1-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d4-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Jalón al pecho",
+          "sets": "3 × 10-12",
+          "rest": "2 min",
+          "equip": "maquina",
+          "muscle": "Dorsales",
+          "tip": "El dorsal ancho necesita un tirón vertical de arriba hacia abajo, algo que ningún remo horizontal le da igual. Codos abajo y atrás, sin tirarte hacia atrás con el cuerpo.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d4-e2-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d4-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Remo sentado en polea",
+          "sets": "3 × 10-12",
+          "rest": "90 seg",
+          "equip": "polea",
+          "muscle": "Espalda media · dorsales",
+          "tip": "La polea mantiene tensión constante incluso al final del recorrido, donde una barra libre ya perdió tracción. Aprieta los omóplatos un segundo en cada repetición.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d4-e3-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d4-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Dominada asistida",
+          "sets": "3 × 6-8",
+          "rest": "2 min",
+          "equip": "maquina",
+          "muscle": "Dorsales · bíceps",
+          "tip": "Da todo el rango de movimiento posible al dorsal ancho: desde completamente estirado colgada hasta completamente contraída arriba. La máquina asiste el peso que aún no puedes mover sola. ¿Muy exigente? Sube más el nivel de asistencia de la máquina.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d4-e4-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d4-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Curl de bíceps con barra Z",
+          "sets": "3 × 8-10",
+          "rest": "90 seg",
+          "equip": "barra",
+          "muscle": "Bíceps",
+          "tip": "La barra Z permite cargar más peso que la mancuerna sin forzar la muñeca. Codos pegados al cuerpo, sin balancear la espalda para subir el peso.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d4-e5-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d4-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Face pull en polea",
+          "sets": "3 × 15",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Deltoides posterior · trapecios",
+          "tip": "El deltoide posterior casi no recibe trabajo directo en el resto de la semana, y es clave para que el hombro no quede descompensado con tanto tirón y empuje. Peso liviano: acá vale más la técnica limpia que cargar fuerte.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d4-e6-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d4-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Bicicleta de spinning — 8 minutos suaves"
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Tren Superior · Hombro y Abdomen",
+      "focus": "Hombro completo · 60 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Elevaciones laterales con mancuernas",
+          "sets": "4 × 12-15",
+          "rest": "60 seg",
+          "equip": "mancuerna",
+          "muscle": "Deltoides laterales",
+          "tip": "El deltoide medial es el que redondea el hombro de costado, y necesita su propio ejercicio porque ningún press lo exprime igual. Sube liderando con el codo, no con la mano, y para justo a la altura del hombro.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d5-e1-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d5-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevación frontal con disco",
+          "sets": "3 × 12",
+          "rest": "60 seg",
+          "equip": "disco",
+          "muscle": "Deltoides anteriores",
+          "tip": "El deltoide anterior ya trabajó en el press militar del día 2, pero un ángulo distinto — aislado, sin ayuda del tríceps — completa el desarrollo del hombro.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d5-e2-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d5-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Curl de bíceps en banco Scott",
+          "sets": "3 × 10-12",
+          "rest": "75 seg",
+          "equip": "barra",
+          "muscle": "Bíceps",
+          "tip": "El banco fija el brazo y aísla el bíceps por completo, sin que la espalda pueda ayudar ni un poco. Es el cierre perfecto de brazo de la semana.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d5-e3-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d5-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Rueda abdominal",
+          "sets": "3 × 8-10",
+          "rest": "75 seg",
+          "equip": "cuerpo",
+          "muscle": "Abdomen · core",
+          "tip": "De los pocos ejercicios que le dan al abdomen tensión mecánica real con una carga que se puede ir aumentando — rodando más lejos — en vez de depender solo de repeticiones altas. Si la espalda baja se arquea al estirarte, ese es tu límite de rango por hoy.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d5-e4-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d5-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Plancha lateral",
+          "sets": "3 × 30 seg por lado",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Oblicuos · core",
+          "tip": "Trabaja el oblicuo como estabilizador — aguantando quieto contra la gravedad — sin girar con carga, que es lo que engrosa la cintura en vez de marcarla.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d5-e5-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d5-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevación de piernas colgada",
+          "sets": "3 × 12-15",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Abdomen inferior",
+          "tip": "El abdomen inferior tiene su rango de movimiento más largo cuando la pelvis se enrolla completa hacia arriba, no solo cuando suben las piernas rectas.",
+          "img": [
+            "img/rutinas/entrenar-mujeres5/d5-e6-inicio.jpg",
+            "img/rutinas/entrenar-mujeres5/d5-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Cardio final",
+      "cooldown": "Trotadora curva — 8 minutos suaves"
+    }
+  ]
+}

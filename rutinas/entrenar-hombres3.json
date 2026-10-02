@@ -1,0 +1,239 @@
+{
+  "version": 1,
+  "id": "entrenar-hombres3",
+  "nombre": "FULL BODY HOMBRES",
+  "claveProgreso": "wgym_entrena_hombres3_v1_",
+  "cardio": "texto",
+  "diasSemana": [
+    0,
+    2,
+    4
+  ],
+  "dias": [
+    {
+      "weekday": "Lunes",
+      "title": "Cuerpo completo A",
+      "focus": "Primer contacto con las máquinas · 55 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Prensa de piernas",
+          "sets": "3 × 12",
+          "rest": "90 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps · glúteos",
+          "tip": "Pies a la altura de los hombros sobre la plataforma. Baja sin despegar la espalda del respaldo y sin estirar del todo las rodillas al subir. Primera semana: peso liviano, el objetivo es aprender el recorrido, no cansarte.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d1-e1-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d1-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Jalón al pecho en polea",
+          "sets": "3 × 10",
+          "rest": "75 seg",
+          "equip": "polea",
+          "muscle": "Dorsales",
+          "tip": "Agarre un poco más ancho que los hombros. Tira la barra hacia el pecho llevando los codos hacia abajo y atrás, sin balancear el cuerpo para ayudarte con impulso.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d1-e2-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d1-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Press militar con mancuernas",
+          "sets": "3 × 10",
+          "rest": "75 seg",
+          "equip": "mancuerna",
+          "muscle": "Hombros",
+          "tip": "Sentado, espalda apoyada. Empuja las mancuernas hacia arriba sin arquear la espalda baja. Parte con mancuernas livianas: es un movimiento nuevo para el hombro.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d1-e3-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d1-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Extensión de cuádriceps en máquina",
+          "sets": "2 × 15",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "Espalda apoyada en el respaldo. Extiende las rodillas sin impulso y baja controlado sin soltar de golpe.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d1-e4-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d1-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Plancha abdominal",
+          "sets": "3 × 20 seg",
+          "rest": "45 seg",
+          "equip": "colchoneta",
+          "muscle": "Abdomen · core",
+          "tip": "Cuerpo alineado de la cabeza a los talones, aprieta el abdomen y respira normal. 20 segundos bien hechos valen más que 40 con la cadera caída. ¿Muy exigente? Apóyate en las rodillas en vez de en los pies.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d1-e5-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d1-e5-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Estiramiento final",
+      "cooldown": "Estira cuádriceps e isquiotibiales 20-30 seg por lado.",
+      "cooldownVideo": "assets/estiramiento_pierna.mp4?v=2"
+    },
+    {
+      "weekday": "Miércoles",
+      "title": "Cuerpo completo B",
+      "focus": "Segundo día — ya conoces las máquinas · 55 min",
+      "warmup": "Calentamiento en bicicleta — 8 minutos",
+      "exercises": [
+        {
+          "name": "Sentadilla en máquina Hack",
+          "sets": "3 × 10",
+          "rest": "90 seg",
+          "equip": "maquina",
+          "muscle": "Cuádriceps",
+          "tip": "La espalda va apoyada contra el respaldo inclinado. La máquina guía el movimiento, así que concéntrate en bajar controlado hasta donde te sea cómodo — no hace falta llegar abajo del todo las primeras semanas.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d2-e1-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d2-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Remo bajo en máquina",
+          "sets": "3 × 10",
+          "rest": "75 seg",
+          "equip": "maquina",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Pecho apoyado o espalda recta según la máquina. Tira hacia el abdomen apretando los omóplatos, sin encoger los hombros hacia las orejas.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d2-e2-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d2-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Press de banca con mancuernas",
+          "sets": "3 × 10",
+          "rest": "75 seg",
+          "equip": "mancuerna",
+          "muscle": "Pectorales · tríceps",
+          "tip": "Acostado en el banco, mancuernas a los lados del pecho. Baja controlado y sube sin chocarlas de golpe arriba. Con mancuernas no necesitas que nadie te ayude — por eso es la mejor forma de empezar con el press.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d2-e3-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d2-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Curl femoral en máquina",
+          "sets": "2 × 12",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Isquiotibiales",
+          "tip": "Acostado boca abajo, flexiona llevando el talón hacia el glúteo y vuelve controlado, sin soltar de golpe.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d2-e4-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d2-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevación de piernas apoyado",
+          "sets": "3 × 10",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Abdomen inferior",
+          "tip": "Antebrazos apoyados en los soportes. Sube las rodillas hacia el pecho sin balancear el cuerpo y baja despacio. ¿Muy exigente? Sube menos alto, lo importante es controlar la bajada.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d2-e5-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d2-e5-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Estiramiento final",
+      "cooldown": "Estira pecho y espalda 20-30 seg por lado.",
+      "cooldownVideo": "assets/estiramiento_pecho_triceps.mp4?v=2"
+    },
+    {
+      "weekday": "Viernes",
+      "title": "Cuerpo completo C",
+      "focus": "Cierre de semana · 55 min",
+      "warmup": "Calentamiento en trotadora — 8 minutos",
+      "exercises": [
+        {
+          "name": "Patada de glúteo en máquina",
+          "sets": "3 × 12 por lado",
+          "rest": "60 seg",
+          "equip": "maquina",
+          "muscle": "Glúteos",
+          "tip": "De pie, sujeto del marco de la máquina, empuja la pierna hacia atrás apretando el glúteo arriba, sin arquear la espalda baja. Vuelve controlado, sin dejar caer el peso de golpe.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d3-e1-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d3-e1-final.jpg"
+          ]
+        },
+        {
+          "name": "Remo con mancuerna a una mano",
+          "sets": "3 × 10 por lado",
+          "rest": "75 seg",
+          "equip": "mancuerna",
+          "muscle": "Espalda media · dorsales",
+          "tip": "Apoya una rodilla y una mano en el banco, espalda recta y paralela al piso. Tira la mancuerna hacia la cadera llevando el codo hacia atrás.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d3-e2-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d3-e2-final.jpg"
+          ]
+        },
+        {
+          "name": "Press inclinado con mancuernas",
+          "sets": "3 × 10",
+          "rest": "75 seg",
+          "equip": "mancuerna",
+          "muscle": "Pectoral superior · tríceps",
+          "tip": "Banco a 30-45°. Baja las mancuernas a los lados del pecho y sube sin bloquear los codos de golpe arriba.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d3-e3-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d3-e3-final.jpg"
+          ]
+        },
+        {
+          "name": "Elevación de talones de pie",
+          "sets": "3 × 15",
+          "rest": "45 seg",
+          "equip": "maquina",
+          "muscle": "Pantorrillas",
+          "tip": "Sube lo más alto posible en la punta de los pies, mantén un segundo arriba y baja controlado.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d3-e4-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d3-e4-final.jpg"
+          ]
+        },
+        {
+          "name": "Face pull en polea",
+          "sets": "2 × 15",
+          "rest": "60 seg",
+          "equip": "polea",
+          "muscle": "Deltoides posterior · trapecios",
+          "tip": "Cuerda a la altura de la cara, tira separando las manos con los codos altos, apretando los omóplatos. Peso liviano — este ejercicio es para la postura, no para cargar fuerte.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d3-e5-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d3-e5-final.jpg"
+          ]
+        },
+        {
+          "name": "Abdominales (crunch)",
+          "sets": "3 × 15",
+          "rest": "45 seg",
+          "equip": "cuerpo",
+          "muscle": "Abdomen · core",
+          "tip": "Acostado boca arriba, rodillas dobladas y manos livianas cerca de las orejas, sin tirar del cuello. Sube los hombros despegando la espalda baja del piso y baja controlado.",
+          "img": [
+            "img/rutinas/entrenar-hombres3/d3-e6-inicio.jpg",
+            "img/rutinas/entrenar-hombres3/d3-e6-final.jpg"
+          ]
+        }
+      ],
+      "cooldownTitle": "Estiramiento final",
+      "cooldown": "Estira hombros, espalda y abdomen 20-30 seg por zona.",
+      "cooldownVideo": "assets/estiramiento_hombro_abdomen_hombres.mp4?v=1"
+    }
+  ]
+}
