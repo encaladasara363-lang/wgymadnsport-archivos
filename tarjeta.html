@@ -192,6 +192,14 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .salida-card .pago-btn{ margin-top:10px; }
 .salida-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 8px; }
 .salida-nota{ font-size:11.5px; color:#8C8C93; margin:4px 0 0; }
+/* "Poner en mi pantalla de inicio" (10/2026). */
+.inst-card{ margin:14px 16px 0; background:var(--card); border:1px solid rgba(212,175,55,.55); border-radius:14px; padding:14px 16px; text-align:center; }
+.inst-card .pago-btn{ margin-top:10px; }
+.inst-pasos{ text-align:left; margin:12px 0 0; padding:0; list-style:none; counter-reset:paso; }
+.inst-pasos li{ counter-increment:paso; position:relative; padding:9px 0 9px 40px; font-size:14px; color:#E8E8E8; border-top:1px solid #2C2C31; }
+.inst-pasos li:before{ content:counter(paso); position:absolute; left:0; top:7px; width:28px; height:28px; border-radius:50%; background:var(--rojo); color:#fff; font-weight:900; display:grid; place-items:center; font-size:14px; }
+.inst-ico{ display:inline-block; padding:1px 7px; border:1px solid #6a6a70; border-radius:6px; font-weight:800; }
+.inst-ya{ background:none; border:0; color:#8C8C93; font-size:12px; text-decoration:underline; margin-top:10px; cursor:pointer; }
 /* "Elige tu horario": cuánta gente suele haber a cada hora (horarios.json). */
 .hor{ margin-top:14px; padding-top:12px; border-top:1px solid #2C2C31; text-align:left; }
 .hor-tit{ font-size:12px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:var(--dorado); margin:0 0 8px; }
@@ -370,6 +378,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  </header>
  <div class="member-card" id="memberCard"></div>
  <div class="salida-card" id="salidaCard" hidden></div>
+ <div class="inst-card" id="instCard" hidden></div>
  <div class="pago-card" id="pagoCard" hidden></div>
  <div class="evo-card" id="evoCard" hidden></div>
  <div class="band-box">
@@ -1424,6 +1433,7 @@ function renderEvolucion(s){
  renderPago(s);
  renderEvolucion(s);
  iniciarIngreso(s);
+ pintarInstalar();
  socioActual = s;
  resetBandBtn();
  resetLockBtn();
@@ -1588,4 +1598,89 @@ unirMediciones_=function(historicas,nuevas){
  return unidas;
 };
 })();
+
+/* ---------- "Poner en mi pantalla de inicio" (10/2026) ----------
+   Para que la dueña no tenga que buscar en cada teléfono cómo crear el
+   acceso directo. Android/Chrome: el botón abre la ventana "Instalar"
+   del propio teléfono (evento beforeinstallprompt). iPhone: Apple no
+   deja que una página se instale sola, así que el botón muestra los 3
+   toques exactos. Dentro de Instagram/Facebook/TikTok no se puede
+   instalar: se explica cómo abrirla en el navegador. Ya instalada (o si
+   el socio tocó "Ya la tengo"), el cuadro no aparece. */
+var avisoInstalar = null, instPasos = false;
+try{
+ if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw-tarjeta.js", { scope:"./tarjeta" }).catch(function(){});
+ }
+}catch(e){}
+window.addEventListener("beforeinstallprompt", function(e){
+ e.preventDefault(); avisoInstalar = e; pintarInstalar();
+});
+window.addEventListener("appinstalled", function(){
+ avisoInstalar = null;
+ var box = document.getElementById("instCard");
+ if(box){ box.hidden = false; box.innerHTML = '<p class="salida-kicker">Listo</p><p class="salida-sub" style="color:#E8E8E8">✅ Tu tarjeta ya está en la pantalla de inicio. Desde ahora ábrela desde ese ícono.</p>'; }
+});
+function yaInstalada(){
+ try{
+  if(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+  if(window.navigator.standalone === true) return true;
+  return localStorage.getItem("wgym_tarjeta_instalada_v1") === "1";
+ }catch(e){ return false; }
+}
+function tipoTelefono(){
+ var ua = navigator.userAgent || "";
+ if(/Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly|Line\//i.test(ua)) return "app";
+ if(/iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) return "iphone";
+ if(/Android/i.test(ua)) return "android";
+ return "otro";
+}
+function pintarInstalar(){
+ var box = document.getElementById("instCard");
+ if(!box || document.getElementById("cardView").hidden) return;
+ if(yaInstalada()){ box.hidden = true; return; }
+ var tipo = tipoTelefono(), html = '<p class="salida-kicker">Tu tarjeta en un toque</p>';
+ if(avisoInstalar){
+  html += '<button type="button" class="pago-btn principal" id="instBtn">📲 Poner en mi pantalla de inicio</button>';
+ }else if(!instPasos){
+  html += '<button type="button" class="pago-btn principal" id="instVer">📲 Poner en mi pantalla de inicio</button>';
+ }else if(tipo === "iphone"){
+  html += '<ol class="inst-pasos">' +
+   '<li>Toca el botón <span class="inst-ico">Compartir ⬆️</span> (el cuadrado con flecha, abajo o arriba de la pantalla).</li>' +
+   '<li>Baja y toca <b>"Agregar a inicio"</b> (o "Añadir a pantalla de inicio").</li>' +
+   '<li>Toca <b>"Agregar"</b> arriba a la derecha. ¡Listo, aparece el ícono de WGYM!</li></ol>' +
+   '<p class="salida-sub">Si no ves "Agregar a inicio", abre esta página en <b>Safari</b>.</p>';
+ }else if(tipo === "app"){
+  html += '<ol class="inst-pasos">' +
+   '<li>Toca los <span class="inst-ico">⋯</span> o <span class="inst-ico">⋮</span> de arriba a la derecha.</li>' +
+   '<li>Elige <b>"Abrir en el navegador"</b> (Chrome o Safari).</li>' +
+   '<li>Ahí vuelve a tocar <b>"Poner en mi pantalla de inicio"</b>.</li></ol>';
+ }else{
+  html += '<ol class="inst-pasos">' +
+   '<li>Toca los <span class="inst-ico">⋮</span> de arriba a la derecha del navegador.</li>' +
+   '<li>Toca <b>"Instalar app"</b> o <b>"Agregar a pantalla de inicio"</b>.</li>' +
+   '<li>Confirma con <b>"Instalar"</b> o <b>"Agregar"</b>. ¡Listo!</li></ol>';
+ }
+ html += '<p class="salida-sub">Así abres tu tarjeta desde un ícono, sin buscar el enlace.</p>' +
+  '<button type="button" class="inst-ya" id="instYa">Ya la tengo en mi pantalla de inicio</button>';
+ box.innerHTML = html;
+ box.hidden = false;
+ var b = document.getElementById("instBtn");
+ if(b) b.addEventListener("click", function(){
+  var ev = avisoInstalar; if(!ev) return;
+  ev.prompt();
+  ev.userChoice.then(function(r){
+   avisoInstalar = null;
+   if(r && r.outcome === "accepted"){ try{ localStorage.setItem("wgym_tarjeta_instalada_v1", "1"); }catch(e){} }
+   else { instPasos = true; }
+   pintarInstalar();
+  }).catch(function(){ avisoInstalar = null; instPasos = true; pintarInstalar(); });
+ });
+ var v = document.getElementById("instVer");
+ if(v) v.addEventListener("click", function(){ instPasos = true; pintarInstalar(); });
+ document.getElementById("instYa").addEventListener("click", function(){
+  try{ localStorage.setItem("wgym_tarjeta_instalada_v1", "1"); }catch(e){}
+  box.hidden = true;
+ });
+}
 </script>  

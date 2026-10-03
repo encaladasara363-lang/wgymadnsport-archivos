@@ -300,6 +300,15 @@ ver cuándo el gym está más vacío.
   `forzar=1` que el QR de la puerta). Desde la casa no lo toca: abrir la
   tarjeta sigue sin registrar nada solo. Si está dentro hace más de 30
   min sin salida, aparece "Volví: registrar nuevo ingreso".
+- **"Poner en mi pantalla de inicio" (03-10-2026):** la tarjeta muestra
+  este botón (cuadro `#instCard`, función `pintarInstalar()`) mientras
+  no esté instalada. En Android/Chrome abre la ventana "Instalar" del
+  teléfono (`beforeinstallprompt`, gracias a `sw-tarjeta.js`, un service
+  worker mínimo con alcance `./tarjeta` que NO guarda caché: no
+  agregarle caché sin pensarlo, porque dejaría a los socios con
+  versiones viejas). En iPhone muestra los 3 toques de Compartir →
+  Agregar a inicio (Apple no permite instalar por código); dentro de
+  Instagram/Facebook/TikTok explica cómo abrirla en el navegador.
 - **Cada visita cuenta (desde 03-10-2026, pedido de la dueña: hay socios
   que vienen 2 o 3 veces al día y necesita ver cada ingreso):** cada
   escaneo del QR de la puerta (y cada "Registrar ingreso" del mesón) es
