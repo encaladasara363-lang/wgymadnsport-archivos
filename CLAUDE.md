@@ -293,6 +293,13 @@ ver cuándo el gym está más vacío.
   cualquier otro enlace solo consulta. La marca se borra de la dirección
   al cargar (un enlace guardado o compartido no registra). El QR antiguo
   del cartel abría `tarjeta.html` sin marca.
+- **Botón "Registrar mi ingreso" en la tarjeta (03-10-2026, pedido de la
+  dueña: la mayoría de los socios entra con su acceso directo, no con el
+  QR):** abierta por cualquier vía, la tarjeta muestra este botón cuando
+  el socio no está dentro; al llegar lo toca (mismo `ingresoTarjeta` con
+  `forzar=1` que el QR de la puerta). Desde la casa no lo toca: abrir la
+  tarjeta sigue sin registrar nada solo. Si está dentro hace más de 30
+  min sin salida, aparece "Volví: registrar nuevo ingreso".
 - **Cada visita cuenta (desde 03-10-2026, pedido de la dueña: hay socios
   que vienen 2 o 3 veces al día y necesita ver cada ingreso):** cada
   escaneo del QR de la puerta (y cada "Registrar ingreso" del mesón) es
