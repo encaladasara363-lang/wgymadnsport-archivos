@@ -190,6 +190,24 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .salida-lbl{ font-size:12.5px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:var(--good); margin:6px 0 0; }
 .salida-sub{ font-size:12.5px; color:#8C8C93; margin:10px 0 0; }
 .salida-card .pago-btn{ margin-top:10px; }
+.salida-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 8px; }
+.salida-nota{ font-size:11.5px; color:#8C8C93; margin:4px 0 0; }
+/* "Elige tu horario": cuánta gente suele haber a cada hora (horarios.json). */
+.hor{ margin-top:14px; padding-top:12px; border-top:1px solid #2C2C31; text-align:left; }
+.hor-tit{ font-size:12px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:var(--dorado); margin:0 0 8px; }
+.hor-dias{ display:flex; gap:5px; margin:0 0 10px; }
+.hor-dias button{ flex:1; padding:7px 0; border-radius:8px; border:1px solid #3a3a40; background:transparent; color:#CFCFCF; font-weight:800; font-size:12px; cursor:pointer; }
+.hor-dias button[aria-pressed="true"]{ background:var(--dorado); border-color:var(--dorado); color:#0A0A0B; }
+.hor-barras{ display:flex; align-items:flex-end; gap:3px; height:96px; }
+.hor-barras div{ flex:1; border-radius:4px 4px 0 0; min-height:3px; position:relative; }
+.hor-barras .v{ background:#4CAF50; } .hor-barras .a{ background:#E8C547; } .hor-barras .r{ background:#E30613; }
+.hor-barras .ya{ outline:2px solid #fff; outline-offset:1px; }
+.hor-horas{ display:flex; gap:3px; margin-top:4px; }
+.hor-horas span{ flex:1; font-size:9.5px; color:#8C8C93; text-align:center; white-space:nowrap; overflow:visible; }
+.hor-vacio{ margin:10px 0 0; font-size:13.5px; font-weight:800; color:#CFCFCF; }
+.hor-vacio b{ color:var(--good); }
+.hor-ley{ display:flex; gap:12px; font-size:11px; color:#8C8C93; margin-top:6px; }
+.hor-ley i{ display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:4px; vertical-align:-1px; }
 .salida-err{ font-size:12.5px; color:var(--danger); font-weight:700; min-height:0; margin:6px 0 0; }
 .pago-card{ margin:14px 16px 0; background:var(--card); border:1px solid var(--dorado); border-radius:14px; padding:16px; }
 .pago-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 6px; }
@@ -1215,6 +1233,77 @@ function renderEvolucion(s){
  /* El cuadro muestra SOLO el contador "Dentro ahora" (cuántas personas
     tienen ingreso hoy sin salida; nunca nombres de otros socios) y, si el
     socio está dentro, su botón "Registrar mi salida". */
+ /* "Ahora": personas distintas con ingreso de hoy sin salida, contando solo
+    los ingresos de las últimas VENTANA_DENTRO_H horas — a quien olvidó
+    marcar la salida se le deja de contar pasado ese tiempo, para que el
+    número no muestre el gimnasio más lleno de lo que está. (El mesón y la
+    tablet siguen mostrando a todos hasta que se marque la salida.) Se
+    calcula con la misma lista pública que leen el mesón y la tablet; en
+    la tarjeta solo se muestra el número, nunca nombres. */
+ var VENTANA_DENTRO_H = 2;
+ var ultimoEstado = null, ultimoAhora = null, diaGrafico = null, horarios = null;
+ function contarAhora(rows){
+  var desde = Date.now() - VENTANA_DENTRO_H * 3600000, gente = {};
+  rows.forEach(function(r){
+   if(!r.salida && Number(r.ts) > desde) gente[normName(r.nombre + " " + r.apellido).toUpperCase()] = 1;
+  });
+  return Object.keys(gente).length;
+ }
+ function pedirAhora(){
+  salidaJsonp({ action:"listarIngresos" }, function(d){
+   if(!d || d.ingresos !== true) return;
+   ultimoAhora = contarAhora(d.rows || []);
+   if(ultimoEstado) pintarSalida(ultimoEstado);
+  });
+ }
+ var DIAS_CORTOS = ["", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+ var DIAS_LARGOS = ["", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+ function diaSemanaChile(){
+  try{
+   var n = new Intl.DateTimeFormat("en-US", { timeZone:"America/Santiago", weekday:"short" }).format(new Date());
+   return { Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6, Sun:7 }[n] || 1;
+  }catch(e){ var g = new Date().getDay(); return g === 0 ? 7 : g; }
+ }
+ function horaActualChile(){
+  try{ return Number(new Intl.DateTimeFormat("en-US", { timeZone:"America/Santiago", hour:"numeric", hour12:false }).format(new Date())) % 24; }
+  catch(e){ return new Date().getHours(); }
+ }
+ function cargarHorarios(){
+  if(horarios) return;
+  horarios = {};
+  fetch("horarios.json?v=" + new Date().toISOString().slice(0, 10), { cache:"no-store" })
+   .then(function(r){ return r.json(); })
+   .then(function(j){ horarios = j; if(ultimoEstado) pintarSalida(ultimoEstado); })
+   ["catch"](function(){ horarios = null; });
+ }
+ function graficoHorarios(){
+  if(!horarios || !horarios.dias) return "";
+  var hoy = diaSemanaChile();
+  if(!diaGrafico) diaGrafico = hoy <= 6 ? hoy : 1;
+  var max = 1;
+  for(var k = 1; k <= 6; k++) (horarios.dias[k] || []).slice(1).forEach(function(x){ if(x.p > max) max = x.p; });
+  var datos = (horarios.dias[diaGrafico] || []).slice(1);   /* la hora de apertura siempre parte vacía */
+  if(!datos.length) return "";
+  var ahoraH = horaActualChile(), menor = datos[0];
+  datos.forEach(function(x){ if(x.p < menor.p) menor = x; });
+  var barras = datos.map(function(x){
+   var c = x.p <= max * 0.4 ? "v" : (x.p <= max * 0.7 ? "a" : "r");
+   var ya = diaGrafico === hoy && x.h === ahoraH ? " ya" : "";
+   return '<div class="' + c + ya + '" style="height:' + Math.max(3, Math.round(x.p / max * 100)) + '%" title="' + x.h + ':00 · ~' + Math.round(x.p) + ' personas"></div>';
+  }).join("");
+  var horas = datos.map(function(x, i){ return '<span>' + (i % 3 === 0 ? x.h + ":00" : "") + '</span>'; }).join("");
+  var chips = [1,2,3,4,5,6].map(function(n){
+   return '<button type="button" data-dia="' + n + '" aria-pressed="' + (n === diaGrafico) + '">' + DIAS_CORTOS[n] + '</button>';
+  }).join("");
+  return '<div class="hor"><p class="hor-tit">📅 Elige tu horario</p>' +
+   (hoy === 7 ? '<p class="salida-nota" style="margin:0 0 8px">Hoy domingo el gimnasio está cerrado.</p>' : '') +
+   '<div class="hor-dias">' + chips + '</div>' +
+   '<div class="hor-barras">' + barras + '</div><div class="hor-horas">' + horas + '</div>' +
+   '<p class="hor-vacio">Más vacío' + (diaGrafico === hoy ? ' hoy' : ' el ' + DIAS_LARGOS[diaGrafico]) +
+   ': <b>' + menor.h + ':00</b> · ~' + Math.round(menor.p) + (Math.round(menor.p) === 1 ? ' persona' : ' personas') + '</p>' +
+   '<div class="hor-ley"><span><i style="background:#4CAF50"></i>Poca gente</span><span><i style="background:#E8C547"></i>Media</span><span><i style="background:#E30613"></i>Lleno</span></div>' +
+   '<p class="salida-nota">Promedio de los ingresos reales desde el ' + horarios.desde.split("-").reverse().join("-") + '. Entrena cuando haya menos gente.</p></div>';
+ }
  function pintarSalida(d, error){
   var box = document.getElementById("salidaCard");
   if(error && !d){
@@ -1223,7 +1312,10 @@ function renderEvolucion(s){
    return;
   }
   if(!d || d.ingresos !== true || typeof d.dentroAhora !== "number"){ box.hidden = true; return; }
+  ultimoEstado = d;
+  cargarHorarios();
   box.hidden = false;
+  var ahora = ultimoAhora !== null ? ultimoAhora : d.dentroAhora;
   var accion = "";
   if(d.dentro){
    accion = d.puedeMarcar
@@ -1234,8 +1326,12 @@ function renderEvolucion(s){
   }else{
    accion = '<p class="salida-sub">Tu ingreso se registra al escanear el QR de la entrada del gimnasio.</p>';
   }
-  box.innerHTML = '<p class="salida-num">' + d.dentroAhora + '</p><p class="salida-lbl">Dentro ahora</p>' + accion +
-   '<p class="salida-err">' + (error ? escapeHtml(error) : '') + '</p>';
+  box.innerHTML = '<p class="salida-kicker">Ocupación en tiempo real</p>' +
+   '<p class="salida-num">' + ahora + '</p><p class="salida-lbl">Dentro ahora</p>' + accion +
+   '<p class="salida-err">' + (error ? escapeHtml(error) : '') + '</p>' + graficoHorarios();
+  Array.prototype.forEach.call(box.querySelectorAll(".hor-dias button"), function(bt){
+   bt.addEventListener("click", function(){ diaGrafico = Number(bt.getAttribute("data-dia")); pintarSalida(ultimoEstado); });
+  });
   var b = box.querySelector("#salidaBtn");
   if(b) b.addEventListener("click", function(){
    b.disabled = true; b.textContent = "Registrando…";
@@ -1255,6 +1351,7 @@ function renderEvolucion(s){
   salidaJsonp({ action:"miIngreso", nombre:s.nombre, apellido:s.apellido, codigo:codigoDe(s) }, function(d){
    if(s === salidaSocio && d) pintarSalida(d);
   });
+  pedirAhora();
  }
  /* Registra el ingreso (solo con el QR de la puerta). El Apps Script
     decide: si ya está dentro responde registrado:false y no agrega nada,
@@ -1274,6 +1371,7 @@ function renderEvolucion(s){
     if(d.ingresos !== true){ avisarIngreso(s); return; }   /* Apps Script antiguo */
     if(d.registrado && d.codigo) guardarCodigo(s, d.codigo);
     pintarSalida(d);
+    pedirAhora();
    });
   }
   intentar();
@@ -1286,6 +1384,7 @@ function renderEvolucion(s){
    if(s !== salidaSocio || !d) return;
    if(d.ingresos !== true){ avisarIngreso(s); return; }
    pintarSalida(d);
+   pedirAhora();
   });
  }
  function iniciarIngreso(s){

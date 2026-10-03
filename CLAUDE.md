@@ -255,7 +255,20 @@ administración una sola vez y la guarda en ese equipo.
 `miIngreso` entrega como `dentroAhora`), nunca los contadores
 Ingresos/Personas ni nombres de otros socios, más el botón **"Registrar
 mi salida"** cuando el socio está dentro. Se refresca cada 15 segundos
-mientras la tarjeta está a la vista.
+mientras la tarjeta está a la vista. Desde la casa (ícono o enlace de
+siempre) el socio lo consulta sin registrar ingreso: ese es el objetivo,
+ver cuándo el gym está más vacío.
+- **"Ahora" del celular** cuenta solo ingresos sin salida de las últimas
+  `VENTANA_DENTRO_H` (2) horas — a quien olvidó marcar salida se le deja
+  de contar. Mesón y tablet siguen mostrando a todos hasta que se marque.
+- **"Elige tu horario"**: gráfico por hora y día con el promedio de
+  personas, de `horarios.json` (solo promedios, sin nombres), generado con
+  `scripts/generar-horarios.py` desde la hoja de ingresos descargada como
+  CSV (el CSV no se sube: trae nombres). Regenerarlo cada tanto.
+- **Cartel "TODO AL ALCANCE DE TU CELULAR"** (impreso por la dueña): su QR
+  apunta a `prueba-tarjeta.html?ingreso=puerta`. Al publicar,
+  `prueba-tarjeta.html` se reemplaza por un puente que redirige a
+  `tarjeta.html` conservando `?ingreso=puerta` — no borrar ese archivo.
 
 - **La fuente es la hoja de Google del check-in**, nunca un archivo del
   repo: el Apps Script (acciones `listarIngresos`, `registrarSalida`,
