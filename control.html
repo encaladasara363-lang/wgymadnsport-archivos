@@ -71,7 +71,9 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
  background:rgba(212,175,55,.14); }
 .hero .plan{ font-size:18px; color:var(--dorado); font-weight:700; margin:8px 0 0; }
 .hero .empty{ font-size:16px; color:var(--gris-soft); font-weight:600; margin:0; }
-.hero .renovar{ margin-top:16px; }
+.hero .renovar{ margin-top:16px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.hero .ing-resp{ flex-basis:100%; margin:4px 0 0; font-size:14px; font-weight:800; color:var(--verde); }
+.hero .ing-resp.mal{ color:var(--rojo-claro); }
 .hero[data-v="ok"]{ border-color:var(--verde); }
 .hero[data-v="ok"] .fallo{ color:var(--verde); }
 .hero[data-v="ok"].flash{ box-shadow:0 0 0 4px var(--verde), 0 0 40px 6px rgba(92,168,92,.45); }
@@ -324,7 +326,11 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <p class="turno" id="heroTurno" hidden></p>
 <p class="plan" id="heroPlan" hidden></p>
 <div class="renovar" hidden id="heroAcc">
+<!-- Respaldo para quien llegó sin escanear el QR de la puerta: aparece al
+     buscarlo a mano y registra su ingreso en la hoja (con la clave). -->
+<button class="btn btn-rojo" id="heroIngreso" hidden>Registrar ingreso</button>
 <button class="btn btn-oro" id="heroEditar">Renovar / editar ficha</button>
+<p class="ing-resp" id="heroIngresoMsg" hidden></p>
 </div>
 </div>
 
@@ -1081,6 +1087,8 @@ function mostrarHero(nombre, ts, s, cuantos){
  var pl = document.getElementById("heroPlan");
  if(d.plan){ pl.hidden = false; pl.textContent = d.plan; } else { pl.hidden = true; }
  document.getElementById("heroAcc").hidden = !s;
+ document.getElementById("heroIngreso").hidden = true;
+ document.getElementById("heroIngresoMsg").hidden = true;
 }
 function destellar(){
  var h = document.getElementById("hero");
@@ -1128,8 +1136,35 @@ function elegir(s){
  if(marcarDia(s, hoyISO())) pintarTabla();
  cerrarSug(); qPuerta.value = "";
  mostrarHero(s.n + " " + s.a, null, s);
+ var bi = document.getElementById("heroIngreso");
+ bi.hidden = false; bi.disabled = false; bi.textContent = "Registrar ingreso";
  destellar();
 }
+/* Botón de respaldo "Registrar ingreso": para quien llegó sin escanear el
+   QR de la puerta. Solo administración (POST con la clave de este equipo).
+   Si la persona ya está dentro, el Apps Script no duplica el ingreso. */
+document.getElementById("heroIngreso").addEventListener("click", function(){
+ var s = socioEnHero, b = this, msg = document.getElementById("heroIngresoMsg");
+ if(!s) return;
+ b.disabled = true; b.textContent = "Registrando…";
+ llamarSocioApi_("registrarIngreso", { nombre:s.n, apellido:s.a, venc:fechaCL(s.v) }, function(ok, info){
+  msg.hidden = false; msg.className = "ing-resp";
+  if(ok && info && info.registrado){
+   b.hidden = true;
+   msg.textContent = "✅ Ingreso registrado a las " + fmtHora(info.ts);
+   poll();
+  }else if(ok && info && info.dentro){
+   b.hidden = true;
+   msg.textContent = "Ya está dentro desde las " + fmtHora(info.desde) + " (no se duplicó).";
+  }else{
+   b.disabled = false; b.textContent = "Registrar ingreso";
+   msg.className = "ing-resp mal";
+   msg.textContent = info === "sin clave" || info === "clave incorrecta" ? "No se registró: hace falta la clave de administración."
+    : info === "acción no reconocida" ? "No se registró: falta actualizar el Apps Script."
+    : "No se registró: revisa internet e inténtalo de nuevo.";
+  }
+ });
+});
 function buscarAMano(){
  var lista = calzan(qPuerta.value);
  if(!lista.length){

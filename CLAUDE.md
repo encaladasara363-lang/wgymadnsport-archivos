@@ -270,10 +270,18 @@ mientras la tarjeta está a la vista.
   ver y desactiva MARCAR SALIDA con un aviso).
 - Una salida cierra **todos** los ingresos abiertos de esa persona ese
   día.
-- **Abrir la tarjeta no es ingresar:** `ingresoTarjeta` registra el
-  ingreso solo si la persona no tiene ninguno hoy (sin límite de horas).
-  Volver a entrar después de salir es un botón aparte ("Volver a
-  ingresar hoy", `forzar=1`).
+- **Abrir la tarjeta no es ingresar (regla permanente):** el ingreso se
+  registra SOLO cuando la tarjeta se abre con el QR de la puerta
+  (`tarjeta.html?ingreso=puerta`, sticker en `qr-entrada-puerta.pdf`
+  pegado sobre el QR antiguo del cartel "TARJETA VIRTUAL"). El socio
+  hace lo mismo de siempre: escanea y escribe su nombre. Abierta por
+  cualquier otro enlace solo consulta. La marca se borra de la dirección
+  al cargar (un enlace guardado o compartido no registra). Escanear
+  estando dentro no duplica; escanear después de salir es volver a
+  entrar. El QR antiguo del cartel abría `tarjeta.html` sin marca.
+- **Respaldo del mesón:** en "¿No alcanzó a escanear?", al buscar a un
+  socio aparece **"Registrar ingreso"** (POST `registrarIngreso` con
+  `ADMIN_KEY`; no duplica si ya está dentro).
 - **Permisos:** marcar o deshacer la salida de otra persona es solo de
   recepción (POST con `ADMIN_KEY`). El socio marca solo la suya, con el
   código privado que recibió su teléfono al registrar el ingreso

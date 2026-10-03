@@ -1148,11 +1148,14 @@ function renderEvolucion(s){
  }
  /* ---------- ingreso, dentro del gimnasio y marcar mi salida (10/2026) ----------
     Abrir la tarjeta NO es lo mismo que entrar al gimnasio. El ingreso se
-    registra con "ingresoTarjeta", y el Apps Script lo guarda SOLO si esa
-    persona todavía no tiene ingreso hoy: volver a abrir la tarjeta (para
-    mostrarla, pedir una banda o marcar la salida) nunca crea otra fila,
-    lleve las horas que lleve dentro o aunque ya haya salido. Volver a
-    entrar el mismo día después de salir se pide con su propio botón.
+    registra SOLO cuando la tarjeta se abre con el QR de la PUERTA
+    (tarjeta.html?ingreso=puerta): el socio escanea y escribe su nombre,
+    igual que siempre. Abierta por cualquier otro enlace (guardado,
+    WhatsApp, redes) la tarjeta solo consulta: muestra el contador y, si
+    está dentro, "Registrar mi salida". La marca de la puerta se borra de
+    la dirección apenas carga la página, así que un enlace guardado o
+    compartido después nunca registra ingresos. Si ya está dentro, volver a
+    escanear no duplica; si ya salió, escanear de nuevo es volver a entrar.
 
     El teléfono que registra el ingreso recibe un código privado (queda
     guardado solo en ese teléfono). Con él, y solo con él, el socio puede
@@ -1161,6 +1164,16 @@ function renderEvolucion(s){
     Si el Apps Script todavía no tiene estas funciones, se registra el
     ingreso como siempre (avisarIngreso) y el cuadro no aparece. */
  var salidaSocio = null, salidaTimer = null, nSal = 0;
+ var modoPuerta = false;
+ try{
+  var qsPuerta = new URLSearchParams(location.search);
+  if(qsPuerta.get("ingreso") === "puerta"){
+   modoPuerta = true;
+   qsPuerta.delete("ingreso");
+   var limpia = location.pathname + (qsPuerta.toString() ? "?" + qsPuerta : "") + location.hash;
+   history.replaceState(null, "", limpia);
+  }
+ }catch(e){}
  var CLAVE_CODIGOS = "wgym_codigo_ingreso_v1";
  function salidaJsonp(params, listo){
   var cb = "wgymSal" + (++nSal) + "_" + Date.now();
@@ -1215,8 +1228,9 @@ function renderEvolucion(s){
     ? '<button type="button" class="pago-btn principal" id="salidaBtn">🚪 Registrar mi salida</button>'
     : '<p class="salida-sub">Para registrar tu salida, avísale a recepción.</p>';
   }else if(d.vino && d.salida){
-   accion = '<p class="salida-sub">Tu salida quedó registrada a las ' + horaChile(d.salida) + '.</p>' +
-    '<button type="button" class="pago-btn sec" id="reingresoBtn">↩️ Volver a ingresar hoy</button>';
+   accion = '<p class="salida-sub">Tu salida quedó registrada a las ' + horaChile(d.salida) + '.</p>';
+  }else{
+   accion = '<p class="salida-sub">Tu ingreso se registra al escanear el QR de la entrada del gimnasio.</p>';
   }
   box.innerHTML = '<p class="salida-num">' + d.dentroAhora + '</p><p class="salida-lbl">Dentro ahora</p>' + accion +
    '<p class="salida-err">' + (error ? escapeHtml(error) : '') + '</p>';
@@ -1232,12 +1246,6 @@ function renderEvolucion(s){
     consultarSalida();
    });
   });
-  var rb = box.querySelector("#reingresoBtn");
-  if(rb) rb.addEventListener("click", function(){
-   if(!confirm("¿Estás entrando de nuevo al gimnasio? Se registrará un nuevo ingreso.")) return;
-   rb.disabled = true; rb.textContent = "Registrando…";
-   registrarIngreso(salidaSocio, true);
-  });
  }
  function consultarSalida(){
   if(!salidaSocio || !CHECKIN_URL) return;
@@ -1246,36 +1254,46 @@ function renderEvolucion(s){
    if(s === salidaSocio && d) pintarSalida(d);
   });
  }
- /* Registra el ingreso (si corresponde). El Apps Script decide: si ya hay
-    un ingreso hoy, responde registrado:false y no agrega nada, así que
-    reintentar por un corte de internet nunca duplica. */
- function registrarIngreso(s, otraVez){
+ /* Registra el ingreso (solo con el QR de la puerta). El Apps Script
+    decide: si ya está dentro responde registrado:false y no agrega nada,
+    así que reintentar por un corte de internet nunca duplica. */
+ function registrarIngreso(s){
   var intentos = 0;
   function intentar(){
    intentos++;
    salidaJsonp({ action:"ingresoTarjeta", nombre:s.nombre, apellido:s.apellido, venc:s.vencimiento || "",
-                 codigo:codigoDe(s), forzar:otraVez ? "1" : "0" }, function(d){
+                 codigo:codigoDe(s), forzar:"1" }, function(d){
     if(s !== salidaSocio) return;
     if(!d){
      if(intentos < 3){ setTimeout(intentar, 2000); return; }
      pintarSalida(null, "No se pudo registrar tu ingreso por falta de internet. Avísale a recepción.");
      return;
     }
-    if(d.ingresos !== true){             /* Apps Script antiguo */
-     if(!otraVez) avisarIngreso(s);
-     return;
-    }
+    if(d.ingresos !== true){ avisarIngreso(s); return; }   /* Apps Script antiguo */
     if(d.registrado && d.codigo) guardarCodigo(s, d.codigo);
     pintarSalida(d);
    });
   }
   intentar();
  }
+ /* Abierta sin el QR de la puerta: solo consulta. Mientras el Apps Script
+    no tenga las funciones nuevas, se mantiene el registro de siempre (hoy
+    el QR de la puerta abre esta misma página sin marca). */
+ function consultarInicio(s){
+  salidaJsonp({ action:"miIngreso", nombre:s.nombre, apellido:s.apellido, codigo:codigoDe(s) }, function(d){
+   if(s !== salidaSocio || !d) return;
+   if(d.ingresos !== true){ avisarIngreso(s); return; }
+   pintarSalida(d);
+  });
+ }
  function iniciarIngreso(s){
   salidaSocio = s;
   document.getElementById("salidaCard").hidden = true;
   clearInterval(salidaTimer);
-  if(CHECKIN_URL) registrarIngreso(s, false);
+  if(CHECKIN_URL){
+   if(modoPuerta){ modoPuerta = false; registrarIngreso(s); }
+   else consultarInicio(s);
+  }
   /* El contador se refresca solo mientras la tarjeta está a la vista. */
   salidaTimer = setInterval(function(){ if(!document.hidden) consultarSalida(); }, 15000);
  }

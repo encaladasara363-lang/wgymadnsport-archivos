@@ -14,15 +14,18 @@
        listarIngresos  → todos los ingresos de un día (fecha de Chile).
        miIngreso       → el estado de UNA persona hoy, más cuántas personas
                          hay dentro ahora (solo el número, sin nombres).
-       ingresoTarjeta  → registra el ingreso desde la tarjeta virtual, pero
-                         SOLO si esa persona todavía no tiene ingreso hoy.
-                         Abrir la tarjeta otra vez (dentro o ya salida) no
-                         crea otra fila. Volver a entrar después de salir
-                         se pide aparte (forzar=1).
+       ingresoTarjeta  → registra el ingreso desde la tarjeta virtual. La
+                         tarjeta solo la llama cuando se abrió con el QR de
+                         la PUERTA (tarjeta.html?ingreso=puerta), con
+                         forzar=1: registra si la persona no está dentro
+                         (si ya está dentro no duplica). Abrir la tarjeta
+                         por cualquier otro enlace solo consulta (miIngreso).
        salidaSocio     → el socio marca SU salida. Exige el código privado
                          que recibió SU teléfono al registrar el ingreso.
    - Solo administración (por POST, con la clave de administración, la
      misma ADMIN_KEY de guardarSocio):
+       registrarIngreso → respaldo del mesón: registra la entrada de quien
+                         llegó sin escanear (si ya está dentro, no duplica).
        registrarSalida → marca la salida de cualquier persona.
        quitarSalida    → deshace una salida marcada por error.
    ═══════════════════════════════════════════════════════════════════════ */
@@ -212,6 +215,31 @@ function salidaSocio_(e) {
 
 /* ── solo administración (POST con clave) ───────────────────────────── */
 
+function registrarIngreso_(e) {
+  var p = e.parameter;
+  if (!claveValida_(p)) return respond_(e, { ok: false, error: "clave incorrecta" });
+  var nombreTxt = String(p.nombre || ""), apellidoTxt = String(p.apellido || "");
+  var nombre = normNombre_(nombreTxt), apellido = normNombre_(apellidoTxt);
+  if (!nombre || !apellido) return respond_(e, { ok: false, error: "faltan datos" });
+  return conCandado_(e, function () {
+    var sheet = getSheet_();
+    var todas = filasDelDia_(sheet, diaCL_(Date.now()));
+    var estado = estadoDe_(todas, nombre, apellido, "");
+    if (estado.dentro) {
+      return respond_(e, { ok: true, ingresos: true, registrado: false, dentro: true, desde: estado.desde,
+                           dentroAhora: estado.dentroAhora });
+    }
+    marcarHeaders_(sheet);
+    var ahora = Date.now();
+    sheet.appendRow([ahora, nombreTxt, apellidoTxt, "", "", "", ""]);
+    var vencCell = sheet.getRange(sheet.getLastRow(), 4);
+    vencCell.setNumberFormat("@");
+    vencCell.setValue(String(p.venc || ""));
+    return respond_(e, { ok: true, ingresos: true, registrado: true, ts: ahora,
+                         dentroAhora: estado.dentroAhora + 1 });
+  });
+}
+
 function registrarSalida_(e) {
   var p = e.parameter;
   if (!claveValida_(p)) return respond_(e, { ok: false, error: "clave incorrecta" });
@@ -260,6 +288,7 @@ function accionIngresos_(e) {
 
 function accionIngresosPost_(e) {
   switch (e.parameter.action) {
+    case "registrarIngreso": return registrarIngreso_(e);
     case "registrarSalida": return registrarSalida_(e);
     case "quitarSalida": return quitarSalida_(e);
   }
