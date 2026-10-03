@@ -539,7 +539,7 @@ function cargarSocios(despues){
   guardar();
   pintar();
   /* Recalcula también el último ingreso visible cuando llega la lista. */
-  if(filas.length){ var r = filas[0]; mostrarHero(r.nombre+" "+r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido)); }
+  if(filas.length){ var r = filas[0]; mostrarHero(r.nombre+" "+r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido), 0, esPaseFila(r)); }
   if(despues) despues();
  };
  var script = document.createElement("script");
@@ -1076,9 +1076,14 @@ function veredicto(s){
 }
 
 var socioEnHero = null;
+function esPaseFila(r){ return String(r && r.venc || "").toUpperCase() === "PASE DIARIO"; }
 
-function mostrarHero(nombre, ts, s, cuantos){
+function mostrarHero(nombre, ts, s, cuantos, pase){
  var d = veredicto(s);
+ /* Pase diario: no tiene ficha de socio (o la que tiene está vencida),
+    pero pagó y puede entrar hoy. */
+ if(pase && d.v !== "ok" && d.v !== "warn") d = { v:"ok", fallo:"Pase diario",
+  detalle:"Pagó su pase diario · válido solo por hoy", corto:null, cls:"good", plan:"Pase Diario" };
  if(!s && cuantos) d.fallo = "Hay " + cuantos + " socios con ese nombre";
  if(!s && cuantos) d.detalle = "Elige cuál es en la lista de abajo";
  socioEnHero = s || null;
@@ -1273,7 +1278,7 @@ function pintarFeed(){
    accionAdmin: function(action, params, cb){ llamarSocioApi_(action, params, cb); },
    alTitulo: function(t){ document.getElementById("ingTitulo").textContent = t; },
    alTocar: function(r){
-    mostrarHero(r.nombre+" "+r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido));
+    mostrarHero(r.nombre+" "+r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido), 0, esPaseFila(r));
     window.scrollTo({ top:0, behavior:"smooth" });
    }
   });
@@ -1303,10 +1308,10 @@ function llegaronDatos(data){
   var ultima = filas[0];
   var s = socioDelRegistro(ultima.nombre, ultima.apellido);
   if(!primeraVuelta && !vistos[llaveDe(ultima)]){
-   mostrarHero(ultima.nombre+" "+ultima.apellido, ultima.ts, s);
+   mostrarHero(ultima.nombre+" "+ultima.apellido, ultima.ts, s, 0, esPaseFila(ultima));
    destellar();
   }else if(primeraVuelta){
-   mostrarHero(ultima.nombre+" "+ultima.apellido, ultima.ts, s);
+   mostrarHero(ultima.nombre+" "+ultima.apellido, ultima.ts, s, 0, esPaseFila(ultima));
   }
  }
  filas.forEach(function(r){ vistos[llaveDe(r)] = true; });

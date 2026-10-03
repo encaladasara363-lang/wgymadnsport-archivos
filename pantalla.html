@@ -733,6 +733,11 @@ function showHero(r){
  var planEl  = document.getElementById("heroPlan");
  var d = veredictoDe(r);
  var s = buscarSocio(r.nombre, r.apellido);
+ /* Pase diario (lo registra el mesón): sin ficha vigente, pero pagó hoy. */
+ if(String(r.venc || "").toUpperCase() === "PASE DIARIO" && d.v !== "ok" && d.v !== "warn"){
+  d = { v:"ok", fallo:"Pase diario", fechaTxt:"", diasTxt:"Pagó su pase diario · válido solo por hoy",
+        detalle:"Pagó su pase diario · válido solo por hoy", corto:null, cls:"good", plan:"Pase Diario" };
+ }
 
  document.getElementById("hero").setAttribute("data-v", d.v);
  falloEl.hidden = false; falloEl.textContent = d.fallo;
