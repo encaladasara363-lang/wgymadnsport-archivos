@@ -257,7 +257,7 @@ function crear(op){
    : '<span class="ing-est salio">SALIDA REGISTRADA · ' + horaCL(r.salida) + '</span>';
   var hora = tipo === "dentro"
    ? '<span class="hr">desde ' + horaCL(r.desde) + (r.veces > 1 ? ' · ' + r.veces + ' ingresos' : '') + '</span>'
-   : '<span class="hr">entró ' + horaCL(r.ts) + '</span>';
+   : '<span class="hr">entró ' + horaCL(r.ts) + (r.de > 1 ? ' · ingreso ' + r.n + ' de ' + r.de : '') + '</span>';
   var btn = "";
   if(abierta){
    var off = modoNuevo !== true || pendientes[persona(r)];
@@ -285,6 +285,14 @@ function crear(op){
    if(!porP[k]){ porP[k] = { nombre:r.nombre, apellido:r.apellido, ts:r.ts, desde:0, veces:0, salida:0, abiertas:0 }; ordenP.push(k); }
    var g = porP[k]; g.veces++;
    if(!r.salida){ g.abiertas++; if(!g.desde || r.ts < g.desde) g.desde = r.ts; }
+  });
+  /* Socios que vienen varias veces al día: cada fila del historial dice
+     qué ingreso del día es ("ingreso 2 de 3"). */
+  var tsP = {};
+  filas.forEach(function(r){ (tsP[persona(r)] = tsP[persona(r)] || []).push(r.ts); });
+  filas.forEach(function(r){
+   var l = tsP[persona(r)].slice().sort(function(x, y){ return x - y; });
+   r.de = l.length; r.n = l.indexOf(r.ts) + 1;
   });
   var dentro = ordenP.map(function(k){ return porP[k]; }).filter(function(g){ return g.abiertas > 0; })
    .sort(function(a, b){ return a.desde - b.desde; });

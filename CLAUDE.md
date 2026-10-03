@@ -300,6 +300,8 @@ ver cuándo el gym está más vacío.
   ingreso anterior que quedó abierto se cierra solo con origen
   "nueva visita". Solo un escaneo repetido antes de
   `MIN_NUEVA_VISITA_` (30) minutos desde su último ingreso no se duplica.
+  En mesón y tablet, cada fila del historial dice qué ingreso del día es
+  ("ingreso 2 de 3") y la lista "Dentro" muestra "· N ingresos".
 - **Pruebas:** `prueba-*.html` (de `scripts/generar-pruebas-ingresos.js`)
   mandan `prueba=1` y todo queda en la hoja "Pruebas ingresos", nunca en
   la hoja real (no alteran pantallas ni estadísticas). Borrarlas al
