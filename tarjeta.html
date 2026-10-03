@@ -1045,6 +1045,11 @@ function renderEvolucion(s){
  function veredictoSocio(s){
  var d = diasParaVencer(s);
  var venc = s.vencimiento || "—";
+ /* Pase diario: vale solo el día en que se pagó en recepción. */
+ if(/diario/i.test(s.plan || "") && s.vencimiento){
+ if(d === 0) return { v:"ok", fallo:"Pase diario", det:"Válido solo por hoy. Puedes entrar y salir todo el día." };
+ if(d < 0) return { v:"bad", fallo:"Pase diario vencido", det:"Tu pase diario fue el " + venc + ". Paga uno nuevo en recepción." };
+ }
  if(!s.vencimiento) return { v:"warn", fallo:"Consulta en recepción",
  det:"Tu ficha no tiene fecha de vencimiento" };
  if(d < 0) return { v:"bad", fallo:"Membresía vencida",
@@ -1385,7 +1390,8 @@ function renderEvolucion(s){
   var intentos = 0;
   function intentar(){
    intentos++;
-   salidaJsonp({ action:"ingresoTarjeta", nombre:s.nombre, apellido:s.apellido, venc:s.vencimiento || "",
+   salidaJsonp({ action:"ingresoTarjeta", nombre:s.nombre, apellido:s.apellido,
+                 venc:/diario/i.test(s.plan || "") ? "PASE DIARIO" : (s.vencimiento || ""),
                  codigo:codigoDe(s), forzar:"1" }, function(d){
     if(s !== salidaSocio) return;
     if(!d){

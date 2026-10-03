@@ -327,6 +327,16 @@ ver cuándo el gym está más vacío.
   elegido, en mesón y tablet. El cobro se sigue anotando en la Caja
   (artifact "Caja WGYMADNSPORT"). No pedir ni guardar teléfonos ahí:
   `listarIngresos` es público.
+  **Acceso todo el día (03-10-2026):** el mismo botón además guarda a la
+  persona como socio (`guardarSocio`, hoja "Socios") con plan "Pase
+  Diario", $4.000 y vencimiento HOY, salvo que ya sea socio con plan
+  vigente (su ficha no se toca; solo se registra el ingreso y se avisa).
+  Así abre su tarjeta, escanea el QR o toca "Registrar mi ingreso" y
+  entra y sale todo el día (la tarjeta manda `venc:"PASE DIARIO"`).
+  Mesón, tablet y tarjeta muestran "Pase diario · válido solo por hoy";
+  al día siguiente, "Pase diario vencido". El resumen del panel cuenta
+  una persona por pase ("· N ingresos"). Estas fichas caen solas con la
+  regla de borrar a quien lleve 3 meses vencido.
 - **Pruebas:** `prueba-*.html` (de `scripts/generar-pruebas-ingresos.js`)
   mandan `prueba=1` y todo queda en la hoja "Pruebas ingresos", nunca en
   la hoja real (no alteran pantallas ni estadísticas). Borrarlas al

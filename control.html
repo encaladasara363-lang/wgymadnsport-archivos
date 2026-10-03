@@ -428,7 +428,7 @@ const LOGO_B64 = "assets/logo-oficial.webp";
 /* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 </script>
-<script src="ingresos.js?v=8"></script>
+<script src="ingresos.js?v=9"></script>
 
 
 <script>
@@ -1058,7 +1058,16 @@ function socioDelRegistro(nombre, apellido){
 }
 
 /* ── veredicto ──────────────────────────────────────────────────────── */
+function esPlanDiario(s){ return !!s && /diario/i.test(s.plan || ""); }
 function veredicto(s){
+ /* Pase diario: vale solo el día en que se pagó (vencimiento = ese día). */
+ if(esPlanDiario(s) && s.v){
+  var dd = diasPara(s.v, s.plan);
+  if(dd === 0) return { v:"ok", fallo:"Pase diario",
+   detalle:"Pagó su pase diario · válido solo por hoy", corto:"Pase diario · hoy", cls:"good", plan:s.plan };
+  if(dd < 0) return { v:"bad", fallo:"Pase diario vencido",
+   detalle:"Su pase diario fue el "+fechaCL(s.v)+" · cobra uno nuevo", corto:null, cls:"danger", plan:s.plan };
+ }
  if(!s) return { v:"nadie", fallo:"No está en la lista de socios",
   detalle:"Revísalo abajo o agrégalo como socio nuevo", corto:"Sin ficha de socio", cls:"", plan:"" };
  var e = estadoDe(s);
@@ -1187,27 +1196,52 @@ document.getElementById("heroIngreso").addEventListener("click", function(){
  });
 });
 /* Registrar un pase diario: nombre y apellido (al menos dos palabras). */
+/* Además deja a la persona como socio con plan "Pase Diario" y vencimiento
+   hoy: así puede abrir su tarjeta, escanear el QR y entrar y salir todo el
+   día; mañana su tarjeta sale vencida. Si ya es socio con plan vigente, su
+   ficha no se toca (solo se registra el ingreso). */
 document.getElementById("bPase").addEventListener("click", function(){
  var inp = document.getElementById("paseNombre"), msg = document.getElementById("paseMsg"), b = this;
  var partes = inp.value.trim().toUpperCase().split(/\s+/).filter(Boolean);
  msg.hidden = false; msg.className = "ing-resp";
  if(partes.length < 2){ msg.className = "ing-resp mal"; msg.textContent = "Escribe nombre y apellido."; inp.focus(); return; }
- var datos = { nombre:partes[0], apellido:partes.slice(1).join(" "), venc:"PASE DIARIO" };
+ var nom = partes[0], ape = partes.slice(1).join(" ");
+ var ficha = null;
+ socios.forEach(function(x){ if(!ficha && sinTildes(x.n) === sinTildes(nom) && sinTildes(x.a) === sinTildes(ape)) ficha = x; });
+ var vigente = ficha && !esPlanDiario(ficha) && estadoDe(ficha) !== "vencido";
+ var datos = { nombre:nom, apellido:ape, venc:vigente ? fechaCL(ficha.v) : "PASE DIARIO" };
  if(window.WGYM_PRUEBA_INGRESOS) datos.prueba = "1";
  b.disabled = true; b.textContent = "Registrando…";
- llamarSocioApi_("registrarIngreso", datos, function(ok, info){
+ function fallo(info){
   b.disabled = false; b.textContent = "Registrar pase diario";
-  if(ok && info && info.registrado){
-   msg.textContent = "✅ Pase diario de " + datos.nombre + " " + datos.apellido + " registrado a las " + fmtHora(info.ts) + ".";
-   inp.value = ""; poll();
-  }else if(ok && info && info.dentro){
-   msg.textContent = datos.nombre + " " + datos.apellido + " ya está dentro desde las " + fmtHora(info.desde) + " (no se duplicó).";
-  }else{
-   msg.className = "ing-resp mal";
-   msg.textContent = info === "sin clave" || info === "clave incorrecta" ? "No se registró: hace falta la clave de administración."
-    : "No se registró: revisa internet e inténtalo de nuevo.";
-  }
+  msg.className = "ing-resp mal";
+  msg.textContent = info === "sin clave" || info === "clave incorrecta" ? "No se registró: hace falta la clave de administración."
+   : "No se registró: revisa internet e inténtalo de nuevo.";
+ }
+ if(vigente || window.WGYM_PRUEBA_INGRESOS){ registrar(); return; }
+ var nuevaFicha = { n:ficha ? ficha.n : nom, a:ficha ? ficha.a : ape, plan:"Pase Diario", m:4000, v:hoyISO(),
+                    medid:(ficha && ficha.medid) || "" };
+ guardarSocioApi(nuevaFicha, function(ok, info){
+  if(!ok){ fallo(info); return; }
+  if(ficha){ ficha.plan = nuevaFicha.plan; ficha.m = nuevaFicha.m; ficha.v = nuevaFicha.v; }
+  else socios.push({ id:idNuevo(), n:nuevaFicha.n, a:nuevaFicha.a, plan:nuevaFicha.plan, m:nuevaFicha.m, v:nuevaFicha.v, medid:"" });
+  guardar(); pintar();
+  registrar();
  });
+ function registrar(){
+ llamarSocioApi_("registrarIngreso", datos, function(ok, info){
+  if(!(ok && info && (info.registrado || info.dentro))){ fallo(info); return; }
+  b.disabled = false; b.textContent = "Registrar pase diario";
+  var quien = datos.nombre + " " + datos.apellido;
+  msg.textContent = vigente
+   ? "Ojo: " + quien + " es socio con plan vigente (vence el " + fechaCL(ficha.v) + "), no necesita pase diario. " +
+     (info.registrado ? "Se registró su ingreso." : "Ya estaba dentro.")
+   : (info.registrado ? "✅ Pase diario de " + quien + " registrado a las " + fmtHora(info.ts) + "."
+                      : "✅ Pase diario de " + quien + " activado (ya estaba dentro).") +
+     " Puede entrar y salir todo el día con su tarjeta virtual (escanea el QR y escribe su nombre).";
+  inp.value = ""; poll();
+ });
+ }
 });
 document.getElementById("paseNombre").addEventListener("keydown", function(ev){
  if(ev.key === "Enter"){ ev.preventDefault(); document.getElementById("bPase").click(); }

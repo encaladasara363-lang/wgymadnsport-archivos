@@ -312,11 +312,18 @@ function crear(op){
    '<div class="dentro"><b>' + dentro.length + '</b><span>Dentro ahora</span></div>';
 
   /* Quiénes entraron con pase diario este día (nombre y hora). */
-  var pases = filas.filter(esPase).slice().sort(function(a, b){ return a.ts - b.ts; });
+  /* Una persona por pase, aunque entre y salga varias veces en el día. */
+  var pases = [], vistosP = {};
+  filas.filter(esPase).slice().sort(function(a, b){ return a.ts - b.ts; }).forEach(function(r){
+   var k = persona(r);
+   if(vistosP[k]){ vistosP[k].veces++; return; }
+   vistosP[k] = { r:r, veces:1 }; pases.push(vistosP[k]);
+  });
   var bp = $(".ing-pases");
   bp.hidden = !pases.length;
   bp.innerHTML = pases.length ? '<b>🎟 Pases diarios: ' + pases.length + '</b><br>' +
-   pases.map(function(r){ return esc(r.nombre + " " + r.apellido) + ' (' + horaCL(r.ts) + ')'; }).join(" · ") : "";
+   pases.map(function(p){ return esc(p.r.nombre + " " + p.r.apellido) + ' (' + horaCL(p.r.ts) +
+    (p.veces > 1 ? ' · ' + p.veces + ' ingresos' : '') + ')'; }).join(" · ") : "";
   var dVis = dentro.filter(coincide), hVis = filas.filter(coincide);
   $(".ing-n-dentro").textContent = dVis.length + (dVis.length !== dentro.length ? " de " + dentro.length : "");
   $(".ing-n-hist").textContent = hVis.length + (hVis.length !== filas.length ? " de " + filas.length : "");

@@ -302,7 +302,7 @@ Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te 
 <div id="feed"></div>
 </div>
 
-<script src="ingresos.js?v=8"></script>
+<script src="ingresos.js?v=9"></script>
 <script>
 const LOGO_B64 = "assets/logo-oficial.webp";
 /* Se completa con el link de "Implementar como app web" de Google Apps Script. */
@@ -644,6 +644,14 @@ function buscarSocio(nombre, apellido){
 }
 function veredictoDe(r){
  var s = buscarSocio(r.nombre, r.apellido);
+ /* Pase diario: vale solo el día en que se pagó. */
+ if(s && /diario/i.test(s.plan || "") && s.v){
+  var dd = diasPara(s.v, s.plan);
+  if(dd === 0) return { v:"ok", fallo:"Pase diario", detalle:"Pagó su pase diario · válido solo por hoy",
+   fechaTxt:"", diasTxt:"Pagó su pase diario · válido solo por hoy", corto:"Pase diario · hoy", cls:"good", plan:s.plan };
+  if(dd < 0) return { v:"bad", fallo:"Pase diario vencido", detalle:"Su pase diario fue el " + fechaCL(s.v),
+   fechaTxt:"Su pase diario fue el " + fechaCL(s.v), diasTxt:"cobra uno nuevo", corto:null, cls:"danger", plan:s.plan };
+ }
  if(!s){
   var viejo = estadoVenc(r.venc);
   var txt = viejo ? viejo.txt : "Revísalo en la planilla";
