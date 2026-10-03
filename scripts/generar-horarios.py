@@ -13,7 +13,7 @@ contador "Dentro ahora" de la tarjeta para quien no marcó su salida).
 import csv, json, sys, datetime, collections
 from zoneinfo import ZoneInfo
 
-VENTANA_HORAS = 2
+VENTANA_HORAS = 3
 TZ = ZoneInfo("America/Santiago")
 # Horario del cartel: lunes=0 … sábado=5; domingo cerrado.
 HORARIO = {0: (8, 23), 1: (8, 23), 2: (8, 23), 3: (8, 23), 4: (9, 23), 5: (10, 22)}

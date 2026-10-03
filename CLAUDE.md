@@ -259,7 +259,7 @@ mientras la tarjeta está a la vista. Desde la casa (ícono o enlace de
 siempre) el socio lo consulta sin registrar ingreso: ese es el objetivo,
 ver cuándo el gym está más vacío.
 - **"Ahora" del celular** cuenta solo ingresos sin salida de las últimas
-  `VENTANA_DENTRO_H` (2) horas — a quien olvidó marcar salida se le deja
+  `VENTANA_DENTRO_H` (3) horas (pedido de la dueña) — a quien olvidó marcar salida se le deja
   de contar. Mesón y tablet siguen mostrando a todos hasta que se marque.
 - **"Elige tu horario"**: gráfico por hora y día con el promedio de
   personas, de `horarios.json` (solo promedios, sin nombres), generado con
