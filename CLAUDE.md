@@ -242,14 +242,18 @@ links públicos.
 
 ### Ingresos de hoy y MARCAR SALIDA (desde 10/2026)
 
-`control.html` muestra el panel **"Ingresos de hoy"** (`ingresos.js`):
-todos los ingresos del día según la fecha de Chile, la lista "Dentro del
-gimnasio" con el botón **MARCAR SALIDA**, el "Historial del día" (cada
-ingreso con su estado DENTRO / SALIDA REGISTRADA, búsqueda por nombre y
-selector de fecha para días anteriores) y los totales (ingresos,
-personas, dentro ahora). `pantalla.html` muestra "Salió HH:MM" y
-`tarjeta.html` el cuadro "Estás dentro del gimnasio" con "Marcar mi
-salida".
+`control.html` muestra el panel **"Dentro del gimnasio"** (`ingresos.js`),
+simplificado a pedido de la dueña (10/2026): solo el contador **"DENTRO
+AHORA"** (número grande en verde, cada socio contado una sola vez,
+calculado con los registros reales de la hoja) y debajo la lista de
+quienes tienen ingreso de hoy sin salida, cada uno con **MARCAR SALIDA**.
+Al marcar la salida (recepción o el propio socio) sale de la lista y el
+contador baja en todos los equipos (se refrescan solos cada 4 segundos).
+**No volver a poner** los contadores "Ingresos"/"Personas" en la vista
+principal. El historial completo (cualquier día, búsqueda, estado de
+cada ingreso, "Deshacer") queda detrás del botón **"VER HISTORIAL"**.
+`pantalla.html` muestra "Salió HH:MM" y `tarjeta.html` el cuadro "Estás
+dentro del gimnasio" con "Marcar mi salida".
 
 - **La fuente es la hoja de Google del check-in**, nunca un archivo del
   repo: el Apps Script (acciones `listarIngresos`, `registrarSalida`,

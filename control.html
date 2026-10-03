@@ -353,11 +353,11 @@ Ver estado
 </div>
 
 <div class="feed-head">
-<h2 id="ingTitulo">Ingresos de hoy</h2>
+<h2 id="ingTitulo">Dentro del gimnasio</h2>
 <span class="dot-status" id="estadoVivo" data-vivo="si"><span class="dot-live"></span> <span id="estadoVivoTxt">Conectando…</span></span>
 </div>
-<!-- Todos los ingresos del día (nunca solo los últimos), quién sigue
-     dentro y MARCAR SALIDA. Lo arma ingresos.js. -->
+<!-- "Dentro ahora", quién sigue dentro con MARCAR SALIDA y el historial
+     (botón VER HISTORIAL). Lo arma ingresos.js con los datos de la hoja. -->
 <div id="ingresosPanel"></div>
 
 <section class="kpis" id="kpis"></section>
@@ -408,7 +408,7 @@ const LOGO_B64 = "assets/logo-oficial.webp";
 /* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 </script>
-<script src="ingresos.js?v=2"></script>
+<script src="ingresos.js?v=3"></script>
 
 
 <script>
