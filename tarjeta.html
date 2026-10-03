@@ -1349,7 +1349,10 @@ function renderEvolucion(s){
   var ahora = ultimoAhora !== null ? ultimoAhora : d.dentroAhora;
   var accion = "";
   if(d.dentro){
-   accion = d.puedeMarcar
+   /* salidaLibre: el script nuevo deja marcar la salida aunque este
+      teléfono no tenga el código (lo abrió en otro navegador). Con el
+      script antiguo no viene, y se sigue pidiendo el código. */
+   accion = (d.puedeMarcar || d.salidaLibre)
     ? '<button type="button" class="pago-btn principal" id="salidaBtn">🚪 Registrar mi salida</button>'
     : '<p class="salida-sub">Para registrar tu salida, avísale a recepción.</p>';
    /* Se fue sin marcar la salida y volvió (hay socios que vienen 2 o 3

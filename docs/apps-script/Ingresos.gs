@@ -25,8 +25,14 @@
                          minutos desde su último ingreso, no se duplica.
                          Abrir la tarjeta por cualquier otro enlace solo
                          consulta (miIngreso).
-       salidaSocio     → el socio marca SU salida. Exige el código privado
-                         que recibió SU teléfono al registrar el ingreso.
+       salidaSocio     → el socio marca SU salida desde su tarjeta. Desde
+                         el 03-10-2026 no exige el código privado del
+                         teléfono (muchos Android escanean en un navegador
+                         y abren la tarjeta en otro, y el código no
+                         estaba): basta con su nombre, igual que para
+                         entrar. Solo cierra los ingresos de ESA persona;
+                         sin el código queda con origen "tarjeta sin
+                         codigo", y recepción lo deshace si hiciera falta.
    - Solo administración (por POST, con la clave de administración, la
      misma ADMIN_KEY de guardarSocio):
        registrarIngreso → respaldo del mesón: registra la entrada de quien
@@ -154,7 +160,10 @@ function estadoPersona_(mias, codigo) {
     desde: abiertas.length ? abiertas[abiertas.length - 1].ts : 0,
     salida: abiertas.length ? 0 : ultimaSalida,
     /* true solo si este teléfono registró uno de los ingresos abiertos */
-    puedeMarcar: !!codigo && abiertas.some(function (r) { return r.codigo === codigo; })
+    puedeMarcar: !!codigo && abiertas.some(function (r) { return r.codigo === codigo; }),
+    /* La tarjeta muestra "Registrar mi salida" aunque este teléfono no
+       tenga el código (ver salidaSocio). */
+    salidaLibre: true
   };
 }
 
@@ -237,7 +246,7 @@ function salidaSocio_(e) {
   var p = e.parameter;
   var nombre = normNombre_(p.nombre), apellido = normNombre_(p.apellido);
   var codigo = String(p.codigo || "");
-  if (!nombre || !apellido || !codigo) return respond_(e, { ok: false, error: "faltan datos" });
+  if (!nombre || !apellido) return respond_(e, { ok: false, error: "faltan datos" });
   return conCandado_(e, function () {
     var sheet = hojaIngresos_(p);
     var todas = filasDelDia_(sheet, diaCL_(Date.now()));
@@ -245,11 +254,11 @@ function salidaSocio_(e) {
       return !r.salida && mismaPersona_(r, nombre, apellido);
     });
     if (!abiertas.length) return respond_(e, { ok: true, ingresos: true, cerradas: 0, dentroAhora: contarDentro_(todas) });
-    var suya = abiertas.some(function (r) { return r.codigo === codigo; });
-    if (!suya) return respond_(e, { ok: false, error: "no autorizado" });
+    var suya = !!codigo && abiertas.some(function (r) { return r.codigo === codigo; });
+    var origen = suya ? "tarjeta" : "tarjeta sin codigo";
     var ahora = Date.now();
     abiertas.forEach(function (r) {
-      sheet.getRange(r.fila, 5, 1, 2).setValues([[ahora, "tarjeta"]]);
+      sheet.getRange(r.fila, 5, 1, 2).setValues([[ahora, origen]]);
       r.salida = ahora;
     });
     return respond_(e, { ok: true, ingresos: true, cerradas: abiertas.length, salida: ahora,

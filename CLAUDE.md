@@ -345,9 +345,15 @@ ver cuándo el gym está más vacío.
   socio aparece **"Registrar ingreso"** (POST `registrarIngreso` con
   `ADMIN_KEY`; misma regla de visita nueva de 30 minutos).
 - **Permisos:** marcar o deshacer la salida de otra persona es solo de
-  recepción (POST con `ADMIN_KEY`). El socio marca solo la suya, con el
-  código privado que recibió su teléfono al registrar el ingreso
-  (columna G, nunca se publica).
+  recepción (POST con `ADMIN_KEY`). El socio marca la suya desde su
+  tarjeta. Hasta el 03-10-2026 exigía el código privado que recibió su
+  teléfono al registrar el ingreso (columna G, nunca se publica); como
+  muchos Android escanean en un navegador y abren la tarjeta en otro, a
+  pedido de la dueña el script nuevo (`salidaLibre:true` en
+  `miIngreso`) ya no lo exige: basta el nombre, igual que para entrar, y
+  la salida queda con origen "tarjeta sin codigo". La tarjeta muestra el
+  botón solo si el script responde `salidaLibre`, así que nada cambia
+  hasta que la dueña pegue el script nuevo.
 - Un equipo recién abierto muestra lo que trae la hoja; la copia del
   equipo solo se usa sin conexión o con el script antiguo.
 
