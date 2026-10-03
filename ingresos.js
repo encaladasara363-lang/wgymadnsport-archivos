@@ -85,9 +85,11 @@ function unir(viejas, nuevas){
  });
  return orden.map(function(k){ return por[k]; }).sort(function(a, b){ return b.ts - a.ts; });
 }
+function esPase(r){ return String(r && r.venc || "").toUpperCase() === "PASE DIARIO"; }
 function limpiarFila(r){
  return { ts:Number(r.ts) || 0, nombre:String(r.nombre || ""), apellido:String(r.apellido || ""),
-          fila:Number(r.fila) || 0, salida:Number(r.salida) || 0, origen:String(r.origen || "") };
+          fila:Number(r.fila) || 0, salida:Number(r.salida) || 0, origen:String(r.origen || ""),
+          venc:String(r.venc || "") };
 }
 
 /* ── JSONP, igual que el resto de las llamadas al check-in ── */
@@ -146,6 +148,9 @@ var CSS = '' +
 '.ing-tot b{display:block;font-size:24px;font-weight:900;color:#fff;line-height:1.1}' +
 '.ing-tot span{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gris-soft,#8C8C8C)}' +
 '.ing-tot .dentro{border-color:rgba(92,168,92,.5)}' +
+'.ing-est.pase{color:#0A0A0B;background:var(--dorado,#D4AF37);border:1px solid var(--dorado,#D4AF37)}' +
+'.ing-pases{background:var(--surface,#161616);border:1px solid rgba(212,175,55,.55);border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:13px;color:#E8E8E8;line-height:1.5}' +
+'.ing-pases b{color:var(--dorado,#D4AF37);letter-spacing:.06em;text-transform:uppercase;font-size:12px}' +
 '.ing-tot .dentro b,.ing-tot .dentro span{color:var(--verde,#5CA85C)}' +
 '.ing-compacto .ing-tot{grid-template-columns:1fr 1fr}' +
 '.ing-compacto .ing-tot .dentro{grid-column:1 / -1}' +
@@ -197,6 +202,7 @@ function crear(op){
   '</div>' +
   '<div class="ing-avisos"></div>' +
   '<div class="ing-tot"></div>' +
+  '<div class="ing-pases" hidden></div>' +
   '<div class="ing-sub"><span>🟢 Dentro del gimnasio</span><span class="n ing-n-dentro"></span></div>' +
   '<button type="button" class="ing-todos" hidden>Marcar salida a todos</button>' +
   '<div class="ing-lista ing-dentro"></div>' +
@@ -251,7 +257,9 @@ function crear(op){
  }
  function itemHtml(r, tipo){
   var abierta = !r.salida;
-  var extra = op.extraHtml ? op.extraHtml(r) : "";
+  /* Pase diario (registrado desde el cuadro "Pase diario" del mesón):
+     etiqueta dorada en vez de la nota de ficha de socio, que no tiene. */
+  var extra = esPase(r) ? '<span class="ing-est pase">PASE DIARIO</span>' : op.extraHtml ? op.extraHtml(r) : "";
   var est = abierta
    ? '<span class="ing-est dentro">DENTRO</span>'
    : '<span class="ing-est salio">SALIDA REGISTRADA · ' + horaCL(r.salida) + '</span>';
@@ -282,7 +290,8 @@ function crear(op){
   var porP = {}, ordenP = [];
   filas.forEach(function(r){
    var k = persona(r);
-   if(!porP[k]){ porP[k] = { nombre:r.nombre, apellido:r.apellido, ts:r.ts, desde:0, veces:0, salida:0, abiertas:0 }; ordenP.push(k); }
+   if(!porP[k]){ porP[k] = { nombre:r.nombre, apellido:r.apellido, ts:r.ts, desde:0, veces:0, salida:0, abiertas:0, venc:"" }; ordenP.push(k); }
+   if(esPase(r)) porP[k].venc = r.venc;
    var g = porP[k]; g.veces++;
    if(!r.salida){ g.abiertas++; if(!g.desde || r.ts < g.desde) g.desde = r.ts; }
   });
@@ -302,6 +311,12 @@ function crear(op){
    '<div><b>' + ordenP.length + '</b><span>Personas</span></div>' +
    '<div class="dentro"><b>' + dentro.length + '</b><span>Dentro ahora</span></div>';
 
+  /* Quiénes entraron con pase diario este día (nombre y hora). */
+  var pases = filas.filter(esPase).slice().sort(function(a, b){ return a.ts - b.ts; });
+  var bp = $(".ing-pases");
+  bp.hidden = !pases.length;
+  bp.innerHTML = pases.length ? '<b>🎟 Pases diarios: ' + pases.length + '</b><br>' +
+   pases.map(function(r){ return esc(r.nombre + " " + r.apellido) + ' (' + horaCL(r.ts) + ')'; }).join(" · ") : "";
   var dVis = dentro.filter(coincide), hVis = filas.filter(coincide);
   $(".ing-n-dentro").textContent = dVis.length + (dVis.length !== dentro.length ? " de " + dentro.length : "");
   $(".ing-n-hist").textContent = hVis.length + (hVis.length !== filas.length ? " de " + filas.length : "");

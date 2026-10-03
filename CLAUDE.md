@@ -318,6 +318,15 @@ ver cuándo el gym está más vacío.
   `MIN_NUEVA_VISITA_` (30) minutos desde su último ingreso no se duplica.
   En mesón y tablet, cada fila del historial dice qué ingreso del día es
   ("ingreso 2 de 3") y la lista "Dentro" muestra "· N ingresos".
+- **Pase diario (03-10-2026, pedido de la dueña: "no saber quiénes
+  son"):** cuadro "🎟 Pase diario" en el mesón (nombre y apellido →
+  POST `registrarIngreso` con `venc:"PASE DIARIO"`, el script ya
+  instalado lo guarda en la columna D). El panel (`ingresos.js`,
+  `esPase()`) muestra la etiqueta dorada PASE DIARIO en vez de la nota
+  de ficha, y el resumen "Pases diarios: N" con nombres y horas del día
+  elegido, en mesón y tablet. El cobro se sigue anotando en la Caja
+  (artifact "Caja WGYMADNSPORT"). No pedir ni guardar teléfonos ahí:
+  `listarIngresos` es público.
 - **Pruebas:** `prueba-*.html` (de `scripts/generar-pruebas-ingresos.js`)
   mandan `prueba=1` y todo queda en la hoja "Pruebas ingresos", nunca en
   la hoja real (no alteran pantallas ni estadísticas). Borrarlas al

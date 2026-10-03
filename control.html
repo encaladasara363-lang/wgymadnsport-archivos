@@ -74,6 +74,9 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .hero .renovar{ margin-top:16px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
 .hero .ing-resp{ flex-basis:100%; margin:4px 0 0; font-size:14px; font-weight:800; color:var(--verde); }
 .hero .ing-resp.mal{ color:var(--rojo-claro); }
+.pase-diario .ing-resp{ flex-basis:100%; margin:0; font-size:14px; font-weight:800; color:var(--verde); }
+.pase-diario .ing-resp.mal{ color:var(--rojo-claro); }
+.pase-diario input{ border-color:rgba(212,175,55,.55); }
 .hero[data-v="ok"]{ border-color:var(--verde); }
 .hero[data-v="ok"] .fallo{ color:var(--verde); }
 .hero[data-v="ok"].flash{ box-shadow:0 0 0 4px var(--verde), 0 0 40px 6px rgba(92,168,92,.45); }
@@ -358,6 +361,17 @@ Ver estado
 </button>
 </div>
 
+<!-- Pase diario (03-10-2026): quien paga el pase diario no está en la
+     planilla de socios. Aquí se anota su nombre y queda en la hoja de
+     ingresos (Vencimiento = "PASE DIARIO"), con etiqueta dorada en el
+     panel. El cobro se sigue anotando en la Caja. -->
+<div class="manual pase-diario">
+<input id="paseNombre" type="text" autocomplete="off" spellcheck="false"
+ placeholder="🎟 Pase diario: nombre y apellido de quien pagó" aria-label="Nombre y apellido del pase diario">
+<button class="btn btn-rojo" id="bPase" type="button">Registrar pase diario</button>
+<p class="ing-resp" id="paseMsg" hidden></p>
+</div>
+
 <div class="feed-head">
 <h2 id="ingTitulo">Ingresos de hoy</h2>
 <span class="dot-status" id="estadoVivo" data-vivo="si"><span class="dot-live"></span> <span id="estadoVivoTxt">Conectando…</span></span>
@@ -414,7 +428,7 @@ const LOGO_B64 = "assets/logo-oficial.webp";
 /* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 </script>
-<script src="ingresos.js?v=7"></script>
+<script src="ingresos.js?v=8"></script>
 
 
 <script>
@@ -1166,6 +1180,32 @@ document.getElementById("heroIngreso").addEventListener("click", function(){
     : "No se registró: revisa internet e inténtalo de nuevo.";
   }
  });
+});
+/* Registrar un pase diario: nombre y apellido (al menos dos palabras). */
+document.getElementById("bPase").addEventListener("click", function(){
+ var inp = document.getElementById("paseNombre"), msg = document.getElementById("paseMsg"), b = this;
+ var partes = inp.value.trim().toUpperCase().split(/\s+/).filter(Boolean);
+ msg.hidden = false; msg.className = "ing-resp";
+ if(partes.length < 2){ msg.className = "ing-resp mal"; msg.textContent = "Escribe nombre y apellido."; inp.focus(); return; }
+ var datos = { nombre:partes[0], apellido:partes.slice(1).join(" "), venc:"PASE DIARIO" };
+ if(window.WGYM_PRUEBA_INGRESOS) datos.prueba = "1";
+ b.disabled = true; b.textContent = "Registrando…";
+ llamarSocioApi_("registrarIngreso", datos, function(ok, info){
+  b.disabled = false; b.textContent = "Registrar pase diario";
+  if(ok && info && info.registrado){
+   msg.textContent = "✅ Pase diario de " + datos.nombre + " " + datos.apellido + " registrado a las " + fmtHora(info.ts) + ".";
+   inp.value = ""; poll();
+  }else if(ok && info && info.dentro){
+   msg.textContent = datos.nombre + " " + datos.apellido + " ya está dentro desde las " + fmtHora(info.desde) + " (no se duplicó).";
+  }else{
+   msg.className = "ing-resp mal";
+   msg.textContent = info === "sin clave" || info === "clave incorrecta" ? "No se registró: hace falta la clave de administración."
+    : "No se registró: revisa internet e inténtalo de nuevo.";
+  }
+ });
+});
+document.getElementById("paseNombre").addEventListener("keydown", function(ev){
+ if(ev.key === "Enter"){ ev.preventDefault(); document.getElementById("bPase").click(); }
 });
 function buscarAMano(){
  var lista = calzan(qPuerta.value);
