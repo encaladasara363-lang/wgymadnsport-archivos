@@ -1075,6 +1075,9 @@ function renderEvolucion(s){
  }
  function renderCard(s){
  var est = estadoDe(s.vencimiento);
+ /* Pase diario: hoy vale todo el día, no "vence pronto". */
+ var diario = /diario/i.test(s.plan || "");
+ if(diario && est.cls === "warn") est = { cls:"good", txt:"Válido hoy" };
  var w = veredictoSocio(s);
  document.getElementById("memberCard").innerHTML =
  '<div class="mc-veredicto" data-v="'+w.v+'">' +
@@ -1087,7 +1090,7 @@ function renderEvolucion(s){
  '<i style="width:'+tn.pct+'%"></i></div>'+
  (tn.favor ? '<p class="vfavor">'+tn.favor+'</p>' : ''); })() +
  '</div>' +
- '<p class="mc-kicker">Socio WGYMADNSPORT</p>' +
+ '<p class="mc-kicker">'+(diario ? 'Pase diario WGYMADNSPORT' : 'Socio WGYMADNSPORT')+'</p>' +
  '<div class="mc-name">'+escapeHtml(s.nombre)+' '+escapeHtml(s.apellido)+'</div>' +
  '<div class="mc-plan">'+escapeHtml(s.plan||"Sin plan asignado")+'</div>' +
  '<div class="mc-row"><span>Vencimiento</span><b>'+escapeHtml(s.vencimiento||"—")+'</b></div>' +
@@ -1154,6 +1157,8 @@ function renderEvolucion(s){
  }
  function renderPago(s){
   var box = document.getElementById("pagoCard");
+  /* El pase diario ya se pagó en recepción: no se muestra "Pagar mensualidad". */
+  if(/diario/i.test(s.plan || "")){ box.hidden = true; return; }
   var monto = precioDePlan(s);
   if(!monto || !CUENTA_PAGO){ box.hidden = true; return; }
   var c = CUENTA_PAGO, nombre = s.nombre + " " + s.apellido, plan = s.plan || "Plan";
