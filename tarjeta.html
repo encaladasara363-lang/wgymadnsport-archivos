@@ -184,6 +184,13 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .evo-row b{ color:var(--blanco); font-weight:800; }
 
 .band-box{ margin:14px 16px 0; }
+/* Estado de hoy y "Marcar mi salida" (10/2026). */
+.salida-card{ margin:14px 16px 0; background:var(--card); border:1px solid #2C2C31; border-left:4px solid var(--good); border-radius:14px; padding:14px 16px; }
+.salida-card.fuera{ border-left-color:#555; }
+.salida-est{ font-weight:800; font-size:15px; margin:0; }
+.salida-sub{ font-size:12.5px; color:#8C8C93; margin:4px 0 0; }
+.salida-card .pago-btn{ margin-top:10px; }
+.salida-err{ font-size:12.5px; color:var(--danger); font-weight:700; min-height:0; margin:6px 0 0; }
 .pago-card{ margin:14px 16px 0; background:var(--card); border:1px solid var(--dorado); border-radius:14px; padding:16px; }
 .pago-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 6px; }
 .pago-monto{ display:inline-block; font-size:34px; font-weight:900; color:#FFD84D; line-height:1.1; margin:2px 0 0; padding:6px 16px; border:2px solid var(--dorado); border-radius:12px; background:#211c0c; }
@@ -344,6 +351,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <p class="sub">tu acceso digital al gimnasio</p>
  </header>
  <div class="member-card" id="memberCard"></div>
+ <div class="salida-card" id="salidaCard" hidden></div>
  <div class="pago-card" id="pagoCard" hidden></div>
  <div class="evo-card" id="evoCard" hidden></div>
  <div class="band-box">
@@ -1138,6 +1146,83 @@ function renderEvolucion(s){
    ["catch"](function(){ ok.style.color = "var(--danger)"; ok.textContent = "No se pudo copiar. Copia los datos a mano."; });
   });
  }
+ /* ---------- dentro del gimnasio / marcar mi salida (10/2026) ----------
+    La salida se guarda en la misma hoja de ingresos que lee recepción
+    (control.html), así que si recepción marca la salida, acá también se
+    ve, y al revés. Si el Apps Script todavía no tiene esta función, el
+    cuadro simplemente no aparece. */
+ var salidaSocio = null, salidaTimer = null, nSal = 0;
+ function salidaJsonp(params, listo){
+  var cb = "wgymSal" + (++nSal) + "_" + Date.now();
+  var sc = document.createElement("script"), hecho = false;
+  var plazo = setTimeout(function(){ fin(null); }, 15000);
+  function fin(d){ if(hecho) return; hecho = true; clearTimeout(plazo); try{ delete window[cb]; }catch(e){} sc.remove(); listo(d); }
+  window[cb] = fin;
+  sc.src = CHECKIN_URL + "?" + Object.keys(params).map(function(k){ return k + "=" + encodeURIComponent(params[k]); }).join("&") +
+   "&callback=" + cb + "&_=" + Date.now();
+  sc.onerror = function(){ fin(null); };
+  document.body.appendChild(sc);
+ }
+ function horaChile(ts){
+  try{ return new Intl.DateTimeFormat("es-CL", { timeZone:"America/Santiago", hour:"2-digit", minute:"2-digit", hour12:false }).format(new Date(ts)); }
+  catch(e){ var d = new Date(ts); return String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); }
+ }
+ function pintarSalida(d, error){
+  var box = document.getElementById("salidaCard");
+  if(!d || d.ingresos !== true || !d.vino){ if(!error) box.hidden = true; return; }
+  box.hidden = false;
+  box.className = "salida-card" + (d.dentro ? "" : " fuera");
+  box.innerHTML = d.dentro
+   ? '<p class="salida-est">🟢 Estás dentro del gimnasio</p><p class="salida-sub">Desde las ' + horaChile(d.desde) + '</p>' +
+     '<button type="button" class="pago-btn principal" id="salidaBtn">🚪 Marcar mi salida</button>' +
+     '<p class="salida-err" id="salidaErr">' + (error ? escapeHtml(error) : '') + '</p>'
+   : '<p class="salida-est">✅ Salida registrada a las ' + horaChile(d.salida) + '</p><p class="salida-sub">¡Buen entrenamiento! Te esperamos de vuelta.</p>';
+  var b = box.querySelector("#salidaBtn");
+  if(b) b.addEventListener("click", function(){
+   b.disabled = true; b.textContent = "Guardando…";
+   salidaJsonp({ action:"registrarSalida", nombre:salidaSocio.nombre, apellido:salidaSocio.apellido, origen:"tarjeta" }, function(r){
+    if(!r || !r.ok){ pintarSalida(d, "No se pudo guardar. Revisa tu internet e inténtalo de nuevo."); return; }
+    consultarSalida();
+   });
+  });
+ }
+ function consultarSalida(){
+  if(!salidaSocio || !CHECKIN_URL) return;
+  var s = salidaSocio;
+  salidaJsonp({ action:"miIngreso", nombre:s.nombre, apellido:s.apellido }, function(d){
+   if(s === salidaSocio && d) pintarSalida(d);
+  });
+ }
+ function iniciarSalida(s, yaSabido){
+  salidaSocio = s;
+  document.getElementById("salidaCard").hidden = true;
+  clearInterval(salidaTimer);
+  if(yaSabido) pintarSalida(yaSabido);
+  /* Se espera un poco para que el ingreso recién enviado ya esté en la hoja. */
+  else setTimeout(consultarSalida, 3000);
+  salidaTimer = setInterval(function(){ if(!document.hidden) consultarSalida(); }, 30000);
+ }
+ /* Si el socio ya está dentro (entró hace menos de 3 horas y no ha marcado
+    salida), abrir de nuevo la tarjeta —por ejemplo para marcar la salida
+    o pedir una banda— no cuenta como otro ingreso. Si no hay respuesta en
+    4 segundos, o el Apps Script todavía no tiene esta función, se registra
+    el ingreso como siempre. */
+ var VENTANA_DENTRO = 3 * 3600000;
+ function ingresoSiCorresponde(s){
+  if(!CHECKIN_URL) return;
+  var listo = false;
+  function seguir(d){
+   if(listo) return; listo = true;
+   var dentro = d && d.ingresos === true && d.dentro && d.ultimoIngreso &&
+                Date.now() - d.ultimoIngreso < VENTANA_DENTRO;
+   if(!dentro) avisarIngreso(s);
+   iniciarSalida(s, dentro ? d : null);
+  }
+  setTimeout(function(){ seguir(null); }, 4000);
+  salidaJsonp({ action:"miIngreso", nombre:s.nombre, apellido:s.apellido }, seguir);
+ }
+ document.addEventListener("visibilitychange", function(){ if(!document.hidden) consultarSalida(); });
+
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
@@ -1145,7 +1230,7 @@ function renderEvolucion(s){
  renderCard(s);
  renderPago(s);
  renderEvolucion(s);
- avisarIngreso(s);
+ ingresoSiCorresponde(s);
  socioActual = s;
  resetBandBtn();
  resetLockBtn();

@@ -95,6 +95,9 @@ header.top h1 span{ color:var(--rojo); }
 .feed-item .fveces{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
  border:1px solid rgba(212,175,55,.6); color:var(--dorado); background:rgba(212,175,55,.12);
  white-space:nowrap; }
+/* Salida marcada en recepción o en la tarjeta del socio (10/2026). */
+.feed-item .fsalio{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
+ color:var(--gris,#CFCFCF); background:#262626; border:1px solid #3a3a3a; }
 .feed-item .fturno{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
  border:1px solid; white-space:nowrap; }
 .feed-item .fturno[data-t="ok"]{ color:#5CA85C; border-color:rgba(92,168,92,.5); }
@@ -172,7 +175,7 @@ header.top h1 span{ color:var(--rojo); }
  .banda-item button{ font-size:11px; padding:8px 11px; }
  .feed-item{ padding:11px 13px; }
  .feed-item .fname{ font-size:13px; }
- .feed-item .fvenc, .feed-item .fturno, .feed-item .fveces{ font-size:10.5px; }
+ .feed-item .fvenc, .feed-item .fturno, .feed-item .fveces, .feed-item .fsalio{ font-size:10.5px; }
  .feed-item .ftime{ font-size:11px; }
 }
 
@@ -704,6 +707,22 @@ var firstPoll = true;
 
 function keyOf(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
 
+/* Hora de salida de esa persona ese día, solo si TODOS sus ingresos ya
+   tienen salida (si volvió a entrar, sigue dentro). 0 = sigue dentro. */
+function salidaDe(rows, g){
+ var k = sinTildes(g.nombre) + "|" + sinTildes(g.apellido), ultima = 0, abierta = false;
+ rows.forEach(function(x){
+  if(sinTildes(x.nombre) + "|" + sinTildes(x.apellido) !== k || diaDelTs(x.ts) !== g.dia) return;
+  if(!x.salida) abierta = true; else if(x.salida > ultima) ultima = x.salida;
+ });
+ return abierta ? 0 : ultima;
+}
+/* Fecha de Chile (la misma que usa la hoja para separar los días). */
+function diaChile(){
+ try{
+  return new Intl.DateTimeFormat("en-CA", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date());
+ }catch(e){ return diaDelTs(Date.now()); }
+}
 function renderFeed(rows){
  var feed = document.getElementById("feed");
  var agrupadas = juntarRepetidos(rows);
@@ -716,7 +735,9 @@ function renderFeed(rows){
   var vencHtml = nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '';
   var turnoHtml = nt ? '<span class="fturno" data-t="'+(nt.pasado?"tope":"ok")+'">'+escapeHtml(nt.txt)+'</span>' : '';
   var vecesHtml = r.veces > 1 ? '<span class="fveces">'+escapeHtml(textoVeces(r))+'</span>' : '';
-  return '<div class="feed-item"><span class="finfo"><span class="fname">'+escapeHtml(r.nombre)+' '+escapeHtml(r.apellido)+'</span>'+vencHtml+turnoHtml+vecesHtml+'</span><span class="ftime">'+fmtTime(r.ts)+'</span></div>';
+  var sal = salidaDe(rows, r);
+  var salioHtml = sal ? '<span class="fsalio">Salió '+fmtTime(sal)+'</span>' : '';
+  return '<div class="feed-item"><span class="finfo"><span class="fname">'+escapeHtml(r.nombre)+' '+escapeHtml(r.apellido)+'</span>'+vencHtml+turnoHtml+vecesHtml+salioHtml+'</span><span class="ftime">'+fmtTime(r.ts)+'</span></div>';
  }).join('');
 }
 
@@ -790,7 +811,10 @@ function poll(){
   script.remove();
  };
  var script = document.createElement("script");
- script.src = CHECKIN_URL + "?callback=" + cb + "&_=" + Date.now();
+ /* listarIngresos trae TODOS los ingresos del día (antes llegaban solo los
+    últimos 20 y los primeros desaparecían). Si el Apps Script todavía no
+    la tiene, responde como antes. */
+ script.src = CHECKIN_URL + "?action=listarIngresos&dia=" + diaChile() + "&callback=" + cb + "&_=" + Date.now();
  script.onerror = function(){ delete window[cb]; script.remove(); };
  document.body.appendChild(script);
 }

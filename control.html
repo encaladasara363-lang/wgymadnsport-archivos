@@ -117,14 +117,14 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .feed-item:hover{ border-color:#3A3A3A; }
 .feed-item .finfo{ display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
 .feed-item .fname{ font-weight:800; font-size:15px; }
-.feed-item .fvenc{ font-size:12px; font-weight:700; }
-.feed-item .fvenc.good{ color:var(--verde); }
-.feed-item .fvenc.warn{ color:var(--dorado); }
-.feed-item .fvenc.danger{ color:var(--rojo-claro); }
-.feed-item .fturno{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
+.feed-item .fvenc, .ing-item .fvenc{ font-size:12px; font-weight:700; }
+.feed-item .fvenc.good, .ing-item .fvenc.good{ color:var(--verde); }
+.feed-item .fvenc.warn, .ing-item .fvenc.warn{ color:var(--dorado); }
+.feed-item .fvenc.danger, .ing-item .fvenc.danger{ color:var(--rojo-claro); }
+.feed-item .fturno, .ing-item .fturno{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
  border:1px solid; white-space:nowrap; }
-.feed-item .fturno[data-t="ok"]{ color:var(--verde); border-color:rgba(92,168,92,.5); }
-.feed-item .fturno[data-t="tope"]{ color:var(--dorado); border-color:rgba(212,175,55,.6);
+.feed-item .fturno[data-t="ok"], .ing-item .fturno[data-t="ok"]{ color:var(--verde); border-color:rgba(92,168,92,.5); }
+.feed-item .fturno[data-t="tope"], .ing-item .fturno[data-t="tope"]{ color:var(--dorado); border-color:rgba(212,175,55,.6);
  background:rgba(212,175,55,.12); }
 .feed-item .fveces{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
  border:1px solid rgba(212,175,55,.6); color:var(--dorado); background:rgba(212,175,55,.12);
@@ -353,10 +353,12 @@ Ver estado
 </div>
 
 <div class="feed-head">
-<h2>Ingresos recientes</h2>
+<h2 id="ingTitulo">Ingresos de hoy</h2>
 <span class="dot-status" id="estadoVivo" data-vivo="si"><span class="dot-live"></span> <span id="estadoVivoTxt">Conectando…</span></span>
 </div>
-<div id="feed"></div>
+<!-- Todos los ingresos del día (nunca solo los últimos), quién sigue
+     dentro y MARCAR SALIDA. Lo arma ingresos.js. -->
+<div id="ingresosPanel"></div>
 
 <section class="kpis" id="kpis"></section>
 
@@ -406,6 +408,7 @@ const LOGO_B64 = "assets/logo-oficial.webp";
 /* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 </script>
+<script src="ingresos.js?v=1"></script>
 
 
 <script>
@@ -1167,66 +1170,40 @@ function diaDelTs(ts){
  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 
-/* Un socio puede escanear varias veces el mismo dia: entra en la manana, se
-   le queda algo y vuelve, o entrena dos veces. Antes su nombre aparecia una
-   vez por escaneo y la lista se llenaba de repetidos. Ahora cada persona
-   ocupa un solo renglon por dia, con la hora de la ultima vez y un aviso de
-   cuantas veces vino. Los escaneos se siguen guardando todos: esto es solo
-   como se muestran. */
-function juntarRepetidos(lista){
- var porLlave = {}, orden = [];
- lista.forEach(function(r){
-  var k = sinTildes(r.nombre) + "|" + sinTildes(r.apellido) + "|" + diaDelTs(r.ts);
-  var g = porLlave[k];
-  if(!g){
-   porLlave[k] = { nombre:r.nombre, apellido:r.apellido, ts:r.ts,
-                   primera:r.ts, veces:1, dia:diaDelTs(r.ts) };
-   orden.push(k);
-   return;
-  }
-  g.veces++;
-  if(r.ts > g.ts) g.ts = r.ts;              /* la mas reciente manda */
-  if(r.ts < g.primera) g.primera = r.ts;    /* y se guarda la primera */
- });
- return orden.map(function(k){ return porLlave[k]; });
-}
-function textoVeces(g){
- if(g.veces < 2) return "";
- var cuando = (g.dia === hoyISO()) ? " hoy" : "";
- return g.veces + "ª vez" + cuando + " · desde " + fmtHora(g.primera);
-}
 
+/* La lista de ingresos ahora es el panel "Ingresos de hoy" (ingresos.js):
+   trae TODOS los ingresos del día desde la hoja, con su estado (dentro o
+   salida registrada), y ya no se corta en los últimos 20. Acá solo se le
+   agrega a cada fila el aviso de vencimiento y el contador de turno, igual
+   que en la lista de antes. */
+var panelIngresos = null;
+function notaIngreso(r){
+ var s = socioDelRegistro(r.nombre, r.apellido);
+ var d = veredicto(s);
+ var nota = d.corto || d.detalle;
+ var nt = notaTurno(s);
+ return (nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '')+
+  (nt ? '<span class="fturno" data-t="'+(nt.pasado?"tope":"ok")+'">'+escapeHtml(nt.txt)+'</span>' : '');
+}
 function pintarFeed(){
- var cont = document.getElementById("feed");
- cont.innerHTML = "";
- if(!filas.length){
-  cont.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>';
-  return;
- }
- juntarRepetidos(filas).forEach(function(r){
-  var s = socioDelRegistro(r.nombre, r.apellido);
-  var d = veredicto(s);
-  var nota = d.corto || d.detalle;
-  var b = document.createElement("button");
-  b.type = "button"; b.className = "feed-item";
-  b.innerHTML = '<span class="finfo"><span class="punto" style="background:'+
-   (s ? COLOR_ESTADO[estadoDe(s)] : "var(--gris-soft)")+'"></span>'+
-   '<span class="fname">'+escapeHtml(r.nombre+" "+r.apellido)+'</span>'+
-   (nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '')+
-   (function(){ var nt = notaTurno(s);
-    return nt ? '<span class="fturno" data-t="'+(nt.pasado?"tope":"ok")+'">'+escapeHtml(nt.txt)+'</span>' : ''; })()+
-   (r.veces > 1 ? '<span class="fveces">'+escapeHtml(textoVeces(r))+'</span>' : '')+
-   '</span><span class="ftime">'+fmtHora(r.ts)+'</span>';
-  b.addEventListener("click", function(){
-   mostrarHero(r.nombre+" "+r.apellido, r.ts, s);
-   window.scrollTo({ top:0, behavior:"smooth" });
+ if(!panelIngresos && window.WgymIngresos){
+  panelIngresos = WgymIngresos.crear({
+   raiz: document.getElementById("ingresosPanel"),
+   url: CHECKIN_URL,
+   extraHtml: notaIngreso,
+   alTitulo: function(t){ document.getElementById("ingTitulo").textContent = t; },
+   alTocar: function(r){
+    mostrarHero(r.nombre+" "+r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido));
+    window.scrollTo({ top:0, behavior:"smooth" });
+   }
   });
-  cont.appendChild(b);
- });
+ }
 }
 
 function llegaronDatos(data){
  filas = data.rows || [];
+ pintarFeed();
+ if(panelIngresos) panelIngresos.recibir(data);
  /* Cada escaneo le suma el dia al socio por turno. El mismo dia repetido no
     suma de nuevo, y solo se anota si el ingreso es de hoy o de dias pasados.
 
@@ -1253,7 +1230,6 @@ function llegaronDatos(data){
  }
  filas.forEach(function(r){ vistos[llaveDe(r)] = true; });
  primeraVuelta = false;
- pintarFeed();
  vivo("si", "En vivo");
 }
 function vivo(estado, txt){
@@ -1261,6 +1237,9 @@ function vivo(estado, txt){
  document.getElementById("estadoVivoTxt").textContent = txt;
 }
 
+function diaChile(){
+ return window.WgymIngresos ? WgymIngresos.diaCL() : hoyISO();
+}
 var nPoll = 0;
 function poll(){
  if(!CHECKIN_URL){ vivo("no", "Sin conexión al QR"); return; }
@@ -1273,7 +1252,9 @@ function poll(){
   try{ llegaronDatos(data); }catch(e){}
   delete window[cb]; tag.remove();
  };
- tag.src = CHECKIN_URL + "?callback=" + cb + "&_=" + Date.now();
+ /* listarIngresos trae el día completo (fecha de Chile). Si el Apps Script
+    todavía no la tiene, responde como antes, con los últimos 20. */
+ tag.src = CHECKIN_URL + "?action=listarIngresos&dia=" + diaChile() + "&callback=" + cb + "&_=" + Date.now();
  tag.onerror = function(){
   clearTimeout(fallo); vivo("no", "Sin conexión al QR");
   delete window[cb]; tag.remove();

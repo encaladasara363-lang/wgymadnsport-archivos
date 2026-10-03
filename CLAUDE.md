@@ -240,6 +240,31 @@ evaluó Mercado Pago (links de pago por plan) y se dejó para más
 adelante; si se agrega, nunca poner claves/tokens en el repo, solo los
 links públicos.
 
+### Ingresos de hoy y MARCAR SALIDA (desde 10/2026)
+
+`control.html` muestra el panel **"Ingresos de hoy"** (`ingresos.js`):
+todos los ingresos del día según la fecha de Chile, la lista "Dentro del
+gimnasio" con el botón **MARCAR SALIDA**, el "Historial del día" (cada
+ingreso con su estado DENTRO / SALIDA REGISTRADA, búsqueda por nombre y
+selector de fecha para días anteriores) y los totales (ingresos,
+personas, dentro ahora). `pantalla.html` muestra "Salió HH:MM" y
+`tarjeta.html` el cuadro "Estás dentro del gimnasio" con "Marcar mi
+salida".
+
+- **La fuente es la hoja de Google del check-in**, nunca un archivo del
+  repo: el Apps Script (acciones `listarIngresos`, `registrarSalida`,
+  `quitarSalida`, `miIngreso`, código en `docs/apps-script/Ingresos.gs`)
+  guarda la salida en las columnas E/F de la misma hoja de ingresos. La
+  dueña lo instala siguiendo `docs/apps-script-ingresos-salidas.md`.
+- Causa del problema original: la respuesta antigua del script trae solo
+  los **últimos 20** ingresos; los demás nunca se borraron de la hoja.
+- Mientras el script no tenga las acciones nuevas, las páginas siguen
+  funcionando como antes (el panel guarda en el equipo lo que alcanzó a
+  ver y desactiva MARCAR SALIDA con un aviso).
+- Una salida cierra **todos** los ingresos abiertos de esa persona ese
+  día. Abrir la tarjeta estando dentro (ingreso de menos de 3 horas sin
+  salida) no registra un ingreso nuevo.
+
 ### `mediciones.json` — mediciones de composición corporal, nunca con nombre real (regla permanente)
 
 `mediciones.json` (en la raíz del repo) guarda el historial de peso, %
