@@ -291,16 +291,22 @@ ver cuándo el gym está más vacío.
   pegado sobre el QR antiguo del cartel "TARJETA VIRTUAL"). El socio
   hace lo mismo de siempre: escanea y escribe su nombre. Abierta por
   cualquier otro enlace solo consulta. La marca se borra de la dirección
-  al cargar (un enlace guardado o compartido no registra). Escanear
-  estando dentro no duplica; escanear después de salir es volver a
-  entrar. El QR antiguo del cartel abría `tarjeta.html` sin marca.
+  al cargar (un enlace guardado o compartido no registra). El QR antiguo
+  del cartel abría `tarjeta.html` sin marca.
+- **Cada visita cuenta (desde 03-10-2026, pedido de la dueña: hay socios
+  que vienen 2 o 3 veces al día y necesita ver cada ingreso):** cada
+  escaneo del QR de la puerta (y cada "Registrar ingreso" del mesón) es
+  una visita nueva, aunque el socio no haya marcado su salida: el
+  ingreso anterior que quedó abierto se cierra solo con origen
+  "nueva visita". Solo un escaneo repetido antes de
+  `MIN_NUEVA_VISITA_` (30) minutos desde su último ingreso no se duplica.
 - **Pruebas:** `prueba-*.html` (de `scripts/generar-pruebas-ingresos.js`)
   mandan `prueba=1` y todo queda en la hoja "Pruebas ingresos", nunca en
   la hoja real (no alteran pantallas ni estadísticas). Borrarlas al
   terminar las pruebas.
 - **Respaldo del mesón:** en "¿No alcanzó a escanear?", al buscar a un
   socio aparece **"Registrar ingreso"** (POST `registrarIngreso` con
-  `ADMIN_KEY`; no duplica si ya está dentro).
+  `ADMIN_KEY`; misma regla de visita nueva de 30 minutos).
 - **Permisos:** marcar o deshacer la salida de otra persona es solo de
   recepción (POST con `ADMIN_KEY`). El socio marca solo la suya, con el
   código privado que recibió su teléfono al registrar el ingreso

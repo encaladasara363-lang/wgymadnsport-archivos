@@ -1172,8 +1172,9 @@ function renderEvolucion(s){
     WhatsApp, redes) la tarjeta solo consulta: muestra el contador y, si
     está dentro, "Registrar mi salida". La marca de la puerta se borra de
     la dirección apenas carga la página, así que un enlace guardado o
-    compartido después nunca registra ingresos. Si ya está dentro, volver a
-    escanear no duplica; si ya salió, escanear de nuevo es volver a entrar.
+    compartido después nunca registra ingresos. Cada escaneo es una visita
+    nueva (el Apps Script cierra solo el ingreso anterior que quedó
+    abierto); escanear dos veces seguidas, antes de 30 minutos, no duplica.
 
     El teléfono que registra el ingreso recibe un código privado (queda
     guardado solo en ese teléfono). Con él, y solo con él, el socio puede

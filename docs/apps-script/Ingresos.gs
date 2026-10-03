@@ -17,15 +17,20 @@
        ingresoTarjeta  → registra el ingreso desde la tarjeta virtual. La
                          tarjeta solo la llama cuando se abrió con el QR de
                          la PUERTA (tarjeta.html?ingreso=puerta), con
-                         forzar=1: registra si la persona no está dentro
-                         (si ya está dentro no duplica). Abrir la tarjeta
-                         por cualquier otro enlace solo consulta (miIngreso).
+                         forzar=1. Cada escaneo es una visita nueva (hay
+                         socios que vienen 2 o 3 veces al día): si quedó
+                         abierto un ingreso anterior sin salida, se cierra
+                         solo (origen "nueva visita") y se agrega el nuevo.
+                         Solo si escanea otra vez antes de MIN_NUEVA_VISITA_
+                         minutos desde su último ingreso, no se duplica.
+                         Abrir la tarjeta por cualquier otro enlace solo
+                         consulta (miIngreso).
        salidaSocio     → el socio marca SU salida. Exige el código privado
                          que recibió SU teléfono al registrar el ingreso.
    - Solo administración (por POST, con la clave de administración, la
      misma ADMIN_KEY de guardarSocio):
        registrarIngreso → respaldo del mesón: registra la entrada de quien
-                         llegó sin escanear (si ya está dentro, no duplica).
+                         llegó sin escanear (misma regla de visita nueva).
        registrarSalida → marca la salida de cualquier persona.
        quitarSalida    → deshace una salida marcada por error.
 
@@ -38,6 +43,9 @@
 
 var TZ_INGRESOS_ = "America/Santiago";
 var HOJA_PRUEBAS_ = "Pruebas ingresos";
+/* Un escaneo antes de estos minutos desde el último ingreso de la misma
+   persona es el mismo ingreso (escaneó dos veces); después, es otra visita. */
+var MIN_NUEVA_VISITA_ = 30;
 
 /* La hoja real de ingresos, o la de pruebas si la llamada trae prueba=1. */
 function hojaIngresos_(p) {
@@ -150,6 +158,23 @@ function estadoPersona_(mias, codigo) {
   };
 }
 
+/* Antes de agregar una visita nueva: si la persona tiene un ingreso
+   abierto de hace menos de MIN_NUEVA_VISITA_ minutos, es el mismo ingreso
+   (devuelve false: no agregar). Si es más antiguo, se fue sin marcar la
+   salida: se cierran sus ingresos abiertos con la hora actual y origen
+   "nueva visita" (devuelve true: agregar la visita nueva). */
+function prepararNuevaVisita_(sheet, todas, nombre, apellido, ahora) {
+  var abiertas = todas.filter(function (r) { return !r.salida && mismaPersona_(r, nombre, apellido); });
+  var ultimo = 0;
+  abiertas.forEach(function (r) { if (r.ts > ultimo) ultimo = r.ts; });
+  if (ultimo && ahora - ultimo < MIN_NUEVA_VISITA_ * 60000) return false;
+  if (abiertas.length) marcarHeaders_(sheet);
+  abiertas.forEach(function (r) {
+    sheet.getRange(r.fila, 5, 1, 2).setValues([[ahora, "nueva visita"]]);
+  });
+  return true;
+}
+
 function marcarHeaders_(sheet) {
   if (!sheet.getRange(1, 5).getValue()) {
     sheet.getRange(1, 5, 1, 3).setValues([["Salida", "Origen salida", "Código tarjeta"]]);
@@ -188,15 +213,15 @@ function ingresoTarjeta_(e) {
     var sheet = hojaIngresos_(p);
     var todas = filasDelDia_(sheet, diaCL_(Date.now()));
     var estado = estadoDe_(todas, nombre, apellido, String(p.codigo || ""));
-    /* Ya vino hoy: abrir la tarjeta es solo una consulta. Volver a entrar
-       (forzar) solo se acepta si ya tiene la salida marcada. */
-    if (estado.vino && (!forzar || estado.dentro)) {
+    var ahora = Date.now();
+    /* Sin forzar (abrir la tarjeta sin el QR de la puerta) y ya vino hoy:
+       solo consulta. Con el QR de la puerta, cada visita cuenta. */
+    if ((estado.vino && !forzar) || !prepararNuevaVisita_(sheet, todas, nombre, apellido, ahora)) {
       estado.registrado = false;
       return respond_(e, estado);
     }
     marcarHeaders_(sheet);
     var codigo = Utilities.getUuid();
-    var ahora = Date.now();
     sheet.appendRow([ahora, nombreTxt, apellidoTxt, "", "", "", codigo]);
     var vencCell = sheet.getRange(sheet.getLastRow(), 4);
     vencCell.setNumberFormat("@");
@@ -244,18 +269,18 @@ function registrarIngreso_(e) {
     var sheet = hojaIngresos_(p);
     var todas = filasDelDia_(sheet, diaCL_(Date.now()));
     var estado = estadoDe_(todas, nombre, apellido, "");
-    if (estado.dentro) {
+    var ahora = Date.now();
+    if (!prepararNuevaVisita_(sheet, todas, nombre, apellido, ahora)) {
       return respond_(e, { ok: true, ingresos: true, registrado: false, dentro: true, desde: estado.desde,
                            dentroAhora: estado.dentroAhora });
     }
     marcarHeaders_(sheet);
-    var ahora = Date.now();
     sheet.appendRow([ahora, nombreTxt, apellidoTxt, "", "", "", ""]);
     var vencCell = sheet.getRange(sheet.getLastRow(), 4);
     vencCell.setNumberFormat("@");
     vencCell.setValue(String(p.venc || ""));
     return respond_(e, { ok: true, ingresos: true, registrado: true, ts: ahora,
-                         dentroAhora: estado.dentroAhora + 1 });
+                         dentroAhora: estado.dentroAhora + (estado.dentro ? 0 : 1) });
   });
 }
 

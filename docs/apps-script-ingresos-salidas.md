@@ -64,9 +64,9 @@ publicada (repite el paso 4).
 | --- | --- | --- |
 | `listarIngresos&dia=AAAA-MM-DD` | control.html, pantalla.html | Pública, igual que la lista de ingresos de hoy (nombres y horas, nunca el código de la tarjeta). |
 | `miIngreso&nombre&apellido` | tarjeta.html | Solo el estado de esa persona hoy. |
-| `ingresoTarjeta&nombre&apellido&forzar=1` | tarjeta.html, **solo** abierta con el QR de la puerta (`?ingreso=puerta`) | Registra el ingreso si la persona no está dentro (si ya está dentro, no duplica). Abierta por cualquier otro enlace, la tarjeta solo consulta (`miIngreso`). |
+| `ingresoTarjeta&nombre&apellido&forzar=1` | tarjeta.html, **solo** abierta con el QR de la puerta (`?ingreso=puerta`) | Cada escaneo es una visita nueva: si quedó abierto un ingreso anterior sin salida, se cierra solo (origen "nueva visita") y se agrega el nuevo. Solo si vuelve a escanear antes de 30 minutos desde su último ingreso, no se duplica. Abierta por cualquier otro enlace, la tarjeta solo consulta (`miIngreso`). |
 | `salidaSocio&nombre&apellido&codigo` | El socio, desde su tarjeta | Exige el código privado que recibió **su** teléfono al registrar el ingreso (columna G). Sin ese código: "no autorizado". |
-| `registrarIngreso` (POST) | Recepción: botón "Registrar ingreso" de "¿No alcanzó a escanear?" | Clave de administración. No duplica si ya está dentro. |
+| `registrarIngreso` (POST) | Recepción: botón "Registrar ingreso" de "¿No alcanzó a escanear?" | Clave de administración. Misma regla de visita nueva (no duplica antes de 30 minutos). |
 | `registrarSalida` (POST) | Recepción (control.html) | Clave de administración (`ADMIN_KEY`), la misma de guardar socios. |
 | `quitarSalida` (POST) | Recepción ("Deshacer") | Clave de administración, más la fila y la hora de ingreso exactas. |
 
