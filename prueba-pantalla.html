@@ -1,0 +1,958 @@
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>PRUEBA · WGYMADNSPORT · Pantalla de Ingresos</title>
+<meta name="description" content="Pantalla en vivo de ingresos por tarjeta virtual, WGYMADNSPORT Tocopilla.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+ --negro:#0A0A0A;
+ --surface:#161616;
+ --surface-2:#1F1F1F;
+ --card:#1c1c1c;
+ --rojo:#E30613;
+ --rojo-oscuro:#A40410;
+ --dorado:#D4AF37;
+ --blanco:#FFFFFF;
+ --gris:#CFCFCF;
+ --gris-soft:#8C8C8C;
+ --line:#2A2A2A;
+}
+*{box-sizing:border-box;}
+[hidden]{display:none !important;}
+body{
+ margin:0;
+ background:var(--negro);
+ color:var(--blanco);
+ font-family:'Segoe UI', Arial, sans-serif;
+ min-height:100vh;
+}
+header.top{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%); border-bottom:3px solid var(--rojo); padding:22px 20px; text-align:center; position:relative; }
+.fs-btn{ position:absolute; top:12px; right:14px; background:var(--surface); border:1px solid var(--line); color:var(--dorado); border-radius:8px; padding:8px 11px; font-size:16px; line-height:1; cursor:pointer; }
+.fs-btn:active{ background:var(--surface-2); }
+header.top .logo{ width:min(78%,260px); height:auto; object-fit:contain; margin-bottom:8px; }
+header.top .gymname{ font-size:13px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 4px; }
+header.top h1{ font-size:22px; margin:0; font-weight:800; text-transform:uppercase; }
+header.top h1 span{ color:var(--rojo); }
+
+.wrap{ max-width:720px; margin:0 auto; padding:26px 20px 60px; }
+
+.hero{
+ background:linear-gradient(135deg, #161616 0%, #0A0A0A 60%, #1c1608 100%);
+ border:1.5px solid var(--dorado);
+ border-radius:20px;
+ padding:36px 28px;
+ text-align:center;
+ min-height:180px;
+ display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.hero .kicker{ font-size:12px; font-weight:800; letter-spacing:.16em; color:var(--dorado); text-transform:uppercase; margin:0 0 12px; }
+.hero .name{ font-size:38px; font-weight:900; text-transform:uppercase; line-height:1.15; margin:0 0 8px; }
+.hero .time{ font-size:15px; color:var(--gris-soft); font-weight:600; }
+.hero .venc{ font-size:clamp(20px, 6.4vw, 31px); font-weight:800; margin-top:12px; padding:10px 16px; border-radius:20px; display:inline-block; white-space:nowrap; max-width:100%; }
+.hero .venc .venc-dias{ display:block; margin-top:6px; font-size:clamp(24px, 9vw, 42px); }
+.hero .venc.good{ color:#5CA85C; background:rgba(92,168,92,.12); }
+.hero .venc.warn{ color:var(--dorado); background:rgba(212,175,55,.12); }
+.hero .venc.danger{ color:#E85C5C; background:rgba(232,92,92,.12); }
+.hero .empty{ font-size:16px; color:var(--gris-soft); font-weight:600; }
+.hero .fallo{ font-size:26px; font-weight:900; text-transform:uppercase; letter-spacing:.02em;
+ line-height:1.1; margin:0 0 10px; text-wrap:balance; }
+.hero .plan{ font-size:28px; color:var(--dorado); font-weight:700; margin:12px 0 0; }
+.hero .turno{ margin-top:10px; font-size:clamp(15px, 4.4vw, 40px); font-weight:800; letter-spacing:.02em;
+ display:inline-block; padding:8px 14px; border-radius:999px; border:1px solid; white-space:nowrap; max-width:100%; }
+.hero .turno[data-t="ok"]{ color:#5CA85C; border-color:#5CA85C; background:rgba(92,168,92,.12); }
+.hero .turno[data-t="tope"]{ color:var(--dorado); border-color:var(--dorado); background:rgba(212,175,55,.14); }
+.hero[data-v="ok"]{ border-color:#5CA85C; }
+.hero[data-v="ok"] .fallo{ color:#5CA85C; }
+.hero[data-v="warn"]{ border-color:var(--dorado); }
+.hero[data-v="warn"] .fallo{ color:var(--dorado); }
+.hero[data-v="bad"]{ border-color:#E85C5C; }
+.hero[data-v="bad"] .fallo{ color:#E85C5C; }
+.hero[data-v="nadie"]{ border-color:var(--line); }
+.hero[data-v="nadie"] .fallo{ color:var(--gris-soft); font-size:20px; }
+@media (max-width:520px){ .hero .name{ font-size:30px; } .hero .fallo{ font-size:21px; }
+ .hero .venc{ font-size:26px; padding:9px 18px; } .hero .turno{ font-size:26px; padding:9px 18px; }
+ .hero .plan{ font-size:22px; } }
+
+.feed-head{ display:flex; align-items:center; justify-content:space-between; margin:28px 0 10px; }
+.feed-head h2{ font-size:13px; font-weight:800; letter-spacing:.1em; color:var(--gris-soft); text-transform:uppercase; margin:0; }
+#bandasSection .feed-head h2{ color:#F4D03F; }
+.feed-head .dot-status{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--gris-soft); font-weight:600; }
+.dot-live{ width:8px; height:8px; border-radius:50%; background:#5CA85C; }
+
+.feed-item{
+ display:flex; align-items:center; justify-content:space-between;
+ background:var(--card); border:1px solid var(--line); border-radius:12px;
+ padding:14px 16px; margin-bottom:8px;
+}
+.feed-item .fname{ font-weight:800; font-size:15px; letter-spacing:.01em; }
+.feed-item .finfo{ display:flex; align-items:baseline; gap:10px; }
+.feed-item .fvenc{ font-size:12px; font-weight:700; }
+.feed-item .fvenc.good{ color:#5CA85C; }
+.feed-item .fvenc.warn{ color:var(--dorado); }
+.feed-item .fvenc.danger{ color:#E85C5C; }
+.feed-item .fveces{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
+ border:1px solid rgba(212,175,55,.6); color:var(--dorado); background:rgba(212,175,55,.12);
+ white-space:nowrap; }
+/* Notas de vencimiento y turno dentro del panel de ingresos (ingresos.js). */
+.ing-item .fvenc{ font-size:12px; font-weight:700; }
+.ing-item .fvenc.good{ color:var(--verde); }
+.ing-item .fvenc.warn{ color:var(--dorado); }
+.ing-item .fvenc.danger{ color:#E85C5C; }
+.ing-item .fturno{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px; border:1px solid; white-space:nowrap; }
+.ing-item .fturno[data-t="ok"]{ color:var(--verde); border-color:rgba(92,168,92,.5); }
+.ing-item .fturno[data-t="tope"]{ color:var(--dorado); border-color:rgba(212,175,55,.6); background:rgba(212,175,55,.12); }
+.feed-item .fturno{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
+ border:1px solid; white-space:nowrap; }
+.feed-item .fturno[data-t="ok"]{ color:#5CA85C; border-color:rgba(92,168,92,.5); }
+.feed-item .fturno[data-t="tope"]{ color:var(--dorado); border-color:rgba(212,175,55,.6);
+ background:rgba(212,175,55,.12); }
+.feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; }
+.feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:30px 0; }
+
+.banda-item{
+ display:flex; align-items:center; justify-content:space-between; gap:12px;
+ background:rgba(212,175,55,.1); border:1.5px solid var(--dorado); border-radius:12px;
+ padding:13px 16px; margin-bottom:8px;
+}
+.banda-item .binfo{ min-width:0; display:flex; align-items:center; gap:9px; }
+.banda-item .bdot{ width:12px; height:12px; border-radius:50%; flex-shrink:0; border:1px solid rgba(255,255,255,.25); }
+.banda-item .btxt{ min-width:0; }
+.banda-item .bname{ font-weight:800; font-size:15px; letter-spacing:.01em; }
+.banda-item .bcolor{ font-size:12px; color:var(--gris-soft); font-weight:700; text-transform:uppercase; letter-spacing:.03em; }
+.banda-item .btime{ font-size:12px; color:var(--gris-soft); font-weight:600; margin-top:2px; }
+.banda-item button{
+ flex-shrink:0; background:var(--dorado); color:var(--negro); border:none; border-radius:9px;
+ padding:10px 14px; font-size:12px; font-weight:900; letter-spacing:.04em; text-transform:uppercase;
+ font-family:inherit; cursor:pointer;
+}
+.banda-item button:active{ opacity:.8; }
+
+.setup-notice{
+ background:rgba(212,175,55,.1); border:1.5px solid var(--dorado); border-radius:12px;
+ padding:16px 18px; font-size:13px; color:var(--gris); line-height:1.6; margin-bottom:24px;
+}
+.setup-notice b{ color:var(--dorado); }
+
+/* "Bandas pedidas" al lado del último ingreso en vez de abajo, en
+   cualquier pantalla con ancho suficiente (tablet incluida) — no
+   depende de si hay mouse o dedo, solo de que entre. En celulares
+   angostos se sigue viendo una sola columna, apilado como siempre. */
+@media (min-width:480px){
+ .wrap{
+  display:grid;
+  grid-template-columns:1.3fr 1fr;
+  grid-template-areas:
+   "notice notice"
+   "hero bandas"
+   "ihead bandas"
+   "ifeed bandas";
+  gap:0 16px;
+  align-items:start;
+ }
+ #setupNotice{ grid-area:notice; }
+ .hero{ grid-area:hero; }
+ #bandasSection{ grid-area:bandas; }
+ #ingresosHead{ grid-area:ihead; }
+ #feed{ grid-area:ifeed; }
+}
+
+/* Pantalla en el computador (mouse): se ve la misma página pero más
+   compacta, para que entre todo sin desplazarse tanto. La tablet de la
+   puerta es táctil (pointer:coarse) y nunca entra acá, asi que queda
+   exactamente como siempre. */
+@media (min-width:640px) and (pointer:fine){
+ .wrap{ max-width:760px; }
+ header.top h1{ font-size:18px; }
+ .hero{ padding:22px 18px; }
+ .hero .name{ font-size:24px; }
+ .hero .fallo{ font-size:17px; }
+ .hero .venc, .hero .turno{ font-size:20px; padding:7px 14px; }
+ .hero .venc .venc-dias{ font-size:28px; margin-top:4px; }
+ .hero .plan{ font-size:17px; }
+ .feed-head h2{ font-size:11px; }
+ .banda-item{ padding:10px 12px; }
+ .banda-item .bdot{ width:10px; height:10px; }
+ .banda-item .bname{ font-size:13px; }
+ .banda-item .bcolor{ font-size:11px; }
+ .banda-item .btime{ font-size:11px; }
+ .banda-item button{ font-size:11px; padding:8px 11px; }
+ .feed-item{ padding:11px 13px; }
+ .feed-item .fname{ font-size:13px; }
+ .feed-item .fvenc, .feed-item .fturno, .feed-item .fveces{ font-size:10.5px; }
+ .feed-item .ftime{ font-size:11px; }
+}
+
+/* Tablet de la puerta usada acostada (horizontal): antes el contenido se
+   quedaba angosto y centrado (max-width:720px) dejando franjas negras
+   enormes a los lados y obligando a desplazarse mucho para ver todo, lo
+   que en la tablet se sentía como que "se cortaba" la pantalla. Acá se
+   estira para ocupar todo el ancho real del aparato y se arma en 3
+   columnas (ingresos · último ingreso · bandas y candados) para que
+   entre mucho más de un vistazo, sin agrandar el celular en modo
+   vertical (pointer:coarse + ancho de tablet acostada, nunca de un
+   teléfono en la mano). */
+@media (min-width:820px) and (orientation:landscape) and (pointer:coarse){
+ /* Se intentó antes obligar a la página a medir EXACTO el alto de la
+    pantalla (con overflow:hidden + 100dvh) para que nadie tuviera que
+    hacer scroll -- pero en esta tablet (navegador Samsung Internet)
+    ese cálculo salió mal y cortó todavía más contenido, esta vez
+    también por arriba. Un forzado de alto que puede fallar así, sin
+    aviso y de forma distinta según el navegador, es más peligroso que
+    el problema que quería resolver: si el cálculo se equivoca, el
+    contenido queda inalcanzable (no hay scroll) en vez de solo
+    requerir un empujoncito. Por eso ahora la página vuelve a poder
+    hacer scroll normal si hace falta -- nunca más desaparece nada -- y
+    en cambio se achica la tarjeta del medio (menos padding, letras más
+    chicas) para que en la gran mayoría de tablets alcance a entrar
+    sin necesidad de moverse. */
+ header.top{
+  display:flex; align-items:center; justify-content:center; gap:18px;
+  padding:14px 28px; text-align:left;
+ }
+ header.top .logo{ width:60px; margin:0; }
+ header.top .headtext{ display:flex; flex-direction:column; gap:2px; }
+ header.top .gymname{ margin:0; }
+ header.top h1{ font-size:19px; }
+
+ .wrap{
+  max-width:1500px; width:100%;
+  padding:16px 32px 20px;
+  grid-template-columns:1fr 1.05fr 1fr;
+  grid-template-areas:
+   "notice notice notice"
+   "ihead  hero   bandas"
+   "ifeed  hero   bandas";
+  gap:0 22px;
+ }
+ #ingresosHead{ grid-area:ihead; }
+ #feed{ grid-area:ifeed; max-height:calc(100vh - 220px); overflow-y:auto; padding-right:4px; }
+ /* La columna de "Ingresos recientes" queda angosta acá (una de tres),
+    y nombre + vencimiento + hora apretados en una sola fila se
+    cortaban feo, partiendo palabras a la mitad. Cada dato pasa a su
+    propia línea: el cajón crece de alto lo que haga falta, pero se
+    lee de corrido. */
+ .feed-item{ flex-direction:column; align-items:stretch; gap:6px; }
+ .feed-item .finfo{ flex-wrap:wrap; row-gap:4px; }
+ .feed-item .ftime{ align-self:flex-end; }
+ #bandasSection{ max-height:calc(100vh - 160px); overflow-y:auto; padding-right:4px; }
+ /* Estos números se habían achicado bastante de más como precaución,
+    por si el contenido no entraba en la pantalla. Ahora que el botón
+    de pantalla completa ya resuelve eso de raíz (nada queda tapado
+    por la barra del navegador), se agranda de nuevo para aprovechar
+    mejor el espacio real disponible. */
+ .hero{ padding:30px 26px; min-height:0; }
+ .hero .kicker{ margin:0 0 10px; }
+ .hero .name{ font-size:34px; margin:0 0 6px; }
+ .hero .time{ font-size:14px; }
+ .hero .venc{ font-size:clamp(19px, 5vw, 27px); margin-top:10px; padding:9px 14px; }
+ .hero .venc .venc-dias{ font-size:clamp(22px, 7.5vw, 36px); margin-top:5px; }
+ .hero .fallo{ font-size:23px; margin:0 0 8px; }
+ .hero .plan{ font-size:24px; margin:10px 0 0; }
+ .hero .turno{ margin-top:8px; font-size:clamp(14px, 3.6vw, 30px); padding:7px 13px; }
+}
+</style>
+
+<div style="position:sticky;top:0;z-index:9999;background:#D4AF37;color:#0A0A0B;font:800 13px Arial,sans-serif;letter-spacing:.06em;text-align:center;padding:7px 10px">MODO PRUEBA · se guarda en la hoja "Pruebas ingresos", no en los registros reales</div>
+<header class="top">
+<script>window.WGYM_PRUEBA_INGRESOS = true;</script>
+<button id="btnFullscreen" class="fs-btn" type="button" title="Pantalla completa">⛶</button>
+<img class="logo" id="topLogoImg" alt="WGYMADNSPORT">
+<div class="headtext">
+<p class="gymname">WGYMADNSPORT Tocopilla</p>
+<h1>Pantalla de <span>Ingresos</span></h1>
+</div>
+</header>
+
+<div class="wrap">
+<div id="setupNotice" class="setup-notice" hidden>
+Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te lo pido cuando termines de publicar el Apps Script).
+</div>
+
+<div class="hero" id="hero">
+<p class="kicker">Último ingreso</p>
+<p class="empty" id="heroEmpty">Esperando el primer escaneo del día...</p>
+<p class="fallo" id="heroFallo" hidden></p>
+<p class="name" id="heroName" hidden></p>
+<p class="time" id="heroTime" hidden></p>
+<p class="venc" id="heroVenc" hidden></p>
+<p class="turno" id="heroTurno" hidden></p>
+<p class="plan" id="heroPlan" hidden></p>
+</div>
+
+<div id="bandasSection">
+<div class="feed-head">
+<h2>Bandas pedidas</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="bandasFeed"></div>
+
+<div class="feed-head">
+<h2>Candados pedidos</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="candadosFeed"></div>
+</div>
+
+<div class="feed-head" id="ingresosHead">
+<h2 id="ingTitulo">Ingresos de hoy</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo · <span id="origenLista">—</span></span>
+</div>
+<!-- Mismo panel completo que el mesón (ingresos.js): contadores, quién
+     sigue dentro con MARCAR SALIDA e historial. -->
+<div id="feed"></div>
+</div>
+
+<script src="ingresos.js?v=5"></script>
+<script>
+const LOGO_B64 = "assets/logo-oficial.webp";
+/* Se completa con el link de "Implementar como app web" de Google Apps Script. */
+
+
+const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
+/* Permite que las tablets que aún tienen la página antigua abierta se recarguen una sola vez. */
+const SOCIOS_VERSION = 2026092808;
+</script>
+<script>
+(function(){
+"use strict";
+
+document.getElementById("topLogoImg").src = LOGO_B64;
+
+if(!CHECKIN_URL){
+ document.getElementById("setupNotice").hidden = false;
+ return;
+}
+
+function fmtTime(ts){
+ var d = new Date(ts);
+ return d.toLocaleTimeString("es-CL", {hour:"2-digit", minute:"2-digit"});
+}
+function escapeHtml(s){
+ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+}
+function parseDMY(str){
+ if(!str) return null;
+ var m = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(String(str).trim());
+ if(!m) return null;
+ var d = new Date(Number(m[3]), Number(m[2])-1, Number(m[1]));
+ return isNaN(d) ? null : d;
+}
+function estadoVenc(venc){
+ var d = parseDMY(venc);
+ if(!d) return null;
+ var hoy = new Date(); hoy.setHours(0,0,0,0);
+ var diffDays = Math.round((d - hoy) / 86400000);
+ if(diffDays < 0) return {cls:"danger", txt:"Vencido " + venc};
+ if(diffDays <= 1) return {cls:"warn", txt:"Vence " + venc};
+ return {cls:"good", txt:"Vence " + venc};
+}
+
+/* ── ¿quién llegó y puede pasar? ───────────────────────────────────── */
+function sinTildes(s){
+ return String(s==null?"":s).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
+}
+function diaDelTs(ts){
+ var d = ts ? new Date(ts) : new Date();
+ if(isNaN(d)) d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function hoyISO(){
+ var d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+/* \u2500\u2500 contador de d\u00edas para Turno, Tres Veces y Semanal \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+   Mismo criterio que ya usa control.html \u2014 Turno: 14 d\u00edas dentro del mes
+   que paga. Tres Veces a la Semana: 12 d\u00edas en el mes (3 x 4 semanas), y
+   adem\u00e1s la cuenta de la semana corrida como gu\u00eda. Plan Semanal: los d\u00edas
+   de gimnasio abiertos (sin domingo) dentro de su semana pagada. Se cuenta
+   sobre los mismos ingresos que ya llegan del script de Google, as\u00ed que el
+   n\u00famero deber\u00eda ir quedando igual que el de control.html con el tiempo,
+   aunque cada aparato lo calcula por su cuenta. */
+var DIAS_TURNO = 14;
+var DIAS_SEMANA = 3;
+var DIAS_MES_3X = 12;
+var CLAVE_ASIS = "wgym_asistencia_v1";
+var CLAVE_CICLOS = "wgym_ciclos_v1";
+var asistencia = {};
+try{ asistencia = JSON.parse(localStorage.getItem(CLAVE_ASIS) || "{}") || {}; }catch(e){}
+var ciclos = {};
+try{ ciclos = JSON.parse(localStorage.getItem(CLAVE_CICLOS) || "{}") || {}; }catch(e){}
+function guardarAsistencia(){ try{ localStorage.setItem(CLAVE_ASIS, JSON.stringify(asistencia)); }catch(e){} }
+function guardarCiclos(){ try{ localStorage.setItem(CLAVE_CICLOS, JSON.stringify(ciclos)); }catch(e){} }
+/* Reparación de una sola vez (2026-09-10): ver la misma nota en control.html.
+   Borra los ciclos guardados para que se recalculen solos desde la fecha de
+   vencimiento actual — el historial de asistencia real no se toca. */
+try{
+ if(!localStorage.getItem("wgym_ciclos_reparado_v1")){
+  ciclos = {};
+  guardarCiclos();
+  localStorage.setItem("wgym_ciclos_reparado_v1", "1");
+ }
+}catch(e){}
+/* Traer los dias marcados y los ciclos que se exportaron con "Copiar
+   lista" en control.html la última vez que se publicó. Es un agregado,
+   nunca un reemplazo: solo suma días de asistencia que faltaban acá y
+   completa el ciclo de un socio que esta pantalla todavía no tiene
+   guardado -- así el contador "día X de Y" no le queda atrás a esta
+   tablet frente al mesón, sin arriesgar lo que ya tenía anotado. */
+const ASISTENCIA_VERSION = 3;
+const ASISTENCIA_BASE = {"HERMANN|BORQUEZ":{"2026-08-28":1,"2026-08-29":1,"2026-08-31":1,"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-11":1,"2026-09-12":1,"2026-09-14":1,"2026-09-16":1,"2026-09-17":1,"2026-09-24":1,"2026-09-25":1,"2026-09-26":1},"ALDO|ENCINA":{"2026-08-28":1},"DIEGO|CLARK":{"2026-08-28":1,"2026-08-31":1,"2026-09-08":1},"JOSEFA|ESCOBAR":{"2026-08-28":1,"2026-08-29":1,"2026-08-31":1,"2026-09-01":1,"2026-09-03":1,"2026-09-15":1,"2026-09-17":1,"2026-09-21":1},"TOMAS|CABALLERO":{"2026-08-28":1,"2026-09-10":1,"2026-09-11":1,"2026-09-12":1,"2026-09-14":1,"2026-09-22":1,"2026-09-23":1,"2026-09-25":1},"HECTOR|CONTRERAS":{"2026-08-28":1,"2026-08-29":1,"2026-08-31":1},"JAIME|VEGA":{"2026-08-28":1,"2026-08-31":1,"2026-09-01":1,"2026-09-11":1,"2026-09-12":1,"2026-09-14":1,"2026-09-16":1,"2026-09-24":1,"2026-09-25":1},"GABRIEL|MOLINA":{"2026-08-29":1,"2026-09-01":1,"2026-09-02":1,"2026-09-03":1,"2026-09-05":1,"2026-09-07":1,"2026-09-09":1,"2026-09-10":1,"2026-09-11":1,"2026-09-12":1,"2026-09-15":1,"2026-09-23":1,"2026-09-24":1,"2026-09-25":1,"2026-09-26":1},"CLAUDIA|VILLEGAS":{"2026-08-29":1,"2026-08-31":1,"2026-09-02":1,"2026-09-04":1,"2026-09-07":1,"2026-09-09":1,"2026-09-11":1,"2026-09-14":1,"2026-09-15":1,"2026-09-17":1,"2026-09-23":1,"2026-09-24":1,"2026-09-25":1},"JENNY|GOMEZ":{"2026-08-29":1},"AKASH|THADANI":{"2026-08-29":1},"SARA|CARVAJAL":{"2026-08-29":1,"2026-08-31":1,"2026-09-01":1,"2026-09-02":1,"2026-09-04":1,"2026-09-05":1,"2026-09-21":1,"2026-09-22":1,"2026-09-24":1,"2026-09-25":1,"2026-09-26":1},"YOHANNA|VEGA":{"2026-08-31":1,"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-10":1,"2026-09-11":1,"2026-09-15":1,"2026-09-17":1,"2026-09-22":1,"2026-09-23":1},"SEBASTIAN|MARIN":{"2026-08-31":1,"2026-09-01":1,"2026-09-03":1,"2026-09-04":1,"2026-09-14":1,"2026-09-15":1,"2026-09-17":1},"RODRIGO|PLAZA":{"2026-08-31":1,"2026-09-03":1,"2026-09-04":1,"2026-09-09":1,"2026-09-11":1,"2026-09-14":1,"2026-09-16":1,"2026-09-21":1,"2026-09-23":1,"2026-09-26":1},"AARON|SOZA":{"2026-08-31":1,"2026-09-02":1,"2026-09-07":1,"2026-09-09":1,"2026-09-11":1,"2026-09-14":1,"2026-09-16":1,"2026-09-21":1,"2026-09-23":1},"VALERIA|MACIAS":{"2026-08-31":1},"JOSE|RODRIGUEZ":{"2026-08-31":1,"2026-09-03":1,"2026-09-04":1,"2026-09-08":1,"2026-09-09":1,"2026-09-10":1,"2026-09-14":1,"2026-09-15":1,"2026-09-16":1,"2026-09-22":1},"ANA MARIA|SANABRIA":{"2026-08-31":1,"2026-09-03":1,"2026-09-23":1,"2026-09-07":1,"2026-09-08":1,"2026-09-11":1},"MARIA JOSE|HERNANDEZ":{"2026-08-31":1,"2026-09-03":1,"2026-09-07":1,"2026-09-08":1,"2026-09-11":1},"ALFREDO|VENEGAS":{"2026-08-31":1,"2026-09-23":1,"2026-09-24":1},"BRAYAN|ALVAREZ":{"2026-08-31":1},"PAUL|TORO":{"2026-08-31":1},"MARYORY|RAMIREZ":{"2026-09-01":1,"2026-09-03":1,"2026-09-04":1,"2026-09-09":1,"2026-09-10":1,"2026-09-11":1,"2026-09-14":1,"2026-09-22":1,"2026-09-25":1,"2026-09-26":1},"ANTONIO|VALENCIA":{"2026-09-01":1,"2026-09-02":1,"2026-09-04":1,"2026-09-05":1,"2026-09-07":1,"2026-09-08":1,"2026-09-10":1,"2026-09-11":1,"2026-09-12":1,"2026-09-22":1,"2026-09-23":1,"2026-09-25":1,"2026-09-26":1},"GABRIEL|PIÑOL":{"2026-09-01":1,"2026-09-02":1,"2026-09-04":1,"2026-09-08":1,"2026-09-10":1,"2026-09-11":1,"2026-09-12":1,"2026-09-22":1,"2026-09-23":1,"2026-09-25":1,"2026-09-26":1},"GLORIA|LOPEZ":{"2026-09-02":1,"2026-09-16":1,"2026-09-17":1,"2026-09-21":1,"2026-09-23":1,"2026-09-25":1},"MAURICIO|URQUIETA":{"2026-09-02":1,"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-21":1,"2026-09-22":1},"MIGUEL|ROJAS":{"2026-09-03":1,"2026-09-05":1,"2026-09-09":1,"2026-09-12":1,"2026-09-15":1},"JORGE|CARRASCO":{"2026-09-03":1,"2026-09-04":1,"2026-09-08":1,"2026-09-21":1,"2026-09-23":1},"LUIS|ROMO":{"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-21":1},"ARACELY|HERRERA":{"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-09":1,"2026-09-10":1,"2026-09-15":1,"2026-09-16":1,"2026-09-23":1},"ISABEL|HERRERA":{"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-09":1,"2026-09-10":1,"2026-09-11":1,"2026-09-15":1,"2026-09-16":1,"2026-09-21":1,"2026-09-23":1,"2026-09-25":1},"MIRKO|SAN MARTIN":{"2026-09-04":1},"ANDRES|PAVEZ":{"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-21":1,"2026-09-22":1},"JUAN|REYES":{"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-21":1},"ALONSO|ARAYA":{"2026-09-07":1},"IGNACIO|CANDIA":{"2026-09-08":1,"2026-09-23":1},"DANIEL|CORTEZ":{"2026-09-09":1,"2026-09-10":1,"2026-09-14":1,"2026-09-23":1,"2026-09-24":1,"2026-09-26":1},"LUIS|RIOS":{"2026-09-10":1,"2026-09-23":1,"2026-09-24":1},"JOHAN|VALLE":{"2026-09-10":1},"KEVIN|BONILLA":{"2026-09-11":1,"2026-09-12":1,"2026-09-14":1,"2026-09-15":1,"2026-09-17":1,"2026-09-18":1,"2026-09-24":1,"2026-09-27":1},"MARGARITA|RODRIGUEZ":{"2026-09-11":1,"2026-09-26":1,"2026-09-28":1},"MONICA|MONTEROS":{"2026-09-15":1,"2026-09-16":1,"2026-09-17":1,"2026-09-21":1,"2026-09-22":1,"2026-09-25":1},"CAMILO|JUICA":{"2026-09-16":1,"2026-09-21":1},"MARIA|TORRES":{"2026-09-22":1},"CHRISTIAN|IBACETA":{"2026-09-22":1,"2026-09-24":1,"2026-09-26":1},"ANDREA|ROJAS":{"2026-09-25":1,"2026-09-26":1,"2026-09-28":1}};
+const CICLOS_BASE = {"AARON|SOZA":{"v":"2026-10-23","desde":"2026-09-23"},"AKASH|THADANI":{"v":"2026-09-03","desde":"2026-08-04"},"ALDO|ENCINA":{"v":"2026-09-04","desde":"2026-08-05"},"ALONSO|ARAYA":{"v":"2026-10-07","desde":"2026-09-07"},"ANDRES|PAEZ":{"v":"2026-08-13","desde":"2026-07-14"},"ANTONIO|VALENCIA":{"v":"2026-10-02","desde":"2026-09-02"},"ARACELY|HERRERA":{"v":"2026-10-02","desde":"2026-09-02"},"BASTIAN|VERGARA":{"v":"2026-08-20","desde":"2026-07-21"},"BENJAMIN|GODOY":{"v":"2026-08-23","desde":"2026-07-24"},"CAMILO|JUICA":{"v":"2026-10-16","desde":"2026-09-16"},"CLAUDIA|VILLEGAS":{"v":"2026-09-28","desde":"2026-08-29"},"DANIEL|CORTEZ":{"v":"2026-09-27","desde":"2026-08-28"},"DIEGO|SALAZAR":{"v":"2026-08-31","desde":"2026-08-01"},"ELIZABETH|LLIULLI":{"v":"2026-09-20","desde":"2026-08-21"},"GABRIEL|MOLINA":{"v":"2026-09-26","desde":"2026-08-27"},"GABRIEL|PIÑOL":{"v":"2026-10-08","desde":"2026-09-08"},"GABRIEL|RUZ":{"v":"2026-08-24","desde":"2026-07-25"},"GLORIA|LOPEZ":{"v":"2026-10-14","desde":"2026-09-14"},"HECTOR|CONTRERAS":{"v":"2026-08-31","desde":"2026-08-01"},"HERMANN|BORQUEZ":{"v":"2026-09-28","desde":"2026-08-29"},"IVAN|ESPIRITU":{"v":"2026-08-08","desde":"2026-07-09"},"JAIRO|CONTRERAS":{"v":"2026-08-14","desde":"2026-07-15"},"JENNY|GOMEZ":{"v":"2026-09-30","desde":"2026-08-31"},"JOHAN|VALLE":{"v":"2026-08-31","desde":"2026-08-01"},"JOSE|RODRIGUEZ":{"v":"2026-09-30","desde":"2026-08-31"},"JOSEFA|ESCOBAR":{"v":"2026-10-09","desde":"2026-09-10"},"JOSTIN|ROSAS":{"v":"2026-09-11","desde":"2026-08-12"},"JUAN|REYES":{"v":"2026-10-06","desde":"2026-09-04"},"KEVIN|BONILLA":{"v":"2026-10-11","desde":"2026-09-11"},"LUIS|RIOS":{"v":"2026-10-23","desde":"2026-09-23"},"MARIA|HERRERA":{"v":"2026-08-19","desde":"2026-07-20"},"MARIA|TORRES":{"v":"2026-08-20","desde":"2026-07-21"},"MARYORY|RAMIREZ":{"v":"2026-10-09","desde":"2026-09-09"},"MAURICIO|RAMIREZ":{"v":"2026-09-06","desde":"2026-08-07"},"MAURICIO|URQUIETA":{"v":"2026-10-02","desde":"2026-09-02"},"MAYORI|RAMIREZ":{"v":"2026-09-04","desde":"2026-08-05"},"MICHEL|QUINZACARA":{"v":"2026-08-31","desde":"2026-08-01"},"MIGUEL|MONSALVES":{"v":"2026-08-27","desde":"2026-07-28"},"MIGUEL|ROJAS":{"v":"2026-10-03","desde":"2026-09-03"},"MIRKO|SAN MARTIN":{"v":"2026-09-06","desde":"2026-08-07"},"NICOLAS|PACHECO":{"v":"2026-09-04","desde":"2026-08-05"},"NINA|SALAZAR":{"v":"2026-08-17","desde":"2026-07-18"},"PAUL|TORO":{"v":"2026-09-13","desde":"2026-08-14"},"RODRIGO|PLAZA":{"v":"2026-10-07","desde":"2026-09-08"},"SARA|CARVAJAL":{"v":"2026-09-30","desde":"2026-08-31"},"SEBASTIAN|MARIN":{"v":"2026-10-30","desde":"2026-10-01"},"TOMAS|CABALLERO":{"v":"2026-10-10","desde":"2026-09-10"},"YESSICA|ESCALERA":{"v":"2026-08-30","desde":"2026-07-31"},"YOHANNA|VEGA":{"v":"2026-09-26","desde":"2026-08-27"},"ALFREDO|VENEGAS":{"v":"2026-09-26","desde":"2026-08-27"},"DIEGO|CLARK":{"v":"2026-09-27","desde":"2026-08-28"},"JAIME|VEGA":{"v":"2026-10-15","desde":"2026-09-15"},"ANA MARIA|SANABRIA":{"v":"2026-09-30","desde":"2026-08-31"},"MARIA JOSE|HERNANDEZ":{"v":"2026-09-30","desde":"2026-08-31"},"BRAYAN|ALVAREZ":{"v":"2026-09-30","desde":"2026-08-31"},"BRAYAN|ALVARE":{"v":"2026-09-30","desde":"2026-08-31"},"IGNASIO|CANDIA":{"v":"2026-10-02","desde":"2026-09-02"},"LUIS|ROMO":{"v":"2026-10-02","desde":"2026-09-02"},"ISABEL|HERRERRA":{"v":"2026-10-02","desde":"2026-09-02"},"IGNACIO|CANDIA":{"v":"2026-10-02","desde":"2026-09-03"},"ISABEL|HERRERA":{"v":"2026-10-02","desde":"2026-09-03"},"JORGE|CARRASCO":{"v":"2026-10-03","desde":"2026-09-03"},"ANDRES|PAVEZ":{"v":"2026-10-04","desde":"2026-09-07"},"SEBASTIAN|RIVERA":{"v":"2026-09-12","desde":"2026-09-06"},"CLAUDIO|BUSTAMANTE":{"v":"2026-09-07","desde":"2026-09-01"},"AMBER|TORRES":{"v":"2026-09-07","desde":"2026-09-01"},"JAVIERA|CARRASCO":{"v":"2026-09-07","desde":"2026-09-01"},"MARGARITA|RODRIGUEZ":{"v":"2026-10-03","desde":"2026-09-26"},"MONICA|MONTEROS":{"v":"2026-10-15","desde":"2026-09-15"},"CHRISTIAN|IBACETA":{"v":"2026-10-22","desde":"2026-09-22"},"ANDREA|ROJAS":{"v":"2026-10-25","desde":"2026-09-25"}};
+(function(){
+ var vistaKey = "wgym_asistencia_version_vista";
+ var vista = 0;
+ try{ vista = Number(localStorage.getItem(vistaKey)) || 0; }catch(e){}
+ if(ASISTENCIA_VERSION <= vista) return;
+ var cambio = false;
+ for(var llaveA in ASISTENCIA_BASE){
+  if(!Object.prototype.hasOwnProperty.call(ASISTENCIA_BASE, llaveA)) continue;
+  if(!asistencia[llaveA]) asistencia[llaveA] = {};
+  var dias = ASISTENCIA_BASE[llaveA];
+  for(var dia in dias){
+   if(!Object.prototype.hasOwnProperty.call(dias, dia)) continue;
+   if(!asistencia[llaveA][dia]){ asistencia[llaveA][dia] = 1; cambio = true; }
+  }
+ }
+ for(var llaveC in CICLOS_BASE){
+  if(!Object.prototype.hasOwnProperty.call(CICLOS_BASE, llaveC)) continue;
+  if(!ciclos[llaveC]){ ciclos[llaveC] = CICLOS_BASE[llaveC]; cambio = true; }
+ }
+ if(cambio){ guardarAsistencia(); guardarCiclos(); }
+ try{ localStorage.setItem(vistaKey, String(ASISTENCIA_VERSION)); }catch(e){}
+})();
+function llaveSocio(s){ return (s.n + "|" + s.a).toUpperCase(); }
+function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
+function esTresVeces(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
+function esSemanalPlan(s){ return !!s && esPlanSemanal(s.plan); }
+function planCuentaDias(s){ return esTurno(s) || esTresVeces(s) || esSemanalPlan(s); }
+function fechaValida(v){
+ var p = String(v || "").split("-");
+ if(p.length !== 3 || p[0].length !== 4) return false;
+ var f = new Date(+p[0], +p[1]-1, +p[2]);
+ return !isNaN(f) && f.getFullYear() > 2000;
+}
+function sumarDias(iso, n){
+ var p = String(iso).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2] + n);
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+}
+function lunesDe(iso){
+ var p = String(iso).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2]);
+ f.setDate(f.getDate() - ((f.getDay() + 6) % 7));
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+}
+function mesAtras(iso){
+ var p = String(iso).split("-");
+ var dia = +p[2];
+ var f = new Date(+p[0], +p[1] - 2, 1);
+ var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
+ f.setDate(Math.min(dia, ultimo));
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+}
+function inicioPorDefecto(v, s){
+ if(s && esSemanalPlan(s)) return sumarDias(v, -6);
+ return sumarDias(mesAtras(v), 1);
+}
+function inicioCalculado(s){
+ if(!s || !fechaValida(s.v)) return null;
+ var c = ciclos[llaveSocio(s)];
+ /* Sigue siendo el MISMO ciclo mientras hoy no haya pasado todavia la fecha
+    de vencimiento que tenia guardada — aunque esa fecha se haya corregido
+    despues sin que el socio haya renovado de verdad (ver control.html). */
+ /* Claudia renovó el 28-09-2026. El mes nuevo empieza ese día también en la tablet. */
+ if(llaveSocio(s) === "CLAUDIA|VILLEGAS" && s.v === "2026-10-28" &&
+    (!c || !fechaValida(c.desde) || c.desde < "2026-09-28")) return "2026-09-28";
+ if(c && fechaValida(c.desde) && fechaValida(c.v) && hoyISO() <= c.v) return c.desde;
+ var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v, s);
+ /* El ciclo nunca puede arrancar despues de hoy: si el calculo por defecto
+    daba "mañana", al que entraba justo hoy (primera vez que se le anota el
+    ciclo en este aparato) no le contaba su propio dia. */
+ if(desde > hoyISO() && hoyISO() <= s.v) desde = hoyISO();
+ return (desde > s.v) ? inicioPorDefecto(s.v, s) : desde;
+}
+function anotarCiclo(s){
+ var k = llaveSocio(s), c = ciclos[k], desde = inicioCalculado(s);
+ if(!desde) return false;
+ if(c && c.v === s.v && c.desde === desde) return false;
+ ciclos[k] = { v:s.v, desde:desde };
+ return true;
+}
+function anotarCiclos(){
+ var cambio = false;
+ lista.forEach(function(s){ if(planCuentaDias(s) && anotarCiclo(s)) cambio = true; });
+ if(cambio) guardarCiclos();
+}
+function contarEntre(s, ini, fin){
+ var dias = asistencia[llaveSocio(s)] || {};
+ var n = 0;
+ for(var d in dias){
+  if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
+  if(d >= ini && d <= fin) n++;
+ }
+ return n;
+}
+function diasUsados(s){ var c = reglaDe(s); return c ? contarEntre(s, c.ini, c.fin) : 0; }
+function diasDeLaSemana(s){ var c = reglaDe(s); return (c && c.semana) ? contarEntre(s, c.semana.ini, c.semana.fin) : null; }
+function marcarDia(s, iso){
+ if(!planCuentaDias(s)) return false;
+ var k = llaveSocio(s);
+ if(!asistencia[k]) asistencia[k] = {};
+ if(asistencia[k][iso]) return false;
+ asistencia[k][iso] = 1;
+ guardarAsistencia();
+ return true;
+}
+function reglaDe(s){
+ if(esTurno(s)){
+  if(!s || !s.v) return null;
+  return { tope:DIAS_TURNO, ini:inicioCalculado(s), fin:s.v, nombre:"Turno", cuando:"este mes", semana:null };
+ }
+ if(esTresVeces(s)){
+  if(!s || !s.v) return null;
+  var lun = lunesDe(hoyISO());
+  return { tope:DIAS_MES_3X, ini:inicioCalculado(s), fin:s.v, nombre:"3 por semana", cuando:"este mes",
+           semana:{ ini:lun, fin:sumarDias(lun, 6), tope:DIAS_SEMANA } };
+ }
+ /* El Plan Semanal no lleva contador de dias: "Vence el... quedan X dias"
+    ya cuenta toda su historia, y mezclarlo con un "dia X de Y" aparte
+    confundia (parecian dos cuentas distintas). */
+ return null;
+}
+function notaTurno(s){
+ var c = reglaDe(s);
+ if(!c) return null;
+ var n = diasUsados(s);
+ var sem = diasDeLaSemana(s);
+ var cola = sem === null ? "" : " \u00b7 " + sem + " esta semana";
+ if(n > c.tope) return { pasado:true, n:n, txt:"Ya us\u00f3 sus " + c.tope + " d\u00edas de " + c.cuando + " \u00b7 lleva " + n + cola };
+ if(n === c.tope) return { pasado:true, n:n, txt:"Este es su d\u00eda " + c.tope + " de " + c.tope + " de " + c.cuando + cola };
+ return { pasado:false, n:n, txt:"d\u00eda " + (n || 0) + " de " + c.tope + " " + c.cuando + cola };
+}
+
+function isoDeSerial(fv){
+ var base = new Date(1899,11,30); base.setHours(0,0,0,0);
+ var d = new Date(base.getTime() + fv*86400000);
+ return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") +
+        "-" + String(d.getDate()).padStart(2,"0");
+}
+function fechaCL(v){
+ if(!v) return "—";
+ var p = String(v).split("-");
+ return p[2] + "-" + p[1] + "-" + p[0];
+}
+/* Al plan semanal no se le cuenta el domingo: el gimnasio cierra ese dia. Si
+   le quedan siete fechas por delante y una es domingo, de gimnasio le quedan
+   seis. Los demas planes siguen contando dias corridos, tal cual estaban. */
+function esPlanSemanal(nombre){ return /semanal/i.test(nombre || ""); }
+function diasAbiertos(desde, hasta){
+ var f = new Date(desde), n = 0;
+ while(f < hasta){
+  f.setDate(f.getDate() + 1);
+  if(f.getDay() !== 0) n++;   /* 0 es domingo: no cuenta */
+ }
+ return n;
+}
+function diasPara(v, plan){
+ if(!v) return null;
+ var p = String(v).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2]); f.setHours(0,0,0,0);
+ if(isNaN(f)) return null;
+ var h = new Date(); h.setHours(0,0,0,0);
+ /* Vencido o venciendo hoy se sigue contando en dias corridos: ahi lo que
+    importa es hace cuanto fue, no cuantos dias de gimnasio le quedan. */
+ if(f > h && esPlanSemanal(plan)) return diasAbiertos(h, f);
+ return Math.round((f - h) / 86400000);
+}
+
+/* Esta pantalla corre siempre en un aparato aparte (la tablet de la
+   puerta), nunca en la misma compu donde se edita control.html — así que
+   nunca tiene un motivo real para guardar su propia copia de la lista en
+   este navegador. Antes lo hacía (fusionándose con "wgym_control_v1"), y
+   eso traía un problema serio: si alguna vez, por lo que sea, un socio
+   quedaba guardado ahí con un dato viejo (por ejemplo un plan mal puesto
+   hace tiempo), la fusión solo rellenaba lo que estuviera vacío y nunca
+   corregía lo que ya tenía algo escrito — así que un socio podía quedar
+   pegado para siempre con un plan viejo en ESTA pantalla, aunque el sitio
+   y el mesón ya estuvieran perfectos (por ejemplo, mostrando el contador
+   de "Turno" a alguien que en realidad es Full Mensual). Ahora esta
+   pantalla lee siempre, directo, la lista tal cual está publicada en el
+   Apps Script (la misma fuente que usan control.html y la tarjeta del
+   socio) — sin guardar ni fusionar nada acá, así nunca puede quedarse
+   con un dato colgado de una versión vieja. */
+var lista = [];
+function cargarLista(){ return false; }
+
+/* Trae la lista completa desde el Apps Script (sin clave: ver la nota en
+   Código.gs). Se llama al arrancar y cada un par de minutos, en silencio
+   -- así esta pantalla nunca necesita recargarse entera para enterarse
+   de un socio nuevo o una renovación. */
+var solicitandoSocios = false;
+var pedidoSocios = 0;
+function cargarSociosDesdeApi(despues){
+ if(!CHECKIN_URL){ if(despues) despues(); return; }
+ if(solicitandoSocios){ if(despues) despues(); return; }
+ solicitandoSocios = true;
+ var cb = "wgymSocios_" + (++pedidoSocios) + "_" + Date.now();
+ var script = document.createElement("script");
+ var terminado = false;
+ var reloj = setTimeout(function(){ terminar(null); }, 10000);
+ function terminar(data){
+  if(terminado) return;
+  terminado = true;
+  solicitandoSocios = false;
+  clearTimeout(reloj);
+  delete window[cb];
+  script.remove();
+  if(data && Array.isArray(data.socios) && data.socios.length){
+   lista = data.socios.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:isoDeSerial(s.fv) }; });
+   pintarOrigen();
+   /* Actualiza de inmediato la tarjeta y los ingresos ya visibles, sin
+      esperar otro escaneo ni recargar o hacer parpadear la pantalla. */
+   if(ultimasFilas.length){
+    showHero(ultimasFilas[0]);
+    renderFeed(ultimasFilas);
+   }
+  }
+  if(despues) despues();
+ }
+ window[cb] = terminar;
+ script.src = CHECKIN_URL + "?action=listarSocios&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ terminar(null); };
+ document.body.appendChild(script);
+}
+
+function pintarOrigen(){
+ var el = document.getElementById("origenLista");
+ if(!el) return;
+ el.textContent = "Lista del sitio · " + lista.length + " socios";
+}
+
+/* Busca al socio por como venga escrito en el registro del QR. */
+function buscarSocio(nombre, apellido){
+ var q = sinTildes(nombre + " " + apellido);
+ if(!q) return null;
+ var exacto = lista.filter(function(s){ return sinTildes(s.n + " " + s.a) === q; });
+ if(exacto.length === 1) return exacto[0];
+ var partes = q.split(" ");
+ var calzan = lista.filter(function(s){
+  var completo = sinTildes(s.n + " " + s.a);
+  return partes.every(function(p){ return completo.indexOf(p) > -1; });
+ });
+ return calzan.length === 1 ? calzan[0] : null;   /* si hay dudas, no inventa */
+}
+function veredictoDe(r){
+ var s = buscarSocio(r.nombre, r.apellido);
+ if(!s){
+  var viejo = estadoVenc(r.venc);
+  var txt = viejo ? viejo.txt : "Revísalo en la planilla";
+  return { v:"nadie", fallo:"No está en la lista de socios",
+           detalle:txt, fechaTxt:"", diasTxt:txt,
+           corto:"Sin ficha de socio", cls:"", plan:"" };
+ }
+ var dias = diasPara(s.v, s.plan);
+ var vence = fechaCL(s.v);
+ if(dias === null){
+  var sf = "Revísale la fecha en el mesón";
+  return { v:"nadie", fallo:"Ficha sin fecha de vencimiento",
+           detalle:sf, fechaTxt:"", diasTxt:sf, corto:"Sin fecha", cls:"", plan:s.plan };
+ }
+ if(dias < 0){
+  var haceTxt = "hace " + Math.abs(dias) + (Math.abs(dias)===1?" día":" días");
+  return { v:"bad", fallo:"Ingreso registrado · membresía vencida",
+           detalle:"Venció el " + vence + " · " + haceTxt,
+           fechaTxt:"Venció el " + vence, diasTxt:haceTxt,
+           corto:null, cls:"danger", plan:s.plan };
+ }
+ if(dias <= 1){
+  if(dias === 0){
+   return { v:"warn", fallo:"Pasa, pero avísale",
+            detalle:"Vence hoy", fechaTxt:"", diasTxt:"Vence hoy",
+            corto:null, cls:"warn", plan:s.plan };
+  }
+  var quedanTxt1 = "quedan " + dias + (dias===1?" día":" días");
+  return { v:"warn", fallo:"Pasa, pero avísale",
+           detalle:"Vence el " + vence + " · " + quedanTxt1,
+           fechaTxt:"Vence el " + vence, diasTxt:quedanTxt1,
+           corto:null, cls:"warn", plan:s.plan };
+ }
+ var quedanTxt = "quedan " + dias + " días";
+ return { v:"ok", fallo:"Acceso permitido",
+          detalle:"Vence el " + vence + " · " + quedanTxt,
+          fechaTxt:"Vence el " + vence, diasTxt:quedanTxt,
+          corto:null, cls:"good", plan:s.plan };
+}
+
+var seenKeys = {};
+var ultimasFilas = [];
+var firstPoll = true;
+
+function keyOf(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
+
+/* Fecha de Chile (la misma que usa la hoja para separar los días). */
+function diaChile(){
+ try{
+  return new Intl.DateTimeFormat("en-CA", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date());
+ }catch(e){ return diaDelTs(Date.now()); }
+}
+/* La lista de ingresos es el panel completo de ingresos.js (el mismo del
+   mesón): contadores Ingresos / Personas / Dentro ahora, quién sigue
+   dentro con MARCAR SALIDA (pide la clave de administración una sola vez
+   en esta tablet) y el historial de cualquier día. */
+var panelIngresos = null;
+function notaIngreso(r){
+ var d = veredictoDe(r);
+ var s = buscarSocio(r.nombre, r.apellido);
+ var nt = s ? notaTurno(s) : null;
+ var nota = d.corto || d.detalle;
+ return (nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '') +
+  (nt ? '<span class="fturno" data-t="'+(nt.pasado?"tope":"ok")+'">'+escapeHtml(nt.txt)+'</span>' : '');
+}
+function renderFeed(data){
+ if(!panelIngresos && window.WgymIngresos){
+  panelIngresos = WgymIngresos.crear({
+   raiz: document.getElementById("feed"),
+   url: CHECKIN_URL,
+   compacto: true,
+   extraHtml: notaIngreso,
+   alTitulo: function(t){ document.getElementById("ingTitulo").textContent = t; },
+   alTocar: function(r){ showHero(r); }
+  });
+ }
+ if(panelIngresos) panelIngresos.recibir(data);
+}
+
+function showHero(r){
+ document.getElementById("heroEmpty").hidden = true;
+ var falloEl = document.getElementById("heroFallo");
+ var nameEl  = document.getElementById("heroName");
+ var timeEl  = document.getElementById("heroTime");
+ var vencEl  = document.getElementById("heroVenc");
+ var turnoEl = document.getElementById("heroTurno");
+ var planEl  = document.getElementById("heroPlan");
+ var d = veredictoDe(r);
+ var s = buscarSocio(r.nombre, r.apellido);
+
+ document.getElementById("hero").setAttribute("data-v", d.v);
+ falloEl.hidden = false; falloEl.textContent = d.fallo;
+ nameEl.hidden = false;  nameEl.textContent = r.nombre + " " + r.apellido;
+ timeEl.hidden = false;  timeEl.textContent = fmtTime(r.ts);
+ if(d.detalle){
+  vencEl.hidden = false; vencEl.className = "venc " + d.cls;
+  /* A los planes por Turno no hace falta mostrarles "quedan X días": ya
+     tienen su propio contador (día X de 14 este mes) justo abajo, y ese
+     es el dato que de verdad les importa mes a mes. Si no hay fecha que
+     mostrar (por ejemplo "Vence hoy"), igual se deja algo en vez de
+     dejar el cuadro vacío. */
+  var ocultarDias = s && (esTurno(s) || esTresVeces(s)) && d.fechaTxt;
+  vencEl.innerHTML = d.fechaTxt
+   ? escapeHtml(d.fechaTxt) + (ocultarDias ? '' : '<span class="venc-dias">' + escapeHtml(d.diasTxt) + '</span>')
+   : '<span class="venc-dias">' + escapeHtml(d.diasTxt) + '</span>';
+ } else { vencEl.hidden = true; }
+ var nt = s ? notaTurno(s) : null;
+ if(nt){
+  turnoEl.hidden = false; turnoEl.textContent = nt.txt;
+  turnoEl.setAttribute("data-t", nt.pasado ? "tope" : "ok");
+ } else { turnoEl.hidden = true; }
+ if(d.plan){ planEl.hidden = false; planEl.textContent = d.plan; }
+ else { planEl.hidden = true; }
+}
+function handleData(data){
+ var rows = data.rows || [];
+ ultimasFilas = rows;
+ var cambioLista = cargarLista();   /* por si agregaste un socio recién */
+ pintarOrigen();
+ /* Cada ingreso le suma el día a su cuenta de Turno / Tres Veces / Semanal.
+    El mismo día repetido no vuelve a sumar (marcarDia ya lo controla). */
+ rows.forEach(function(r){
+  var sr = buscarSocio(r.nombre, r.apellido);
+  if(sr && !window.WGYM_PRUEBA_INGRESOS) marcarDia(sr, diaDelTs(r.ts));
+ });
+ if(rows.length > 0){
+  var newest = rows[0];
+  if(!firstPoll && !seenKeys[keyOf(newest)]){
+   showHero(newest);
+  } else if(firstPoll || cambioLista){
+   /* La lista cambió: recalcula el veredicto sin destellar de nuevo. */
+   showHero(newest);
+  }
+ }
+ rows.forEach(function(r){ seenKeys[keyOf(r)] = true; });
+ firstPoll = false;
+ renderFeed(data);
+}
+
+var pollCounter = 0;
+function poll(){
+ pollCounter++;
+ var cb = "wgymCb" + pollCounter + "_" + Date.now();
+ window[cb] = function(data){
+  handleData(data);
+  delete window[cb];
+  script.remove();
+ };
+ var script = document.createElement("script");
+ /* listarIngresos trae TODOS los ingresos del día (antes llegaban solo los
+    últimos 20 y los primeros desaparecían). Si el Apps Script todavía no
+    la tiene, responde como antes. */
+ script.src = CHECKIN_URL + "?action=listarIngresos&dia=" + diaChile() + (window.WGYM_PRUEBA_INGRESOS ? "&prueba=1" : "") + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+
+/* ---------- bandas elásticas ---------- */
+function fmtMin(ts){
+ var min = Math.max(0, Math.round((Date.now() - ts) / 60000));
+ return min + " min";
+}
+var COLOR_DOT = { Negra:"#2B2B2B", Verde:"#5CA85C", Morada:"#9B59D0", Roja:"#E30613", Amarilla:"#E8C547" };
+function renderBandas(activos){
+ var el = document.getElementById("bandasFeed");
+ if(!activos || activos.length===0){
+  el.innerHTML = '<div class="feed-empty">Nadie ha pedido banda por ahora.</div>';
+  return;
+ }
+ el.innerHTML = activos.map(function(b){
+  var color = b.banda || "";
+  var dot = COLOR_DOT[color] || "#8C8C8C";
+  return '<div class="banda-item"><span class="binfo"><span class="bdot" style="background:'+dot+'"></span>'+
+   '<span class="btxt"><span class="bname">'+escapeHtml(b.nombre)+' '+escapeHtml(b.apellido)+'</span><br>'+
+   '<span class="bcolor">'+escapeHtml(color)+'</span> · <span class="btime">Hace '+fmtMin(b.retiro)+'</span></span></span>'+
+   '<button type="button" data-id="'+escapeHtml(b.id)+'">Devolver</button></div>';
+ }).join('');
+}
+function pollBandas(){
+ pollCounter++;
+ var cb = "wgymBandaCb" + pollCounter + "_" + Date.now();
+ window[cb] = function(data){
+  renderBandas(data && data.activos);
+  delete window[cb];
+  script.remove();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=listarBandas&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+document.getElementById("bandasFeed").addEventListener("click", function(ev){
+ var btn = ev.target.closest("button[data-id]");
+ if(!btn) return;
+ btn.disabled = true;
+ var cb = "wgymDevBanda_" + Date.now();
+ window[cb] = function(){
+  delete window[cb];
+  script.remove();
+  pollBandas();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=devolverBanda&id=" + encodeURIComponent(btn.getAttribute("data-id")) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
+ document.body.appendChild(script);
+});
+
+/* ---------- candados ---------- */
+function renderCandados(activos){
+ var el = document.getElementById("candadosFeed");
+ if(!activos || activos.length===0){
+  el.innerHTML = '<div class="feed-empty">Nadie ha pedido candado por ahora.</div>';
+  return;
+ }
+ el.innerHTML = activos.map(function(c){
+  return '<div class="banda-item"><span class="binfo">'+
+   '<span class="btxt"><span class="bname">'+escapeHtml(c.nombre)+' '+escapeHtml(c.apellido)+'</span><br>'+
+   '<span class="btime">Hace '+fmtMin(c.retiro)+'</span></span></span>'+
+   '<button type="button" data-id="'+escapeHtml(c.id)+'">Devolver</button></div>';
+ }).join('');
+}
+function pollCandados(){
+ pollCounter++;
+ var cb = "wgymCandadoCb" + pollCounter + "_" + Date.now();
+ window[cb] = function(data){
+  renderCandados(data && data.activos);
+  delete window[cb];
+  script.remove();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=listarCandados&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+document.getElementById("candadosFeed").addEventListener("click", function(ev){
+ var btn = ev.target.closest("button[data-id]");
+ if(!btn) return;
+ btn.disabled = true;
+ var cb = "wgymDevCandado_" + Date.now();
+ window[cb] = function(){
+  delete window[cb];
+  script.remove();
+  pollCandados();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=devolverCandado&id=" + encodeURIComponent(btn.getAttribute("data-id")) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
+ document.body.appendChild(script);
+});
+
+/* Botón de pantalla completa: la tablet de la puerta no puede esconder
+   la barra de dirección del navegador por su cuenta (eso le quita
+   espacio real a la pantalla), pero el navegador SÍ puede entrar a modo
+   pantalla completa de verdad -- sin esa barra -- si alguien lo toca
+   una vez. Basta con tocarlo al dejar la tablet instalada; se queda
+   así aunque pasen los días, salvo que alguien la reinicie. */
+var btnFS = document.getElementById("btnFullscreen");
+if(btnFS){
+ function enFullscreen(){ return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+ function pintarBotonFS(){
+  btnFS.textContent = enFullscreen() ? "⤡" : "⛶";
+  btnFS.title = enFullscreen() ? "Salir de pantalla completa" : "Pantalla completa";
+ }
+ btnFS.addEventListener("click", function(){
+  if(enFullscreen()){
+   (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document);
+  }else{
+   var el = document.documentElement;
+   var pedir = el.requestFullscreen || el.webkitRequestFullscreen;
+   if(pedir){
+    var resultado = pedir.call(el);
+    if(resultado && resultado.catch) resultado.catch(function(){});
+   }
+  }
+ });
+ document.addEventListener("fullscreenchange", pintarBotonFS);
+ document.addEventListener("webkitfullscreenchange", pintarBotonFS);
+ pintarBotonFS();
+}
+
+/* Esta pantalla se queda abierta todo el día en una tablet, sin que nadie
+   la recargue. Antes eso significaba quedarse con la copia de socios del
+   momento en que se abrió, hasta que alguien la refrescara a mano -- y
+   ahí un socio salía "vencido" acá aunque en control.html ya estuviera al
+   día. Ahora, como la lista se trae en vivo del Apps Script (no viene
+   pegada en el HTML), alcanza con volver a pedirla cada dos minutos, en
+   silencio, sin recargar nada -- nunca hay una página vieja que revisar. */
+cargarSociosDesdeApi(function(){
+ poll();
+ pollBandas();
+ pollCandados();
+ setInterval(poll, 4000);
+ setInterval(pollBandas, 4000);
+ setInterval(pollCandados, 4000);
+ setInterval(cargarSociosDesdeApi, 10 * 1000);
+  /* Solo una publicación de código nuevo recarga la pantalla. Los cambios
+     normales de socios llegan arriba desde la planilla sin recargar. */
+  setInterval(function(){
+   fetch(location.pathname + "?v=" + Date.now(), {cache:"no-store"})
+    .then(function(r){ return r.text(); })
+    .then(function(html){
+     var m = html.match(/const SOCIOS_VERSION\s*=\s*(\d+)/);
+     if(m && Number(m[1]) > SOCIOS_VERSION)
+      location.replace(location.pathname + "?v=" + Date.now());
+    })
+    .catch(function(){});
+  }, 60000);
+});
+})();
+</script>

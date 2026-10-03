@@ -1,0 +1,1990 @@
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>PRUEBA · WGYMADNSPORT · Control de Acceso</title>
+<meta name="description" content="Control de acceso y socios de WGYMADNSPORT Tocopilla.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="manifest" href="control.webmanifest?v=3">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icono-180.png?v=3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="MESÓN WGYM">
+<style>
+:root{
+ --negro:#0A0A0A; --surface:#161616; --surface-2:#1F1F1F; --card:#1c1c1c;
+ --rojo:#E30613; --rojo-oscuro:#A40410; --dorado:#D4AF37;
+ --blanco:#FFFFFF; --gris:#CFCFCF; --gris-soft:#8C8C8C; --line:#2A2A2A;
+ --verde:#5CA85C; --verde-soft:rgba(92,168,92,.13);
+ --naranja:#D4AF37; --naranja-soft:rgba(212,175,55,.13);
+ --rojo-claro:#E85C5C; --rojo-soft:rgba(232,92,92,.13);
+}
+*{box-sizing:border-box;}
+body{ margin:0; background:var(--negro); color:var(--blanco);
+ font-family:'Segoe UI', Arial, sans-serif; min-height:100vh; }
+svg{ fill:none; stroke-linecap:round; stroke-linejoin:round; }
+:focus-visible{ outline:2px solid var(--rojo); outline-offset:2px; }
+[hidden]{ display:none !important; }
+
+header.top{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%);
+ border-bottom:3px solid var(--rojo); padding:18px 20px; text-align:center; }
+header.top .logo{ width:min(78%,260px); height:auto; object-fit:contain;
+ margin-bottom:8px; }
+header.top .gymname{ font-size:12px; font-weight:800; letter-spacing:.14em;
+ color:var(--dorado); text-transform:uppercase; margin:0 0 4px; }
+header.top h1{ font-size:21px; margin:0; font-weight:800; text-transform:uppercase; }
+header.top h1 span{ color:var(--rojo); }
+header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; margin:6px 0 0; }
+
+.wrap{ max-width:1080px; margin:0 auto; padding:22px 20px 70px; }
+
+.aviso-lista{ background:rgba(212,175,55,.1); border:1.5px solid var(--dorado);
+ border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--gris);
+ line-height:1.6; margin-bottom:20px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+.aviso-lista p{ margin:0; flex:1; min-width:230px; }
+.aviso-lista b{ color:var(--dorado); }
+
+/* ── Puerta ─────────────────────────────────────────────────────────── */
+.hero{ background:linear-gradient(135deg,#161616 0%, #0A0A0A 60%, #1c1608 100%);
+ border:1.5px solid var(--dorado); border-radius:20px; padding:30px 26px;
+ text-align:center; min-height:172px; display:flex; flex-direction:column;
+ align-items:center; justify-content:center; transition:box-shadow .3s ease; }
+.hero.flash{ box-shadow:0 0 0 4px var(--rojo), 0 0 40px 6px rgba(227,6,19,.5); }
+.hero .kicker{ font-size:12px; font-weight:800; letter-spacing:.16em;
+ color:var(--dorado); text-transform:uppercase; margin:0 0 12px; }
+.hero .fallo{ font-size:26px; font-weight:900; text-transform:uppercase;
+ letter-spacing:.02em; line-height:1.1; margin:0 0 10px; text-wrap:balance; }
+.hero .name{ font-size:36px; font-weight:900; text-transform:uppercase;
+ line-height:1.15; margin:0 0 8px; }
+.hero .time{ font-size:14.5px; color:var(--gris-soft); font-weight:600; }
+.hero .venc{ font-size:20px; font-weight:700; margin:10px 0 0; padding:7px 18px;
+ border-radius:999px; display:inline-block; }
+.hero .venc.good{ color:var(--verde); background:var(--verde-soft); }
+.hero .venc.warn{ color:var(--dorado); background:var(--naranja-soft); }
+.hero .venc.danger{ color:var(--rojo-claro); background:var(--rojo-soft); }
+.hero .turno{ margin-top:8px; font-size:20px; font-weight:800; letter-spacing:.02em;
+ display:inline-block; padding:7px 17px; border-radius:999px; border:1px solid; }
+.hero .turno[data-t="ok"]{ color:var(--verde); border-color:var(--verde);
+ background:rgba(92,168,92,.12); }
+.hero .turno[data-t="tope"]{ color:var(--dorado); border-color:var(--dorado);
+ background:rgba(212,175,55,.14); }
+.hero .plan{ font-size:18px; color:var(--dorado); font-weight:700; margin:8px 0 0; }
+.hero .empty{ font-size:16px; color:var(--gris-soft); font-weight:600; margin:0; }
+.hero .renovar{ margin-top:16px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.hero .ing-resp{ flex-basis:100%; margin:4px 0 0; font-size:14px; font-weight:800; color:var(--verde); }
+.hero .ing-resp.mal{ color:var(--rojo-claro); }
+.hero[data-v="ok"]{ border-color:var(--verde); }
+.hero[data-v="ok"] .fallo{ color:var(--verde); }
+.hero[data-v="ok"].flash{ box-shadow:0 0 0 4px var(--verde), 0 0 40px 6px rgba(92,168,92,.45); }
+.hero[data-v="warn"]{ border-color:var(--dorado); }
+.hero[data-v="warn"] .fallo{ color:var(--dorado); }
+.hero[data-v="warn"].flash{ box-shadow:0 0 0 4px var(--dorado), 0 0 40px 6px rgba(212,175,55,.45); }
+.hero[data-v="bad"]{ border-color:var(--rojo-claro); }
+.hero[data-v="bad"] .fallo{ color:var(--rojo-claro); }
+.hero[data-v="bad"].flash{ box-shadow:0 0 0 4px var(--rojo), 0 0 40px 8px rgba(227,6,19,.55); }
+.hero[data-v="nadie"]{ border-color:var(--line); }
+.hero[data-v="nadie"] .fallo{ color:var(--gris-soft); font-size:20px; }
+
+.manual{ display:flex; gap:9px; flex-wrap:wrap; margin-top:14px; position:relative; }
+.manual input{ flex:1; min-width:200px; background:var(--surface); border:1px solid var(--line);
+ border-radius:10px; color:var(--blanco); font-size:16px; font-weight:600;
+ font-family:inherit; padding:13px 14px; }
+.manual input::placeholder{ color:var(--gris-soft); font-weight:500; }
+.sugerencias{ position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:30;
+ background:var(--surface-2); border:1px solid #3A3A3A; border-radius:12px;
+ max-height:260px; overflow-y:auto; list-style:none; margin:0; padding:0;
+ box-shadow:0 18px 40px -14px #000; }
+.sugerencias li{ display:flex; align-items:center; gap:10px; padding:11px 14px;
+ cursor:pointer; border-bottom:1px solid var(--line); }
+.sugerencias li:last-child{ border-bottom:none; }
+.sugerencias li:hover,.sugerencias li[aria-selected="true"]{ background:#2A2A2A; }
+.sugerencias .snom{ flex:1; font-weight:700; font-size:14.5px; }
+.sugerencias .spl{ font-size:12.5px; color:var(--gris-soft); }
+.punto{ width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+
+.feed-head{ display:flex; align-items:center; justify-content:space-between;
+ margin:26px 0 10px; gap:12px; flex-wrap:wrap; }
+.feed-head h2{ font-size:13px; font-weight:800; letter-spacing:.1em;
+ color:var(--gris-soft); text-transform:uppercase; margin:0; }
+#bandasSection .feed-head h2{ color:#F4D03F; }
+.dot-status{ display:flex; align-items:center; gap:6px; font-size:12px;
+ color:var(--gris-soft); font-weight:600; }
+.dot-live{ width:8px; height:8px; border-radius:50%; background:var(--verde); }
+.dot-status[data-vivo="no"] .dot-live{ background:var(--rojo-claro); }
+.feed-item{ display:flex; align-items:center; justify-content:space-between; gap:10px;
+ background:var(--card); border:1px solid var(--line); border-radius:12px;
+ padding:13px 16px; margin-bottom:8px; width:100%; text-align:left;
+ font-family:inherit; color:inherit; cursor:pointer; }
+.feed-item:hover{ border-color:#3A3A3A; }
+.feed-item .finfo{ display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
+.feed-item .fname{ font-weight:800; font-size:15px; }
+.feed-item .fvenc, .ing-item .fvenc{ font-size:12px; font-weight:700; }
+.feed-item .fvenc.good, .ing-item .fvenc.good{ color:var(--verde); }
+.feed-item .fvenc.warn, .ing-item .fvenc.warn{ color:var(--dorado); }
+.feed-item .fvenc.danger, .ing-item .fvenc.danger{ color:var(--rojo-claro); }
+.feed-item .fturno, .ing-item .fturno{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
+ border:1px solid; white-space:nowrap; }
+.feed-item .fturno[data-t="ok"], .ing-item .fturno[data-t="ok"]{ color:var(--verde); border-color:rgba(92,168,92,.5); }
+.feed-item .fturno[data-t="tope"], .ing-item .fturno[data-t="tope"]{ color:var(--dorado); border-color:rgba(212,175,55,.6);
+ background:rgba(212,175,55,.12); }
+.feed-item .fveces{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
+ border:1px solid rgba(212,175,55,.6); color:var(--dorado); background:rgba(212,175,55,.12);
+ white-space:nowrap; }
+.feed-item .ftime{ font-size:12.5px; color:var(--gris-soft); font-weight:600; flex:0 0 auto; }
+.feed-empty{ text-align:center; color:var(--gris-soft); font-size:13.5px; padding:26px 0; }
+
+.banda-item{
+ display:flex; align-items:center; justify-content:space-between; gap:12px;
+ background:rgba(212,175,55,.1); border:1.5px solid var(--dorado); border-radius:12px;
+ padding:13px 16px; margin-bottom:8px;
+}
+.banda-item .binfo{ min-width:0; display:flex; align-items:center; gap:9px; }
+.banda-item .bdot{ width:12px; height:12px; border-radius:50%; flex-shrink:0; border:1px solid rgba(255,255,255,.25); }
+.banda-item .btxt{ min-width:0; }
+.banda-item .bname{ font-weight:800; font-size:15px; letter-spacing:.01em; }
+.banda-item .bcolor{ font-size:12px; color:var(--gris-soft); font-weight:700; text-transform:uppercase; letter-spacing:.03em; }
+.banda-item .btime{ font-size:12px; color:var(--gris-soft); font-weight:600; margin-top:2px; }
+.banda-item button{
+ flex-shrink:0; background:var(--dorado); color:var(--negro); border:none; border-radius:9px;
+ padding:10px 14px; font-size:12px; font-weight:900; letter-spacing:.04em; text-transform:uppercase;
+ font-family:inherit; cursor:pointer;
+}
+.banda-item button:active{ opacity:.8; }
+
+/* En celular, el último ingreso y las bandas van uno abajo del otro
+   (igual que antes). En pantalla ancha van lado a lado. */
+@media (min-width:860px){
+ .hero-fila{ display:grid; grid-template-columns:1fr 340px; gap:0 18px; align-items:start; }
+}
+
+/* ── Indicadores ────────────────────────────────────────────────────── */
+.kpis{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:26px 0 18px; }
+.kpi{ background:var(--card); border:1px solid var(--line); border-radius:12px;
+ padding:13px 14px 14px; text-align:left; cursor:pointer; font-family:inherit;
+ color:inherit; width:100%; border-left:3px solid var(--line); }
+.kpi:hover{ border-color:#3A3A3A; }
+.kpi[aria-pressed="true"]{ border-color:var(--rojo); }
+.kpi .klbl{ font-size:11px; font-weight:800; letter-spacing:.12em;
+ text-transform:uppercase; color:var(--gris-soft); display:block; }
+.kpi .kval{ font-size:29px; font-weight:900; line-height:1.1; margin-top:7px; }
+.kpi .ksub{ font-size:11.5px; color:var(--gris-soft); margin-top:4px; }
+.kpi.t{ border-left-color:var(--gris-soft); }
+.kpi.a{ border-left-color:var(--verde); } .kpi.a .kval{ color:var(--verde); }
+.kpi.p{ border-left-color:var(--dorado); } .kpi.p .kval{ color:var(--dorado); }
+.kpi.v{ border-left-color:var(--rojo-claro); } .kpi.v .kval{ color:var(--rojo-claro); }
+.kpi.r{ border-left-color:var(--dorado); cursor:default; }
+.kpi.r .kval{ color:var(--dorado); font-size:23px; }
+
+/* ── Lista ──────────────────────────────────────────────────────────── */
+.panel{ background:var(--surface); border:1px solid var(--line); border-radius:16px;
+ overflow:hidden; }
+.panel > h2{ font-size:13px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+ color:var(--gris); margin:0; padding:14px 18px; border-bottom:1px solid var(--line);
+ background:#131313; display:flex; align-items:center; gap:10px; }
+.panel > h2 .der{ margin-left:auto; color:var(--gris-soft); font-size:12px; letter-spacing:.06em; }
+.panel .cuerpo{ padding:16px 18px 18px; }
+
+.barra{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+.barra .campo{ flex:1; min-width:190px; }
+.barra input[type="text"], .barra select{ width:100%; background:var(--surface-2);
+ border:1px solid var(--line); border-radius:10px; color:var(--blanco);
+ font-family:inherit; font-size:15px; font-weight:600; padding:11px 13px; }
+.barra select{ width:auto; text-transform:uppercase; font-size:13px; letter-spacing:.05em; }
+.btn{ border:none; border-radius:10px; cursor:pointer; padding:11px 16px;
+ font-family:inherit; font-weight:800; font-size:13px; text-transform:uppercase;
+ letter-spacing:.08em; display:inline-flex; align-items:center; gap:7px; }
+.btn svg{ width:15px; height:15px; stroke-width:2.2; }
+.btn-rojo{ background:var(--rojo); color:#fff; } .btn-rojo svg{ stroke:#fff; }
+.btn-oro{ background:var(--dorado); color:#14140F; } .btn-oro svg{ stroke:#14140F; }
+.btn-linea{ background:transparent; color:var(--gris); border:1px solid var(--line); }
+.btn-linea svg{ stroke:var(--gris); }
+.btn-linea:hover{ color:#fff; border-color:#3A3A3A; }
+.btn:hover{ filter:brightness(1.12); }
+
+.tscroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+table.socios{ width:100%; min-width:730px; border-collapse:collapse; }
+table.socios th{ text-align:left; font-size:11px; font-weight:800; letter-spacing:.12em;
+ text-transform:uppercase; color:var(--gris-soft); padding:0 12px 10px 0;
+ border-bottom:1px solid var(--line); white-space:nowrap; }
+table.socios td{ padding:10px 12px 10px 0; border-bottom:1px solid var(--line);
+ font-size:14.5px; vertical-align:middle; }
+table.socios tr:last-child td{ border-bottom:none; }
+table.socios td.nom{ font-weight:700; white-space:nowrap; }
+table.socios td.plan{ color:var(--gris-soft); font-size:13px; white-space:nowrap; }
+table.socios th.mon, table.socios td.mon{ text-align:right; padding-right:18px;
+ white-space:nowrap; font-variant-numeric:tabular-nums; }
+table.socios td.fec{ white-space:nowrap; font-variant-numeric:tabular-nums; }
+table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
+.pill{ display:inline-flex; align-items:center; gap:6px; border-radius:999px;
+ padding:4px 11px; font-size:11.5px; font-weight:800; text-transform:uppercase;
+ letter-spacing:.06em; white-space:nowrap; border:1px solid; }
+.pill[data-e="aldia"]{ color:var(--verde); border-color:var(--verde); background:var(--verde-soft); }
+.pill[data-e="porvencer"]{ color:var(--dorado); border-color:var(--dorado); background:var(--naranja-soft); }
+.pill[data-e="vencido"]{ color:var(--rojo-claro); border-color:var(--rojo-claro); background:var(--rojo-soft); }
+.pill .punto{ width:7px; height:7px; }
+.dias{ display:block; font-size:14.5px; font-weight:700; color:var(--gris-soft); margin-top:4px; }
+.turno-tabla{ display:block; font-size:14.5px; font-weight:700; margin-top:4px; color:var(--dorado); }
+.turno-tabla[data-t="tope"]{ color:var(--rojo-claro); }
+.iconbtn{ background:none; border:1px solid transparent; border-radius:8px;
+ cursor:pointer; padding:6px 7px; line-height:0; }
+.iconbtn svg{ width:16px; height:16px; stroke:var(--gris-soft); stroke-width:2; }
+.iconbtn:hover{ background:var(--surface-2); border-color:var(--line); }
+.iconbtn:hover svg{ stroke:#fff; }
+.iconbtn.borrar:hover{ border-color:var(--rojo-claro); }
+.iconbtn.borrar:hover svg{ stroke:var(--rojo-claro); }
+.sinnada{ padding:32px 6px; text-align:center; color:var(--gris-soft); font-size:14px; }
+
+/* ── Ficha ──────────────────────────────────────────────────────────── */
+.velo{ position:fixed; inset:0; background:rgba(0,0,0,.78); display:grid;
+ place-items:center; padding:18px; z-index:60; }
+.ficha{ background:var(--surface); border:1px solid #3A3A3A; border-radius:16px;
+ width:100%; max-width:460px; max-height:92vh; overflow-y:auto;
+ box-shadow:0 26px 60px -20px #000; }
+.ficha h3{ font-size:19px; font-weight:900; margin:0; padding:18px 20px 15px;
+ border-bottom:1px solid var(--line); text-transform:uppercase; }
+.ficha .campos{ padding:18px 20px; display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+.ficha label{ display:flex; flex-direction:column; gap:6px; }
+.ficha label.ancho{ grid-column:1 / -1; }
+.ficha label span{ font-size:11px; font-weight:800; letter-spacing:.12em;
+ text-transform:uppercase; color:var(--gris-soft); }
+.ficha input, .ficha select{ background:var(--surface-2); border:1px solid var(--line);
+ border-radius:10px; color:var(--blanco); font-family:inherit; font-size:15px;
+ font-weight:600; padding:11px 12px; width:100%; }
+.ficha .turno-caja{ grid-column:1 / -1; display:flex; align-items:center; gap:12px;
+ flex-wrap:wrap; justify-content:space-between;
+ border:1px solid var(--dorado); background:rgba(212,175,55,.08);
+ border-radius:10px; padding:11px 13px; }
+.ficha .tc-lbl{ display:block; font-size:11px; font-weight:800; letter-spacing:.1em;
+ text-transform:uppercase; color:var(--dorado); }
+.ficha .tc-sub{ display:block; margin-top:3px; font-size:12.5px; color:var(--gris-soft); }
+.ficha .tc-ctrl{ display:flex; align-items:center; gap:10px; }
+.ficha .tc-ctrl button{ width:34px; height:34px; border-radius:8px; cursor:pointer;
+ background:var(--surface-2); border:1px solid var(--line); color:var(--blanco);
+ font-size:19px; font-weight:800; line-height:1; }
+.ficha .tc-ctrl button:hover{ border-color:var(--dorado); }
+.ficha .tc-ctrl b{ min-width:52px; text-align:center; font-size:22px; font-weight:900; }
+.ficha .tc-desde{ flex:1 1 100%; display:flex; align-items:center; gap:9px;
+ justify-content:flex-start;
+ margin-top:2px; padding-top:9px; border-top:1px solid rgba(212,175,55,.28); }
+.ficha .tc-desde span{ font-size:11px; font-weight:800; letter-spacing:.1em;
+ text-transform:uppercase; color:var(--dorado); white-space:nowrap; }
+.ficha .tc-desde input{ width:auto; flex:0 0 auto; padding:7px 9px; font-size:14px; }
+.ficha .rapidos{ grid-column:1 / -1; display:flex; gap:7px; flex-wrap:wrap; }
+.ficha .rapidos button{ background:var(--surface-2); border:1px solid var(--line);
+ border-radius:999px; color:var(--gris); font-family:inherit; font-size:12px;
+ font-weight:700; padding:7px 13px; cursor:pointer; text-transform:uppercase;
+ letter-spacing:.05em; }
+.ficha .rapidos button:hover{ color:#fff; border-color:var(--dorado); }
+.ficha .rapidos button.rap-oro{ background:var(--dorado); color:#151515;
+ border-color:var(--dorado); font-weight:800; }
+.ficha .rapidos button.rap-oro:hover{ color:#151515; filter:brightness(1.08); }
+.ficha .aviso{ grid-column:1 / -1; color:var(--rojo-claro); font-size:13.5px; margin:0; }
+.ficha .pie{ display:flex; gap:9px; justify-content:flex-end; padding:0 20px 20px;
+ flex-wrap:wrap; }
+.ficha .pie #fCopiar{ margin-right:auto; background:#F4D03F; color:#14140F; border-color:#F4D03F; }
+
+.nota{ margin-top:26px; padding-top:16px; border-top:1px solid var(--line);
+ font-size:12.5px; color:var(--gris-soft); line-height:1.65; }
+.nota b{ color:var(--gris); }
+.nota a{ color:var(--dorado); }
+
+@media (max-width:900px){ .kpis{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width:560px){
+ .kpis{ grid-template-columns:repeat(2,1fr); }
+ .hero .name{ font-size:28px; } .hero .fallo{ font-size:20px; }
+ .ficha .campos{ grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce){ *{ transition:none !important; animation:none !important; } }
+</style>
+
+<div style="position:sticky;top:0;z-index:9999;background:#D4AF37;color:#0A0A0B;font:800 13px Arial,sans-serif;letter-spacing:.06em;text-align:center;padding:7px 10px">MODO PRUEBA · se guarda en la hoja "Pruebas ingresos", no en los registros reales</div>
+<header class="top">
+<script>window.WGYM_PRUEBA_INGRESOS = true;</script>
+<img class="logo" id="topLogo" alt="WGYMADNSPORT">
+<p class="gymname">WGYMADNSPORT Tocopilla</p>
+<h1>Control de <span>Acceso</span></h1>
+<p class="reloj" id="reloj">—</p>
+<button id="copiar-lista" type="button" title="Copiar lista al día para pasarla por chat" style="cursor:pointer;border:1px solid #D4AF37;border-radius:9px;background:transparent;color:#D4AF37;font-family:inherit;font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:8px 12px;margin-left:10px;white-space:nowrap">📋 Copiar lista</button>
+</header>
+<p id="copiar-aviso" style="text-align:center;font-size:13px;color:#9B9BA6;padding:6px 14px 0;min-height:1.4em"></p>
+
+<div class="wrap">
+
+<div class="aviso-lista" id="avisoLista" hidden>
+<p id="avisoTexto"></p>
+<button class="btn btn-oro" id="usarSitio">Usar la del sitio</button>
+<button class="btn btn-linea" id="seguirMia">Seguir con la mía</button>
+</div>
+
+<div class="hero-fila">
+<div class="hero" id="hero">
+<p class="kicker">Último ingreso</p>
+<p class="empty" id="heroEmpty">Esperando el primer escaneo del día…</p>
+<p class="fallo" id="heroFallo" hidden></p>
+<p class="name" id="heroName" hidden></p>
+<p class="time" id="heroTime" hidden></p>
+<p class="venc" id="heroVenc" hidden></p>
+<p class="turno" id="heroTurno" hidden></p>
+<p class="plan" id="heroPlan" hidden></p>
+<div class="renovar" hidden id="heroAcc">
+<!-- Respaldo para quien llegó sin escanear el QR de la puerta: aparece al
+     buscarlo a mano y registra su ingreso en la hoja (con la clave). -->
+<button class="btn btn-rojo" id="heroIngreso" hidden>Registrar ingreso</button>
+<button class="btn btn-oro" id="heroEditar">Renovar / editar ficha</button>
+<p class="ing-resp" id="heroIngresoMsg" hidden></p>
+</div>
+</div>
+
+<div id="bandasSection">
+<div class="feed-head">
+<h2>Bandas pedidas</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="bandasFeed"></div>
+
+<div class="feed-head">
+<h2>Candados pedidos</h2>
+<span class="dot-status"><span class="dot-live"></span> En vivo</span>
+</div>
+<div id="candadosFeed"></div>
+</div>
+</div>
+
+<div class="manual">
+<input id="qPuerta" type="text" autocomplete="off" spellcheck="false"
+ placeholder="¿No alcanzó a escanear? Busca su nombre aquí…" aria-label="Buscar socio a mano">
+<button class="btn btn-rojo" id="bEntrar">
+<svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+Ver estado
+</button>
+</div>
+
+<div class="feed-head">
+<h2 id="ingTitulo">Ingresos de hoy</h2>
+<span class="dot-status" id="estadoVivo" data-vivo="si"><span class="dot-live"></span> <span id="estadoVivoTxt">Conectando…</span></span>
+</div>
+<!-- Todos los ingresos del día, contadores, quién sigue dentro con
+     MARCAR SALIDA y el historial. Lo arma ingresos.js con la hoja. -->
+<div id="ingresosPanel"></div>
+
+<section class="kpis" id="kpis"></section>
+
+<div class="panel">
+<h2>Socios del gimnasio <span class="der" id="conteo">—</span></h2>
+<div class="cuerpo">
+<div class="barra">
+<div class="campo"><input id="qLista" type="text" autocomplete="off" placeholder="Buscar por nombre o apellido…" aria-label="Buscar socio"></div>
+<select id="orden" aria-label="Ordenar">
+<option value="venc">Por vencimiento</option>
+<option value="nombre">Por nombre</option>
+<option value="plan">Por plan</option>
+</select>
+<button class="btn btn-rojo" id="bNuevo">
+<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Nuevo socio</button>
+<button class="btn btn-oro" id="bRespaldo">
+<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar respaldo</button>
+<button class="btn btn-linea" id="bPlanilla">
+<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg> Planilla Excel</button>
+<button class="btn btn-linea" id="bFresco" title="Vuelve a bajar la página desde internet, por si el equipo se quedó con una copia vieja">
+<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg> Buscar lista nueva</button>
+<button class="btn btn-linea" id="bSitio" title="Vuelve a la lista publicada en el sitio">
+<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3"/><path d="M21 3v6h-6M3 21v-6h6"/></svg> Restaurar del sitio</button>
+<button class="btn btn-linea" id="bCargar">
+<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 8l5-5 5 5M12 3v12"/></svg> Cargar respaldo</button>
+<input type="file" id="archivo" accept=".json,.csv,.txt,application/json,text/csv,text/plain" hidden>
+</div>
+<div class="tscroll">
+<table class="socios">
+<thead><tr><th>Nombre</th><th>Apellido</th><th>Plan</th><th class="mon">Monto</th><th>Vence</th><th>Estado</th><th></th></tr></thead>
+<tbody id="tabla"></tbody>
+</table>
+</div>
+</div>
+</div>
+
+<p class="nota">
+<b>Los clientes siguen entrando con el mismo QR de siempre.</b> Esta página escucha ese mismo registro, así que no hay que cambiar nada en la puerta.<br>
+<b>Tu lista se guarda en este equipo.</b> Si abres esta página en otro teléfono o computador, ese parte con la lista del sitio. Para pasar la tuya, descarga el respaldo acá y cárgalo allá.<br>
+La <a href="prueba-pantalla.html">pantalla de ingresos</a> es la que va a la vista de los clientes.
+</p>
+
+</div>
+
+<script>
+const LOGO_B64 = "assets/logo-oficial.webp";
+/* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
+const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
+</script>
+<script src="ingresos.js?v=5"></script>
+
+
+<script>
+(function(){
+"use strict";
+
+var KEY = "wgym_control_v1";
+var PLANES = ["Full Mensual","Mensual Turno","Tres Veces a La Semana",
+ "Estudiante Profesor","Funcionario Público","Mensual Tercera Edad","Plan Especial","Plan Semanal"];
+var PRECIO = { "Full Mensual":33000, "Mensual Turno":23000, "Tres Veces a La Semana":28000,
+ "Estudiante Profesor":28000, "Funcionario Público":28000, "Mensual Tercera Edad":23000,
+ "Plan Especial":20000, "Plan Semanal":15000 };
+
+document.getElementById("topLogo").src = LOGO_B64;
+
+/* ── fuente compartida: Apps Script / Google Sheet ─────────────────────
+   Antes cada equipo se quedaba con su propia copia (LISTA_BASE) guardada
+   en este navegador, y había que ir juntándola a mano con lo publicado.
+   Ahora control.html, pantalla.html y la tarjeta del socio leen y
+   escriben la MISMA hoja "Socios" a través del Apps Script -- no hay
+   copia local que se pueda desincronizar. Lo único que sigue viviendo
+   solo en este equipo es la asistencia/ciclos (el contador "día X de
+   Y"), que nunca formó parte de esta migración. */
+function fechaValida(v){
+ var p = String(v || "").split("-");
+ if(p.length !== 3 || p[0].length !== 4) return false;
+ var f = new Date(+p[0], +p[1]-1, +p[2]);
+ return !isNaN(f) && f.getFullYear() > 2000;
+}
+/* Si una fecha quedó al revés (26-09-2026 en vez de 2026-09-26), la endereza.
+   Solo lo sigue usando el importador de respaldo .json/.csv, más abajo. */
+function arreglarFecha(v){
+ var s = String(v || "").trim();
+ var p = s.split("-");
+ if(p.length !== 3) return s;
+ if(p[0].length === 4) return s;                       /* ya está bien */
+ if(p[2].length === 4) return p[2] + "-" + p[1] + "-" + p[0];
+ return s;
+}
+/* El sitio guarda el vencimiento como serial (tipo Excel, días desde el
+   30-12-1899) y acá adentro se trabaja siempre con la fecha ISO
+   (aaaa-mm-dd) -- son las mismas dos conversiones que ya usan
+   tarjeta.html y pantalla.html. */
+function serialAIso_(fv){
+ var d = new Date(Date.UTC(1899, 11, 30) + Number(fv) * 86400000);
+ return d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+
+        "-"+String(d.getUTCDate()).padStart(2,"0");
+}
+/* La vuelta contraria: de "aaaa-mm-dd" al serial que entiende el Apps
+   Script. Hay otra igual, "aSerial", más abajo -- pero vive adentro del
+   cierre del botón "📋 Copiar lista" y no se puede usar desde acá. */
+function isoASerial_(iso){
+ var p = String(iso || "").trim().split("-");
+ if(p.length !== 3) return 0;
+ var d = Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+ return Math.round((d - Date.UTC(1899, 11, 30)) / 86400000);
+}
+
+var socios = [];
+var cargandoSocios = true;
+
+function guardar(){
+ /* Ya no es la fuente de verdad -- es solo una copia de respaldo para que,
+    si por algún motivo no hay señal, esta pantalla no quede en blanco. */
+ try{ localStorage.setItem(KEY, JSON.stringify({ socios:socios })); }catch(e){}
+}
+
+function socioDeLaApi_(s){
+ return { id:"s_"+(s.n+"|"+s.a).toUpperCase().replace(/[^A-Z0-9]/g, "_"),
+  n:s.n, a:s.a, plan:s.plan, m:Number(s.monto)||0, v:serialAIso_(s.fv), medid:s.medid||"" };
+}
+
+/* Trae la lista completa desde el Apps Script (sin clave: ver la nota en
+   Código.gs de por qué listarSocios queda abierta). Usa el mismo truco de
+   <script src> que bandas/candados, porque es una lectura (GET) y así no
+   depende de que el navegador soporte bien CORS con fetch. */
+function cargarSocios(despues){
+ var av = document.getElementById("avisoLista");
+ if(!CHECKIN_URL){ cargandoSocios = false; if(despues) despues(); return; }
+ var cb = "wgymSocios_" + Date.now();
+ var listo = false;
+ var reloj = setTimeout(function(){
+  if(listo) return; listo = true; delete window[cb];
+  fallback("Sin conexión con el sitio -- mostrando la última copia guardada en este equipo.");
+ }, 20000);
+ function fallback(msg){
+  cargandoSocios = false;
+  var guardado = null;
+  try{ guardado = JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){}
+  if(guardado && Array.isArray(guardado.socios) && guardado.socios.length){
+   socios = guardado.socios;
+  }
+  if(msg && av){
+   av.hidden = false;
+   document.getElementById("avisoTexto").textContent = msg;
+   document.getElementById("usarSitio").hidden = true;
+   document.getElementById("seguirMia").textContent = "Entendido";
+   document.getElementById("seguirMia").addEventListener("click", function(){ av.hidden = true; });
+  }
+  pintar();
+  if(despues) despues();
+ }
+ window[cb] = function(data){
+  if(listo) return; listo = true; clearTimeout(reloj); delete window[cb]; script.remove();
+  if(!data || !Array.isArray(data.socios)){ fallback("El sitio respondió algo raro -- mostrando la última copia guardada."); return; }
+  socios = data.socios.map(socioDeLaApi_);
+  cargandoSocios = false;
+  guardar();
+  pintar();
+  /* Recalcula también el último ingreso visible cuando llega la lista. */
+  if(filas.length){ var r = filas[0]; mostrarHero(r.nombre+" "+r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido)); }
+  if(despues) despues();
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=listarSocios&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){
+  if(listo) return; listo = true; clearTimeout(reloj); delete window[cb];
+  fallback("No se pudo conectar con el sitio -- mostrando la última copia guardada en este equipo.");
+ };
+ document.body.appendChild(script);
+}
+
+/* ── clave de administración, recordada en este equipo (09/2026) ───────
+   A pedido del dueño: se pide UNA sola vez en la compu de recepción y
+   queda guardada en el localStorage de ESE equipo, así no la vuelve a
+   pedir. Nunca va escrita en este archivo (que es público). Si el sitio
+   responde "clave incorrecta" (por ejemplo, porque se cambió), se borra
+   la guardada, se pide de nuevo y se reintenta una vez. */
+var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";
+var claveAdmin = "";
+try{ claveAdmin = localStorage.getItem(CLAVE_ADMIN_LS) || ""; }catch(e){}
+function recordarClaveAdmin_(c){
+ claveAdmin = c || "";
+ try{
+  if(claveAdmin) localStorage.setItem(CLAVE_ADMIN_LS, claveAdmin);
+  else localStorage.removeItem(CLAVE_ADMIN_LS);
+ }catch(e){}
+}
+function pedirClaveAdmin_(texto){
+ recordarClaveAdmin_(prompt(texto) || "");
+ return claveAdmin;
+}
+
+/* Guarda (alta o edición) o borra un socio en el sitio. Va por POST --
+   nunca por la URL de un <script src> -- para que la clave no quede en
+   el historial del navegador. cb(ok) avisa si funcionó o no. */
+function llamarSocioApi_(action, params, cb, reintento){
+ if(!CHECKIN_URL){ cb(false, "no configurado"); return; }
+ if(!claveAdmin && !pedirClaveAdmin_("Clave de administración (se pide solo esta vez en este equipo):")){
+  cb(false, "sin clave"); return;
+ }
+ var cuerpo = new URLSearchParams(Object.assign({ action:action, clave:claveAdmin }, params));
+ fetch(CHECKIN_URL, { method:"POST", body:cuerpo })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+   if(data && data.ok){ cb(true, data); return; }
+   if(data && data.error === "clave incorrecta"){
+    recordarClaveAdmin_("");
+    if(!reintento && pedirClaveAdmin_("La clave guardada no funcionó. Escribe la clave de administración:")){
+     llamarSocioApi_(action, params, cb, true); return;
+    }
+   }
+   cb(false, (data && data.error) || "no se pudo guardar");
+  })
+  .catch(function(){ cb(false, "sin conexión"); });
+}
+function guardarSocioApi(s, cb){
+ llamarSocioApi_("guardarSocio", {
+  nombre:s.n, apellido:s.a, plan:s.plan, monto:s.m,
+  fv:isoASerial_(s.v), medid:s.medid || ""
+ }, cb);
+}
+function borrarSocioApi(s, cb){
+ llamarSocioApi_("borrarSocio", { nombre:s.n, apellido:s.a }, cb);
+}
+
+cargarSocios(function(){
+ try{ pasarLosDiasDelNombreViejo(); }catch(e){}
+ try{ anotarCiclos(); }catch(e){}
+});
+
+/* ── planes con dias contados ───────────────────────────────────────────
+   Hay dos planes que no dan el mes corrido sino una cantidad de dias:
+     · por turno, 14 dias dentro del mes que esta pagando;
+     · tres veces a la semana, 3 dias dentro de la semana, de lunes a domingo.
+   Aca se lleva la cuenta de los dias distintos en que entro: dos escaneos el
+   mismo dia cuentan uno solo. */
+var DIAS_TURNO = 14;
+var DIAS_SEMANA = 3;
+/* Tres por semana por cuatro semanas: los dias que trae el plan en el mes.
+   El tope que vale es este, no el de la semana: si una semana viene menos,
+   esos dias le quedan a favor y los puede usar en las semanas siguientes. */
+var DIAS_MES_3X = 12;
+var CLAVE_ASIS = "wgym_asistencia_v1";
+var asistencia = {};
+try{ asistencia = JSON.parse(localStorage.getItem(CLAVE_ASIS) || "{}") || {}; }catch(e){}
+
+function guardarAsistencia(){
+ try{ localStorage.setItem(CLAVE_ASIS, JSON.stringify(asistencia)); }catch(e){}
+}
+
+/* Cuando en el sitio se le corrige el nombre a un socio, los dias que este
+   equipo ya le tenia anotados quedaban colgando del nombre viejo y su
+   contador volvia a cero sin motivo. Aca se le pasan al nombre nuevo. Si ya
+   tiene algo anotado con el nombre nuevo, se juntan los dos. */
+var RENOMBRES = [
+ { de:"BRAYAN|ALVARE", a:"BRAYAN|ALVAREZ" },
+ { de:"ANA|MARIA SANABRIA", a:"ANA MARIA|SANABRIA" },
+ { de:"KEIDY|ANDRADES", a:"KEIDY|ANDRADE" },
+ { de:"MACARENA|GONSALEZ", a:"MACARENA|GONZALEZ" },
+ { de:"MARIA|JOSE HERNANDEZ", a:"MARIA JOSE|HERNANDEZ" }
+];
+function pasarLosDiasDelNombreViejo(){
+ var cambio = false;
+ RENOMBRES.forEach(function(r){
+  var viejo = asistencia[r.de];
+  if(!viejo) return;
+  if(!asistencia[r.a]) asistencia[r.a] = {};
+  for(var dia in viejo){
+   if(Object.prototype.hasOwnProperty.call(viejo, dia)) asistencia[r.a][dia] = 1;
+  }
+  delete asistencia[r.de];
+  cambio = true;
+  /* Y lo mismo con el mes que le corre, para no perderle el inicio. */
+  if(ciclos[r.de] && !ciclos[r.a]){ ciclos[r.a] = ciclos[r.de]; guardarCiclos(); }
+  if(ciclos[r.de]){ delete ciclos[r.de]; guardarCiclos(); }
+ });
+ if(cambio) guardarAsistencia();
+}
+
+function llaveSocio(s){ return (s.n + "|" + s.a).toUpperCase(); }
+function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
+function esSemanal(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
+
+/* El lunes de la semana en que cae esa fecha. En Chile la semana parte el
+   lunes, y getDay() cuenta el domingo como 0. */
+function lunesDe(iso){
+ var p = String(iso).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2]);
+ f.setDate(f.getDate() - ((f.getDay() + 6) % 7));
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+}
+
+/* Un mes hacia atras desde el vencimiento, con el mismo criterio que usa el
+   boton de renovar: si el dia no existe en el mes anterior, queda en el ultimo. */
+function mesAtras(iso){
+ var p = String(iso).split("-");
+ var dia = +p[2];
+ var f = new Date(+p[0], +p[1] - 2, 1);
+ var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
+ f.setDate(Math.min(dia, ultimo));
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+}
+/* ── Desde cuando corre el mes de cada socio ───────────────────────────
+   Los dos planes de dias contados se cuentan dentro del mes que el socio
+   pago. Antes ese mes se adivinaba restandole un mes al vencimiento, y eso
+   solo sale bien cuando la fecha viene de una renovacion de mes justo. Al
+   socio nuevo que entraba hoy con vencimiento a un mes, su primer dia caia
+   justo en el corte y no le contaba; y al que se le corrio la fecha unos
+   pocos dias, el mes le quedaba en cualquier parte.
+
+   Ahora se guarda, socio por socio, desde cuando le corre el mes. Se anota
+   sola cuando el meson ve una fecha de vencimiento distinta a la que tenia
+   -- que es el dia en que ella lo renueva o lo agrega -- y se puede
+   corregir a mano en la ficha. A los socios que ya estaban, la primera vez
+   se les deja el mismo criterio de antes para que a nadie le cambie la
+   cuenta de golpe. */
+var CLAVE_CICLOS = "wgym_ciclos_v1";
+var ciclos = {};
+try{ ciclos = JSON.parse(localStorage.getItem(CLAVE_CICLOS) || "{}") || {}; }catch(e){}
+function guardarCiclos(){
+ try{ localStorage.setItem(CLAVE_CICLOS, JSON.stringify(ciclos)); }catch(e){}
+}
+/* Reparación de una sola vez (2026-09-10): antes, sincronizar la lista con
+   el sitio podía reiniciar sin querer el ciclo de casi todo el mundo a
+   "hoy", aunque no hubieran renovado — perdiendo de vista los días que ya
+   llevaban usados este mes. El historial real de ingresos (asistencia) no
+   se tocó nunca; el problema era solo esta cuenta de ciclos. Se borra una
+   vez para que se recalcule sola desde la fecha de vencimiento actual de
+   cada quien, y los días ya marcados en asistencia vuelvan a contar. */
+try{
+ if(!localStorage.getItem("wgym_ciclos_reparado_v1")){
+  ciclos = {};
+  guardarCiclos();
+  localStorage.setItem("wgym_ciclos_reparado_v1", "1");
+ }
+}catch(e){}
+/* Traer los dias marcados y los ciclos que este mismo equipo exportó con
+   "Copiar lista" la ultima vez que se publicó. Es un agregado, nunca un
+   reemplazo: solo suma dias de asistencia que faltaban acá y completa el
+   ciclo de un socio que este equipo todavía no tiene guardado -- así el
+   contador "día X de Y" no le queda atrás a un equipo recién abierto o
+   con la memoria borrada, sin arriesgar lo que ya tenía anotado. */
+const ASISTENCIA_VERSION = 3;
+const ASISTENCIA_BASE = {"HERMANN|BORQUEZ":{"2026-08-28":1,"2026-08-29":1,"2026-08-31":1,"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-11":1,"2026-09-12":1,"2026-09-14":1,"2026-09-16":1,"2026-09-17":1,"2026-09-24":1,"2026-09-25":1,"2026-09-26":1},"ALDO|ENCINA":{"2026-08-28":1},"DIEGO|CLARK":{"2026-08-28":1,"2026-08-31":1,"2026-09-08":1},"JOSEFA|ESCOBAR":{"2026-08-28":1,"2026-08-29":1,"2026-08-31":1,"2026-09-01":1,"2026-09-03":1,"2026-09-15":1,"2026-09-17":1,"2026-09-21":1},"TOMAS|CABALLERO":{"2026-08-28":1,"2026-09-10":1,"2026-09-11":1,"2026-09-12":1,"2026-09-14":1,"2026-09-22":1,"2026-09-23":1,"2026-09-25":1},"HECTOR|CONTRERAS":{"2026-08-28":1,"2026-08-29":1,"2026-08-31":1},"JAIME|VEGA":{"2026-08-28":1,"2026-08-31":1,"2026-09-01":1,"2026-09-11":1,"2026-09-12":1,"2026-09-14":1,"2026-09-16":1,"2026-09-24":1,"2026-09-25":1},"GABRIEL|MOLINA":{"2026-08-29":1,"2026-09-01":1,"2026-09-02":1,"2026-09-03":1,"2026-09-05":1,"2026-09-07":1,"2026-09-09":1,"2026-09-10":1,"2026-09-11":1,"2026-09-12":1,"2026-09-15":1,"2026-09-23":1,"2026-09-24":1,"2026-09-25":1,"2026-09-26":1},"CLAUDIA|VILLEGAS":{"2026-08-29":1,"2026-08-31":1,"2026-09-02":1,"2026-09-04":1,"2026-09-07":1,"2026-09-09":1,"2026-09-11":1,"2026-09-14":1,"2026-09-15":1,"2026-09-17":1,"2026-09-23":1,"2026-09-24":1,"2026-09-25":1},"JENNY|GOMEZ":{"2026-08-29":1},"AKASH|THADANI":{"2026-08-29":1},"SARA|CARVAJAL":{"2026-08-29":1,"2026-08-31":1,"2026-09-01":1,"2026-09-02":1,"2026-09-04":1,"2026-09-05":1,"2026-09-21":1,"2026-09-22":1,"2026-09-24":1,"2026-09-25":1,"2026-09-26":1},"YOHANNA|VEGA":{"2026-08-31":1,"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-10":1,"2026-09-11":1,"2026-09-15":1,"2026-09-17":1,"2026-09-22":1,"2026-09-23":1},"SEBASTIAN|MARIN":{"2026-08-31":1,"2026-09-01":1,"2026-09-03":1,"2026-09-04":1,"2026-09-14":1,"2026-09-15":1,"2026-09-17":1},"RODRIGO|PLAZA":{"2026-08-31":1,"2026-09-03":1,"2026-09-04":1,"2026-09-09":1,"2026-09-11":1,"2026-09-14":1,"2026-09-16":1,"2026-09-21":1,"2026-09-23":1,"2026-09-26":1},"AARON|SOZA":{"2026-08-31":1,"2026-09-02":1,"2026-09-07":1,"2026-09-09":1,"2026-09-11":1,"2026-09-14":1,"2026-09-16":1,"2026-09-21":1,"2026-09-23":1},"VALERIA|MACIAS":{"2026-08-31":1},"JOSE|RODRIGUEZ":{"2026-08-31":1,"2026-09-03":1,"2026-09-04":1,"2026-09-08":1,"2026-09-09":1,"2026-09-10":1,"2026-09-14":1,"2026-09-15":1,"2026-09-16":1,"2026-09-22":1},"ANA MARIA|SANABRIA":{"2026-08-31":1,"2026-09-03":1,"2026-09-23":1,"2026-09-07":1,"2026-09-08":1,"2026-09-11":1},"MARIA JOSE|HERNANDEZ":{"2026-08-31":1,"2026-09-03":1,"2026-09-07":1,"2026-09-08":1,"2026-09-11":1},"ALFREDO|VENEGAS":{"2026-08-31":1,"2026-09-23":1,"2026-09-24":1},"BRAYAN|ALVAREZ":{"2026-08-31":1},"PAUL|TORO":{"2026-08-31":1},"MARYORY|RAMIREZ":{"2026-09-01":1,"2026-09-03":1,"2026-09-04":1,"2026-09-09":1,"2026-09-10":1,"2026-09-11":1,"2026-09-14":1,"2026-09-22":1,"2026-09-25":1,"2026-09-26":1},"ANTONIO|VALENCIA":{"2026-09-01":1,"2026-09-02":1,"2026-09-04":1,"2026-09-05":1,"2026-09-07":1,"2026-09-08":1,"2026-09-10":1,"2026-09-11":1,"2026-09-12":1,"2026-09-22":1,"2026-09-23":1,"2026-09-25":1,"2026-09-26":1},"GABRIEL|PIÑOL":{"2026-09-01":1,"2026-09-02":1,"2026-09-04":1,"2026-09-08":1,"2026-09-10":1,"2026-09-11":1,"2026-09-12":1,"2026-09-22":1,"2026-09-23":1,"2026-09-25":1,"2026-09-26":1},"GLORIA|LOPEZ":{"2026-09-02":1,"2026-09-16":1,"2026-09-17":1,"2026-09-21":1,"2026-09-23":1,"2026-09-25":1},"MAURICIO|URQUIETA":{"2026-09-02":1,"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-21":1,"2026-09-22":1},"MIGUEL|ROJAS":{"2026-09-03":1,"2026-09-05":1,"2026-09-09":1,"2026-09-12":1,"2026-09-15":1},"JORGE|CARRASCO":{"2026-09-03":1,"2026-09-04":1,"2026-09-08":1,"2026-09-21":1,"2026-09-23":1},"LUIS|ROMO":{"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-21":1},"ARACELY|HERRERA":{"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-09":1,"2026-09-10":1,"2026-09-15":1,"2026-09-16":1,"2026-09-23":1},"ISABEL|HERRERA":{"2026-09-03":1,"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-09":1,"2026-09-10":1,"2026-09-11":1,"2026-09-15":1,"2026-09-16":1,"2026-09-21":1,"2026-09-23":1,"2026-09-25":1},"MIRKO|SAN MARTIN":{"2026-09-04":1},"ANDRES|PAVEZ":{"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-21":1,"2026-09-22":1},"JUAN|REYES":{"2026-09-04":1,"2026-09-07":1,"2026-09-08":1,"2026-09-21":1},"ALONSO|ARAYA":{"2026-09-07":1},"IGNACIO|CANDIA":{"2026-09-08":1,"2026-09-23":1},"DANIEL|CORTEZ":{"2026-09-09":1,"2026-09-10":1,"2026-09-14":1,"2026-09-23":1,"2026-09-24":1,"2026-09-26":1},"LUIS|RIOS":{"2026-09-10":1,"2026-09-23":1,"2026-09-24":1},"JOHAN|VALLE":{"2026-09-10":1},"KEVIN|BONILLA":{"2026-09-11":1,"2026-09-12":1,"2026-09-14":1,"2026-09-15":1,"2026-09-17":1,"2026-09-18":1,"2026-09-24":1,"2026-09-27":1},"MARGARITA|RODRIGUEZ":{"2026-09-11":1,"2026-09-26":1,"2026-09-28":1},"MONICA|MONTEROS":{"2026-09-15":1,"2026-09-16":1,"2026-09-17":1,"2026-09-21":1,"2026-09-22":1,"2026-09-25":1},"CAMILO|JUICA":{"2026-09-16":1,"2026-09-21":1},"MARIA|TORRES":{"2026-09-22":1},"CHRISTIAN|IBACETA":{"2026-09-22":1,"2026-09-24":1,"2026-09-26":1},"ANDREA|ROJAS":{"2026-09-25":1,"2026-09-26":1,"2026-09-28":1}};
+const CICLOS_BASE = {"AARON|SOZA":{"v":"2026-10-23","desde":"2026-09-23"},"AKASH|THADANI":{"v":"2026-09-03","desde":"2026-08-04"},"ALDO|ENCINA":{"v":"2026-09-04","desde":"2026-08-05"},"ALONSO|ARAYA":{"v":"2026-10-07","desde":"2026-09-07"},"ANDRES|PAEZ":{"v":"2026-08-13","desde":"2026-07-14"},"ANTONIO|VALENCIA":{"v":"2026-10-02","desde":"2026-09-02"},"ARACELY|HERRERA":{"v":"2026-10-02","desde":"2026-09-02"},"BASTIAN|VERGARA":{"v":"2026-08-20","desde":"2026-07-21"},"BENJAMIN|GODOY":{"v":"2026-08-23","desde":"2026-07-24"},"CAMILO|JUICA":{"v":"2026-10-16","desde":"2026-09-16"},"CLAUDIA|VILLEGAS":{"v":"2026-09-28","desde":"2026-08-29"},"DANIEL|CORTEZ":{"v":"2026-09-27","desde":"2026-08-28"},"DIEGO|SALAZAR":{"v":"2026-08-31","desde":"2026-08-01"},"ELIZABETH|LLIULLI":{"v":"2026-09-20","desde":"2026-08-21"},"GABRIEL|MOLINA":{"v":"2026-09-26","desde":"2026-08-27"},"GABRIEL|PIÑOL":{"v":"2026-10-08","desde":"2026-09-08"},"GABRIEL|RUZ":{"v":"2026-08-24","desde":"2026-07-25"},"GLORIA|LOPEZ":{"v":"2026-10-14","desde":"2026-09-14"},"HECTOR|CONTRERAS":{"v":"2026-08-31","desde":"2026-08-01"},"HERMANN|BORQUEZ":{"v":"2026-09-28","desde":"2026-08-29"},"IVAN|ESPIRITU":{"v":"2026-08-08","desde":"2026-07-09"},"JAIRO|CONTRERAS":{"v":"2026-08-14","desde":"2026-07-15"},"JENNY|GOMEZ":{"v":"2026-09-30","desde":"2026-08-31"},"JOHAN|VALLE":{"v":"2026-08-31","desde":"2026-08-01"},"JOSE|RODRIGUEZ":{"v":"2026-09-30","desde":"2026-08-31"},"JOSEFA|ESCOBAR":{"v":"2026-10-09","desde":"2026-09-10"},"JOSTIN|ROSAS":{"v":"2026-09-11","desde":"2026-08-12"},"JUAN|REYES":{"v":"2026-10-06","desde":"2026-09-04"},"KEVIN|BONILLA":{"v":"2026-10-11","desde":"2026-09-11"},"LUIS|RIOS":{"v":"2026-10-23","desde":"2026-09-23"},"MARIA|HERRERA":{"v":"2026-08-19","desde":"2026-07-20"},"MARIA|TORRES":{"v":"2026-08-20","desde":"2026-07-21"},"MARYORY|RAMIREZ":{"v":"2026-10-09","desde":"2026-09-09"},"MAURICIO|RAMIREZ":{"v":"2026-09-06","desde":"2026-08-07"},"MAURICIO|URQUIETA":{"v":"2026-10-02","desde":"2026-09-02"},"MAYORI|RAMIREZ":{"v":"2026-09-04","desde":"2026-08-05"},"MICHEL|QUINZACARA":{"v":"2026-08-31","desde":"2026-08-01"},"MIGUEL|MONSALVES":{"v":"2026-08-27","desde":"2026-07-28"},"MIGUEL|ROJAS":{"v":"2026-10-03","desde":"2026-09-03"},"MIRKO|SAN MARTIN":{"v":"2026-09-06","desde":"2026-08-07"},"NICOLAS|PACHECO":{"v":"2026-09-04","desde":"2026-08-05"},"NINA|SALAZAR":{"v":"2026-08-17","desde":"2026-07-18"},"PAUL|TORO":{"v":"2026-09-13","desde":"2026-08-14"},"RODRIGO|PLAZA":{"v":"2026-10-07","desde":"2026-09-08"},"SARA|CARVAJAL":{"v":"2026-09-30","desde":"2026-08-31"},"SEBASTIAN|MARIN":{"v":"2026-10-30","desde":"2026-10-01"},"TOMAS|CABALLERO":{"v":"2026-10-10","desde":"2026-09-10"},"YESSICA|ESCALERA":{"v":"2026-08-30","desde":"2026-07-31"},"YOHANNA|VEGA":{"v":"2026-09-26","desde":"2026-08-27"},"ALFREDO|VENEGAS":{"v":"2026-09-26","desde":"2026-08-27"},"DIEGO|CLARK":{"v":"2026-09-27","desde":"2026-08-28"},"JAIME|VEGA":{"v":"2026-10-15","desde":"2026-09-15"},"ANA MARIA|SANABRIA":{"v":"2026-09-30","desde":"2026-08-31"},"MARIA JOSE|HERNANDEZ":{"v":"2026-09-30","desde":"2026-08-31"},"BRAYAN|ALVAREZ":{"v":"2026-09-30","desde":"2026-08-31"},"BRAYAN|ALVARE":{"v":"2026-09-30","desde":"2026-08-31"},"IGNASIO|CANDIA":{"v":"2026-10-02","desde":"2026-09-02"},"LUIS|ROMO":{"v":"2026-10-02","desde":"2026-09-02"},"ISABEL|HERRERRA":{"v":"2026-10-02","desde":"2026-09-02"},"IGNACIO|CANDIA":{"v":"2026-10-02","desde":"2026-09-03"},"ISABEL|HERRERA":{"v":"2026-10-02","desde":"2026-09-03"},"JORGE|CARRASCO":{"v":"2026-10-03","desde":"2026-09-03"},"ANDRES|PAVEZ":{"v":"2026-10-04","desde":"2026-09-07"},"SEBASTIAN|RIVERA":{"v":"2026-09-12","desde":"2026-09-06"},"CLAUDIO|BUSTAMANTE":{"v":"2026-09-07","desde":"2026-09-01"},"AMBER|TORRES":{"v":"2026-09-07","desde":"2026-09-01"},"JAVIERA|CARRASCO":{"v":"2026-09-07","desde":"2026-09-01"},"MARGARITA|RODRIGUEZ":{"v":"2026-10-03","desde":"2026-09-26"},"MONICA|MONTEROS":{"v":"2026-10-15","desde":"2026-09-15"},"CHRISTIAN|IBACETA":{"v":"2026-10-22","desde":"2026-09-22"},"ANDREA|ROJAS":{"v":"2026-10-25","desde":"2026-09-25"}};
+(function(){
+ var vistaKey = "wgym_asistencia_version_vista";
+ var vista = 0;
+ try{ vista = Number(localStorage.getItem(vistaKey)) || 0; }catch(e){}
+ if(ASISTENCIA_VERSION <= vista) return;
+ var cambio = false;
+ for(var llaveA in ASISTENCIA_BASE){
+  if(!Object.prototype.hasOwnProperty.call(ASISTENCIA_BASE, llaveA)) continue;
+  if(!asistencia[llaveA]) asistencia[llaveA] = {};
+  var dias = ASISTENCIA_BASE[llaveA];
+  for(var dia in dias){
+   if(!Object.prototype.hasOwnProperty.call(dias, dia)) continue;
+   if(!asistencia[llaveA][dia]){ asistencia[llaveA][dia] = 1; cambio = true; }
+  }
+ }
+ for(var llaveC in CICLOS_BASE){
+  if(!Object.prototype.hasOwnProperty.call(CICLOS_BASE, llaveC)) continue;
+  if(!ciclos[llaveC]){ ciclos[llaveC] = CICLOS_BASE[llaveC]; cambio = true; }
+ }
+ if(cambio){ guardarAsistencia(); guardarCiclos(); }
+ try{ localStorage.setItem(vistaKey, String(ASISTENCIA_VERSION)); }catch(e){}
+})();
+function planCuentaDias(s){ return esTurno(s) || esSemanal(s) || esSemanalPlan(s); }
+/* El criterio de antes: el dia siguiente al de un mes atras del vencimiento.
+   Al Plan Semanal no le corre un mes sino una semana, asi que su ciclo por
+   defecto arranca 6 dias antes del vencimiento (7 dias en total). */
+function inicioPorDefecto(v, s){
+ if(s && esSemanalPlan(s)) return sumarDias(v, -6);
+ return sumarDias(mesAtras(v), 1);
+}
+/* Solo calcula, no guarda: la ficha lo llama con fechas que ella todavia
+   esta escribiendo y no hay que anotar nada hasta que apriete Guardar. */
+function inicioCalculado(s){
+ if(!s || !fechaValida(s.v)) return null;
+ /* La ficha manda uno propio mientras ella lo esta escribiendo. */
+ if(s.desdeFicha && fechaValida(s.desdeFicha)) return s.desdeFicha;
+ var c = ciclos[llaveSocio(s)];
+ /* Sigue siendo el MISMO ciclo mientras hoy no haya pasado todavia la fecha
+    de vencimiento que tenia guardada — aunque esa fecha se haya corregido
+    un poco despues (por ejemplo al sincronizar con el sitio, sin que el
+    socio haya renovado de verdad). Antes se exigia que coincidiera exacto
+    con la fecha actual, y cualquier ajuste de fecha —aunque fuera solo
+    para reflejar la misma renovacion— borraba el inicio del ciclo y le
+    hacia perder los dias que ya llevaba usados este mes. Solo cuando hoy
+    ya pasó la fecha que tenia guardada se considera que empieza un ciclo
+    nuevo de verdad (una renovacion). */
+ /* Claudia renovó el 28-09-2026: se conserva su historial, pero el nuevo
+    plan cuenta solo los ingresos desde la renovación, incluso si el equipo
+    ya había guardado el vencimiento nuevo con el inicio anterior. */
+ if(llaveSocio(s) === "CLAUDIA|VILLEGAS" && s.v === "2026-10-28" &&
+    (!c || !fechaValida(c.desde) || c.desde < "2026-09-28")) return "2026-09-28";
+ if(c && fechaValida(c.desde) && fechaValida(c.v) && hoyISO() <= c.v) return c.desde;
+ var desde = (c && hoyISO() <= s.v) ? hoyISO() : inicioPorDefecto(s.v, s);
+ /* El ciclo nunca puede arrancar despues de hoy: si el calculo por defecto
+    daba "mañana", al que entraba justo hoy (primera vez que se le anota el
+    ciclo en este equipo) no le contaba su propio dia. */
+ if(desde > hoyISO() && hoyISO() <= s.v) desde = hoyISO();
+ return (desde > s.v) ? inicioPorDefecto(s.v, s) : desde;
+}
+function anotarCiclo(s){
+ var k = llaveSocio(s), c = ciclos[k], desde = inicioCalculado(s);
+ if(!desde) return false;
+ if(c && c.v === s.v && c.desde === desde) return false;
+ ciclos[k] = { v:s.v, desde:desde };
+ return true;
+}
+function anotarCiclos(){
+ var cambio = false;
+ socios.forEach(function(s){ if(planCuentaDias(s) && anotarCiclo(s)) cambio = true; });
+ if(cambio) guardarCiclos();
+}
+function fijarInicioCiclo(s, desde){
+ ciclos[llaveSocio(s)] = { v:s.v, desde:desde };
+ guardarCiclos();
+}
+
+/* Cuantos dias le tocan y dentro de que periodo se cuentan. Los dos planes se
+   pagan por mes y los dos se cuentan contra el mes que esta pagando:
+     · el de turno trae 14 dias;
+     · el de tres veces trae 12, que son sus 3 por semana por cuatro semanas.
+   Al de tres veces se le lleva ademas la cuenta de la semana corrida, pero
+   solo como guia: si una semana viene una vez, las otras dos no se pierden,
+   le quedan a favor dentro de los 12 del mes. */
+function esSemanalPlan(s){ return !!s && esPlanSemanal(s.plan); }
+function reglaDe(s){
+ if(esTurno(s)){
+  if(!s || !s.v) return null;
+  return { tope:DIAS_TURNO, ini:inicioCalculado(s), fin:s.v,
+           nombre:"Turno", cuando:"este mes", semana:null };
+ }
+ if(esSemanal(s)){
+  if(!s || !s.v) return null;
+  var lun = lunesDe(hoyISO());
+  return { tope:DIAS_MES_3X, ini:inicioCalculado(s), fin:s.v,
+           nombre:"3 por semana", cuando:"este mes",
+           semana:{ ini:lun, fin:sumarDias(lun, 6), tope:DIAS_SEMANA } };
+ }
+ /* El Plan Semanal no lleva contador de dias: "Vence el... quedan X dias"
+    ya cuenta toda su historia, y mezclarlo con un "dia X de Y" aparte
+    confundia (parecian dos cuentas distintas). */
+ return null;
+}
+function contarEntre(s, ini, fin){
+ var dias = asistencia[llaveSocio(s)] || {};
+ var n = 0;
+ for(var d in dias){
+  if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
+  if(d >= ini && d <= fin) n++;   /* el primer dia del mes tambien cuenta */
+ }
+ return n;
+}
+function diasUsados(s){
+ var c = reglaDe(s);
+ return c ? contarEntre(s, c.ini, c.fin) : 0;
+}
+/* Los dias que lleva en la semana corrida, para el plan de tres veces. */
+function diasDeLaSemana(s){
+ var c = reglaDe(s);
+ return (c && c.semana) ? contarEntre(s, c.semana.ini, c.semana.fin) : null;
+}
+function marcarDia(s, iso){
+ if(!planCuentaDias(s)) return false;
+ var k = llaveSocio(s);
+ if(!asistencia[k]) asistencia[k] = {};
+ if(asistencia[k][iso]) return false;
+ asistencia[k][iso] = 1;
+ guardarAsistencia();
+ return true;
+}
+function corregirDias(s, cuanto){
+ var c = reglaDe(s);
+ if(!c) return;
+ var k = llaveSocio(s);
+ if(!asistencia[k]) asistencia[k] = {};
+ if(cuanto > 0){
+  /* Suma el primer dia libre del ciclo, empezando por hoy hacia atras. */
+  var d = hoyISO();
+  if(d > c.fin) d = c.fin;
+  for(var i = 0; i < 40; i++){
+   if(d < c.ini) break;
+   if(!asistencia[k][d]){ asistencia[k][d] = 1; break; }
+   d = sumarDias(d, -1);
+  }
+ }else{
+  /* Borra el dia mas nuevo del ciclo. */
+  var dentro = [];
+  for(var x in asistencia[k]){
+   if(Object.prototype.hasOwnProperty.call(asistencia[k], x) && x >= c.ini && x <= c.fin) dentro.push(x);
+  }
+  dentro.sort();
+  if(dentro.length) delete asistencia[k][dentro[dentro.length - 1]];
+ }
+ guardarAsistencia();
+}
+function sumarDias(iso, n){
+ var p = String(iso).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2] + n);
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+}
+/* El texto que ve el meson: "dia 9 de 14" o el aviso de que ya se paso.
+   Es solo para que ella lo sepa: el socio igual entra, ella decide. */
+function notaTurno(s){
+ var c = reglaDe(s);
+ if(!c) return null;
+ var n = diasUsados(s);
+ /* Al de tres veces se le agrega cuantos lleva en la semana, para que ella vea
+    de una si esta viniendo parejo o si junto varios dias seguidos. */
+ var sem = diasDeLaSemana(s);
+ var cola = sem === null ? "" : " · " + sem + " esta semana";
+ if(n > c.tope) return { pasado:true, n:n,
+  txt:"Ya usó sus " + c.tope + " días de " + c.cuando + " · lleva " + n + cola };
+ if(n === c.tope) return { pasado:true, n:n,
+  txt:"Este es su día " + c.tope + " de " + c.tope + " de " + c.cuando + cola };
+ return { pasado:false, n:n,
+  txt:"día " + (n || 0) + " de " + c.tope + " " + c.cuando + cola };
+}
+
+/* ── que la pantalla del mesón no se apague sola ──────────────────────
+   Entre un socio y el siguiente pasan minutos, y si la tablet se bloquea
+   hay que desbloquearla en cada ingreso. Esto le pide al aparato mantener
+   la pantalla despierta mientras la página esté abierta. Si el navegador
+   no lo permite, no pasa nada: sigue funcionando igual que siempre. */
+var velaPantalla = null;
+function mantenerDespierta(){
+ try{
+  if(!("wakeLock" in navigator) || document.hidden) return;
+  if(velaPantalla) return;
+  navigator.wakeLock.request("screen").then(function(v){
+   velaPantalla = v;
+   v.addEventListener("release", function(){ velaPantalla = null; });
+  }).catch(function(){ velaPantalla = null; });
+ }catch(e){ velaPantalla = null; }
+}
+/* Al volver a la página hay que pedirla de nuevo: el sistema la suelta sola
+   cuando uno se cambia de aplicación o bloquea el aparato. */
+document.addEventListener("visibilitychange", function(){
+ if(!document.hidden) mantenerDespierta();
+});
+document.addEventListener("pointerdown", mantenerDespierta, true);
+mantenerDespierta();
+
+/* ── fechas y estado ────────────────────────────────────────────────── */
+function hoyISO(){
+ var d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+/* Al plan semanal no se le cuenta el domingo: el gimnasio cierra ese dia. Si
+   le quedan siete fechas por delante y una es domingo, de gimnasio le quedan
+   seis. Los demas planes siguen contando dias corridos, tal cual estaban. */
+function esPlanSemanal(nombre){ return /semanal/i.test(nombre || ""); }
+function diasAbiertos(desde, hasta){
+ var f = new Date(desde), n = 0;
+ while(f < hasta){
+  f.setDate(f.getDate() + 1);
+  if(f.getDay() !== 0) n++;   /* 0 es domingo: no cuenta */
+ }
+ return n;
+}
+function diasPara(v, plan){
+ if(!v) return null;
+ var p = String(v).split("-");
+ var f = new Date(+p[0], +p[1]-1, +p[2]); f.setHours(0,0,0,0);
+ if(isNaN(f)) return null;
+ var h = new Date(); h.setHours(0,0,0,0);
+ /* Vencido o venciendo hoy se sigue contando en dias corridos: ahi lo que
+    importa es hace cuanto fue, no cuantos dias de gimnasio le quedan. */
+ if(f > h && esPlanSemanal(plan)) return diasAbiertos(h, f);
+ return Math.round((f - h) / 86400000);
+}
+/* El aviso de que se le viene el vencimiento sale recien el dia antes, no
+   cinco dias antes: avisado con tanta anticipacion el socio lo pasaba por
+   alto y para ella era ruido en la lista. */
+var DIAS_AVISO = 1;
+function estadoDe(s){
+ var d = diasPara(s.v, s.plan);
+ if(d === null || d < 0) return "vencido";
+ return d <= DIAS_AVISO ? "porvencer" : "aldia";
+}
+var NOMBRE_ESTADO = { aldia:"Al día", porvencer:"Por vencer", vencido:"Vencido" };
+var COLOR_ESTADO = { aldia:"var(--verde)", porvencer:"var(--dorado)", vencido:"var(--rojo-claro)" };
+var CLASE_ESTADO = { aldia:"good", porvencer:"warn", vencido:"danger" };
+function textoDias(s){
+ var d = diasPara(s.v, s.plan);
+ if(d === null) return "sin fecha";
+ if(d < 0) return "venció hace " + Math.abs(d) + (Math.abs(d)===1 ? " día" : " días");
+ if(d === 0) return "vence hoy";
+ return "quedan " + d + (d===1 ? " día" : " días");
+}
+function fechaCL(v){
+ if(!v) return "—";
+ var p = String(v).split("-");
+ return p[2]+"-"+p[1]+"-"+p[0];
+}
+function clp(n){
+ var v = Math.round(n || 0);
+ return (v < 0 ? "-$" : "$") + Math.abs(v).toLocaleString("es-CL");
+}
+function soloDigitos(s){ var d = String(s==null?"":s).replace(/[^\d]/g,""); return d ? parseInt(d,10) : 0; }
+function sinTildes(s){
+ return String(s==null?"":s).toUpperCase().normalize("NFD")
+  .replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
+}
+function escapeHtml(s){
+ return String(s==null?"":s).replace(/[&<>"']/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+}
+function idNuevo(){ return "s"+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function fmtHora(ts){
+ var d = new Date(ts);
+ return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+}
+
+/* ── buscar socios ──────────────────────────────────────────────────── */
+function calzan(txt){
+ var q = sinTildes(txt);
+ if(!q) return [];
+ var partes = q.split(" ");
+ return socios.filter(function(s){
+  var completo = sinTildes(s.n + " " + s.a);
+  return partes.every(function(p){ return completo.indexOf(p) > -1; });
+ });
+}
+/* Compara nombres aunque vengan mal escritos: cuenta cuántas letras hay que
+   cambiar para pasar de uno al otro. Así "YOHAANNA" encuentra a "YOHANNA". */
+function distanciaNombre(a, b){
+ if(a === b) return 0;
+ var la = a.length, lb = b.length;
+ if(Math.abs(la - lb) > 4) return 99;
+ var fila = [], i, j;
+ for(j = 0; j <= lb; j++) fila[j] = j;
+ for(i = 1; i <= la; i++){
+  var ant = fila[0];
+  fila[0] = i;
+  for(j = 1; j <= lb; j++){
+   var tmp = fila[j];
+   fila[j] = Math.min(fila[j] + 1, fila[j-1] + 1,
+                      ant + (a.charAt(i-1) === b.charAt(j-1) ? 0 : 1));
+   ant = tmp;
+  }
+ }
+ return fila[lb];
+}
+function claveNombre(s){ return sinTildes(s).replace(/\s+/g, ""); }
+function margen(q){ return q.length <= 8 ? 1 : (q.length <= 14 ? 2 : 3); }
+
+/* Quién llegó, según el nombre que quedó registrado en el QR. */
+function socioDelRegistro(nombre, apellido){
+ var q = sinTildes(nombre + " " + apellido);
+ if(!q) return null;
+ var exacto = socios.filter(function(s){ return sinTildes(s.n+" "+s.a) === q; });
+ if(exacto.length === 1) return exacto[0];
+ var lista = calzan(q);
+ if(lista.length === 1) return lista[0];
+ /* Si vino mal escrito, el más parecido — salvo que haya dos igual de parecidos. */
+ var k = claveNombre(nombre + apellido);
+ var mejor = null, mejorD = 99, empate = false;
+ socios.forEach(function(s){
+  var d = distanciaNombre(k, claveNombre(s.n + s.a));
+  if(d < mejorD){ mejorD = d; mejor = s; empate = false; }
+  else if(d === mejorD){ empate = true; }
+ });
+ if(mejor && mejorD <= margen(k) && !empate) return mejor;
+ /* Último intento: apellido exacto y un solo socio con ese apellido. */
+ var ap = sinTildes(apellido);
+ var mismoApellido = socios.filter(function(s){ return sinTildes(s.a) === ap; });
+ if(mismoApellido.length === 1 &&
+    distanciaNombre(claveNombre(nombre), claveNombre(mismoApellido[0].n)) <= 3){
+  return mismoApellido[0];
+ }
+ return null;
+}
+
+/* ── veredicto ──────────────────────────────────────────────────────── */
+function veredicto(s){
+ if(!s) return { v:"nadie", fallo:"No está en la lista de socios",
+  detalle:"Revísalo abajo o agrégalo como socio nuevo", corto:"Sin ficha de socio", cls:"", plan:"" };
+ var e = estadoDe(s);
+ var d = diasPara(s.v, s.plan);
+ if(d === null) return { v:"nadie", fallo:"Esta ficha no tiene fecha",
+  detalle:"Ábrela y ponle el vencimiento", corto:"Sin fecha", cls:"", plan:s.plan };
+ if(e === "vencido") return { v:"bad", fallo:"Ingreso registrado · membresía vencida",
+  detalle:"Venció el "+fechaCL(s.v)+" · hace "+Math.abs(diasPara(s.v, s.plan))+(Math.abs(diasPara(s.v, s.plan))===1?" día":" días"),
+  corto:null, cls:"danger", plan:s.plan };
+ if(e === "porvencer") return { v:"warn", fallo:"Pasa, pero avísale",
+  detalle: d === 0 ? "Vence hoy" : "Vence el "+fechaCL(s.v)+" · quedan "+d+(d===1?" día":" días"),
+  corto:null, cls:"warn", plan:s.plan };
+ return { v:"ok", fallo:"Acceso permitido",
+  detalle:"Vence el "+fechaCL(s.v)+" · quedan "+d+" días", corto:null, cls:"good", plan:s.plan };
+}
+
+var socioEnHero = null;
+
+function mostrarHero(nombre, ts, s, cuantos){
+ var d = veredicto(s);
+ if(!s && cuantos) d.fallo = "Hay " + cuantos + " socios con ese nombre";
+ if(!s && cuantos) d.detalle = "Elige cuál es en la lista de abajo";
+ socioEnHero = s || null;
+
+ document.getElementById("heroEmpty").hidden = true;
+ document.getElementById("hero").setAttribute("data-v", d.v);
+ var f = document.getElementById("heroFallo"); f.hidden = false; f.textContent = d.fallo;
+ var n = document.getElementById("heroName"); n.hidden = false; n.textContent = nombre;
+ var t = document.getElementById("heroTime");
+ if(ts){ t.hidden = false; t.textContent = fmtHora(ts); } else { t.hidden = true; }
+ var ve = document.getElementById("heroVenc");
+ if(d.detalle){ ve.hidden = false; ve.textContent = d.detalle; ve.className = "venc " + d.cls; }
+ else { ve.hidden = true; }
+ var tu = document.getElementById("heroTurno");
+ var nt = s ? notaTurno(s) : null;
+ if(nt){
+  tu.hidden = false; tu.textContent = nt.txt;
+  tu.setAttribute("data-t", nt.pasado ? "tope" : "ok");
+ } else { tu.hidden = true; }
+ var pl = document.getElementById("heroPlan");
+ if(d.plan){ pl.hidden = false; pl.textContent = d.plan; } else { pl.hidden = true; }
+ document.getElementById("heroAcc").hidden = !s;
+ document.getElementById("heroIngreso").hidden = true;
+ document.getElementById("heroIngresoMsg").hidden = true;
+}
+function destellar(){
+ var h = document.getElementById("hero");
+ h.classList.remove("flash");
+ void h.offsetWidth;
+ h.classList.add("flash");
+}
+document.getElementById("heroEditar").addEventListener("click", function(){
+ if(socioEnHero) abrirFicha(socioEnHero);
+});
+
+/* ── busqueda a mano ────────────────────────────────────────────────── */
+var qPuerta = document.getElementById("qPuerta");
+var cajaSug = null, marcado = -1, cierreDemorado = null;
+
+function cerrarSug(){ if(cajaSug){ cajaSug.remove(); cajaSug = null; } marcado = -1; }
+function verSug(){
+ clearTimeout(cierreDemorado);
+ cerrarSug();
+ var lista = calzan(qPuerta.value).slice(0, 8);
+ if(!lista.length) return;
+ cajaSug = document.createElement("ul");
+ cajaSug.className = "sugerencias";
+ lista.forEach(function(s){
+  var li = document.createElement("li");
+  li.innerHTML = '<span class="punto" style="background:'+COLOR_ESTADO[estadoDe(s)]+'"></span>'+
+   '<span class="snom"></span><span class="spl"></span>';
+  li.querySelector(".snom").textContent = s.n + " " + s.a;
+  li.querySelector(".spl").textContent = s.plan;
+  li.addEventListener("mousedown", function(ev){ ev.preventDefault(); elegir(s); });
+  cajaSug.appendChild(li);
+ });
+ qPuerta.parentNode.appendChild(cajaSug);
+}
+function moverMarca(paso){
+ if(!cajaSug) return;
+ var items = cajaSug.children;
+ marcado = (marcado + paso + items.length) % items.length;
+ Array.prototype.forEach.call(items, function(li, i){
+  li.setAttribute("aria-selected", i === marcado ? "true" : "false");
+ });
+}
+function elegir(s){
+ /* Si entro sin alcanzar a escanear, el dia se cuenta igual. */
+ if(marcarDia(s, hoyISO())) pintarTabla();
+ cerrarSug(); qPuerta.value = "";
+ mostrarHero(s.n + " " + s.a, null, s);
+ var bi = document.getElementById("heroIngreso");
+ bi.hidden = false; bi.disabled = false; bi.textContent = "Registrar ingreso";
+ destellar();
+}
+/* Botón de respaldo "Registrar ingreso": para quien llegó sin escanear el
+   QR de la puerta. Solo administración (POST con la clave de este equipo).
+   Si la persona ya está dentro, el Apps Script no duplica el ingreso. */
+document.getElementById("heroIngreso").addEventListener("click", function(){
+ var s = socioEnHero, b = this, msg = document.getElementById("heroIngresoMsg");
+ if(!s) return;
+ b.disabled = true; b.textContent = "Registrando…";
+ var datosIng = { nombre:s.n, apellido:s.a, venc:fechaCL(s.v) };
+ if(window.WGYM_PRUEBA_INGRESOS) datosIng.prueba = "1";
+ llamarSocioApi_("registrarIngreso", datosIng, function(ok, info){
+  msg.hidden = false; msg.className = "ing-resp";
+  if(ok && info && info.registrado){
+   b.hidden = true;
+   msg.textContent = "✅ Ingreso registrado a las " + fmtHora(info.ts);
+   poll();
+  }else if(ok && info && info.dentro){
+   b.hidden = true;
+   msg.textContent = "Ya está dentro desde las " + fmtHora(info.desde) + " (no se duplicó).";
+  }else{
+   b.disabled = false; b.textContent = "Registrar ingreso";
+   msg.className = "ing-resp mal";
+   msg.textContent = info === "sin clave" || info === "clave incorrecta" ? "No se registró: hace falta la clave de administración."
+    : info === "acción no reconocida" ? "No se registró: falta actualizar el Apps Script."
+    : "No se registró: revisa internet e inténtalo de nuevo.";
+  }
+ });
+});
+function buscarAMano(){
+ var lista = calzan(qPuerta.value);
+ if(!lista.length){
+  /* Nada por texto: prueba por parecido antes de rendirse. */
+  var partes = qPuerta.value.trim().split(/\s+/);
+  var s = socioDelRegistro(partes[0] || "", partes.slice(1).join(" "));
+  if(s){ elegir(s); return; }
+  mostrarHero(qPuerta.value.trim() || "—", null, null);
+  return;
+ }
+ if(lista.length > 1){
+  mostrarHero(qPuerta.value.trim(), null, null, lista.length);
+  verSug(); qPuerta.focus(); return;
+ }
+ elegir(lista[0]);
+}
+qPuerta.addEventListener("input", verSug);
+qPuerta.addEventListener("blur", function(){ cierreDemorado = setTimeout(cerrarSug, 120); });
+qPuerta.addEventListener("keydown", function(ev){
+ if(ev.key === "ArrowDown"){ ev.preventDefault(); moverMarca(1); }
+ else if(ev.key === "ArrowUp"){ ev.preventDefault(); moverMarca(-1); }
+ else if(ev.key === "Escape"){ cerrarSug(); }
+ else if(ev.key === "Enter"){
+  ev.preventDefault();
+  if(cajaSug && marcado > -1){ elegir(calzan(qPuerta.value)[marcado]); }
+  else buscarAMano();
+ }
+});
+document.getElementById("bEntrar").addEventListener("click", buscarAMano);
+
+/* ── el QR de siempre: escucha el registro en vivo ──────────────────── */
+var vistos = {}, primeraVuelta = true, filas = [];
+function llaveDe(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
+/* La hora del registro viene del QR; aca solo interesa el dia. */
+function diaDelTs(ts){
+ var d = ts ? new Date(ts) : new Date();
+ if(isNaN(d)) d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+
+/* La lista de ingresos ahora es el panel "Ingresos de hoy" (ingresos.js):
+   trae TODOS los ingresos del día desde la hoja, con su estado (dentro o
+   salida registrada), y ya no se corta en los últimos 20. Acá solo se le
+   agrega a cada fila el aviso de vencimiento y el contador de turno, igual
+   que en la lista de antes. */
+var panelIngresos = null;
+function notaIngreso(r){
+ var s = socioDelRegistro(r.nombre, r.apellido);
+ var d = veredicto(s);
+ var nota = d.corto || d.detalle;
+ var nt = notaTurno(s);
+ return (nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '')+
+  (nt ? '<span class="fturno" data-t="'+(nt.pasado?"tope":"ok")+'">'+escapeHtml(nt.txt)+'</span>' : '');
+}
+function pintarFeed(){
+ if(!panelIngresos && window.WgymIngresos){
+  panelIngresos = WgymIngresos.crear({
+   raiz: document.getElementById("ingresosPanel"),
+   url: CHECKIN_URL,
+   extraHtml: notaIngreso,
+   /* Marcar o deshacer la salida de otra persona: solo administración,
+      por POST con la clave de este equipo (la misma de guardar socios). */
+   accionAdmin: function(action, params, cb){ llamarSocioApi_(action, params, cb); },
+   alTitulo: function(t){ document.getElementById("ingTitulo").textContent = t; },
+   alTocar: function(r){
+    mostrarHero(r.nombre+" "+r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido));
+    window.scrollTo({ top:0, behavior:"smooth" });
+   }
+  });
+ }
+}
+
+function llegaronDatos(data){
+ filas = data.rows || [];
+ pintarFeed();
+ if(panelIngresos) panelIngresos.recibir(data);
+ /* Cada escaneo le suma el dia al socio por turno. El mismo dia repetido no
+    suma de nuevo, y solo se anota si el ingreso es de hoy o de dias pasados.
+
+    Esto va ANTES de mostrar el panel de arriba, y no despues: el panel dice
+    "dia N de 12", y si se pintaba primero mostraba la cuenta de antes del
+    escaneo. Al socio que entraba por primera vez en el mes le salia "dia 0
+    de 12" arriba mientras abajo, en la lista, ya decia "dia 1". El dia
+    quedaba bien anotado; lo que estaba mal era el numero de arriba. */
+ var seAnoto = false;
+ filas.forEach(function(r){
+  var sr = socioDelRegistro(r.nombre, r.apellido);
+  /* En la página de prueba no se tocan los días de turno reales. */
+  if(sr && !window.WGYM_PRUEBA_INGRESOS && marcarDia(sr, diaDelTs(r.ts))) seAnoto = true;
+ });
+ if(seAnoto) pintarTabla();
+ if(filas.length){
+  var ultima = filas[0];
+  var s = socioDelRegistro(ultima.nombre, ultima.apellido);
+  if(!primeraVuelta && !vistos[llaveDe(ultima)]){
+   mostrarHero(ultima.nombre+" "+ultima.apellido, ultima.ts, s);
+   destellar();
+  }else if(primeraVuelta){
+   mostrarHero(ultima.nombre+" "+ultima.apellido, ultima.ts, s);
+  }
+ }
+ filas.forEach(function(r){ vistos[llaveDe(r)] = true; });
+ primeraVuelta = false;
+ vivo("si", "En vivo");
+}
+function vivo(estado, txt){
+ document.getElementById("estadoVivo").setAttribute("data-vivo", estado);
+ document.getElementById("estadoVivoTxt").textContent = txt;
+}
+
+function diaChile(){
+ return window.WgymIngresos ? WgymIngresos.diaCL() : hoyISO();
+}
+var nPoll = 0;
+function poll(){
+ if(!CHECKIN_URL){ vivo("no", "Sin conexión al QR"); return; }
+ nPoll++;
+ var cb = "wgymCb" + nPoll + "_" + Date.now();
+ var tag = document.createElement("script");
+ var fallo = setTimeout(function(){ vivo("no", "Reintentando…"); }, 9000);
+ window[cb] = function(data){
+  clearTimeout(fallo);
+  try{ llegaronDatos(data); }catch(e){}
+  delete window[cb]; tag.remove();
+ };
+ /* listarIngresos trae el día completo (fecha de Chile). Si el Apps Script
+    todavía no la tiene, responde como antes, con los últimos 20. */
+ tag.src = CHECKIN_URL + "?action=listarIngresos&dia=" + diaChile() + (window.WGYM_PRUEBA_INGRESOS ? "&prueba=1" : "") + "&callback=" + cb + "&_=" + Date.now();
+ tag.onerror = function(){
+  clearTimeout(fallo); vivo("no", "Sin conexión al QR");
+  delete window[cb]; tag.remove();
+ };
+ document.body.appendChild(tag);
+}
+
+/* ── indicadores ────────────────────────────────────────────────────── */
+var filtro = "";
+
+function pintarKpis(){
+ var c = { aldia:0, porvencer:0, vencido:0 }, recauda = 0;
+ socios.forEach(function(s){
+  var e = estadoDe(s); c[e]++;
+  if(e !== "vencido") recauda += (s.m || 0);
+ });
+ var defs = [
+  { k:"", cls:"t", lbl:"Total de socios", val:socios.length, sub:"en la lista completa" },
+  { k:"aldia", cls:"a", lbl:"Al día", val:c.aldia, sub:"más de 5 días por delante" },
+  { k:"porvencer", cls:"p", lbl:"Por vencer", val:c.porvencer, sub:"Vencen mañana o ya vencen hoy" },
+  { k:"vencido", cls:"v", lbl:"Vencidos", val:c.vencido, sub:"no pueden entrar" },
+  { k:"", cls:"r", lbl:"Recaudación proyectada", val:clp(recauda), sub:"si renuevan los vigentes", fijo:true }
+ ];
+ var cont = document.getElementById("kpis");
+ cont.innerHTML = "";
+ defs.forEach(function(t){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "kpi " + t.cls;
+  b.setAttribute("aria-pressed", (!t.fijo && t.k && t.k === filtro) ? "true" : "false");
+  b.innerHTML = '<span class="klbl"></span><div class="kval"></div><div class="ksub"></div>';
+  b.querySelector(".klbl").textContent = t.lbl;
+  b.querySelector(".kval").textContent = t.val;
+  b.querySelector(".ksub").textContent = t.sub;
+  if(t.fijo){ b.setAttribute("aria-disabled","true"); }
+  else{
+   b.addEventListener("click", function(){
+    filtro = (filtro === t.k) ? "" : t.k;
+    pintarKpis(); pintarTabla();
+   });
+  }
+  cont.appendChild(b);
+ });
+}
+
+/* ── tabla ──────────────────────────────────────────────────────────── */
+var PESO = { vencido:0, porvencer:1, aldia:2 };
+function visibles(){
+ var q = sinTildes(document.getElementById("qLista").value);
+ var partes = q ? q.split(" ") : [];
+ var lista = socios.filter(function(s){
+  if(filtro && estadoDe(s) !== filtro) return false;
+  if(!partes.length) return true;
+  var completo = sinTildes(s.n + " " + s.a);
+  return partes.every(function(p){ return completo.indexOf(p) > -1; });
+ });
+ var modo = document.getElementById("orden").value;
+ lista.sort(function(x, y){
+  if(modo === "nombre") return (x.n+x.a).localeCompare(y.n+y.a, "es");
+  if(modo === "plan"){
+   var pc = String(x.plan).localeCompare(String(y.plan), "es");
+   return pc || (x.n+x.a).localeCompare(y.n+y.a, "es");
+  }
+  var d = PESO[estadoDe(x)] - PESO[estadoDe(y)];
+  return d || String(x.v).localeCompare(String(y.v));
+ });
+ return lista;
+}
+function pintarTabla(){
+ var lista = visibles();
+ var tb = document.getElementById("tabla");
+ tb.innerHTML = "";
+ document.getElementById("conteo").textContent =
+  lista.length === socios.length ? socios.length + " socios"
+                                 : lista.length + " de " + socios.length;
+ if(!lista.length){
+  var tr = document.createElement("tr");
+  var td = document.createElement("td");
+  td.colSpan = 7; td.className = "sinnada";
+  td.textContent = socios.length ? "Ningún socio calza con lo que buscas."
+                                 : "La lista está vacía. Agrega el primero con «Nuevo socio».";
+  tr.appendChild(td); tb.appendChild(tr); return;
+ }
+ lista.forEach(function(s){
+  var e = estadoDe(s);
+  var tr = document.createElement("tr");
+  tr.innerHTML =
+   '<td class="nom"></td><td class="nom"></td><td class="plan"></td>'+
+   '<td class="mon"></td><td class="fec"></td>'+
+   '<td><span class="pill" data-e="'+e+'"><span class="punto" style="background:'+COLOR_ESTADO[e]+'"></span>'+
+   '<span class="et"></span></span><span class="dias"></span><span class="turno-tabla"></span></td>'+
+   '<td class="acc">'+
+   '<button class="iconbtn editar" title="Editar socio" aria-label="Editar socio">'+
+   '<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>'+
+   '<button class="iconbtn borrar" title="Eliminar socio" aria-label="Eliminar socio">'+
+   '<svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg></button>'+
+   '</td>';
+  var c = tr.children;
+  c[0].textContent = s.n; c[1].textContent = s.a; c[2].textContent = s.plan;
+  c[3].textContent = clp(s.m); c[4].textContent = fechaCL(s.v);
+  tr.querySelector(".et").textContent = NOMBRE_ESTADO[e];
+  tr.querySelector(".dias").textContent = textoDias(s);
+  var nt = notaTurno(s);
+  if(nt){
+   var tt = tr.querySelector(".turno-tabla");
+   tt.hidden = false; tt.textContent = nt.txt;
+   tt.setAttribute("data-t", nt.pasado ? "tope" : "ok");
+  }
+  tr.querySelector(".editar").addEventListener("click", function(){ abrirFicha(s); });
+  tr.querySelector(".borrar").addEventListener("click", function(){ borrar(s); });
+  tb.appendChild(tr);
+ });
+}
+function borrar(s){
+ if(!confirm("¿Eliminar a " + s.n + " " + s.a + " de la lista? No se puede deshacer.")) return;
+ borrarSocioApi(s, function(ok, info){
+  if(!ok){
+   alert(info === "sin clave" ? "No borré nada: hace falta la clave de administración."
+    : "No se pudo borrar en el sitio (" + info + "). No se tocó nada acá tampoco.");
+   return;
+  }
+  var i = socios.findIndex(function(x){ return x.id === s.id; });
+  if(i > -1) socios.splice(i, 1);
+  if(socioEnHero && socioEnHero.id === s.id) socioEnHero = null;
+  guardar(); pintar();
+ });
+}
+
+/* ── ficha ──────────────────────────────────────────────────────────── */
+var velo = null;
+function abrirFicha(s){
+ if(velo) return;
+ var nuevo = !s;
+ var d = nuevo ? { n:"", a:"", plan:PLANES[0], m:PRECIO[PLANES[0]], v:hoyISO() } : s;
+ var opciones = PLANES.slice();
+ if(d.plan && opciones.indexOf(d.plan) === -1) opciones.unshift(d.plan);
+
+ velo = document.createElement("div");
+ velo.className = "velo";
+ velo.innerHTML =
+  '<div class="ficha" role="dialog" aria-modal="true" aria-label="Ficha del socio">'+
+  '<h3></h3><div class="campos">'+
+  '<label class="ancho"><span>Nombre y apellido</span>'+
+  '<input id="fN" type="text" autocomplete="off"></label>'+
+  '<label class="ancho"><span>Plan</span><select id="fPlan"></select></label>'+
+  '<label><span>Monto</span><input id="fM" type="text" inputmode="numeric"></label>'+
+  '<label><span>Vence</span><input id="fV" type="date"></label>'+
+  '<div class="turno-caja" id="fTurnoCaja" hidden>'+
+  '<div class="tc-txt"><span class="tc-lbl" id="fTurnoLbl">Días usados</span>'+
+  '<span class="tc-sub" id="fTurnoSub"></span></div>'+
+  '<div class="tc-ctrl"><button type="button" id="fTurnoMenos" aria-label="Quitar un día">−</button>'+
+  '<b id="fTurnoNum">0</b>'+
+  '<button type="button" id="fTurnoMas" aria-label="Sumar un día">+</button></div>'+
+  '<label class="tc-desde"><span>Su mes empezó el</span>'+
+  '<input id="fDesde" type="date"></label></div>'+
+  '<div class="rapidos">'+
+  '<button type="button" class="rap-oro" data-meses="1">Renovar un mes</button>'+
+  '<button type="button" data-meses="3">Renovar 3 meses</button>'+
+  '<button type="button" data-mas="15">+15 días</button>'+
+  '<button type="button" id="fMas7" data-mas="7">+7 días</button>'+
+  '</div><p class="aviso" id="fAviso"></p></div>'+
+  '<div class="pie"><button class="btn btn-linea" id="fCopiar" type="button">📋 Copiar</button>'+
+  '<button class="btn btn-linea" id="fCancelar">Cancelar</button>'+
+  '<button class="btn btn-rojo" id="fGuardar">Guardar</button></div></div>';
+ document.body.appendChild(velo);
+
+ velo.querySelector("h3").textContent = nuevo ? "Nuevo socio" : "Editar a " + d.n + " " + d.a;
+ var sel = velo.querySelector("#fPlan");
+ opciones.forEach(function(p){
+  var o = document.createElement("option");
+  o.value = p; o.textContent = p;
+  if(p === d.plan) o.selected = true;
+  sel.appendChild(o);
+ });
+ var iN = velo.querySelector("#fN");
+ var iM = velo.querySelector("#fM"), iV = velo.querySelector("#fV");
+ iN.value = ((d.n || "") + " " + (d.a || "")).trim();
+ iV.value = d.v || hoyISO();
+
+ /* Se escribe todo junto, pero adentro se sigue guardando el nombre por un
+    lado y el apellido por otro. La primera palabra es el nombre y el resto
+    el apellido; si al socio no se le cambio el nombre, se respeta como
+    estaba partido para no descuadrar a los que ya tienen dos nombres. */
+ function partirNombre(texto){
+  var partes = String(texto || "").trim().toUpperCase().split(/\s+/).filter(Boolean);
+  if(!partes.length) return { n:"", a:"" };
+  var comoEstaba = ((d.n || "") + " " + (d.a || "")).trim().toUpperCase();
+  if(!nuevo && partes.join(" ") === comoEstaba) return { n:d.n, a:d.a };
+  if(partes.length === 1) return { n:partes[0], a:"" };
+  return { n:partes[0], a:partes.slice(1).join(" ") };
+ }
+ iM.value = "$" + (d.m || 0).toLocaleString("es-CL");
+
+ function pintaMonto(){
+  var n = soloDigitos(iM.value);
+  iM.value = n ? "$" + n.toLocaleString("es-CL") : "";
+ }
+ iM.addEventListener("input", pintaMonto);
+ iM.addEventListener("blur", pintaMonto);
+ sel.addEventListener("change", function(){
+  if(PRECIO[sel.value]) iM.value = "$" + PRECIO[sel.value].toLocaleString("es-CL");
+ });
+
+ /* Un mes de verdad, no 30 días: 26 de agosto pasa a ser 26 de septiembre.
+    Si el día no existe en el mes siguiente (31 de enero) se queda en el último. */
+ function sumarMeses(base, meses){
+  var dia = base.getDate();
+  var f = new Date(base.getFullYear(), base.getMonth() + meses, 1);
+  var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
+  f.setDate(Math.min(dia, ultimo));
+  return f;
+ }
+ /* Desde dónde se cuenta la renovación, en una sola regla:
+
+    - Si el socio está atrasado (ya se le venció), se cuenta desde HOY,
+      que es el día que pagó. Vencía el 25 y paga el 26 -> el próximo 26.
+    - Si paga adelantado (todavía no se le vence), se le respeta su fecha
+      aunque haya pagado varios días antes. Vencía el 28 -> el próximo 28. */
+ function desdeCuando(){
+  var hoy = new Date(); hoy.setHours(0,0,0,0);
+  if(!iV.value) return hoy;
+  var p = iV.value.split("-");
+  var venc = new Date(+p[0], +p[1]-1, +p[2]);
+  return venc > hoy ? venc : hoy;
+ }
+ /* El contador solo aparece en los planes de dias contados: por turno y tres
+    veces a la semana. Si cambian el plan o el vencimiento en la misma ficha,
+    se actualiza al tiro. */
+ var cajaTurno = velo.querySelector("#fTurnoCaja");
+ var iDesde = velo.querySelector("#fDesde");
+ /* Lo que ella escriba en "su mes empezó el" manda por sobre lo calculado,
+    hasta que cambie el vencimiento (ahi vuelve a proponerse solo). */
+ var desdeAMano = "";
+ var vAnterior = iV.value;
+ function socioDeLaFicha(){
+  var p = partirNombre(iN.value);
+  var f = { n: p.n || d.n, a: p.a || d.a, plan: sel.value, v: iV.value };
+  if(desdeAMano) f.desdeFicha = desdeAMano;
+  return f;
+ }
+ function inicioDeLaFicha(f){
+  return desdeAMano || inicioCalculado(f);
+ }
+ function pintarTurnoFicha(){
+  /* Si le cambio el vencimiento, el mes nuevo se propone de nuevo solo: hay
+     que borrar lo escrito a mano ANTES de calcular nada con ello. */
+  if(iV.value !== vAnterior){ desdeAMano = ""; vAnterior = iV.value; }
+  var falso = socioDeLaFicha();
+  var c = nuevo ? null : reglaDe(falso);
+  if(!c){ cajaTurno.hidden = true; return; }
+  cajaTurno.hidden = false;
+  var desde = inicioDeLaFicha(falso);
+  c.ini = desde;
+  iDesde.value = desde || "";
+  iDesde.max = iV.value || "";
+  var n = contarEntre(falso, c.ini, c.fin);
+  velo.querySelector("#fTurnoNum").textContent = n;
+  velo.querySelector("#fTurnoLbl").textContent = "Días usados " + c.cuando;
+  var sem = diasDeLaSemana(falso);
+  velo.querySelector("#fTurnoSub").textContent =
+   (n > c.tope ? "Se pasó por " + (n - c.tope) + (n - c.tope === 1 ? " día" : " días")
+               : "Le quedan " + (c.tope - n) + " de " + c.tope) +
+   " · del " + fechaCL(desde) + " al " + fechaCL(c.fin) +
+   (sem === null ? "" : " · esta semana lleva " + sem + " de " + c.semana.tope);
+ }
+ iDesde.addEventListener("change", function(){
+  if(!fechaValida(this.value)) return;
+  if(iV.value && this.value > iV.value) this.value = iV.value;
+  desdeAMano = this.value;
+  vAnterior = iV.value;
+  pintarTurnoFicha(); pintar();
+ });
+ function tocarTurno(cuanto){
+  var falso = socioDeLaFicha();
+  corregirDias(falso, cuanto);
+  pintarTurnoFicha(); pintar();
+ }
+ velo.querySelector("#fTurnoMenos").addEventListener("click", function(){ tocarTurno(-1); });
+ velo.querySelector("#fTurnoMas").addEventListener("click", function(){ tocarTurno(1); });
+ /* Para que se note que en el plan semanal el domingo no se descuenta. */
+ var bMas7 = velo.querySelector("#fMas7");
+ function pintarBoton7(){
+  bMas7.textContent = esPlanSemanal(sel.value) ? "+7 días sin domingo" : "+7 días";
+ }
+ sel.addEventListener("change", function(){ pintarTurnoFicha(); pintarBoton7(); });
+ iV.addEventListener("change", pintarTurnoFicha);
+ pintarTurnoFicha();
+ pintarBoton7();
+
+ /* El plan semanal trae pocos dias, asi que los domingos no se le descuentan:
+    el gimnasio cierra ese dia y no seria justo cobrarselo. Se le suman dias
+    hasta juntar los que corresponden, saltandose los domingos. */
+ /* Cuenta dias de gimnasio abierto, saltandose los domingos. La cuenta parte al
+    dia siguiente del pago: el dia en que paga entra igual, asi que le quedan
+    siete dias mas por delante. */
+ function sumarDiasAbiertos(base, cuantos){
+  var f = new Date(base);
+  var puestos = 0;
+  while(puestos < cuantos){
+   f.setDate(f.getDate() + 1);
+   if(f.getDay() !== 0) puestos++;   /* 0 es domingo: no cuenta */
+  }
+  return f;
+ }
+ velo.querySelectorAll(".rapidos button").forEach(function(b){
+  b.addEventListener("click", function(){
+   var base = desdeCuando();
+   if(b.dataset.meses) base = sumarMeses(base, parseInt(b.dataset.meses, 10));
+   else if(esPlanSemanal(sel.value)) base = sumarDiasAbiertos(base, parseInt(b.dataset.mas, 10));
+   else base.setDate(base.getDate() + parseInt(b.dataset.mas, 10));
+   iV.value = base.getFullYear()+"-"+String(base.getMonth()+1).padStart(2,"0")+
+              "-"+String(base.getDate()).padStart(2,"0");
+   /* Cambiar el valor desde el codigo no dispara el "change" del campo, asi
+      que la caja de dias hay que volver a pintarla a mano: si no, se queda
+      mostrando el mes viejo despues de apretar Renovar. */
+   pintarTurnoFicha();
+  });
+ });
+
+ function cerrar(){
+  if(!velo) return;
+  velo.remove(); velo = null;
+  document.removeEventListener("keydown", teclas);
+ }
+ function teclas(ev){
+  if(ev.key === "Escape") cerrar();
+  if(ev.key === "Enter" && ev.target.tagName === "INPUT") aceptar();
+ }
+ function aceptar(){
+  var p = partirNombre(iN.value), n = p.n, a = p.a;
+  if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe el nombre y el apellido."; iN.focus(); return; }
+  if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
+  var datos = { n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value, medid:(s && s.medid) || "" };
+  var vencimientoAnterior = nuevo ? "" : s.v;
+  var aviso = velo.querySelector("#fAviso");
+  var btnGuardar = velo.querySelector("#fGuardar");
+  btnGuardar.disabled = true;
+  aviso.style.color = "";
+  aviso.textContent = "Guardando en el sitio...";
+  guardarSocioApi(datos, function(ok, info){
+   btnGuardar.disabled = false;
+   if(!ok){
+    aviso.textContent = info === "sin clave" ? "No se guardó: hace falta la clave de administración."
+     : "No se pudo guardar en el sitio (" + info + "). No se perdió nada, intenta de nuevo.";
+    return;
+   }
+   var quien;
+   if(nuevo){
+    quien = { id:idNuevo(), n:datos.n, a:datos.a, plan:datos.plan, m:datos.m, v:datos.v, medid:datos.medid };
+    socios.push(quien);
+   }else{
+    s.n = datos.n; s.a = datos.a; s.plan = datos.plan; s.m = datos.m; s.v = datos.v;
+    quien = s;
+   }
+   /* Queda anotado desde cuando le corre el mes: lo que ella puso a mano, o
+      lo que corresponde por la fecha nueva. Al socio nuevo, desde hoy. */
+   if(planCuentaDias(quien)){
+    if(desdeAMano && fechaValida(desdeAMano)) fijarInicioCiclo(quien, desdeAMano);
+    else if(nuevo && hoyISO() <= quien.v) fijarInicioCiclo(quien, hoyISO());
+    else if(!nuevo && fechaValida(vencimientoAnterior) && quien.v > vencimientoAnterior &&
+            mesAtras(quien.v) >= vencimientoAnterior && hoyISO() <= quien.v)
+     fijarInicioCiclo(quien, hoyISO());
+    else anotarCiclos();
+   }
+   cerrar(); guardar(); pintar();
+   if(socioEnHero && !nuevo && socioEnHero.id === quien.id) mostrarHero(quien.n+" "+quien.a, null, quien);
+  });
+ }
+ /* Copia solo esta ficha (no la lista completa) en el mismo formato que
+    entiende socios.json, para que sea fácil pegársela a Claude cuando
+    renueva a una sola persona en vez de a todas. */
+ function aSerialFicha(iso){
+  var p = String(iso || "").trim().split("-");
+  if(p.length !== 3) return 0;
+  var d = Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  return Math.round((d - Date.UTC(1899, 11, 30)) / 86400000);
+ }
+ velo.querySelector("#fCopiar").addEventListener("click", function(){
+  var p = partirNombre(iN.value);
+  var ficha = { n:p.n || d.n, a:p.a || d.a, rut:(s && s.rut) || "Sin Rut",
+   plan:sel.value, monto:soloDigitos(iM.value), fv:aSerialFicha(iV.value) };
+  var txt = JSON.stringify(ficha, null, 1);
+  var aviso = velo.querySelector("#fAviso");
+  function ok(){ aviso.style.color = "#43C48D"; aviso.textContent = "¡Copiado! Pégaselo a Claude por chat."; }
+  function aMano(){
+   aviso.style.color = "";
+   aviso.textContent = "No pude copiarlo solo. Apreta Ctrl + C ahora.";
+   var ta = document.createElement("textarea");
+   ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+   document.body.appendChild(ta); ta.select();
+   setTimeout(function(){ ta.remove(); }, 15000);
+  }
+  try{
+   if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok, aMano); }
+   else{ aMano(); }
+  }catch(e){ aMano(); }
+ });
+ velo.querySelector("#fCancelar").addEventListener("click", cerrar);
+ velo.querySelector("#fGuardar").addEventListener("click", aceptar);
+ velo.addEventListener("mousedown", function(ev){ if(ev.target === velo) cerrar(); });
+ document.addEventListener("keydown", teclas);
+ iN.focus();
+}
+document.getElementById("bNuevo").addEventListener("click", function(){ abrirFicha(null); });
+
+/* El equipo del meson se queda con una copia guardada de esta pagina y no la
+   cambia solo, asi que un socio recien agregado no aparece. Este boton vuelve
+   a pedirla con una direccion distinta cada vez, que es lo unico que obliga al
+   navegador a bajarla de nuevo. Lo anotado en el equipo no se toca: vive
+   aparte de la pagina. */
+document.getElementById("bFresco").addEventListener("click", function(){
+ var base = location.href.split("?")[0].split("#")[0];
+ location.href = base + "?v=" + Date.now();
+});
+
+/* ── respaldo ───────────────────────────────────────────────────────── */
+function bajar(nombre, texto, tipo){
+ var blob = new Blob([texto], { type: tipo + ";charset=utf-8" });
+ var url = URL.createObjectURL(blob);
+ var a = document.createElement("a");
+ a.href = url; a.download = nombre;
+ document.body.appendChild(a); a.click(); a.remove();
+ setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+}
+function celda(v){
+ var s = String(v==null?"":v);
+ return /[";\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+document.getElementById("bRespaldo").addEventListener("click", function(){
+ bajar("socios-wgymadnsport-"+hoyISO()+".json",
+  JSON.stringify({ gimnasio:"WGYMADNSPORT Tocopilla", generado:new Date().toISOString(),
+                   socios:socios }, null, 1),
+  "application/json");
+});
+document.getElementById("bPlanilla").addEventListener("click", function(){
+ var L = [["Nombre","Apellido","Plan","Monto","Vence","Estado"].join(";")];
+ socios.forEach(function(s){
+  L.push([s.n, s.a, s.plan, s.m||0, fechaCL(s.v), NOMBRE_ESTADO[estadoDe(s)]].map(celda).join(";"));
+ });
+ bajar("socios-wgymadnsport-"+hoyISO()+".csv", "﻿"+L.join("\r\n")+"\r\n", "text/csv");
+});
+
+var archivo = document.getElementById("archivo");
+document.getElementById("bCargar").addEventListener("click", function(){ archivo.click(); });
+
+document.getElementById("bSitio").addEventListener("click", function(){
+ if(!confirm("Se descarta cualquier cambio sin guardar y se vuelve a traer la lista tal como está en el sitio ahora mismo.\n\n¿Seguimos?")) return;
+ filtro = "";
+ document.getElementById("qLista").value = "";
+ cargarSocios(function(){
+  alert("Listo: quedaron " + socios.length + " socios, tal como están publicados.");
+ });
+});
+
+function filasCSV(texto){
+ var filas = [], campo = "", fila = [], dentro = false;
+ texto = texto.replace(/^﻿/, "");
+ for(var i = 0; i < texto.length; i++){
+  var c = texto[i];
+  if(dentro){
+   if(c === '"' && texto[i+1] === '"'){ campo += '"'; i++; }
+   else if(c === '"'){ dentro = false; }
+   else campo += c;
+  }else if(c === '"'){ dentro = true; }
+  else if(c === ";"){ fila.push(campo); campo = ""; }
+  else if(c === "\n"){ fila.push(campo); filas.push(fila); fila = []; campo = ""; }
+  else if(c !== "\r"){ campo += c; }
+ }
+ if(campo !== "" || fila.length){ fila.push(campo); filas.push(fila); }
+ return filas.filter(function(f){ return f.some(function(x){ return x.trim() !== ""; }); });
+}
+function deCSV(texto){
+ var f = filasCSV(texto);
+ if(f.length < 2) return null;
+ if(sinTildes(f[0][0]).indexOf("NOMBRE") === -1) return null;
+ return f.slice(1).map(function(r){
+  var v = String(r[4]||"").trim().split("-");
+  return { id:idNuevo(), n:String(r[0]||"").trim(), a:String(r[1]||"").trim(),
+           plan:String(r[2]||"").trim() || PLANES[0], m:soloDigitos(r[3]),
+           v: v.length === 3 ? v[2]+"-"+v[1]+"-"+v[0] : "" };
+ });
+}
+archivo.addEventListener("change", function(){
+ var f = archivo.files && archivo.files[0];
+ if(!f) return;
+ var lector = new FileReader();
+ lector.onload = function(){
+  var texto = String(lector.result || ""), leidos = null;
+  try{
+   var o = JSON.parse(texto);
+   if(o && Array.isArray(o.socios)) leidos = o.socios;
+   else if(Array.isArray(o)) leidos = o;
+  }catch(e){ leidos = deCSV(texto); }
+  if(!leidos || !leidos.length){
+   alert("Ese archivo no trae socios que pueda leer.\n\nUsa el respaldo .json que bajaste de esta misma página, o la planilla .csv.");
+   archivo.value = ""; return;
+  }
+  if(!confirm("El archivo trae " + leidos.length + " socios.\nAhora tienes " + socios.length +
+              ".\n\nSe reemplaza la lista completa. ¿Seguimos?")){ archivo.value = ""; return; }
+  socios = leidos.map(function(s, i){
+   return { id:s.id || ("c"+i+Date.now().toString(36)), n:String(s.n||"").trim(),
+            a:String(s.a||"").trim(), plan:String(s.plan||PLANES[0]).trim(),
+            m:soloDigitos(s.m), v:arreglarFecha(s.v) };
+  });
+  archivo.value = ""; filtro = "";
+  document.getElementById("qLista").value = "";
+  guardar(); pintar();
+  alert("Listo: quedaron " + socios.length + " socios.");
+ };
+ lector.readAsText(f, "utf-8");
+});
+
+/* ── arranque ───────────────────────────────────────────────────────── */
+document.getElementById("qLista").addEventListener("input", pintarTabla);
+document.getElementById("orden").addEventListener("change", pintarTabla);
+
+function pintar(){ pintarKpis(); pintarTabla(); pintarFeed(); }
+
+function reloj(){
+ var d = new Date();
+ var s = d.toLocaleDateString("es-CL", { weekday:"long", day:"numeric", month:"long" });
+ document.getElementById("reloj").textContent =
+  s.charAt(0).toUpperCase() + s.slice(1) + " · " +
+  String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")+" hrs";
+}
+reloj();
+setInterval(reloj, 20000);
+pintar();
+poll();
+setInterval(poll, 4000);
+
+/* ═══ Bandas elásticas prestadas ══════════════════════════════════════
+   Mismo panel que ya se ve en pantalla.html (la puerta), para que en el
+   mesón también se vea quién tiene una banda afuera sin tener que ir a
+   mirar la otra pantalla. */
+function fmtMinBanda(ts){
+ var min = Math.max(0, Math.round((Date.now() - ts) / 60000));
+ return min + " min";
+}
+var COLOR_DOT_BANDA = { Negra:"#2B2B2B", Verde:"#5CA85C", Morada:"#9B59D0", Roja:"#E30613", Amarilla:"#E8C547" };
+function renderBandas(activos){
+ var el = document.getElementById("bandasFeed");
+ if(!el) return;
+ if(!activos || activos.length===0){
+  el.innerHTML = '<div class="feed-empty">Nadie ha pedido banda por ahora.</div>';
+  return;
+ }
+ el.innerHTML = activos.map(function(b){
+  var color = b.banda || "";
+  var dot = COLOR_DOT_BANDA[color] || "#8C8C8C";
+  return '<div class="banda-item"><span class="binfo"><span class="bdot" style="background:'+dot+'"></span>'+
+   '<span class="btxt"><span class="bname">'+escapeHtml(b.nombre)+' '+escapeHtml(b.apellido)+'</span><br>'+
+   '<span class="bcolor">'+escapeHtml(color)+'</span> · <span class="btime">Hace '+fmtMinBanda(b.retiro)+'</span></span></span>'+
+   '<button type="button" data-id="'+escapeHtml(b.id)+'">Devolver</button></div>';
+ }).join('');
+}
+var nPollBandas = 0;
+function pollBandas(){
+ if(!CHECKIN_URL) return;
+ nPollBandas++;
+ var cb = "wgymBandaCb" + nPollBandas + "_" + Date.now();
+ var script = document.createElement("script");
+ window[cb] = function(data){
+  renderBandas(data && data.activos);
+  delete window[cb];
+  script.remove();
+ };
+ script.src = CHECKIN_URL + "?action=listarBandas&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+var bandasFeedEl = document.getElementById("bandasFeed");
+if(bandasFeedEl) bandasFeedEl.addEventListener("click", function(ev){
+ var btn = ev.target.closest("button[data-id]");
+ if(!btn) return;
+ btn.disabled = true;
+ var cb = "wgymDevBanda_" + Date.now();
+ var script = document.createElement("script");
+ window[cb] = function(){
+  delete window[cb];
+  script.remove();
+  pollBandas();
+ };
+ script.src = CHECKIN_URL + "?action=devolverBanda&id=" + encodeURIComponent(btn.getAttribute("data-id")) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
+ document.body.appendChild(script);
+});
+pollBandas();
+setInterval(pollBandas, 4000);
+
+/* ═══ Candados prestados ══════════════════════════════════════════════
+   Mismo panel que las bandas, pero para los candados de los casilleros. */
+function renderCandados(activos){
+ var el = document.getElementById("candadosFeed");
+ if(!el) return;
+ if(!activos || activos.length===0){
+  el.innerHTML = '<div class="feed-empty">Nadie ha pedido candado por ahora.</div>';
+  return;
+ }
+ el.innerHTML = activos.map(function(c){
+  return '<div class="banda-item"><span class="binfo">'+
+   '<span class="btxt"><span class="bname">'+escapeHtml(c.nombre)+' '+escapeHtml(c.apellido)+'</span><br>'+
+   '<span class="btime">Hace '+fmtMinBanda(c.retiro)+'</span></span></span>'+
+   '<button type="button" data-id="'+escapeHtml(c.id)+'">Devolver</button></div>';
+ }).join('');
+}
+var nPollCandados = 0;
+function pollCandados(){
+ if(!CHECKIN_URL) return;
+ nPollCandados++;
+ var cb = "wgymCandadoCb" + nPollCandados + "_" + Date.now();
+ var script = document.createElement("script");
+ window[cb] = function(data){
+  renderCandados(data && data.activos);
+  delete window[cb];
+  script.remove();
+ };
+ script.src = CHECKIN_URL + "?action=listarCandados&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); };
+ document.body.appendChild(script);
+}
+var candadosFeedEl = document.getElementById("candadosFeed");
+if(candadosFeedEl) candadosFeedEl.addEventListener("click", function(ev){
+ var btn = ev.target.closest("button[data-id]");
+ if(!btn) return;
+ btn.disabled = true;
+ var cb = "wgymDevCandado_" + Date.now();
+ var script = document.createElement("script");
+ window[cb] = function(){
+  delete window[cb];
+  script.remove();
+  pollCandados();
+ };
+ script.src = CHECKIN_URL + "?action=devolverCandado&id=" + encodeURIComponent(btn.getAttribute("data-id")) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){ delete window[cb]; script.remove(); btn.disabled = false; };
+ document.body.appendChild(script);
+});
+pollCandados();
+setInterval(pollCandados, 4000);
+
+/* ═══ Pasar la lista de este equipo a los celulares ═════════════════════
+   Las renovaciones hechas acá quedan guardadas en este mismo equipo. Este
+   botón arma la lista completa en el formato de socios.json — el archivo
+   que leen la tarjeta virtual y las apps de rutina — para copiarla y
+   mandarla por chat de una sola vez. */
+(function(){
+ var boton = document.getElementById("copiar-lista");
+ var aviso = document.getElementById("copiar-aviso");
+ if(!boton) return;
+ function aSerial(iso){
+  var p = String(iso || "").trim().split("-");
+  if(p.length !== 3) return 0;
+  var d = Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  return Math.round((d - Date.UTC(1899, 11, 30)) / 86400000);
+ }
+ boton.addEventListener("click", function(){
+  var lista = socios.map(function(s){
+   return { n:s.n, a:s.a, rut:s.rut || "Sin Rut", plan:s.plan || "",
+            monto:Number(s.m) || 0, fv:aSerial(s.v) };
+  }).filter(function(s){ return s.n || s.a; });
+  lista.sort(function(x, y){ return (x.a + x.n).localeCompare(y.a + y.n, "es"); });
+  var h = new Date();
+  var iso = h.getFullYear() + "-" + String(h.getMonth()+1).padStart(2,"0") +
+            "-" + String(h.getDate()).padStart(2,"0");
+  /* Los dias marcados (asistencia) y desde cuando corre el ciclo de cada
+     socio (ciclos) van aparte: son los datos que arman el contador
+     "dia X de Y" y este equipo es el que manda para copiarlos tal cual a
+     la tablet y a cualquier otro que se abra. */
+  var txt = JSON.stringify({ actualizado:iso, socios:lista,
+   asistencia:asistencia, ciclos:ciclos }, null, 1);
+  function ok(){
+   aviso.textContent = "¡Copiado! " + lista.length + " socios. Pégamelo por chat.";
+   aviso.style.color = "#43C48D";
+  }
+  function aMano(){
+   aviso.textContent = "No pude copiarlo solo. Apreta Ctrl + C ahora.";
+   var ta = document.createElement("textarea");
+   ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+   document.body.appendChild(ta); ta.select();
+   setTimeout(function(){ document.body.removeChild(ta); }, 15000);
+  }
+  try{
+   if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(ok, aMano);
+   }else{ aMano(); }
+  }catch(e){ aMano(); }
+ });
+})();
+
+})();
+</script>

@@ -1,0 +1,1478 @@
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>PRUEBA · WGYMADNSPORT · Socios y Rutinas</title>
+<meta name="description" content="Acceso de socios, rutinas de entrenamiento y gestión de WGYMADNSPORT Tocopilla.">  
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="manifest" href="tarjeta.webmanifest?v=3">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icono-180.png?v=3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="TARJETA VIRTUAL">
+<style>  
+:root{  
+ --negro:#0A0A0A;  
+ --surface:#161616;  
+ --surface-2:#1F1F1F;  
+ --card:#1c1c1c;  
+ --rojo:#E30613;  
+ --rojo-oscuro:#A40410;  
+ --dorado:#D4AF37;  
+ --dorado-tint:#332B10;  
+ --blanco:#FFFFFF;  
+ --gris:#CFCFCF;  
+ --gris-soft:#8C8C8C;  
+ --line:#2A2A2A;  
+ --good:#5CA85C;
+ --good-tint:#16261A;
+ --warn:#D4AF37;
+ --warn-tint:#332B10;
+ --danger:#E85C5C;
+ --danger-tint:#331414;
+ --azul:#4C9FD6;
+ --azul-tint:#122A38;
+ --naranja:#E2933D;
+ --naranja-tint:#332210;
+ --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 20px -10px rgba(0,0,0,.7);  
+}  
+*{box-sizing:border-box;}  
+html{-webkit-text-size-adjust:100%;}  
+body{  
+ margin:0;  
+ background:var(--negro);  
+ color:var(--blanco);  
+ font-family:'Segoe UI', Arial, sans-serif;  
+ font-size:15px;  
+ line-height:1.5;  
+ -webkit-font-smoothing:antialiased;  
+}  
+h1,h2,h3{ font-weight:800; color:var(--blanco); text-transform:uppercase; letter-spacing:.02em; margin:0; }  
+.tabular{ font-variant-numeric: tabular-nums; }  
+button{ font-family:inherit; }  
+[hidden]{ display:none !important; }  
+  
+/* ===== GATE ===== */  
+.gate{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }  
+.gate-card{ width:100%; max-width:340px; text-align:center; }  
+.gate-logo{ width:min(78%,260px); height:auto; object-fit:contain; margin-bottom:14px; }
+.gate-kicker{ font-size:12px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 10px; }  
+.gate-card h2{ font-size:22px; margin:0 0 8px; }  
+.gate-sub{ font-size:13px; color:var(--gris); margin:0 0 20px; font-weight:600; }  
+.gate-label{ display:block; font-size:12.5px; font-weight:800; letter-spacing:.12em;
+ color:var(--dorado); text-transform:uppercase; text-align:left; margin:0 0 7px 2px; }  
+.gate-input{  
+ width:100%; box-sizing:border-box; background:var(--surface); border:1.5px solid var(--line);  
+ border-radius:10px; padding:14px 16px; font-size:16px; color:var(--blanco); text-align:center;  
+ letter-spacing:.05em; margin-bottom:12px; font-family:inherit;  
+}  
+.gate-input:focus{ outline:none; border-color:var(--rojo); }  
+.gate-btn{  
+ width:100%; background:var(--rojo); color:var(--blanco); border:none; border-radius:10px;  
+ padding:14px 16px; font-size:14px; font-weight:900; letter-spacing:.06em; text-transform:uppercase;  
+ font-family:inherit; cursor:pointer;  
+}  
+.gate-btn:active{ background:var(--rojo-oscuro); }
+.gate-btn:disabled{ background:var(--rojo-oscuro); opacity:.75; cursor:default; }
+.gate-error{ color:var(--rojo); font-size:12.5px; font-weight:700; margin:14px 0 0; }  
+.gate-admin-link{ display:block; margin-top:22px; font-size:11.5px; color:var(--gris-soft); text-decoration:none; letter-spacing:.03em; }  
+  
+/* ===== SOCIO / ROUTINE VIEW ===== */  
+.wrap{ max-width:520px; margin:0 auto; padding-bottom:60px; }  
+header.masthead2{ background:linear-gradient(180deg,#111 0%, var(--negro) 100%); border-bottom:3px solid var(--rojo); padding:22px 20px 18px; text-align:center; }  
+header.masthead2 .logo{ width:min(78%,260px); height:auto; object-fit:contain; margin-bottom:10px; }  
+header.masthead2 .gymname{ font-size:13px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 4px; }  
+header.masthead2 h1{ font-size:26px; margin:0 0 6px; line-height:1.15; }  
+header.masthead2 h1 span{ color:var(--rojo); }  
+header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:600; }  
+.expiry-banner{ margin:14px 16px 0; background:rgba(212,175,55,.14); border:1.5px solid var(--dorado); border-radius:10px; padding:12px 14px; font-size:13px; font-weight:700; color:var(--dorado); text-align:center; line-height:1.4; }  
+.member-card{
+  margin:18px 16px 0;
+  background:linear-gradient(135deg, #161616 0%, #0A0A0A 60%, #1c1608 100%);
+  border:1.5px solid var(--dorado);
+  border-radius:18px;
+  padding:24px 22px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 30px -12px rgba(0,0,0,.6);
+}
+.member-card::before{
+  content:"";
+  position:absolute; top:-40px; right:-40px;
+  width:140px; height:140px; border-radius:50%;
+  background:radial-gradient(circle, rgba(212,175,55,.18), transparent 70%);
+}
+.mc-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.16em; color:var(--dorado); text-transform:uppercase; margin:0 0 10px; }
+.mc-name{ font-size:22px; font-weight:900; color:var(--blanco); text-transform:uppercase; letter-spacing:.02em; line-height:1.2; margin-bottom:4px; }
+.mc-plan{ font-size:13px; font-weight:700; color:var(--gris); margin-bottom:18px; }
+.mc-row{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-top:1px solid rgba(255,255,255,.08); font-size:13px; }
+.mc-row span{ color:var(--gris-soft); font-weight:600; }
+.mc-row b{ color:var(--blanco); font-weight:800; letter-spacing:.02em; }
+.mc-status{ margin-top:14px; }
+.mc-veredicto{ border-radius:14px; padding:20px 18px; margin-bottom:18px; text-align:center;
+ border:2px solid; }
+.mc-veredicto .vfallo{ font-size:20px; font-weight:900; text-transform:uppercase;
+ letter-spacing:.02em; line-height:1.15; margin:0; text-wrap:balance; }
+.mc-veredicto .vdet{ font-size:13.5px; font-weight:700; margin:9px 0 0; }
+.mc-veredicto[data-v="ok"]{ border-color:#5CA85C; background:rgba(92,168,92,.12); }
+.mc-veredicto[data-v="ok"] .vfallo{ color:#5CA85C; }
+.mc-veredicto[data-v="warn"]{ border-color:var(--dorado); background:rgba(212,175,55,.12); }
+.mc-veredicto[data-v="warn"] .vfallo{ color:var(--dorado); }
+.mc-veredicto[data-v="bad"]{ border-color:#E85C5C; background:rgba(232,92,92,.12); }
+.mc-veredicto[data-v="bad"] .vfallo{ color:#E85C5C; }
+.mc-veredicto .vdet{ color:var(--gris); }
+.mc-veredicto .vturno{ font-size:14px; font-weight:800; margin:11px 0 0;
+ padding-top:10px; border-top:1px solid rgba(255,255,255,.14); }
+.mc-veredicto .vturno[data-t="ok"]{ color:var(--gris); }
+.mc-veredicto .vturno[data-t="tope"]{ color:var(--dorado); }
+/* La barrita de los dias del mes: llena lo usado, el resto es lo que le queda. */
+.mc-veredicto .vbarra{ height:9px; border-radius:5px; margin:9px 0 0;
+ background:rgba(255,255,255,.14); overflow:hidden; }
+.mc-veredicto .vbarra i{ display:block; height:100%; border-radius:5px;
+ background:var(--dorado); }
+.mc-veredicto .vturno[data-t="tope"] + .vbarra i{ background:#E85C5C; }
+.mc-veredicto .vfavor{ font-size:12.5px; font-weight:600; line-height:1.5;
+ color:var(--gris); margin:8px 0 0; }
+.mc-veredicto .vfavor b{ color:var(--dorado); }
+.routine-blocked{ text-align:center; color:var(--danger); font-weight:700; font-size:13px; line-height:1.5; margin:18px 0 0; }
+
+.evo-card{ margin:14px 16px 0; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 16px 14px; }
+.evo-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 10px; }
+.evo-actual{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.evo-stat{ flex:1; min-width:90px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px; text-align:center; }
+.evo-stat .n{ font-size:20px; font-weight:900; color:var(--blanco); }
+.evo-stat .l{ display:block; font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--gris-soft); margin-top:2px; }
+.evo-chip{ display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; padding:3px 8px; border-radius:999px; margin-top:6px; }
+.evo-chip .dot{ width:6px; height:6px; border-radius:50%; }
+.evo-chip.low{ background:var(--azul-tint); color:var(--azul); } .evo-chip.low .dot{ background:var(--azul); }
+.evo-chip.normal{ background:var(--good-tint); color:var(--good); } .evo-chip.normal .dot{ background:var(--good); }
+.evo-chip.high{ background:var(--naranja-tint); color:var(--naranja); } .evo-chip.high .dot{ background:var(--naranja); }
+.evo-chip.veryhigh{ background:var(--danger-tint); color:var(--danger); } .evo-chip.veryhigh .dot{ background:var(--danger); }
+.evo-fecha{ font-size:11.5px; color:var(--gris-soft); font-weight:600; margin:0 0 12px; }
+.evo-hist{ border-top:1px solid var(--line); padding-top:10px; max-height:220px; overflow-y:auto; }
+.evo-hist-tit{ font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--gris-soft); margin:0 0 6px; }
+.evo-meta{ margin:14px 0; background:rgba(212,175,55,.09); border:1.5px solid var(--dorado); border-radius:12px; padding:14px 16px; }
+.evo-meta .mt{ font-size:10.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--dorado); margin:0 0 6px; }
+.evo-meta p.mtxt{ margin:0; font-size:13px; color:var(--gris); line-height:1.5; }
+.evo-meta b{ color:var(--dorado); }
+.evo-ref{ margin:14px 0; background:var(--azul-tint); border:1.5px solid var(--azul); border-radius:12px; padding:14px 16px; }
+.evo-ref .mt{ font-size:10.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--azul); margin:0 0 6px; }
+.evo-ref p.mtxt{ margin:0 0 8px; font-size:13px; color:var(--gris); line-height:1.5; }
+.evo-ref p.mtxt:last-child{ margin-bottom:0; }
+.evo-ref p.mtxt-nota{ font-size:11.5px; color:var(--gris-soft); font-style:italic; }
+.evo-ref b{ color:var(--azul); }
+.evo-ref-campo{ margin-bottom:10px; }
+.evo-ref-campo label{ display:block; font-size:10.5px; font-weight:700; color:var(--gris-soft); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+.evo-ref-campo input{ width:100%; box-sizing:border-box; background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:9px 10px; font-size:14px; color:var(--blanco); font-family:inherit; }
+.evo-ref-campo input:focus{ outline:none; border-color:var(--azul); }
+.evo-ref-sexo{ display:flex; gap:8px; margin-bottom:10px; }
+.evo-ref-sexo button{ flex:1; padding:8px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--gris); font-weight:700; font-size:12.5px; cursor:pointer; }
+.evo-ref-sexo button.on{ background:var(--azul-tint); border-color:var(--azul); color:var(--azul); }
+.evo-ref-btn{ width:100%; padding:10px; border-radius:8px; border:none; background:var(--azul); color:#fff; font-weight:800; font-size:13px; cursor:pointer; margin-top:2px; }
+.evo-ref-aviso{ font-size:11.5px; color:var(--danger); margin:6px 0 0; min-height:14px; }
+.evo-ref-editar{ background:none; border:none; color:var(--azul); font-size:11.5px; font-weight:700; text-decoration:underline; cursor:pointer; padding:0; margin-top:10px; display:block; }
+.evo-pin{ margin:14px 0 0; border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--surface); }
+.evo-pin .mt{ font-size:10.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--dorado); margin:0 0 6px; }
+.evo-pin p{ margin:0 0 8px; font-size:12.5px; color:var(--gris); line-height:1.45; }
+.evo-pin input{ width:100%; box-sizing:border-box; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; margin:0 0 8px; color:var(--blanco); font-size:18px; letter-spacing:.4em; text-align:center; }
+.evo-pin button{ width:100%; border:1px solid var(--dorado); background:transparent; color:var(--dorado); border-radius:10px; padding:10px; font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; cursor:pointer; }
+.evo-pin .err{ color:var(--danger); font-weight:700; font-size:12px; min-height:16px; margin:0; }
+.evo-pin-ok{ margin:12px 0 0; font-size:11.5px; color:var(--gris-soft); font-weight:700; }
+.evo-row{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:12.5px; }
+.evo-row span{ color:var(--gris-soft); font-weight:600; }
+.evo-row b{ color:var(--blanco); font-weight:800; }
+
+.band-box{ margin:14px 16px 0; }
+/* Estado de hoy y "Marcar mi salida" (10/2026). */
+.salida-card{ margin:14px 16px 0; background:var(--card); border:1px solid rgba(92,168,92,.45); border-radius:14px; padding:14px 16px; text-align:center; }
+.salida-num{ font-size:60px; font-weight:900; line-height:1; color:var(--good); margin:0; font-variant-numeric:tabular-nums; }
+.salida-lbl{ font-size:12.5px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:var(--good); margin:6px 0 0; }
+.salida-sub{ font-size:12.5px; color:#8C8C93; margin:10px 0 0; }
+.salida-card .pago-btn{ margin-top:10px; }
+.salida-err{ font-size:12.5px; color:var(--danger); font-weight:700; min-height:0; margin:6px 0 0; }
+.pago-card{ margin:14px 16px 0; background:var(--card); border:1px solid var(--dorado); border-radius:14px; padding:16px; }
+.pago-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 6px; }
+.pago-monto{ display:inline-block; font-size:34px; font-weight:900; color:#FFD84D; line-height:1.1; margin:2px 0 0; padding:6px 16px; border:2px solid var(--dorado); border-radius:12px; background:#211c0c; }
+.pago-plan{ font-size:12.5px; color:var(--gris-soft); font-weight:700; margin:2px 0 12px; }
+.pago-btn{ display:block; width:100%; box-sizing:border-box; border-radius:12px; padding:13px; font-weight:900; font-size:14px; letter-spacing:.05em; text-transform:uppercase; cursor:pointer; text-align:center; text-decoration:none; margin-top:8px; }
+.pago-btn.principal{ background:var(--rojo); color:#fff; border:1px solid var(--dorado); }
+.pago-btn.sec{ background:transparent; color:var(--dorado); border:1px solid var(--dorado); }
+.pago-btn.wsp{ background:#1F8E4E; color:#fff; border:1px solid #25D366; }
+.pago-datos{ margin-top:12px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:4px 12px; }
+.pago-datos .fila{ display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px; }
+.pago-datos .fila:last-child{ border-bottom:none; }
+.pago-datos .fila span{ color:var(--gris-soft); font-weight:600; }
+.pago-datos .fila b{ color:var(--blanco); font-weight:800; text-align:right; word-break:break-all; }
+.pago-nota{ font-size:11.5px; color:var(--gris-soft); margin:10px 0 0; line-height:1.45; }
+.pago-ok{ font-size:12.5px; color:var(--good); font-weight:800; min-height:16px; margin:6px 0 0; text-align:center; }
+.band-btn{
+  width:100%; background:var(--rojo); color:var(--blanco); border:none; border-radius:12px;
+  padding:15px 16px; font-size:13.5px; font-weight:900; letter-spacing:.05em; text-transform:uppercase;
+  font-family:inherit; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px;
+}
+.band-btn:active{ background:var(--rojo-oscuro); }
+.band-btn:disabled{ background:var(--surface-2); color:var(--gris-soft); cursor:default; }
+.band-msg{ text-align:center; font-size:12.5px; font-weight:700; color:#5CA85C; margin:10px 0 0; }
+.band-msg.err{ color:var(--danger); }
+.band-note{ text-align:center; font-size:11.5px; font-weight:700; color:var(--gris-soft); margin:9px 0 0; letter-spacing:.01em; }
+.band-note b{ color:var(--dorado); }
+.band-colors{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.band-chip{
+  flex:1 1 auto; display:flex; align-items:center; justify-content:center; gap:7px;
+  background:var(--surface); border:1.5px solid var(--line); border-radius:10px;
+  padding:10px 8px; font-size:12px; font-weight:800; letter-spacing:.02em; text-transform:uppercase;
+  color:var(--gris); font-family:inherit; cursor:pointer;
+}
+.band-chip .dot{ width:11px; height:11px; border-radius:50%; flex-shrink:0; border:1px solid rgba(255,255,255,.25); }
+.band-chip[data-active="1"]{ border-color:var(--dorado); color:var(--blanco); background:rgba(212,175,55,.12); }
+
+nav.days{ display:flex; gap:8px; overflow-x:auto; padding:16px 16px 4px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }  
+nav.days::-webkit-scrollbar{ display:none; }  
+nav.days button{ flex:0 0 auto; background:var(--surface); color:var(--gris); border:1.5px solid var(--line); border-radius:999px; padding:10px 16px; font-size:13px; font-weight:800; letter-spacing:.04em; cursor:pointer; white-space:nowrap; }  
+nav.days button.active{ background:var(--rojo); border-color:var(--rojo); color:var(--blanco); }  
+.progsel{ display:flex; gap:8px; padding:16px 16px 0; }
+.progbtn{ flex:1; background:var(--surface); color:var(--gris); border:1.5px solid var(--line); border-radius:10px; padding:11px 10px; font-size:12.5px; font-weight:800; letter-spacing:.02em; cursor:pointer; text-transform:uppercase; font-family:inherit; }
+.progbtn.active{ background:var(--dorado); border-color:var(--dorado); color:var(--negro); }
+
+main.daymain{ padding:8px 16px 0; }  
+.day-panel{ display:none; }  
+.day-panel.active{ display:block; }  
+.day-banner{ background:linear-gradient(120deg, var(--rojo-oscuro), var(--rojo)); border-radius:14px; padding:18px 20px; margin:10px 0 16px; }  
+.day-banner .num{ font-size:11px; font-weight:800; letter-spacing:.18em; color:rgba(255,255,255,.85); text-transform:uppercase; margin:0 0 4px; }  
+.day-banner h2{ font-size:22px; margin:0; }  
+.day-banner .focus{ font-size:13px; color:rgba(255,255,255,.9); margin:6px 0 0; font-weight:600; }  
+.warmup{ display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--dorado); border-radius:10px; padding:12px 14px; margin-bottom:16px; }  
+.warmup b{ display:block; color:var(--dorado); font-size:11px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:2px; }  
+.warmup span{ font-size:13.5px; color:var(--gris); font-weight:600; }  
+.exercise{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; position:relative; }  
+.exercise .badge{ position:absolute; top:-8px; left:-8px; width:26px; height:26px; border-radius:50%; background:var(--rojo); color:#fff; font-size:13px; font-weight:900; display:flex; align-items:center; justify-content:center; border:2px solid var(--negro); }  
+.exercise h3{ font-size:15px; margin:0 0 6px; line-height:1.25; }  
+.exercise .stats{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:6px; }  
+.exercise .stats span{ font-size:12.5px; font-weight:800; color:var(--rojo); background:rgba(227,6,19,.12); padding:3px 9px; border-radius:6px; letter-spacing:.02em; }  
+.exercise .tip{ font-size:12.5px; color:var(--gris-soft); font-style:italic; line-height:1.4; margin:0; }  
+.exercise .alt{ font-size:11.5px; color:var(--dorado); font-weight:700; margin:6px 0 0; }  
+.video-wrap{ margin:10px 0; }  
+.video-lbl{ display:block; font-size:10px; font-weight:800; color:var(--dorado); text-transform:uppercase; letter-spacing:.08em; margin-bottom:5px; }  
+.ex-video{ width:100%; max-height:420px; display:block; border-radius:10px; border:1px solid var(--line); background:#000; object-fit:cover; }  
+.cooldown{ background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px; margin:16px 0 4px; text-align:center; }  
+.cooldown b{ display:block; color:var(--dorado); font-size:11px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; }  
+.cooldown span{ font-size:13px; color:var(--gris); font-weight:600; }  
+.info-card{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:14px 16px 0; font-size:12.5px; color:var(--gris); line-height:1.55; }  
+.info-card b{ color:var(--dorado); }  
+footer.footer2{ text-align:center; padding:26px 20px 10px; margin-top:10px; border-top:1px solid var(--line); }  
+footer.footer2 .slogan{ font-size:13px; font-weight:800; color:var(--rojo); letter-spacing:.05em; margin:0 0 4px; }  
+footer.footer2 .name{ font-size:11px; font-weight:700; color:var(--gris-soft); letter-spacing:.12em; text-transform:uppercase; margin:0; }  
+  
+/* ===== ADMIN VIEW ===== */  
+.shell{ max-width:1180px; margin:0 auto; padding:28px 24px 80px; }  
+.masthead{ display:flex; align-items:center; gap:16px; margin-bottom:22px; }  
+.mark{ width:52px; height:52px; border-radius:50%; flex:none; overflow:hidden; border:2px solid var(--dorado); box-shadow:var(--shadow); }  
+.mark img{ width:100%; height:100%; object-fit:cover; }  
+.masthead h1{ font-size:21px; letter-spacing:.03em; }  
+.masthead h1 span{ color:var(--rojo); }  
+.masthead p{ margin:3px 0 0; color:var(--gris-soft); font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; }  
+.tabbar{ display:flex; gap:4px; padding:4px; margin-bottom:24px; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow-x:auto; }  
+.tabbtn{ appearance:none; border:none; background:transparent; cursor:pointer; padding:11px 18px; border-radius:10px; white-space:nowrap; font-weight:700; font-size:13.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--gris-soft); }  
+.tabbtn[aria-selected="true"]{ background:linear-gradient(135deg, var(--rojo), var(--rojo-oscuro)); color:var(--blanco); }  
+.panel2{ display:none; }  
+.panel2.active{ display:block; }  
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px; box-shadow:var(--shadow); }  
+.card + .card{ margin-top:18px; }  
+.card-head h2{ font-size:16px; letter-spacing:.03em; }  
+.card-head h2::before{ content:""; display:inline-block; width:4px; height:16px; background:var(--dorado); margin-right:9px; vertical-align:-2px; border-radius:2px; }  
+.card-sub{ color:var(--gris-soft); font-size:13px; margin:2px 0 16px; max-width:65ch; }  
+.twrap{ overflow-x:auto; border:1px solid var(--line); border-radius:12px; }  
+table{ width:100%; border-collapse:collapse; min-width:600px; }  
+thead th{ text-align:left; font-weight:700; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--gris-soft); background:var(--surface-2); padding:10px 12px; border-bottom:1px solid var(--line); position:sticky; top:0; }  
+tbody td{ padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:middle; }  
+tbody tr:last-child td{ border-bottom:none; }  
+tbody tr:hover{ background:var(--surface-2); }  
+td.num{ text-align:right; }  
+td[contenteditable]{ outline:none; border-radius:6px; }  
+td[contenteditable]:hover{ background:rgba(255,255,255,.03); }  
+td[contenteditable]:focus{ background:rgba(227,6,19,.08); box-shadow:inset 0 0 0 1.5px var(--rojo); }  
+input[type="text"]{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:var(--negro); border:1px solid var(--line); border-radius:8px; padding:8px 10px; width:100%; min-width:0; }  
+select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:var(--negro); border:1px solid var(--line); border-radius:8px; padding:8px 10px; width:100%; min-width:0; }  
+.addrow{ display:grid; grid-template-columns:1fr 1fr 1fr .8fr .8fr 1fr auto; gap:8px; padding:14px 16px; background:var(--surface-2); border-top:1px solid var(--line); }  
+.addrow label{ display:block; font-size:10px; color:var(--gris-soft); margin-bottom:3px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }  
+.addrow .btn{ align-self:end; }  
+@media (max-width:960px){ .addrow{ grid-template-columns:1fr 1fr; } }  
+.btn{ appearance:none; border:none; cursor:pointer; border-radius:10px; font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.03em; padding:11px 18px; }  
+.btn-primary{ background:linear-gradient(135deg, var(--rojo), var(--rojo-oscuro)); color:#fff; }  
+.iconbtn{ appearance:none; border:1px solid var(--line); background:var(--surface-2); color:var(--gris-soft); width:30px; height:30px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }  
+.iconbtn:hover{ color:var(--danger); border-color:var(--danger); }  
+.iconbtn svg{ width:15px; height:15px; }  
+.statrow{ display:flex; gap:14px; flex-wrap:wrap; margin-top:16px; }  
+.stat{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 16px; flex:1; min-width:150px; }  
+.stat .eyebrow{ display:block; margin-bottom:4px; font-weight:700; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--dorado); }  
+.stat .val{ font-weight:800; font-size:19px; }  
+.pill{ display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; padding:5px 11px; border-radius:999px; text-transform:uppercase; letter-spacing:.03em; white-space:nowrap; }  
+.pill.good{ background:var(--good-tint); color:var(--good); }  
+.pill.warn{ background:var(--warn-tint); color:var(--warn); }  
+.pill.danger{ background:var(--danger-tint); color:var(--danger); }  
+.pill .dot{ width:6px; height:6px; border-radius:50%; background:currentColor; }  
+.empty{ color:var(--gris-soft); font-size:13px; padding:18px; text-align:center; }  
+  
+.fab-admin{  
+ position:fixed; top:14px; right:14px; z-index:999;  
+ background:var(--rojo); color:#fff; border:none; border-radius:999px;  
+ padding:12px 18px; font-size:13px; font-weight:900; text-transform:uppercase;  
+ letter-spacing:.03em; cursor:pointer; box-shadow:0 4px 14px rgba(227,6,19,.5);  
+}  
+.fab-admin:active{ background:var(--rojo-oscuro); }  
+.hint2{ font-size:12px; color:var(--gris-soft); margin:10px 0 0; line-height:1.5; }  
+.hint2 b{ color:var(--dorado); }  
+</style>  
+  
+<div style="position:sticky;top:0;z-index:9999;background:#D4AF37;color:#0A0A0B;font:800 13px Arial,sans-serif;letter-spacing:.06em;text-align:center;padding:7px 10px">MODO PRUEBA · se guarda en la hoja "Pruebas ingresos", no en los registros reales</div>
+<div id="appRoot" artifact-local>
+  
+<!-- ===================== GATE (default view) ===================== -->  
+<div id="gate" class="gate">  
+ <div class="gate-card">  
+ <img class="gate-logo" id="gateLogoImg" alt="WGYMADNSPORT">  
+ <p class="gate-kicker">WGYMADNSPORT Tocopilla</p>  
+ <h2>Acceso a tu tarjeta virtual</h2>
+ <p class="gate-sub">Escribe tu nombre y apellido juntos, como está registrado en el gimnasio</p>  
+ <label class="gate-label" for="gateNombre">Nombre y apellido</label>  
+ <input type="text" id="gateNombre" class="gate-input" placeholder=""
+ autocomplete="off" autocapitalize="words" enterkeyhint="go">  
+ <button id="gateBtn" class="gate-btn">Entrar</button>  
+ <p id="gateError" class="gate-error" hidden>No encontramos ese nombre entre los socios registrados. Consulta en recepción.</p>  
+ </div>  
+</div>  
+
+<!-- ===================== CARD VIEW (tarjeta virtual) ===================== -->
+<div id="cardView" class="wrap" hidden>
+ <header class="masthead2">
+<script>window.WGYM_PRUEBA_INGRESOS = true;</script>
+ <img class="logo" id="cardLogoImg" alt="WGYMADNSPORT">
+ <p class="gymname">WGYMADNSPORT Tocopilla</p>
+ <h1>Tarjeta <span>Virtual</span></h1>
+ <p class="sub">tu acceso digital al gimnasio</p>
+ </header>
+ <div class="member-card" id="memberCard"></div>
+ <div class="salida-card" id="salidaCard" hidden></div>
+ <div class="pago-card" id="pagoCard" hidden></div>
+ <div class="evo-card" id="evoCard" hidden></div>
+ <div class="band-box">
+ <div class="band-colors" id="bandColors">
+ <button class="band-chip" type="button" data-color="Negra"><span class="dot" style="background:#2B2B2B"></span>Negra</button>
+ <button class="band-chip" type="button" data-color="Verde"><span class="dot" style="background:#5CA85C"></span>Verde</button>
+ <button class="band-chip" type="button" data-color="Morada"><span class="dot" style="background:#9B59D0"></span>Morada</button>
+ <button class="band-chip" type="button" data-color="Roja"><span class="dot" style="background:#E30613"></span>Roja</button>
+ <button class="band-chip" type="button" data-color="Amarilla"><span class="dot" style="background:#E8C547"></span>Amarilla</button>
+ </div>
+ <button class="band-btn" id="bandBtn" type="button" disabled>
+ <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4c0 4 3 5 3 8s-3 4-3 8"></path><path d="M18 4c0 4-3 5-3 8s3 4 3 8"></path></svg>
+ Pedir banda elástica
+ </button>
+ <p class="band-msg" id="bandMsg" hidden></p>
+ <p class="band-note">Recuerda <b>devolver la banda en recepción</b> al terminar de usarla.</p>
+ </div>
+ <div class="band-box">
+ <button class="band-btn" id="lockBtn" type="button">
+ <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+ Pedir candado
+ </button>
+ <p class="band-msg" id="lockMsg" hidden></p>
+ <p class="band-note">Deja tu <b>llave en recepción</b> mientras entrenas y retírala al salir.</p>
+ </div>
+ <footer class="footer2">
+ <p class="slogan">ENTRENA CON ACTITUD</p>
+ <p class="name">WGYMADNSPORT · Tocopilla</p>
+ </footer>
+</div>
+
+</div>
+
+<script src="pago-datos.js?v=1"></script>
+<script>  
+const LOGO_B64 = "assets/logo-oficial.webp";
+/* Se completa con el link de "Implementar como app web" de Google Apps Script. */
+const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
+const MEDICIONES_URL = "https://wgymadnsport-mediciones.encaladasara363.chatgpt.site/api/mediciones";
+</script>  
+<script>  
+(function(){  
+ "use strict";  
+  
+ /* ---------- shared helpers ---------- */  
+ /* Dates are entered and displayed as DD-MM-AAAA everywhere in this app. */  
+ function todayISO(){  
+ var d = new Date();  
+ return String(d.getDate()).padStart(2,"0") + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + d.getFullYear();  
+ }  
+ function parseDMY(str){  
+ if(!str) return null;  
+ var m = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(String(str).trim());  
+ if(!m) return null;  
+ var d = new Date(Number(m[3]), Number(m[2])-1, Number(m[1]));  
+ if(isNaN(d)) return null;  
+ return d;  
+ }  
+ function clp(n){
+ n = Math.round(Number(n)||0);
+ return "$" + n.toLocaleString("es-CL");
+ }
+ function normName(s){
+ return (s||"").toString().trim().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ");
+ }
+
+ /* ═══ Evolución física (Omron) ═══════════════════════════════════════
+    mediciones.json es un archivo aparte de socios.json: solo trae a los
+    socios que efectivamente se miden. Si un socio no aparece ahí, la
+    tarjeta simplemente no muestra esta sección — nada se rompe para el
+    resto. Rangos de referencia estándar Omron (ver control-fisico.html). */
+ function grupoEdad(edad){
+ var e = Number(edad) || 30;
+ if(e < 40) return "20-39";
+ if(e < 60) return "40-59";
+ return "60-79";
+ }
+ var TABLA_GRASA = {
+ F: { "20-39":[21,33,39], "40-59":[23,34,40], "60-79":[24,36,42] },
+ M: { "20-39":[8,20,25],  "40-59":[11,22,28], "60-79":[13,25,30] }
+ };
+ function bandaDesdeCortes(valor, cortes){
+ var v = Number(valor);
+ if(valor == null || isNaN(v)) return null;
+ if(v < cortes[0]) return "low";
+ if(v < cortes[1]) return "normal";
+ if(v < cortes[2]) return "high";
+ return "veryhigh";
+ }
+ function bandaGrasa(sexo, edad, valor){
+ return bandaDesdeCortes(valor, TABLA_GRASA[sexo === "M" ? "M" : "F"][grupoEdad(edad)]);
+ }
+ function bandaImc(valor){ return bandaDesdeCortes(valor, [18.5, 25, 30]); }
+ var ETIQUETA_BANDA = { low:"BAJO", normal:"NORMAL", high:"ALTO", veryhigh:"MUY ALTO" };
+ function chipEvo(prefijo, banda){
+ if(!banda) return "";
+ return '<span class="evo-chip '+banda+'"><span class="dot"></span>'+prefijo+ETIQUETA_BANDA[banda]+'</span>';
+ }
+ /* Meta motivacional: usa el nivel "Fitness" de la tabla ACE (la misma
+ de control-fisico.html) como aspiración, sin tocar la clasificación
+ oficial del Omron que ya se muestra arriba. */
+ var ACE_FITNESS_MAX = { F:24, M:17 };
+ function metaFitness(sexo, grasa){
+ if(grasa == null) return "";
+ var limite = ACE_FITNESS_MAX[sexo === "M" ? "M" : "F"];
+ if(grasa <= limite){
+ return '<div class="evo-meta"><p class="mt">Meta Fitness</p>' +
+ '<p class="mtxt">Tu % de grasa ya está en nivel <b>FITNESS</b> — uno de los mejores rangos que existen. ¡Sigue así!</p></div>';
+ }
+ var falta = Math.round((grasa - limite) * 10) / 10;
+ return '<div class="evo-meta"><p class="mt">Tu próxima meta</p>' +
+ '<p class="mtxt">Para llegar a nivel <b>FITNESS</b> te faltan <b>'+falta+' puntos</b>: bajar tu % de grasa de '+grasa+'% a '+limite+'% o menos.</p></div>';
+ }
+ /* Peso saludable para tu estatura y % de grasa de referencia -- lo que
+ más preguntan los socios en el mesón. La estatura no se guarda en
+ ningún lado (mediciones.json solo trae peso/grasa/IMC): se despeja del
+ propio IMC (IMC = peso / altura²), así que sale exacta sin pedirle a
+ nadie un dato nuevo. El % de grasa de referencia es el promedio real
+ medido en gente chilena físicamente activa (estudio CHIREF, Rodríguez
+ et al. 2010 -- ver la base de conocimiento técnico del proyecto), no
+ un número inventado. La muestra de ese estudio tiene 20 a 29 años: fuera
+ de ese rango se avisa que es una referencia direccional, no una
+ medición hecha en su mismo grupo de edad. */
+ var GRASA_REF_CHIREF = { F:29.6, M:21.6 };
+ function rangoSaludableHTML(sexo, altura, fueraDeMuestra){
+ var pesoMin = Math.round(18.5 * altura * altura * 10) / 10;
+ var pesoMax = Math.round(24.9 * altura * altura * 10) / 10;
+ var esHombre = sexo === "M";
+ var grasaRef = GRASA_REF_CHIREF[esHombre ? "M" : "F"];
+ return '<p class="mt">Tu rango saludable</p>' +
+ '<p class="mtxt">Según tu estatura (≈'+(Math.round(altura*100)/100)+' m), ' +
+ 'un peso dentro de rango normal va de <b>'+pesoMin+' a '+pesoMax+' kg</b>.</p>' +
+ '<p class="mtxt">En '+(esHombre?'hombres físicamente activos':'mujeres físicamente activas')+' como tú, el % de grasa promedio ' +
+ 'medido es <b>'+grasaRef+'%</b> (estudio chileno CHIREF' +
+ (fueraDeMuestra ? ', referencia general' : '') + ').</p>' +
+ (fueraDeMuestra ? '<p class="mtxt mtxt-nota">Ese estudio midió a personas de 20 a 29 años, así que acá se usa como guía general, no como una medición hecha en tu mismo grupo de edad.</p>' : '');
+ }
+ /* Para socios con medición: la estatura no se guarda en ningún lado
+ (mediciones.json solo trae peso/grasa/IMC), así que se despeja del
+ propio IMC (IMC = peso / altura²) y sale exacta sin pedir nada nuevo. */
+ function rangoSaludable(sexo, edad, peso, imc){
+ if(peso == null || !imc) return "";
+ var altura = Math.sqrt(peso / imc);
+ var fueraDeMuestra = Number(edad) < 20 || Number(edad) > 29;
+ return '<div class="evo-ref">' + rangoSaludableHTML(sexo, altura, fueraDeMuestra) + '</div>';
+ }
+ /* Para socios SIN medición (la mayoría): no hay peso/estatura guardados
+ en ningún lado público, así que se le pide al socio que los escriba él
+ mismo la primera vez -- igual que la ficha de IMC de las apps de rutina
+ (entrenar-*.html): nunca se guardan en el repo, solo en el localStorage
+ de SU teléfono, y se recuerdan la próxima vez que abra su tarjeta. */
+ var CLAVE_RANGO = "wgym_rango_datos_v1";
+ function llaveSocioRango_(s){
+ return (String(s.nombre||"").trim() + "|" + String(s.apellido||"").trim()).toUpperCase();
+ }
+ function leerRangoGuardado(s){
+ try{
+ var todo = JSON.parse(localStorage.getItem(CLAVE_RANGO) || "{}");
+ return todo[llaveSocioRango_(s)] || null;
+ }catch(e){ return null; }
+ }
+ function guardarRangoDatos(s, datos){
+ try{
+ var todo = JSON.parse(localStorage.getItem(CLAVE_RANGO) || "{}");
+ todo[llaveSocioRango_(s)] = datos;
+ localStorage.setItem(CLAVE_RANGO, JSON.stringify(todo));
+ }catch(e){}
+ }
+ function cajaRangoAuto(s, box, editando){
+ var guardado = !editando && leerRangoGuardado(s);
+ if(guardado){
+ var altura = Number(guardado.estatura) / 100;
+ box.innerHTML = '<div class="evo-ref">' +
+ rangoSaludableHTML(guardado.sexo, altura, false) +
+ '<button type="button" class="evo-ref-editar" id="evoRefEditar">Editar mis datos</button>' +
+ '</div>';
+ var btnEd = box.querySelector("#evoRefEditar");
+ if(btnEd) btnEd.addEventListener("click", function(){ cajaRangoAuto(s, box, true); });
+ return;
+ }
+ box.innerHTML = '<div class="evo-ref"><p class="mt">Tu rango saludable</p>' +
+ '<p class="mtxt">Escribe tu peso y tu estatura para ver tu rango de peso normal y el % de grasa de referencia. Solo se guarda en tu teléfono.</p>' +
+ '<div class="evo-ref-sexo">' +
+ '<button type="button" data-sexo="F" id="evoRefF">Mujer</button>' +
+ '<button type="button" data-sexo="M" id="evoRefM">Hombre</button>' +
+ '</div>' +
+ '<div class="evo-ref-campo"><label>Peso (kg)</label><input type="number" inputmode="decimal" id="evoRefPeso" placeholder="—"></div>' +
+ '<div class="evo-ref-campo"><label>Estatura (cm)</label><input type="number" inputmode="decimal" id="evoRefEstatura" placeholder="—"></div>' +
+ '<button type="button" class="evo-ref-btn" id="evoRefCalcular">Ver mi rango</button>' +
+ '<p class="evo-ref-aviso" id="evoRefAviso"></p>' +
+ '</div>';
+ var sexoElegido = (guardado && guardado.sexo) || null;
+ var btnF = box.querySelector("#evoRefF"), btnM = box.querySelector("#evoRefM");
+ function pintarSexo(){
+ btnF.classList.toggle("on", sexoElegido === "F");
+ btnM.classList.toggle("on", sexoElegido === "M");
+ }
+ btnF.addEventListener("click", function(){ sexoElegido = "F"; pintarSexo(); });
+ btnM.addEventListener("click", function(){ sexoElegido = "M"; pintarSexo(); });
+ pintarSexo();
+ if(guardado){
+ box.querySelector("#evoRefPeso").value = guardado.peso;
+ box.querySelector("#evoRefEstatura").value = guardado.estatura;
+ }
+ box.querySelector("#evoRefCalcular").addEventListener("click", function(){
+ var aviso = box.querySelector("#evoRefAviso");
+ var peso = Number(box.querySelector("#evoRefPeso").value);
+ var estatura = Number(box.querySelector("#evoRefEstatura").value);
+ if(!sexoElegido){ aviso.textContent = "Elige si eres mujer u hombre."; return; }
+ if(!peso || peso < 25 || peso > 300){ aviso.textContent = "Escribe un peso válido en kg."; return; }
+ if(!estatura || estatura < 100 || estatura > 230){ aviso.textContent = "Escribe tu estatura en cm (ej: 165)."; return; }
+ guardarRangoDatos(s, { sexo:sexoElegido, peso:peso, estatura:estatura });
+ cajaRangoAuto(s, box, false);
+ });
+ }
+ function cargarMediciones(){
+ return fetch("mediciones.json?v=" + Date.now(), { cache:"no-store" })
+ .then(function(r){ return r.ok ? r.json() : null; })
+ .catch(function(){ return null; });
+ }
+ var medicionesPromise = cargarMediciones();
+ /* Un celular que vuelve a esta pestaña ya abierta (cambió de app y volvió)
+    nunca vuelve a pedir los datos por su cuenta: se queda con la foto del
+    momento en que la abrió, aunque se haya cargado una medición nueva hace
+    rato. "pageshow" se dispara también al restaurar la pestaña desde el
+    caché del navegador, así que ahí se repite todo de nuevo. */
+ window.addEventListener("pageshow", function(){
+ medicionesPromise = cargarMediciones();
+ if(socioActual) renderEvolucion(socioActual);
+ });
+ function socioMedido(data, s){
+ if(!data || !Array.isArray(data.socios) || !s.medid) return null;
+ return data.socios.filter(function(m){ return m.id === s.medid; })[0] || null;
+ }
+ /* La hoja compartida del Apps Script no siempre trae el medId: al fusionar
+    una medición nueva por chat, el código queda solo en socios.json. Si la
+    ficha llega sin medid, se busca ahí por nombre y apellido. */
+ function medIdDeSociosJson_(s){
+ return fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
+ .then(function(r){ return r.json(); })
+ .then(function(d){
+ var x = (d && d.socios || []).filter(function(m){
+ return normName(m.n) === normName(s.nombre) && normName(m.a) === normName(s.apellido);
+ })[0];
+ return (x && x.medId) || medIdEstable_(s.nombre,s.apellido);
+ })["catch"](function(){ return medIdEstable_(s.nombre,s.apellido); });
+ }
+ function medIdEstable_(n,a){
+ var texto=normName(n+" "+a),h=2166136261;
+ for(var i=0;i<texto.length;i++) h=Math.imul(h^texto.charCodeAt(i),16777619);
+ return ("00000000"+(h>>>0).toString(16)).slice(-8);
+ }
+ /* PIN opcional de las mediciones (10/2026). Cada socio puede proteger su
+   evolución física con un PIN de 4 dígitos; quien no lo activa sigue viendo
+   todo solo con su nombre. El PIN lo revisa el servicio de mediciones (no
+   esta página): si un medid tiene PIN, el servicio responde
+   {protegido:true} sin datos, salvo que llegue el PIN correcto
+   (X-Wgym-Pin) o la clave de mediciones del mesón (X-Wgym-Clave), que la
+   dueña ya tiene guardada en sus equipos. Si el servicio todavía no
+   maneja PIN (no responde pinSoportado), todo funciona como antes. */
+var CLAVE_MED_ADMIN = "wgym_clave_mediciones_v1";
+function pinGuardado_(medid){ try{ return localStorage.getItem("wgym_pin_med_"+medid) || ""; }catch(e){ return ""; } }
+function guardarPin_(medid, pin){ try{ if(pin) localStorage.setItem("wgym_pin_med_"+medid, pin); else localStorage.removeItem("wgym_pin_med_"+medid); }catch(e){} }
+function claveAdminMed_(){ try{ return localStorage.getItem(CLAVE_MED_ADMIN) || ""; }catch(e){ return ""; } }
+function pedirMediciones_(medid, cabeceras){
+ return fetch(MEDICIONES_URL+"?medid="+encodeURIComponent(medid)+"&_="+Date.now(),
+  {cache:"no-store", headers:cabeceras||{}})
+ .then(function(r){ return r.json()["catch"](function(){ return null; }).then(function(j){ return r.ok ? j : (j && j.error ? j : null); }); })
+ ["catch"](function(){ return null; });
+}
+function leerMedicionesEnVivo_(medid){
+ if(!medid) return Promise.resolve(null);
+ /* Primero sin cabeceras (así funciona igual con el servicio antiguo). */
+ return pedirMediciones_(medid).then(function(res){
+  if(!res || !res.protegido || res.socio) return res;
+  var pin = pinGuardado_(medid), clave = claveAdminMed_(), cab = {};
+  if(pin) cab["X-Wgym-Pin"] = pin;
+  if(clave) cab["X-Wgym-Clave"] = clave;
+  if(!pin && !clave) return res;
+  return pedirMediciones_(medid, cab).then(function(r2){
+   if(r2 && r2.ok && r2.socio) return r2;
+   if(r2 && r2.error === "pin incorrecto") guardarPin_(medid, "");
+   return { ok:true, protegido:true, pinSoportado:true, error:(r2 && r2.error) || "" };
+  });
+ });
+}
+function cajaPinBloqueo_(error){
+ var msg = error === "pin incorrecto" ? "PIN incorrecto. Inténtalo de nuevo." :
+           error === "bloqueado" ? "Demasiados intentos. Espera 15 minutos y vuelve a intentarlo." :
+           error ? "No se pudo comprobar el PIN. Revisa tu conexión." : "";
+ return '<p class="evo-kicker">Tu evolución física</p>' +
+  '<div class="evo-pin"><p class="mt">🔒 Mediciones protegidas</p>' +
+  '<p>Escribe tu PIN de 4 dígitos para ver tu evolución. Este celular lo recordará.</p>' +
+  '<input type="password" inputmode="numeric" maxlength="4" autocomplete="off" id="evoPinIn" placeholder="••••">' +
+  '<p class="err" id="evoPinErr">'+msg+'</p>' +
+  '<button type="button" id="evoPinVer">Ver mis mediciones</button>' +
+  '<p style="margin:8px 0 0;font-size:11.5px;color:var(--gris-soft)">¿Olvidaste tu PIN? Pide en recepción que lo quiten y crea uno nuevo.</p></div>';
+}
+function cajaPinCrear_(){
+ return '<div class="evo-pin" id="evoPinCrear"><p class="mt">🔒 Proteger mis mediciones (opcional)</p>' +
+  '<p>Si creas un PIN, nadie más podrá ver tu peso ni tu % de grasa escribiendo tu nombre. Tu QR de ingreso y tu rutina siguen igual, sin PIN.</p>' +
+  '<div id="evoPinForm" hidden>' +
+  '<input type="password" inputmode="numeric" maxlength="4" autocomplete="off" id="evoPinN1" placeholder="PIN (4 dígitos)">' +
+  '<input type="password" inputmode="numeric" maxlength="4" autocomplete="off" id="evoPinN2" placeholder="Repite el PIN">' +
+  '<p class="err" id="evoPinErr2"></p></div>' +
+  '<button type="button" id="evoPinCrearBtn">Crear PIN</button></div>';
+}
+function conectarPinBloqueo_(box, s){
+ var boton = box.querySelector("#evoPinVer"), campo = box.querySelector("#evoPinIn");
+ function enviar(){
+  var pin = campo.value.trim();
+  if(!/^\d{4}$/.test(pin)){ box.querySelector("#evoPinErr").textContent = "El PIN tiene 4 números."; return; }
+  guardarPin_(s.medid, pin); boton.disabled = true; boton.textContent = "Revisando...";
+  renderEvolucion(s);
+ }
+ boton.addEventListener("click", enviar);
+ campo.addEventListener("keydown", function(e){ if(e.key === "Enter") enviar(); });
+}
+function conectarPinCrear_(box, s){
+ var boton = box.querySelector("#evoPinCrearBtn"), form = box.querySelector("#evoPinForm"), err = box.querySelector("#evoPinErr2");
+ boton.addEventListener("click", function(){
+  if(form.hidden){ form.hidden = false; boton.textContent = "Guardar PIN"; box.querySelector("#evoPinN1").focus(); return; }
+  var a = box.querySelector("#evoPinN1").value.trim(), b = box.querySelector("#evoPinN2").value.trim();
+  if(!/^\d{4}$/.test(a)){ err.textContent = "El PIN debe tener 4 números."; return; }
+  if(a !== b){ err.textContent = "Los dos PIN no coinciden."; return; }
+  boton.disabled = true; boton.textContent = "Guardando..."; err.textContent = "";
+  fetch(MEDICIONES_URL+"/pin", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ medid:s.medid, pin:a }) })
+  .then(function(r){ return r.json(); })
+  .then(function(r){
+   if(!r || !r.ok) throw Error(r && r.error || "no se pudo guardar");
+   guardarPin_(s.medid, a); renderEvolucion(s);
+  })["catch"](function(e){
+   err.textContent = e.message === "ya tiene pin" ? "Ya tienes un PIN. Si lo olvidaste, pide en recepción que lo quiten." : "No se pudo guardar el PIN: " + e.message;
+   boton.disabled = false; boton.textContent = "Guardar PIN";
+  });
+ });
+}
+function unirMediciones_(historicas,nuevas){
+ if(!historicas) return nuevas;
+ if(!nuevas) return historicas;
+ var porFecha={};
+ (historicas.registros||[]).forEach(function(x){porFecha[x.fecha]=x;});
+ (nuevas.registros||[]).forEach(function(x){porFecha[x.fecha]=x;});
+ return {id:nuevas.id||historicas.id,sexo:nuevas.sexo||historicas.sexo,
+  estatura:nuevas.estatura||historicas.estatura,
+  registros:Object.keys(porFecha).sort().map(function(f){return porFecha[f];})};
+}
+function renderEvolucion(s){
+ var medidPromise=s.medid?Promise.resolve(s.medid):medIdDeSociosJson_(s);
+ medidPromise.then(function(medid){
+  if(medid) s.medid=medid;
+  return Promise.all([medicionesPromise,leerMedicionesEnVivo_(medid)]);
+ }).then(function(res){
+ var box=document.getElementById("evoCard");
+ var vivo=res[1];
+ if(vivo&&vivo.protegido&&!vivo.socio){
+  box.hidden=false; box.innerHTML=cajaPinBloqueo_(vivo.error); conectarPinBloqueo_(box,s); return;
+ }
+ /* Con PIN activo no se mezcla el archivo público antiguo. */
+ var historicas=vivo&&vivo.protegido?null:socioMedido(res[0],s);
+ var nuevas=vivo&&vivo.ok?vivo.socio:null;
+ var m=unirMediciones_(historicas,nuevas);
+ if(!m || !m.registros || !m.registros.length){
+ box.hidden = false;
+ cajaRangoAuto(s, box, false);
+ return;
+ }
+ var regs = m.registros.slice();
+ var ultimo = regs[regs.length - 1];
+ function dmy(iso){ var p = String(iso||"").split("-"); return p.length===3 ? p[2]+"-"+p[1]+"-"+p[0] : (iso||"—"); }
+ var bg = bandaGrasa(m.sexo, ultimo.edad, ultimo.grasa);
+ var bi = bandaImc(ultimo.imc);
+ /* Todo el historial, del más reciente al más viejo — ningún mes se
+ pierde, aunque el socio ya lleve un año midiéndose. */
+ var historial = regs.slice(0, -1).reverse().map(function(r){
+ return '<div class="evo-row"><span>'+dmy(r.fecha)+'</span><b>'+
+ (r.peso!=null?r.peso+" kg · ":"")+(r.grasa!=null?r.grasa+"% grasa · ":"")+(r.imc!=null?"IMC "+r.imc:"")+
+ '</b></div>';
+ }).join("");
+ box.hidden = false;
+ box.innerHTML =
+ '<p class="evo-kicker">Tu evolución física</p>' +
+ '<div class="evo-actual">' +
+ (ultimo.peso!=null ? '<div class="evo-stat"><div class="n">'+ultimo.peso+'</div><span class="l">Peso (kg)</span></div>' : '') +
+ (ultimo.grasa!=null ? '<div class="evo-stat"><div class="n">'+ultimo.grasa+'%</div><span class="l">Grasa</span>'+chipEvo("",bg)+'</div>' : '') +
+ (ultimo.imc!=null ? '<div class="evo-stat"><div class="n">'+ultimo.imc+'</div><span class="l">IMC</span>'+chipEvo("",bi)+'</div>' : '') +
+ '</div>' +
+ '<p class="evo-fecha">Última medición: '+dmy(ultimo.fecha)+'</p>' +
+ rangoSaludable(m.sexo, ultimo.edad, ultimo.peso, ultimo.imc) +
+ metaFitness(m.sexo, ultimo.grasa) +
+ (historial ? '<p class="evo-hist-tit">Historial completo ('+regs.length+' mediciones)</p><div class="evo-hist">'+historial+'</div>' : '') +
+ (vivo&&vivo.pinSoportado ? (vivo.protegido ? '<p class="evo-pin-ok">🔒 Tus mediciones están protegidas con PIN.</p>' : cajaPinCrear_()) : '');
+ if(vivo&&vivo.pinSoportado&&!vivo.protegido) conectarPinCrear_(box,s);
+ });
+ }
+
+ document.getElementById("gateLogoImg").src = LOGO_B64;
+ document.getElementById("cardLogoImg").src = LOGO_B64;
+  
+ /* La ficha de cada socio llega en vivo desde el Apps Script compartido
+    (cargarSociosTarjeta más abajo) — ya no hay tabla local de respaldo. */
+ function dosDigitos(n){ return (n < 10 ? "0" : "") + n; }
+ function fechaDeSerial(fv){
+ var d = new Date(Date.UTC(1899, 11, 30) + Number(fv) * 86400000);
+ return dosDigitos(d.getUTCDate()) + "-" + dosDigitos(d.getUTCMonth() + 1) +
+ "-" + d.getUTCFullYear();
+ }
+ function estadoDe(vencimiento){
+ var venc = parseDMY(vencimiento);  
+ if(!venc) return {cls:"good", txt:"Al día"};  
+ var hoy = parseDMY(todayISO());  
+ var diffDays = (venc - hoy) / 86400000;  
+ if(diffDays < 0) return {cls:"danger", txt:"Vencido"};  
+ if(diffDays <= 1) return {cls:"warn", txt:"Vence pronto"};  
+ return {cls:"good", txt:"Al día"};  
+ }  
+ function escapeHtml(s){
+ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
+ }
+
+ /* ---------- gate: find socio (no vencimiento check — la tarjeta nunca bloquea) ---------- */
+ /* Antes se le preguntaba al Apps Script por UNA ficha a la vez, probando
+    cada corte posible de nombre/apellido uno por uno -- con mala señal
+    cada intento sumaba varios segundos, y con nombres compuestos hacían
+    falta dos o tres consultas seguidas antes de acertar, así que entrar
+    se sentía lento o pegado. Ahora se baja la lista completa UNA sola
+    vez apenas se abre la página (igual que ya hacen control.html y
+    pantalla.html con listarSocios -- el mismo dato sin RUT que ya es
+    público hoy en socios.json, así que esto no expone nada nuevo) y la
+    búsqueda de ahí en más es instantánea, contra esa copia en memoria:
+    no hay una consulta nueva por cada corte de nombre que se prueba. */
+ function cargarSociosTarjeta(){
+ return new Promise(function(resolve){
+ if(!CHECKIN_URL){ resolve([]); return; }
+ var cb_ = "wgymSociosTarjeta_" + Date.now();
+ var terminado = false;
+ function terminar(lista){
+ if(terminado) return; terminado = true;
+ clearTimeout(reloj); delete window[cb_]; script.remove();
+ resolve(lista);
+ }
+ /* Con mala señal el <script src> nunca dispara onerror -- se queda
+ cargando para siempre. Con este límite, a los 12 s se da por vacía
+ y el login cae al aviso de "no encontramos" en vez de quedar pegado. */
+ var reloj = setTimeout(function(){ terminar([]); }, 12000);
+ window[cb_] = function(data){
+ terminar(data && Array.isArray(data.socios) ? data.socios : []);
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=listarSocios&callback=" + cb_ + "&_=" + Date.now();
+ script.onerror = function(){ terminar([]); };
+ document.body.appendChild(script);
+ });
+ }
+ var sociosTarjetaPromise = cargarSociosTarjeta();
+ /* Si vuelve a esta pestaña después de un rato (cambió de app y volvió),
+    trae la lista de nuevo por si hubo una renovación mientras tanto. */
+ window.addEventListener("pageshow", function(){ sociosTarjetaPromise = cargarSociosTarjeta(); });
+ /* El socio escribe todo junto en un solo casillero, así que hay que adivinar
+    dónde termina el nombre y empieza el apellido. Se prueban todos los cortes,
+    porque los hay compuestos de los dos lados: ANA MARIA GONZALEZ tiene el
+    nombre corto y el apellido largo, y MARIA JOSE OBREQUE al revés. */
+ function candidatosDeTexto_(texto){
+ var palabras = String(texto || "").trim().split(/\s+/).filter(Boolean);
+ var candidatos = [];
+ if(!palabras.length) return candidatos;
+ if(palabras.length === 1){ candidatos.push([palabras[0], palabras[0]]); return candidatos; }
+ var i, j;
+ for(i = 1; i < palabras.length; i++){
+ candidatos.push([palabras.slice(0, i).join(" "), palabras.slice(i).join(" ")]);
+ }
+ /* Hay gente que lo escribe al revés, primero el apellido. */
+ for(j = 1; j < palabras.length; j++){
+ candidatos.push([palabras.slice(j).join(" "), palabras.slice(0, j).join(" ")]);
+ }
+ candidatos.push([palabras[0], palabras.slice(1).join(" ")]);
+ return candidatos;
+ }
+ function buscarEnLista_(lista, candidatos){
+ for(var i = 0; i < candidatos.length; i++){
+ var nombre = normName(candidatos[i][0]), apellido = normName(candidatos[i][1]);
+ for(var j = 0; j < lista.length; j++){
+ if(normName(lista[j].n) === nombre && normName(lista[j].a) === apellido) return lista[j];
+ }
+ }
+ return null;
+ }
+ /* Respaldo: si el socio no aparece en la hoja del Apps Script (no quedó
+    cargado ahí, o la hoja no respondió a tiempo con mala señal), se busca
+    en socios.json, la planilla publicada del sitio (sin RUT). Así un socio
+    vigente nunca queda afuera de su tarjeta por un problema de la hoja. */
+ function sociosJsonComoApi_(){
+ return fetch("socios.json?v=" + Date.now(), { cache:"no-store" })
+ .then(function(r){ return r.json(); })
+ .then(function(d){
+ return (d && d.socios || []).map(function(s){
+ return { n:s.n, a:s.a, plan:s.plan, monto:s.monto, fv:s.fv, medid:s.medId || "" };
+ });
+ })["catch"](function(){ return []; });
+ }
+ function findSocioJunto(texto, cb){
+ var candidatos = candidatosDeTexto_(texto);
+ if(!candidatos.length){ cb(null); return; }
+ sociosTarjetaPromise.then(function(lista){
+ var s = buscarEnLista_(lista, candidatos);
+ if(s){ cb(s); return; }
+ sociosJsonComoApi_().then(function(lista2){ cb(buscarEnLista_(lista2, candidatos)); });
+ });
+ }
+ function socioApiATarjeta_(s){
+ return { nombre:s.n, apellido:s.a, rut:"Sin Rut", plan:s.plan, monto:Number(s.monto)||0,
+ vencimiento:fechaDeSerial(s.fv), tieneRutina:false, medid:s.medid || "" };
+ }
+ /* El plan por turno da 14 días de gimnasio al mes, no un mes corrido.
+    El celular del socio se acuerda de los días en que abrió su tarjeta con
+    el QR, que es justo cuando entra. La cuenta buena la lleva el mostrador;
+    esta es para que el socio sepa cómo va. */
+ var DIAS_TURNO = 14;
+ var DIAS_SEMANA = 3;
+ /* Tres por semana por cuatro semanas. Es el tope que vale: si una semana
+    viene menos, esos días le quedan a favor para las siguientes. */
+ var DIAS_MES_3X = 12;
+ var CLAVE_DIAS = "wgym_dias_v1";
+ function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
+ function esSemanal(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
+ function llaveDe(s){ return (s.nombre + "|" + s.apellido).toUpperCase(); }
+ function leerDias(){
+ try{ return JSON.parse(localStorage.getItem(CLAVE_DIAS) || "{}") || {}; }catch(e){ return {}; }
+ }
+ function isoDeHoy(){
+ var d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+ }
+ function aISO(f){
+ return f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0");
+ }
+ /* ── Desde cuándo le corre el mes ─────────────────────────────────────
+    Antes el mes se adivinaba restándole un mes al vencimiento, y el primer
+    día caía justo en el corte y no le contaba: al socio nuevo su tarjeta le
+    decía "día 0 de 12". Ahora la tarjeta se acuerda de la fecha con la que
+    lo vio la última vez: si cambió, es que le renovaron, y su mes nuevo le
+    empieza el día en que abre la tarjeta -- que es el día en que vuelve al
+    gimnasio. La primera vez de todas se usa el mes hacia atrás, contando
+    ese día. */
+ var CLAVE_CICLOS = "wgym_ciclo_socio_v1";
+ function leerCiclos(){
+ try{ return JSON.parse(localStorage.getItem(CLAVE_CICLOS) || "{}") || {}; }catch(e){ return {}; }
+ }
+ function mesAtrasDe(v){
+ var dia = v.getDate();
+ var f = new Date(v.getFullYear(), v.getMonth() - 1, 1);
+ var ultimo = new Date(f.getFullYear(), f.getMonth() + 1, 0).getDate();
+ f.setDate(Math.min(dia, ultimo));
+ return aISO(f);
+ }
+ function inicioCiclo(s, v){
+ var todo = leerCiclos(), k = llaveDe(s), c = todo[k], venc = aISO(v);
+ if(c && c.v === venc && c.desde) return c.desde;
+ var hoy = isoDeHoy();
+ var desde = (c && hoy <= venc) ? hoy : mesAtrasDe(v);
+ if(desde > venc) desde = mesAtrasDe(v);
+ todo[k] = { v:venc, desde:desde };
+ try{ localStorage.setItem(CLAVE_CICLOS, JSON.stringify(todo)); }catch(e){}
+ return desde;
+ }
+ /* Los dos planes se pagan por mes; lo que cambia es cómo se reparten los
+    días: el de turno da 14 para todo el mes que está pagando, y el de tres
+    veces da 3 por semana, de lunes a domingo. */
+ function reglaDe(s){
+ if(esTurno(s)){
+ var v = parseDMY(s.vencimiento);
+ if(!v) return null;
+ return { tope:DIAS_TURNO, ini:inicioCiclo(s, v), fin:aISO(v),
+ cuando:"este mes", suPlan:"tu plan por turno", semana:null };
+ }
+ if(esSemanal(s)){
+ var h = new Date(); h.setHours(0,0,0,0);
+ var lun = new Date(h); lun.setDate(lun.getDate() - ((lun.getDay() + 6) % 7));
+ var dom = new Date(lun); dom.setDate(dom.getDate() + 6);
+ /* Los 12 días se cuentan contra el mes que pagó, no contra la semana. */
+ var v = parseDMY(s.vencimiento);
+ if(!v) return null;
+ return { tope:DIAS_MES_3X, ini:inicioCiclo(s, v), fin:aISO(v),
+ cuando:"este mes", suPlan:"tu plan de 3 veces por semana",
+ semana:{ ini:aISO(lun), fin:aISO(dom), tope:DIAS_SEMANA } };
+ }
+ return null;
+ }
+ function anotarDia(s){
+ if(!esTurno(s) && !esSemanal(s)) return;
+ try{
+ var todo = leerDias(), k = llaveDe(s);
+ if(!todo[k]) todo[k] = {};
+ todo[k][isoDeHoy()] = 1;
+ localStorage.setItem(CLAVE_DIAS, JSON.stringify(todo));
+ }catch(e){}
+ }
+ function contarEntre(s, ini, fin){
+ var dias = leerDias()[llaveDe(s)] || {}, n = 0;
+ for(var d in dias){
+ if(!Object.prototype.hasOwnProperty.call(dias, d)) continue;
+ if(d >= ini && d <= fin) n++;   /* el primer día del mes también cuenta */
+ }
+ return n;
+ }
+ function diasUsados(s){
+ var c = reglaDe(s);
+ return c ? contarEntre(s, c.ini, c.fin) : 0;
+ }
+ function textoTurno(s){
+ var c = reglaDe(s);
+ if(!c) return null;
+ var n = diasUsados(s);
+ var quedan = Math.max(0, c.tope - n);
+ var r = { tope:false, n:n, total:c.tope, quedan:quedan,
+ pct:Math.min(100, Math.round(n / c.tope * 100)), favor:"" };
+
+ if(n > c.tope){
+ r.tope = true;
+ r.txt = "Ya usaste tus " + c.tope + " días de " + c.cuando + " · llevas " + n + ".";
+ r.favor = "Consulta en recepción.";
+ return r;
+ }
+ if(n === c.tope){
+ r.tope = true;
+ r.txt = "Este es tu día " + c.tope + " de " + c.tope + ", el último de " + c.cuando + ".";
+ return r;
+ }
+ r.txt = "Día " + n + " de " + c.tope + " de " + c.suPlan + " · te quedan " + quedan + " " + c.cuando + ".";
+ /* Lo que le importa al socio: que los días que no usó no se le pierden. */
+ if(c.semana){
+ var sem = contarEntre(s, c.semana.ini, c.semana.fin);
+ r.favor = "Esta semana llevas <b>" + sem + " de " + c.semana.tope + "</b>. " +
+ (sem < c.semana.tope
+ ? "Los días que no uses no se pierden: te quedan a favor y los puedes recuperar las próximas semanas."
+ : "Lo que vale son los " + c.tope + " días del mes, así que si te quedan, los puedes usar igual.");
+ }
+ return r;
+ }
+
+ /* Al plan semanal no se le cuenta el domingo: el gimnasio cierra ese dia. Si
+    le quedan siete fechas por delante y una es domingo, de gimnasio le quedan
+    seis. Los demas planes siguen contando dias corridos, tal cual estaban. */
+ function esPlanSemanal(nombre){ return /semanal/i.test(nombre || ""); }
+ function diasAbiertos(desde, hasta){
+ var f = new Date(desde), n = 0;
+ while(f < hasta){
+  f.setDate(f.getDate() + 1);
+  if(f.getDay() !== 0) n++;   /* 0 es domingo: no cuenta */
+ }
+ return n;
+ }
+ function diasParaVencer(s){
+ var venc = parseDMY(s.vencimiento);
+ if(!venc) return 9999;
+ var hoy = parseDMY(todayISO());
+ /* Vencido o venciendo hoy se sigue contando en dias corridos: ahi lo que
+    importa es hace cuanto fue, no cuantos dias de gimnasio le quedan. */
+ if(venc > hoy && esPlanSemanal(s.plan)) return diasAbiertos(hoy, venc);
+ return Math.round((venc - hoy) / 86400000);
+ }
+ /* El mismo aviso que ve el mesón, para que el socio sepa al tiro cómo está
+ y cuándo le toca pagar. Sin botón de renovar: eso es solo del gimnasio. */
+ function veredictoSocio(s){
+ var d = diasParaVencer(s);
+ var venc = s.vencimiento || "—";
+ if(!s.vencimiento) return { v:"warn", fallo:"Consulta en recepción",
+ det:"Tu ficha no tiene fecha de vencimiento" };
+ if(d < 0) return { v:"bad", fallo:"Membresía vencida",
+ det:"Venció el " + venc + " · hace " + Math.abs(d) + (Math.abs(d)===1?" día":" días") +
+ ". Pasa a renovar en recepción." };
+ if(d === 0) return { v:"warn", fallo:"Pasa, pero avísale",
+ det:"Tu mensualidad vence hoy. Acuérdate de renovar." };
+ /* Recien el día antes: avisado con cinco días de anticipación el socio lo
+    pasaba por alto. */
+ if(d <= 1) return { v:"warn", fallo:"Pasa, pero avísale",
+ det:"Vence el " + venc + " · queda" + (d===1?" 1 día":"n " + d + " días") +
+ ". Acuérdate de renovar." };
+ return { v:"ok", fallo:"Acceso permitido",
+ det:"Vence el " + venc + " · quedan " + d + " días" };
+ }
+ function renderCard(s){
+ var est = estadoDe(s.vencimiento);
+ var w = veredictoSocio(s);
+ document.getElementById("memberCard").innerHTML =
+ '<div class="mc-veredicto" data-v="'+w.v+'">' +
+ '<p class="vfallo">'+escapeHtml(w.fallo)+'</p>' +
+ '<p class="vdet">'+escapeHtml(w.det)+'</p>' +
+ (function(){ var tn = textoTurno(s);
+ if(!tn) return '';
+ return '<p class="vturno" data-t="'+(tn.tope?"tope":"ok")+'">'+escapeHtml(tn.txt)+'</p>'+
+ '<div class="vbarra" role="img" aria-label="Llevas '+tn.n+' de '+tn.total+' días">'+
+ '<i style="width:'+tn.pct+'%"></i></div>'+
+ (tn.favor ? '<p class="vfavor">'+tn.favor+'</p>' : ''); })() +
+ '</div>' +
+ '<p class="mc-kicker">Socio WGYMADNSPORT</p>' +
+ '<div class="mc-name">'+escapeHtml(s.nombre)+' '+escapeHtml(s.apellido)+'</div>' +
+ '<div class="mc-plan">'+escapeHtml(s.plan||"Sin plan asignado")+'</div>' +
+ '<div class="mc-row"><span>Vencimiento</span><b>'+escapeHtml(s.vencimiento||"—")+'</b></div>' +
+ '<div class="mc-status"><span class="pill '+est.cls+'"><span class="dot"></span>'+est.txt+'</span></div>';
+ }
+ function avisarIngreso(s){
+ if(!CHECKIN_URL || window.WGYM_PRUEBA_INGRESOS) return;   /* la prueba nunca escribe en la hoja real */
+ /* Evita duplicados si la pagina se recarga o el socio toca dos veces. */
+ var marca = "wgym_checkin_" + s.nombre + "_" + s.apellido;
+ try{
+ var previo = Number(localStorage.getItem(marca) || 0);
+ if(Date.now() - previo < 60000) return;
+ localStorage.setItem(marca, String(Date.now()));
+ }catch(e){}
+ var intentos = 0;
+ function armarUrl(){
+ return CHECKIN_URL + "?action=checkin&nombre=" + encodeURIComponent(s.nombre) + "&apellido=" + encodeURIComponent(s.apellido) + "&venc=" + encodeURIComponent(s.vencimiento||"") + "&_=" + Date.now();
+ }
+ function reintentar(){ if(intentos < 3) setTimeout(intentar, 1500); }
+ function intentar(){
+ intentos++;
+ try{
+ if(window.fetch){
+ /* no-cors se resuelve si el servidor respondio; solo falla si no hubo red. */
+ fetch(armarUrl(), {mode:"no-cors", cache:"no-store"})["catch"](reintentar);
+ } else {
+ /* Navegadores antiguos: se envia una sola vez, sin reintento. */
+ var img = new Image();
+ img.src = armarUrl();
+ }
+ }catch(e){ reintentar(); }
+ }
+ intentar();
+ }
+ /* ---------- pagar mensualidad (10/2026) ----------
+    Precios oficiales por plan: el monto se toma de esta lista según el
+    plan del socio (si el plan no está aquí, se usa el monto de su ficha).
+    Para cambiar un precio o la cuenta, editar SOLO pago-datos.js. */
+ /* Planes, precios y cuenta: en pago-datos.js (compartido con pagar.html). */
+ var PRECIOS_PLANES = (window.WGYM_PAGO && WGYM_PAGO.planes) || [];
+ var CUENTA_PAGO = (window.WGYM_PAGO && WGYM_PAGO.cuenta) || null;
+ function precioDePlan(s){
+  var plan = normName(s.plan || "").toLowerCase();
+  for(var i = 0; i < PRECIOS_PLANES.length; i++){
+   if(PRECIOS_PLANES[i].re.test(plan)) return PRECIOS_PLANES[i].precio;
+  }
+  return Number(s.monto) > 0 ? Number(s.monto) : 0;
+ }
+ function pesos(n){ return "$" + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+ function copiarTexto(txt){
+  if(navigator.clipboard && window.isSecureContext){
+   return navigator.clipboard.writeText(txt)["catch"](function(){ return copiarTextoViejo(txt); });
+  }
+  return copiarTextoViejo(txt);
+ }
+ function copiarTextoViejo(txt){
+  return new Promise(function(ok, mal){
+   var t = document.createElement("textarea");
+   t.value = txt; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
+   document.body.appendChild(t); t.select(); t.setSelectionRange(0, txt.length);
+   var hecho = false; try{ hecho = document.execCommand("copy"); }catch(e){}
+   t.remove(); hecho ? ok() : mal(Error("no se pudo copiar"));
+  });
+ }
+ function renderPago(s){
+  var box = document.getElementById("pagoCard");
+  var monto = precioDePlan(s);
+  if(!monto || !CUENTA_PAGO){ box.hidden = true; return; }
+  var c = CUENTA_PAGO, nombre = s.nombre + " " + s.apellido, plan = s.plan || "Plan";
+  var asunto = nombre + " - " + plan;
+  var filas = [["Nombre", c.titular], ["RUT", c.rut], ["Banco", c.banco], ["Tipo de cuenta", c.tipo],
+   ["Número de cuenta", c.numero], ["Email", c.correo], ["Monto", pesos(monto)], ["Comentario", asunto]];
+  var textoCopia = filas.map(function(f){ return f[0] + ": " + f[1]; }).join("\n");
+  var wsp = "https://wa.me/" + c.whatsapp + "?text=" + encodeURIComponent(
+   "Hola, soy " + nombre + ". Pagué mi " + plan + " de " + pesos(monto) + " por transferencia. Te envío el comprobante.");
+  box.hidden = false;
+  box.innerHTML =
+   '<p class="pago-kicker">Tu mensualidad</p>' +
+   '<p class="pago-monto">' + pesos(monto) + '</p>' +
+   '<p class="pago-plan">' + escapeHtml(plan) + '</p>' +
+   '<button type="button" class="pago-btn principal" id="pagoAbrir">💳 Pagar mensualidad</button>' +
+   '<div id="pagoDetalle" hidden>' +
+    '<div class="pago-datos">' + filas.map(function(f){ return '<div class="fila"><span>' + escapeHtml(f[0]) + '</span><b>' + escapeHtml(f[1]) + '</b></div>'; }).join("") + '</div>' +
+    '<button type="button" class="pago-btn sec" id="pagoCopiar">📋 Copiar datos</button>' +
+    '<p class="pago-ok" id="pagoOk"></p>' +
+    '<a class="pago-btn wsp" href="' + wsp + '" target="_blank" rel="noopener">Enviar comprobante por WhatsApp</a>' +
+    '<p class="pago-nota">Transfiere desde la app de tu banco con estos datos y envía el comprobante por WhatsApp. Tu plan se renueva cuando recepción confirme el pago.</p>' +
+   '</div>';
+  box.querySelector("#pagoAbrir").addEventListener("click", function(){
+   var det = box.querySelector("#pagoDetalle"); det.hidden = !det.hidden;
+   this.textContent = det.hidden ? "💳 Pagar mensualidad" : "Ocultar datos de pago";
+  });
+  box.querySelector("#pagoCopiar").addEventListener("click", function(){
+   var ok = box.querySelector("#pagoOk");
+   copiarTexto(textoCopia).then(function(){ ok.style.color = ""; ok.textContent = "✅ Datos copiados. Pégalos en la app de tu banco."; })
+   ["catch"](function(){ ok.style.color = "var(--danger)"; ok.textContent = "No se pudo copiar. Copia los datos a mano."; });
+  });
+ }
+ /* ---------- ingreso, dentro del gimnasio y marcar mi salida (10/2026) ----------
+    Abrir la tarjeta NO es lo mismo que entrar al gimnasio. El ingreso se
+    registra SOLO cuando la tarjeta se abre con el QR de la PUERTA
+    (tarjeta.html?ingreso=puerta): el socio escanea y escribe su nombre,
+    igual que siempre. Abierta por cualquier otro enlace (guardado,
+    WhatsApp, redes) la tarjeta solo consulta: muestra el contador y, si
+    está dentro, "Registrar mi salida". La marca de la puerta se borra de
+    la dirección apenas carga la página, así que un enlace guardado o
+    compartido después nunca registra ingresos. Si ya está dentro, volver a
+    escanear no duplica; si ya salió, escanear de nuevo es volver a entrar.
+
+    El teléfono que registra el ingreso recibe un código privado (queda
+    guardado solo en ese teléfono). Con él, y solo con él, el socio puede
+    marcar SU salida. Las salidas de otras personas las marca recepción.
+
+    Si el Apps Script todavía no tiene estas funciones, se registra el
+    ingreso como siempre (avisarIngreso) y el cuadro no aparece. */
+ var salidaSocio = null, salidaTimer = null, nSal = 0;
+ var modoPuerta = false;
+ try{
+  var qsPuerta = new URLSearchParams(location.search);
+  if(qsPuerta.get("ingreso") === "puerta"){
+   modoPuerta = true;
+   qsPuerta.delete("ingreso");
+   var limpia = location.pathname + (qsPuerta.toString() ? "?" + qsPuerta : "") + location.hash;
+   history.replaceState(null, "", limpia);
+  }
+ }catch(e){}
+ var CLAVE_CODIGOS = "wgym_codigo_ingreso_v1";
+ function salidaJsonp(params, listo){
+  var cb = "wgymSal" + (++nSal) + "_" + Date.now();
+  var sc = document.createElement("script"), hecho = false;
+  var plazo = setTimeout(function(){ fin(null); }, 15000);
+  function fin(d){ if(hecho) return; hecho = true; clearTimeout(plazo); try{ delete window[cb]; }catch(e){} sc.remove(); listo(d); }
+  window[cb] = fin;
+  /* Páginas prueba-*.html: todo va a la hoja "Pruebas ingresos". */
+  if(window.WGYM_PRUEBA_INGRESOS) params = Object.assign({ prueba:"1" }, params);
+  sc.src = CHECKIN_URL + "?" + Object.keys(params).map(function(k){ return k + "=" + encodeURIComponent(params[k]); }).join("&") +
+   "&callback=" + cb + "&_=" + Date.now();
+  sc.onerror = function(){ fin(null); };
+  document.body.appendChild(sc);
+ }
+ function diaChileHoy(){
+  try{ return new Intl.DateTimeFormat("en-CA", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date()); }
+  catch(e){ var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+ }
+ function horaChile(ts){
+  try{ return new Intl.DateTimeFormat("es-CL", { timeZone:"America/Santiago", hour:"2-digit", minute:"2-digit", hour12:false }).format(new Date(ts)); }
+  catch(e){ var d = new Date(ts); return String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); }
+ }
+ function llaveCodigo(s){ return normName(s.nombre + " " + s.apellido).toUpperCase(); }
+ /* Códigos de ingreso de HOY guardados en este teléfono (por persona). */
+ function codigoDe(s){
+  try{
+   var t = JSON.parse(localStorage.getItem(CLAVE_CODIGOS) || "{}");
+   return (t.dia === diaChileHoy() && t.codigos && t.codigos[llaveCodigo(s)]) || "";
+  }catch(e){ return ""; }
+ }
+ function guardarCodigo(s, codigo){
+  try{
+   var t = JSON.parse(localStorage.getItem(CLAVE_CODIGOS) || "{}");
+   if(t.dia !== diaChileHoy()) t = { dia:diaChileHoy(), codigos:{} };
+   t.codigos[llaveCodigo(s)] = codigo;
+   localStorage.setItem(CLAVE_CODIGOS, JSON.stringify(t));
+  }catch(e){}
+ }
+ /* El cuadro muestra SOLO el contador "Dentro ahora" (cuántas personas
+    tienen ingreso hoy sin salida; nunca nombres de otros socios) y, si el
+    socio está dentro, su botón "Registrar mi salida". */
+ function pintarSalida(d, error){
+  var box = document.getElementById("salidaCard");
+  if(error && !d){
+   box.hidden = false;
+   box.innerHTML = '<p class="salida-err">⚠️ ' + escapeHtml(error) + '</p>';
+   return;
+  }
+  if(!d || d.ingresos !== true || typeof d.dentroAhora !== "number"){ box.hidden = true; return; }
+  box.hidden = false;
+  var accion = "";
+  if(d.dentro){
+   accion = d.puedeMarcar
+    ? '<button type="button" class="pago-btn principal" id="salidaBtn">🚪 Registrar mi salida</button>'
+    : '<p class="salida-sub">Para registrar tu salida, avísale a recepción.</p>';
+  }else if(d.vino && d.salida){
+   accion = '<p class="salida-sub">Tu salida quedó registrada a las ' + horaChile(d.salida) + '.</p>';
+  }else{
+   accion = '<p class="salida-sub">Tu ingreso se registra al escanear el QR de la entrada del gimnasio.</p>';
+  }
+  box.innerHTML = '<p class="salida-num">' + d.dentroAhora + '</p><p class="salida-lbl">Dentro ahora</p>' + accion +
+   '<p class="salida-err">' + (error ? escapeHtml(error) : '') + '</p>';
+  var b = box.querySelector("#salidaBtn");
+  if(b) b.addEventListener("click", function(){
+   b.disabled = true; b.textContent = "Registrando…";
+   salidaJsonp({ action:"salidaSocio", nombre:salidaSocio.nombre, apellido:salidaSocio.apellido, codigo:codigoDe(salidaSocio) }, function(r){
+    if(!r || !r.ok){
+     pintarSalida(d, r && r.error === "no autorizado" ? "Solo el teléfono que registró tu ingreso puede marcar la salida. Avísale a recepción."
+      : "No se pudo guardar. Revisa tu internet e inténtalo de nuevo.");
+     return;
+    }
+    consultarSalida();
+   });
+  });
+ }
+ function consultarSalida(){
+  if(!salidaSocio || !CHECKIN_URL) return;
+  var s = salidaSocio;
+  salidaJsonp({ action:"miIngreso", nombre:s.nombre, apellido:s.apellido, codigo:codigoDe(s) }, function(d){
+   if(s === salidaSocio && d) pintarSalida(d);
+  });
+ }
+ /* Registra el ingreso (solo con el QR de la puerta). El Apps Script
+    decide: si ya está dentro responde registrado:false y no agrega nada,
+    así que reintentar por un corte de internet nunca duplica. */
+ function registrarIngreso(s){
+  var intentos = 0;
+  function intentar(){
+   intentos++;
+   salidaJsonp({ action:"ingresoTarjeta", nombre:s.nombre, apellido:s.apellido, venc:s.vencimiento || "",
+                 codigo:codigoDe(s), forzar:"1" }, function(d){
+    if(s !== salidaSocio) return;
+    if(!d){
+     if(intentos < 3){ setTimeout(intentar, 2000); return; }
+     pintarSalida(null, "No se pudo registrar tu ingreso por falta de internet. Avísale a recepción.");
+     return;
+    }
+    if(d.ingresos !== true){ avisarIngreso(s); return; }   /* Apps Script antiguo */
+    if(d.registrado && d.codigo) guardarCodigo(s, d.codigo);
+    pintarSalida(d);
+   });
+  }
+  intentar();
+ }
+ /* Abierta sin el QR de la puerta: solo consulta. Mientras el Apps Script
+    no tenga las funciones nuevas, se mantiene el registro de siempre (hoy
+    el QR de la puerta abre esta misma página sin marca). */
+ function consultarInicio(s){
+  salidaJsonp({ action:"miIngreso", nombre:s.nombre, apellido:s.apellido, codigo:codigoDe(s) }, function(d){
+   if(s !== salidaSocio || !d) return;
+   if(d.ingresos !== true){ avisarIngreso(s); return; }
+   pintarSalida(d);
+  });
+ }
+ function iniciarIngreso(s){
+  salidaSocio = s;
+  document.getElementById("salidaCard").hidden = true;
+  clearInterval(salidaTimer);
+  if(CHECKIN_URL){
+   if(modoPuerta){ modoPuerta = false; registrarIngreso(s); }
+   else consultarInicio(s);
+  }
+  /* El contador se refresca solo mientras la tarjeta está a la vista. */
+  salidaTimer = setInterval(function(){ if(!document.hidden) consultarSalida(); }, 15000);
+ }
+ document.addEventListener("visibilitychange", function(){ if(!document.hidden) consultarSalida(); });
+
+ function unlockCardView(s){
+ document.getElementById("gate").hidden = true;
+ document.getElementById("cardView").hidden = false;
+ anotarDia(s);
+ renderCard(s);
+ renderPago(s);
+ renderEvolucion(s);
+ iniciarIngreso(s);
+ socioActual = s;
+ resetBandBtn();
+ resetLockBtn();
+ }
+
+ /* ---------- pedir banda elástica ---------- */
+ var socioActual = null;
+ var colorElegido = null;
+ function resetBandBtn(){
+ var btn = document.getElementById("bandBtn");
+ var msg = document.getElementById("bandMsg");
+ var colores = document.getElementById("bandColors");
+ colorElegido = null;
+ colores.hidden = false;
+ Array.prototype.forEach.call(colores.querySelectorAll(".band-chip"), function(c){ c.setAttribute("data-active","0"); });
+ btn.disabled = true;
+ btn.hidden = false;
+ msg.hidden = true;
+ }
+ document.getElementById("bandColors").addEventListener("click", function(ev){
+ var chip = ev.target.closest(".band-chip");
+ if(!chip) return;
+ colorElegido = chip.getAttribute("data-color");
+ Array.prototype.forEach.call(this.querySelectorAll(".band-chip"), function(c){
+ c.setAttribute("data-active", (c === chip) ? "1" : "0");
+ });
+ document.getElementById("bandBtn").disabled = false;
+ });
+ function pedirBanda(){
+ if(!socioActual || !CHECKIN_URL || !colorElegido) return;
+ var btn = document.getElementById("bandBtn");
+ var msg = document.getElementById("bandMsg");
+ var colores = document.getElementById("bandColors");
+ btn.disabled = true;
+ var cb = "wgymBanda_" + Date.now();
+ var terminado = false;
+ window[cb] = function(data){
+ terminado = true;
+ delete window[cb];
+ script.remove();
+ if(data && data.ok){
+ btn.hidden = true;
+ colores.hidden = true;
+ msg.hidden = false;
+ msg.classList.remove("err");
+ msg.textContent = "Listo, avisamos a recepción. Retírala en el mesón.";
+ } else {
+ btn.disabled = false;
+ msg.hidden = false;
+ msg.classList.add("err");
+ msg.textContent = "No se pudo avisar, prueba de nuevo o pide en el mesón.";
+ }
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=pedirBanda&nombre=" + encodeURIComponent(socioActual.nombre) +
+ "&apellido=" + encodeURIComponent(socioActual.apellido) + "&banda=" + encodeURIComponent(colorElegido) +
+ "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){
+ if(terminado) return;
+ delete window[cb];
+ script.remove();
+ btn.disabled = false;
+ msg.hidden = false;
+ msg.classList.add("err");
+ msg.textContent = "No se pudo avisar, prueba de nuevo o pide en el mesón.";
+ };
+ document.body.appendChild(script);
+ }
+ document.getElementById("bandBtn").addEventListener("click", pedirBanda);
+
+ /* ---------- pedir candado ---------- */
+ function resetLockBtn(){
+ var btn = document.getElementById("lockBtn");
+ var msg = document.getElementById("lockMsg");
+ btn.disabled = false;
+ btn.hidden = false;
+ msg.hidden = true;
+ }
+ function pedirCandado(){
+ if(!socioActual || !CHECKIN_URL) return;
+ var btn = document.getElementById("lockBtn");
+ var msg = document.getElementById("lockMsg");
+ btn.disabled = true;
+ var cb = "wgymCandado_" + Date.now();
+ var terminado = false;
+ window[cb] = function(data){
+ terminado = true;
+ delete window[cb];
+ script.remove();
+ if(data && data.ok){
+ btn.hidden = true;
+ msg.hidden = false;
+ msg.classList.remove("err");
+ msg.textContent = "Listo, avisamos a recepción. Retíralo en el mesón.";
+ } else {
+ btn.disabled = false;
+ msg.hidden = false;
+ msg.classList.add("err");
+ msg.textContent = "No se pudo avisar, prueba de nuevo o pide en el mesón.";
+ }
+ };
+ var script = document.createElement("script");
+ script.src = CHECKIN_URL + "?action=pedirCandado&nombre=" + encodeURIComponent(socioActual.nombre) +
+ "&apellido=" + encodeURIComponent(socioActual.apellido) + "&callback=" + cb + "&_=" + Date.now();
+ script.onerror = function(){
+ if(terminado) return;
+ delete window[cb];
+ script.remove();
+ btn.disabled = false;
+ msg.hidden = false;
+ msg.classList.add("err");
+ msg.textContent = "No se pudo avisar, prueba de nuevo o pide en el mesón.";
+ };
+ document.body.appendChild(script);
+ }
+ document.getElementById("lockBtn").addEventListener("click", pedirCandado);
+
+ var buscandoSocio = false;
+ function tryLogin(texto){
+ if(buscandoSocio) return false;
+ if(!String(texto || "").trim()){ document.getElementById("gateError").hidden = false; return false; }
+ buscandoSocio = true;
+ var btn = document.getElementById("gateBtn");
+ btn.disabled = true;
+ btn.textContent = "Buscando...";
+ findSocioJunto(texto, function(s){
+ buscandoSocio = false;
+ btn.disabled = false;
+ btn.textContent = "Entrar";
+ if(s){
+ unlockCardView(socioApiATarjeta_(s));
+ return;
+ }
+ document.getElementById("gateError").hidden = false;
+ });
+ return true;
+ }
+
+ var cajaNombre = document.getElementById("gateNombre");
+ document.getElementById("gateBtn").addEventListener("click", function(){
+ tryLogin(cajaNombre.value);
+ });
+ cajaNombre.addEventListener("keydown", function(e){
+ if(e.key === "Enter"){ e.preventDefault(); tryLogin(cajaNombre.value); }
+ });
+ /* Si se equivocó, el aviso se va apenas empieza a corregir. */
+ cajaNombre.addEventListener("input", function(){
+ document.getElementById("gateError").hidden = true;
+ });
+
+/* Respetar los borrados aunque una medición siga en el archivo histórico. */
+var leerEnVivoOriginal=leerMedicionesEnVivo_;
+leerMedicionesEnVivo_=function(id){return leerEnVivoOriginal(id).then(function(res){
+ if(res&&res.socio)res.socio.fechasEliminadas=res.fechasEliminadas||[];
+ return res;
+});};
+var unirMedicionesOriginal=unirMediciones_;
+unirMediciones_=function(historicas,nuevas){
+ var unidas=unirMedicionesOriginal(historicas,nuevas);
+ if(unidas&&nuevas&&nuevas.fechasEliminadas)
+  unidas.registros=unidas.registros.filter(function(r){return nuevas.fechasEliminadas.indexOf(r.fecha)<0;});
+ return unidas;
+};
+})();
+</script>  
