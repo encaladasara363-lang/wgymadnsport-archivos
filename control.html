@@ -408,7 +408,7 @@ const LOGO_B64 = "assets/logo-oficial.webp";
 /* El mismo Apps Script que ya usan tus clientes al escanear el QR. */
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 </script>
-<script src="ingresos.js?v=1"></script>
+<script src="ingresos.js?v=2"></script>
 
 
 <script>
@@ -1191,6 +1191,9 @@ function pintarFeed(){
    raiz: document.getElementById("ingresosPanel"),
    url: CHECKIN_URL,
    extraHtml: notaIngreso,
+   /* Marcar o deshacer la salida de otra persona: solo administración,
+      por POST con la clave de este equipo (la misma de guardar socios). */
+   accionAdmin: function(action, params, cb){ llamarSocioApi_(action, params, cb); },
    alTitulo: function(t){ document.getElementById("ingTitulo").textContent = t; },
    alTocar: function(r){
     mostrarHero(r.nombre+" "+r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido));

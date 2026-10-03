@@ -16,60 +16,58 @@ se borraron**: todos siguen guardados en la hoja (al 03-10-2026 había
 
 Con este cambio, las pantallas piden **todos los ingresos del día** (fecha
 de Chile), y la salida de cada socio queda guardada en la misma hoja
-(columnas E "Salida" y F "Origen salida", que hoy están vacías).
+(columnas E "Salida", F "Origen salida" y G "Código tarjeta", que hoy están vacías).
 
-## Pasos (unos 5 minutos, desde el computador)
+## Pasos (unos 10 minutos, desde el computador)
 
-1. Abre la hoja **"WGYMADNSPORT - Ingresos por Tarjeta QR"** y entra a
-   **Extensiones → Apps Script**. Si no aparece ahí, abre
-   <https://script.google.com> y entra al proyecto modificado el 28-09-2026
-   (se llama "Proyecto sin título" y su archivo `Código.gs` empieza con
-   `var SHEET_ID = "1CST4GI31…"`).
-2. **Archivo nuevo:** a la izquierda, junto a "Archivos", toca **＋ →
-   Secuencia de comandos**, ponle de nombre `Ingresos` y pega **todo** el
-   contenido de
-   [`docs/apps-script/Ingresos.gs`](apps-script/Ingresos.gs)
-   (reemplaza el `function myFunction() {}` que aparece). Guarda (💾).
-3. **Una línea en `Código.gs`:** abre `Código.gs`, busca (Ctrl + F) este
-   texto:
+El proyecto correcto es el que tiene `listarSocios` y empieza con
+`var SHEET_ID = "1CST4GI31…"`:
+<https://script.google.com/d/1qDGKxf4tAqw4WkMnAdE2d48MKtMiL7MYe-fMq04MBoMzEsSe25_nKoAH/edit>
 
-   ```
-   /* guardarSocio y borrarSocio NO se atienden
-   ```
-
-   y, **justo en la línea de arriba** de ese comentario, pega:
+1. **Archivo nuevo `Ingresos`:** a la izquierda, junto a "Archivos", toca
+   **＋ → Secuencia de comandos**, ponle de nombre `Ingresos`, borra el
+   `function myFunction() {}` que aparece y pega **todo** el contenido de
+   [`docs/apps-script/Ingresos.gs`](apps-script/Ingresos.gs). Guarda (💾).
+2. **Línea 1 en `Código.gs` (dentro de `doGet`):** busca (Ctrl + F)
+   `/* guardarSocio y borrarSocio NO se atienden` y, **justo en la línea de
+   arriba**, pega:
 
    ```js
    var respIngresos_ = accionIngresos_(e); if (respIngresos_) return respIngresos_;
    ```
+3. **Línea 2 en `Código.gs` (dentro de `doPost`):** busca
+   `if (p.action === "guardarSocio") {` y, **justo en la línea de arriba**,
+   pega:
+
+   ```js
+   var respIngresosPost_ = accionIngresosPost_(e); if (respIngresosPost_) return respIngresosPost_;
+   ```
 
    No borres ni cambies nada más. Guarda (💾).
-4. **Publicar la versión nueva sin cambiar el link:** arriba a la derecha,
-   **Implementar → Administrar implementaciones** → toca el lápiz ✏️ de la
-   implementación activa → en "Versión" elige **Nueva versión** →
-   **Implementar**. **No uses "Nueva implementación"**: eso crea otro link
-   y las páginas dejarían de recibir los ingresos.
-5. Si Google pide permisos, acéptalos (son los mismos de siempre: tu hoja).
+4. **Publicar sin cambiar el link:** **Implementar → Administrar
+   implementaciones** → lápiz ✏️ de la implementación activa → "Versión":
+   **Nueva versión** → **Implementar**. **No uses "Nueva implementación"**
+   (crea otro link y las páginas dejarían de recibir los ingresos).
+5. Si Google pide permisos, acéptalos.
 
 ## Cómo comprobar que quedó bien
 
-- Abre `control.html`: en **"Ingresos de hoy"** ya no debe aparecer el
-  aviso amarillo "Falta actualizar el Apps Script", y los botones
-  **MARCAR SALIDA** quedan activos.
-- Marca la salida de alguien de prueba (por ejemplo tú misma): debe pasar
-  a "SALIDA REGISTRADA" y seguir en el "Historial del día". Si fue un
-  error, toca **Deshacer**.
-- En la hoja, esa fila tendrá la hora de salida en la columna E y
-  "control" o "tarjeta" en la columna F.
+Abre en el navegador el link del script terminado en
+`/exec?action=listarIngresos`. Debe mostrar un texto que empieza con
+`{"ok":true,"ingresos":true,"dia":"…` con los ingresos de hoy. Si muestra
+`{"rows":[…` sin `"ingresos":true`, la versión nueva todavía no está
+publicada (repite el paso 4).
 
-## Qué hace cada acción nueva (para quien revise el código)
+## Quién puede hacer qué
 
-| Acción | Quién la usa | Qué hace |
+| Acción | Quién | Cómo se protege |
 | --- | --- | --- |
-| `listarIngresos&dia=AAAA-MM-DD` | control.html, pantalla.html | Todos los ingresos de ese día (hora de Chile), con su salida. Sin `dia`, el de hoy. |
-| `registrarSalida&nombre&apellido[&dia][&origen]` | MARCAR SALIDA (control y tarjeta) | Anota la hora de salida en **todos** los ingresos abiertos de esa persona ese día. |
-| `quitarSalida&fila&ts` | "Deshacer" en control.html | Borra la salida de esa fila (solo si la hora de ingreso coincide exacta). |
-| `miIngreso&nombre&apellido` | tarjeta.html | Solo el estado de esa persona hoy: si está dentro, desde qué hora o a qué hora salió. |
+| `listarIngresos&dia=AAAA-MM-DD` | control.html, pantalla.html | Pública, igual que la lista de ingresos de hoy (nombres y horas, nunca el código de la tarjeta). |
+| `miIngreso&nombre&apellido` | tarjeta.html | Solo el estado de esa persona hoy. |
+| `ingresoTarjeta&nombre&apellido[&forzar=1]` | tarjeta.html | Registra el ingreso **solo si esa persona no tiene ingreso hoy**. Abrir la tarjeta otra vez no crea filas. `forzar=1` (botón "Volver a ingresar hoy") solo funciona si ya tiene la salida marcada. |
+| `salidaSocio&nombre&apellido&codigo` | El socio, desde su tarjeta | Exige el código privado que recibió **su** teléfono al registrar el ingreso (columna G). Sin ese código: "no autorizado". |
+| `registrarSalida` (POST) | Recepción (control.html) | Clave de administración (`ADMIN_KEY`), la misma de guardar socios. |
+| `quitarSalida` (POST) | Recepción ("Deshacer") | Clave de administración, más la fila y la hora de ingreso exactas. |
 
 Ninguna borra ni mueve filas de la hoja. La respuesta antigua (sin
-`action`, los últimos 20) se mantiene igual, por si algo más la usa.
+`action`, los últimos 20) y la acción `checkin` siguen iguales.

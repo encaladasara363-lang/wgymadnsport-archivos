@@ -4,13 +4,18 @@
    De dónde salen los datos: la hoja de Google del check-in (la misma de
    siempre), con la acción "listarIngresos" del Apps Script, que trae TODOS
    los ingresos del día según la fecha de Chile. La salida se guarda en esa
-   misma hoja ("registrarSalida"), así que la ven igual la compu, la tablet
-   y la tarjeta del socio.
+   misma hoja, así que la ven igual la compu, la tablet y la tarjeta del
+   socio. Marcar o deshacer la salida de otra persona es solo de
+   administración: va por POST con la clave (op.accionAdmin, que pone
+   control.html), nunca por la URL.
+
+   Un equipo recién abierto muestra lo que trae la hoja, no lo que haya
+   visto antes: la copia guardada en el equipo solo se usa si no hay
+   conexión (con aviso) o con el Apps Script antiguo.
 
    Si el Apps Script todavía no tiene las acciones nuevas, responde como
    antes (solo los últimos 20 ingresos). En ese caso el panel sigue
-   funcionando con lo que este equipo alcanzó a ver (guardado acá mismo,
-   para que no desaparezca al llegar más gente) y avisa que falta
+   funcionando con lo que este equipo alcanzó a ver y avisa que falta
    actualizar el script; MARCAR SALIDA queda desactivado. */
 (function(){
 "use strict";
@@ -130,9 +135,12 @@ var CSS = '' +
 
 function crear(op){
  var raiz = op.raiz, url = op.url;
- var hoy = diaCL(), dia = hoy, filas = [], modoNuevo = null, pendientes = {}, mensaje = "";
+ var hoy = diaCL(), dia = hoy, filas = [], modoNuevo = null, pendientes = {}, mensaje = "", mensajeAccion = "", plazoAccion = null;
+ /* cargado: ya llegó al menos una respuesta de la hoja para este día. Antes
+    de eso no se muestra la copia del equipo: un aparato recién abierto ve
+    lo que dice Google, no lo que haya visto antes. */
+ var cargado = false;
  limpiarViejos();
- filas = leerLocal(dia);
 
  if(!document.getElementById("ingCss")){
   var st = document.createElement("style"); st.id = "ingCss"; st.textContent = CSS;
@@ -158,21 +166,28 @@ function crear(op){
  }
  function aplicar(data, deDia){
   if(deDia !== dia) return;            /* llegó tarde, ya se cambió de día */
-  if(!data){ mensaje = "Sin conexión con la hoja de ingresos: se muestra lo último guardado en este equipo."; pintar(); return; }
+  if(!data){
+   /* Sin respuesta: si nunca llegó nada, se muestra la copia del equipo
+      con un aviso; si ya había datos de la hoja, se dejan tal cual. */
+   if(!cargado){ filas = leerLocal(deDia); mensaje = "Sin conexión con la hoja de ingresos: se muestra lo último guardado en este equipo (puede estar incompleto)."; }
+   else mensaje = "Sin conexión con la hoja de ingresos: reintentando…";
+   pintar(); return;
+  }
   mensaje = "";
   var nuevas = (data.rows || []).map(limpiarFila).filter(function(r){ return r.ts && diaCL(r.ts) === deDia; });
   if(data.ingresos === true){
    modoNuevo = true;
-   /* La hoja manda: trae el día completo, con las salidas. Lo que este
-      equipo vio y la hoja no trae se conserva igual (nunca se borra una
-      fila por una respuesta incompleta). */
-   var porK = {}; nuevas.forEach(function(r){ porK[llave(r)] = true; });
-   filas = nuevas.concat(filas.filter(function(r){ return !porK[llave(r)]; }))
-    .sort(function(a, b){ return b.ts - a.ts; });
+   /* La hoja manda: trae el día completo con sus salidas, y eso es
+      exactamente lo que se muestra (la copia del equipo no se mezcla). */
+   filas = nuevas.sort(function(a, b){ return b.ts - a.ts; });
   }else{
+   /* Apps Script antiguo (solo los últimos 20): se junta con lo que este
+      equipo ya había visto, para no perder a los primeros del día. */
+   if(!cargado) filas = leerLocal(deDia);
    modoNuevo = false;
    filas = unir(filas, nuevas);
   }
+  cargado = true;
   /* Una salida recién marcada acá todavía no viene en la respuesta. */
   filas.forEach(function(r){ var p = pendientes[persona(r)]; if(p && !r.salida) r.salida = p; });
   guardarLocal(deDia, filas);
@@ -215,6 +230,7 @@ function crear(op){
   var avisos = "";
   if(modoNuevo === false) avisos += '<div class="ing-aviso">Falta actualizar el Apps Script del check-in: por ahora se muestran los ingresos que este equipo alcanzó a ver y MARCAR SALIDA queda desactivado.</div>';
   if(mensaje) avisos += '<div class="ing-aviso mal">' + esc(mensaje) + '</div>';
+  if(mensajeAccion) avisos += '<div class="ing-aviso mal">' + esc(mensajeAccion) + '</div>';
   $(".ing-avisos").innerHTML = avisos;
 
   /* Dentro: una fila por persona con al menos un ingreso sin salida. */
@@ -237,11 +253,23 @@ function crear(op){
   $(".ing-n-dentro").textContent = dVis.length + (dVis.length !== dentro.length ? " de " + dentro.length : "");
   $(".ing-n-hist").textContent = hVis.length + (hVis.length !== filas.length ? " de " + filas.length : "");
   $(".ing-dentro").innerHTML = dVis.length ? dVis.map(function(g){ return itemHtml(g, "dentro"); }).join("")
-   : '<div class="ing-vacio">' + (q.value ? "Nadie con ese nombre dentro." : "No hay nadie dentro sin salida registrada.") + '</div>';
+   : '<div class="ing-vacio">' + (!cargado ? "Cargando ingresos desde Google…" : q.value ? "Nadie con ese nombre dentro." : "No hay nadie dentro sin salida registrada.") + '</div>';
   $(".ing-hist").innerHTML = hVis.length ? hVis.map(function(r){ return itemHtml(r, "hist"); }).join("")
-   : '<div class="ing-vacio">' + (q.value ? "Ningún ingreso con ese nombre." : "Todavía no hay ingresos registrados este día.") + '</div>';
+   : '<div class="ing-vacio">' + (!cargado ? "Cargando ingresos desde Google…" : q.value ? "Ningún ingreso con ese nombre." : "Todavía no hay ingresos registrados este día.") + '</div>';
  }
 
+ /* Los errores de MARCAR SALIDA / Deshacer quedan a la vista 20 segundos
+    (el sondeo de cada 4 segundos no los borra). */
+ function avisarAccion(t){
+  mensajeAccion = t; clearTimeout(plazoAccion);
+  plazoAccion = setTimeout(function(){ mensajeAccion = ""; pintar(); }, 20000);
+  pintar();
+ }
+ function textoError(info){
+  if(info === "sin clave" || info === "clave incorrecta") return "hace falta la clave de administración.";
+  if(info === "sin conexión") return "sin conexión, inténtalo de nuevo.";
+  return "inténtalo de nuevo.";
+ }
  function marcarSalida(k){
   var r = null;
   filas.forEach(function(x){ if(!r && persona(x) === k) r = x; });
@@ -250,12 +278,13 @@ function crear(op){
   pendientes[k] = ahora;
   filas.forEach(function(x){ if(persona(x) === k && !x.salida) x.salida = ahora; });
   pintar();
-  jsonp(url, { action:"registrarSalida", nombre:r.nombre, apellido:r.apellido, dia:d, origen:"control" }, function(res){
+  /* Solo administración: va por POST con la clave (op.accionAdmin). */
+  op.accionAdmin("registrarSalida", { nombre:r.nombre, apellido:r.apellido, dia:d }, function(ok, info){
    delete pendientes[k];
-   if(!res || !res.ok){
+   if(!ok){
     filas.forEach(function(x){ if(persona(x) === k && x.salida === ahora) x.salida = 0; });
-    mensaje = "No se pudo guardar la salida de " + r.nombre + " " + r.apellido + ". Revisa internet e inténtalo de nuevo.";
-    pintar(); return;
+    avisarAccion("No se guardó la salida de " + r.nombre + " " + r.apellido + ": " + textoError(info));
+    return;
    }
    pedirDia();
   });
@@ -265,8 +294,8 @@ function crear(op){
   filas.forEach(function(x){ if(x.fila === fila && x.ts === ts) r = x; });
   if(!r || !confirm("¿Deshacer la salida de " + r.nombre + " " + r.apellido + "?")) return;
   var antes = r.salida; r.salida = 0; pintar();
-  jsonp(url, { action:"quitarSalida", fila:fila, ts:ts }, function(res){
-   if(!res || !res.ok){ r.salida = antes; mensaje = "No se pudo deshacer. Inténtalo de nuevo."; pintar(); return; }
+  op.accionAdmin("quitarSalida", { fila:fila, ts:ts }, function(ok, info){
+   if(!ok){ r.salida = antes; avisarAccion("No se pudo deshacer: " + textoError(info)); return; }
    pedirDia();
   });
  }
@@ -287,7 +316,7 @@ function crear(op){
  fecha.addEventListener("change", function(){
   var v = fecha.value;
   if(!/^\d{4}-\d{2}-\d{2}$/.test(v) || v > hoy){ fecha.value = dia; return; }
-  dia = v; filas = leerLocal(dia); mensaje = ""; pintar(); pedirDia();
+  dia = v; filas = []; cargado = false; mensaje = ""; pintar(); pedirDia();
  });
 
  /* Cada cuanto se vuelve a preguntar por un día pasado (el de hoy llega
@@ -296,7 +325,7 @@ function crear(op){
   var h = diaCL();
   if(h !== hoy){                      /* pasó la medianoche */
    var eraHoy = dia === hoy; hoy = h; fecha.max = hoy;
-   if(eraHoy){ dia = hoy; fecha.value = hoy; filas = leerLocal(dia); pintar(); }
+   if(eraHoy){ dia = hoy; fecha.value = hoy; filas = []; cargado = false; pintar(); }
   }
   if(dia !== hoy) pedirDia();
  }, 30000);

@@ -253,7 +253,8 @@ salida".
 
 - **La fuente es la hoja de Google del check-in**, nunca un archivo del
   repo: el Apps Script (acciones `listarIngresos`, `registrarSalida`,
-  `quitarSalida`, `miIngreso`, código en `docs/apps-script/Ingresos.gs`)
+  `quitarSalida`, `miIngreso`, `ingresoTarjeta`, `salidaSocio`; código en
+  `docs/apps-script/Ingresos.gs`)
   guarda la salida en las columnas E/F de la misma hoja de ingresos. La
   dueña lo instala siguiendo `docs/apps-script-ingresos-salidas.md`.
 - Causa del problema original: la respuesta antigua del script trae solo
@@ -262,8 +263,17 @@ salida".
   funcionando como antes (el panel guarda en el equipo lo que alcanzó a
   ver y desactiva MARCAR SALIDA con un aviso).
 - Una salida cierra **todos** los ingresos abiertos de esa persona ese
-  día. Abrir la tarjeta estando dentro (ingreso de menos de 3 horas sin
-  salida) no registra un ingreso nuevo.
+  día.
+- **Abrir la tarjeta no es ingresar:** `ingresoTarjeta` registra el
+  ingreso solo si la persona no tiene ninguno hoy (sin límite de horas).
+  Volver a entrar después de salir es un botón aparte ("Volver a
+  ingresar hoy", `forzar=1`).
+- **Permisos:** marcar o deshacer la salida de otra persona es solo de
+  recepción (POST con `ADMIN_KEY`). El socio marca solo la suya, con el
+  código privado que recibió su teléfono al registrar el ingreso
+  (columna G, nunca se publica).
+- Un equipo recién abierto muestra lo que trae la hoja; la copia del
+  equipo solo se usa sin conexión o con el script antiguo.
 
 ### `mediciones.json` — mediciones de composición corporal, nunca con nombre real (regla permanente)
 
