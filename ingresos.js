@@ -154,6 +154,8 @@ var CSS = '' +
 '.ing-aviso.mal{border-color:var(--rojo-claro,#E85C5C);background:rgba(232,92,92,.1);color:var(--rojo-claro,#E85C5C)}' +
 '.ing-sub{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;font-size:12.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--dorado,#D4AF37)}' +
 '.ing-sub .n{color:var(--gris-soft,#8C8C8C)}' +
+'.ing-todos{display:block;width:100%;margin:0 0 8px;background:transparent;color:var(--rojo-claro,#E85C5C);border:1px dashed var(--rojo-claro,#E85C5C);border-radius:10px;padding:9px;font:800 12.5px inherit;font-family:inherit;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}' +
+'.ing-todos[disabled]{opacity:.5;cursor:default}' +
 '.ing-lista{max-height:460px;overflow-y:auto;padding-right:4px;display:flex;flex-direction:column;gap:6px}' +
 '.ing-item{display:flex;align-items:center;gap:10px;background:var(--card,#1c1c1c);border:1px solid var(--line,#2A2A2A);border-radius:12px;padding:10px 12px}' +
 '.ing-item.dentro{border-left:4px solid var(--verde,#5CA85C)}' +
@@ -196,6 +198,7 @@ function crear(op){
   '<div class="ing-avisos"></div>' +
   '<div class="ing-tot"></div>' +
   '<div class="ing-sub"><span>🟢 Dentro del gimnasio</span><span class="n ing-n-dentro"></span></div>' +
+  '<button type="button" class="ing-todos" hidden>Marcar salida a todos</button>' +
   '<div class="ing-lista ing-dentro"></div>' +
   '<div class="ing-sub"><span>📋 Historial del día</span><span class="n ing-n-hist"></span></div>' +
   '<div class="ing-lista ing-hist"></div>';
@@ -294,6 +297,11 @@ function crear(op){
   var dVis = dentro.filter(coincide), hVis = filas.filter(coincide);
   $(".ing-n-dentro").textContent = dVis.length + (dVis.length !== dentro.length ? " de " + dentro.length : "");
   $(".ing-n-hist").textContent = hVis.length + (hVis.length !== filas.length ? " de " + filas.length : "");
+  /* "Marcar salida a todos": para cerrar el día o limpiar a quienes se
+     fueron sin marcar (solo cuando hay 2 o más y el script está al día). */
+  var bt = $(".ing-todos");
+  bt.hidden = !(modoNuevo === true && dentro.length > 1 && !q.value);
+  if(!enCurso) { bt.disabled = false; bt.textContent = "Marcar salida a todos (" + dentro.length + ")"; }
   $(".ing-dentro").innerHTML = dVis.length ? dVis.map(function(g){ return itemHtml(g, "dentro"); }).join("")
    : '<div class="ing-vacio">' + (!cargado ? "Cargando ingresos desde Google…" : q.value ? "Nadie con ese nombre dentro." : "No hay nadie dentro sin salida registrada.") + '</div>';
   $(".ing-hist").innerHTML = hVis.length ? hVis.map(function(r){ return itemHtml(r, "hist"); }).join("")
@@ -331,6 +339,37 @@ function crear(op){
    pedirDia();
   });
  }
+ /* Una por una (así la clave se pide una sola vez y no se satura el script). */
+ var enCurso = false;
+ function marcarTodos(){
+  var claves = {}, lista = [];
+  filas.forEach(function(x){ var k = persona(x); if(!x.salida && !claves[k]){ claves[k] = 1; lista.push(x); } });
+  if(lista.length < 2 || !confirm("¿Marcar la salida de las " + lista.length + " personas que siguen dentro?")) return;
+  enCurso = true;
+  var bt = $(".ing-todos"), hechas = 0, fallas = 0, d = dia;
+  bt.disabled = true;
+  (function siguiente(i){
+   if(i >= lista.length){
+    enCurso = false;
+    if(fallas) avisarAccion("No se pudo marcar la salida de " + fallas + (fallas === 1 ? " persona" : " personas") + ". Inténtalo de nuevo.");
+    pedirDia(); return;
+   }
+   var r = lista[i], k = persona(r), ahora = Date.now();
+   bt.textContent = "Marcando salidas… " + (i + 1) + " de " + lista.length;
+   pendientes[k] = ahora;
+   filas.forEach(function(x){ if(persona(x) === k && !x.salida) x.salida = ahora; });
+   pintar();
+   op.accionAdmin("registrarSalida", { nombre:r.nombre, apellido:r.apellido, dia:d }, function(ok, info){
+    delete pendientes[k];
+    if(!ok){
+     filas.forEach(function(x){ if(persona(x) === k && x.salida === ahora) x.salida = 0; });
+     fallas++;
+     if(info === "sin clave" || info === "clave incorrecta"){ fallas += lista.length - i - 1; siguiente(lista.length); return; }
+    }else hechas++;
+    siguiente(i + 1);
+   });
+  })(0);
+ }
  function deshacer(fila, ts){
   var r = null;
   filas.forEach(function(x){ if(x.fila === fila && x.ts === ts) r = x; });
@@ -343,6 +382,7 @@ function crear(op){
  }
 
  raiz.addEventListener("click", function(ev){
+  if(ev.target.closest(".ing-todos")){ if(!enCurso) marcarTodos(); return; }
   var b = ev.target.closest("[data-sal]");
   if(b && !b.disabled){ marcarSalida(b.getAttribute("data-sal")); return; }
   var u = ev.target.closest("[data-fila]");

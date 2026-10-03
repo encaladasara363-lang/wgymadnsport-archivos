@@ -247,8 +247,10 @@ completo **"Ingresos de hoy"** (`ingresos.js`), sin simplificar (pedido
 explícito de la dueña, 10/2026): contadores **Ingresos / Personas /
 Dentro ahora**, la lista de quienes siguen dentro con **MARCAR SALIDA**,
 búsqueda, selector de fecha e historial del día (DENTRO / SALIDA
-REGISTRADA, "Deshacer"). En la tablet, MARCAR SALIDA pide la clave de
-administración una sola vez y la guarda en ese equipo.
+REGISTRADA, "Deshacer"), más el botón **"Marcar salida a todos"** para
+cerrar el día o limpiar a quienes se fueron sin marcar. En la tablet,
+MARCAR SALIDA pide la clave de administración una sola vez y la guarda en
+ese equipo.
 
 **Tarjeta virtual (`tarjeta.html`)**: muestra **solo** el contador verde
 **"DENTRO AHORA"** (número de personas con ingreso hoy sin salida, que
