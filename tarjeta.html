@@ -376,9 +376,9 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <h1>Tarjeta <span>Virtual</span></h1>
  <p class="sub">tu acceso digital al gimnasio</p>
  </header>
+ <div class="inst-card" id="instCard" hidden></div>
  <div class="member-card" id="memberCard"></div>
  <div class="salida-card" id="salidaCard" hidden></div>
- <div class="inst-card" id="instCard" hidden></div>
  <div class="pago-card" id="pagoCard" hidden></div>
  <div class="evo-card" id="evoCard" hidden></div>
  <div class="band-box">
@@ -1659,7 +1659,8 @@ function pintarInstalar(){
   html += '<ol class="inst-pasos">' +
    '<li>Toca los <span class="inst-ico">⋮</span> de arriba a la derecha del navegador.</li>' +
    '<li>Toca <b>"Instalar app"</b> o <b>"Agregar a pantalla de inicio"</b>.</li>' +
-   '<li>Confirma con <b>"Instalar"</b> o <b>"Agregar"</b>. ¡Listo!</li></ol>';
+   '<li>Confirma con <b>"Instalar"</b> o <b>"Agregar"</b>. ¡Listo!</li></ol>' +
+   '<p class="salida-sub">¿No aparece "Instalar"? En ese mismo menú toca <b>"Abrir en Chrome"</b> y repite los pasos.</p>';
  }
  html += '<p class="salida-sub">Así abres tu tarjeta desde un ícono, sin buscar el enlace.</p>' +
   '<button type="button" class="inst-ya" id="instYa">Ya la tengo en mi pantalla de inicio</button>';
