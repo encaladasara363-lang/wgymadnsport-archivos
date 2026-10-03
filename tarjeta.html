@@ -185,10 +185,10 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 
 .band-box{ margin:14px 16px 0; }
 /* Estado de hoy y "Marcar mi salida" (10/2026). */
-.salida-card{ margin:14px 16px 0; background:var(--card); border:1px solid #2C2C31; border-left:4px solid var(--good); border-radius:14px; padding:14px 16px; }
-.salida-card.fuera{ border-left-color:#555; }
-.salida-est{ font-weight:800; font-size:15px; margin:0; }
-.salida-sub{ font-size:12.5px; color:#8C8C93; margin:4px 0 0; }
+.salida-card{ margin:14px 16px 0; background:var(--card); border:1px solid rgba(92,168,92,.45); border-radius:14px; padding:14px 16px; text-align:center; }
+.salida-num{ font-size:60px; font-weight:900; line-height:1; color:var(--good); margin:0; font-variant-numeric:tabular-nums; }
+.salida-lbl{ font-size:12.5px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:var(--good); margin:6px 0 0; }
+.salida-sub{ font-size:12.5px; color:#8C8C93; margin:10px 0 0; }
 .salida-card .pago-btn{ margin-top:10px; }
 .salida-err{ font-size:12.5px; color:var(--danger); font-weight:700; min-height:0; margin:6px 0 0; }
 .pago-card{ margin:14px 16px 0; background:var(--card); border:1px solid var(--dorado); border-radius:14px; padding:16px; }
@@ -1197,29 +1197,32 @@ function renderEvolucion(s){
    localStorage.setItem(CLAVE_CODIGOS, JSON.stringify(t));
   }catch(e){}
  }
+ /* El cuadro muestra SOLO el contador "Dentro ahora" (cuántas personas
+    tienen ingreso hoy sin salida; nunca nombres de otros socios) y, si el
+    socio está dentro, su botón "Registrar mi salida". */
  function pintarSalida(d, error){
   var box = document.getElementById("salidaCard");
   if(error && !d){
-   box.hidden = false; box.className = "salida-card fuera";
-   box.innerHTML = '<p class="salida-est">⚠️ ' + escapeHtml(error) + '</p>';
+   box.hidden = false;
+   box.innerHTML = '<p class="salida-err">⚠️ ' + escapeHtml(error) + '</p>';
    return;
   }
-  if(!d || d.ingresos !== true || !d.vino){ box.hidden = true; return; }
+  if(!d || d.ingresos !== true || typeof d.dentroAhora !== "number"){ box.hidden = true; return; }
   box.hidden = false;
-  box.className = "salida-card" + (d.dentro ? "" : " fuera");
-  var err = '<p class="salida-err">' + (error ? escapeHtml(error) : '') + '</p>';
+  var accion = "";
   if(d.dentro){
-   box.innerHTML = '<p class="salida-est">🟢 Estás dentro del gimnasio</p><p class="salida-sub">Desde las ' + horaChile(d.desde) + '</p>' +
-    (d.puedeMarcar
-     ? '<button type="button" class="pago-btn principal" id="salidaBtn">🚪 Marcar mi salida</button>'
-     : '<p class="salida-sub">Tu ingreso se registró desde otro teléfono: para marcar la salida, avísale a recepción.</p>') + err;
-  }else{
-   box.innerHTML = '<p class="salida-est">✅ Salida registrada a las ' + horaChile(d.salida) + '</p><p class="salida-sub">¡Buen entrenamiento! Te esperamos de vuelta.</p>' +
-    '<button type="button" class="pago-btn sec" id="reingresoBtn">↩️ Volver a ingresar hoy</button>' + err;
+   accion = d.puedeMarcar
+    ? '<button type="button" class="pago-btn principal" id="salidaBtn">🚪 Registrar mi salida</button>'
+    : '<p class="salida-sub">Para registrar tu salida, avísale a recepción.</p>';
+  }else if(d.vino && d.salida){
+   accion = '<p class="salida-sub">Tu salida quedó registrada a las ' + horaChile(d.salida) + '.</p>' +
+    '<button type="button" class="pago-btn sec" id="reingresoBtn">↩️ Volver a ingresar hoy</button>';
   }
+  box.innerHTML = '<p class="salida-num">' + d.dentroAhora + '</p><p class="salida-lbl">Dentro ahora</p>' + accion +
+   '<p class="salida-err">' + (error ? escapeHtml(error) : '') + '</p>';
   var b = box.querySelector("#salidaBtn");
   if(b) b.addEventListener("click", function(){
-   b.disabled = true; b.textContent = "Guardando…";
+   b.disabled = true; b.textContent = "Registrando…";
    salidaJsonp({ action:"salidaSocio", nombre:salidaSocio.nombre, apellido:salidaSocio.apellido, codigo:codigoDe(salidaSocio) }, function(r){
     if(!r || !r.ok){
      pintarSalida(d, r && r.error === "no autorizado" ? "Solo el teléfono que registró tu ingreso puede marcar la salida. Avísale a recepción."
@@ -1273,7 +1276,8 @@ function renderEvolucion(s){
   document.getElementById("salidaCard").hidden = true;
   clearInterval(salidaTimer);
   if(CHECKIN_URL) registrarIngreso(s, false);
-  salidaTimer = setInterval(function(){ if(!document.hidden) consultarSalida(); }, 30000);
+  /* El contador se refresca solo mientras la tarjeta está a la vista. */
+  salidaTimer = setInterval(function(){ if(!document.hidden) consultarSalida(); }, 15000);
  }
  document.addEventListener("visibilitychange", function(){ if(!document.hidden) consultarSalida(); });
 

@@ -95,9 +95,14 @@ header.top h1 span{ color:var(--rojo); }
 .feed-item .fveces{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
  border:1px solid rgba(212,175,55,.6); color:var(--dorado); background:rgba(212,175,55,.12);
  white-space:nowrap; }
-/* Salida marcada en recepción o en la tarjeta del socio (10/2026). */
-.feed-item .fsalio{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
- color:var(--gris,#CFCFCF); background:#262626; border:1px solid #3a3a3a; }
+/* Notas de vencimiento y turno dentro del panel de ingresos (ingresos.js). */
+.ing-item .fvenc{ font-size:12px; font-weight:700; }
+.ing-item .fvenc.good{ color:var(--verde); }
+.ing-item .fvenc.warn{ color:var(--dorado); }
+.ing-item .fvenc.danger{ color:#E85C5C; }
+.ing-item .fturno{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px; border:1px solid; white-space:nowrap; }
+.ing-item .fturno[data-t="ok"]{ color:var(--verde); border-color:rgba(92,168,92,.5); }
+.ing-item .fturno[data-t="tope"]{ color:var(--dorado); border-color:rgba(212,175,55,.6); background:rgba(212,175,55,.12); }
 .feed-item .fturno{ font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:999px;
  border:1px solid; white-space:nowrap; }
 .feed-item .fturno[data-t="ok"]{ color:#5CA85C; border-color:rgba(92,168,92,.5); }
@@ -175,7 +180,7 @@ header.top h1 span{ color:var(--rojo); }
  .banda-item button{ font-size:11px; padding:8px 11px; }
  .feed-item{ padding:11px 13px; }
  .feed-item .fname{ font-size:13px; }
- .feed-item .fvenc, .feed-item .fturno, .feed-item .fveces, .feed-item .fsalio{ font-size:10.5px; }
+ .feed-item .fvenc, .feed-item .fturno, .feed-item .fveces{ font-size:10.5px; }
  .feed-item .ftime{ font-size:11px; }
 }
 
@@ -289,12 +294,15 @@ Esta pantalla todavía no está conectada. Falta pegar el link del check-in (te 
 </div>
 
 <div class="feed-head" id="ingresosHead">
-<h2>Ingresos recientes</h2>
+<h2 id="ingTitulo">Ingresos de hoy</h2>
 <span class="dot-status"><span class="dot-live"></span> En vivo · <span id="origenLista">—</span></span>
 </div>
+<!-- Mismo panel completo que el mesón (ingresos.js): contadores, quién
+     sigue dentro con MARCAR SALIDA e historial. -->
 <div id="feed"></div>
 </div>
 
+<script src="ingresos.js?v=4"></script>
 <script>
 const LOGO_B64 = "assets/logo-oficial.webp";
 /* Se completa con el link de "Implementar como app web" de Google Apps Script. */
@@ -351,31 +359,6 @@ function diaDelTs(ts){
 function hoyISO(){
  var d = new Date();
  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-}
-/* Un mismo escaneo a veces llega repetido desde el script de Google. Se
-   agrupan por persona + d\u00eda para que el feed muestre una sola l\u00ednea con
-   "\u00d7N" en vez de N l\u00edneas iguales \u2014 igual que ya hace control.html. */
-function juntarRepetidos(lista){
- var porLlave = {}, orden = [];
- lista.forEach(function(r){
-  var k = sinTildes(r.nombre) + "|" + sinTildes(r.apellido) + "|" + diaDelTs(r.ts);
-  var g = porLlave[k];
-  if(!g){
-   porLlave[k] = { nombre:r.nombre, apellido:r.apellido, ts:r.ts,
-                   primera:r.ts, veces:1, dia:diaDelTs(r.ts) };
-   orden.push(k);
-   return;
-  }
-  g.veces++;
-  if(r.ts > g.ts) g.ts = r.ts;
-  if(r.ts < g.primera) g.primera = r.ts;
- });
- return orden.map(function(k){ return porLlave[k]; });
-}
-function textoVeces(g){
- if(g.veces < 2) return "";
- var cuando = (g.dia === hoyISO()) ? " hoy" : "";
- return g.veces + "\u00aa vez" + cuando;
 }
 
 /* \u2500\u2500 contador de d\u00edas para Turno, Tres Veces y Semanal \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -707,38 +690,37 @@ var firstPoll = true;
 
 function keyOf(r){ return r.ts + "|" + r.nombre + "|" + r.apellido; }
 
-/* Hora de salida de esa persona ese día, solo si TODOS sus ingresos ya
-   tienen salida (si volvió a entrar, sigue dentro). 0 = sigue dentro. */
-function salidaDe(rows, g){
- var k = sinTildes(g.nombre) + "|" + sinTildes(g.apellido), ultima = 0, abierta = false;
- rows.forEach(function(x){
-  if(sinTildes(x.nombre) + "|" + sinTildes(x.apellido) !== k || diaDelTs(x.ts) !== g.dia) return;
-  if(!x.salida) abierta = true; else if(x.salida > ultima) ultima = x.salida;
- });
- return abierta ? 0 : ultima;
-}
 /* Fecha de Chile (la misma que usa la hoja para separar los días). */
 function diaChile(){
  try{
   return new Intl.DateTimeFormat("en-CA", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date());
  }catch(e){ return diaDelTs(Date.now()); }
 }
-function renderFeed(rows){
- var feed = document.getElementById("feed");
- var agrupadas = juntarRepetidos(rows);
- if(agrupadas.length===0){ feed.innerHTML = '<div class="feed-empty">Todavía no hay ingresos registrados.</div>'; return; }
- feed.innerHTML = agrupadas.map(function(r){
-  var d = veredictoDe(r);
-  var s = buscarSocio(r.nombre, r.apellido);
-  var nt = s ? notaTurno(s) : null;
-  var nota = d.corto || d.detalle;
-  var vencHtml = nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '';
-  var turnoHtml = nt ? '<span class="fturno" data-t="'+(nt.pasado?"tope":"ok")+'">'+escapeHtml(nt.txt)+'</span>' : '';
-  var vecesHtml = r.veces > 1 ? '<span class="fveces">'+escapeHtml(textoVeces(r))+'</span>' : '';
-  var sal = salidaDe(rows, r);
-  var salioHtml = sal ? '<span class="fsalio">Salió '+fmtTime(sal)+'</span>' : '';
-  return '<div class="feed-item"><span class="finfo"><span class="fname">'+escapeHtml(r.nombre)+' '+escapeHtml(r.apellido)+'</span>'+vencHtml+turnoHtml+vecesHtml+salioHtml+'</span><span class="ftime">'+fmtTime(r.ts)+'</span></div>';
- }).join('');
+/* La lista de ingresos es el panel completo de ingresos.js (el mismo del
+   mesón): contadores Ingresos / Personas / Dentro ahora, quién sigue
+   dentro con MARCAR SALIDA (pide la clave de administración una sola vez
+   en esta tablet) y el historial de cualquier día. */
+var panelIngresos = null;
+function notaIngreso(r){
+ var d = veredictoDe(r);
+ var s = buscarSocio(r.nombre, r.apellido);
+ var nt = s ? notaTurno(s) : null;
+ var nota = d.corto || d.detalle;
+ return (nota ? '<span class="fvenc '+d.cls+'">'+escapeHtml(nota)+'</span>' : '') +
+  (nt ? '<span class="fturno" data-t="'+(nt.pasado?"tope":"ok")+'">'+escapeHtml(nt.txt)+'</span>' : '');
+}
+function renderFeed(data){
+ if(!panelIngresos && window.WgymIngresos){
+  panelIngresos = WgymIngresos.crear({
+   raiz: document.getElementById("feed"),
+   url: CHECKIN_URL,
+   compacto: true,
+   extraHtml: notaIngreso,
+   alTitulo: function(t){ document.getElementById("ingTitulo").textContent = t; },
+   alTocar: function(r){ showHero(r); }
+  });
+ }
+ if(panelIngresos) panelIngresos.recibir(data);
 }
 
 function showHero(r){
@@ -798,7 +780,7 @@ function handleData(data){
  }
  rows.forEach(function(r){ seenKeys[keyOf(r)] = true; });
  firstPoll = false;
- renderFeed(rows);
+ renderFeed(data);
 }
 
 var pollCounter = 0;

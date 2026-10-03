@@ -12,7 +12,8 @@
    Quién puede hacer qué:
    - Cualquiera (sin clave, como hoy la lista de ingresos):
        listarIngresos  → todos los ingresos de un día (fecha de Chile).
-       miIngreso       → el estado de UNA persona hoy.
+       miIngreso       → el estado de UNA persona hoy, más cuántas personas
+                         hay dentro ahora (solo el número, sin nombres).
        ingresoTarjeta  → registra el ingreso desde la tarjeta virtual, pero
                          SOLO si esa persona todavía no tiene ingreso hoy.
                          Abrir la tarjeta otra vez (dentro o ya salida) no
@@ -92,6 +93,25 @@ function mismaPersona_(r, nombre, apellido) {
   return normNombre_(r.nombre) === nombre && normNombre_(r.apellido) === apellido;
 }
 
+/* Cuántas personas distintas tienen ingreso hoy sin salida (solo el
+   número: la tarjeta del socio nunca recibe nombres de otros). */
+function contarDentro_(filas) {
+  var vistos = {}, n = 0;
+  filas.forEach(function (r) {
+    if (r.salida) return;
+    var k = normNombre_(r.nombre) + "|" + normNombre_(r.apellido);
+    if (!vistos[k]) { vistos[k] = true; n++; }
+  });
+  return n;
+}
+
+function estadoDe_(todas, nombre, apellido, codigo) {
+  var mias = todas.filter(function (r) { return mismaPersona_(r, nombre, apellido); });
+  var estado = estadoPersona_(mias, codigo);
+  estado.dentroAhora = contarDentro_(todas);
+  return estado;
+}
+
 function estadoPersona_(mias, codigo) {
   var abiertas = mias.filter(function (r) { return !r.salida; });
   var ultimaSalida = 0;
@@ -132,10 +152,8 @@ function miIngreso_(e) {
   var p = e.parameter;
   var nombre = normNombre_(p.nombre), apellido = normNombre_(p.apellido);
   if (!nombre || !apellido) return respond_(e, { ok: false, error: "faltan datos" });
-  var mias = filasDelDia_(getSheet_(), diaCL_(Date.now())).filter(function (r) {
-    return mismaPersona_(r, nombre, apellido);
-  });
-  return respond_(e, estadoPersona_(mias, String(p.codigo || "")));
+  var todas = filasDelDia_(getSheet_(), diaCL_(Date.now()));
+  return respond_(e, estadoDe_(todas, nombre, apellido, String(p.codigo || "")));
 }
 
 function ingresoTarjeta_(e) {
@@ -146,13 +164,11 @@ function ingresoTarjeta_(e) {
   var forzar = p.forzar === "1";
   return conCandado_(e, function () {
     var sheet = getSheet_();
-    var mias = filasDelDia_(sheet, diaCL_(Date.now())).filter(function (r) {
-      return mismaPersona_(r, nombre, apellido);
-    });
-    var estado = estadoPersona_(mias, String(p.codigo || ""));
+    var todas = filasDelDia_(sheet, diaCL_(Date.now()));
+    var estado = estadoDe_(todas, nombre, apellido, String(p.codigo || ""));
     /* Ya vino hoy: abrir la tarjeta es solo una consulta. Volver a entrar
        (forzar) solo se acepta si ya tiene la salida marcada. */
-    if (mias.length && (!forzar || estado.dentro)) {
+    if (estado.vino && (!forzar || estado.dentro)) {
       estado.registrado = false;
       return respond_(e, estado);
     }
@@ -163,8 +179,10 @@ function ingresoTarjeta_(e) {
     var vencCell = sheet.getRange(sheet.getLastRow(), 4);
     vencCell.setNumberFormat("@");
     vencCell.setValue(String(p.venc || ""));
-    return respond_(e, { ok: true, ingresos: true, registrado: true, codigo: codigo,
-                         vino: true, dentro: true, desde: ahora, salida: 0, puedeMarcar: true });
+    var resp = estadoDe_(filasDelDia_(sheet, diaCL_(ahora)), nombre, apellido, codigo);
+    resp.registrado = true;
+    resp.codigo = codigo;
+    return respond_(e, resp);
   });
 }
 
@@ -175,15 +193,20 @@ function salidaSocio_(e) {
   if (!nombre || !apellido || !codigo) return respond_(e, { ok: false, error: "faltan datos" });
   return conCandado_(e, function () {
     var sheet = getSheet_();
-    var abiertas = filasDelDia_(sheet, diaCL_(Date.now())).filter(function (r) {
+    var todas = filasDelDia_(sheet, diaCL_(Date.now()));
+    var abiertas = todas.filter(function (r) {
       return !r.salida && mismaPersona_(r, nombre, apellido);
     });
-    if (!abiertas.length) return respond_(e, { ok: true, ingresos: true, cerradas: 0 });
+    if (!abiertas.length) return respond_(e, { ok: true, ingresos: true, cerradas: 0, dentroAhora: contarDentro_(todas) });
     var suya = abiertas.some(function (r) { return r.codigo === codigo; });
     if (!suya) return respond_(e, { ok: false, error: "no autorizado" });
     var ahora = Date.now();
-    abiertas.forEach(function (r) { sheet.getRange(r.fila, 5, 1, 2).setValues([[ahora, "tarjeta"]]); });
-    return respond_(e, { ok: true, ingresos: true, cerradas: abiertas.length, salida: ahora });
+    abiertas.forEach(function (r) {
+      sheet.getRange(r.fila, 5, 1, 2).setValues([[ahora, "tarjeta"]]);
+      r.salida = ahora;
+    });
+    return respond_(e, { ok: true, ingresos: true, cerradas: abiertas.length, salida: ahora,
+                         dentroAhora: contarDentro_(todas) });
   });
 }
 

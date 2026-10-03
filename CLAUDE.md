@@ -242,18 +242,20 @@ links públicos.
 
 ### Ingresos de hoy y MARCAR SALIDA (desde 10/2026)
 
-`control.html` muestra el panel **"Dentro del gimnasio"** (`ingresos.js`),
-simplificado a pedido de la dueña (10/2026): solo el contador **"DENTRO
-AHORA"** (número grande en verde, cada socio contado una sola vez,
-calculado con los registros reales de la hoja) y debajo la lista de
-quienes tienen ingreso de hoy sin salida, cada uno con **MARCAR SALIDA**.
-Al marcar la salida (recepción o el propio socio) sale de la lista y el
-contador baja en todos los equipos (se refrescan solos cada 4 segundos).
-**No volver a poner** los contadores "Ingresos"/"Personas" en la vista
-principal. El historial completo (cualquier día, búsqueda, estado de
-cada ingreso, "Deshacer") queda detrás del botón **"VER HISTORIAL"**.
-`pantalla.html` muestra "Salió HH:MM" y `tarjeta.html` el cuadro "Estás
-dentro del gimnasio" con "Marcar mi salida".
+**Mesón (`control.html`) y tablet (`pantalla.html`)** muestran el panel
+completo **"Ingresos de hoy"** (`ingresos.js`), sin simplificar (pedido
+explícito de la dueña, 10/2026): contadores **Ingresos / Personas /
+Dentro ahora**, la lista de quienes siguen dentro con **MARCAR SALIDA**,
+búsqueda, selector de fecha e historial del día (DENTRO / SALIDA
+REGISTRADA, "Deshacer"). En la tablet, MARCAR SALIDA pide la clave de
+administración una sola vez y la guarda en ese equipo.
+
+**Tarjeta virtual (`tarjeta.html`)**: muestra **solo** el contador verde
+**"DENTRO AHORA"** (número de personas con ingreso hoy sin salida, que
+`miIngreso` entrega como `dentroAhora`), nunca los contadores
+Ingresos/Personas ni nombres de otros socios, más el botón **"Registrar
+mi salida"** cuando el socio está dentro. Se refresca cada 15 segundos
+mientras la tarjeta está a la vista.
 
 - **La fuente es la hoja de Google del check-in**, nunca un archivo del
   repo: el Apps Script (acciones `listarIngresos`, `registrarSalida`,
