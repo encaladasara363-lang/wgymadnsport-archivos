@@ -885,7 +885,15 @@ function renderEvolucion(s){
  sociosTarjetaPromise.then(function(lista){
  var s = buscarEnLista_(lista, candidatos);
  if(s){ cb(s); return; }
- sociosJsonComoApi_().then(function(lista2){ cb(buscarEnLista_(lista2, candidatos)); });
+ sociosJsonComoApi_().then(function(lista2){
+ var s2 = buscarEnLista_(lista2, candidatos);
+ if(s2){ cb(s2); return; }
+ /* Puede que recepción lo haya registrado recién (por ejemplo un pase
+    diario) después de abrir esta página: se pide la lista de nuevo una
+    vez antes de decir que no está. */
+ sociosTarjetaPromise = cargarSociosTarjeta();
+ sociosTarjetaPromise.then(function(lista3){ cb(buscarEnLista_(lista3, candidatos)); });
+ });
  });
  }
  function socioApiATarjeta_(s){
