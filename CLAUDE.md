@@ -352,8 +352,11 @@ ver cuándo el gym está más vacío.
   pedido de la dueña el script nuevo (`salidaLibre:true` en
   `miIngreso`) ya no lo exige: basta el nombre, igual que para entrar, y
   la salida queda con origen "tarjeta sin codigo". La tarjeta muestra el
-  botón solo si el script responde `salidaLibre`, así que nada cambia
-  hasta que la dueña pegue el script nuevo.
+  botón solo si el script responde `salidaLibre`. **Instalado por la
+  dueña el 03-10-2026 a las 20:41 como Versión 9** (misma implementación
+  y enlace; INGRESOS.gs verificado idéntico al del repo vía Drive). Para
+  volver atrás: Implementar → Administrar implementaciones → lápiz →
+  Versión 8.
 - Un equipo recién abierto muestra lo que trae la hoja; la copia del
   equipo solo se usa sin conexión o con el script antiguo.
 
