@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<title>WGYMADNSPORT · Horarios Tranquilos</title>
+<style>
+:root {
+  --negro: #0A0A0B;
+  --surface: #161616;
+  --surface-2: #1F1F1F;
+  --rojo: #E30613;
+  --dorado: #D4AF37;
+  --blanco: #FFFFFF;
+  --gris: #CFCFCF;
+  --gris-soft: #8C8C8C;
+  --line: #2A2A2A;
+  --verde: #5CA85C;
+  --naranja: #D4AF37;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--negro);
+  color: var(--blanco);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+header.top {
+  background: linear-gradient(180deg, #111 0%, var(--negro) 100%);
+  border-bottom: 3px solid var(--rojo);
+  padding: 20px;
+  text-align: center;
+}
+
+header.top .logo {
+  width: min(78%, 260px);
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+header.top h1 {
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: .02em;
+}
+
+header.top h1 span { color: var(--rojo); }
+header.top .sub { font-size: 12px; color: var(--gris-soft); margin: 8px 0 0; font-weight: 600; }
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 22px 20px 60px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.panel > h2 {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin: 0;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #131313;
+}
+
+.panel .cuerpo { padding: 16px 18px; }
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  gap: 12px;
+}
+
+.stat-row:last-child { border-bottom: none; }
+
+.stat-hora {
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--dorado);
+  min-width: 70px;
+}
+
+.stat-bar-wrap {
+  flex: 1;
+  background: var(--surface-2);
+  border-radius: 8px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.stat-bar-fill {
+  background: linear-gradient(90deg, var(--verde) 0%, var(--verde) 80%, transparent 100%);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--blanco);
+  white-space: nowrap;
+}
+
+.stat-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gris-soft);
+  min-width: 60px;
+  text-align: right;
+}
+
+.aviso {
+  background: rgba(212, 175, 55, .1);
+  border: 1.5px solid var(--dorado);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13.5px;
+  color: var(--gris);
+  line-height: 1.6;
+}
+
+.aviso b { color: var(--dorado); }
+
+.empty {
+  text-align: center;
+  color: var(--gris-soft);
+  font-size: 14px;
+  padding: 26px 0;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--naranja);
+  color: var(--negro);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  margin-left: 10px;
+}
+</style>
+
+<header class="top">
+  <img src="assets/logo-wgym.png" alt="WGYMADNSPORT" class="logo">
+  <h1>Horarios <span>Tranquilos</span></h1>
+  <div class="sub">Últimas 2 semanas</div>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <h2>📊 Franjas Horarias Menos Ocupadas</h2>
+    <div class="cuerpo" id="tranquilos"></div>
+  </div>
+
+  <div class="panel">
+    <h2>🔥 Franjas Más Movidas</h2>
+    <div class="cuerpo" id="movidas"></div>
+  </div>
+
+  <div class="aviso" id="aviso-datos"></div>
+</div>
+
+<script src="salidas-motor.js"></script>
+<script>
+(async () => {
+  await SalidasMotor.cargar();
+  const stats = SalidasMotor.estadisticasHorarias();
+
+  const tranquilosDiv = document.getElementById('tranquilos');
+  const movidasDiv = document.getElementById('movidas');
+  const avisoDiv = document.getElementById('aviso-datos');
+
+  if (!stats.ok) {
+    tranquilosDiv.innerHTML = `<div class="empty">Datos insuficientes. Vuelve cuando haya ${2 - stats.diasUnicos} día${2 - stats.diasUnicos !== 1 ? 's' : ''} más de registro.</div>`;
+    movidasDiv.innerHTML = `<div class="empty">—</div>`;
+    avisoDiv.textContent = `Mostrando análisis de los últimos ${stats.diasUnicos} día${stats.diasUnicos !== 1 ? 's' : ''} de ingresos. Necesitamos al menos 2 días para calcular promedios.`;
+    return;
+  }
+
+  avisoDiv.innerHTML = `<b>✓ Analizado:</b> ${stats.diasUnicos} días de datos. Los promedios mostrados son ingresos por día en esa franja horaria.`;
+
+  const renderLista = (items, div) => {
+    const maxIngresos = Math.max(...items.map(i => i.ingresos));
+    div.innerHTML = items.map(item => `
+      <div class="stat-row">
+        <div class="stat-hora">${item.hora}</div>
+        <div class="stat-bar-wrap">
+          <div class="stat-bar-fill" style="width: ${(item.ingresos / maxIngresos) * 100}%">
+            ${item.ingresos > 0 ? item.ingresos : ''}
+          </div>
+        </div>
+        <div class="stat-val">
+          ${item.promedio} <span class="badge">ingresos/día</span>
+        </div>
+      </div>
+    `).join('');
+  };
+
+  renderLista(stats.horariosMasTranquilos, tranquilosDiv);
+  renderLista(stats.horariosMasMovidos, movidasDiv);
+})();
+</script>

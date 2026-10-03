@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0A0A0A">
+<title>Prueba: Sistema de Salidas</title>
+<style>
+:root {
+  --negro: #0A0A0B;
+  --surface: #161616;
+  --surface-2: #1F1F1F;
+  --rojo: #E30613;
+  --dorado: #D4AF37;
+  --blanco: #FFFFFF;
+  --gris: #CFCFCF;
+  --gris-soft: #8C8C8C;
+  --line: #2A2A2A;
+  --verde: #5CA85C;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--negro);
+  color: var(--blanco);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 15px;
+}
+
+header {
+  background: linear-gradient(180deg, #111 0%, var(--negro) 100%);
+  border-bottom: 3px solid var(--rojo);
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+header h1 span { color: var(--rojo); }
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.panel h2 {
+  margin: 0;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #131313;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.panel .cuerpo { padding: 16px 18px; }
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 10px 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: inherit;
+  letter-spacing: .05em;
+}
+
+.btn-rojo { background: var(--rojo); color: #fff; }
+.btn-oro { background: var(--dorado); color: #000; }
+.btn-linea { background: transparent; border: 1px solid var(--line); color: var(--gris); }
+.btn:hover:not(:disabled) { filter: brightness(1.1); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+
+.form-group {
+  margin-bottom: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.form-group input, .form-group select {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--blanco);
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.form-group input { flex: 1; min-width: 150px; }
+
+.feed-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.feed-item .info {
+  flex: 1;
+  min-width: 0;
+}
+
+.feed-item .nombre {
+  font-weight: 800;
+  font-size: 15px;
+  margin: 0;
+}
+
+.feed-item .detalles {
+  font-size: 12px;
+  color: var(--gris-soft);
+  margin: 4px 0 0;
+}
+
+.feed-empty {
+  text-align: center;
+  color: var(--gris-soft);
+  padding: 20px 0;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--verde);
+  color: var(--negro);
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+
+.log {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 12px;
+  font-family: monospace;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 12px;
+}
+
+.log-entry {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.log-entry:last-child { border-bottom: none; }
+
+.stat {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--gris-soft);
+}
+
+.stat-valor {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--dorado);
+}
+</style>
+
+<header>
+  <h1>Prueba: Sistema de <span>Salidas</span></h1>
+  <p style="color: var(--gris-soft); margin: 6px 0 0; font-size: 12px;">
+    Control de ingresos y salidas en tiempo real
+  </p>
+</header>
+
+<div class="wrap">
+  <!-- Panel de control: Registrar ingresos y salidas -->
+  <div class="panel">
+    <h2>🚪 Registrar Ingreso / Salida</h2>
+    <div class="cuerpo">
+      <div class="form-group">
+        <input type="text" id="nombre" placeholder="Nombre" value="CARLOS">
+        <input type="text" id="apellido" placeholder="Apellido" value="ARAYA">
+      </div>
+      <div class="form-group">
+        <button class="btn btn-oro" id="btnIngreso">➡️ Registrar Ingreso</button>
+        <button class="btn btn-rojo" id="btnSalida">⬅️ Registrar Salida</button>
+        <button class="btn btn-linea" id="btnLimpiar">🗑️ Limpiar Datos</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="panel">
+    <h2>📊 Estado Actual</h2>
+    <div class="cuerpo">
+      <div class="stat">
+        <span class="stat-label">Socios dentro del gimnasio</span>
+        <span class="stat-valor" id="contarDentro">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Total de registros hoy</span>
+        <span class="stat-valor" id="totalRegistros">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Socios dentro -->
+  <div class="panel">
+    <h2>✓ Socios Dentro</h2>
+    <div class="cuerpo" id="sociosDentro"></div>
+  </div>
+
+  <!-- Historial -->
+  <div class="panel">
+    <h2>📝 Historial del Día</h2>
+    <div class="cuerpo">
+      <div id="historial" class="log"></div>
+    </div>
+  </div>
+
+  <!-- Análisis horarios -->
+  <div class="panel">
+    <h2>📈 Análisis de Horarios</h2>
+    <div class="cuerpo">
+      <button class="btn btn-linea" id="btnAnalizar" style="width: 100%;">Analizar horarios tranquilos</button>
+      <div id="analisis" style="margin-top: 12px;"></div>
+    </div>
+  </div>
+</div>
+
+<script src="salidas-motor.js"></script>
+<script>
+(async function() {
+  'use strict';
+
+  const Motor = window.SalidasMotor;
+  let logEntries = [];
+
+  const nombre = document.getElementById('nombre');
+  const apellido = document.getElementById('apellido');
+  const btnIngreso = document.getElementById('btnIngreso');
+  const btnSalida = document.getElementById('btnSalida');
+  const btnLimpiar = document.getElementById('btnLimpiar');
+  const btnAnalizar = document.getElementById('btnAnalizar');
+  const contarDentro = document.getElementById('contarDentro');
+  const totalRegistros = document.getElementById('totalRegistros');
+  const sociosDentro = document.getElementById('sociosDentro');
+  const historial = document.getElementById('historial');
+  const analisis = document.getElementById('analisis');
+
+  function log(msg) {
+    const timestamp = new Date().toLocaleTimeString();
+    logEntries.unshift(`[${timestamp}] ${msg}`);
+    if (logEntries.length > 20) logEntries.pop();
+    historial.innerHTML = logEntries.map((e, i) =>
+      `<div class="log-entry">${e}</div>`
+    ).join('');
+  }
+
+  async function actualizar() {
+    await Motor.cargar();
+
+    const dentro = Motor.sociosDentro();
+    contarDentro.textContent = dentro.length;
+
+    const cache = Motor.getCache();
+    totalRegistros.textContent = cache.registros.length;
+
+    if (!dentro.length) {
+      sociosDentro.innerHTML = '<div class="feed-empty">Nadie dentro.</div>';
+    } else {
+      sociosDentro.innerHTML = dentro.map(s => {
+        const reg = Motor.obtenerUltimoIngreso(s.n, s.a);
+        const hora = reg?.ingreso?.hora || '—';
+        return `
+          <div class="feed-item">
+            <div class="info">
+              <p class="nombre">${s.n} ${s.a}</p>
+              <p class="detalles">Ingreso: ${hora} <span class="badge">DENTRO</span></p>
+            </div>
+            <button class="btn btn-rojo" onclick="salida('${s.n}', '${s.a}')">
+              Marcar Salida
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  window.salida = async (n, a) => {
+    const res = await Motor.registrarSalida(n, a, 'demostración');
+    if (res.ok) {
+      log(`✓ ${n} ${a} salió a las ${res.salida.hora}`);
+      await actualizar();
+    } else {
+      log(`✗ Error: ${res.msg}`);
+    }
+  };
+
+  btnIngreso.addEventListener('click', async () => {
+    const n = nombre.value.toUpperCase().trim();
+    const a = apellido.value.toUpperCase().trim();
+    if (!n || !a) {
+      log('⚠️ Faltan nombre o apellido');
+      return;
+    }
+    const res = Motor.registrarIngreso(n, a, 'demostración');
+    if (res.ok) {
+      log(`✓ ${n} ${a} ingresó`);
+      await actualizar();
+    } else {
+      log(`✗ Error: ${res.msg}`);
+    }
+  });
+
+  btnSalida.addEventListener('click', async () => {
+    const n = nombre.value.toUpperCase().trim();
+    const a = apellido.value.toUpperCase().trim();
+    if (!n || !a) {
+      log('⚠️ Faltan nombre o apellido');
+      return;
+    }
+    await window.salida(n, a);
+  });
+
+  btnLimpiar.addEventListener('click', () => {
+    nombre.value = '';
+    apellido.value = '';
+    nombre.focus();
+  });
+
+  btnAnalizar.addEventListener('click', async () => {
+    const stats = Motor.estadisticasHorarias();
+    if (!stats.ok) {
+      analisis.innerHTML = `<p style="color: var(--gris-soft); margin: 0;">
+        ${stats.msg} (${stats.diasUnicos} días registrados)
+      </p>`;
+      return;
+    }
+
+    const html = `
+      <p style="font-size: 12px; color: var(--gris-soft); margin: 0 0 12px;">
+        <strong>${stats.diasUnicos} días</strong> de datos analizados.
+      </p>
+      <p style="font-weight: 700; margin: 12px 0 8px; font-size: 12px; text-transform: uppercase; color: var(--dorado);">
+        Más tranquilas:
+      </p>
+      ${stats.horariosMasTranquilos.map(h => `
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 13px;">
+          <strong>${h.hora}</strong>
+          <span>${h.promedio} ingresos/día</span>
+        </div>
+      `).join('')}
+      <p style="font-weight: 700; margin: 12px 0 8px; font-size: 12px; text-transform: uppercase; color: var(--rojo);">
+        Más movidas:
+      </p>
+      ${stats.horariosMasMovidos.map(h => `
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 13px;">
+          <strong>${h.hora}</strong>
+          <span>${h.promedio} ingresos/día</span>
+        </div>
+      `).join('')}
+    `;
+    analisis.innerHTML = html;
+  });
+
+  // Actualización inicial y periódica
+  await actualizar();
+  setInterval(actualizar, 3000);
+
+  log('Sistema listo. Prueba ingresando/saliendo socios.');
+})();
+</script>
