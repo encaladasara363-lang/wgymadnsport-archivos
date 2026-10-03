@@ -68,28 +68,31 @@ body{font-family:'Barlow',Arial,sans-serif;color:#fff;-webkit-print-color-adjust
 .franja.top{top:8mm}.franja.bot{bottom:10mm}
 .franja .r{background:#E30613;flex:0 0 65%}.franja .g{background:#D4AF37;flex:1}
 .franja.bot .r{flex:0 0 30%}
-.logo{width:48mm;margin-top:3mm}
+.logo{width:42mm;margin-top:2mm}
 .marca{margin-top:1mm;color:#D4AF37;font:800 12pt 'Barlow Condensed',Arial,sans-serif;letter-spacing:.32em;text-transform:uppercase}
 .marca:before,.marca:after{content:"—";color:#E30613;margin:0 3mm}
 h1{font-family:'Rubik Distressed',Impact,sans-serif;font-weight:400;text-transform:uppercase;text-align:center;line-height:.9;margin-top:2mm}
-h1 .l1{display:block;color:#fff;font-size:56pt}
-h1 .l2{display:block;color:#D4AF37;font-size:58pt}
-.sub{margin-top:3mm;text-align:center;font:800 15pt 'Barlow',Arial,sans-serif;letter-spacing:.03em;text-transform:uppercase;line-height:1.2}
+h1 .l1{display:block;color:#fff;font-size:50pt}
+h1 .l2{display:block;color:#D4AF37;font-size:54pt}
+.sub{margin-top:2mm;text-align:center;font:800 15pt 'Barlow',Arial,sans-serif;letter-spacing:.03em;text-transform:uppercase;line-height:1.2}
 .sub b{color:#E30613}
-.centro{margin-top:6mm;display:flex;gap:7mm;align-items:center;width:100%;justify-content:center}
-.caja{background:#fff;border:2.4mm solid #D4AF37;border-radius:7mm;padding:4mm;width:74mm;height:74mm;box-shadow:0 2mm 6mm rgba(0,0,0,.5);flex:none}
+.centro{margin-top:5mm;display:flex;gap:7mm;align-items:center;width:100%;justify-content:center}
+.caja{background:#fff;border:2.4mm solid #D4AF37;border-radius:7mm;padding:4mm;width:66mm;height:66mm;box-shadow:0 2mm 6mm rgba(0,0,0,.5);flex:none}
 .caja img{display:block;width:100%;height:100%;image-rendering:pixelated}
 .pasos{flex:1;max-width:88mm;display:flex;flex-direction:column;gap:4mm}
 .p{display:flex;gap:3mm;align-items:flex-start;font:700 13.5pt 'Barlow',Arial,sans-serif;line-height:1.2}
 .p i{flex:none;font-style:normal;width:9mm;height:9mm;border-radius:50%;background:#E30613;border:.6mm solid #D4AF37;display:grid;place-items:center;font:400 14pt 'Anton',Arial,sans-serif}
 .p small{display:block;color:#b9b9bf;font-weight:600;font-size:11pt;margin-top:.6mm}
-.pill{margin-top:5mm;background:#c4161c;border:.8mm solid #D4AF37;border-radius:999px;padding:1.6mm 7mm;font:800 14pt 'Barlow',Arial,sans-serif;letter-spacing:.04em;white-space:nowrap}
-.precios{margin-top:6mm;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:2mm 8mm;background:rgba(255,255,255,.04);border:.5mm solid rgba(212,175,55,.6);border-radius:5mm;padding:4mm 7mm}
+.pill{margin-top:4mm;background:#c4161c;border:.8mm solid #D4AF37;border-radius:999px;padding:1.6mm 7mm;font:800 14pt 'Barlow',Arial,sans-serif;letter-spacing:.04em;white-space:nowrap}
+.precios{margin-top:4mm;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:2mm 8mm;background:rgba(255,255,255,.04);border:.5mm solid rgba(212,175,55,.6);border-radius:5mm;padding:3mm 7mm}
 .precios .t{grid-column:1/-1;text-align:center;color:#D4AF37;font:800 12pt 'Barlow Condensed',Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase}
-.pr{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.3mm dashed rgba(255,255,255,.18);padding:1mm 0;font:700 11.5pt 'Barlow',Arial,sans-serif}
-.pr b{font:400 14pt 'Anton',Arial,sans-serif;color:#fff;letter-spacing:.02em}
-.dir{margin-top:5mm;font:800 13pt 'Barlow',Arial,sans-serif}
-.fonos{margin-top:1.5mm;color:#D4AF37;font:800 18pt 'Barlow',Arial,sans-serif;letter-spacing:.02em}
+.pr{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.3mm dashed rgba(255,255,255,.18);padding:.4mm 0;font:700 12.5pt 'Barlow',Arial,sans-serif}
+.pr b{font:400 18pt 'Anton',Arial,sans-serif;color:#fff;letter-spacing:.02em}
+.dir{margin-top:3mm;font:800 12pt 'Barlow',Arial,sans-serif;color:#cfcfcf}
+.fono{margin-top:4mm;display:flex;align-items:center;gap:4mm;background:#1F8E4E;border:.9mm solid #D4AF37;border-radius:999px;padding:2.5mm 9mm 2.5mm 6mm;box-shadow:0 2mm 6mm rgba(0,0,0,.5)}
+.fono svg{width:12mm;height:12mm;flex:none}
+.fono .tx small{display:block;font:800 10.5pt 'Barlow Condensed',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#e9ffe9}
+.fono .tx b{display:block;font:400 30pt 'Anton',Arial,sans-serif;letter-spacing:.03em;color:#fff;line-height:1.05}
 @media print{html,body{background:#0D0D0F}.btn-imprimir{display:none}.hoja{margin:0;box-shadow:none}}
 @media screen and (max-width:820px){.hoja{transform:scale(.45);transform-origin:top center;margin-bottom:-160mm}}
 </style>
@@ -113,7 +116,7 @@ h1 .l2{display:block;color:#D4AF37;font-size:58pt}
   <div class="pill">💳 Transferencia · Banco Falabella</div>
   <div class="precios"><div class="t">Planes y precios</div><div class="pr"><span>Full Mensual</span><b>$33.000</b></div><div class="pr"><span>3 Veces por Semana</span><b>$28.000</b></div><div class="pr"><span>Funcionarios Públicos</span><b>$28.000</b></div><div class="pr"><span>Estudiante / Profesor</span><b>$28.000</b></div><div class="pr"><span>Mensual Tercera Edad</span><b>$23.000</b></div><div class="pr"><span>Mensual por Turno</span><b>$23.000</b></div><div class="pr"><span>Semanal</span><b>$15.000</b></div><div class="pr"><span>Pase Diario</span><b>$4.000</b></div></div>
   <div class="dir">21 de Mayo 1520, Tocopilla</div>
-  <div class="fonos">+56 9 9154 0156 · +56 9 7519 6394</div>
+  <div class="fono"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35zM12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.31-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.49-8.41z"/></svg><div class="tx"><small>WhatsApp · Sara</small><b>+56 9 7519 6394</b></div></div>
   <div class="franja bot"><i class="r"></i><i class="g"></i></div>
 </div>
 </body>

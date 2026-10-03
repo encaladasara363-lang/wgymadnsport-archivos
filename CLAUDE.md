@@ -75,6 +75,11 @@ o para imprimir — nunca solo uno:
 - **+56 9 7519 6394** — el que ya usan `cartel-qr-whatsapp.html` y otras
   piezas impresas existentes.
 
+**Única excepción, a pedido explícito de la dueña (10/2026):** el cartel
+de pago (`cartel-pago-qr.html`/`.pdf`) y `pagar.html` llevan **solo el
+WhatsApp de Sara (+56 9 7519 6394)**, en grande, porque los pagos y
+comprobantes van a ella. No volver a poner los dos ahí.
+
 ## Planilla de socios (regla permanente)
 
 `socios.json` (en la raíz del repo) es la **única planilla de socios** que
