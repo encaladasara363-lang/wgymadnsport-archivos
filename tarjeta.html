@@ -377,6 +377,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 
 </div>
 
+<script src="pago-datos.js?v=1"></script>
 <script>  
 const LOGO_B64 = "assets/logo-oficial.webp";
 /* Se completa con el link de "Implementar como app web" de Google Apps Script. */
@@ -1076,24 +1077,10 @@ function renderEvolucion(s){
  /* ---------- pagar mensualidad (10/2026) ----------
     Precios oficiales por plan: el monto se toma de esta lista según el
     plan del socio (si el plan no está aquí, se usa el monto de su ficha).
-    Para cambiar un precio o la cuenta, editar SOLO estas dos tablas.
-    Los datos de la cuenta son los de la dueña, publicados a propósito
-    para recibir transferencias (no son datos de socios). */
- var PRECIOS_PLANES = [
-  { re:/full/,                  precio:33000 },
-  { re:/(3|tres) veces/,        precio:28000 },
-  { re:/funcionari/,            precio:28000 },
-  { re:/tercera edad/,          precio:23000 },
-  { re:/turno/,                 precio:23000 },
-  { re:/estudiante|profesor/,   precio:28000 },
-  { re:/\bsemanal\b/,           precio:15000 },
-  { re:/diario/,                precio:4000 }
- ];
- var CUENTA_PAGO = {
-  banco:"Banco Falabella", tipo:"Cuenta Corriente", numero:"19992903080",
-  titular:"Sara Encalada", rut:"15.005.638-1", correo:"encaladasara363@gmail.com",
-  whatsapp:"56975196394"
- };
+    Para cambiar un precio o la cuenta, editar SOLO pago-datos.js. */
+ /* Planes, precios y cuenta: en pago-datos.js (compartido con pagar.html). */
+ var PRECIOS_PLANES = (window.WGYM_PAGO && WGYM_PAGO.planes) || [];
+ var CUENTA_PAGO = (window.WGYM_PAGO && WGYM_PAGO.cuenta) || null;
  function precioDePlan(s){
   var plan = normName(s.plan || "").toLowerCase();
   for(var i = 0; i < PRECIOS_PLANES.length; i++){
@@ -1120,7 +1107,7 @@ function renderEvolucion(s){
  function renderPago(s){
   var box = document.getElementById("pagoCard");
   var monto = precioDePlan(s);
-  if(!monto){ box.hidden = true; return; }
+  if(!monto || !CUENTA_PAGO){ box.hidden = true; return; }
   var c = CUENTA_PAGO, nombre = s.nombre + " " + s.apellido, plan = s.plan || "Plan";
   var asunto = nombre + " - " + plan;
   var filas = [["Banco", c.banco], ["Tipo de cuenta", c.tipo], ["N° de cuenta", c.numero],

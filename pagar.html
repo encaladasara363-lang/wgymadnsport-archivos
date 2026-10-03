@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0B">
+<title>Paga tu mensualidad · WGYMADNSPORT Tocopilla</title>
+<meta name="description" content="Elige tu plan, copia los datos de transferencia y envía tu comprobante por WhatsApp.">
+<!-- Página del cartel "Paga tu mensualidad" (cartel-pago-qr.html). Planes,
+     precios y cuenta vienen de pago-datos.js, igual que en la tarjeta. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Distressed&family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--negro:#0A0A0B;--card:#17171A;--surface:#1F1F23;--line:#2C2C31;--rojo:#E30613;--dorado:#D4AF37;--blanco:#fff;--gris:#CFCFCF;--gris-soft:#8C8C93;--good:#5CA85C;--danger:#E85C5C}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--negro);color:var(--blanco);font-family:'Barlow',Arial,sans-serif}
+.wrap{max-width:520px;margin:0 auto;padding:22px 16px 40px}
+header{text-align:center}
+header img{width:150px;max-width:50%;display:block;margin:0 auto 6px}
+.kicker{color:var(--dorado);font:800 12px 'Barlow Condensed',Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;margin:0}
+h1{font-family:'Rubik Distressed',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:.95;margin:10px 0 6px;font-size:clamp(36px,11vw,52px)}
+h1 span{color:var(--dorado);display:block}
+.intro{color:var(--gris);font-size:15px;margin:0 0 18px;text-align:center}
+.paso{margin:18px 0 0}
+.paso h2{display:flex;align-items:center;gap:10px;font:800 15px 'Barlow Condensed',Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--dorado);margin:0 0 10px}
+.paso h2 b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--rojo);color:#fff;font-size:14px;border:1px solid var(--dorado)}
+.planes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.plan{border:1px solid var(--line);background:var(--card);color:var(--blanco);border-radius:12px;padding:12px 10px;text-align:left;cursor:pointer;font-family:inherit}
+.plan span{display:block;font-size:13px;font-weight:700;color:var(--gris);line-height:1.2}
+.plan b{display:block;font-size:20px;font-weight:800;margin-top:4px}
+.plan[aria-pressed="true"]{border-color:var(--dorado);background:#2A2310;box-shadow:0 0 0 1px var(--dorado) inset}
+.plan[aria-pressed="true"] b{color:var(--dorado)}
+label.campo{display:block;font-size:13px;font-weight:700;color:var(--gris-soft);margin:0 0 6px}
+input.campo{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 12px;color:var(--blanco);font:600 16px 'Barlow',Arial,sans-serif}
+input.campo:focus{outline:none;border-color:var(--dorado)}
+.datos{background:var(--card);border:1px solid var(--dorado);border-radius:14px;padding:6px 14px}
+.fila{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.fila:last-child{border-bottom:none}
+.fila span{color:var(--gris-soft);font-weight:600}
+.fila b{text-align:right;word-break:break-all}
+.fila.monto b{color:var(--dorado);font-size:20px}
+.btn{display:block;width:100%;border-radius:12px;padding:15px;font:800 16px 'Barlow Condensed',Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;text-align:center;text-decoration:none;cursor:pointer;margin-top:10px}
+.btn.copiar{background:var(--rojo);color:#fff;border:1px solid var(--dorado)}
+.btn.wsp{background:#1F8E4E;color:#fff;border:1px solid #25D366}
+.btn[disabled],.btn.off{opacity:.45;pointer-events:none}
+.ok{min-height:18px;margin:8px 0 0;text-align:center;font-weight:700;font-size:14px;color:var(--good)}
+.ok.mal{color:var(--danger)}
+.nota{color:var(--gris-soft);font-size:13px;line-height:1.45;margin:14px 0 0}
+.oculto{display:none}
+footer{margin-top:28px;text-align:center;color:var(--gris-soft);font-size:13px;line-height:1.6}
+footer b{color:var(--dorado)}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <img src="assets/logo-oficial.webp" alt="WGYM ADN SPORT Tocopilla Gimnasio">
+  <p class="kicker">WGYMADNSPORT · Tocopilla</p>
+  <h1>Paga tu <span>mensualidad</span></h1>
+ </header>
+ <p class="intro">Sin anotar nada: elige tu plan, copia los datos y pégalos en la app de tu banco.</p>
+
+ <section class="paso">
+  <h2><b>1</b> Elige tu plan</h2>
+  <div class="planes" id="planes"></div>
+ </section>
+
+ <section class="paso">
+  <h2><b>2</b> Tu nombre</h2>
+  <label class="campo" for="nombre">Nombre y apellido (para saber de quién es el pago)</label>
+  <input class="campo" id="nombre" autocomplete="name" placeholder="Ej.: María González">
+ </section>
+
+ <section class="paso oculto" id="pasoDatos">
+  <h2><b>3</b> Copia y transfiere</h2>
+  <div class="datos" id="datos"></div>
+  <button type="button" class="btn copiar" id="copiar">📋 Copiar datos</button>
+  <p class="ok" id="ok"></p>
+  <a class="btn wsp" id="wsp" target="_blank" rel="noopener">Enviar comprobante por WhatsApp</a>
+  <p class="nota">Pega los datos en la app de tu banco, transfiere y envía el comprobante por WhatsApp. Tu plan se activa cuando recepción confirme el pago.</p>
+ </section>
+
+ <footer>
+  21 de Mayo 1520, Tocopilla<br>
+  <b>+56 9 9154 0156 · +56 9 7519 6394</b>
+ </footer>
+</div>
+<script src="pago-datos.js?v=1"></script>
+<script>
+"use strict";
+(function(){
+ var D = window.WGYM_PAGO, c = D.cuenta, elegido = null;
+ var $ = function(id){ return document.getElementById(id); };
+ function pesos(n){ return "$" + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+ function esc(t){ return String(t).replace(/[&<>"']/g, function(x){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]; }); }
+ var CLAVE_NOMBRE = "wgym_pago_nombre_v1";
+ try{ $("nombre").value = localStorage.getItem(CLAVE_NOMBRE) || ""; }catch(e){}
+
+ $("planes").innerHTML = D.planes.map(function(p, i){
+  return '<button type="button" class="plan" aria-pressed="false" data-i="' + i + '"><span>' + esc(p.nombre) + '</span><b>' + pesos(p.precio) + '</b></button>';
+ }).join("");
+ $("planes").addEventListener("click", function(e){
+  var b = e.target.closest(".plan"); if(!b) return;
+  elegido = D.planes[+b.dataset.i];
+  Array.prototype.forEach.call(document.querySelectorAll(".plan"), function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+  pintar();
+  $("pasoDatos").classList.remove("oculto");
+  setTimeout(function(){ $("nombre").value.trim() ? $("pasoDatos").scrollIntoView({behavior:"smooth", block:"start"}) : $("nombre").focus(); }, 50);
+ });
+ $("nombre").addEventListener("input", function(){
+  try{ localStorage.setItem(CLAVE_NOMBRE, this.value.trim()); }catch(e){}
+  if(elegido) pintar();
+ });
+
+ function filas(){
+  var nombre = $("nombre").value.trim();
+  return [["Banco", c.banco], ["Tipo de cuenta", c.tipo], ["N° de cuenta", c.numero], ["Titular", c.titular],
+   ["RUT", c.rut], ["Correo", c.correo], ["Monto", pesos(elegido.precio)],
+   ["Comentario", (nombre ? nombre + " - " : "") + elegido.nombre]];
+ }
+ function pintar(){
+  $("datos").innerHTML = filas().map(function(f){
+   return '<div class="fila' + (f[0] === "Monto" ? " monto" : "") + '"><span>' + esc(f[0]) + '</span><b>' + esc(f[1]) + '</b></div>';
+  }).join("");
+  var nombre = $("nombre").value.trim();
+  $("wsp").href = "https://wa.me/" + c.whatsapp + "?text=" + encodeURIComponent(
+   "Hola, soy " + (nombre || "____") + ". Pagué mi plan " + elegido.nombre + " de " + pesos(elegido.precio) + " por transferencia. Te envío el comprobante.");
+  $("ok").textContent = ""; $("ok").className = "ok";
+ }
+
+ function copiar(txt){
+  if(navigator.clipboard && window.isSecureContext){
+   return navigator.clipboard.writeText(txt)["catch"](function(){ return copiarViejo(txt); });
+  }
+  return copiarViejo(txt);
+ }
+ function copiarViejo(txt){
+  return new Promise(function(ok, mal){
+   var t = document.createElement("textarea");
+   t.value = txt; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
+   document.body.appendChild(t); t.select(); t.setSelectionRange(0, txt.length);
+   var hecho = false; try{ hecho = document.execCommand("copy"); }catch(e){}
+   t.remove(); hecho ? ok() : mal(Error("no se pudo copiar"));
+  });
+ }
+ $("copiar").addEventListener("click", function(){
+  if(!elegido) return;
+  var txt = filas().map(function(f){ return f[0] + ": " + f[1]; }).join("\n");
+  copiar(txt).then(function(){ $("ok").className = "ok"; $("ok").textContent = "✅ Datos copiados. Pégalos en la app de tu banco."; })
+  ["catch"](function(){ $("ok").className = "ok mal"; $("ok").textContent = "No se pudo copiar. Copia los datos a mano."; });
+ });
+})();
+</script>
+</body>
+</html>

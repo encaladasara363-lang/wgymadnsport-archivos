@@ -221,7 +221,12 @@ su plan y un botón "Pagar mensualidad" con los datos de transferencia
 $33.000; 3 Veces por Semana, Funcionarios Públicos y Estudiante/Profesor
 $28.000; Tercera Edad y Turno $23.000; Semanal $15.000; Pase Diario
 $4.000); un plan que no esté ahí (ej. Plan Especial) usa el `monto` de
-la ficha. La cuenta está en `CUENTA_PAGO`: es la cuenta de la propia
+la ficha. Planes, precios y cuenta viven en **`pago-datos.js`** (un solo
+lugar, lo leen `tarjeta.html` y `pagar.html`). `pagar.html` es la página
+para clientes nuevos (eligen plan, escriben su nombre, Copiar datos,
+WhatsApp); la abre el QR de `cartel-pago-qr.html`/`.pdf` (A4, fuentes
+embebidas). **Si cambia un precio**: editar `pago-datos.js` y además
+regenerar el cartel, que trae los precios impresos. La cuenta es la de la propia
 dueña (Banco Falabella), publicada a propósito por ella para recibir
 transferencias; la regla de "nunca escribir un RUT real" es para los
 RUT de los socios, no para estos datos de cobro. El pago NO renueva
