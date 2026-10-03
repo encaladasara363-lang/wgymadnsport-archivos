@@ -70,5 +70,12 @@ publicada (repite el paso 4).
 | `registrarSalida` (POST) | Recepción (control.html) | Clave de administración (`ADMIN_KEY`), la misma de guardar socios. |
 | `quitarSalida` (POST) | Recepción ("Deshacer") | Clave de administración, más la fila y la hora de ingreso exactas. |
 
+**Modo prueba:** las páginas `prueba-control.html`, `prueba-pantalla.html`
+y `prueba-tarjeta.html` (generadas con `node scripts/generar-pruebas-ingresos.js`)
+mandan `prueba=1` en todas las llamadas: todo se guarda en la hoja
+**"Pruebas ingresos"** (se crea sola), nunca en la hoja real, así que no
+aparecen en las pantallas reales ni alteran estadísticas. Al terminar las
+pruebas se borran esas páginas y esa hoja.
+
 Ninguna borra ni mueve filas de la hoja. La respuesta antigua (sin
 `action`, los últimos 20) y la acción `checkin` siguen iguales.

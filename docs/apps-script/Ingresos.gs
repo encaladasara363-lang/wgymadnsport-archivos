@@ -28,9 +28,28 @@
                          llegó sin escanear (si ya está dentro, no duplica).
        registrarSalida → marca la salida de cualquier persona.
        quitarSalida    → deshace una salida marcada por error.
+
+   Modo prueba: si la llamada trae prueba=1 (lo mandan solo las páginas
+   prueba-*.html), todo se lee y se escribe en otra hoja de la misma
+   planilla, "Pruebas ingresos", nunca en la hoja real de ingresos. Así
+   las pruebas no aparecen en las pantallas reales ni en ninguna
+   estadística, y se pueden borrar después sin tocar nada real.
    ═══════════════════════════════════════════════════════════════════════ */
 
 var TZ_INGRESOS_ = "America/Santiago";
+var HOJA_PRUEBAS_ = "Pruebas ingresos";
+
+/* La hoja real de ingresos, o la de pruebas si la llamada trae prueba=1. */
+function hojaIngresos_(p) {
+  if (String(p.prueba || "") !== "1") return getSheet_();
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var hoja = ss.getSheetByName(HOJA_PRUEBAS_);
+  if (!hoja) {
+    hoja = ss.insertSheet(HOJA_PRUEBAS_);
+    hoja.appendRow(["Fecha", "Nombre", "Apellido", "Vencimiento", "Salida", "Origen salida", "Código tarjeta"]);
+  }
+  return hoja;
+}
 
 /* La columna A trae la hora en milisegundos. Las primeras filas de agosto
    quedaron como fecha de Sheets: también se aceptan. */
@@ -147,7 +166,7 @@ function conCandado_(e, fn) {
 
 function listarIngresos_(e) {
   var dia = diaPedido_(e.parameter);
-  var rows = filasDelDia_(getSheet_(), dia).map(filaPublica_);
+  var rows = filasDelDia_(hojaIngresos_(e.parameter), dia).map(filaPublica_);
   return respond_(e, { ok: true, ingresos: true, dia: dia, hoy: diaCL_(Date.now()), rows: rows });
 }
 
@@ -155,7 +174,7 @@ function miIngreso_(e) {
   var p = e.parameter;
   var nombre = normNombre_(p.nombre), apellido = normNombre_(p.apellido);
   if (!nombre || !apellido) return respond_(e, { ok: false, error: "faltan datos" });
-  var todas = filasDelDia_(getSheet_(), diaCL_(Date.now()));
+  var todas = filasDelDia_(hojaIngresos_(e.parameter), diaCL_(Date.now()));
   return respond_(e, estadoDe_(todas, nombre, apellido, String(p.codigo || "")));
 }
 
@@ -166,7 +185,7 @@ function ingresoTarjeta_(e) {
   if (!nombre || !apellido) return respond_(e, { ok: false, error: "faltan datos" });
   var forzar = p.forzar === "1";
   return conCandado_(e, function () {
-    var sheet = getSheet_();
+    var sheet = hojaIngresos_(p);
     var todas = filasDelDia_(sheet, diaCL_(Date.now()));
     var estado = estadoDe_(todas, nombre, apellido, String(p.codigo || ""));
     /* Ya vino hoy: abrir la tarjeta es solo una consulta. Volver a entrar
@@ -195,7 +214,7 @@ function salidaSocio_(e) {
   var codigo = String(p.codigo || "");
   if (!nombre || !apellido || !codigo) return respond_(e, { ok: false, error: "faltan datos" });
   return conCandado_(e, function () {
-    var sheet = getSheet_();
+    var sheet = hojaIngresos_(p);
     var todas = filasDelDia_(sheet, diaCL_(Date.now()));
     var abiertas = todas.filter(function (r) {
       return !r.salida && mismaPersona_(r, nombre, apellido);
@@ -222,7 +241,7 @@ function registrarIngreso_(e) {
   var nombre = normNombre_(nombreTxt), apellido = normNombre_(apellidoTxt);
   if (!nombre || !apellido) return respond_(e, { ok: false, error: "faltan datos" });
   return conCandado_(e, function () {
-    var sheet = getSheet_();
+    var sheet = hojaIngresos_(p);
     var todas = filasDelDia_(sheet, diaCL_(Date.now()));
     var estado = estadoDe_(todas, nombre, apellido, "");
     if (estado.dentro) {
@@ -246,7 +265,7 @@ function registrarSalida_(e) {
   var nombre = normNombre_(p.nombre), apellido = normNombre_(p.apellido);
   if (!nombre || !apellido) return respond_(e, { ok: false, error: "faltan datos" });
   return conCandado_(e, function () {
-    var sheet = getSheet_();
+    var sheet = hojaIngresos_(p);
     marcarHeaders_(sheet);
     var ahora = Date.now(), cerradas = 0;
     filasDelDia_(sheet, diaPedido_(p)).forEach(function (r) {
@@ -265,7 +284,7 @@ function quitarSalida_(e) {
   var fila = Number(p.fila), ts = Number(p.ts);
   if (!(fila >= 2) || !ts) return respond_(e, { ok: false, error: "faltan datos" });
   return conCandado_(e, function () {
-    var sheet = getSheet_();
+    var sheet = hojaIngresos_(p);
     if (fila > sheet.getLastRow() || tsDeCelda_(sheet.getRange(fila, 1).getValue()) !== ts) {
       return respond_(e, { ok: false, error: "no encontrado" });
     }

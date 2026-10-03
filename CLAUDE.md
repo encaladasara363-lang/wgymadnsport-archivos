@@ -279,6 +279,10 @@ mientras la tarjeta está a la vista.
   al cargar (un enlace guardado o compartido no registra). Escanear
   estando dentro no duplica; escanear después de salir es volver a
   entrar. El QR antiguo del cartel abría `tarjeta.html` sin marca.
+- **Pruebas:** `prueba-*.html` (de `scripts/generar-pruebas-ingresos.js`)
+  mandan `prueba=1` y todo queda en la hoja "Pruebas ingresos", nunca en
+  la hoja real (no alteran pantallas ni estadísticas). Borrarlas al
+  terminar las pruebas.
 - **Respaldo del mesón:** en "¿No alcanzó a escanear?", al buscar a un
   socio aparece **"Registrar ingreso"** (POST `registrarIngreso` con
   `ADMIN_KEY`; no duplica si ya está dentro).

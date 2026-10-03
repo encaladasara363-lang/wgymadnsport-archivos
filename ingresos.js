@@ -172,6 +172,10 @@ var CSS = '' +
 function crear(op){
  var raiz = op.raiz, url = op.url;
  if(!op.accionAdmin) op.accionAdmin = accionAdminPorDefecto(url);
+ /* Páginas prueba-*.html: todo va a la hoja "Pruebas ingresos". */
+ var extraPrueba = window.WGYM_PRUEBA_INGRESOS ? { prueba:"1" } : {};
+ var admin = op.accionAdmin;
+ op.accionAdmin = function(action, params, cb){ admin(action, Object.assign({}, params, extraPrueba), cb); };
  var hoy = diaCL(), dia = hoy, filas = [], modoNuevo = null, pendientes = {}, mensaje = "", mensajeAccion = "", plazoAccion = null;
  /* cargado: ya llegó al menos una respuesta de la hoja para este día. Antes
     de eso no se muestra la copia del equipo: un aparato recién abierto ve
@@ -233,7 +237,7 @@ function crear(op){
  }
  function pedirDia(){
   var d = dia;
-  jsonp(url, { action:"listarIngresos", dia:d }, function(data){ aplicar(data, d); });
+  jsonp(url, Object.assign({ action:"listarIngresos", dia:d }, extraPrueba), function(data){ aplicar(data, d); });
  }
 
  function coincide(r){
