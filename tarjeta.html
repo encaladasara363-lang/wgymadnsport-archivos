@@ -1110,8 +1110,8 @@ function renderEvolucion(s){
   if(!monto || !CUENTA_PAGO){ box.hidden = true; return; }
   var c = CUENTA_PAGO, nombre = s.nombre + " " + s.apellido, plan = s.plan || "Plan";
   var asunto = nombre + " - " + plan;
-  var filas = [["Banco", c.banco], ["Tipo de cuenta", c.tipo], ["N° de cuenta", c.numero],
-   ["Titular", c.titular], ["RUT", c.rut], ["Correo", c.correo], ["Monto", pesos(monto)], ["Comentario", asunto]];
+  var filas = [["Nombre", c.titular], ["RUT", c.rut], ["Banco", c.banco], ["Tipo de cuenta", c.tipo],
+   ["Número de cuenta", c.numero], ["Email", c.correo], ["Monto", pesos(monto)], ["Comentario", asunto]];
   var textoCopia = filas.map(function(f){ return f[0] + ": " + f[1]; }).join("\n");
   var wsp = "https://wa.me/" + c.whatsapp + "?text=" + encodeURIComponent(
    "Hola, soy " + nombre + ". Pagué mi " + plan + " de " + pesos(monto) + " por transferencia. Te envío el comprobante.");

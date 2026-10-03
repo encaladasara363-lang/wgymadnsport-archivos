@@ -116,8 +116,10 @@ footer b{display:block;color:var(--blanco);font:800 24px 'Barlow',Arial,sans-ser
 
  function filas(){
   var nombre = $("nombre").value.trim();
-  return [["Banco", c.banco], ["Tipo de cuenta", c.tipo], ["N° de cuenta", c.numero], ["Titular", c.titular],
-   ["RUT", c.rut], ["Correo", c.correo], ["Monto", pesos(elegido.precio)],
+  /* Orden y nombres habituales de "datos de transferencia", para que las
+     apps de los bancos los reconozcan al pegarlos. */
+  return [["Nombre", c.titular], ["RUT", c.rut], ["Banco", c.banco], ["Tipo de cuenta", c.tipo],
+   ["Número de cuenta", c.numero], ["Email", c.correo], ["Monto", pesos(elegido.precio)],
    ["Comentario", (nombre ? nombre + " - " : "") + elegido.nombre]];
  }
  function pintar(){
