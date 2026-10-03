@@ -9,7 +9,10 @@ const banner =
   '<div style="position:sticky;top:0;z-index:9999;background:#D4AF37;color:#0A0A0B;' +
   'font:800 13px Arial,sans-serif;letter-spacing:.06em;text-align:center;padding:7px 10px">' +
   'MODO PRUEBA · se guarda en la hoja "Pruebas ingresos", no en los registros reales</div>';
-for (const nombre of ["control", "pantalla", "tarjeta"]) {
+/* prueba-tarjeta.html ya NO se genera: desde la publicación (10/2026) es el
+   PUENTE del QR del cartel impreso "TODO AL ALCANCE DE TU CELULAR" y no se
+   debe pisar. Si hace falta probar la tarjeta, generar otra con otro nombre. */
+for (const nombre of ["control", "pantalla"]) {
   let s = fs.readFileSync(path.join(raiz, nombre + ".html"), "utf8");
   const head = s.match(/<head[^>]*>/i);
   const body = s.match(/<body[^>]*>/i);
