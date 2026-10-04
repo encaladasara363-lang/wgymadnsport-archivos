@@ -1,6 +1,6 @@
 """Lista de socios que vencieron en la última semana (los 7 días antes de
 hoy), para el correo de los domingos. Solo NOMBRE APELLIDO en mayúsculas,
-ordenados por apellido, sin fechas ni otros datos (regla del CLAUDE.md).
+ordenados alfabéticamente por nombre (pedido de la dueña, 04-10-2026), sin fechas ni otros datos (regla del CLAUDE.md).
 No incluye los pases diarios.
 
 Uso: python3 scripts/vencidos-semana.py <planilla-completa.xlsx> [AAAA-MM-DD]
@@ -38,8 +38,8 @@ for f in filas[1:]:
     if (n, a) in vistos:
         continue
     vistos.add((n, a))
-    lista.append((a, n))
+    lista.append((n, a))
 lista.sort()
 print(f"VENCIDOS DE LA SEMANA ({len(lista)})")
-for a, n in lista:
+for n, a in lista:
     print(f"{n} {a}".strip())
