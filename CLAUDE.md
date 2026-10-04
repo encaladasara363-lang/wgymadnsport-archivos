@@ -526,6 +526,23 @@ export todavía, pedírselo (apretar de nuevo "📋 Copiar lista" y pegar el
 resultado) — sin él no hay forma de saber los días reales que ya lleva
 marcados cada socio en el equipo que el usuario toma como el bueno.
 
+## Videos de máquinas para las rutinas con QR (regla permanente, desde 10/2026)
+
+La dueña está armando un video por cada máquina del gimnasio, todos con el
+mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
+`videos-maquinas/` (ver `videos-maquinas/README.md`): una carpeta por
+máquina con `imagen.jpg`, `fuentes/` (videos de Gemini/Grok sin editar),
+`config.json` y el `.mp4`/`.gif` final, generados con
+`python3 scripts/video-maquina.py videos-maquinas/<maquina>`.
+- Diseño fijo: vertical 720×1280, logo oficial (`videos-maquinas/comun/logo.png`)
+  arriba a la derecha, franja inferior con el nombre en Rubik Distressed y
+  las series en Anton dorado, y el músculo trabajado parpadeando en rojo
+  (pedido explícito de la dueña). Sin flechas ni textos sobre la máquina.
+- El movimiento real lo generan Gemini (Video) o Grok (Imagine) desde la
+  imagen; Remotion/código no puede hacer que la persona se mueva. Los
+  créditos de ElevenLabs no incluyen video en su plan.
+- Primera máquina lista: `pantorrilla-sentado` (04-10-2026).
+
 ## Rutinas: contenido en JSON, nunca editar a mano el HTML (regla permanente, desde 10/2026)
 
 Las 12 rutinas de los carteles QR usan esta estructura (ver detalle
