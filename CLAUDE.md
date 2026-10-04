@@ -359,6 +359,13 @@ ver cuándo el gym está más vacío.
   Versión 8.
 - Un equipo recién abierto muestra lo que trae la hoja; la copia del
   equipo solo se usa sin conexión o con el script antiguo.
+- **Respaldo semanal (04-10-2026):** `docs/apps-script/Respaldos.gs`
+  (archivo aparte del mismo proyecto de Apps Script; no requiere
+  reimplementar) copia la planilla completa cada sábado a las 23:00 en la
+  carpeta "Respaldos WGYMADNSPORT" del Drive de la dueña y le manda un
+  correo con el enlace. Se activa una vez ejecutando
+  `instalarRespaldoSemanal`. Solo copia: nunca borra ni modifica. Los
+  respaldos traen nombres de socios: no subirlos al repo.
 
 ### `mediciones.json` — mediciones de composición corporal, nunca con nombre real (regla permanente)
 
