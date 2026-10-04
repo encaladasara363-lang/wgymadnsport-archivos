@@ -1,14 +1,6 @@
 {
   "titulo": "PANTORRILLA SENTADO",
   "series": "3 × 15",
-  "pendiente": "Falta el video del ejercicio (Gemini con la imagen horizontal). El primero salió recortado: sin cabeza ni pies.",
-  "partes": [
-    {
-      "video": "fuentes/paso-previo-gemini.mp4",
-      "desde": 0,
-      "hasta": 5.2,
-      "recorte": [352, 0, 576, 720],
-      "nota": "Saca el seguro (se corta antes de que desarme la manilla izquierda, ~6 s)"
-    }
-  ]
+  "pendiente": "Faltan los dos videos: el del seguro y el del ejercicio (usar la imagen horizontal en Gemini, o Grok).",
+  "partes": []
 }
