@@ -487,10 +487,16 @@ Cuando el aviso al dueño del gimnasio sea por Gmail (correo) sobre
 socios vencidos, el correo lleva **solo** a los que vencieron **en la
 última semana** (los 7 días corridos hasta hoy) — nadie vencido de
 antes, nadie por vencer todavía. Se listan **ordenados alfabéticamente
-por apellido**, y cada línea lleva **solo NOMBRE Y APELLIDO EN
+por nombre** (cambio pedido por la dueña el 04-10-2026; antes era por
+apellido), y cada línea lleva **solo NOMBRE Y APELLIDO EN
 MAYÚSCULAS — nada de fecha de vencimiento ni ningún otro dato** (ni
 "venció el...", ni plan, ni monto). Sin agregar socios que no cumplan
 ese corte.
+
+Este correo sale solo cada domingo a las 11:55 (rutina "Vencidos de la
+semana WGYM", con `scripts/vencidos-semana.py` sobre la planilla de
+Google; sin pases diarios), queda en la etiqueta "Vencidos WGYM" de
+Gmail y otra rutina lo manda a la papelera cada lunes a las 19:55.
 
 ### El contador "día X de Y" es un dato aparte — también hay que sincronizarlo
 
