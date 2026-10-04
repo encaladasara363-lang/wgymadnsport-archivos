@@ -1,12 +1,12 @@
 """Arma el video y el GIF de una máquina con el diseño WGYM ADN SPORT.
 
-Uso: python3 scripts/video-maquina.py videos-maquinas/<maquina>
+Uso: python3 scripts/video-maquina.py maquinas-wgymadnsport/<hombre|mujer>/<maquina>
 Lee <maquina>/config.json y deja <maquina>/<maquina>.mp4 y .gif.
 
 Diseño (igual para todas las máquinas):
 - Video vertical 720x1280. Si la fuente no es vertical 9:16, se centra sobre
   un fondo difuminado y oscurecido de ella misma.
-- Logo oficial (videos-maquinas/comun/logo.png) arriba a la derecha, 320 px.
+- Logo oficial (maquinas-wgymadnsport/comun/logo.png) arriba a la derecha, 320 px.
 - Franja inferior negra con línea roja, título en Rubik Distressed y
   series en Anton dorado.
 - En las partes con "musculo", el músculo que se trabaja parpadea en rojo
@@ -101,7 +101,7 @@ def capa_marca(titulo, series):
     while d.textlength(titulo, font=rubik(tam)) > W - 40: tam -= 2
     d.text((W // 2, 1172), titulo, font=rubik(tam), fill=(255, 255, 255, 255), anchor='mm')
     d.text((W // 2, 1236), series, font=anton(46), fill=GOLD + (255,), anchor='mm')
-    logo = Image.open(os.path.join(REPO, 'videos-maquinas/comun/logo.png')).convert('RGBA')
+    logo = Image.open(os.path.join(REPO, 'maquinas-wgymadnsport/comun/logo.png')).convert('RGBA')
     logo = logo.resize((320, int(320 * logo.height / logo.width)), Image.LANCZOS)
     capa.alpha_composite(logo, (W - 320 - 12, 16))
     return capa

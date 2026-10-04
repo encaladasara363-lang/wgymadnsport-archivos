@@ -530,18 +530,23 @@ marcados cada socio en el equipo que el usuario toma como el bueno.
 
 La dueña está armando un video por cada máquina del gimnasio, todos con el
 mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
-`videos-maquinas/` (ver `videos-maquinas/README.md`): una carpeta por
-máquina con `imagen.jpg`, `fuentes/` (videos de Gemini/Grok sin editar),
-`config.json` y el `.mp4`/`.gif` final, generados con
-`python3 scripts/video-maquina.py videos-maquinas/<maquina>`.
-- Diseño fijo: vertical 720×1280, logo oficial (`videos-maquinas/comun/logo.png`)
+`maquinas-wgymadnsport/` (ver su `README.md`), con dos carpetas paralelas:
+`hombre/<maquina>/` y `mujer/<maquina>/`, cada una con `imagen.jpg`,
+`fuentes/` (videos de Gemini/Grok sin editar), `config.json` y el
+`.mp4`/`.gif` final, generados con
+`python3 scripts/video-maquina.py maquinas-wgymadnsport/<hombre|mujer>/<maquina>`.
+- **Siempre el mismo modelo** (pedido de la dueña): el mismo hombre en todas
+  las máquinas de `hombre/` y la misma mujer en todas las de `mujer/`;
+  referencias en `maquinas-wgymadnsport/comun/modelo-hombre.jpg` y
+  `modelo-mujer.jpg`.
+- Diseño fijo: vertical 720×1280, logo oficial (`maquinas-wgymadnsport/comun/logo.png`)
   arriba a la derecha, franja inferior con el nombre en Rubik Distressed y
   las series en Anton dorado, y el músculo trabajado parpadeando en rojo
   (pedido explícito de la dueña). Sin flechas ni textos sobre la máquina.
 - El movimiento real lo generan Gemini (Video) o Grok (Imagine) desde la
   imagen; Remotion/código no puede hacer que la persona se mueva. Los
   créditos de ElevenLabs no incluyen video en su plan.
-- Primera máquina lista: `pantorrilla-sentado` (04-10-2026).
+- Primera máquina lista: `hombre/pantorrilla-sentado` (04-10-2026).
 
 ## Rutinas: contenido en JSON, nunca editar a mano el HTML (regla permanente, desde 10/2026)
 
