@@ -39,7 +39,7 @@ for f in filas[1:]:
         continue
     vistos.add((n, a))
     lista.append((n, a))
-lista.sort()
+lista.sort(key=lambda x: f"{x[0]} {x[1]}")
 print(f"VENCIDOS DE LA SEMANA ({len(lista)})")
 for n, a in lista:
     print(f"{n} {a}".strip())
