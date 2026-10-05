@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WGYMADNSPORT · ¿Cuánta gente hay ahora?</title>
+<meta name="description" content="Mira en vivo cuánta gente hay ahora en WGYMADNSPORT Tocopilla y elige el mejor horario para entrenar.">
+<meta name="theme-color" content="#0A0A0B">
+<link rel="icon" href="assets/logo-oficial.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;700;800&family=Rubik+Distressed&display=swap" rel="stylesheet">
+<!--
+  Contador en vivo PÚBLICO (05-10-2026, idea elegida por la dueña para
+  atraer socios nuevos). Cualquier persona, sin ser socia, ve cuánta gente
+  hay ahora y el gráfico de horarios. Solo muestra NÚMEROS: nunca nombres.
+  Cuenta igual que la tarjeta (ingresos sin salida de las últimas
+  VENTANA_DENTRO_H horas) y usa horarios.json (solo promedios).
+-->
+<style>
+:root{
+ --negro:#0A0A0B; --surface:#141416; --line:#2A2A2E;
+ --rojo:#E30613; --dorado:#D4AF37; --blanco:#FFFFFF; --gris:#A8A8AE;
+ --verde:#4CAF50; --amarillo:#E8C547;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+body{
+ background:var(--negro);
+ background-image:radial-gradient(circle at 50% -10%, rgba(227,6,19,.22), transparent 55%),
+  repeating-linear-gradient(45deg, rgba(255,255,255,.012) 0 2px, transparent 2px 6px);
+ color:var(--blanco); font-family:'Barlow Condensed', 'Segoe UI', Arial, sans-serif;
+ min-height:100vh; padding:20px 16px 32px;
+}
+.wrap{ max-width:460px; margin:0 auto; }
+header{ text-align:center; margin-bottom:18px; }
+.logo{ width:150px; height:auto; display:block; margin:0 auto 6px; }
+.kicker{ font-size:14px; font-weight:800; letter-spacing:.22em; color:var(--dorado); text-transform:uppercase; margin:0; }
+h1{ font-family:'Rubik Distressed', Impact, sans-serif; text-transform:uppercase; font-weight:400;
+ font-size:38px; line-height:1.02; margin:6px 0 0; }
+h1 span{ color:var(--rojo); }
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:20px 18px; margin-bottom:14px; }
+.vivo{ text-align:center; border:2px solid var(--verde); }
+.vivo.a{ border-color:var(--amarillo); } .vivo.r{ border-color:var(--rojo); } .vivo.c{ border-color:var(--line); }
+.punto{ display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--verde); }
+.punto i{ width:10px; height:10px; border-radius:50%; background:currentColor; animation:late 1.4s infinite; }
+.vivo.a .punto{ color:var(--amarillo); } .vivo.r .punto{ color:var(--rojo); } .vivo.c .punto{ color:var(--gris); }
+.vivo.c .punto i{ animation:none; }
+@keyframes late{ 50%{ opacity:.25; } }
+.num{ font-family:'Anton', Impact, sans-serif; font-size:110px; line-height:1; margin:8px 0 0; color:var(--verde); }
+.vivo.a .num{ color:var(--amarillo); } .vivo.r .num{ color:var(--rojo); } .vivo.c .num{ color:var(--gris); }
+.num-lbl{ font-size:20px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin:2px 0 6px; }
+.estado{ font-size:18px; font-weight:700; color:#E8E8E8; margin:0; }
+.actual{ font-size:13px; color:var(--gris); margin:10px 0 0; }
+.tit{ font-size:15px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--dorado); margin:0 0 10px; }
+.dias{ display:flex; gap:5px; margin:0 0 12px; }
+.dias button{ flex:1; padding:8px 0; border-radius:9px; border:1px solid #3a3a40; background:transparent; color:#CFCFCF; font-weight:800; font-size:15px; font-family:inherit; cursor:pointer; }
+.dias button[aria-pressed="true"]{ background:var(--dorado); border-color:var(--dorado); color:var(--negro); }
+.barras{ display:flex; align-items:flex-end; gap:3px; height:110px; }
+.barras div{ flex:1; border-radius:4px 4px 0 0; min-height:3px; }
+.barras .v{ background:var(--verde); } .barras .a{ background:var(--amarillo); } .barras .r{ background:var(--rojo); }
+.barras .ya{ outline:2px solid #fff; outline-offset:1px; }
+.horas{ display:flex; gap:3px; margin-top:4px; }
+.horas span{ flex:1; font-size:11px; color:var(--gris); text-align:center; white-space:nowrap; }
+.vacio{ margin:12px 0 0; font-size:17px; font-weight:700; }
+.vacio b{ color:var(--verde); }
+.ley{ display:flex; gap:14px; font-size:13px; color:var(--gris); margin-top:6px; }
+.ley i{ display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; }
+.nota{ font-size:13px; color:var(--gris); margin:8px 0 0; }
+.hor-lista{ list-style:none; padding:0; margin:0; font-size:17px; }
+.hor-lista li{ display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--line); }
+.hor-lista li:last-child{ border-bottom:0; }
+.hor-lista b{ font-family:'Anton', Impact, sans-serif; font-weight:400; letter-spacing:.03em; }
+.cta{ text-align:center; border-color:var(--dorado); }
+.cta h2{ font-family:'Rubik Distressed', Impact, sans-serif; text-transform:uppercase; font-weight:400; font-size:28px; line-height:1.05; margin:0 0 6px; }
+.cta p{ font-size:17px; color:#E8E8E8; margin:0 0 14px; }
+.btn{ display:block; width:100%; text-decoration:none; text-align:center; border-radius:14px; padding:14px; font-size:19px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px; }
+.btn.rojo{ background:var(--rojo); color:#fff; }
+.btn.wsp{ background:#1F8F4E; color:#fff; font-size:17px; }
+.btn.borde{ border:1.5px solid var(--dorado); color:var(--dorado); }
+footer{ text-align:center; font-size:15px; font-weight:800; letter-spacing:.1em; color:var(--dorado); text-transform:uppercase; margin-top:18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <img class="logo" src="assets/logo-oficial.webp" alt="WGYMADNSPORT Tocopilla">
+  <p class="kicker">WGYMADNSPORT Tocopilla</p>
+  <h1>¿Cuánta gente hay <span>ahora?</span></h1>
+ </header>
+
+ <section class="card vivo c" id="vivo">
+  <span class="punto"><i></i><span id="vivoTxt">Cargando…</span></span>
+  <p class="num" id="num">–</p>
+  <p class="num-lbl" id="numLbl">Personas entrenando</p>
+  <p class="estado" id="estado">Consultando el gimnasio…</p>
+  <p class="actual" id="actual"></p>
+ </section>
+
+ <section class="card" id="graf" hidden></section>
+
+ <section class="card">
+  <p class="tit">🕒 Horario de atención</p>
+  <ul class="hor-lista">
+   <li><span>Lunes a jueves</span><b>08:00 – 23:30</b></li>
+   <li><span>Viernes</span><b>09:00 – 23:30</b></li>
+   <li><span>Sábado</span><b>10:00 – 22:00</b></li>
+   <li><span>Domingo</span><b>Cerrado</b></li>
+  </ul>
+ </section>
+
+ <section class="card cta">
+  <h2>Ven a entrenar con nosotros</h2>
+  <p>Elige tu horario, conoce los planes e inscríbete hoy.</p>
+  <a class="btn rojo" href="pagar.html">💳 Ver planes y precios</a>
+  <a class="btn wsp" href="https://wa.me/56991540156?text=Hola%2C%20quiero%20informaci%C3%B3n%20para%20inscribirme%20en%20WGYMADNSPORT" target="_blank" rel="noopener">💬 WhatsApp +56 9 9154 0156</a>
+  <a class="btn wsp" href="https://wa.me/56975196394?text=Hola%2C%20quiero%20informaci%C3%B3n%20para%20inscribirme%20en%20WGYMADNSPORT" target="_blank" rel="noopener">💬 WhatsApp +56 9 7519 6394</a>
+  <a class="btn borde" href="index.html">Conoce el gimnasio</a>
+ </section>
+
+ <footer>Donde hay calidad no hay competencia</footer>
+</div>
+
+<script>
+(function(){
+ var CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
+ /* Misma regla que la tarjeta: quien no marcó salida deja de contar a las 2 horas. */
+ var VENTANA_DENTRO_H = 2;
+ /* Horario del gimnasio (lunes=1 … sábado=6), en horas decimales. */
+ var HORARIO = { 1:[8,23.5], 2:[8,23.5], 3:[8,23.5], 4:[8,23.5], 5:[9,23.5], 6:[10,22] };
+ var DIAS_CORTOS = ["", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+ var DIAS_LARGOS = ["", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+ var horarios = null, diaGrafico = null, nCb = 0;
+
+ function ahoraChile(){
+  try{
+   var p = new Intl.DateTimeFormat("en-US", { timeZone:"America/Santiago", weekday:"short", hour:"numeric", minute:"numeric", hour12:false }).formatToParts(new Date());
+   var o = {}; p.forEach(function(x){ o[x.type] = x.value; });
+   return { dia:{ Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6, Sun:7 }[o.weekday] || 1, h:(Number(o.hour) % 24) + Number(o.minute) / 60 };
+  }catch(e){ var d = new Date(), g = d.getDay(); return { dia:g === 0 ? 7 : g, h:d.getHours() + d.getMinutes() / 60 }; }
+ }
+ function abierto(a){ var r = HORARIO[a.dia]; return !!r && a.h >= r[0] && a.h < r[1]; }
+ function proximaApertura(a){
+  for(var i = 0; i < 8; i++){
+   var d = ((a.dia - 1 + i) % 7) + 1, r = HORARIO[d];
+   if(!r) continue;
+   if(i === 0 && a.h >= r[0]) continue;
+   var hh = String(Math.floor(r[0])).padStart(2, "0") + ":" + (r[0] % 1 ? "30" : "00");
+   return (i === 0 ? "hoy" : i === 1 ? "mañana" : "el " + DIAS_LARGOS[d]) + " a las " + hh;
+  }
+  return "";
+ }
+ function jsonp(params, listo){
+  var cb = "wgymVivo" + (++nCb) + "_" + Date.now(), sc = document.createElement("script"), hecho = false;
+  var plazo = setTimeout(function(){ fin(null); }, 15000);
+  function fin(d){ if(hecho) return; hecho = true; clearTimeout(plazo); try{ delete window[cb]; }catch(e){} sc.remove(); listo(d); }
+  window[cb] = fin;
+  sc.src = CHECKIN_URL + "?" + Object.keys(params).map(function(k){ return k + "=" + encodeURIComponent(params[k]); }).join("&") + "&callback=" + cb + "&_=" + Date.now();
+  sc.onerror = function(){ fin(null); };
+  document.body.appendChild(sc);
+ }
+ function norm(s){ return String(s || "").trim().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, " "); }
+ function contar(rows){
+  var desde = Date.now() - VENTANA_DENTRO_H * 3600000, gente = {};
+  rows.forEach(function(r){ if(!r.salida && Number(r.ts) > desde) gente[norm(r.nombre + " " + r.apellido)] = 1; });
+  return Object.keys(gente).length;
+ }
+ function maxPromedio(){
+  var max = 1;
+  if(horarios && horarios.dias) for(var k = 1; k <= 6; k++) (horarios.dias[k] || []).slice(1).forEach(function(x){ if(x.p > max) max = x.p; });
+  return max;
+ }
+ function pintarVivo(n){
+  var a = ahoraChile(), caja = document.getElementById("vivo");
+  var hora = String(Math.floor(a.h)).padStart(2, "0") + ":" + String(Math.round((a.h % 1) * 60)).padStart(2, "0");
+  if(!abierto(a)){
+   caja.className = "card vivo c";
+   document.getElementById("vivoTxt").textContent = "Cerrado ahora";
+   document.getElementById("num").textContent = "0";
+   document.getElementById("estado").textContent = "Abrimos " + proximaApertura(a) + ".";
+   document.getElementById("actual").textContent = "";
+   return;
+  }
+  if(n === null){
+   caja.className = "card vivo c";
+   document.getElementById("vivoTxt").textContent = "Sin conexión";
+   document.getElementById("num").textContent = "–";
+   document.getElementById("estado").textContent = "No pudimos consultar el gimnasio. Intentaremos de nuevo en un momento.";
+   return;
+  }
+  var max = maxPromedio(), cls = n <= max * 0.4 ? "v" : (n <= max * 0.7 ? "a" : "r");
+  caja.className = "card vivo " + cls;
+  document.getElementById("vivoTxt").textContent = "En vivo";
+  document.getElementById("num").textContent = String(n);
+  document.getElementById("numLbl").textContent = n === 1 ? "Persona entrenando" : "Personas entrenando";
+  document.getElementById("estado").textContent = cls === "v" ? "Poca gente: ¡buen momento para venir!" :
+   (cls === "a" ? "Gente media: hay espacio para entrenar." : "Está lleno: si puedes, elige otro horario.");
+  document.getElementById("actual").textContent = "Actualizado a las " + hora + " · se renueva solo cada minuto";
+ }
+ function consultar(){
+  if(!abierto(ahoraChile())){ pintarVivo(0); return; }
+  jsonp({ action:"listarIngresos" }, function(d){
+   pintarVivo(d && d.ingresos === true ? contar(d.rows || []) : null);
+  });
+ }
+ function pintarGrafico(){
+  var box = document.getElementById("graf");
+  if(!horarios || !horarios.dias){ box.hidden = true; return; }
+  var a = ahoraChile(), hoy = a.dia;
+  if(!diaGrafico) diaGrafico = hoy <= 6 ? hoy : 1;
+  var max = maxPromedio(), datos = (horarios.dias[diaGrafico] || []).slice(1);
+  if(!datos.length){ box.hidden = true; return; }
+  var menor = datos[0];
+  datos.forEach(function(x){ if(x.p < menor.p) menor = x; });
+  var barras = datos.map(function(x){
+   var c = x.p <= max * 0.4 ? "v" : (x.p <= max * 0.7 ? "a" : "r");
+   var ya = diaGrafico === hoy && x.h === Math.floor(a.h) ? " ya" : "";
+   return '<div class="' + c + ya + '" style="height:' + Math.max(3, Math.round(x.p / max * 100)) + '%" title="' + x.h + ':00 · ~' + Math.round(x.p) + ' personas"></div>';
+  }).join("");
+  var horas = datos.map(function(x, i){ return '<span>' + (i % 3 === 0 ? x.h + ":00" : "") + '</span>'; }).join("");
+  var chips = [1,2,3,4,5,6].map(function(n){ return '<button type="button" data-dia="' + n + '" aria-pressed="' + (n === diaGrafico) + '">' + DIAS_CORTOS[n] + '</button>'; }).join("");
+  box.innerHTML = '<p class="tit">📅 Elige tu horario</p>' +
+   (hoy === 7 ? '<p class="nota" style="margin:0 0 8px">Hoy domingo el gimnasio está cerrado.</p>' : '') +
+   '<div class="dias">' + chips + '</div>' +
+   '<div class="barras">' + barras + '</div><div class="horas">' + horas + '</div>' +
+   '<p class="vacio">Más vacío ' + (diaGrafico === hoy ? 'hoy' : 'el ' + DIAS_LARGOS[diaGrafico]) + ': <b>' + menor.h + ':00</b></p>' +
+   '<div class="ley"><span><i style="background:#4CAF50"></i>Poca gente</span><span><i style="background:#E8C547"></i>Media</span><span><i style="background:#E30613"></i>Lleno</span></div>' +
+   '<p class="nota">Promedio de los ingresos reales del gimnasio. Entrena cuando haya menos gente.</p>';
+  box.hidden = false;
+  Array.prototype.forEach.call(box.querySelectorAll(".dias button"), function(b){
+   b.addEventListener("click", function(){ diaGrafico = Number(b.getAttribute("data-dia")); pintarGrafico(); });
+  });
+ }
+ fetch("horarios.json?v=" + new Date().toISOString().slice(0, 10), { cache:"no-store" })
+  .then(function(r){ return r.json(); })
+  .then(function(j){ horarios = j; pintarGrafico(); consultar(); })
+  ["catch"](function(){ consultar(); });
+ setInterval(function(){ if(!document.hidden) consultar(); }, 60000);
+ document.addEventListener("visibilitychange", function(){ if(!document.hidden) consultar(); });
+})();
+</script>
+</body>
+</html>
