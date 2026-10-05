@@ -267,12 +267,6 @@ ver cuándo el gym está más vacío.
   personas, de `horarios.json` (solo promedios, sin nombres), generado con
   `scripts/generar-horarios.py` desde la hoja de ingresos descargada como
   CSV (el CSV no se sube: trae nombres). Regenerarlo cada tanto.
-- **`en-vivo.html` (05-10-2026, contador público para atraer socios
-  nuevos):** cualquiera, sin ser socio, ve cuánta gente hay ahora (misma
-  regla de 2 horas que la tarjeta), el gráfico de `horarios.json`, el
-  horario de atención y botones a `pagar.html` y a WhatsApp (los dos
-  números). Solo números, nunca nombres. Se renueva cada minuto; fuera de
-  horario dice "Cerrado ahora" sin consultar la hoja.
 - **Cartel "TODO AL ALCANCE DE TU CELULAR"** (impreso por la dueña): su QR
   apunta a `prueba-tarjeta.html?ingreso=puerta`. Al publicar,
   `prueba-tarjeta.html` se reemplaza por un puente que redirige a
