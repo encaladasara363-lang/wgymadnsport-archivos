@@ -364,11 +364,11 @@ nav.tabs button.on span{color:var(--red2);font-weight:700}
           <div class="field">
             <label>Actividad</label>
             <select id="nutActividad">
-              <option value="1">Reposo</option>
-              <option value="1.5">Muy ligera</option>
-              <option value="2.5" selected>Ligera</option>
-              <option value="5">Moderada</option>
-              <option value="7">Intensa</option>
+              <option value="1.2">Sedentaria (casi sin ejercicio)</option>
+              <option value="1.375">Ligera (1 a 3 días por semana)</option>
+              <option value="1.55" selected>Moderada (3 a 5 días por semana)</option>
+              <option value="1.725">Intensa (6 a 7 días por semana)</option>
+              <option value="1.9">Muy intensa (2 veces al día o trabajo físico)</option>
             </select>
           </div>
         </div>
@@ -1073,7 +1073,7 @@ function renderPRs(){
 
 /* ═══ Nutrición: macros e hidratación ═══════════════════════════════════
    Fórmulas de la base de conocimiento técnico de WGYMADNSPORT: Harris-
-   Benedict para TMB, factor de actividad orientativo, y proteína 1.2-2.0
+   Benedict para TMB, factores de actividad estándar (×1,2 a ×1,9), y proteína 1.2-2.0
    g/kg/día. Hidratación: 150-250 ml cada 10-15 min de ejercicio. */
 var sexoNut="F";
 document.getElementById("segSexo").addEventListener("click", function(ev){
@@ -1089,7 +1089,7 @@ document.getElementById("nutCalcBtn").addEventListener("click", function(){
   if(!peso || !alt || !edad){ return; }
   var tmb = sexoNut==="M"
     ? (66 + 13.7*peso + 5*alt - 6.8*edad)
-    : (65.5 + 9.6*peso + 1.7*alt - 4.7*edad);
+    : (655.1 + 9.563*peso + 1.85*alt - 4.676*edad);   /* 655, no 65,5 (corregido 05-10-2026) */
   var tee = Math.round(tmb*fact);
   var protMin=Math.round(peso*1.2), protMax=Math.round(peso*2.0);
   var box=document.getElementById("nutResultado");

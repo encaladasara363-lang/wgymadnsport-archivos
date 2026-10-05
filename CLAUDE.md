@@ -1041,10 +1041,15 @@ sensible como diabetes.
 - Gasto calórico total (TEE) = metabolismo basal (TMB) + efecto térmico
   de los alimentos + gasto por actividad.
 - TMB Harris-Benedict hombres: `66 + (13,7 × kg) + (5 × cm) − (6,8 × edad)`.
-  Mujeres: `65,5 + (9,6 × kg) + (1,7 × cm) − (4,7 × edad)`.
-- Factor de actividad sobre el TMB (orientativo): reposo ×1, muy ligera
-  ×1,5, ligera ×2,5, moderada ×5, intensa ×7 — no reemplaza una
-  medición real, es solo referencia rápida.
+  Mujeres: `655,1 + (9,563 × kg) + (1,85 × cm) − (4,676 × edad)`
+  (corregido el 05-10-2026: decía 65,5, un error de copia que restaba
+  ~590 kcal).
+- Factor de actividad sobre el TMB (corregido el 05-10-2026; los valores
+  anteriores ×1/×1,5/×2,5/×5/×7 no son multiplicadores del TMB y daban
+  más de 7.000 kcal): sedentario ×1,2 · ligera (1-3 días/semana) ×1,375 ·
+  moderada (3-5 días) ×1,55 · intensa (6-7 días) ×1,725 · muy intensa
+  (doble sesión o trabajo físico) ×1,9 — estimación orientativa, no
+  reemplaza una medición real.
 - Proteína según objetivo: 1,2-2,0 g/kg/día cubre a la mayoría de
   deportistas; subir a ≥2,0 g/kg/día en déficit calórico o lesión para
   proteger masa magra; rango deportivo amplio 1,8-4,4 g/kg, óptimo para
