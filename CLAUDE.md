@@ -514,10 +514,13 @@ arreglar un contador que no coincide entre los dos aparatos):
   `ASISTENCIA_BASE`/`CICLOS_BASE` en `control.html` y `pantalla.html`
   (mismo bloque, mismos nombres de variable) con esos objetos completos.
 - Subir `ASISTENCIA_VERSION` a un número mayor.
-- Es un agregado puro: `ASISTENCIA_BASE`/`CICLOS_BASE` solo rellenan lo
-  que a cada aparato le falte, nunca pisan ni borran un día o un ciclo
-  que ese equipo ya tenía anotado — así nunca hace bajar un contador que
-  ya iba bien en alguno de los dos.
+- Es un agregado puro: `ASISTENCIA_BASE` solo rellena los días que a
+  cada aparato le falten, nunca borra uno. Para `CICLOS_BASE` (desde
+  05-10-2026, caso Gloria López: tablet "día 1", mesón "día 9") el ciclo
+  del mesón reemplaza al del equipo si este no lo tenía, si el del mesón
+  es más nuevo (`v` mayor: renovó) o si es el mismo `v` pero empieza antes
+  (el equipo lo había reiniciado solo). Así el contador solo sube hasta
+  igualar al mesón, nunca baja.
 - Publicar junto con cualquier otro cambio de `socios.json`/`LISTA_BASE`/
   `SOCIOS` de esa misma tanda.
 
