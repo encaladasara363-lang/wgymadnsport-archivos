@@ -300,6 +300,11 @@ ver cuándo el gym está más vacío.
   `forzar=1` que el QR de la puerta). Desde la casa no lo toca: abrir la
   tarjeta sigue sin registrar nada solo. Si está dentro hace más de 30
   min sin salida, aparece "Volví: registrar nuevo ingreso".
+- **Entrada rápida (05-10-2026, la dueña: "sale Buscando... y se demora"):**
+  la tarjeta guarda en el teléfono la lista de socios (`wgym_lista_socios_v1`,
+  mismo dato público sin RUT) y el último nombre escrito
+  (`wgym_ultimo_socio_v1`, aparece ya puesto). Busca primero ahí y abre al
+  instante; la lista de la hoja llega por detrás y corrige fecha/plan.
 - **"Poner en mi pantalla de inicio" (03-10-2026):** la tarjeta muestra
   este botón (cuadro `#instCard`, función `pintarInstalar()`) mientras
   no esté instalada. En Android/Chrome abre la ventana "Instalar" del
