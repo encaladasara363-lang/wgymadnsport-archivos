@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-09-30",
+ "actualizado": "2026-10-05",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -99,6 +99,14 @@
    "fv": 46307
   },
   {
+   "n": "SABINO",
+   "a": "ALVAREZ",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46331
+  },
+  {
    "n": "KEIDY",
    "a": "ANDRADE",
    "rut": "Sin Rut",
@@ -124,12 +132,28 @@
    "fv": 46316
   },
   {
+   "n": "NATALIA",
+   "a": "ANDRADES",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46324
+  },
+  {
    "n": "VICTORIA",
    "a": "ANGEL",
    "rut": "Sin Rut",
    "plan": "Funcionario Público",
    "monto": 28000,
    "fv": 46316
+  },
+  {
+   "n": "ALEX",
+   "a": "APAZA",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46331
   },
   {
    "n": "JOCKSHUA",
@@ -162,7 +186,7 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46297,
+   "fv": 46328,
    "medId": "3d9e1339"
   },
   {
@@ -215,6 +239,14 @@
    "medId": "a2ee2e98"
   },
   {
+   "n": "CAMILA",
+   "a": "BARRERA",
+   "rut": "Sin Rut",
+   "plan": "Funcionario Público",
+   "monto": 28000,
+   "fv": 46331
+  },
+  {
    "n": "ESTEFANNY",
    "a": "BERMUDEZ",
    "rut": "Sin Rut",
@@ -246,7 +278,7 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46296
+   "fv": 46327
   },
   {
    "n": "LUCIANO",
@@ -399,7 +431,7 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46268
+   "fv": 46331
   },
   {
    "n": "SARA",
@@ -471,7 +503,7 @@
    "rut": "Sin Rut",
    "plan": "Mensual Turno",
    "monto": 23000,
-   "fv": 46265
+   "fv": 46324
   },
   {
    "n": "JAIRO",
@@ -522,6 +554,14 @@
    "fv": 46323
   },
   {
+   "n": "DAMARIS",
+   "a": "CORVACHO",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46324
+  },
+  {
    "n": "SONIA",
    "a": "CUBA",
    "rut": "Sin Rut",
@@ -552,6 +592,14 @@
    "plan": "Funcionario Público",
    "monto": 28000,
    "fv": 46265
+  },
+  {
+   "n": "DARKKO",
+   "a": "CUELLAR",
+   "rut": "Sin Rut",
+   "plan": "Pase Diario",
+   "monto": 4000,
+   "fv": 46298
   },
   {
    "n": "VALENTINA",
@@ -608,7 +656,7 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46729,
+   "fv": 46853,
    "medId": "b72be41d"
   },
   {
@@ -665,7 +713,7 @@
    "rut": "Sin Rut",
    "plan": "Mensual Turno",
    "monto": 23000,
-   "fv": 46242
+   "fv": 46331
   },
   {
    "n": "XIMENA",
@@ -718,12 +766,28 @@
    "fv": 46294
   },
   {
+   "n": "CAMILA",
+   "a": "FUENTE",
+   "rut": "Sin Rut",
+   "plan": "Pase Diario",
+   "monto": 4000,
+   "fv": 46298
+  },
+  {
+   "n": "CAMILA",
+   "a": "FUENTES",
+   "rut": "Sin Rut",
+   "plan": "Pase Diario",
+   "monto": 4000,
+   "fv": 46298
+  },
+  {
    "n": "MILTON",
    "a": "FUENTES",
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46650,
+   "fv": 46680,
    "medId": "15d46a3e"
   },
   {
@@ -788,7 +852,15 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46295
+   "fv": 46325
+  },
+  {
+   "n": "EMILIANO",
+   "a": "GONZALEZ",
+   "rut": "Sin Rut",
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46327
   },
   {
    "n": "MACARENA",
@@ -890,20 +962,20 @@
    "fv": 46275
   },
   {
-   "n": "ISABEL",
-   "a": "HERRERRA",
-   "rut": "Sin Rut",
-   "plan": "Mensual Turno",
-   "monto": 23000,
-   "fv": 46297
-  },
-  {
    "n": "LUISA",
    "a": "HIDALGO",
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46309
+  },
+  {
+   "n": "JUAN",
+   "a": "HINOJOSA",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46331
   },
   {
    "n": "WENDY",
@@ -923,7 +995,7 @@
   },
   {
    "n": "KATHERINE",
-   "a": "IGLESIA",
+   "a": "IGLESIAS",
    "rut": "Sin Rut",
    "plan": "Estudiante Profesor",
    "monto": 28000,
@@ -944,6 +1016,14 @@
    "plan": "Estudiante Profesor",
    "monto": 28000,
    "fv": 46320
+  },
+  {
+   "n": "MARIA",
+   "a": "JOSE RODRIGUEZ",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46331
   },
   {
    "n": "CAMILA",
@@ -1039,7 +1119,7 @@
    "rut": "Sin Rut",
    "plan": "Mensual Tercera Edad",
    "monto": 23000,
-   "fv": 46274
+   "fv": 46331
   },
   {
    "n": "JOSE",
@@ -1056,6 +1136,14 @@
    "plan": "Full Mensual",
    "monto": 33000,
    "fv": 46295
+  },
+  {
+   "n": "MIGUEL",
+   "a": "MAMANI",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46331
   },
   {
    "n": "RICARDO",
@@ -1087,7 +1175,7 @@
    "rut": "Sin Rut",
    "plan": "Funcionario Público",
    "monto": 28000,
-   "fv": 46303
+   "fv": 46334
   },
   {
    "n": "SEBASTIAN",
@@ -1160,7 +1248,7 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46292
+   "fv": 46328
   },
   {
    "n": "MIGUEL",
@@ -1172,7 +1260,7 @@
   },
   {
    "n": "MONICA",
-   "a": "MONTERO",
+   "a": "MONTEROS",
    "rut": "Sin Rut",
    "plan": "Tres Veces a La Semana",
    "monto": 28000,
@@ -1234,7 +1322,15 @@
    "rut": "Sin Rut",
    "plan": "Estudiante Profesor",
    "monto": 28000,
-   "fv": 46294
+   "fv": 46325
+  },
+  {
+   "n": "MICHAEL",
+   "a": "NUÑEZ",
+   "rut": "Sin Rut",
+   "plan": "Pase Diario",
+   "monto": 4000,
+   "fv": 46300
   },
   {
    "n": "MARIA JOSE",
@@ -1258,7 +1354,7 @@
    "rut": "Sin Rut",
    "plan": "Funcionario Público",
    "monto": 28000,
-   "fv": 46295
+   "fv": 46327
   },
   {
    "n": "AlEXANDER",
@@ -1266,7 +1362,7 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46292
+   "fv": 46323
   },
   {
    "n": "MAURICIO",
@@ -1316,7 +1412,7 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46295
+   "fv": 46331
   },
   {
    "n": "ARACELY",
@@ -1367,14 +1463,6 @@
    "fv": 46299
   },
   {
-   "n": "BASTIAN",
-   "a": "PERALTA",
-   "rut": "Sin Rut",
-   "plan": "Estudiante Profesor",
-   "monto": 28000,
-   "fv": 46207
-  },
-  {
    "n": "YANETH",
    "a": "PERCCA",
    "rut": "Sin Rut",
@@ -1388,7 +1476,7 @@
    "rut": "Sin Rut",
    "plan": "Funcionario Público",
    "monto": 28000,
-   "fv": 46275
+   "fv": 46327
   },
   {
    "n": "ANTONIO",
@@ -1424,6 +1512,14 @@
    "fv": 46275
   },
   {
+   "n": "PABLO",
+   "a": "PINO",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46324
+  },
+  {
    "n": "CRISTOBAL",
    "a": "PIZARRO",
    "rut": "Sin Rut",
@@ -1447,6 +1543,14 @@
    "monto": 28000,
    "fv": 46302,
    "medId": "412609ba"
+  },
+  {
+   "n": "DILAN",
+   "a": "POMG",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46331
   },
   {
    "n": "IVAN",
@@ -1487,7 +1591,7 @@
    "rut": "Sin Rut",
    "plan": "Mensual Turno",
    "monto": 23000,
-   "fv": 46271
+   "fv": 46327
   },
   {
    "n": "MAYORI",
@@ -1562,6 +1666,14 @@
    "fv": 46302
   },
   {
+   "n": "ISABEL",
+   "a": "RODRIGUEZ",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46331
+  },
+  {
    "n": "JOSE",
    "a": "RODRIGUEZ",
    "rut": "Sin Rut",
@@ -1593,6 +1705,14 @@
    "monto": 28000,
    "fv": 46323,
    "medId": "c4f25509"
+  },
+  {
+   "n": "ALERSON",
+   "a": "ROJAS",
+   "rut": "Sin Rut",
+   "plan": "Pase Diario",
+   "monto": 4000,
+   "fv": 46298
   },
   {
    "n": "ANDREA",
@@ -1698,7 +1818,7 @@
    "rut": "Sin Rut",
    "plan": "Mensual Turno",
    "monto": 23000,
-   "fv": 46271
+   "fv": 46325
   },
   {
    "n": "ANA MARIA",
@@ -1806,6 +1926,22 @@
    "fv": 46297
   },
   {
+   "n": "MAURICIO",
+   "a": "VALDIVIA",
+   "rut": "Sin Rut",
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46327
+  },
+  {
+   "n": "PATRICIO",
+   "a": "VALDIVIA",
+   "rut": "Sin Rut",
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46327
+  },
+  {
    "n": "ANTONIO",
    "a": "VALENCIA",
    "rut": "Sin Rut",
@@ -1819,7 +1955,7 @@
    "rut": "Sin Rut",
    "plan": "Estudiante Profesor",
    "monto": 28000,
-   "fv": 46290
+   "fv": 46324
   },
   {
    "n": "JOHAN",
@@ -1843,7 +1979,7 @@
    "rut": "Sin Rut",
    "plan": "Estudiante Profesor",
    "monto": 28000,
-   "fv": 46303
+   "fv": 46334
   },
   {
    "n": "NELSON",
@@ -1851,7 +1987,7 @@
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46302
+   "fv": 46333
   },
   {
    "n": "JAIME",
@@ -1906,9 +2042,9 @@
    "n": "BASTIAN",
    "a": "VERGARA",
    "rut": "Sin Rut",
-   "plan": "Tres Veces a La Semana",
-   "monto": 28000,
-   "fv": 46254
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46328
   },
   {
    "n": "DANIELA",
@@ -1918,6 +2054,14 @@
    "monto": 28000,
    "fv": 46323,
    "medId": "a4f0efc2"
+  },
+  {
+   "n": "MARIU",
+   "a": "VERGARA",
+   "rut": "Sin Rut",
+   "plan": "Mensual Turno",
+   "monto": 23000,
+   "fv": 46328
   },
   {
    "n": "DARKO",
@@ -1952,12 +2096,20 @@
    "fv": 46305
   },
   {
+   "n": "DANIELA",
+   "a": "ZARATE",
+   "rut": "Sin Rut",
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46327
+  },
+  {
    "n": "JOFRE",
    "a": "ZARUMA",
    "rut": "Sin Rut",
    "plan": "Full Mensual",
    "monto": 33000,
-   "fv": 46291
+   "fv": 46302
   },
   {
    "n": "MARIA",
