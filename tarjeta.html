@@ -1327,7 +1327,7 @@ function renderEvolucion(s){
     tablet siguen mostrando a todos hasta que se marque la salida.) Se
     calcula con la misma lista pública que leen el mesón y la tablet; en
     la tarjeta solo se muestra el número, nunca nombres. */
- var VENTANA_DENTRO_H = 3;
+ var VENTANA_DENTRO_H = 2;
  var ultimoEstado = null, ultimoAhora = null, diaGrafico = null, horarios = null;
  function contarAhora(rows){
   var desde = Date.now() - VENTANA_DENTRO_H * 3600000, gente = {};
@@ -1412,7 +1412,10 @@ function renderEvolucion(s){
       teléfono no tenga el código (lo abrió en otro navegador). Con el
       script antiguo no viene, y se sigue pidiendo el código. */
    accion = (d.puedeMarcar || d.salidaLibre)
-    ? '<button type="button" class="pago-btn principal" id="salidaBtn">🚪 Registrar mi salida</button>'
+    ? '<button type="button" class="pago-btn principal" id="salidaBtn">🚪 Registrar mi salida</button>' +
+      /* Recordatorio (05-10-2026): la tablet marcaba 7 y había 1 persona,
+         porque casi nadie marca su salida. */
+      '<p class="salida-sub">👋 ¿Ya te vas? Toca este botón al salir: así todos ven cuánta gente hay de verdad.</p>'
     : '<p class="salida-sub">Para registrar tu salida, avísale a recepción.</p>';
    /* Se fue sin marcar la salida y volvió (hay socios que vienen 2 o 3
       veces al día): pasados 30 minutos puede registrar la visita nueva. */
