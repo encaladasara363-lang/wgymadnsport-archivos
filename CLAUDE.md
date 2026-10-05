@@ -305,6 +305,13 @@ ver cuándo el gym está más vacío.
   mismo dato público sin RUT) y el último nombre escrito
   (`wgym_ultimo_socio_v1`, aparece ya puesto). Busca primero ahí y abre al
   instante; la lista de la hoja llega por detrás y corrige fecha/plan.
+- **Bienvenida a socios nuevos (05-10-2026, pedido de la dueña: "solo
+  nuevos y solo una vez"):** al abrir su tarjeta, `revisarBienvenida()`
+  consulta `asistenciaDesde` (75 días) y, si el socio tiene 2 días o menos
+  con ingreso, muestra un saludo a pantalla completa ("¡Hola, NOMBRE!",
+  3 pasos, lema, confeti rojo/dorado). Nunca a socios antiguos ni a pases
+  diarios. El teléfono guarda en `wgym_bienvenida_v1` a quién ya revisó y
+  no vuelve a consultar.
 - **"Poner en mi pantalla de inicio" (03-10-2026):** la tarjeta muestra
   este botón (cuadro `#instCard`, función `pintarInstalar()`) mientras
   no esté instalada. En Android/Chrome abre la ventana "Instalar" del

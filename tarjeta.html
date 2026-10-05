@@ -190,6 +190,23 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .salida-lbl{ font-size:12.5px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:var(--good); margin:6px 0 0; }
 .salida-sub{ font-size:12.5px; color:#8C8C93; margin:10px 0 0; }
 .salida-card .pago-btn{ margin-top:10px; }
+/* Bienvenida a socios nuevos (05-10-2026) */
+.bv-fondo{ position:fixed; inset:0; z-index:9999; background:rgba(5,5,6,.94); display:flex; align-items:center; justify-content:center; padding:16px; overflow:hidden; animation:bvAparece .35s ease-out; }
+.bv-caja{ position:relative; z-index:2; width:100%; max-width:420px; text-align:center; background:linear-gradient(180deg,#151517,#0A0A0B); border:2px solid var(--dorado); border-radius:22px; padding:26px 20px 22px; box-shadow:0 0 40px rgba(227,6,19,.35); animation:bvSalta .6s cubic-bezier(.2,1.4,.4,1); }
+.bv-logo{ width:110px; height:auto; margin:0 auto 10px; display:block; }
+.bv-kicker{ font-size:11px; font-weight:800; letter-spacing:.18em; color:var(--dorado); text-transform:uppercase; margin:0 0 6px; }
+.bv-hola{ font-family:'Rubik Distressed', Impact, sans-serif; text-transform:uppercase; font-size:40px; line-height:1.05; color:var(--rojo); margin:0 0 6px; overflow-wrap:anywhere; }
+.bv-sub{ font-family:'Rubik Distressed', Impact, sans-serif; text-transform:uppercase; font-size:19px; line-height:1.15; color:#fff; margin:0 0 16px; }
+.bv-pasos{ list-style:none; padding:0; margin:0 0 16px; text-align:left; }
+.bv-pasos li{ background:#1C1C1E; border:1px solid #2A2A2E; border-radius:12px; padding:10px 12px; margin-bottom:8px; font-size:14px; color:#E8E8E8; line-height:1.35; }
+.bv-pasos b{ color:var(--dorado); }
+.bv-lema{ font-size:12px; font-weight:800; letter-spacing:.08em; color:var(--dorado); text-transform:uppercase; margin:0 0 14px; }
+.bv-btn{ width:100%; border:0; border-radius:14px; padding:15px; font-size:17px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:#fff; background:var(--rojo); cursor:pointer; font-family:inherit; }
+.bv-confeti{ position:absolute; top:-20px; width:9px; height:14px; border-radius:2px; z-index:1; animation:bvCae linear forwards; }
+@keyframes bvAparece{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes bvSalta{ from{ transform:scale(.6); opacity:0; } to{ transform:scale(1); opacity:1; } }
+@keyframes bvCae{ to{ transform:translateY(110vh) rotate(720deg); } }
+@media (prefers-reduced-motion: reduce){ .bv-fondo,.bv-caja{ animation:none; } .bv-confeti{ display:none; } }
 .salida-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 8px; }
 .salida-nota{ font-size:11.5px; color:#8C8C93; margin:4px 0 0; }
 /* "Poner en mi pantalla de inicio" (10/2026). */
@@ -1531,6 +1548,68 @@ function renderEvolucion(s){
  }
  document.addEventListener("visibilitychange", function(){ if(!document.hidden) consultarSalida(); });
 
+ /* ---------- Bienvenida a socios nuevos (05-10-2026, pedido de la dueña) ----------
+    Solo para socios NUEVOS y solo UNA vez: la primera vez que abren su
+    tarjeta aparece un saludo con su nombre. "Nuevo" = tiene 2 días o
+    menos con ingreso en la hoja (últimos 75 días, acción asistenciaDesde,
+    solo días por nombre, sin datos privados). Los socios antiguos nunca
+    lo ven. Los pases diarios tampoco. Este teléfono recuerda a quién ya
+    se lo mostró (o a quién revisó y no era nuevo) y no vuelve a consultar. */
+ var CLAVE_BIENV = "wgym_bienvenida_v1";
+ function revisarBienvenida(s){
+  if(!CHECKIN_URL || /diario/i.test(s.plan || "")) return;
+  var k = normName(s.nombre + " " + s.apellido), vistos;
+  try{ vistos = JSON.parse(localStorage.getItem(CLAVE_BIENV) || "{}") || {}; }catch(e){ return; }
+  if(vistos[k]) return;
+  var f = new Date(Date.now() - 75 * 864e5);
+  var desde = f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-" + String(f.getDate()).padStart(2,"0");
+  salidaJsonp({ action:"asistenciaDesde", desde:desde }, function(d){
+   if(!d || d.asistencia !== true) return;   /* sin respuesta: se revisa la próxima vez */
+   vistos[k] = 1;
+   try{ localStorage.setItem(CLAVE_BIENV, JSON.stringify(vistos)); }catch(e){}
+   var dias = d.dias && d.dias[k] ? Object.keys(d.dias[k]).length : 0;
+   if(dias <= 2 && socioActual && normName(socioActual.nombre + " " + socioActual.apellido) === k) mostrarBienvenida(s);
+  });
+ }
+ function mostrarBienvenida(s){
+  try{
+   var fl = document.createElement("link");
+   fl.rel = "stylesheet"; fl.href = "https://fonts.googleapis.com/css2?family=Rubik+Distressed&display=swap";
+   document.head.appendChild(fl);
+  }catch(e){}
+  var nombre = String(s.nombre || "").trim().split(/\s+/)[0] || "";
+  var fondo = document.createElement("div");
+  fondo.className = "bv-fondo";
+  fondo.setAttribute("role", "dialog");
+  fondo.setAttribute("aria-label", "Bienvenida");
+  fondo.innerHTML =
+   '<div class="bv-caja">' +
+    '<img class="bv-logo" src="' + LOGO_B64 + '" alt="WGYMADNSPORT">' +
+    '<p class="bv-kicker">Tu primer día</p>' +
+    '<h2 class="bv-hola">¡Hola, ' + escapeHtml(nombre) + '!</h2>' +
+    '<p class="bv-sub">Te damos la bienvenida a WGYMADNSPORT</p>' +
+    '<ul class="bv-pasos">' +
+     '<li>✅ Al llegar, toca <b>"Registrar mi ingreso"</b>.</li>' +
+     '<li>🚪 Al irte, toca <b>"Registrar mi salida"</b>.</li>' +
+     '<li>📊 Mira <b>cuánta gente hay</b> antes de venir y elige tu horario.</li>' +
+    '</ul>' +
+    '<p class="bv-lema">Donde hay calidad no hay competencia</p>' +
+    '<button type="button" class="bv-btn">¡Vamos a entrenar!</button>' +
+   '</div>';
+  var colores = ["#E30613", "#D4AF37", "#FFFFFF"];
+  for(var i = 0; i < 40; i++){
+   var c = document.createElement("span");
+   c.className = "bv-confeti";
+   c.style.left = (Math.random() * 100) + "%";
+   c.style.background = colores[i % 3];
+   c.style.animationDuration = (2.2 + Math.random() * 2.5) + "s";
+   c.style.animationDelay = (Math.random() * 1.2) + "s";
+   fondo.appendChild(c);
+  }
+  document.body.appendChild(fondo);
+  fondo.querySelector(".bv-btn").addEventListener("click", function(){ fondo.remove(); });
+ }
+
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
@@ -1541,6 +1620,7 @@ function renderEvolucion(s){
  iniciarIngreso(s);
  pintarInstalar();
  socioActual = s;
+ revisarBienvenida(s);
  resetBandBtn();
  resetLockBtn();
  }
