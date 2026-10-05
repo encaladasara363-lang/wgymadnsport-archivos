@@ -4,7 +4,7 @@
   "partes": [
     {
       "video": "fuentes/seguro-y-ejercicio-gemini.mp4",
-      "desde": 0,
+      "desde": 3.0,
       "hasta": 10,
       "recorte": [
         352,
@@ -32,7 +32,7 @@
         150,
         220
       ],
-      "nota": "Saca el seguro (0-3 s) y luego elevaciones; pantorrillas en rojo"
+      "nota": "Solo ejercicio: en 0-3 s sacaba el seguro pero la palanca se devolvía (descartado por la dueña). Falta un video del seguro donde la palanca quede tirada a la izquierda."
     }
   ]
 }
