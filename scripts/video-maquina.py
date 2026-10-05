@@ -16,7 +16,9 @@ config.json:
   titulo, series
   partes: lista en orden; cada una con video, desde, hasta (segundos),
     repetir (opcional; la última parte se repite y su vuelta se empalma sola),
+    recorte (opcional): [x, y, ancho, alto] para recortar la fuente antes,
     musculo (opcional): [[cx, cy, rx, ry], ...] óvalos en px de 720x1280,
+    solo_piel (opcional, true): false si el músculo está bajo ropa oscura (glúteos): pinta solo lo oscuro,
     seguir (opcional): [y0, y1, x0, x1] zona con textura a media
       resolución para seguir el movimiento del músculo.
 
@@ -37,10 +39,11 @@ rubik = lambda s: font('assets/font-rubik-distressed.ttf', s)
 anton = lambda s: font('contenido/fuentes/Anton.ttf', s)
 
 
-def leer_frames(path, desde, hasta):
+def leer_frames(path, desde, hasta, recorte=None):
     tmp = tempfile.mkdtemp()
+    vf = ['-vf', 'crop=%d:%d:%d:%d' % (recorte[2], recorte[3], recorte[0], recorte[1])] if recorte else []
     subprocess.run([FF, '-v', 'error', '-ss', str(desde), '-t', str(hasta - desde),
-                    '-i', path, '-map', '0:v:0', '-an', '-r', str(FPS),
+                    '-i', path, '-map', '0:v:0', '-an', '-r', str(FPS)] + vf + [
                     os.path.join(tmp, '%04d.png')], check=True)
     return [Image.open(f).convert('RGB') for f in sorted(glob.glob(os.path.join(tmp, '*.png')))]
 
@@ -76,10 +79,10 @@ def seguir(frames, zona):
     return [(dy * 2, dx * 2) for dy, dx in offs]
 
 
-def musculo_rojo(fr, ovalos, off, i):
+def musculo_rojo(fr, ovalos, off, i, solo_piel=True):
     a = np.array(fr).astype(np.float32)
     R, G, B = a[:, :, 0], a[:, :, 1], a[:, :, 2]
-    piel = (R > 85) & (G > 45) & (B > 25) & (R - G > 12) & (R - B > 22)
+    piel = ((R > 85) & (G > 45) & (B > 25) & (R - G > 12) & (R - B > 22)) if solo_piel else ((R + G + B) / 3 < 75)  # ropa oscura
     yy, xx = np.mgrid[0:H, 0:W]
     m = np.zeros((H, W), np.float32)
     for cx, cy, rx, ry in ovalos:
@@ -113,13 +116,13 @@ def main(carpeta):
     X = 8  # cuadros de fundido entre partes
     secuencia, extra = [], []
     for n, p in enumerate(cfg['partes']):
-        fr = [a_vertical(f) for f in leer_frames(os.path.join(carpeta, p['video']), p['desde'], p['hasta'])]
+        fr = [a_vertical(f) for f in leer_frames(os.path.join(carpeta, p['video']), p['desde'], p['hasta'], p.get('recorte'))]
         if p.get('repetir') and n == len(cfg['partes']) - 1:
             m = len(fr) - X
             fr = [Image.blend(fr[m + i], fr[i], (i + 1) / (X + 1)) if i < X else fr[i] for i in range(m)]
         if p.get('musculo'):
             offs = seguir(fr, p.get('seguir'))
-            fr = [musculo_rojo(f, p['musculo'], offs[i], i) for i, f in enumerate(fr)]
+            fr = [musculo_rojo(f, p['musculo'], offs[i], i, p.get('solo_piel', True)) for i, f in enumerate(fr)]
         vuelta = list(fr)
         if secuencia:
             fr[:X] = [Image.blend(secuencia[-X + i], fr[i], (i + 1) / (X + 1)) for i in range(X)]

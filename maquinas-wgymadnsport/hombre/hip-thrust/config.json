@@ -1,6 +1,34 @@
 {
   "titulo": "HIP THRUST",
   "series": "4 × 12",
-  "pendiente": "Falta el video del ejercicio (Gemini o Grok) con esta imagen.",
-  "partes": []
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-gemini.mp4",
+      "desde": 0,
+      "hasta": 10,
+      "recorte": [
+        388,
+        44,
+        504,
+        630
+      ],
+      "repetir": 2,
+      "musculo": [
+        [
+          365,
+          670,
+          85,
+          42
+        ]
+      ],
+      "seguir": [
+        300,
+        370,
+        130,
+        240
+      ],
+      "solo_piel": false,
+      "nota": "Glúteos parpadeando en rojo (bajo el short, sin filtro de piel)"
+    }
+  ]
 }

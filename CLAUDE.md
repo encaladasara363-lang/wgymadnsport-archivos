@@ -546,7 +546,11 @@ mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
 - El movimiento real lo generan Gemini (Video) o Grok (Imagine) desde la
   imagen; Remotion/código no puede hacer que la persona se mueva. Los
   créditos de ElevenLabs no incluyen video en su plan.
-- Primera máquina lista: `hombre/pantorrilla-sentado` (04-10-2026).
+- Listas: `hombre/pantorrilla-sentado` (04-10-2026) y `hombre/hip-thrust`
+  (05-10-2026, glúteos marcados sobre el short con `solo_piel:false`).
+- Gemini recorta lo vertical: subirle siempre la versión horizontal con
+  costados difuminados y el modelo al 88 % del alto; luego `recorte` en el
+  config saca solo la foto.
 
 ## Rutinas: contenido en JSON, nunca editar a mano el HTML (regla permanente, desde 10/2026)
 
