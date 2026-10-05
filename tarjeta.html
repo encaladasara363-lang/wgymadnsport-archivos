@@ -248,6 +248,18 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .pago-datos .fila span{ color:var(--gris-soft); font-weight:600; }
 .pago-datos .fila b{ color:var(--blanco); font-weight:800; text-align:right; word-break:break-all; }
 .pago-nota{ font-size:11.5px; color:var(--gris-soft); margin:10px 0 0; line-height:1.45; }
+/* "Mis calorías del día" (05-10-2026) */
+.cal-sub{ font-size:13px; color:#CFCFCF; margin:0 0 10px; line-height:1.4; }
+.cal-seg{ display:flex; gap:6px; margin:0 0 10px; }
+.cal-seg button{ flex:1; padding:9px 4px; border-radius:9px; border:1px solid var(--line); background:var(--surface); color:var(--gris-soft); font-weight:800; font-size:12.5px; cursor:pointer; font-family:inherit; }
+.cal-seg button[aria-pressed="true"]{ background:var(--dorado); border-color:var(--dorado); color:#0A0A0B; }
+.cal-fila3{ display:flex; gap:8px; }
+.cal-fila3 .evo-ref-campo{ flex:1; min-width:0; }
+.cal-card select{ width:100%; box-sizing:border-box; background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:9px 10px; font-size:13.5px; color:var(--blanco); font-family:inherit; margin-bottom:10px; }
+.cal-meta{ text-align:center; background:#211c0c; border:2px solid var(--dorado); border-radius:12px; padding:10px; margin:4px 0 10px; }
+.cal-meta b{ display:block; font-size:30px; font-weight:900; color:#FFD84D; line-height:1.1; }
+.cal-meta span{ font-size:11.5px; font-weight:800; letter-spacing:.08em; color:var(--dorado); text-transform:uppercase; }
+.cal-err{ font-size:12.5px; color:var(--danger); font-weight:700; margin:4px 0 0; }
 .pago-ok{ font-size:12.5px; color:var(--good); font-weight:800; min-height:16px; margin:6px 0 0; text-align:center; }
 .band-btn{
   width:100%; background:var(--rojo); color:var(--blanco); border:none; border-radius:12px;
@@ -397,6 +409,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="member-card" id="memberCard"></div>
  <div class="salida-card" id="salidaCard" hidden></div>
  <div class="pago-card" id="pagoCard" hidden></div>
+ <div class="pago-card cal-card" id="calCard" hidden></div>
  <div class="evo-card" id="evoCard" hidden></div>
  <div class="band-box">
  <div class="band-colors" id="bandColors">
@@ -1548,6 +1561,128 @@ function renderEvolucion(s){
  }
  document.addEventListener("visibilitychange", function(){ if(!document.hidden) consultarSalida(); });
 
+ /* ---------- "Mis calorías del día" (05-10-2026, pedido de la dueña) ----------
+    Calculadora personal con las fórmulas de la base de conocimiento técnico
+    (CLAUDE.md): Harris-Benedict corregida (mujeres 655,1), factores de
+    actividad ×1,2 a ×1,9, déficit de 250-500 kcal para bajar grasa, proteína
+    1,2-2,0 g/kg (2,0 en déficit; 2,0-2,2 para ganar músculo), grasas mínimo
+    0,66 g/kg y bajar menos del 1 % del peso por semana. Los datos (peso,
+    edad, estatura) se guardan SOLO en este teléfono, nunca en la hoja ni en
+    el sitio: son datos de salud. */
+ var CLAVE_CAL = "wgym_calorias_v1";
+ var ACTIVIDADES = [
+  [1.2, "Sedentaria (casi sin ejercicio)"],
+  [1.375, "Ligera (1 a 3 días por semana)"],
+  [1.55, "Moderada (3 a 5 días por semana)"],
+  [1.725, "Intensa (6 a 7 días por semana)"],
+  [1.9, "Muy intensa (2 veces al día o trabajo físico)"]
+ ];
+ var calAbierto = false, calEditando = false;
+ function leerCal(){ try{ return JSON.parse(localStorage.getItem(CLAVE_CAL) || "{}") || {}; }catch(e){ return {}; } }
+ function miles(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+ function calcularCal(d){
+  var tmb = d.sexo === "M" ? (66 + 13.7 * d.peso + 5 * d.alt - 6.8 * d.edad)
+                           : (655.1 + 9.563 * d.peso + 1.85 * d.alt - 4.676 * d.edad);
+  var mant = tmb * d.act, r = { tmb:tmb, mant:mant };
+  if(d.obj === "bajar"){
+   r.kMin = Math.max(tmb, mant - 500); r.kMax = Math.max(tmb, mant - 250);
+   r.pMin = r.pMax = 2.0 * d.peso;
+   r.bajaSemana = d.peso * 0.01;
+  }else if(d.obj === "ganar"){
+   r.kMin = r.kMax = mant;
+   r.pMin = 2.0 * d.peso; r.pMax = 2.2 * d.peso;
+  }else{
+   r.kMin = r.kMax = mant;
+   r.pMin = 1.2 * d.peso; r.pMax = 2.0 * d.peso;
+  }
+  var kRef = (r.kMin + r.kMax) / 2, pRef = (r.pMin + r.pMax) / 2;
+  r.gMin = 0.66 * d.peso;
+  r.gMax = kRef * 0.40 / 9;
+  r.carbo = Math.max(0, (kRef - pRef * 4 - r.gMin * 9) / 4);
+  r.tope = d.obj === "bajar" && (mant - 500 < tmb);
+  return r;
+ }
+ function renderCalorias(s){
+  var box = document.getElementById("calCard");
+  if(!box) return;
+  var k = normName(s.nombre + " " + s.apellido), todo = leerCal(), d = todo[k];
+  box.hidden = false;
+  var html = '<p class="pago-kicker">🔥 Mis calorías del día</p>';
+  if(!calAbierto && !calEditando){
+   html += '<p class="cal-sub">Calcula cuántas calorías y cuánta proteína necesitas según tu objetivo.</p>' +
+    '<button type="button" class="pago-btn principal" id="calAbrir">' + (d ? 'Ver mis calorías' : 'Calcular mis calorías') + '</button>';
+   box.innerHTML = html;
+   box.querySelector("#calAbrir").addEventListener("click", function(){ calAbierto = true; calEditando = !d; renderCalorias(s); });
+   return;
+  }
+  if(calEditando || !d){
+   var v = d || { sexo:"", obj:"bajar", act:1.55 };
+   html += '<p class="cal-sub">Tus datos se guardan solo en este teléfono.</p>' +
+    '<div class="cal-seg" id="calSexo"><button type="button" data-v="F" aria-pressed="' + (v.sexo === "F") + '">Mujer</button><button type="button" data-v="M" aria-pressed="' + (v.sexo === "M") + '">Hombre</button></div>' +
+    '<div class="cal-fila3">' +
+     '<div class="evo-ref-campo"><label for="calEdad">Edad</label><input id="calEdad" type="number" inputmode="numeric" placeholder="—" value="' + (v.edad || "") + '"></div>' +
+     '<div class="evo-ref-campo"><label for="calPeso">Peso (kg)</label><input id="calPeso" type="number" inputmode="decimal" step="0.1" placeholder="—" value="' + (v.peso || "") + '"></div>' +
+     '<div class="evo-ref-campo"><label for="calAlt">Estatura (cm)</label><input id="calAlt" type="number" inputmode="numeric" placeholder="—" value="' + (v.alt || "") + '"></div>' +
+    '</div>' +
+    '<div class="evo-ref-campo"><label for="calAct">¿Cuánto te mueves?</label></div>' +
+    '<select id="calAct">' + ACTIVIDADES.map(function(a){ return '<option value="' + a[0] + '"' + (Number(v.act) === a[0] ? ' selected' : '') + '>' + a[1] + '</option>'; }).join("") + '</select>' +
+    '<div class="evo-ref-campo"><label>Tu objetivo</label></div>' +
+    '<div class="cal-seg" id="calObj">' +
+     [["bajar","Bajar grasa"],["mantener","Mantenerme"],["ganar","Ganar músculo"]].map(function(o){ return '<button type="button" data-v="' + o[0] + '" aria-pressed="' + (v.obj === o[0]) + '">' + o[1] + '</button>'; }).join("") +
+    '</div>' +
+    '<p class="cal-err" id="calErr" hidden></p>' +
+    '<button type="button" class="pago-btn principal" id="calCalcular">Calcular</button>' +
+    (d ? '<button type="button" class="pago-btn sec" id="calCancelar">Cancelar</button>' : '');
+   box.innerHTML = html;
+   var elegido = { sexo:v.sexo, obj:v.obj };
+   ["calSexo", "calObj"].forEach(function(id){
+    box.querySelector("#" + id).addEventListener("click", function(ev){
+     var b = ev.target.closest("button"); if(!b) return;
+     elegido[id === "calSexo" ? "sexo" : "obj"] = b.getAttribute("data-v");
+     Array.prototype.forEach.call(this.querySelectorAll("button"), function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+    });
+   });
+   box.querySelector("#calCalcular").addEventListener("click", function(){
+    var n = { sexo:elegido.sexo, obj:elegido.obj,
+     edad:Number(box.querySelector("#calEdad").value), peso:Number(String(box.querySelector("#calPeso").value).replace(",", ".")),
+     alt:Number(box.querySelector("#calAlt").value), act:Number(box.querySelector("#calAct").value) };
+    var err = !n.sexo ? "Elige si eres mujer u hombre." :
+     !(n.edad >= 15 && n.edad <= 90) ? "Escribe tu edad (entre 15 y 90 años)." :
+     !(n.peso >= 30 && n.peso <= 250) ? "Escribe tu peso en kilos (por ejemplo 65)." :
+     !(n.alt >= 120 && n.alt <= 220) ? "Escribe tu estatura en centímetros (por ejemplo 160)." : "";
+    var e = box.querySelector("#calErr");
+    if(err){ e.textContent = err; e.hidden = false; return; }
+    var t2 = leerCal(); t2[k] = n;
+    try{ localStorage.setItem(CLAVE_CAL, JSON.stringify(t2)); }catch(x){}
+    calEditando = false; renderCalorias(s);
+   });
+   var c = box.querySelector("#calCancelar");
+   if(c) c.addEventListener("click", function(){ calEditando = false; renderCalorias(s); });
+   return;
+  }
+  var r = calcularCal(d), meta;
+  if(d.obj === "bajar") meta = miles(r.kMin) + (Math.round(r.kMax) !== Math.round(r.kMin) ? " – " + miles(r.kMax) : "");
+  else meta = miles(r.kMin);
+  var fila = function(a, b){ return '<div class="fila"><span>' + a + '</span><b>' + b + '</b></div>'; };
+  html += '<div class="cal-meta"><span>' + (d.obj === "bajar" ? "Para bajar grasa" : d.obj === "ganar" ? "Tu base para ganar músculo" : "Para mantenerte") + '</span><b>' + meta + ' kcal</b><span>al día</span></div>' +
+   '<div class="pago-datos">' +
+    fila("🔋 Gasto en reposo", miles(r.tmb) + " kcal") +
+    fila("⚖️ Para mantener tu peso", miles(r.mant) + " kcal") +
+    fila("🥩 Proteína", Math.round(r.pMin) === Math.round(r.pMax) ? Math.round(r.pMin) + " g" : Math.round(r.pMin) + " – " + Math.round(r.pMax) + " g") +
+    fila("🥑 Grasas", Math.round(r.gMin) + " – " + Math.round(r.gMax) + " g") +
+    fila("🍚 Carbohidratos (aprox.)", Math.round(r.carbo) + " g") +
+   '</div>' +
+   (d.obj === "bajar" ? '<p class="pago-nota">📉 Ritmo sano: baja menos de ' + (Math.round(r.bajaSemana * 10) / 10).toString().replace(".", ",") + ' kg por semana para no perder músculo. Los cambios se notan desde las 3 a 6 semanas.</p>' : '') +
+   (r.tope ? '<p class="pago-nota">⚠️ No comas menos de lo que tu cuerpo gasta en reposo (' + miles(r.tmb) + ' kcal).</p>' : '') +
+   (d.obj === "ganar" ? '<p class="pago-nota">💪 Come un poco por sobre esta cifra y revisa tu avance con tus mediciones del gimnasio. Más proteína de la indicada no te hará ganar más músculo.</p>' : '') +
+   '<p class="pago-nota">Es una estimación orientativa. Si tienes diabetes u otra condición de salud, sigue las indicaciones de tu médico o nutricionista.</p>' +
+   '<button type="button" class="pago-btn sec" id="calCambiar">Cambiar mis datos</button>' +
+   '<button type="button" class="pago-btn sec" id="calCerrar">Cerrar</button>';
+  box.innerHTML = html;
+  box.querySelector("#calCambiar").addEventListener("click", function(){ calEditando = true; renderCalorias(s); });
+  box.querySelector("#calCerrar").addEventListener("click", function(){ calAbierto = false; renderCalorias(s); });
+ }
+
  /* ---------- Bienvenida a socios nuevos (05-10-2026, pedido de la dueña) ----------
     Solo para socios NUEVOS y solo UNA vez: la primera vez que abren su
     tarjeta aparece un saludo con su nombre. "Nuevo" = tiene 2 días o
@@ -1616,6 +1751,8 @@ function renderEvolucion(s){
  anotarDia(s);
  renderCard(s);
  renderPago(s);
+ calAbierto = false; calEditando = false;
+ renderCalorias(s);
  renderEvolucion(s);
  iniciarIngreso(s);
  pintarInstalar();

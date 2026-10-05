@@ -312,6 +312,16 @@ ver cuándo el gym está más vacío.
   3 pasos, lema, confeti rojo/dorado). Nunca a socios antiguos ni a pases
   diarios. El teléfono guarda en `wgym_bienvenida_v1` a quién ya revisó y
   no vuelve a consultar.
+- **"🔥 Mis calorías del día" (05-10-2026, pedido de la dueña):** cuadro
+  `#calCard` en la tarjeta (`renderCalorias()`). El socio elige sexo,
+  edad, peso, estatura, actividad (×1,2 a ×1,9) y objetivo (bajar grasa /
+  mantenerme / ganar músculo) y ve calorías, proteína, grasas y
+  carbohidratos según la base técnica (Harris-Benedict corregida,
+  déficit 250-500 kcal sin bajar del TMB, proteína 2,0 g/kg en déficit,
+  2,0-2,2 para ganar, 1,2-2,0 para mantener, grasas ≥0,66 g/kg y ≤40 %).
+  Para ganar músculo no se inventa un superávit: se muestra la mantención
+  como base. Los datos son de salud: se guardan SOLO en el teléfono
+  (`wgym_calorias_v1`), nunca en la hoja ni en el repo.
 - **"Poner en mi pantalla de inicio" (03-10-2026):** la tarjeta muestra
   este botón (cuadro `#instCard`, función `pintarInstalar()`) mientras
   no esté instalada. En Android/Chrome abre la ventana "Instalar" del
