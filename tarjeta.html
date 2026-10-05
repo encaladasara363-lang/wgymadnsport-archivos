@@ -1426,9 +1426,20 @@ function renderEvolucion(s){
  /* Abierta sin el QR de la puerta: solo consulta. Mientras el Apps Script
     no tenga las funciones nuevas, se mantiene el registro de siempre (hoy
     el QR de la puerta abre esta misma página sin marca). */
- function consultarInicio(s){
+ function consultarInicio(s, intento){
+  intento = intento || 1;
   salidaJsonp({ action:"miIngreso", nombre:s.nombre, apellido:s.apellido, codigo:codigoDe(s) }, function(d){
-   if(s !== salidaSocio || !d) return;
+   if(s !== salidaSocio) return;
+   /* Sin respuesta del registro de ingresos: antes la tarjeta quedaba sin
+      contador ni botón, sin decir nada (caso Gloria López, 05-10-2026).
+      Reintenta y, si sigue sin conexión, lo avisa. */
+   if(!d){
+    if(intento < 3){ setTimeout(function(){ consultarInicio(s, intento + 1); }, 2500); return; }
+    pintarSalida(null, "Este teléfono no logra conectarse con el registro de ingresos del gimnasio. " +
+     "Revisa que tengas internet (datos o wifi), abre la tarjeta en Safari o Chrome (no dentro de WhatsApp, Instagram o Facebook) " +
+     "y desactiva bloqueadores de anuncios o VPN. Mientras tanto, avísale a recepción para registrar tu ingreso.");
+    return;
+   }
    if(d.ingresos !== true){ avisarIngreso(s); return; }
    pintarSalida(d);
    pedirAhora();
