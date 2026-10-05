@@ -825,7 +825,9 @@ function renderEvolucion(s){
  y el login cae al aviso de "no encontramos" en vez de quedar pegado. */
  var reloj = setTimeout(function(){ terminar([]); }, 12000);
  window[cb_] = function(data){
- terminar(data && Array.isArray(data.socios) ? data.socios : []);
+ var lista = data && Array.isArray(data.socios) ? data.socios : [];
+ if(lista.length) guardarListaLocal_(lista);
+ terminar(lista);
  };
  var script = document.createElement("script");
  script.src = CHECKIN_URL + "?action=listarSocios&callback=" + cb_ + "&_=" + Date.now();
@@ -833,10 +835,28 @@ function renderEvolucion(s){
  document.body.appendChild(script);
  });
  }
+ /* Copia de la lista guardada en el teléfono (05-10-2026, la dueña:
+    "sale Buscando... y se demora el ingreso"). La hoja de Google tarda
+    varios segundos en responder, y antes el socio esperaba eso cada vez
+    que tocaba Entrar. Ahora se busca primero en la lista que el teléfono
+    guardó la vez anterior: si está, la tarjeta se abre al instante y la
+    lista nueva llega por detrás y corrige la fecha si cambió. Es el mismo
+    dato público de socios.json (sin RUT). */
+ var CLAVE_LISTA = "wgym_lista_socios_v1", CLAVE_ULTIMO = "wgym_ultimo_socio_v1";
+ function guardarListaLocal_(lista){
+ try{ localStorage.setItem(CLAVE_LISTA, JSON.stringify(lista.map(function(s){
+  return { n:s.n, a:s.a, plan:s.plan, monto:s.monto, fv:s.fv, medid:s.medid || "" };
+ }))); }catch(e){}
+ }
+ function listaLocal_(){
+ try{ var l = JSON.parse(localStorage.getItem(CLAVE_LISTA) || "[]"); return Array.isArray(l) ? l : []; }catch(e){ return []; }
+ }
  var sociosTarjetaPromise = cargarSociosTarjeta();
  /* Si vuelve a esta pestaña después de un rato (cambió de app y volvió),
-    trae la lista de nuevo por si hubo una renovación mientras tanto. */
- window.addEventListener("pageshow", function(){ sociosTarjetaPromise = cargarSociosTarjeta(); });
+    trae la lista de nuevo por si hubo una renovación mientras tanto.
+    Solo al volver: en la primera carga ya se pidió arriba (antes se
+    pedía dos veces seguidas). */
+ window.addEventListener("pageshow", function(e){ if(e.persisted) sociosTarjetaPromise = cargarSociosTarjeta(); });
  /* El socio escribe todo junto en un solo casillero, así que hay que adivinar
     dónde termina el nombre y empieza el apellido. Se prueban todos los cortes,
     porque los hay compuestos de los dos lados: ANA MARIA GONZALEZ tiene el
@@ -882,19 +902,55 @@ function renderEvolucion(s){
  function findSocioJunto(texto, cb){
  var candidatos = candidatosDeTexto_(texto);
  if(!candidatos.length){ cb(null); return; }
+ /* 1) Al instante, con la lista guardada en el teléfono. */
+ var rapido = buscarEnLista_(listaLocal_(), candidatos);
+ if(rapido){
+ cb(rapido);
+ /* La lista nueva llega por detrás: si le renovaron o cambió el plan, se
+    corrige la tarjeta ya abierta. */
  sociosTarjetaPromise.then(function(lista){
+ var nuevo = buscarEnLista_(lista, candidatos);
+ if(nuevo && (nuevo.fv !== rapido.fv || nuevo.plan !== rapido.plan || nuevo.monto !== rapido.monto)) actualizarTarjeta_(nuevo);
+ });
+ return;
+ }
+ /* 2) Primera vez en este teléfono: se espera la hoja, pero si socios.json
+    (más rápido) ya lo trae, se entra con ese mientras tanto. */
+ var listo = false;
+ function entrar(s){ if(listo) return; listo = true; cb(s); }
+ sociosJsonComoApi_().then(function(l){
+ var s = buscarEnLista_(l, candidatos);
+ if(s && !listo){
+ entrar(s);
+ sociosTarjetaPromise.then(function(lista){
+ var nuevo = buscarEnLista_(lista, candidatos);
+ if(nuevo && (nuevo.fv !== s.fv || nuevo.plan !== s.plan || nuevo.monto !== s.monto)) actualizarTarjeta_(nuevo);
+ });
+ }
+ });
+ sociosTarjetaPromise.then(function(lista){
+ if(listo) return;
  var s = buscarEnLista_(lista, candidatos);
- if(s){ cb(s); return; }
+ if(s){ entrar(s); return; }
  sociosJsonComoApi_().then(function(lista2){
+ if(listo) return;
  var s2 = buscarEnLista_(lista2, candidatos);
  if(s2){ cb(s2); return; }
  /* Puede que recepción lo haya registrado recién (por ejemplo un pase
     diario) después de abrir esta página: se pide la lista de nuevo una
     vez antes de decir que no está. */
  sociosTarjetaPromise = cargarSociosTarjeta();
- sociosTarjetaPromise.then(function(lista3){ cb(buscarEnLista_(lista3, candidatos)); });
+ sociosTarjetaPromise.then(function(lista3){ entrar(buscarEnLista_(lista3, candidatos)); });
  });
  });
+ }
+ /* Corrige la tarjeta ya abierta con la ficha nueva de la hoja (fecha,
+    plan o monto), sin volver a registrar el ingreso. */
+ function actualizarTarjeta_(api){
+ var s = socioApiATarjeta_(api);
+ if(!socioActual || normName(socioActual.nombre) !== normName(s.nombre) || normName(socioActual.apellido) !== normName(s.apellido)) return;
+ socioActual.plan = s.plan; socioActual.monto = s.monto; socioActual.vencimiento = s.vencimiento;
+ try{ renderCard(socioActual); renderPago(socioActual); }catch(e){}
  }
  function socioApiATarjeta_(s){
  return { nombre:s.n, apellido:s.a, rut:"Sin Rut", plan:s.plan, monto:Number(s.monto)||0,
@@ -1597,6 +1653,7 @@ function renderEvolucion(s){
  btn.disabled = false;
  btn.textContent = "Entrar";
  if(s){
+ try{ localStorage.setItem(CLAVE_ULTIMO, texto.trim()); }catch(e){}
  unlockCardView(socioApiATarjeta_(s));
  return;
  }
@@ -1606,6 +1663,9 @@ function renderEvolucion(s){
  }
 
  var cajaNombre = document.getElementById("gateNombre");
+ /* El nombre que escribió la vez anterior en este teléfono ya aparece
+    puesto: solo toca Entrar. */
+ try{ var ultimo = localStorage.getItem(CLAVE_ULTIMO); if(ultimo && !cajaNombre.value) cajaNombre.value = ultimo; }catch(e){}
  document.getElementById("gateBtn").addEventListener("click", function(){
  tryLogin(cajaNombre.value);
  });
