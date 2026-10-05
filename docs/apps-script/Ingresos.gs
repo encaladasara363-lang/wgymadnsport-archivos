@@ -327,6 +327,46 @@ function quitarSalida_(e) {
   });
 }
 
+
+/* Días con ingreso por persona desde una fecha (máximo 75 días atrás),
+   para que el mesón y la tablet cuenten el "día X de Y" con los mismos
+   datos de la hoja (desde 05-10-2026). Solo nombre y días: sin horas,
+   salidas ni códigos. */
+function claveDias_(nombre, apellido) {
+  return (String(nombre) + " " + String(apellido)).toUpperCase().normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+}
+
+function asistenciaDesde_(e) {
+  var p = e.parameter;
+  var minimo = diaCL_(Date.now() - 75 * 864e5);
+  var desde = String(p.desde || "");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(desde) || desde < minimo) desde = minimo;
+  var sheet = hojaIngresos_(p);
+  var dias = {};
+  var fin = sheet.getLastRow();
+  var TRAMO = 800, anteriores = 0;
+  while (fin >= 2 && anteriores < 30) {
+    var ini = Math.max(2, fin - TRAMO + 1);
+    var vals = sheet.getRange(ini, 1, fin - ini + 1, 3).getValues();
+    for (var i = vals.length - 1; i >= 0; i--) {
+      var ts = tsDeCelda_(vals[i][0]);
+      if (!ts) continue;
+      var d = diaCL_(ts);
+      if (d >= desde) {
+        anteriores = 0;
+        var k = claveDias_(vals[i][1], vals[i][2]);
+        if (k) { if (!dias[k]) dias[k] = {}; dias[k][d] = 1; }
+      } else {
+        anteriores++;
+        if (anteriores >= 30) break;
+      }
+    }
+    fin = ini - 1;
+  }
+  return respond_(e, { ok: true, asistencia: true, desde: desde, dias: dias });
+}
+
 /* ── las dos entradas que llama Código.gs ───────────────────────────── */
 
 function accionIngresos_(e) {
@@ -335,6 +375,7 @@ function accionIngresos_(e) {
     case "miIngreso": return miIngreso_(e);
     case "ingresoTarjeta": return ingresoTarjeta_(e);
     case "salidaSocio": return salidaSocio_(e);
+    case "asistenciaDesde": return asistenciaDesde_(e);
   }
   return null;
 }

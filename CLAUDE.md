@@ -524,6 +524,17 @@ arreglar un contador que no coincide entre los dos aparatos):
 - Publicar junto con cualquier otro cambio de `socios.json`/`LISTA_BASE`/
   `SOCIOS` de esa misma tanda.
 
+**Desde 05-10-2026 los días salen también de la hoja de ingresos:**
+`control.html` y `pantalla.html` llaman a la acción `asistenciaDesde` del
+Apps Script (`docs/apps-script/Ingresos.gs`) al cargar y cada 5 minutos,
+y agregan a su `asistencia` local los días con ingreso de los últimos 60
+días que les falten (agregado puro, por nombre sin tildes). Así los dos
+aparatos cuentan los mismos días aunque uno haya estado apagado. Requiere
+que la dueña instale esa versión del script (nueva versión de la misma
+implementación); con el script antiguo no hace nada. Los ciclos (desde
+cuándo corre el mes) siguen siendo locales: si un "día X" no calza por el
+inicio del mes, se corrige con el export de "Copiar lista".
+
 Si el usuario reclama que los contadores no coinciden y no mandó ese
 export todavía, pedírselo (apretar de nuevo "📋 Copiar lista" y pegar el
 resultado) — sin él no hay forma de saber los días reales que ya lleva
