@@ -1395,7 +1395,10 @@ function renderEvolucion(s){
   var box = document.getElementById("salidaCard");
   if(error && !d){
    box.hidden = false;
-   box.innerHTML = '<p class="salida-err">⚠️ ' + escapeHtml(error) + '</p>';
+   box.innerHTML = '<p class="salida-err">⚠️ ' + escapeHtml(error) + '</p>' +
+    '<button type="button" class="pago-btn sec" id="salidaReintentar">🔄 Reintentar</button>';
+   var re = box.querySelector("#salidaReintentar");
+   if(re) re.addEventListener("click", function(){ if(salidaSocio){ pintarCargando(); consultarInicio(salidaSocio); } });
    return;
   }
   if(!d || d.ingresos !== true || typeof d.dentroAhora !== "number"){ box.hidden = true; return; }
@@ -1471,7 +1474,7 @@ function renderEvolucion(s){
      pintarSalida(null, "No se pudo registrar tu ingreso por falta de internet. Avísale a recepción.");
      return;
     }
-    if(d.ingresos !== true){ avisarIngreso(s); return; }   /* Apps Script antiguo */
+    if(d.ingresos !== true){ document.getElementById("salidaCard").hidden = true; avisarIngreso(s); return; }   /* Apps Script antiguo */
     if(d.registrado && d.codigo) guardarCodigo(s, d.codigo);
     pintarSalida(d);
     pedirAhora();
@@ -1496,21 +1499,32 @@ function renderEvolucion(s){
      "y desactiva bloqueadores de anuncios o VPN. Mientras tanto, avísale a recepción para registrar tu ingreso.");
     return;
    }
-   if(d.ingresos !== true){ avisarIngreso(s); return; }
+   if(d.ingresos !== true){ document.getElementById("salidaCard").hidden = true; avisarIngreso(s); return; }
    pintarSalida(d);
    pedirAhora();
   });
+ }
+ /* Mientras la hoja responde (puede tardar), el cuadro se ve de inmediato
+    con un aviso: antes quedaba oculto hasta 50 segundos y el socio creía
+    que su tarjeta no tenía el "en vivo" (05-10-2026). */
+ function pintarCargando(){
+  var box = document.getElementById("salidaCard");
+  box.hidden = false;
+  box.innerHTML = '<p class="salida-kicker">Ocupación en tiempo real</p><p class="salida-sub">⏳ Viendo cuánta gente hay en el gimnasio…</p>';
  }
  function iniciarIngreso(s){
   salidaSocio = s;
   document.getElementById("salidaCard").hidden = true;
   clearInterval(salidaTimer);
   if(CHECKIN_URL){
+   pintarCargando();
    if(modoPuerta){ modoPuerta = false; registrarIngreso(s); }
    else consultarInicio(s);
   }
   /* El contador se refresca solo mientras la tarjeta está a la vista. */
-  salidaTimer = setInterval(function(){ if(!document.hidden) consultarSalida(); }, 15000);
+  /* Cada 30 s (antes 15): con muchos socios mirando a la vez, la hoja de
+     Google se saturaba y respondía lento para todos. */
+  salidaTimer = setInterval(function(){ if(!document.hidden) consultarSalida(); }, 30000);
  }
  document.addEventListener("visibilitychange", function(){ if(!document.hidden) consultarSalida(); });
 

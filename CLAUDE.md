@@ -257,7 +257,7 @@ ese equipo.
 `miIngreso` entrega como `dentroAhora`), nunca los contadores
 Ingresos/Personas ni nombres de otros socios, más el botón **"Registrar
 mi salida"** cuando el socio está dentro. Se refresca cada 15 segundos
-mientras la tarjeta está a la vista. Desde la casa (ícono o enlace de
+mientras la tarjeta está a la vista (cada 30 s desde 05-10-2026, para no saturar la hoja; mientras carga muestra "Viendo cuánta gente hay…" y, si falla, "Reintentar"). Desde la casa (ícono o enlace de
 siempre) el socio lo consulta sin registrar ingreso: ese es el objetivo,
 ver cuándo el gym está más vacío.
 - **"Ahora" del celular** cuenta solo ingresos sin salida de las últimas
