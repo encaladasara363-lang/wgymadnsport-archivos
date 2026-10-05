@@ -310,7 +310,7 @@ const LOGO_B64 = "assets/logo-oficial.webp";
 
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 /* Permite que las tablets que aún tienen la página antigua abierta se recarguen una sola vez. */
-const SOCIOS_VERSION = 2026100501;
+const SOCIOS_VERSION = 2026100502;
 </script>
 <script>
 (function(){
@@ -428,6 +428,48 @@ const CICLOS_BASE = {"AARON|SOZA":{"v":"2026-10-23","desde":"2026-09-23"},"AKASH
  try{ localStorage.setItem(vistaKey, String(ASISTENCIA_VERSION)); }catch(e){}
 })();
 function llaveSocio(s){ return (s.n + "|" + s.a).toUpperCase(); }
+
+/* ── días del contador desde la hoja de ingresos (desde 05-10-2026) ────
+   Cada equipo anotaba solo los días que él mismo veía, y el mesón y la
+   tablet terminaban mostrando "día X" distintos (caso Gloria López).
+   Ahora se piden al Apps Script (acción asistenciaDesde) los días con
+   ingreso de los últimos 60 días, tal como están en la hoja común, y se
+   agregan los que falten. Es un agregado puro: nunca borra un día ya
+   anotado. Con el script antiguo la acción no existe y no pasa nada. */
+var pidiendoDias = false;
+function sincronizarDiasHoja(){
+ if(!CHECKIN_URL || pidiendoDias) return;
+ pidiendoDias = true;
+ var desde = new Date(Date.now() - 60 * 864e5);
+ desde = desde.getFullYear() + "-" + String(desde.getMonth()+1).padStart(2,"0") + "-" + String(desde.getDate()).padStart(2,"0");
+ var cb = "wgymDias_" + Date.now(), sc = document.createElement("script"), hecho = false;
+ var plazo = setTimeout(function(){ fin(null); }, 20000);
+ function fin(d){
+  if(hecho) return; hecho = true; pidiendoDias = false; clearTimeout(plazo);
+  try{ delete window[cb]; }catch(e){} sc.remove();
+  if(!d || d.asistencia !== true || !d.dias) return;
+  var porNombre = {};
+  (lista || []).forEach(function(s){ porNombre[sinTildes(s.n + " " + s.a)] = llaveSocio(s); });
+  var cambio = false;
+  for(var nom in d.dias){
+   if(!Object.prototype.hasOwnProperty.call(d.dias, nom)) continue;
+   var llave = porNombre[sinTildes(nom)];
+   if(!llave) continue;
+   if(!asistencia[llave]) asistencia[llave] = {};
+   var ds = d.dias[nom];
+   for(var dia in ds){
+    if(Object.prototype.hasOwnProperty.call(ds, dia) && !asistencia[llave][dia]){ asistencia[llave][dia] = 1; cambio = true; }
+   }
+  }
+  if(cambio){ guardarAsistencia(); try{ if(ultimasFilas.length){ showHero(ultimasFilas[0]); renderFeed(ultimasFilas); } }catch(e){} }
+ }
+ window[cb] = fin;
+ sc.src = CHECKIN_URL + "?action=asistenciaDesde&desde=" + desde + "&callback=" + cb + "&_=" + Date.now();
+ sc.onerror = function(){ fin(null); };
+ document.body.appendChild(sc);
+}
+setInterval(sincronizarDiasHoja, 5 * 60 * 1000);
+
 function esTurno(s){ return !!s && /turno/i.test(s.plan || ""); }
 function esTresVeces(s){ return !!s && /(?:^|\s)(?:3|tres)\s*veces/i.test(s.plan || ""); }
 function esSemanalPlan(s){ return !!s && esPlanSemanal(s.plan); }
@@ -951,6 +993,7 @@ if(btnFS){
    pegada en el HTML), alcanza con volver a pedirla cada dos minutos, en
    silencio, sin recargar nada -- nunca hay una página vieja que revisar. */
 cargarSociosDesdeApi(function(){
+ try{ sincronizarDiasHoja(); }catch(e){}
  poll();
  pollBandas();
  pollCandados();
