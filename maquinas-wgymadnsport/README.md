@@ -54,4 +54,4 @@ Para armar o rehacer un video:
 | Máquina | Hombre | Mujer | Series |
 |---|---|---|---|
 | Pantorrilla sentado | ✅ `hombre/pantorrilla-sentado` | imagen lista, faltan videos | 3 × 15 |
-| Hip thrust | ✅ `hombre/hip-thrust` | pendiente | 4 × 12 |
+| Hip thrust | ✅ `hombre/hip-thrust` | ✅ `mujer/hip-thrust` | 4 × 12 |
