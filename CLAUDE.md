@@ -529,9 +529,10 @@ arreglar un contador que no coincide entre los dos aparatos):
 Apps Script (`docs/apps-script/Ingresos.gs`) al cargar y cada 5 minutos,
 y agregan a su `asistencia` local los días con ingreso de los últimos 60
 días que les falten (agregado puro, por nombre sin tildes). Así los dos
-aparatos cuentan los mismos días aunque uno haya estado apagado. Requiere
-que la dueña instale esa versión del script (nueva versión de la misma
-implementación); con el script antiguo no hace nada. Los ciclos (desde
+aparatos cuentan los mismos días aunque uno haya estado apagado. **Instalado por la
+dueña el 05-10-2026 a las 12:41 como Versión 10** (misma implementación
+y enlace; para volver atrás: lápiz → Versión 9). Con un script antiguo
+no hace nada. Los ciclos (desde
 cuándo corre el mes) siguen siendo locales: si un "día X" no calza por el
 inicio del mes, se corrige con el export de "Copiar lista".
 
