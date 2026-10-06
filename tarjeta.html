@@ -1489,13 +1489,36 @@ function renderEvolucion(s){
    });
   });
  }
+ /* Una sola consulta en vez de dos (06-10-2026): con listarIngresos (la
+    lista pública del día) se calcula aquí mismo el estado del socio —igual
+    que miIngreso en el Apps Script— y cuánta gente hay. La hoja recibe la
+    mitad de consultas y el "en vivo" aparece antes. */
+ function estadoDesdeFilas_(rows, s){
+  var yo = normName(s.nombre + " " + s.apellido), vistos = {}, dentroAhora = 0;
+  var mias = rows.filter(function(r){ return normName(r.nombre + " " + r.apellido) === yo; });
+  rows.forEach(function(r){
+   if(r.salida) return;
+   var k = normName(r.nombre) + "|" + normName(r.apellido);
+   if(!vistos[k]){ vistos[k] = true; dentroAhora++; }
+  });
+  var abiertas = mias.filter(function(r){ return !r.salida; }), ultimaSalida = 0;
+  mias.forEach(function(r){ if(Number(r.salida) > ultimaSalida) ultimaSalida = Number(r.salida); });
+  return { ok:true, ingresos:true, vino:mias.length > 0, dentro:abiertas.length > 0,
+   desde:abiertas.length ? Number(abiertas[abiertas.length - 1].ts) : 0,
+   salida:abiertas.length ? 0 : ultimaSalida, puedeMarcar:false, salidaLibre:true, dentroAhora:dentroAhora };
+ }
+ function consultarEstado_(s, listo){
+  salidaJsonp({ action:"listarIngresos" }, function(d){
+   if(!d || d.ingresos !== true){ listo(null); return; }
+   var rows = d.rows || [];
+   ultimoAhora = contarAhora(rows);
+   listo(estadoDesdeFilas_(rows, s));
+  });
+ }
  function consultarSalida(){
   if(!salidaSocio || !CHECKIN_URL) return;
   var s = salidaSocio;
-  salidaJsonp({ action:"miIngreso", nombre:s.nombre, apellido:s.apellido, codigo:codigoDe(s) }, function(d){
-   if(s === salidaSocio && d) pintarSalida(d);
-  });
-  pedirAhora();
+  consultarEstado_(s, function(d){ if(s === salidaSocio && d) pintarSalida(d); });
  }
  /* Registra el ingreso (QR de la puerta o botón "Registrar mi ingreso"). El Apps Script
     decide: si ya está dentro responde registrado:false y no agrega nada,
@@ -1526,7 +1549,7 @@ function renderEvolucion(s){
     el QR de la puerta abre esta misma página sin marca). */
  function consultarInicio(s, intento){
   intento = intento || 1;
-  salidaJsonp({ action:"miIngreso", nombre:s.nombre, apellido:s.apellido, codigo:codigoDe(s) }, function(d){
+  consultarEstado_(s, function(d){
    if(s !== salidaSocio) return;
    /* Sin respuesta del registro de ingresos: antes la tarjeta quedaba sin
       contador ni botón, sin decir nada (caso Gloria López, 05-10-2026).
@@ -1540,7 +1563,6 @@ function renderEvolucion(s){
    }
    if(d.ingresos !== true){ document.getElementById("salidaCard").hidden = true; avisarIngreso(s); return; }
    pintarSalida(d);
-   pedirAhora();
   });
  }
  /* Mientras la hoja responde (puede tardar), el cuadro se ve de inmediato
@@ -1780,7 +1802,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100602", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100603", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();

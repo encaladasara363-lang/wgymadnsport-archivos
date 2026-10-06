@@ -330,6 +330,10 @@ ver cuándo el gym está más vacío.
   AAAAMMDDNN).** Además `unlockCardView` registra el ingreso y pinta el
   "en vivo" primero, y cada cuadro extra va en `seguro_()` para que una
   falla de un cuadro nunca impida registrarse.
+- **Una sola consulta para el "en vivo" (06-10-2026):** la tarjeta ya no
+  llama a `miIngreso`: con `listarIngresos` calcula ella misma el estado
+  del socio (`estadoDesdeFilas_`, misma lógica que `estadoPersona_` del
+  Apps Script) y el contador "Ahora". La mitad de consultas a la hoja.
 - **"Poner en mi pantalla de inicio" (03-10-2026):** la tarjeta muestra
   este botón (cuadro `#instCard`, función `pintarInstalar()`) mientras
   no esté instalada. En Android/Chrome abre la ventana "Instalar" del
