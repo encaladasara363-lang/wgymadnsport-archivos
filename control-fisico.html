@@ -643,7 +643,7 @@ function leerMediciones_(medid){
  });
 }
 
-document.getElementById("btnGuardar").addEventListener("click", function(){
+document.getElementById("btnGuardar").addEventListener("click", async function(){
  if(!socioActual || this.disabled) return;
  var s=socioActual, boton=this, msg=document.getElementById("guardadoMsg");
  if(!sexoActual || !inEdad.value || !inEstatura.value ||
@@ -654,7 +654,7 @@ document.getElementById("btnGuardar").addEventListener("click", function(){
  if(est>0 && est<3) est=Math.round(est*100);
  var clave="";
  try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
- if(!clave) clave=prompt("Clave de mediciones (solo la primera vez):")||"";
+ if(!clave) clave=await pedirClaveMed_();
  if(!clave){msg.hidden=false;msg.textContent="No se guardó: falta la clave de administración.";return;}
  var registro={fecha:hoyISO(),edad:Number(inEdad.value),
   peso:inPeso.value===""?null:Number(inPeso.value),
@@ -689,7 +689,7 @@ document.getElementById("btnGuardar").addEventListener("click", function(){
   inPeso.value="";inGrasa.value="";inImc.value="";
  })
  .catch(function(err){
-  if(err.message==="clave incorrecta") try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(e){}
+  if(err.message==="clave incorrecta") {claveRechazada_=true;try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(e){}}
   msg.textContent="No se guardó en el sitio: "+err.message+". Los datos siguen en pantalla.";
  })
  .then(function(){boton.disabled=false;});
@@ -717,7 +717,7 @@ publicarHist.addEventListener("click",async function(){
  if(!local||!local.registros||!local.registros.length)return;
  var msg=document.getElementById("guardadoMsg"),clave="";
  try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
- if(!clave)clave=prompt("Clave de mediciones (solo la primera vez):")||"";
+ if(!clave)clave=await pedirClaveMed_();
  if(!clave){msg.hidden=false;msg.textContent="Falta la clave de administración.";return;}
  var medid=s.medId||medIdDe(s.n,s.a),est=Number(local.estatura);
  if(est>0&&est<3)est=Math.round(est*100);
@@ -733,7 +733,7 @@ publicarHist.addEventListener("click",async function(){
  }
  try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
  s.medId=medid;msg.textContent="Historial enviado. Abre de nuevo la tarjeta QR del socio.";
- }catch(e){if(e.message==="clave incorrecta")try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){} msg.textContent="No se completó el envío: "+e.message;}finally{this.disabled=false;}
+ }catch(e){if(e.message==="clave incorrecta"){claveRechazada_=true;try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){}} msg.textContent="No se completó el envío: "+e.message;}finally{this.disabled=false;}
 });
 /* Borrar una medición por fecha y sincronizar la tarjeta QR. */
 var CLAVE_BORRADAS="wgym_mediciones_borradas_v1";
@@ -770,7 +770,7 @@ document.getElementById("histBody").addEventListener("click",async function(ev){
  var fecha=b.dataset.fecha,medid=medIdDe(s.n,s.a),msg=document.getElementById("guardadoMsg");
  if(!confirm("¿Borrar la medición del "+fechaLegible(fecha)+" de "+s.n+" "+s.a+"? Dejará de verse en su tarjeta QR."))return;
  var clave="";try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
- if(!clave)clave=prompt("Clave de mediciones:")||"";
+ if(!clave)clave=await pedirClaveMed_();
  if(!clave)return;
  b.disabled=true;msg.hidden=false;msg.textContent="Borrando medición...";
  try{
@@ -780,12 +780,39 @@ document.getElementById("histBody").addEventListener("click",async function(ev){
   if(!comprobacion||!comprobacion.ok||comprobacion.fechasEliminadas.indexOf(fecha)<0)throw Error("no se pudo confirmar el borrado");
   try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
   msg.textContent="Medición del "+fechaLegible(fecha)+" borrada de la tarjeta QR.";
- }catch(e){if(e.message==="clave incorrecta")try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){}msg.textContent="No se borró: "+e.message;b.disabled=false;}
+ }catch(e){if(e.message==="clave incorrecta"){claveRechazada_=true;try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){}}msg.textContent="No se borró: "+e.message;b.disabled=false;}
 });
-function claveMed_(){
+async function claveMed_(){
  var clave="";try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
- if(!clave)clave=prompt("Clave de mediciones:")||"";
+ if(!clave)clave=await pedirClaveMed_();
  return clave;
+}
+/* Cuadro propio para la clave (06-10-2026, la dueña: "me sale a cada rato
+   clave"). El prompt() del iPhone ponía la primera letra en mayúscula y
+   la clave quedaba mal; aquí el campo no cambia mayúsculas ni corrige, y
+   avisa si la clave anterior fue rechazada. Se guarda en el equipo solo
+   cuando el servicio la acepta. */
+var claveRechazada_=false;
+function pedirClaveMed_(){
+ return new Promise(function(listo){
+  var fondo=document.createElement("div");
+  fondo.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px";
+  fondo.innerHTML='<div style="background:#141414;border:1px solid #D4AF37;border-radius:14px;padding:18px;max-width:380px;width:100%;font-family:inherit;color:#fff">'+
+   '<p style="margin:0 0 6px;font-weight:800;color:#D4AF37;letter-spacing:.06em;text-transform:uppercase;font-size:13px">Clave de mediciones</p>'+
+   '<p style="margin:0 0 10px;font-size:13.5px;color:#cfcfcf;line-height:1.45">'+(claveRechazada_?'<b style="color:#E85C5C">La clave anterior no era la correcta.</b> Escríbela de nuevo, fíjate en mayúsculas y minúsculas.':'Escríbela una vez: este equipo la recordará.')+'</p>'+
+   '<div style="display:flex;gap:6px"><input id="claveMedIn" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" style="flex:1;min-width:0;background:#1c1c1c;border:1px solid #333;border-radius:8px;color:#fff;padding:11px;font-size:16px">'+
+   '<button type="button" id="claveMedVer" style="background:none;border:1px solid #333;border-radius:8px;color:#cfcfcf;padding:0 10px;font-size:13px">Ver</button></div>'+
+   '<div style="display:flex;gap:8px;margin-top:12px"><button type="button" id="claveMedNo" style="flex:1;background:none;border:1px solid #444;border-radius:8px;color:#cfcfcf;padding:11px;font-weight:700">Cancelar</button>'+
+   '<button type="button" id="claveMedSi" style="flex:1;background:#E30613;border:1px solid #D4AF37;border-radius:8px;color:#fff;padding:11px;font-weight:800">Aceptar</button></div></div>';
+  document.body.appendChild(fondo);
+  var inp=fondo.querySelector("#claveMedIn");
+  function fin(v){ fondo.remove(); listo(v); }
+  fondo.querySelector("#claveMedVer").onclick=function(){ inp.type=inp.type==="password"?"text":"password"; this.textContent=inp.type==="password"?"Ver":"Ocultar"; };
+  fondo.querySelector("#claveMedNo").onclick=function(){ fin(""); };
+  fondo.querySelector("#claveMedSi").onclick=function(){ fin(inp.value.trim()); };
+  inp.addEventListener("keydown",function(e){ if(e.key==="Enter") fin(inp.value.trim()); });
+  setTimeout(function(){ inp.focus(); },50);
+ });
 }
 /* Quitar el PIN de un socio que lo olvidó (10/2026). Solo aparece cuando el
    socio elegido tiene sus mediciones protegidas con PIN. */
@@ -802,7 +829,7 @@ leerMediciones_=function(medid){return leerConPin_(medid).then(function(res){
 quitarPin.addEventListener("click",async function(){
  var s=socioActual,msg=document.getElementById("guardadoMsg");if(!s)return;
  if(!confirm("¿Quitar el PIN de "+s.n+" "+s.a+"? Podrá crear uno nuevo desde su tarjeta QR."))return;
- var clave=claveMed_();if(!clave)return;
+ var clave=await claveMed_();if(!clave)return;
  var medid=medIdDe(s.n,s.a);this.disabled=true;msg.hidden=false;msg.textContent="Quitando PIN...";
  try{
   var r=await fetch(MEDICIONES_URL+"/pin",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({clave:clave,medid:medid})});
@@ -810,7 +837,7 @@ quitarPin.addEventListener("click",async function(){
   try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
   msg.textContent="PIN quitado. "+s.n+" ya puede crear uno nuevo desde su tarjeta QR.";
   await leerMediciones_(medid);
- }catch(e){if(e.message==="clave incorrecta")try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){}msg.textContent="No se quitó el PIN: "+e.message;}
+ }catch(e){if(e.message==="clave incorrecta"){claveRechazada_=true;try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){}}msg.textContent="No se quitó el PIN: "+e.message;}
  finally{this.disabled=false;}
 });
 })();
