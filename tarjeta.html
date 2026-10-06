@@ -1745,22 +1745,49 @@ function renderEvolucion(s){
   fondo.querySelector(".bv-btn").addEventListener("click", function(){ fondo.remove(); });
  }
 
+ /* El registro de ingreso y el "en vivo" van PRIMERO y cada parte va
+    protegida: si un cuadro extra (calorías, evolución, bienvenida...)
+    fallara en algún teléfono, nunca debe impedir que el socio se registre
+    (06-10-2026). */
+ function seguro_(fn){ try{ fn(); }catch(e){ try{ console.error(e); }catch(x){} } }
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
- anotarDia(s);
- renderCard(s);
- renderPago(s);
- calAbierto = false; calEditando = false;
- renderCalorias(s);
- renderEvolucion(s);
- iniciarIngreso(s);
- pintarInstalar();
  socioActual = s;
- revisarBienvenida(s);
- resetBandBtn();
- resetLockBtn();
+ seguro_(function(){ renderCard(s); });
+ seguro_(function(){ iniciarIngreso(s); });
+ seguro_(function(){ anotarDia(s); });
+ seguro_(function(){ renderPago(s); });
+ calAbierto = false; calEditando = false;
+ seguro_(function(){ renderCalorias(s); });
+ seguro_(function(){ renderEvolucion(s); });
+ seguro_(pintarInstalar);
+ seguro_(function(){ revisarBienvenida(s); });
+ seguro_(resetBandBtn);
+ seguro_(resetLockBtn);
  }
+
+ /* ---------- Actualización automática (06-10-2026) ----------
+    Hubo socios con la tarjeta abierta desde días antes en su navegador:
+    al volver a ella veían la versión antigua (sin "en vivo") y no se
+    registraban. Cada vez que la tarjeta vuelve a estar a la vista, se
+    compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
+    una más nueva, la página se recarga sola (el nombre ya aparece
+    puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
+ var TARJETA_VERSION = "2026100601", ultimaRevisionVersion = 0;
+ function revisarVersion(){
+  if(Date.now() - ultimaRevisionVersion < 60000) return;
+  ultimaRevisionVersion = Date.now();
+  try{
+   fetch("tarjeta-version.txt?_=" + Date.now(), { cache:"no-store" })
+    .then(function(r){ return r.ok ? r.text() : ""; })
+    .then(function(v){ v = String(v || "").trim(); if(/^\d{10}$/.test(v) && v > TARJETA_VERSION) location.reload(); })
+    ["catch"](function(){});
+  }catch(e){}
+ }
+ document.addEventListener("visibilitychange", function(){ if(!document.hidden) revisarVersion(); });
+ window.addEventListener("pageshow", function(e){ if(e.persisted){ ultimaRevisionVersion = 0; revisarVersion(); } });
+ window.addEventListener("focus", revisarVersion);
 
  /* ---------- pedir banda elástica ---------- */
  var socioActual = null;

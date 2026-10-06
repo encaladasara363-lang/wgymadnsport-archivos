@@ -322,6 +322,14 @@ ver cuándo el gym está más vacío.
   Para ganar músculo no se inventa un superávit: se muestra la mantención
   como base. Los datos son de salud: se guardan SOLO en el teléfono
   (`wgym_calorias_v1`), nunca en la hoja ni en el repo.
+- **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
+  con "la app antigua" que no se registraban):** `tarjeta.html` trae
+  `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
+  la vista; si el archivo es mayor, se recarga sola. **Cada vez que se
+  cambie `tarjeta.html`, subir los dos números juntos (formato
+  AAAAMMDDNN).** Además `unlockCardView` registra el ingreso y pinta el
+  "en vivo" primero, y cada cuadro extra va en `seguro_()` para que una
+  falla de un cuadro nunca impida registrarse.
 - **"Poner en mi pantalla de inicio" (03-10-2026):** la tarjeta muestra
   este botón (cuadro `#instCard`, función `pintarInstalar()`) mientras
   no esté instalada. En Android/Chrome abre la ventana "Instalar" del
