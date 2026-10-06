@@ -300,6 +300,12 @@ ver cuándo el gym está más vacío.
   `forzar=1` que el QR de la puerta). Desde la casa no lo toca: abrir la
   tarjeta sigue sin registrar nada solo. Si está dentro hace más de 30
   min sin salida, aparece "Volví: registrar nuevo ingreso".
+  **Desde 06-10-2026** (la dueña: "la gente se aburre esperando que cargue
+  el botón y cree que ya está registrada") el botón aparece **al instante**
+  (en `pintarCargando()`, sin esperar a la hoja) y el cuadro `#salidaCard`
+  va **primero**, arriba de todo. Al registrarse se ve "✅ Tu ingreso está
+  registrado (HH:MM)"; una lista atrasada de la hoja no vuelve a mostrar
+  el botón durante 2 min (`ingresoHecho`).
 - **Entrada rápida (05-10-2026, la dueña: "sale Buscando... y se demora"):**
   la tarjeta guarda en el teléfono la lista de socios (`wgym_lista_socios_v1`,
   mismo dato público sin RUT) y el último nombre escrito
