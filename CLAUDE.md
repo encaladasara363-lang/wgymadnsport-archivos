@@ -378,6 +378,12 @@ ver cuándo el gym está más vacío.
   aviso abajo a la derecha "⏳ Guardando…" / "✅ Guardado en el sitio" /
   "⚠️ … Reintentar"). Al recargar, lo pendiente se vuelve a aplicar sobre
   la lista del sitio y se reenvía: ningún cambio se pierde.
+- **Menos consultas y tablet sin "0 socios" (06-10-2026, la tablet decía
+  "Lista del sitio · 0 socios"):** mesón y tablet consultan ingresos cada
+  6 s (antes 4), bandas y candados cada 15 s (antes 4) y la tablet la
+  lista de socios cada 60 s (antes 10). La tablet guarda la última lista
+  buena (`wgym_lista_tablet_v1`), arranca con ella sin esperar a la hoja y
+  espera hasta 25 s por la lista nueva.
 - **Respaldo del mesón:** en "¿No alcanzó a escanear?", al buscar a un
   socio aparece **"Registrar ingreso"** (POST `registrarIngreso` con
   `ADMIN_KEY`; misma regla de visita nueva de 30 minutos).
