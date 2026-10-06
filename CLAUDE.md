@@ -480,6 +480,11 @@ repositorio: los cambios los aplica la dueña.
   "Tus mediciones están protegidas con PIN" y en el cuadro bloqueado):
   en los equipos con la clave guardada basta confirmar; en otro celular
   pide la clave de recepción (el servicio solo acepta `DELETE` con ella).
+- **Clave de mediciones en `control-fisico.html` (06-10-2026):** se pide con
+  un cuadro propio (`pedirClaveMed_()`, sin mayúscula automática ni
+  corrector; el `prompt()` del iPhone ponía mayúscula y la clave quedaba
+  mal y se volvía a pedir a cada rato). Solo se guarda cuando el servicio
+  la acepta; si la rechaza, el cuadro siguiente lo avisa.
 - **`mediciones.json` (público) quedó vacío el 02-10-2026**: la dueña
   subió las 32 mediciones antiguas al servicio (confirmadas) y se
   vació el archivo. No volver a escribir mediciones ahí; el historial
