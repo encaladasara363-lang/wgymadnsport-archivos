@@ -716,6 +716,48 @@ function cajaPinCrear_(){
   '<p class="err" id="evoPinErr2"></p></div>' +
   '<button type="button" id="evoPinCrearBtn">Crear PIN</button></div>';
 }
+/* "Quitar PIN" desde la misma tarjeta (06-10-2026, pedido de la dueña:
+   antes solo se podía en control-fisico.html del mesón). El servicio exige
+   la clave de mediciones de recepción: en los equipos de la dueña ya está
+   guardada y basta confirmar; en otro celular se pide la clave. */
+function cajaQuitarPin_(){
+ return '<div class="evo-pin" id="evoPinQuitar" style="margin-top:10px">' +
+  '<button type="button" id="evoPinQuitarBtn">🔓 Quitar PIN</button>' +
+  '<div id="evoPinQuitarForm" hidden style="margin-top:8px">' +
+  '<p>Para quitar el PIN se necesita la clave de recepción.</p>' +
+  '<input type="password" autocomplete="off" id="evoPinClave" placeholder="Clave de recepción" style="letter-spacing:.1em;font-size:15px">' +
+  '<button type="button" id="evoPinQuitarOk">Quitar PIN</button></div>' +
+  '<p class="err" id="evoPinQuitarErr" style="margin-top:6px"></p></div>';
+}
+function conectarQuitarPin_(box, s){
+ var btn = box.querySelector("#evoPinQuitarBtn"); if(!btn) return;
+ var form = box.querySelector("#evoPinQuitarForm"), err = box.querySelector("#evoPinQuitarErr");
+ function quitar(clave, boton){
+  boton.disabled = true; boton.textContent = "Quitando PIN...";
+  fetch(MEDICIONES_URL+"/pin", { method:"DELETE", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ clave:clave, medid:s.medid }) })
+  .then(function(r){ return r.json()["catch"](function(){ return {}; }).then(function(j){ if(!r.ok || !j.ok) throw Error(j.error || "no se pudo quitar"); }); })
+  .then(function(){
+   try{ localStorage.setItem(CLAVE_MED_ADMIN, clave); }catch(e){}
+   guardarPin_(s.medid, ""); renderEvolucion(s);
+  })["catch"](function(e){
+   if(e.message === "clave incorrecta"){ try{ localStorage.removeItem(CLAVE_MED_ADMIN); }catch(x){} form.hidden = false; }
+   err.textContent = e.message === "clave incorrecta" ? "Clave incorrecta." : "No se pudo quitar el PIN: " + e.message;
+   boton.disabled = false; boton.textContent = boton === btn ? "🔓 Quitar PIN" : "Quitar PIN";
+  });
+ }
+ btn.addEventListener("click", function(){
+  err.textContent = "";
+  var clave = claveAdminMed_();
+  if(clave){ if(confirm("¿Quitar el PIN de estas mediciones? Después se puede crear uno nuevo.")) quitar(clave, btn); return; }
+  form.hidden = !form.hidden;
+  if(!form.hidden) box.querySelector("#evoPinClave").focus();
+ });
+ box.querySelector("#evoPinQuitarOk").addEventListener("click", function(){
+  var c = box.querySelector("#evoPinClave").value.trim();
+  if(!c){ err.textContent = "Escribe la clave de recepción."; return; }
+  quitar(c, this);
+ });
+}
 function conectarPinBloqueo_(box, s){
  var boton = box.querySelector("#evoPinVer"), campo = box.querySelector("#evoPinIn");
  function enviar(){
@@ -765,7 +807,7 @@ function renderEvolucion(s){
  var box=document.getElementById("evoCard");
  var vivo=res[1];
  if(vivo&&vivo.protegido&&!vivo.socio){
-  box.hidden=false; box.innerHTML=cajaPinBloqueo_(vivo.error); conectarPinBloqueo_(box,s); return;
+  box.hidden=false; box.innerHTML=cajaPinBloqueo_(vivo.error)+cajaQuitarPin_(); conectarPinBloqueo_(box,s); conectarQuitarPin_(box,s); return;
  }
  /* Con PIN activo no se mezcla el archivo público antiguo. */
  var historicas=vivo&&vivo.protegido?null:socioMedido(res[0],s);
@@ -800,8 +842,9 @@ function renderEvolucion(s){
  rangoSaludable(m.sexo, ultimo.edad, ultimo.peso, ultimo.imc) +
  metaFitness(m.sexo, ultimo.grasa) +
  (historial ? '<p class="evo-hist-tit">Historial completo ('+regs.length+' mediciones)</p><div class="evo-hist">'+historial+'</div>' : '') +
- (vivo&&vivo.pinSoportado ? (vivo.protegido ? '<p class="evo-pin-ok">🔒 Tus mediciones están protegidas con PIN.</p>' : cajaPinCrear_()) : '');
+ (vivo&&vivo.pinSoportado ? (vivo.protegido ? '<p class="evo-pin-ok">🔒 Tus mediciones están protegidas con PIN.</p>' + cajaQuitarPin_() : cajaPinCrear_()) : '');
  if(vivo&&vivo.pinSoportado&&!vivo.protegido) conectarPinCrear_(box,s);
+ if(vivo&&vivo.pinSoportado&&vivo.protegido) conectarQuitarPin_(box,s);
  });
  }
 
@@ -1843,7 +1886,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100605", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100606", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
