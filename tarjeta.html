@@ -1512,6 +1512,7 @@ function renderEvolucion(s){
    if(!d || d.ingresos !== true){ listo(null); return; }
    var rows = d.rows || [];
    ultimoAhora = contarAhora(rows);
+   try{ localStorage.setItem("wgym_ultimo_ahora_v1", JSON.stringify({ n:ultimoAhora, t:Date.now() })); }catch(e){}
    listo(estadoDesdeFilas_(rows, s));
   });
  }
@@ -1568,10 +1569,21 @@ function renderEvolucion(s){
  /* Mientras la hoja responde (puede tardar), el cuadro se ve de inmediato
     con un aviso: antes quedaba oculto hasta 50 segundos y el socio creía
     que su tarjeta no tenía el "en vivo" (05-10-2026). */
+ /* Mientras llega el dato nuevo se muestra al instante el último que vio
+    este teléfono, si tiene menos de 15 minutos (06-10-2026: la hoja
+    tardaba ~15 s y el cuadro se quedaba en "Viendo…"). */
  function pintarCargando(){
-  var box = document.getElementById("salidaCard");
+  var box = document.getElementById("salidaCard"), prev = null;
+  try{ prev = JSON.parse(localStorage.getItem("wgym_ultimo_ahora_v1") || "null"); }catch(e){}
   box.hidden = false;
-  box.innerHTML = '<p class="salida-kicker">Ocupación en tiempo real</p><p class="salida-sub">⏳ Viendo cuánta gente hay en el gimnasio…</p>';
+  var min = prev ? Math.round((Date.now() - prev.t) / 60000) : 99;
+  if(prev && typeof prev.n === "number" && min < 15){
+   box.innerHTML = '<p class="salida-kicker">Ocupación en tiempo real</p>' +
+    '<p class="salida-num" style="font-size:44px;font-weight:900;color:#5CA85C;margin:4px 0 0;opacity:.75">' + prev.n + '</p>' +
+    '<p class="salida-sub">' + (min <= 1 ? 'Hace un momento' : 'Hace ' + min + ' minutos') + ' · ⏳ actualizando…</p>';
+  }else{
+   box.innerHTML = '<p class="salida-kicker">Ocupación en tiempo real</p><p class="salida-sub">⏳ Viendo cuánta gente hay en el gimnasio…</p>';
+  }
  }
  function iniciarIngreso(s){
   salidaSocio = s;
@@ -1802,7 +1814,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100603", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100604", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();

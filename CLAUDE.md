@@ -388,6 +388,14 @@ ver cuándo el gym está más vacío.
   lista de socios cada 60 s (antes 10). La tablet guarda la última lista
   buena (`wgym_lista_tablet_v1`), arranca con ella sin esperar a la hoja y
   espera hasta 25 s por la lista nueva.
+- **Caché de 15 s en `listarIngresos` (Versión 11 del Apps Script,
+  06-10-2026, la tarjeta tardaba ~15 s en mostrar el "en vivo"):**
+  `docs/apps-script/Ingresos.gs` guarda la lista del día en
+  `CacheService` 15 s y `conCandado_` la borra después de cualquier
+  escritura. La tarjeta muestra al instante el último número visto
+  (`wgym_ultimo_ahora_v1`, si tiene menos de 15 min) mientras llega el
+  nuevo. **Pendiente: que la dueña instale la Versión 11** (mismo
+  procedimiento que la 10; para volver atrás: lápiz → Versión 10).
 - **Respaldo del mesón:** en "¿No alcanzó a escanear?", al buscar a un
   socio aparece **"Registrar ingreso"** (POST `registrarIngreso` con
   `ADMIN_KEY`; misma regla de visita nueva de 30 minutos).

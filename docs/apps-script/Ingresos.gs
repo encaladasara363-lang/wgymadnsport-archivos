@@ -193,15 +193,40 @@ function marcarHeaders_(sheet) {
 function conCandado_(e, fn) {
   var lock = LockService.getScriptLock();
   if (!lock.tryLock(10000)) return respond_(e, { ok: false, error: "ocupado, intenta de nuevo" });
-  try { return fn(); } finally { lock.releaseLock(); }
+  /* Todo lo que escribe en la hoja pasa por aquí: al terminar se borra la
+     caché de la lista del día, para que el cambio se vea al tiro. */
+  try { return fn(); } finally { borrarCacheIngresos_(e.parameter); lock.releaseLock(); }
 }
 
 /* ── públicas (GET) ─────────────────────────────────────────────────── */
 
+/* Caché corta (Versión 11, 06-10-2026): con mesón, tablet y muchos
+   celulares preguntando lo mismo, la hoja se leía decenas de veces por
+   minuto y todo se ponía lento. La lista del día se guarda 15 s en la
+   caché de Apps Script, y cualquier ingreso o salida la borra al tiro,
+   así que nunca se muestra un dato viejo después de un cambio. */
+var CACHE_SEG_ = 15;
+function claveCache_(p, dia) { return "ing_" + (String(p.prueba || "") === "1" ? "p_" : "") + dia; }
+function borrarCacheIngresos_(p) {
+  try {
+    var c = CacheService.getScriptCache(), hoy = diaCL_(Date.now());
+    c.removeAll([claveCache_(p, hoy), claveCache_({}, hoy)]);
+  } catch (err) {}
+}
+
 function listarIngresos_(e) {
-  var dia = diaPedido_(e.parameter);
+  var dia = diaPedido_(e.parameter), clave = claveCache_(e.parameter, dia), cache = null;
+  try { cache = CacheService.getScriptCache(); } catch (err) {}
+  if (cache) {
+    var guardado = cache.get(clave);
+    if (guardado) {
+      try { return respond_(e, JSON.parse(guardado)); } catch (err) {}
+    }
+  }
   var rows = filasDelDia_(hojaIngresos_(e.parameter), dia).map(filaPublica_);
-  return respond_(e, { ok: true, ingresos: true, dia: dia, hoy: diaCL_(Date.now()), rows: rows });
+  var resp = { ok: true, ingresos: true, dia: dia, hoy: diaCL_(Date.now()), rows: rows };
+  if (cache) { try { cache.put(clave, JSON.stringify(resp), CACHE_SEG_); } catch (err) {} }
+  return respond_(e, resp);
 }
 
 function miIngreso_(e) {
