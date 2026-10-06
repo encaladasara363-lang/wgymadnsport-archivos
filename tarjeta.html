@@ -932,16 +932,25 @@ function renderEvolucion(s){
  function findSocioJunto(texto, cb){
  var candidatos = candidatosDeTexto_(texto);
  if(!candidatos.length){ cb(null); return; }
+ /* La ficha de la hoja llega por detrás y corrige la tarjeta ya abierta
+    (renovación, plan). Si la hoja no respondió (vino vacía), se reintenta
+    hasta 3 veces más: así nunca queda mostrando una fecha vieja de la
+    copia (06-10-2026, caso Andrea Cuella: "me sale vencida"). */
+ function corregirConHoja(previo, intento){
+ sociosTarjetaPromise.then(function(lista){
+ if(!lista.length){
+  if((intento || 0) < 3) setTimeout(function(){ sociosTarjetaPromise = cargarSociosTarjeta(); corregirConHoja(previo, (intento || 0) + 1); }, 4000);
+  return;
+ }
+ var nuevo = buscarEnLista_(lista, candidatos);
+ if(nuevo && (nuevo.fv !== previo.fv || nuevo.plan !== previo.plan || nuevo.monto !== previo.monto)) actualizarTarjeta_(nuevo);
+ });
+ }
  /* 1) Al instante, con la lista guardada en el teléfono. */
  var rapido = buscarEnLista_(listaLocal_(), candidatos);
  if(rapido){
  cb(rapido);
- /* La lista nueva llega por detrás: si le renovaron o cambió el plan, se
-    corrige la tarjeta ya abierta. */
- sociosTarjetaPromise.then(function(lista){
- var nuevo = buscarEnLista_(lista, candidatos);
- if(nuevo && (nuevo.fv !== rapido.fv || nuevo.plan !== rapido.plan || nuevo.monto !== rapido.monto)) actualizarTarjeta_(nuevo);
- });
+ corregirConHoja(rapido, 0);
  return;
  }
  /* 2) Primera vez en este teléfono: se espera la hoja, pero si socios.json
@@ -952,10 +961,7 @@ function renderEvolucion(s){
  var s = buscarEnLista_(l, candidatos);
  if(s && !listo){
  entrar(s);
- sociosTarjetaPromise.then(function(lista){
- var nuevo = buscarEnLista_(lista, candidatos);
- if(nuevo && (nuevo.fv !== s.fv || nuevo.plan !== s.plan || nuevo.monto !== s.monto)) actualizarTarjeta_(nuevo);
- });
+ corregirConHoja(s, 0);
  }
  });
  sociosTarjetaPromise.then(function(lista){
@@ -1774,7 +1780,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100601", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100602", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
