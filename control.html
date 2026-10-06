@@ -2004,7 +2004,7 @@ reloj();
 setInterval(reloj, 20000);
 pintar();
 poll();
-setInterval(poll, 4000);
+setInterval(poll, 6000);   /* antes 4 s: menos carga para la hoja (06-10-2026) */
 
 /* ═══ Bandas elásticas prestadas ══════════════════════════════════════
    Mismo panel que ya se ve en pantalla.html (la puerta), para que en el
@@ -2063,7 +2063,7 @@ if(bandasFeedEl) bandasFeedEl.addEventListener("click", function(ev){
  document.body.appendChild(script);
 });
 pollBandas();
-setInterval(pollBandas, 4000);
+setInterval(pollBandas, 15000);
 
 /* ═══ Candados prestados ══════════════════════════════════════════════
    Mismo panel que las bandas, pero para los candados de los casilleros. */
@@ -2113,7 +2113,7 @@ if(candadosFeedEl) candadosFeedEl.addEventListener("click", function(ev){
  document.body.appendChild(script);
 });
 pollCandados();
-setInterval(pollCandados, 4000);
+setInterval(pollCandados, 15000);
 
 /* ═══ Pasar la lista de este equipo a los celulares ═════════════════════
    Las renovaciones hechas acá quedan guardadas en este mismo equipo. Este

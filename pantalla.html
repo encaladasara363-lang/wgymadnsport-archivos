@@ -310,7 +310,7 @@ const LOGO_B64 = "assets/logo-oficial.webp";
 
 const CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 /* Permite que las tablets que aún tienen la página antigua abierta se recarguen una sola vez. */
-const SOCIOS_VERSION = 2026100502;
+const SOCIOS_VERSION = 2026100601;
 </script>
 <script>
 (function(){
@@ -629,7 +629,12 @@ function diasPara(v, plan){
    Apps Script (la misma fuente que usan control.html y la tarjeta del
    socio) — sin guardar ni fusionar nada acá, así nunca puede quedarse
    con un dato colgado de una versión vieja. */
+/* La última lista buena queda guardada en la tablet (06-10-2026): si la
+   hoja no responde a tiempo, se usa esa y nunca se queda en "0 socios"
+   diciendo que todos "no están en la lista". */
+var CLAVE_LISTA_TABLET = "wgym_lista_tablet_v1";
 var lista = [];
+try{ var _l = JSON.parse(localStorage.getItem(CLAVE_LISTA_TABLET) || "[]"); if(Array.isArray(_l)) lista = _l; }catch(e){}
 function cargarLista(){ return false; }
 
 /* Trae la lista completa desde el Apps Script (sin clave: ver la nota en
@@ -645,7 +650,7 @@ function cargarSociosDesdeApi(despues){
  var cb = "wgymSocios_" + (++pedidoSocios) + "_" + Date.now();
  var script = document.createElement("script");
  var terminado = false;
- var reloj = setTimeout(function(){ terminar(null); }, 10000);
+ var reloj = setTimeout(function(){ terminar(null); }, 25000);
  function terminar(data){
   if(terminado) return;
   terminado = true;
@@ -655,6 +660,7 @@ function cargarSociosDesdeApi(despues){
   script.remove();
   if(data && Array.isArray(data.socios) && data.socios.length){
    lista = data.socios.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, v:isoDeSerial(s.fv) }; });
+   try{ localStorage.setItem(CLAVE_LISTA_TABLET, JSON.stringify(lista)); }catch(e){}
    pintarOrigen();
    /* Actualiza de inmediato la tarjeta y los ingresos ya visibles, sin
       esperar otro escaneo ni recargar o hacer parpadear la pantalla. */
@@ -992,15 +998,21 @@ if(btnFS){
    día. Ahora, como la lista se trae en vivo del Apps Script (no viene
    pegada en el HTML), alcanza con volver a pedirla cada dos minutos, en
    silencio, sin recargar nada -- nunca hay una página vieja que revisar. */
-cargarSociosDesdeApi(function(){
- try{ sincronizarDiasHoja(); }catch(e){}
+/* Si la tablet ya tiene una copia de la lista, arranca de inmediato sin
+   esperar a la hoja (06-10-2026: con la hoja lenta, todo quedaba en
+   espera y los socios salían "no está en la lista"). */
+var arrancado = false;
+function arrancar(){
+ if(arrancado) return; arrancado = true;
  poll();
  pollBandas();
  pollCandados();
- setInterval(poll, 4000);
- setInterval(pollBandas, 4000);
- setInterval(pollCandados, 4000);
- setInterval(cargarSociosDesdeApi, 10 * 1000);
+ /* Menos consultas a la hoja (06-10-2026): con mesón, tablet y celulares
+    preguntando cada 4 s, Google se saturaba y dejaba de responder. */
+ setInterval(poll, 6000);
+ setInterval(pollBandas, 15000);
+ setInterval(pollCandados, 15000);
+ setInterval(cargarSociosDesdeApi, 60 * 1000);
   /* Solo una publicación de código nuevo recarga la pantalla. Los cambios
      normales de socios llegan arriba desde la planilla sin recargar. */
   setInterval(function(){
@@ -1013,6 +1025,11 @@ cargarSociosDesdeApi(function(){
     })
     .catch(function(){});
   }, 60000);
+}
+if(lista.length){ try{ pintarOrigen(); }catch(e){} arrancar(); }
+cargarSociosDesdeApi(function(){
+ try{ sincronizarDiasHoja(); }catch(e){}
+ arrancar();
 });
 })();
 </script>
