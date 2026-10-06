@@ -625,7 +625,9 @@ mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
   créditos de ElevenLabs no incluyen video en su plan.
 - `mujer/pantorrilla-sentado` completo desde 06-10-2026: el paso del seguro
   (`fuentes/seguro-gemini.mp4`, 0-3,4 s) se corta antes de que la palanca
-  se devuelva, igual que en el del hombre.
+  se devuelva; el ejercicio (`fuentes/ejercicio-palanca-abierta-gemini.mp4`)
+  se generó desde el último cuadro del seguro, así la palanca sigue abierta
+  todo el ejercicio (pedido de la dueña).
 - Listas: `hombre/pantorrilla-sentado` (04-10-2026) y `hombre/hip-thrust`
   (05-10-2026, glúteos marcados sobre el short con `solo_piel:false`).
 - Gemini recorta lo vertical: subirle siempre la versión horizontal con
