@@ -535,6 +535,7 @@ function cargarSocios(despues){
   if(listo) return; listo = true; clearTimeout(reloj); delete window[cb]; script.remove();
   if(!data || !Array.isArray(data.socios)){ fallback("El sitio respondió algo raro -- mostrando la última copia guardada."); return; }
   socios = data.socios.map(socioDeLaApi_);
+  try{ aplicarPendientes_(); }catch(e){}
   cargandoSocios = false;
   guardar();
   pintar();
@@ -601,11 +602,71 @@ function guardarSocioApi(s, cb){
   fv:isoASerial_(s.v), medid:s.medid || ""
  }, cb);
 }
+/* ── Guardar sin esperar (06-10-2026, la dueña: "Guardar se demora la
+   vida") ── La ficha se guarda al instante en este equipo y se cierra;
+   el envío a la hoja de Google va por detrás, con reintentos cada 30 s y
+   un aviso abajo a la derecha. Lo pendiente se recuerda en el equipo:
+   si se recarga la página antes de que llegue, se vuelve a aplicar y a
+   enviar, así que nunca se pierde un cambio. */
+var CLAVE_PEND = "wgym_pendientes_guardar_v1", enviandoPend = false, relojPend = null;
+function leerPend_(){ try{ var l = JSON.parse(localStorage.getItem(CLAVE_PEND) || "[]"); return Array.isArray(l) ? l : []; }catch(e){ return []; } }
+function escribirPend_(l){ try{ localStorage.setItem(CLAVE_PEND, JSON.stringify(l)); }catch(e){} }
+function llavePend_(d){ return String(d.n || "").toUpperCase().trim() + "|" + String(d.a || "").toUpperCase().trim(); }
+function encolarGuardado(datos){
+ var l = leerPend_().filter(function(x){ return llavePend_(x) !== llavePend_(datos); });
+ l.push(datos); escribirPend_(l); enviarPendientes();
+}
+function avisoPend_(txt, tipo, reintentar){
+ var c = document.getElementById("estadoGuardado");
+ if(!c){
+  c = document.createElement("div"); c.id = "estadoGuardado";
+  c.style.cssText = "position:fixed;right:16px;bottom:16px;z-index:9999;max-width:340px;padding:12px 16px;border-radius:12px;font:700 14px/1.35 inherit;box-shadow:0 6px 24px rgba(0,0,0,.5);cursor:default";
+  document.body.appendChild(c);
+ }
+ c.style.background = tipo === "ok" ? "#16261A" : tipo === "error" ? "#3a1214" : "#1f1f22";
+ c.style.border = "1px solid " + (tipo === "ok" ? "#5CA85C" : tipo === "error" ? "#E30613" : "#D4AF37");
+ c.style.color = "#fff";
+ c.innerHTML = txt + (reintentar ? ' <button type="button" style="margin-left:8px;padding:4px 10px;border-radius:8px;border:1px solid #D4AF37;background:transparent;color:#D4AF37;font-weight:800;cursor:pointer">Reintentar</button>' : "");
+ c.hidden = false;
+ var b = c.querySelector("button"); if(b) b.addEventListener("click", function(){ enviarPendientes(); });
+ clearTimeout(c._t);
+ if(tipo === "ok") c._t = setTimeout(function(){ c.hidden = true; }, 3500);
+}
+function enviarPendientes(){
+ var l = leerPend_();
+ if(!l.length || enviandoPend) return;
+ enviandoPend = true; clearTimeout(relojPend);
+ avisoPend_("⏳ Guardando " + (l.length === 1 ? "1 cambio" : l.length + " cambios") + " en el sitio…", "info");
+ var d = l[0];
+ guardarSocioApi(d, function(ok, info){
+  enviandoPend = false;
+  if(ok){
+   escribirPend_(leerPend_().filter(function(x){ return llavePend_(x) !== llavePend_(d) || x.v !== d.v || x.plan !== d.plan || x.m !== d.m; }));
+   if(leerPend_().length){ enviarPendientes(); return; }
+   avisoPend_("✅ Guardado en el sitio", "ok");
+   return;
+  }
+  var n = leerPend_().length;
+  avisoPend_("⚠️ " + (n === 1 ? "1 cambio" : n + " cambios") + " guardado" + (n === 1 ? "" : "s") + " en este equipo, pero todavía no en el sitio (" + info + "). Se reintenta solo.", "error", true);
+  if(info !== "sin clave") relojPend = setTimeout(enviarPendientes, 30000);
+ });
+}
+/* Al recargar, lo que no alcanzó a llegar a la hoja se vuelve a aplicar
+   sobre la lista que trae el sitio (si no, se vería la ficha vieja). */
+function aplicarPendientes_(){
+ leerPend_().forEach(function(d){
+  var s = null;
+  for(var i = 0; i < socios.length; i++){ if(llavePend_(socios[i]) === llavePend_(d)){ s = socios[i]; break; } }
+  if(s){ s.plan = d.plan; s.m = d.m; s.v = d.v; }
+  else socios.push({ id:idNuevo(), n:d.n, a:d.a, plan:d.plan, m:d.m, v:d.v, medid:d.medid || "" });
+ });
+}
 function borrarSocioApi(s, cb){
  llamarSocioApi_("borrarSocio", { nombre:s.n, apellido:s.a }, cb);
 }
 
 cargarSocios(function(){
+ try{ enviarPendientes(); }catch(e){}
  try{ pasarLosDiasDelNombreViejo(); }catch(e){}
  try{ anotarCiclos(); }catch(e){}
  try{ sincronizarDiasHoja(); }catch(e){}
@@ -1756,18 +1817,9 @@ function abrirFicha(s){
   if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
   var datos = { n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value, medid:(s && s.medid) || "" };
   var vencimientoAnterior = nuevo ? "" : s.v;
-  var aviso = velo.querySelector("#fAviso");
-  var btnGuardar = velo.querySelector("#fGuardar");
-  btnGuardar.disabled = true;
-  aviso.style.color = "";
-  aviso.textContent = "Guardando en el sitio...";
-  guardarSocioApi(datos, function(ok, info){
-   btnGuardar.disabled = false;
-   if(!ok){
-    aviso.textContent = info === "sin clave" ? "No se guardó: hace falta la clave de administración."
-     : "No se pudo guardar en el sitio (" + info + "). No se perdió nada, intenta de nuevo.";
-    return;
-   }
+  /* Se guarda al instante en este equipo y la hoja se actualiza por
+     detrás (encolarGuardado): ya no hay que esperar a Google. */
+  (function(){
    var quien;
    if(nuevo){
     quien = { id:idNuevo(), n:datos.n, a:datos.a, plan:datos.plan, m:datos.m, v:datos.v, medid:datos.medid };
@@ -1788,7 +1840,8 @@ function abrirFicha(s){
    }
    cerrar(); guardar(); pintar();
    if(socioEnHero && !nuevo && socioEnHero.id === quien.id) mostrarHero(quien.n+" "+quien.a, null, quien);
-  });
+  })();
+  encolarGuardado(datos);
  }
  /* Copia solo esta ficha (no la lista completa) en el mismo formato que
     entiende socios.json, para que sea fácil pegársela a Claude cuando

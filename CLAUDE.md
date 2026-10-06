@@ -371,6 +371,13 @@ ver cuándo el gym está más vacío.
   mandan `prueba=1` y todo queda en la hoja "Pruebas ingresos", nunca en
   la hoja real (no alteran pantallas ni estadísticas). Borrarlas al
   terminar las pruebas.
+- **"Guardar" de la ficha sin esperar (06-10-2026, la dueña: "se demora
+  la vida"):** en `control.html` la ficha se guarda al instante en el
+  equipo y se cierra; `encolarGuardado()` envía `guardarSocio` a la hoja
+  por detrás (cola `wgym_pendientes_guardar_v1`, reintento cada 30 s,
+  aviso abajo a la derecha "⏳ Guardando…" / "✅ Guardado en el sitio" /
+  "⚠️ … Reintentar"). Al recargar, lo pendiente se vuelve a aplicar sobre
+  la lista del sitio y se reenvía: ningún cambio se pierde.
 - **Respaldo del mesón:** en "¿No alcanzó a escanear?", al buscar a un
   socio aparece **"Registrar ingreso"** (POST `registrarIngreso` con
   `ADMIN_KEY`; misma regla de visita nueva de 30 minutos).
