@@ -405,9 +405,9 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <h1>Tarjeta <span>Virtual</span></h1>
  <p class="sub">tu acceso digital al gimnasio</p>
  </header>
+ <div class="salida-card" id="salidaCard" hidden></div>
  <div class="inst-card" id="instCard" hidden></div>
  <div class="member-card" id="memberCard"></div>
- <div class="salida-card" id="salidaCard" hidden></div>
  <div class="pago-card" id="pagoCard" hidden></div>
  <div class="pago-card cal-card" id="calCard" hidden></div>
  <div class="evo-card" id="evoCard" hidden></div>
@@ -1444,10 +1444,13 @@ function renderEvolucion(s){
   var ahora = ultimoAhora !== null ? ultimoAhora : d.dentroAhora;
   var accion = "";
   if(d.dentro){
+   /* Confirmación visible (06-10-2026): muchos socios abrían la tarjeta y
+      creían que ya estaban registrados sin tocar el botón. */
+   if(d.desde) accion += '<p class="salida-ok" style="color:#5CA85C;font-weight:800;margin:6px 0 10px">✅ Tu ingreso está registrado (' + horaChile(d.desde) + ')</p>';
    /* salidaLibre: el script nuevo deja marcar la salida aunque este
       teléfono no tenga el código (lo abrió en otro navegador). Con el
       script antiguo no viene, y se sigue pidiendo el código. */
-   accion = (d.puedeMarcar || d.salidaLibre)
+   accion += (d.puedeMarcar || d.salidaLibre)
     ? '<button type="button" class="pago-btn principal" id="salidaBtn">🚪 Registrar mi salida</button>' +
       /* Recordatorio (05-10-2026): la tablet marcaba 7 y había 1 persona,
          porque casi nadie marca su salida. */
@@ -1462,7 +1465,8 @@ function renderEvolucion(s){
    /* Casi todos abren la tarjeta con su acceso directo: al llegar tocan
       este botón. Desde la casa no lo tocan y solo miran el contador. */
    accion = (d.vino && d.salida ? '<p class="salida-sub">Tu salida quedó registrada a las ' + horaChile(d.salida) + '.</p>' : '') +
-    '<button type="button" class="pago-btn principal" id="ingresoBtn">✅ Registrar mi ingreso</button>' +
+    (ingresoEnCurso ? '<button type="button" class="pago-btn principal" id="ingresoBtn" disabled>⏳ Registrando tu ingreso…</button>'
+     : '<button type="button" class="pago-btn principal" id="ingresoBtn">✅ Registrar mi ingreso</button>') +
     '<p class="salida-sub">Tócalo al llegar al gimnasio. Para ver cuánta gente hay, no hace falta tocarlo.</p>';
   }
   box.innerHTML = '<p class="salida-kicker">Ocupación en tiempo real</p>' +
@@ -1513,7 +1517,13 @@ function renderEvolucion(s){
    var rows = d.rows || [];
    ultimoAhora = contarAhora(rows);
    try{ localStorage.setItem("wgym_ultimo_ahora_v1", JSON.stringify({ n:ultimoAhora, t:Date.now() })); }catch(e){}
-   listo(estadoDesdeFilas_(rows, s));
+   var e = estadoDesdeFilas_(rows, s);
+   /* Una lista pedida antes de registrarse puede llegar después: no vuelve
+      a mostrar "Registrar mi ingreso" a quien recién se registró. */
+   if(!e.dentro && ingresoHecho && ingresoHecho.s === s && Date.now() - ingresoHecho.t < 120000 && !(e.salida > ingresoHecho.t)){
+    e.dentro = true; e.vino = true; e.desde = ingresoHecho.t; e.salida = 0;
+   }
+   listo(e);
   });
  }
  function consultarSalida(){
@@ -1524,8 +1534,10 @@ function renderEvolucion(s){
  /* Registra el ingreso (QR de la puerta o botón "Registrar mi ingreso"). El Apps Script
     decide: si ya está dentro responde registrado:false y no agrega nada,
     así que reintentar por un corte de internet nunca duplica. */
+ var ingresoEnCurso = false, ingresoHecho = null;
  function registrarIngreso(s){
   var intentos = 0;
+  ingresoEnCurso = true;
   function intentar(){
    intentos++;
    salidaJsonp({ action:"ingresoTarjeta", nombre:s.nombre, apellido:s.apellido,
@@ -1534,11 +1546,14 @@ function renderEvolucion(s){
     if(s !== salidaSocio) return;
     if(!d){
      if(intentos < 3){ setTimeout(intentar, 2000); return; }
+     ingresoEnCurso = false;
      pintarSalida(null, "No se pudo registrar tu ingreso por falta de internet. Avísale a recepción.");
      return;
     }
+    ingresoEnCurso = false;
     if(d.ingresos !== true){ document.getElementById("salidaCard").hidden = true; avisarIngreso(s); return; }   /* Apps Script antiguo */
     if(d.registrado && d.codigo) guardarCodigo(s, d.codigo);
+    if(d.dentro) ingresoHecho = { s:s, t:Number(d.desde) || Date.now() };
     pintarSalida(d);
     pedirAhora();
    });
@@ -1584,14 +1599,28 @@ function renderEvolucion(s){
   }else{
    box.innerHTML = '<p class="salida-kicker">Ocupación en tiempo real</p><p class="salida-sub">⏳ Viendo cuánta gente hay en el gimnasio…</p>';
   }
+  /* El botón aparece al instante, sin esperar a la hoja (06-10-2026: la
+     hoja tardaba y los socios se aburrían o creían que ya estaban
+     registrados). El Apps Script no duplica un ingreso de menos de 30 min. */
+  box.innerHTML += ingresoEnCurso
+   ? '<button type="button" class="pago-btn principal" id="ingresoBtn" disabled>⏳ Registrando tu ingreso…</button>'
+   : '<button type="button" class="pago-btn principal" id="ingresoBtn">✅ Registrar mi ingreso</button>' +
+     '<p class="salida-sub">Tócalo al llegar al gimnasio.</p>';
+  var bi = box.querySelector("#ingresoBtn");
+  if(bi && !ingresoEnCurso) bi.addEventListener("click", function(){
+   if(!salidaSocio) return;
+   bi.disabled = true; bi.textContent = "⏳ Registrando tu ingreso…";
+   registrarIngreso(salidaSocio);
+  });
  }
  function iniciarIngreso(s){
   salidaSocio = s;
+  ingresoEnCurso = false;
   document.getElementById("salidaCard").hidden = true;
   clearInterval(salidaTimer);
   if(CHECKIN_URL){
    pintarCargando();
-   if(modoPuerta){ modoPuerta = false; registrarIngreso(s); }
+   if(modoPuerta){ modoPuerta = false; registrarIngreso(s); pintarCargando(); }
    else consultarInicio(s);
   }
   /* El contador se refresca solo mientras la tarjeta está a la vista. */
@@ -1814,7 +1843,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100604", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100605", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
