@@ -655,7 +655,7 @@ document.getElementById("btnGuardar").addEventListener("click", async function()
  var clave="";
  try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
  if(!clave) clave=await pedirClaveMed_();
- if(!clave){msg.hidden=false;msg.textContent="No se guardó: falta la clave de administración.";return;}
+ if(!clave){msg.hidden=false;msg.textContent="No se envió: tocaste Cancelar sin escribir la clave. Toca Guardar registro de nuevo y escríbela.";return;}
  var registro={fecha:hoyISO(),edad:Number(inEdad.value),
   peso:inPeso.value===""?null:Number(inPeso.value),
   grasa:inGrasa.value===""?null:Number(inGrasa.value),
@@ -718,7 +718,7 @@ publicarHist.addEventListener("click",async function(){
  var msg=document.getElementById("guardadoMsg"),clave="";
  try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
  if(!clave)clave=await pedirClaveMed_();
- if(!clave){msg.hidden=false;msg.textContent="Falta la clave de administración.";return;}
+ if(!clave){msg.hidden=false;msg.textContent="No se envió: tocaste Cancelar sin escribir la clave. Toca de nuevo y escríbela.";return;}
  var medid=s.medId||medIdDe(s.n,s.a),est=Number(local.estatura);
  if(est>0&&est<3)est=Math.round(est*100);
  var regs=local.registros.filter(function(r){return r.fecha&&Number(r.edad)>0&&[r.peso,r.grasa,r.imc].some(function(v){return v!=null&&v!=="";});});
@@ -809,8 +809,15 @@ function pedirClaveMed_(){
   function fin(v){ fondo.remove(); listo(v); }
   fondo.querySelector("#claveMedVer").onclick=function(){ inp.type=inp.type==="password"?"text":"password"; this.textContent=inp.type==="password"?"Ver":"Ocultar"; };
   fondo.querySelector("#claveMedNo").onclick=function(){ fin(""); };
-  fondo.querySelector("#claveMedSi").onclick=function(){ fin(inp.value.trim()); };
-  inp.addEventListener("keydown",function(e){ if(e.key==="Enter") fin(inp.value.trim()); });
+  /* Aceptar con el campo vacío no cierra: antes devolvía "falta la clave"
+     y parecía que la medición no se enviaba (06-10-2026). */
+  function aceptar(){
+   var v=inp.value.trim();
+   if(!v){ inp.style.borderColor="#E85C5C"; inp.placeholder="Escribe aquí la clave"; inp.focus(); return; }
+   fin(v);
+  }
+  fondo.querySelector("#claveMedSi").onclick=aceptar;
+  inp.addEventListener("keydown",function(e){ if(e.key==="Enter") aceptar(); });
   setTimeout(function(){ inp.focus(); },50);
  });
 }
