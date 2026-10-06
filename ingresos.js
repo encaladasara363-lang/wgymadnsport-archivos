@@ -159,6 +159,8 @@ var CSS = '' +
 '.ing-aviso.mal{border-color:var(--rojo-claro,#E85C5C);background:rgba(232,92,92,.1);color:var(--rojo-claro,#E85C5C)}' +
 '.ing-sub{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;font-size:12.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--dorado,#D4AF37)}' +
 '.ing-sub .n{color:var(--gris-soft,#8C8C8C)}' +
+'.ing-sub.carpeta{cursor:pointer;background:var(--surface,#161616);border:1px solid var(--line,#2A2A2A);border-radius:12px;padding:12px 14px;width:100%;font-family:inherit;text-align:left}' +
+'.ing-sub.carpeta .ver{color:var(--gris,#CFCFCF);font-size:11.5px;letter-spacing:.06em;margin-left:8px}' +
 '.ing-todos{display:block;width:100%;margin:0 0 8px;background:transparent;color:var(--rojo-claro,#E85C5C);border:1px dashed var(--rojo-claro,#E85C5C);border-radius:10px;padding:9px;font:800 12.5px inherit;font-family:inherit;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}' +
 '.ing-todos[disabled]{opacity:.5;cursor:default}' +
 '.ing-lista{max-height:460px;overflow-y:auto;padding-right:4px;display:flex;flex-direction:column;gap:6px}' +
@@ -206,9 +208,19 @@ function crear(op){
   '<div class="ing-sub"><span>🟢 Dentro del gimnasio</span><span class="n ing-n-dentro"></span></div>' +
   '<button type="button" class="ing-todos" hidden>Marcar salida a todos</button>' +
   '<div class="ing-lista ing-dentro"></div>' +
-  '<div class="ing-sub"><span>📋 Historial del día</span><span class="n ing-n-hist"></span></div>' +
-  '<div class="ing-lista ing-hist"></div>';
+  '<button type="button" class="ing-sub carpeta ing-carpeta" aria-expanded="false"><span class="ing-carpeta-t">📁 Historial del día</span><span><span class="n ing-n-hist"></span><span class="ver"></span></span></button>' +
+  '<div class="ing-lista ing-hist" hidden></div>';
  var $ = function(c){ return raiz.querySelector(c); };
+ /* Historial del día en una "carpeta" (06-10-2026, pedido de la dueña):
+    cerrada por defecto; cada equipo recuerda si la dejó abierta. Al buscar
+    por nombre se muestra sola. */
+ var CLAVE_HIST = "wgym_historial_abierto_v1", histAbierto = false;
+ try{ histAbierto = localStorage.getItem(CLAVE_HIST) === "1"; }catch(e){}
+ $(".ing-carpeta").addEventListener("click", function(){
+  histAbierto = !histAbierto;
+  try{ localStorage.setItem(CLAVE_HIST, histAbierto ? "1" : "0"); }catch(e){}
+  pintar();
+ });
  var fecha = $(".ing-fecha"), q = $(".ing-q");
  fecha.value = dia; fecha.max = hoy;
 
@@ -334,6 +346,11 @@ function crear(op){
   if(!enCurso) { bt.disabled = false; bt.textContent = "Marcar salida a todos (" + dentro.length + ")"; }
   $(".ing-dentro").innerHTML = dVis.length ? dVis.map(function(g){ return itemHtml(g, "dentro"); }).join("")
    : '<div class="ing-vacio">' + (!cargado ? "Cargando ingresos desde Google…" : q.value ? "Nadie con ese nombre dentro." : "No hay nadie dentro sin salida registrada.") + '</div>';
+  var verHist = histAbierto || !!q.value;
+  $(".ing-hist").hidden = !verHist;
+  $(".ing-carpeta").setAttribute("aria-expanded", String(verHist));
+  $(".ing-carpeta-t").textContent = (verHist ? "📂" : "📁") + " Historial del día";
+  $(".ing-carpeta .ver").textContent = q.value ? "" : (histAbierto ? "▲ Ocultar" : "▼ Ver");
   $(".ing-hist").innerHTML = hVis.length ? hVis.map(function(r){ return itemHtml(r, "hist"); }).join("")
    : '<div class="ing-vacio">' + (!cargado ? "Cargando ingresos desde Google…" : q.value ? "Ningún ingreso con ese nombre." : "Todavía no hay ingresos registrados este día.") + '</div>';
  }
