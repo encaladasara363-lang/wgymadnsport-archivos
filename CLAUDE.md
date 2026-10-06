@@ -394,8 +394,9 @@ ver cuándo el gym está más vacío.
   `CacheService` 15 s y `conCandado_` la borra después de cualquier
   escritura. La tarjeta muestra al instante el último número visto
   (`wgym_ultimo_ahora_v1`, si tiene menos de 15 min) mientras llega el
-  nuevo. **Pendiente: que la dueña instale la Versión 11** (mismo
-  procedimiento que la 10; para volver atrás: lápiz → Versión 10).
+  nuevo. **Instalado por la dueña el 06-10-2026 a las 9:32 como
+  Versión 11** (misma implementación y enlace; para volver atrás:
+  lápiz → Versión 10).
 - **Respaldo del mesón:** en "¿No alcanzó a escanear?", al buscar a un
   socio aparece **"Registrar ingreso"** (POST `registrarIngreso` con
   `ADMIN_KEY`; misma regla de visita nueva de 30 minutos).
