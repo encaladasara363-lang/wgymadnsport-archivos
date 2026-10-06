@@ -9,36 +9,48 @@
       "nota": "Saca el seguro: la palanca queda tirada hacia ella (se corta a los 3,4 s, antes de que se devuelva)"
     },
     {
-      "video": "fuentes/seguro-y-ejercicio-gemini.mp4",
-      "desde": 3.0,
+      "video": "fuentes/ejercicio-palanca-abierta-gemini.mp4",
+      "desde": 0,
+      "hasta": 1.0,
+      "recorte": [
+        387,
+        43,
+        507,
+        633
+      ],
+      "nota": "Suelta la palanca (queda abierta) y toma los mangos"
+    },
+    {
+      "video": "fuentes/ejercicio-palanca-abierta-gemini.mp4",
+      "desde": 1.0,
       "hasta": 10,
       "recorte": [
-        352,
-        0,
-        576,
-        720
+        387,
+        43,
+        507,
+        633
       ],
       "musculo": [
         [
-          368,
-          785,
-          42,
-          78
+          485,
+          795,
+          28,
+          62
         ],
         [
-          462,
-          790,
-          26,
-          62
+          385,
+          805,
+          24,
+          58
         ]
       ],
       "seguir": [
-        320,
-        380,
-        150,
-        220
+        350,
+        450,
+        175,
+        280
       ],
-      "nota": "Ejercicio: pantorrillas parpadeando en rojo (de seguro-y-ejercicio-gemini, desde 3 s)"
+      "nota": "Ejercicio con la palanca abierta: pantorrillas parpadeando en rojo"
     }
   ]
 }
