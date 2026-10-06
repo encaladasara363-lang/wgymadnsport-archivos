@@ -3,6 +3,12 @@
   "series": "3 × 15",
   "partes": [
     {
+      "video": "fuentes/seguro-gemini.mp4",
+      "desde": 0,
+      "hasta": 3.4,
+      "nota": "Saca el seguro: la palanca queda tirada hacia ella (se corta a los 3,4 s, antes de que se devuelva)"
+    },
+    {
       "video": "fuentes/seguro-y-ejercicio-gemini.mp4",
       "desde": 3.0,
       "hasta": 10,
@@ -32,7 +38,7 @@
         150,
         220
       ],
-      "nota": "Solo ejercicio: en 0-3 s sacaba el seguro pero la palanca se devolvía (descartado por la dueña). Falta un video del seguro donde la palanca quede tirada a la izquierda."
+      "nota": "Ejercicio: pantorrillas parpadeando en rojo (de seguro-y-ejercicio-gemini, desde 3 s)"
     }
   ]
 }
