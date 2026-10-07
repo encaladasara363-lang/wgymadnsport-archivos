@@ -99,3 +99,11 @@ table.socios td.mon{ color:#fff; }
 #paseNombre::placeholder{ color:#E9CF72; }
 #qPuerta:focus, #paseNombre:focus{ outline:none; box-shadow:0 0 0 3px rgba(255,255,255,.12); }
 @media (max-width:520px){ #qPuerta, #paseNombre{ font-size:15px !important; letter-spacing:.02em; } }
+
+/* Fecha de "Ingresos de hoy" más grande y destacada (07-10-2026) */
+.ing-barra input.ing-fecha{
+ font-family:var(--f-num) !important; font-weight:400 !important; font-size:22px !important; letter-spacing:.04em;
+ color:#fff !important; padding:10px 14px !important; border:2px solid #D4AF37 !important;
+ background:linear-gradient(90deg,rgba(212,175,55,.28),rgba(212,175,55,.08)) !important;
+ box-shadow:0 3px 0 #E30613; color-scheme:dark; }
+.ing-barra input.ing-fecha::-webkit-calendar-picker-indicator{ opacity:.9; cursor:pointer; transform:scale(1.2); }
