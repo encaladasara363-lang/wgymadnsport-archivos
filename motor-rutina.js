@@ -50,11 +50,25 @@ function fechaSerialUTC(serial){return new Date(Date.UTC(1899,11,30)+Number(seri
 function fechaDMY(serial){const d=fechaSerialUTC(serial);return String(d.getUTCDate()).padStart(2,"0")+"-"+String(d.getUTCMonth()+1).padStart(2,"0")+"-"+d.getUTCFullYear()}
 function diasParaVencer(serial){return Math.round((fechaSerialUTC(serial)-chileDate())/86400000)}
 function pintarVencimiento(serial){const el=$("noticeBar");if(!el||serial==null)return;const d=diasParaVencer(serial),venc=fechaDMY(serial);if(d<0){el.dataset.v="bad";el.textContent="\u{1F534} Tu membres\u00eda venci\u00f3 el "+venc+" \u00b7 hace "+Math.abs(d)+(Math.abs(d)===1?" d\u00eda":" d\u00edas")+". Pasa a renovar en recepci\u00f3n."}else if(d===0){el.dataset.v="warn";el.textContent="\u26A0\uFE0F Tu membres\u00eda vence hoy ("+venc+"). Acu\u00e9rdate de renovar."}else if(d<=1){el.dataset.v="warn";el.textContent="\u26A0\uFE0F Vence el "+venc+" \u00b7 queda 1 d\u00eda. Acu\u00e9rdate de renovar."}else{el.dataset.v="ok";el.textContent="\u2705 Vence el "+venc+" \u00b7 quedan "+d+" d\u00edas."}}
+/* 07-10-2026 (la dueña): "si a un socio se le vence la mensualidad se le
+   bloquee y, si paga, yo se la activo del mesón". La renovación del mesón
+   queda en la hoja de Google (listarSocios), no en socios.json: se consultan
+   las dos y vale la fecha MÁS NUEVA. Así, apenas recepción renueva, el socio
+   vuelve a entrar; si está vencido, la rutina queda bloqueada. */
+const CHECKIN_URL="https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
+function sociosDeLaHoja(){return new Promise(res=>{const cb="wgymRut_"+Date.now();let listo=false;const fin=v=>{if(listo)return;listo=true;try{delete window[cb]}catch{}res(v)};const t=setTimeout(()=>fin(null),7000);window[cb]=d=>{clearTimeout(t);fin(d&&Array.isArray(d.socios)?d.socios:null)};const sc=document.createElement("script");sc.src=CHECKIN_URL+"?action=listarSocios&callback="+cb+"&_="+Date.now();sc.onerror=()=>{clearTimeout(t);fin(null)};document.body.appendChild(sc)})}
+async function sociosDelSitio(){try{const c=new AbortController();const t=setTimeout(()=>c.abort(),4000);const r=await fetch("socios.json?v="+Date.now(),{cache:"no-store",signal:c.signal});clearTimeout(t);if(!r.ok)return null;const j=await r.json();return Array.isArray(j)?j:(j.socios||[])}catch{return null}}
 async function login(){const name=norm($("member").value);if(!name||name.split(" ").length<2){$("error").textContent="Escribe nombre y apellido.";return}
  try{await rutinaLista}catch{$("error").textContent="No se pudo cargar la rutina. Revisa tu conexión a internet e intenta de nuevo.";return}
- try{const c=new AbortController();const t=setTimeout(()=>c.abort(),4000);const r=await fetch("socios.json?v="+Date.now(),{cache:"no-store",signal:c.signal});clearTimeout(t);if(!r.ok)throw Error();const j=await r.json();const members=Array.isArray(j)?j:(j.socios||[]);const m=members.find(x=>norm(x.n+" "+x.a)===name||norm(x.a+" "+x.n)===name);
- if(!m){$("error").textContent="No encontramos tu nombre en la lista de socios.";return}if(expired(m.fv)){$("error").textContent="Tu plan aparece vencido. Consulta en recepción.";return}memberFv=m.fv;memberName=norm(m.n+" "+m.a);memberFirst=(m.n||"").trim();mostrarBienvenida();}
- catch{$("error").textContent="No se pudo consultar la lista. Intenta de nuevo o pregunta en recepción."}}
+ $("error").textContent="Buscando tu ficha…";
+ const [sitio,hoja]=await Promise.all([sociosDelSitio(),sociosDeLaHoja()]);
+ if(!sitio&&!hoja){$("error").textContent="No se pudo consultar la lista. Intenta de nuevo o pregunta en recepción.";return}
+ const busca=l=>(l||[]).find(x=>norm(x.n+" "+x.a)===name||norm(x.a+" "+x.n)===name);
+ const a=busca(sitio),b=busca(hoja);
+ const m=a&&b?(Number(b.fv)>=Number(a.fv)?b:a):(b||a);
+ if(!m){$("error").textContent="No encontramos tu nombre en la lista de socios.";return}
+ if(expired(m.fv)){$("error").textContent="\u{1F512} Tu rutina está bloqueada: tu mensualidad venció el "+fechaDMY(m.fv)+". Paga tu mensualidad y, cuando recepción la renueve, podrás entrar de nuevo.";return}
+ $("error").textContent="";memberFv=m.fv;memberName=norm(m.n+" "+m.a);memberFirst=(m.n||"").trim();mostrarBienvenida();}
 function start(){load();const wd=(chileDate().getUTCDay()+6)%7;const dS=opt("diasSemana",null);currentDay=dS?dS.reduce((best,w,i)=>w<=wd?i:best,0):Math.min(nDias()-1,wd);if($("totalDias"))$("totalDias").textContent=String(nDias()).padStart(2,"0");$("login").hidden=true;$("app").hidden=false;$("userpill").textContent=memberName;render();renderWeight();pintarVencimiento(memberFv)}
 function mostrarBienvenida(){const el=$("welcome");if(!el){start();return}const wl=$("welcomeLogo");if(wl&&!wl.src){const hdr=document.querySelector(".top img");if(hdr)wl.src=hdr.src}$("welcomeName").textContent="¡Hola, "+(memberFirst||"")+"!";el.hidden=false;requestAnimationFrame(()=>el.classList.add("open"));welcomeTimer=setTimeout(()=>{el.classList.remove("open");el.hidden=true;start()},25000)}
 function saltarBienvenida(){clearTimeout(welcomeTimer);const el=$("welcome");if(!el){start();return}el.classList.remove("open");el.hidden=true;start()}

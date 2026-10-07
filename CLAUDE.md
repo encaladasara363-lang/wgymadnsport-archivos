@@ -357,6 +357,16 @@ ver cuándo el gym está más vacío.
   según el socio: 4.º campo "F"/"M" de `COACH_RUTINAS`; el sexo sale de "Mis
   calorías", de la rutina ya elegida o se pregunta una vez
   (`wgym_coach_sexo_v1`); abajo queda "Ver rutinas para hombre/mujer".
+- **Bloqueo por mensualidad vencida (07-10-2026, la dueña: "si se le vence
+  la mensualidad se le bloquee y, si paga, yo se la activo del mesón"):**
+  en la tarjeta, con el plan vencido el coach y "Ver todas las rutinas"
+  muestran "🔒 Tus rutinas están bloqueadas" + "💳 Pagar mi mensualidad"
+  (abre el cuadro de pago); al renovar en el mesón la tarjeta recibe la fecha
+  nueva de la hoja (`actualizarTarjeta_` → `renderCoach`) y se desbloquea.
+  En las rutinas (`motor-rutina.js`, `login()`) se consulta `socios.json` Y
+  la hoja (`listarSocios`) y vale la fecha MÁS NUEVA: la renovación del mesón
+  desbloquea al tiro y un socio cargado solo en el mesón también entra.
+  Al cambiar el motor, subir `motor-rutina.js?v=` en las 12 páginas.
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
