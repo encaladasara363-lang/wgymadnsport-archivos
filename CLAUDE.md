@@ -342,6 +342,12 @@ ver cuándo el gym está más vacío.
   `rutinas/<id>.json`; la rutina del socio sale de su clave de progreso en
   ese teléfono o la elige él (`wgym_coach_rutina_v1`). Si se agrega una
   rutina nueva al formato JSON, sumarla a `COACH_RUTINAS`.
+  **"🔄 La máquina está ocupada" (07-10-2026):** propone hasta 4
+  reemplazos sacados SOLO de ejercicios que ya están en alguna rutina del
+  gimnasio (así existen las máquinas), con el mismo músculo principal
+  (`COACH_GRUPOS`), primero los que comparten más músculos y usan otro
+  equipo, sin repetir el mismo ejercicio con otro nombre. Se hacen las
+  mismas series y repeticiones de la rutina.
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
