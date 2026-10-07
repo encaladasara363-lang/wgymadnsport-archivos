@@ -1299,3 +1299,5 @@ Caja nueva: logo grande, franja roja/dorada, títulos en Rubik Distressed con
 barra roja inclinada, números en Anton, botones en Barlow Condensed cursiva).
 Es solo una capa de apariencia encima de su CSS propio: no toca el
 funcionamiento. Si se cambia, subir el `?v=` del enlace en los dos archivos.
+Desde el 07-10-2026 (v=2) también da estilo a las tablas: la planilla de
+socios (`table.socios`) y el historial de mediciones (`.hist table`).

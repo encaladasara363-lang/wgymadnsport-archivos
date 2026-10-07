@@ -66,3 +66,24 @@ header.top .reloj{ font-family:var(--f-cond); font-size:15px; letter-spacing:.06
 .ing-tot span, .kpi .klbl{ font-size:13px !important; }
 .dot-status{ font-size:13px; }
 .ing-sub{ font-size:14px !important; }
+
+/* Tablas (planilla de socios y historial de mediciones) — 07-10-2026 */
+table.socios, .hist table{ border-collapse:separate; border-spacing:0; }
+table.socios th, .hist th{
+ font-family:var(--f-cond) !important; font-style:italic; font-size:14px !important; font-weight:800 !important;
+ letter-spacing:.1em !important; color:#D4AF37 !important; background:#0A0A0B !important;
+ padding:12px 12px !important; border-bottom:3px solid #E30613 !important; }
+table.socios td, .hist td{ padding:11px 12px !important; border-bottom:1px solid #222 !important; border-top:0 !important; }
+table.socios tbody tr:nth-child(even) td, .hist tbody tr:nth-child(even) td{ background:rgba(255,255,255,.025); }
+table.socios tbody tr td:first-child, .hist tbody tr td:first-child{ box-shadow:inset 3px 0 0 transparent; transition:box-shadow .15s; }
+table.socios tbody tr:hover td, .hist tbody tr:hover td{ background:rgba(227,6,19,.10); }
+table.socios tbody tr:hover td:first-child, .hist tbody tr:hover td:first-child{ box-shadow:inset 3px 0 0 #E30613; }
+table.socios td.nom{ font-family:var(--f-cond); font-size:17px; font-weight:800; letter-spacing:.02em; }
+table.socios td:nth-child(2){ font-family:var(--f-cond); font-size:17px; font-weight:600; }
+table.socios td.plan{ font-family:var(--f-cond); font-size:15px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+table.socios td.mon, table.socios td.fec{ font-family:var(--f-num); font-size:17px; letter-spacing:.03em; }
+table.socios td.mon{ color:#fff; }
+.hist td{ font-family:var(--f-num); font-size:16px; letter-spacing:.03em; }
+.pill{ font-family:var(--f-cond); font-style:italic; font-size:13px; border-radius:6px; transform:skewX(-8deg); }
+.iconbtn{ border-radius:8px; }
+.iconbtn:hover{ border-color:#E30613 !important; }
