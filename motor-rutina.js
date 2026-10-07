@@ -62,7 +62,7 @@ async function sociosDelSitio(){try{const c=new AbortController();const t=setTim
    (?socio=Nombre Apellido, que se borra de la dirección al cargar para que un
    enlace compartido no lo lleve) o del último nombre usado en este teléfono. */
 const CLAVE_NOMBRE_RUTINA="wgym_rutina_nombre_v1";
-function ponerNombre(){let n="";try{const u=new URL(location.href);n=(u.searchParams.get("socio")||"").trim();if(u.searchParams.has("socio")){u.searchParams.delete("socio");history.replaceState(null,"",u.pathname+(u.search||"")+u.hash)}}catch{}
+function ponerNombre(){let n="";try{const u=new URL(location.href);n=(u.searchParams.get("socio")||"").trim();if(u.searchParams.has("socio")||u.searchParams.has("t")){u.searchParams.delete("socio");u.searchParams.delete("t");history.replaceState(null,"",u.pathname+(u.search||"")+u.hash)}}catch{}
  if(!n){try{n=localStorage.getItem(CLAVE_NOMBRE_RUTINA)||localStorage.getItem("wgym_ultimo_socio_v1")||""}catch{}}
  if(n&&$("member")&&!$("member").value)$("member").value=n.slice(0,80)}
 async function login(){const name=norm($("member").value);if(!name||name.split(" ").length<2){$("error").textContent="Escribe nombre y apellido.";return}

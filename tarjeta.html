@@ -1889,6 +1889,9 @@ function renderEvolucion(s){
   t[normName(s.nombre + " " + s.apellido)] = g;
   try{ localStorage.setItem(CLAVE_COACH_SEXO, JSON.stringify(t)); }catch(e){}
  }
+ /* Enlace a una rutina con el nombre del socio ya puesto. El "&t=" evita que
+    el teléfono muestre una copia vieja guardada de la página de la rutina. */
+ function coachLinkRutina(id, s){ return id + ".html?socio=" + encodeURIComponent(s.nombre + " " + s.apellido) + "&t=" + Date.now(); }
  function coachNombre(id){ var r = COACH_RUTINAS.filter(function(x){ return x[0] === id; })[0]; return r ? r[1] : id; }
  function coachCargar(id, listo){
   if(coachDatos[id]){ listo(coachDatos[id]); return; }
@@ -2033,7 +2036,7 @@ function renderEvolucion(s){
       elegirla". Cada una abre su página; la tarjeta recuerda la última abierta. */
    pintar('<p class="coach-preg">📚 Rutinas para ' + (sx === "M" ? 'hombre' : 'mujer') + '</p><p class="cal-sub">Toca una rutina para abrirla. La tarjeta recordará la que elegiste.</p>' +
     '<div class="coach-lista">' + lista.map(function(r){
-     return '<a class="coach-op coach-ruta' + (r[0] === rid ? ' on' : '') + '" href="' + r[0] + '.html?socio=' + encodeURIComponent(s.nombre + " " + s.apellido) + '" data-abrir="' + r[0] + '">' + esc(r[1]) + '<span>' + (r[0] === rid ? 'Tu rutina · ' : '') + 'Abrir ›</span></a>';
+     return '<a class="coach-op coach-ruta' + (r[0] === rid ? ' on' : '') + '" href="' + esc(coachLinkRutina(r[0], s)) + '" data-abrir="' + r[0] + '">' + esc(r[1]) + '<span>' + (r[0] === rid ? 'Tu rutina · ' : '') + 'Abrir ›</span></a>';
     }).join("") + '</div>' +
     '<p class="coach-tu"><button type="button" class="coach-link" data-sexo="' + (sx === "M" ? 'F' : 'M') + '">Ver rutinas para ' + (sx === "M" ? 'mujer' : 'hombre') + '</button></p>' +
     '<button type="button" class="pago-btn sec" data-coach="cerrado">Cerrar</button>');
@@ -2063,7 +2066,7 @@ function renderEvolucion(s){
    pintar('<p class="cal-sub">Buscando tu rutina…</p>');
    coachCargar(rid, function(d){
     if(!d){ pintar('<p class="cal-sub">No pude abrir tu rutina. Revisa tu internet e inténtalo de nuevo.</p>' + volver); return; }
-    var abrir = '<a class="pago-btn principal" href="' + esc(rid) + '.html">Abrir mi rutina</a>';
+    var abrir = '<a class="pago-btn principal" href="' + esc(coachLinkRutina(rid, s)) + '">Abrir mi rutina</a>';
     if(coachVista === "hoy"){
      var hoy = coachDiaHoy(), di = -1;
      d.dias.forEach(function(x, i){ if(x.weekday === hoy) di = i; });
@@ -2243,7 +2246,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100708", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100709", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
