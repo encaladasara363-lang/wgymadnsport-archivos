@@ -251,7 +251,9 @@ REGISTRADA, "Deshacer"), más el botón **"Marcar salida a todos"** para
 cerrar el día o limpiar a quienes se fueron sin marcar. Desde 06-10-2026
 el historial va en una "carpeta" (📁 Historial del día · ▼ Ver), cerrada
 por defecto; cada equipo recuerda si quedó abierta
-(`wgym_historial_abierto_v1`) y al buscar un nombre se abre sola. En la tablet,
+(`wgym_historial_abierto_v1`) y al buscar un nombre se abre sola. Desde
+07-10-2026 la lista "Dentro del gimnasio" va del último que entró
+(arriba) al primero. En la tablet,
 MARCAR SALIDA pide la clave de administración una sola vez y la guarda en
 ese equipo.
 

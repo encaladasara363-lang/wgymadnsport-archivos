@@ -316,7 +316,9 @@ function crear(op){
    r.de = l.length; r.n = l.indexOf(r.ts) + 1;
   });
   var dentro = ordenP.map(function(k){ return porP[k]; }).filter(function(g){ return g.abiertas > 0; })
-   .sort(function(a, b){ return a.desde - b.desde; });
+   /* El último que entró va arriba (07-10-2026, pedido de la dueña: ver al
+      tiro quién acaba de entrar sin bajar en la lista). */
+   .sort(function(a, b){ return b.desde - a.desde; });
 
   $(".ing-tot").innerHTML =
    '<div><b>' + filas.length + '</b><span>Ingresos</span></div>' +
