@@ -1304,4 +1304,6 @@ socios (`table.socios`) y el historial de mediciones (`.hist table`).
 Desde el 07-10-2026 (pedido de la dueña) el panel "Socios del gimnasio" de
 `control.html` ya no trae "Planilla Excel" ni "Buscar lista nueva";
 "Restaurar del sitio" y "Cargar respaldo" quedan chicos al final de la
-tabla, bajo "Solo si algo falla:" (`.emergencia`).
+tabla, bajo "Solo si algo falla:" (`.emergencia`). También se sacó "Ver
+estado" del buscador "¿No alcanzó a escanear?": se elige tocando la
+sugerencia o con Enter.
