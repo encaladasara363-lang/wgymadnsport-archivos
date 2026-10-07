@@ -1306,4 +1306,5 @@ Desde el 07-10-2026 (pedido de la dueña) el panel "Socios del gimnasio" de
 "Restaurar del sitio" y "Cargar respaldo" quedan chicos al final de la
 tabla, bajo "Solo si algo falla:" (`.emergencia`). También se sacó "Ver
 estado" del buscador "¿No alcanzó a escanear?": se elige tocando la
-sugerencia o con Enter.
+sugerencia o con Enter. Desde el 07-10-2026 la tablet (`pantalla.html`) también
+carga `estilo-deportivo.css`: al cambiar el `?v=`, cambiarlo en los TRES archivos.
