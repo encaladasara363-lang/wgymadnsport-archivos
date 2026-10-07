@@ -279,6 +279,11 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .coach-grupo{ font-size:11.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--dorado); margin:12px 0 6px; }
 .coach-fotos{ display:flex; gap:6px; margin:0 0 10px; }
 .coach-fotos img{ flex:1; min-width:0; width:100%; border-radius:10px; border:1px solid var(--line); background:#111; }
+.coach-alt{ display:flex; gap:10px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--dorado); border-radius:10px; padding:10px; margin:0 0 8px; }
+.coach-alt img{ width:84px; height:84px; object-fit:cover; border-radius:8px; flex:0 0 auto; background:#111; }
+.coach-alt b{ display:block; color:#fff; font-size:14px; }
+.coach-eq{ display:block; font-size:11.5px; font-weight:800; color:var(--dorado); text-transform:uppercase; letter-spacing:.04em; margin:2px 0 4px; }
+.coach-tip{ display:block; font-size:12.5px; color:#CFCFCF; line-height:1.4; }
 .coach-video{ width:100%; border-radius:10px; border:1px solid var(--line); margin:0 0 10px; background:#111; }
 .cal-err{ font-size:12.5px; color:var(--danger); font-weight:700; margin:4px 0 0; }
 .pago-ok{ font-size:12.5px; color:var(--good); font-weight:800; min-height:16px; margin:6px 0 0; text-align:center; }
@@ -1904,6 +1909,66 @@ function renderEvolucion(s){
      '• Si el dolor es fuerte o dura más de unos días, <b>consulta a un médico o kinesiólogo</b>.</p>' +
      '<p>El cansancio o el ardor del músculo al hacer fuerza sí es normal; el dolor agudo o en las articulaciones, no.</p>' }
  };
+ /* Reemplazos (07-10-2026, la dueña: "si la máquina está ocupada, con qué
+    ejercicio la reemplazo, que trabaje el mismo músculo"). Solo se proponen
+    ejercicios que ya están en alguna rutina del gimnasio (así existen las
+    máquinas), con el mismo músculo principal y, primero, con otro equipo. */
+ var COACH_GRUPOS = [
+  ["gluteos",/gl[uú]te/],["cuadriceps",/cu[aá]dricep/],["isquios",/isquio|femoral/],["aductores",/aductor/],
+  ["pantorrillas",/pantorrill|gemel/],["pecho",/pect|pecho/],["espalda",/dorsal|espalda|romboide|trapecio/],
+  ["hombros",/hombro|deltoide/],["biceps",/b[ií]ceps|braquial/],["triceps",/tr[ií]ceps/],
+  ["abdomen",/abdom|core|obl[ií]cuo/],["lumbar",/lumbar/]
+ ];
+ function coachGrupo(m){
+  var t = String(m || "").split("·")[0].toLowerCase();
+  for(var i = 0; i < COACH_GRUPOS.length; i++) if(COACH_GRUPOS[i][1].test(t)) return COACH_GRUPOS[i][0];
+  return "";
+ }
+ function coachEquipo(e){
+  var t = String(e || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  if(/smith|guiada/.test(t)) return "Barra guiada (Smith)";
+  if(/maquina|prensa/.test(t)) return "Máquina";
+  if(/polea/.test(t)) return "Polea";
+  if(/mancuerna|kettlebell/.test(t)) return "Mancuernas";
+  if(/barra|disco/.test(t)) return "Barra o disco";
+  if(/trx/.test(t)) return "TRX";
+  if(/banda/.test(t)) return "Banda elástica";
+  if(/cuerpo|corporal|colchoneta|suelo|pared|step|banco/.test(t)) return "Peso corporal";
+  return t ? t.charAt(0).toUpperCase() + t.slice(1) : "";
+ }
+ function coachTodas(listo){
+  var pend = COACH_RUTINAS.length, todos = [];
+  COACH_RUTINAS.forEach(function(r){
+   coachCargar(r[0], function(d){
+    if(d) d.dias.forEach(function(x){ x.exercises.forEach(function(e){ todos.push(e); }); });
+    if(--pend === 0) listo(todos);
+   });
+  });
+ }
+ function coachReemplazos(e, todos){
+  var g = coachGrupo(e.muscle), eq = coachEquipo(e.equip), vistos = {}, out = [];
+  vistos[normName(e.name)] = 1;
+  if(!g) return out;
+  /* Fuera también el mismo ejercicio con otro nombre (misma primera palabra
+     y mismo equipo, ej. "Elevación lateral" vs "Elevaciones laterales"). */
+  function raiz(n){ return normName(n).split(" ")[0].replace(/(ES|S)$/, ""); }
+  var r0 = raiz(e.name);
+  todos.forEach(function(x){
+   var k = normName(x.name);
+   if(vistos[k] || coachGrupo(x.muscle) !== g) return;
+   if(raiz(x.name) === r0 && coachEquipo(x.equip) === eq) return;
+   vistos[k] = 1; out.push(x);
+  });
+  /* Primero los que comparten más músculos y usan otro equipo. */
+  var mis = String(e.muscle || "").toLowerCase().split("·").map(function(t){ return t.trim(); });
+  function puntos(x){
+   var sus = String(x.muscle || "").toLowerCase().split("·").map(function(t){ return t.trim(); });
+   var comunes = sus.filter(function(t){ return mis.indexOf(t) >= 0; }).length;
+   return comunes * 2 + (sus[0] === mis[0] ? 2 : 0) + (coachEquipo(x.equip) !== eq ? 1 : 0);
+  }
+  out.sort(function(a, b){ return puntos(b) - puntos(a); });
+  return out.slice(0, 4);
+ }
  function renderCoach(s){
   var box = document.getElementById("coachCard");
   if(!box) return;
@@ -1915,7 +1980,7 @@ function renderEvolucion(s){
   if(coachVista === "cerrado"){
    pintar('<p class="cal-sub">Resuelve tus dudas sobre tu rutina: qué te toca hoy, cómo hacer cada ejercicio y más.</p>' +
     '<button type="button" class="pago-btn principal" data-coach="menu">Preguntarle a mi coach</button>');
-  } else if(coachVista === "elegir" || (!rid && (coachVista === "hoy" || coachVista === "ejercicios" || coachVista === "ej"))){
+  } else if(coachVista === "elegir" || (!rid && (coachVista === "hoy" || coachVista === "ejercicios" || coachVista === "ej" || coachVista === "ocupada" || coachVista === "reemp"))){
    pintar('<p class="cal-sub">¿Con qué rutina entrenas? Es la del cartel con QR que escaneaste.</p>' +
     '<div class="coach-lista">' + COACH_RUTINAS.map(function(r){
      return '<button type="button" class="coach-op' + (r[0] === rid ? ' on' : '') + '" data-rutina="' + r[0] + '">' + esc(r[1]) + '</button>';
@@ -1926,6 +1991,7 @@ function renderEvolucion(s){
     '<div class="coach-lista">' +
      '<button type="button" class="coach-op" data-coach="hoy">📅 ¿Qué me toca hoy?</button>' +
      '<button type="button" class="coach-op" data-coach="ejercicios">🏋️ ¿Cómo hago un ejercicio?</button>' +
+     '<button type="button" class="coach-op" data-coach="ocupada">🔄 La máquina está ocupada, ¿qué hago?</button>' +
      '<button type="button" class="coach-op" data-info="series">🔢 ¿Qué significa 3 × 12?</button>' +
      '<button type="button" class="coach-op" data-info="descanso">⏱️ ¿Cuánto descanso entre series?</button>' +
      '<button type="button" class="coach-op" data-info="orden">🧭 ¿En qué orden hago los ejercicios?</button>' +
@@ -1961,11 +2027,13 @@ function renderEvolucion(s){
        (x.cooldown ? '<p>🧘 <b>' + esc(x.cooldownTitle || "Al terminar") + ':</b> ' + esc(x.cooldown) + '</p>' : '') + '</div>';
      }
      pintar(h + abrir + volver);
-    } else if(coachVista === "ejercicios"){
-     var h2 = '<p class="coach-preg">🏋️ ¿Cómo hago un ejercicio?</p><p class="cal-sub">Toca el ejercicio que quieres aprender.</p>';
+    } else if(coachVista === "ejercicios" || coachVista === "ocupada"){
+     var ocup = coachVista === "ocupada";
+     var h2 = ocup ? '<p class="coach-preg">🔄 La máquina está ocupada</p><p class="cal-sub">¿Qué ejercicio ibas a hacer? Te digo con cuál reemplazarlo.</p>'
+      : '<p class="coach-preg">🏋️ ¿Cómo hago un ejercicio?</p><p class="cal-sub">Toca el ejercicio que quieres aprender.</p>';
      d.dias.forEach(function(x, i){
       h2 += '<p class="coach-grupo">' + esc((x.weekday ? x.weekday + " · " : "") + (x.title || "")) + '</p><div class="coach-lista">' +
-       x.exercises.map(function(e, j){ return '<button type="button" class="coach-op" data-ej="' + i + '-' + j + '">' + esc(e.name) + '</button>'; }).join("") + '</div>';
+       x.exercises.map(function(e, j){ return '<button type="button" class="coach-op" data-' + (ocup ? 'reemp' : 'ej') + '="' + i + '-' + j + '">' + esc(e.name) + '</button>'; }).join("") + '</div>';
      });
      pintar(h2 + volver);
     } else if(coachVista === "ej"){
@@ -1983,7 +2051,29 @@ function renderEvolucion(s){
       '</div>' +
       (e.tip ? '<div class="coach-resp"><p><b>Cómo hacerlo:</b> ' + esc(e.tip) + '</p></div>' : '') +
       '<p class="pago-nota">⚠️ Si sientes dolor en una articulación, detente y avísale al profesor.</p>' +
+      '<button type="button" class="pago-btn principal" data-reemp="' + esc(coachSel) + '">🔄 ¿Máquina ocupada? Ver reemplazos</button>' +
       '<button type="button" class="pago-btn sec" data-coach="ejercicios">← Otro ejercicio</button>' + volver);
+    } else if(coachVista === "reemp"){
+     var q = String(coachSel).split("-"), e0 = (d.dias[+q[0]] || {exercises:[]}).exercises[+q[1]];
+     if(!e0){ coachVista = "ocupada"; renderCoach(s); return; }
+     pintar('<p class="coach-preg">🔄 En vez de: ' + esc(e0.name) + '</p><p class="cal-sub">Buscando ejercicios que trabajen lo mismo…</p>');
+     coachTodas(function(todos){
+      if(coachVista !== "reemp") return;
+      var alts = coachReemplazos(e0, todos), h3 = '<p class="coach-preg">🔄 En vez de: ' + esc(e0.name) + '</p>';
+      if(!alts.length){
+       h3 += '<p class="cal-sub">No tengo un reemplazo seguro para este ejercicio. Espera a que se desocupe o pregúntale al profesor.</p>';
+      } else {
+       h3 += '<p class="cal-sub">Estos trabajan el mismo músculo (<b>' + esc(String(e0.muscle || "").split("·")[0].trim()) + '</b>). Haz <b>las mismas series y repeticiones</b> de tu rutina (' + esc(e0.sets || "") + ').</p>' +
+        alts.map(function(a){
+         var im = Array.isArray(a.img) ? a.img[a.img.length - 1] : a.img;
+         return '<div class="coach-alt">' + (im ? '<img src="' + esc(im) + '" alt="" loading="lazy">' : '') +
+          '<div><b>' + esc(a.name) + '</b><span class="coach-eq">' + esc(coachEquipo(a.equip)) + (a.muscle ? ' · ' + esc(a.muscle) : '') + '</span>' +
+          (a.tip ? '<span class="coach-tip">' + esc(a.tip) + '</span>' : '') + '</div></div>';
+        }).join("") +
+        '<p class="pago-nota">Si no conoces el ejercicio, pídele al profesor que te lo muestre la primera vez.</p>';
+      }
+      pintar(h3 + '<button type="button" class="pago-btn sec" data-coach="ocupada">← Otro ejercicio</button>' + volver);
+     });
     }
    });
   }
@@ -1993,6 +2083,7 @@ function renderEvolucion(s){
    else if(b.hasAttribute("data-info")) coachVista = "info:" + b.getAttribute("data-info");
    else if(b.hasAttribute("data-dia")){ coachSel = +b.getAttribute("data-dia"); }
    else if(b.hasAttribute("data-ej")){ coachVista = "ej"; coachSel = b.getAttribute("data-ej"); }
+   else if(b.hasAttribute("data-reemp")){ coachVista = "reemp"; coachSel = b.getAttribute("data-reemp"); }
    else if(b.hasAttribute("data-coach")){ coachVista = b.getAttribute("data-coach"); coachSel = null; }
    else return;
    renderCoach(s);
@@ -2092,7 +2183,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100701", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100702", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
