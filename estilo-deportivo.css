@@ -87,3 +87,15 @@ table.socios td.mon{ color:#fff; }
 .pill{ font-family:var(--f-cond); font-style:italic; font-size:13px; border-radius:6px; transform:skewX(-8deg); }
 .iconbtn{ border-radius:8px; }
 .iconbtn:hover{ border-color:#E30613 !important; }
+
+/* Buscador de la puerta y pase diario con color y en mayúsculas (07-10-2026) */
+#qPuerta, #paseNombre{
+ font-family:var(--f-cond) !important; font-size:18px !important; font-weight:700 !important;
+ text-transform:uppercase; letter-spacing:.05em; color:#fff !important; border-width:2px !important; }
+#qPuerta::placeholder, #paseNombre::placeholder{ text-transform:uppercase; font-weight:700; opacity:1; }
+#qPuerta{ border-color:#E30613 !important; background:linear-gradient(90deg,rgba(227,6,19,.22),rgba(227,6,19,.06)) !important; }
+#qPuerta::placeholder{ color:#FF8A8F; }
+#paseNombre{ border-color:#D4AF37 !important; background:linear-gradient(90deg,rgba(212,175,55,.22),rgba(212,175,55,.06)) !important; }
+#paseNombre::placeholder{ color:#E9CF72; }
+#qPuerta:focus, #paseNombre:focus{ outline:none; box-shadow:0 0 0 3px rgba(255,255,255,.12); }
+@media (max-width:520px){ #qPuerta, #paseNombre{ font-size:15px !important; letter-spacing:.02em; } }
