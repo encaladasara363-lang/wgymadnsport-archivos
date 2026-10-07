@@ -265,6 +265,7 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .coach-abrir{ font-size:15px !important; margin:0 0 12px !important; }
 .coach-lista{ display:flex; flex-direction:column; gap:7px; margin:0 0 6px; }
 .coach-op{ text-align:left; background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--rojo); border-radius:10px; padding:12px; color:#fff; font:inherit; font-size:14px; font-weight:700; cursor:pointer; }
+.coach-sexo button{ padding:14px 6px !important; font-size:14px !important; }
 .coach-ruta{ display:flex; justify-content:space-between; align-items:center; gap:10px; text-decoration:none; }
 .coach-ruta span{ flex:0 0 auto; font-size:12px; font-weight:800; color:var(--dorado); text-transform:uppercase; letter-spacing:.04em; }
 .coach-op.on{ border-color:var(--dorado); background:#211c0c; }
@@ -1832,18 +1833,18 @@ function renderEvolucion(s){
     recuerda qué rutina eligió (wgym_coach_rutina_v1). Si ya entrenó con alguna
     rutina en este teléfono, la reconoce por su clave de progreso. */
  var COACH_RUTINAS = [
-  ["mujeres-en-movimiento","Mujeres en Movimiento","wgym_mujeres_movimiento_v1_"],
-  ["entrenar-mujeres","Principiante Mujeres","wgym_entrena_mujeres_v1_"],
-  ["entrenar-full-body-principiantes","Full Body Mujeres","wgym_full_body_principiantes_v1_"],
-  ["entrenar-mujeres3","Baja de Peso Mujeres","wgym_mujeres3_v1_"],
-  ["entrenar-mujeres5","Mujeres 5 Días Intermedio","wgym_mujeres5_v1_"],
-  ["entrenar-intermedio-mujeres","Enfocada en Glúteos","wgym_intermedio_mujeres_v1_"],
-  ["entrenar-mujeres-perdida-grasa","Pérdida de Grasa","wgym_perdida_grasa_v1_"],
-  ["entrenar-hombres3","Full Body Hombres","wgym_entrena_hombres3_v1_"],
-  ["entrenar-hombres","Hombres 5 Días Intermedio","wgym_entrena_hombres_v1_"],
-  ["entrenar-hombre6","Hombre 6 Días Intermedio","wgym_hombre6_v1_"],
-  ["entrenar-modo-musculo-hombres","Modo Músculo Hombres","wgym_modo_musculo_hombres_v1_"],
-  ["entrenar-pulso-firme","A Pulso Firme","wgym_hombres_pulso_firme_v1_"]
+  ["mujeres-en-movimiento","Mujeres en Movimiento","wgym_mujeres_movimiento_v1_","F"],
+  ["entrenar-mujeres","Principiante Mujeres","wgym_entrena_mujeres_v1_","F"],
+  ["entrenar-full-body-principiantes","Full Body Mujeres","wgym_full_body_principiantes_v1_","F"],
+  ["entrenar-mujeres3","Baja de Peso Mujeres","wgym_mujeres3_v1_","F"],
+  ["entrenar-mujeres5","Mujeres 5 Días Intermedio","wgym_mujeres5_v1_","F"],
+  ["entrenar-intermedio-mujeres","Enfocada en Glúteos","wgym_intermedio_mujeres_v1_","F"],
+  ["entrenar-mujeres-perdida-grasa","Pérdida de Grasa","wgym_perdida_grasa_v1_","F"],
+  ["entrenar-hombres3","Full Body Hombres","wgym_entrena_hombres3_v1_","M"],
+  ["entrenar-hombres","Hombres 5 Días Intermedio","wgym_entrena_hombres_v1_","M"],
+  ["entrenar-hombre6","Hombre 6 Días Intermedio","wgym_hombre6_v1_","M"],
+  ["entrenar-modo-musculo-hombres","Modo Músculo Hombres","wgym_modo_musculo_hombres_v1_","M"],
+  ["entrenar-pulso-firme","A Pulso Firme","wgym_hombres_pulso_firme_v1_","M"]
  ];
  var CLAVE_COACH = "wgym_coach_rutina_v1";
  var coachVista = "cerrado", coachDatos = {}, coachSel = null;
@@ -1866,6 +1867,23 @@ function renderEvolucion(s){
  function coachGuardar(s, id){
   var t = coachLeer(); t[normName(s.nombre + " " + s.apellido)] = id;
   try{ localStorage.setItem(CLAVE_COACH, JSON.stringify(t)); }catch(e){}
+ }
+ var CLAVE_COACH_SEXO = "wgym_coach_sexo_v1";
+ /* 07-10-2026 (la dueña): a los socios solo sus rutinas de hombre y a las
+    socias solo las de mujer. La planilla no trae el sexo: se toma de "Mis
+    calorías" si ya lo marcó, o de la rutina que ya eligió; si no, se le
+    pregunta una vez y queda guardado en el teléfono. */
+ function coachSexo(s){
+  var k = normName(s.nombre + " " + s.apellido), g = "";
+  try{ g = (JSON.parse(localStorage.getItem(CLAVE_COACH_SEXO) || "{}") || {})[k] || ""; }catch(e){}
+  if(!g){ try{ var c = leerCal()[k]; if(c && (c.sexo === "F" || c.sexo === "M")) g = c.sexo; }catch(e){} }
+  if(!g){ var r = COACH_RUTINAS.filter(function(x){ return x[0] === coachRutinaDe(s); })[0]; if(r) g = r[3]; }
+  return g;
+ }
+ function coachGuardarSexo(s, g){
+  var t = {}; try{ t = JSON.parse(localStorage.getItem(CLAVE_COACH_SEXO) || "{}") || {}; }catch(e){}
+  t[normName(s.nombre + " " + s.apellido)] = g;
+  try{ localStorage.setItem(CLAVE_COACH_SEXO, JSON.stringify(t)); }catch(e){}
  }
  function coachNombre(id){ var r = COACH_RUTINAS.filter(function(x){ return x[0] === id; })[0]; return r ? r[1] : id; }
  function coachCargar(id, listo){
@@ -1987,17 +2005,23 @@ function renderEvolucion(s){
     '<button type="button" class="pago-btn ' + (rid ? 'sec' : 'principal') + ' coach-abrir" data-coach="rutinas">📚 Ver todas las rutinas</button>' +
     '<p class="cal-sub">Resuelve tus dudas sobre tu rutina: qué te toca hoy, cómo hacer cada ejercicio y más.</p>' +
     '<button type="button" class="pago-btn sec" data-coach="menu">Preguntarle a mi coach</button>');
+  } else if(coachVista === "rutinas" && !coachSexo(s)){
+   pintar('<p class="coach-preg">📚 Rutinas del gimnasio</p><p class="cal-sub">¿Qué rutinas quieres ver?</p>' +
+    '<div class="cal-seg coach-sexo"><button type="button" data-sexo="F">🙋‍♀️ Para mujer</button><button type="button" data-sexo="M">🙋‍♂️ Para hombre</button></div>' +
+    '<button type="button" class="pago-btn sec" data-coach="cerrado">Cerrar</button>');
   } else if(coachVista === "rutinas"){
+   var sx = coachSexo(s), lista = COACH_RUTINAS.filter(function(r){ return r[3] === sx; });
    /* 07-10-2026 (la dueña): "que se abran todas mis rutinas y la gente pueda
       elegirla". Cada una abre su página; la tarjeta recuerda la última abierta. */
-   pintar('<p class="coach-preg">📚 Todas las rutinas</p><p class="cal-sub">Toca una rutina para abrirla. La tarjeta recordará la que elegiste.</p>' +
-    '<div class="coach-lista">' + COACH_RUTINAS.map(function(r){
+   pintar('<p class="coach-preg">📚 Rutinas para ' + (sx === "M" ? 'hombre' : 'mujer') + '</p><p class="cal-sub">Toca una rutina para abrirla. La tarjeta recordará la que elegiste.</p>' +
+    '<div class="coach-lista">' + lista.map(function(r){
      return '<a class="coach-op coach-ruta' + (r[0] === rid ? ' on' : '') + '" href="' + r[0] + '.html" data-abrir="' + r[0] + '">' + esc(r[1]) + '<span>' + (r[0] === rid ? 'Tu rutina · ' : '') + 'Abrir ›</span></a>';
     }).join("") + '</div>' +
+    '<p class="coach-tu"><button type="button" class="coach-link" data-sexo="' + (sx === "M" ? 'F' : 'M') + '">Ver rutinas para ' + (sx === "M" ? 'mujer' : 'hombre') + '</button></p>' +
     '<button type="button" class="pago-btn sec" data-coach="cerrado">Cerrar</button>');
   } else if(coachVista === "elegir" || (!rid && (coachVista === "hoy" || coachVista === "ejercicios" || coachVista === "ej" || coachVista === "ocupada" || coachVista === "reemp"))){
    pintar('<p class="cal-sub">¿Con qué rutina entrenas? Es la del cartel con QR que escaneaste. Elígela una vez y después la abres desde aquí, sin escanear.</p>' +
-    '<div class="coach-lista">' + COACH_RUTINAS.map(function(r){
+    '<div class="coach-lista">' + COACH_RUTINAS.filter(function(r){ var g = coachSexo(s); return !g || r[3] === g; }).map(function(r){
      return '<button type="button" class="coach-op' + (r[0] === rid ? ' on' : '') + '" data-rutina="' + r[0] + '">' + esc(r[1]) + '</button>';
     }).join("") + '</div>' + volver);
   } else if(coachVista === "menu"){
@@ -2097,7 +2121,8 @@ function renderEvolucion(s){
    var a = ev.target.closest("a[data-abrir]");
    if(a){ coachGuardar(s, a.getAttribute("data-abrir")); return; }
    var b = ev.target.closest("button"); if(!b) return;
-   if(b.hasAttribute("data-rutina")){ coachGuardar(s, b.getAttribute("data-rutina")); coachVista = "menu"; coachSel = null; }
+   if(b.hasAttribute("data-sexo")){ coachGuardarSexo(s, b.getAttribute("data-sexo")); coachVista = "rutinas"; }
+   else if(b.hasAttribute("data-rutina")){ coachGuardar(s, b.getAttribute("data-rutina")); coachVista = "menu"; coachSel = null; }
    else if(b.hasAttribute("data-info")) coachVista = "info:" + b.getAttribute("data-info");
    else if(b.hasAttribute("data-dia")){ coachSel = +b.getAttribute("data-dia"); }
    else if(b.hasAttribute("data-ej")){ coachVista = "ej"; coachSel = b.getAttribute("data-ej"); }
@@ -2201,7 +2226,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100704", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100705", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
