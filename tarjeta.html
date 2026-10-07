@@ -266,6 +266,7 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .coach-lista{ display:flex; flex-direction:column; gap:7px; margin:0 0 6px; }
 .coach-op{ text-align:left; background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--rojo); border-radius:10px; padding:12px; color:#fff; font:inherit; font-size:14px; font-weight:700; cursor:pointer; }
 .coach-sexo button{ padding:14px 6px !important; font-size:14px !important; }
+.bloqueo-card{ border-color:var(--rojo); }
 .coach-bloq{ background:#2a0d10; border:1px solid var(--rojo); border-radius:10px; padding:12px; margin:0 0 8px; }
 .coach-bloq b{ display:block; color:#fff; font-size:15px; margin:0 0 4px; }
 .coach-bloq span{ display:block; color:#E8E8E8; font-size:13px; line-height:1.45; }
@@ -440,6 +441,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  </header>
  <div class="salida-card" id="salidaCard" hidden></div>
  <div class="inst-card" id="instCard" hidden></div>
+ <div class="pago-card bloqueo-card" id="bloqueoCard" hidden></div>
  <div class="member-card" id="memberCard"></div>
  <div class="pago-card" id="pagoCard" hidden></div>
  <div class="pago-card cal-card" id="calCard" hidden></div>
@@ -906,7 +908,7 @@ function renderEvolucion(s){
  return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; });
  }
 
- /* ---------- gate: find socio (no vencimiento check — la tarjeta nunca bloquea) ---------- */
+ /* ---------- gate: find socio (la tarjeta abre siempre; si está vencida, mostrarBloqueo_ la deja solo con "Pagar mensualidad") ---------- */
  /* Antes se le preguntaba al Apps Script por UNA ficha a la vez, probando
     cada corte posible de nombre/apellido uno por uno -- con mala señal
     cada intento sumaba varios segundos, y con nombres compuestos hacían
@@ -1062,7 +1064,9 @@ function renderEvolucion(s){
  function actualizarTarjeta_(api){
  var s = socioApiATarjeta_(api);
  if(!socioActual || normName(socioActual.nombre) !== normName(s.nombre) || normName(socioActual.apellido) !== normName(s.apellido)) return;
+ var antes = tarjetaBloqueada_(socioActual);
  socioActual.plan = s.plan; socioActual.monto = s.monto; socioActual.vencimiento = s.vencimiento;
+ if(antes !== tarjetaBloqueada_(socioActual)){ unlockCardView(socioActual); return; }
  try{ renderCard(socioActual); renderPago(socioActual); }catch(e){}
  try{ renderCoach(socioActual); }catch(e){}
  }
@@ -2241,11 +2245,46 @@ function renderEvolucion(s){
     fallara en algún teléfono, nunca debe impedir que el socio se registre
     (06-10-2026). */
  function seguro_(fn){ try{ fn(); }catch(e){ try{ console.error(e); }catch(x){} } }
+ /* 07-10-2026 (la dueña: "los vencidos aún entran a su tarjeta virtual"):
+    con la mensualidad vencida la tarjeta queda bloqueada. Solo se ve la
+    ficha (MEMBRESÍA VENCIDA) y "Pagar mensualidad": no registra ingreso,
+    no muestra el "en vivo", ni calorías, coach, evolución, bandas o
+    candados. Cuando recepción renueva en el mesón, llega la fecha nueva de
+    la hoja (actualizarTarjeta_) y la tarjeta se desbloquea sola. */
+ function tarjetaBloqueada_(s){ return !!s && estadoDe(s.vencimiento).cls === "danger"; }
+ function mostrarBloqueo_(s){
+  var bloq = tarjetaBloqueada_(s), box = document.getElementById("bloqueoCard");
+  ["instCard","calCard","coachCard","evoCard"].forEach(function(id){ if(bloq) document.getElementById(id).hidden = true; });
+  Array.prototype.forEach.call(document.querySelectorAll("#cardView .band-box"), function(b){ b.hidden = bloq; });
+  box.hidden = !bloq;
+  if(!bloq){ box.innerHTML = ""; return false; }
+  salidaSocio = null; clearInterval(salidaTimer);
+  document.getElementById("salidaCard").hidden = true;
+  var hayPago = !!document.getElementById("pagoAbrir");
+  box.innerHTML = '<p class="pago-kicker">🔒 Tarjeta bloqueada</p>' +
+   '<div class="coach-bloq"><b>' + (/diario/i.test(s.plan || "") ? 'Tu pase diario fue el ' : 'Tu mensualidad venció el ') + escapeHtml(s.vencimiento || "") + '</b>' +
+   '<span>' + (hayPago ? 'Paga tu mensualidad y, cuando recepción la renueve, tu tarjeta se desbloquea sola.'
+    : 'Acércate a recepción para renovar tu plan. Cuando lo renueven, tu tarjeta se desbloquea sola.') + '</span></div>' +
+   (hayPago ? '<button type="button" class="pago-btn principal" id="bloqueoPagar">💳 Pagar mi mensualidad</button>' : '');
+  var bp = box.querySelector("#bloqueoPagar");
+  if(bp) bp.addEventListener("click", function(){
+   var pb = document.getElementById("pagoAbrir"), pc = document.getElementById("pagoCard");
+   if(pb && document.getElementById("pagoDetalle") && document.getElementById("pagoDetalle").hidden) pb.click();
+   if(pc) pc.scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+  return true;
+ }
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
  socioActual = s;
  seguro_(function(){ renderCard(s); });
+ if(tarjetaBloqueada_(s)){
+  seguro_(function(){ renderPago(s); });
+  seguro_(function(){ mostrarBloqueo_(s); });
+  return;
+ }
+ seguro_(function(){ mostrarBloqueo_(s); });
  seguro_(function(){ iniciarIngreso(s); });
  seguro_(function(){ anotarDia(s); });
  seguro_(function(){ renderPago(s); });
@@ -2266,7 +2305,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100710", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100711", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
