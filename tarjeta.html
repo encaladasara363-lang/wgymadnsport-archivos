@@ -259,6 +259,27 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .cal-meta{ text-align:center; background:#211c0c; border:2px solid var(--dorado); border-radius:12px; padding:10px; margin:4px 0 10px; }
 .cal-meta b{ display:block; font-size:30px; font-weight:900; color:#FFD84D; line-height:1.1; }
 .cal-meta span{ font-size:11.5px; font-weight:800; letter-spacing:.08em; color:var(--dorado); text-transform:uppercase; }
+.coach-tu{ font-size:13px; color:#CFCFCF; margin:0 0 10px; }
+.coach-tu b{ color:#fff; }
+.coach-link{ background:none; border:none; color:var(--dorado); font:inherit; font-weight:800; text-decoration:underline; cursor:pointer; padding:0; }
+.coach-lista{ display:flex; flex-direction:column; gap:7px; margin:0 0 6px; }
+.coach-op{ text-align:left; background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--rojo); border-radius:10px; padding:12px; color:#fff; font:inherit; font-size:14px; font-weight:700; cursor:pointer; }
+.coach-op.on{ border-color:var(--dorado); background:#211c0c; }
+.coach-preg{ font-size:16px; font-weight:900; color:#fff; margin:0 0 10px; }
+.coach-resp{ background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:4px 12px; margin:0 0 6px; font-size:13.5px; line-height:1.5; color:#E8E8E8; }
+.coach-resp b{ color:#fff; }
+.coach-titulo{ font-size:15px; font-weight:900; color:var(--dorado); text-transform:uppercase; margin:10px 0 2px; }
+.coach-sub2{ font-size:12px; color:var(--gris-soft); margin:0 0 6px; }
+.coach-ejs{ margin:6px 0; padding-left:20px; }
+.coach-ejs li{ margin:0 0 6px; }
+.coach-ejs li span{ display:block; font-size:12px; color:var(--gris-soft); }
+.coach-dias{ display:flex; flex-wrap:wrap; gap:6px; margin:0 0 10px; }
+.coach-dia{ flex:1 1 auto; padding:8px 10px; border-radius:9px; border:1px solid var(--line); background:var(--surface); color:var(--gris-soft); font:inherit; font-weight:800; font-size:12.5px; cursor:pointer; }
+.coach-dia.on{ background:var(--dorado); border-color:var(--dorado); color:#0A0A0B; }
+.coach-grupo{ font-size:11.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--dorado); margin:12px 0 6px; }
+.coach-fotos{ display:flex; gap:6px; margin:0 0 10px; }
+.coach-fotos img{ flex:1; min-width:0; width:100%; border-radius:10px; border:1px solid var(--line); background:#111; }
+.coach-video{ width:100%; border-radius:10px; border:1px solid var(--line); margin:0 0 10px; background:#111; }
 .cal-err{ font-size:12.5px; color:var(--danger); font-weight:700; margin:4px 0 0; }
 .pago-ok{ font-size:12.5px; color:var(--good); font-weight:800; min-height:16px; margin:6px 0 0; text-align:center; }
 .band-btn{
@@ -410,6 +431,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="member-card" id="memberCard"></div>
  <div class="pago-card" id="pagoCard" hidden></div>
  <div class="pago-card cal-card" id="calCard" hidden></div>
+ <div class="pago-card cal-card coach-card" id="coachCard" hidden></div>
  <div class="evo-card" id="evoCard" hidden></div>
  <div class="band-box">
  <div class="band-colors" id="bandColors">
@@ -1795,6 +1817,189 @@ function renderEvolucion(s){
   box.querySelector("#calCerrar").addEventListener("click", function(){ calAbierto = false; renderCalorias(s); });
  }
 
+ /* ---------- Mi coach virtual (07-10-2026, pedido de la dueña: opción "preguntas
+    para elegir", sin IA ni costo) ----------
+    Responde con la rutina real del socio (rutinas/<id>.json) y con textos fijos
+    revisados. No usa servicios externos ni guarda nada fuera del teléfono: solo
+    recuerda qué rutina eligió (wgym_coach_rutina_v1). Si ya entrenó con alguna
+    rutina en este teléfono, la reconoce por su clave de progreso. */
+ var COACH_RUTINAS = [
+  ["mujeres-en-movimiento","Mujeres en Movimiento","wgym_mujeres_movimiento_v1_"],
+  ["entrenar-mujeres","Principiante Mujeres","wgym_entrena_mujeres_v1_"],
+  ["entrenar-full-body-principiantes","Full Body Mujeres","wgym_full_body_principiantes_v1_"],
+  ["entrenar-mujeres3","Baja de Peso Mujeres","wgym_mujeres3_v1_"],
+  ["entrenar-mujeres5","Mujeres 5 Días Intermedio","wgym_mujeres5_v1_"],
+  ["entrenar-intermedio-mujeres","Enfocada en Glúteos","wgym_intermedio_mujeres_v1_"],
+  ["entrenar-mujeres-perdida-grasa","Pérdida de Grasa","wgym_perdida_grasa_v1_"],
+  ["entrenar-hombres3","Full Body Hombres","wgym_entrena_hombres3_v1_"],
+  ["entrenar-hombres","Hombres 5 Días Intermedio","wgym_entrena_hombres_v1_"],
+  ["entrenar-hombre6","Hombre 6 Días Intermedio","wgym_hombre6_v1_"],
+  ["entrenar-modo-musculo-hombres","Modo Músculo Hombres","wgym_modo_musculo_hombres_v1_"],
+  ["entrenar-pulso-firme","A Pulso Firme","wgym_hombres_pulso_firme_v1_"]
+ ];
+ var CLAVE_COACH = "wgym_coach_rutina_v1";
+ var coachVista = "cerrado", coachDatos = {}, coachSel = null;
+ function coachLeer(){ try{ return JSON.parse(localStorage.getItem(CLAVE_COACH) || "{}") || {}; }catch(e){ return {}; } }
+ function coachRutinaDe(s){
+  var k = normName(s.nombre + " " + s.apellido), guardada = coachLeer()[k];
+  if(guardada) return guardada;
+  /* Rutina con progreso de este socio en este teléfono. */
+  var nom = normName(s.nombre).toLowerCase(), hallada = null;
+  try{
+   for(var i = 0; i < localStorage.length && !hallada; i++){
+    var key = localStorage.key(i) || "";
+    COACH_RUTINAS.forEach(function(r){
+     if(!hallada && key.indexOf(r[2]) === 0 && normName(key.slice(r[2].length)).toLowerCase().indexOf(nom) === 0) hallada = r[0];
+    });
+   }
+  }catch(e){}
+  return hallada;
+ }
+ function coachGuardar(s, id){
+  var t = coachLeer(); t[normName(s.nombre + " " + s.apellido)] = id;
+  try{ localStorage.setItem(CLAVE_COACH, JSON.stringify(t)); }catch(e){}
+ }
+ function coachNombre(id){ var r = COACH_RUTINAS.filter(function(x){ return x[0] === id; })[0]; return r ? r[1] : id; }
+ function coachCargar(id, listo){
+  if(coachDatos[id]){ listo(coachDatos[id]); return; }
+  fetch("rutinas/" + id + ".json?v=" + Date.now(), { cache:"no-store" })
+   .then(function(r){ return r.ok ? r.json() : null; })
+   .then(function(d){ if(d && Array.isArray(d.dias)){ coachDatos[id] = d; listo(d); } else listo(null); })
+   .catch(function(){ listo(null); });
+ }
+ function coachDiaHoy(){
+  var dias = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+  var p = new Intl.DateTimeFormat("es-CL", { timeZone:"America/Santiago", weekday:"long" }).format(new Date());
+  p = p.charAt(0).toUpperCase() + p.slice(1);
+  return dias.indexOf(p) >= 0 ? p : dias[new Date().getDay()];
+ }
+ var COACH_INFO = {
+  series: { t:"🔢 ¿Qué significa 3 × 12?",
+   h:'<p><b>El primer número son las series</b> y el segundo, las <b>repeticiones</b>.</p>' +
+     '<p>«3 × 12» quiere decir: haz el ejercicio <b>12 veces seguidas</b>, descansa, y repite eso <b>3 veces</b>.</p>' +
+     '<p>• «3 × 10-12»: haz entre 10 y 12. Si llegas fácil a 12, el próximo día puedes subir un poco el peso.<br>' +
+     '• «por pierna» o «por lado»: haz las repeticiones con cada lado.<br>' +
+     '• «30 seg»: no se cuentan repeticiones, se mantiene la posición ese tiempo.</p>' +
+     '<p>El <b>descanso</b> (por ejemplo «60 seg») es lo que esperas entre una serie y la siguiente.</p>' },
+  descanso: { t:"⏱️ ¿Cuánto descanso entre series?",
+   h:'<p>Respeta el descanso que dice cada ejercicio de tu rutina. Como guía general:</p>' +
+     '<p>• Si estás empezando: <b>1 minuto</b>.<br>• Si ya llevas un tiempo: <b>1 a 2 minutos</b>.</p>' +
+     '<p>Descansar muy poco te cansa antes de tiempo; descansar demasiado hace que el músculo «se enfríe». Tu rutina trae un temporizador que te avisa cuándo seguir.</p>' },
+  progreso: { t:"📈 ¿Cómo registro mi progreso?",
+   h:'<p><b>1.</b> Abre tu rutina y entra con tu nombre.<br>' +
+     '<b>2.</b> Marca cada serie cuando la termines y anota el peso que usaste.<br>' +
+     '<b>3.</b> Tu rutina guarda tus récords y te muestra cuánto entrenaste esta semana.</p>' +
+     '<p>Además, en el gimnasio te miden <b>gratis</b> peso, % de grasa e IMC. Pídelo en recepción: tu avance aparece en esta tarjeta, en «Tu evolución física».</p>' +
+     '<p>Tu progreso se guarda en este teléfono: usa siempre el mismo para entrenar.</p>' },
+  orden: { t:"🧭 ¿En qué orden hago los ejercicios?",
+   h:'<p>Hazlos <b>en el orden en que aparecen</b> en tu rutina:</p>' +
+     '<p><b>1.</b> Calentamiento (5 a 10 minutos).<br>' +
+     '<b>2.</b> Los ejercicios grandes primero (sentadilla, prensa, press, remo): ahí necesitas más energía.<br>' +
+     '<b>3.</b> Después los ejercicios de un solo músculo.<br>' +
+     '<b>4.</b> Al final, el estiramiento: ayuda a recuperarte.</p>' },
+  dolor: { t:"🤕 Tengo dolor o una molestia",
+   h:'<p><b>Detente</b> si un ejercicio te causa dolor en una articulación (rodilla, espalda, hombro, muñeca). No es normal y no hay que «aguantarlo».</p>' +
+     '<p>• Avísale al profesor o en recepción antes de seguir.<br>' +
+     '• No entrenes la zona que duele.<br>' +
+     '• Si el dolor es fuerte o dura más de unos días, <b>consulta a un médico o kinesiólogo</b>.</p>' +
+     '<p>El cansancio o el ardor del músculo al hacer fuerza sí es normal; el dolor agudo o en las articulaciones, no.</p>' }
+ };
+ function renderCoach(s){
+  var box = document.getElementById("coachCard");
+  if(!box) return;
+  box.hidden = false;
+  var esc = escapeHtml, rid = coachRutinaDe(s);
+  var html = '<p class="pago-kicker">🤖 Mi coach virtual</p>';
+  var volver = '<button type="button" class="pago-btn sec" data-coach="menu">← Volver a las preguntas</button>';
+  function pintar(h){ box.innerHTML = html + h; }
+  if(coachVista === "cerrado"){
+   pintar('<p class="cal-sub">Resuelve tus dudas sobre tu rutina: qué te toca hoy, cómo hacer cada ejercicio y más.</p>' +
+    '<button type="button" class="pago-btn principal" data-coach="menu">Preguntarle a mi coach</button>');
+  } else if(coachVista === "elegir" || (!rid && (coachVista === "hoy" || coachVista === "ejercicios" || coachVista === "ej"))){
+   pintar('<p class="cal-sub">¿Con qué rutina entrenas? Es la del cartel con QR que escaneaste.</p>' +
+    '<div class="coach-lista">' + COACH_RUTINAS.map(function(r){
+     return '<button type="button" class="coach-op' + (r[0] === rid ? ' on' : '') + '" data-rutina="' + r[0] + '">' + esc(r[1]) + '</button>';
+    }).join("") + '</div>' + volver);
+  } else if(coachVista === "menu"){
+   pintar((rid ? '<p class="coach-tu">Tu rutina: <b>' + esc(coachNombre(rid)) + '</b> · <button type="button" class="coach-link" data-coach="elegir">Cambiar</button></p>'
+     : '<p class="coach-tu">Aún no me dices tu rutina · <button type="button" class="coach-link" data-coach="elegir">Elegirla</button></p>') +
+    '<div class="coach-lista">' +
+     '<button type="button" class="coach-op" data-coach="hoy">📅 ¿Qué me toca hoy?</button>' +
+     '<button type="button" class="coach-op" data-coach="ejercicios">🏋️ ¿Cómo hago un ejercicio?</button>' +
+     '<button type="button" class="coach-op" data-info="series">🔢 ¿Qué significa 3 × 12?</button>' +
+     '<button type="button" class="coach-op" data-info="descanso">⏱️ ¿Cuánto descanso entre series?</button>' +
+     '<button type="button" class="coach-op" data-info="orden">🧭 ¿En qué orden hago los ejercicios?</button>' +
+     '<button type="button" class="coach-op" data-info="progreso">📈 ¿Cómo registro mi progreso?</button>' +
+     '<button type="button" class="coach-op" data-info="dolor">🤕 Tengo dolor o una molestia</button>' +
+    '</div>' +
+    '<button type="button" class="pago-btn sec" data-coach="cerrado">Cerrar</button>');
+  } else if(coachVista.indexOf("info:") === 0){
+   var inf = COACH_INFO[coachVista.slice(5)];
+   pintar('<p class="coach-preg">' + inf.t + '</p><div class="coach-resp">' + inf.h + '</div>' + volver);
+  } else {
+   pintar('<p class="cal-sub">Buscando tu rutina…</p>');
+   coachCargar(rid, function(d){
+    if(!d){ pintar('<p class="cal-sub">No pude abrir tu rutina. Revisa tu internet e inténtalo de nuevo.</p>' + volver); return; }
+    var abrir = '<a class="pago-btn principal" href="' + esc(rid) + '.html">Abrir mi rutina</a>';
+    if(coachVista === "hoy"){
+     var hoy = coachDiaHoy(), di = -1;
+     d.dias.forEach(function(x, i){ if(x.weekday === hoy) di = i; });
+     if(coachSel != null) di = coachSel;
+     var h = '<p class="coach-preg">📅 ¿Qué me toca hoy?</p>';
+     if(di < 0) h += '<p class="cal-sub">Hoy es <b>' + esc(hoy) + '</b> y tu rutina no tiene entrenamiento este día: ¡descansa o haz cardio suave! Si quieres, elige un día:</p>';
+     h += '<div class="coach-dias">' + d.dias.map(function(x, i){
+      return '<button type="button" class="coach-dia' + (i === di ? ' on' : '') + '" data-dia="' + i + '">' + esc(x.weekday || ("Día " + (i + 1))) + '</button>';
+     }).join("") + '</div>';
+     if(di >= 0){
+      var x = d.dias[di];
+      h += '<div class="coach-resp"><p class="coach-titulo">' + esc(x.title || "") + '</p>' +
+       (x.focus ? '<p class="coach-sub2">' + esc(x.focus) + '</p>' : '') +
+       (x.warmup ? '<p>🔥 <b>Calentamiento:</b> ' + esc(x.warmup) + '</p>' : '') +
+       '<ol class="coach-ejs">' + x.exercises.map(function(e){
+        return '<li><b>' + esc(e.name) + '</b><span>' + esc(e.sets || "") + (e.rest ? ' · descanso ' + esc(e.rest) : '') + '</span></li>';
+       }).join("") + '</ol>' +
+       (x.cooldown ? '<p>🧘 <b>' + esc(x.cooldownTitle || "Al terminar") + ':</b> ' + esc(x.cooldown) + '</p>' : '') + '</div>';
+     }
+     pintar(h + abrir + volver);
+    } else if(coachVista === "ejercicios"){
+     var h2 = '<p class="coach-preg">🏋️ ¿Cómo hago un ejercicio?</p><p class="cal-sub">Toca el ejercicio que quieres aprender.</p>';
+     d.dias.forEach(function(x, i){
+      h2 += '<p class="coach-grupo">' + esc((x.weekday ? x.weekday + " · " : "") + (x.title || "")) + '</p><div class="coach-lista">' +
+       x.exercises.map(function(e, j){ return '<button type="button" class="coach-op" data-ej="' + i + '-' + j + '">' + esc(e.name) + '</button>'; }).join("") + '</div>';
+     });
+     pintar(h2 + volver);
+    } else if(coachVista === "ej"){
+     var p = String(coachSel).split("-"), e = (d.dias[+p[0]] || {exercises:[]}).exercises[+p[1]];
+     if(!e){ coachVista = "ejercicios"; renderCoach(s); return; }
+     var media = "";
+     var img = Array.isArray(e.img) ? e.img : (e.img ? [e.img] : []);
+     if(img.length) media = '<div class="coach-fotos">' + img.map(function(u){ return '<img src="' + esc(u) + '" alt="" loading="lazy">'; }).join("") + '</div>';
+     else if(e.video) media = '<video class="coach-video" src="' + esc(e.video) + '" muted loop playsinline autoplay></video>';
+     pintar('<p class="coach-preg">🏋️ ' + esc(e.name) + '</p>' + media +
+      '<div class="pago-datos">' +
+       (e.muscle ? '<div class="fila"><span>💪 Trabaja</span><b>' + esc(e.muscle) + '</b></div>' : '') +
+       (e.sets ? '<div class="fila"><span>🔢 Series × repeticiones</span><b>' + esc(e.sets) + '</b></div>' : '') +
+       (e.rest ? '<div class="fila"><span>⏱️ Descanso</span><b>' + esc(e.rest) + '</b></div>' : '') +
+      '</div>' +
+      (e.tip ? '<div class="coach-resp"><p><b>Cómo hacerlo:</b> ' + esc(e.tip) + '</p></div>' : '') +
+      '<p class="pago-nota">⚠️ Si sientes dolor en una articulación, detente y avísale al profesor.</p>' +
+      '<button type="button" class="pago-btn sec" data-coach="ejercicios">← Otro ejercicio</button>' + volver);
+    }
+   });
+  }
+  box.onclick = function(ev){
+   var b = ev.target.closest("button"); if(!b) return;
+   if(b.hasAttribute("data-rutina")){ coachGuardar(s, b.getAttribute("data-rutina")); coachVista = "menu"; coachSel = null; }
+   else if(b.hasAttribute("data-info")) coachVista = "info:" + b.getAttribute("data-info");
+   else if(b.hasAttribute("data-dia")){ coachSel = +b.getAttribute("data-dia"); }
+   else if(b.hasAttribute("data-ej")){ coachVista = "ej"; coachSel = b.getAttribute("data-ej"); }
+   else if(b.hasAttribute("data-coach")){ coachVista = b.getAttribute("data-coach"); coachSel = null; }
+   else return;
+   renderCoach(s);
+   if(coachVista !== "cerrado") box.scrollIntoView({ behavior:"smooth", block:"start" });
+  };
+ }
+
  /* ---------- Bienvenida a socios nuevos (05-10-2026, pedido de la dueña) ----------
     Solo para socios NUEVOS y solo UNA vez: la primera vez que abren su
     tarjeta aparece un saludo con su nombre. "Nuevo" = tiene 2 días o
@@ -1872,6 +2077,7 @@ function renderEvolucion(s){
  seguro_(function(){ renderPago(s); });
  calAbierto = false; calEditando = false;
  seguro_(function(){ renderCalorias(s); });
+ seguro_(function(){ renderCoach(s); });
  seguro_(function(){ renderEvolucion(s); });
  seguro_(pintarInstalar);
  seguro_(function(){ revisarBienvenida(s); });
@@ -1886,7 +2092,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100606", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100701", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();

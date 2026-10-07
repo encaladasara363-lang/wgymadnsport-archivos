@@ -333,6 +333,15 @@ ver cuándo el gym está más vacío.
   Para ganar músculo no se inventa un superávit: se muestra la mantención
   como base. Los datos son de salud: se guardan SOLO en el teléfono
   (`wgym_calorias_v1`), nunca en la hoja ni en el repo.
+- **"🤖 Mi coach virtual" (07-10-2026, la dueña eligió la opción de preguntas
+  para elegir, sin IA ni costo):** cuadro `#coachCard` en la tarjeta
+  (`renderCoach()`, después de las calorías). Preguntas: ¿qué me toca hoy?
+  (día de hoy en Chile según `weekday` de la rutina), ¿cómo hago un ejercicio?
+  (foto/video, músculo, series, descanso y `tip` del JSON), 3 × 12, descanso,
+  orden, progreso y dolor (siempre deriva al profesor/profesional). Lee
+  `rutinas/<id>.json`; la rutina del socio sale de su clave de progreso en
+  ese teléfono o la elige él (`wgym_coach_rutina_v1`). Si se agrega una
+  rutina nueva al formato JSON, sumarla a `COACH_RUTINAS`.
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
