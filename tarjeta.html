@@ -1877,11 +1877,32 @@ function renderEvolucion(s){
     socias solo las de mujer. La planilla no trae el sexo: se toma de "Mis
     calorías" si ya lo marcó, o de la rutina que ya eligió; si no, se le
     pregunta una vez y queda guardado en el teléfono. */
+ /* Sexo por el primer nombre (07-10-2026, la dueña: "los nombres de mujeres
+    solo con acceso a rutinas de mujeres y los de hombres solo a las de
+    hombres", sin poder elegir las otras). Regla: termina en "A" → mujer, si no
+    → hombre, con estas excepciones. Nombres dudosos: se pregunta una sola vez. */
+ var COACH_F = ("ALANYS AMBER ANGIE ARACELY ARACELI BELEN BETSY DAMARIS DANAE ELIZABETH EMELY EMYLY ESTEFANNY ESTEFANI " +
+  "EYMILEE FANY ISABEL JENNY KATHERINE KATHERYN KEIDY LORETO MARILYN MARIU MARYORY MAYORI MAYUMY MILAGROS NICOLE NICOL " +
+  "SARAH TRAYSI WENDY YANETH CARMEN RAQUEL RUTH ESTER ESTHER INES PILAR ROCIO CONSUELO SOLEDAD MERCEDES DOLORES BEATRIZ " +
+  "MARISOL MARIBEL LUZ ABIGAIL MIRIAM NOEMI ZOE CHLOE AILYN AYLIN EVELYN JACQUELINE LILIAN GRACE MARLEN NAYELI ANAIS " +
+  "DAYANNE YOSELIN JOSELYN NATALY NATALIE KARIN KAREN MONSERRAT BRITANY STEPHANIE JUDITH LISSETTE LISETTE CAROL SOLANGE " +
+  "YAZMIN JAZMIN JASMIN MAITE FLOR IRIS MARGOT JANET JANETH LIZ BETTY KATY KATHY ROSE ROUSS ASHLEY KIMBERLY BRENDA_ NOA " +
+  "YASMIN ARLETTE SCARLETT SCARLET ODETTE MARIBETH DAYAN YULIET JULIET ELEN ELLEN HELEN ALISON ALLISON EMILY EMILI LEONOR").split(" ");
+ var COACH_M = "JOCKSHUA JOSHUA LUCA MATTIA NIKITA ANDREA_ ELIAS_ JONA".split(" ");
+ var COACH_DUDA = "KRYSHNA KRYS FRANCCINI KIMMEN MICHEL JEAN ALEX_".split(" ");
+ function coachSexoNombre(nombre){
+  var n = normName(nombre).split(" ")[0] || "";
+  if(!n || COACH_DUDA.indexOf(n) >= 0) return "";
+  if(COACH_F.indexOf(n) >= 0) return "F";
+  if(COACH_M.indexOf(n) >= 0) return "M";
+  return /A$/.test(n) ? "F" : "M";
+ }
  function coachSexo(s){
-  var k = normName(s.nombre + " " + s.apellido), g = "";
+  var g = coachSexoNombre(s.nombre);
+  if(g) return g;
+  var k = normName(s.nombre + " " + s.apellido);
   try{ g = (JSON.parse(localStorage.getItem(CLAVE_COACH_SEXO) || "{}") || {})[k] || ""; }catch(e){}
   if(!g){ try{ var c = leerCal()[k]; if(c && (c.sexo === "F" || c.sexo === "M")) g = c.sexo; }catch(e){} }
-  if(!g){ var r = COACH_RUTINAS.filter(function(x){ return x[0] === coachRutinaDe(s); })[0]; if(r) g = r[3]; }
   return g;
  }
  function coachGuardarSexo(s, g){
@@ -2038,7 +2059,6 @@ function renderEvolucion(s){
     '<div class="coach-lista">' + lista.map(function(r){
      return '<a class="coach-op coach-ruta' + (r[0] === rid ? ' on' : '') + '" href="' + esc(coachLinkRutina(r[0], s)) + '" data-abrir="' + r[0] + '">' + esc(r[1]) + '<span>' + (r[0] === rid ? 'Tu rutina · ' : '') + 'Abrir ›</span></a>';
     }).join("") + '</div>' +
-    '<p class="coach-tu"><button type="button" class="coach-link" data-sexo="' + (sx === "M" ? 'F' : 'M') + '">Ver rutinas para ' + (sx === "M" ? 'mujer' : 'hombre') + '</button></p>' +
     '<button type="button" class="pago-btn sec" data-coach="cerrado">Cerrar</button>');
   } else if(coachVista === "elegir" || (!rid && (coachVista === "hoy" || coachVista === "ejercicios" || coachVista === "ej" || coachVista === "ocupada" || coachVista === "reemp"))){
    pintar('<p class="cal-sub">¿Con qué rutina entrenas? Es la del cartel con QR que escaneaste. Elígela una vez y después la abres desde aquí, sin escanear.</p>' +
@@ -2246,7 +2266,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100709", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100710", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();

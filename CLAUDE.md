@@ -354,9 +354,12 @@ ver cuándo el gym está más vacío.
   pedido de ella ("no debería abrir nada").
   La lista muestra las rutinas y cada una abre su página al tocarla, guardando la elegida.
   Desde 07-10-2026 (la dueña) muestra solo las de mujer (7) o las de hombre (5)
-  según el socio: 4.º campo "F"/"M" de `COACH_RUTINAS`; el sexo sale de "Mis
-  calorías", de la rutina ya elegida o se pregunta una vez
-  (`wgym_coach_sexo_v1`); abajo queda "Ver rutinas para hombre/mujer".
+  según el socio: 4.º campo "F"/"M" de `COACH_RUTINAS`. El sexo sale del
+  PRIMER NOMBRE (`coachSexoNombre`: termina en "A" → mujer, si no → hombre,
+  con las excepciones de `COACH_F`/`COACH_M`); solo los nombres de
+  `COACH_DUDA` se preguntan una vez (`wgym_coach_sexo_v1`). Sin enlace para
+  ver las del otro grupo (pedido de la dueña). Si llega un socio con nombre
+  femenino que no termina en "A" (o al revés), sumarlo a la lista que toque.
 - **Bloqueo por mensualidad vencida (07-10-2026, la dueña: "si se le vence
   la mensualidad se le bloquee y, si paga, yo se la activo del mesón"):**
   en la tarjeta, con el plan vencido el coach y "Ver todas las rutinas"
