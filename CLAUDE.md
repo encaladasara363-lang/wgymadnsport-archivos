@@ -1301,3 +1301,7 @@ Es solo una capa de apariencia encima de su CSS propio: no toca el
 funcionamiento. Si se cambia, subir el `?v=` del enlace en los dos archivos.
 Desde el 07-10-2026 (v=2) también da estilo a las tablas: la planilla de
 socios (`table.socios`) y el historial de mediciones (`.hist table`).
+Desde el 07-10-2026 (pedido de la dueña) el panel "Socios del gimnasio" de
+`control.html` ya no trae "Planilla Excel" ni "Buscar lista nueva";
+"Restaurar del sitio" y "Cargar respaldo" quedan chicos al final de la
+tabla, bajo "Solo si algo falla:" (`.emergencia`).
