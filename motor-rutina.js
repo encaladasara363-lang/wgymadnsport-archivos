@@ -58,6 +58,13 @@ function pintarVencimiento(serial){const el=$("noticeBar");if(!el||serial==null)
 const CHECKIN_URL="https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20EDdAGdQQbxBoKebYg2eDwX42A3yCXEpKacpnjtp8RjkBcNq/exec";
 function sociosDeLaHoja(){return new Promise(res=>{const cb="wgymRut_"+Date.now();let listo=false;const fin=v=>{if(listo)return;listo=true;try{delete window[cb]}catch{}res(v)};const t=setTimeout(()=>fin(null),7000);window[cb]=d=>{clearTimeout(t);fin(d&&Array.isArray(d.socios)?d.socios:null)};const sc=document.createElement("script");sc.src=CHECKIN_URL+"?action=listarSocios&callback="+cb+"&_="+Date.now();sc.onerror=()=>{clearTimeout(t);fin(null)};document.body.appendChild(sc)})}
 async function sociosDelSitio(){try{const c=new AbortController();const t=setTimeout(()=>c.abort(),4000);const r=await fetch("socios.json?v="+Date.now(),{cache:"no-store",signal:c.signal});clearTimeout(t);if(!r.ok)return null;const j=await r.json();return Array.isArray(j)?j:(j.socios||[])}catch{return null}}
+/* 07-10-2026 (la dueña): el nombre aparece ya escrito. Viene de la tarjeta
+   (?socio=Nombre Apellido, que se borra de la dirección al cargar para que un
+   enlace compartido no lo lleve) o del último nombre usado en este teléfono. */
+const CLAVE_NOMBRE_RUTINA="wgym_rutina_nombre_v1";
+function ponerNombre(){let n="";try{const u=new URL(location.href);n=(u.searchParams.get("socio")||"").trim();if(u.searchParams.has("socio")){u.searchParams.delete("socio");history.replaceState(null,"",u.pathname+(u.search||"")+u.hash)}}catch{}
+ if(!n){try{n=localStorage.getItem(CLAVE_NOMBRE_RUTINA)||localStorage.getItem("wgym_ultimo_socio_v1")||""}catch{}}
+ if(n&&$("member")&&!$("member").value)$("member").value=n.slice(0,80)}
 async function login(){const name=norm($("member").value);if(!name||name.split(" ").length<2){$("error").textContent="Escribe nombre y apellido.";return}
  try{await rutinaLista}catch{$("error").textContent="No se pudo cargar la rutina. Revisa tu conexión a internet e intenta de nuevo.";return}
  $("error").textContent="Buscando tu ficha…";
@@ -68,7 +75,7 @@ async function login(){const name=norm($("member").value);if(!name||name.split("
  const m=a&&b?(Number(b.fv)>=Number(a.fv)?b:a):(b||a);
  if(!m){$("error").textContent="No encontramos tu nombre en la lista de socios.";return}
  if(expired(m.fv)){$("error").textContent="\u{1F512} Tu rutina está bloqueada: tu mensualidad venció el "+fechaDMY(m.fv)+". Paga tu mensualidad y, cuando recepción la renueve, podrás entrar de nuevo.";return}
- $("error").textContent="";memberFv=m.fv;memberName=norm(m.n+" "+m.a);memberFirst=(m.n||"").trim();mostrarBienvenida();}
+ $("error").textContent="";try{localStorage.setItem(CLAVE_NOMBRE_RUTINA,$("member").value.trim())}catch{}memberFv=m.fv;memberName=norm(m.n+" "+m.a);memberFirst=(m.n||"").trim();mostrarBienvenida();}
 function start(){load();const wd=(chileDate().getUTCDay()+6)%7;const dS=opt("diasSemana",null);currentDay=dS?dS.reduce((best,w,i)=>w<=wd?i:best,0):Math.min(nDias()-1,wd);if($("totalDias"))$("totalDias").textContent=String(nDias()).padStart(2,"0");$("login").hidden=true;$("app").hidden=false;$("userpill").textContent=memberName;render();renderWeight();pintarVencimiento(memberFv)}
 function mostrarBienvenida(){const el=$("welcome");if(!el){start();return}const wl=$("welcomeLogo");if(wl&&!wl.src){const hdr=document.querySelector(".top img");if(hdr)wl.src=hdr.src}$("welcomeName").textContent="¡Hola, "+(memberFirst||"")+"!";el.hidden=false;requestAnimationFrame(()=>el.classList.add("open"));welcomeTimer=setTimeout(()=>{el.classList.remove("open");el.hidden=true;start()},25000)}
 function saltarBienvenida(){clearTimeout(welcomeTimer);const el=$("welcome");if(!el){start();return}el.classList.remove("open");el.hidden=true;start()}
@@ -146,4 +153,4 @@ $("summaryContinue").onclick=()=>{$("sessionSummary").classList.remove("open");$
 $("celebrateClose").onclick=()=>{$("celebrate").classList.remove("open");$("finishDay").focus()};
 setInterval(()=>{if(!$("app").hidden)renderClock()},1000);
 $("timer").onclick=()=>{clearInterval(countdown);try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume()}catch{}const seconds=parseInt(PLAN[currentDay].exercises[currentEx].rest,10),deadline=Date.now()+seconds*1000,btn=$("timer");btn.classList.remove("finished");$("restStatus").textContent="";btn.textContent="Descanso · "+seconds+" s";countdown=setInterval(()=>{const sec=Math.ceil((deadline-Date.now())/1000);btn.textContent=sec>0?"Descanso · "+sec+" s":"¡Descanso terminado!";if(sec<=0){clearInterval(countdown);btn.classList.add("finished");$("restStatus").textContent="LISTA PARA LA SIGUIENTE SERIE";restChime()}},250)};
-if(DEMO){rutinaLista.then(start)}else{$("login").hidden=false}
+if(DEMO){rutinaLista.then(start)}else{$("login").hidden=false;ponerNombre()}
