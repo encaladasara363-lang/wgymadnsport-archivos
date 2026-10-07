@@ -352,7 +352,11 @@ ver cuándo el gym está más vacío.
   escanear su rutina a cada rato"):** el coach muestra un botón rojo que
   abre `<id>.html` de la rutina elegida (cerrado y en el menú, bajo "Tu
   rutina · Cambiar"). Además "📚 Ver todas las rutinas" (vista `rutinas`)
-  lista las 12 y cada una abre su página al tocarla, guardando la elegida.
+  lista las rutinas y cada una abre su página al tocarla, guardando la elegida.
+  Desde 07-10-2026 (la dueña) muestra solo las de mujer (7) o las de hombre (5)
+  según el socio: 4.º campo "F"/"M" de `COACH_RUTINAS`; el sexo sale de "Mis
+  calorías", de la rutina ya elegida o se pregunta una vez
+  (`wgym_coach_sexo_v1`); abajo queda "Ver rutinas para hombre/mujer".
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
