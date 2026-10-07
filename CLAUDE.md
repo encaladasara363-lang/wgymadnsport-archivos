@@ -367,6 +367,11 @@ ver cuándo el gym está más vacío.
   la hoja (`listarSocios`) y vale la fecha MÁS NUEVA: la renovación del mesón
   desbloquea al tiro y un socio cargado solo en el mesón también entra.
   Al cambiar el motor, subir `motor-rutina.js?v=` en las 12 páginas.
+  **Nombre ya escrito (07-10-2026):** la tarjeta abre cada rutina con
+  `?socio=Nombre Apellido`; `ponerNombre()` del motor lo pone en el casillero
+  y lo borra de la dirección. Sin parámetro usa el último nombre que entró en
+  ese teléfono (`wgym_rutina_nombre_v1`) o el de la tarjeta
+  (`wgym_ultimo_socio_v1`). El socio solo toca "Ingresar a mi rutina".
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a

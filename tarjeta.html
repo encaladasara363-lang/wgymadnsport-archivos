@@ -2033,7 +2033,7 @@ function renderEvolucion(s){
       elegirla". Cada una abre su página; la tarjeta recuerda la última abierta. */
    pintar('<p class="coach-preg">📚 Rutinas para ' + (sx === "M" ? 'hombre' : 'mujer') + '</p><p class="cal-sub">Toca una rutina para abrirla. La tarjeta recordará la que elegiste.</p>' +
     '<div class="coach-lista">' + lista.map(function(r){
-     return '<a class="coach-op coach-ruta' + (r[0] === rid ? ' on' : '') + '" href="' + r[0] + '.html" data-abrir="' + r[0] + '">' + esc(r[1]) + '<span>' + (r[0] === rid ? 'Tu rutina · ' : '') + 'Abrir ›</span></a>';
+     return '<a class="coach-op coach-ruta' + (r[0] === rid ? ' on' : '') + '" href="' + r[0] + '.html?socio=' + encodeURIComponent(s.nombre + " " + s.apellido) + '" data-abrir="' + r[0] + '">' + esc(r[1]) + '<span>' + (r[0] === rid ? 'Tu rutina · ' : '') + 'Abrir ›</span></a>';
     }).join("") + '</div>' +
     '<p class="coach-tu"><button type="button" class="coach-link" data-sexo="' + (sx === "M" ? 'F' : 'M') + '">Ver rutinas para ' + (sx === "M" ? 'mujer' : 'hombre') + '</button></p>' +
     '<button type="button" class="pago-btn sec" data-coach="cerrado">Cerrar</button>');
@@ -2243,7 +2243,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100707", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100708", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
