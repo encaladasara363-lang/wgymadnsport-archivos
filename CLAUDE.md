@@ -628,7 +628,7 @@ Gmail y otra rutina lo manda a la papelera cada lunes a las 19:55.
 
 **Correo diario "vencen hoy y mañana" (desde 07-10-2026, pedido de la dueña
 para cobrar a tiempo):** rutina "Vencen hoy y mañana WGYM (diario)", cada día
-a las 8:47 (Chile), con `scripts/vencen-pronto.py` sobre la planilla de
+a las 7:45 (Chile; el gym abre a las 8:00), con `scripts/vencen-pronto.py` sobre la planilla de
 Google. Mismo formato: solo NOMBRE APELLIDO en mayúsculas, por nombre, sin
 pases diarios, en dos grupos (HOY / MAÑANA). Si no hay nadie, no se manda.
 Los correos de más de 2 días se van a la papelera solos.
