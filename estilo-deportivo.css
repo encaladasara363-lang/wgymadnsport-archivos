@@ -107,3 +107,19 @@ table.socios td.mon{ color:#fff; }
  background:linear-gradient(90deg,rgba(212,175,55,.28),rgba(212,175,55,.08)) !important;
  box-shadow:0 3px 0 #E30613; color-scheme:dark; }
 .ing-barra input.ing-fecha::-webkit-calendar-picker-indicator{ opacity:.9; cursor:pointer; transform:scale(1.2); }
+
+/* Historial de mediciones (control-fisico.html), 07-10-2026 */
+.hist h3{ font-size:19px !important; color:#fff !important; padding:16px !important; }
+.hist th, .hist td{ white-space:nowrap; }
+#histBody button[data-fecha]{
+ background:#E30613 !important; border:1px solid #E30613 !important; color:#fff !important; border-radius:8px !important;
+ font-family:var(--f-cond) !important; font-size:14px !important; font-weight:800 !important; letter-spacing:.04em;
+ text-transform:uppercase; padding:5px 10px !important; box-shadow:0 2px 0 #7a030b; }
+#histBody button[data-fecha]:disabled{ opacity:.5; }
+@media (max-width:520px){
+ .hist th, .hist td{ padding:10px 7px !important; }
+ .hist th{ font-size:12.5px !important; letter-spacing:.04em !important; }
+ .hist td{ font-size:15px; }
+ #histBody td:first-child{ white-space:normal; }
+ #histBody button[data-fecha]{ display:block; margin:6px 0 0 !important; }
+}
