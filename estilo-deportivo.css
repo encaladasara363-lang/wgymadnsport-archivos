@@ -1,0 +1,68 @@
+/* Estilo deportivo WGYMADNSPORT (07-10-2026): el mismo de la Caja nueva,
+   aplicado encima del diseño de control.html (mesón) y control-fisico.html.
+   Solo cambia la apariencia: no toca nada del funcionamiento. */
+:root{
+ --f-marca:'Rubik Distressed','Anton',Impact,sans-serif;
+ --f-num:'Anton',Impact,sans-serif;
+ --f-txt:'Barlow','Helvetica Neue',Arial,sans-serif;
+ --f-cond:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+ color-scheme:dark;
+}
+body{ font-family:var(--f-txt); background:#0A0A0B; }
+
+/* Encabezado: logo grande, título con letra rugosa y franja roja/dorada */
+header.top{ position:relative; border-bottom:0; padding-bottom:26px; }
+header.top::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:8px;
+ background:repeating-linear-gradient(-45deg,#E30613 0 14px,transparent 14px 20px,#D4AF37 20px 24px,transparent 24px 30px); }
+header.top .logo{ width:min(80%,300px); }
+header.top .gymname{ font-family:var(--f-cond); font-size:14px; letter-spacing:.2em; }
+header.top h1{ font-family:var(--f-marca); font-weight:400; font-size:30px; letter-spacing:.03em; }
+header.top .reloj{ font-family:var(--f-cond); font-size:15px; letter-spacing:.06em; text-transform:uppercase; }
+
+/* Títulos de sección con barra roja inclinada */
+.feed-head h2, .panel > h2, .panel h2, .hist h3, .tablas h4{
+ font-family:var(--f-marca) !important; font-weight:400 !important; letter-spacing:.03em !important;
+ text-transform:uppercase; display:flex; align-items:center; gap:10px; }
+.feed-head h2{ font-size:18px; }
+.panel > h2{ font-size:18px; }
+.feed-head h2::before, .panel > h2::before, .panel h2::before, .hist h3::before, .tablas h4::before{
+ content:""; width:6px; height:18px; background:#E30613; transform:skewX(-18deg); flex:0 0 auto; }
+
+/* Etiquetas en letra angosta */
+.kicker, .kpi .klbl, .grupo-label, .campo label, .ing-sub, .ing-tot span, .dot-status,
+.feed-item .ftime, .ltit, .etit{ font-family:var(--f-cond) !important; }
+.hero .kicker, .panel .kicker{ font-size:14px; letter-spacing:.2em; }
+
+/* Números grandes en Anton */
+.kpi .kval, .ing-tot b, .num, .hero .time{ font-family:var(--f-num) !important; font-weight:400 !important; letter-spacing:.01em; }
+.kpi .kval{ font-size:34px; }
+.ing-tot b{ font-size:30px; }
+
+/* Tarjeta de la puerta / ficha: degradado rojo con rayas doradas */
+.hero, .panel{ position:relative; overflow:hidden; }
+.hero{ background:linear-gradient(135deg,rgba(227,6,19,.24) 0%,#161616 55%,#0A0A0A 100%); }
+.hero::after{ content:""; position:absolute; right:-40px; top:0; bottom:0; width:150px; pointer-events:none;
+ background:repeating-linear-gradient(-60deg,transparent 0 18px,rgba(212,175,55,.14) 18px 22px); }
+.hero > *{ position:relative; z-index:1; }
+.hero .name, .hero .fallo{ font-family:var(--f-marca); font-weight:400; letter-spacing:.02em; }
+
+/* Tarjetas con borde rojo a la izquierda */
+.feed-item, .ing-item, .imc-card, .hist, .edad-card{ border-left:3px solid #E30613 !important; }
+.ing-tot div{ border-left:3px solid #E30613; }
+
+/* Botones: letra angosta, cursiva y mayúscula; los rojos con sombra */
+.btn, .btn-copy, .btn-guardar, .ing-btn, .ing-todos, .sexo-btn, .tab-sexo, #copiar-lista,
+.rapidos button, .ing-carpeta{
+ font-family:var(--f-cond) !important; font-style:italic; text-transform:uppercase; letter-spacing:.07em; font-weight:800; }
+.btn{ font-size:16px; }
+.btn-rojo, .btn-guardar{ box-shadow:0 4px 0 #7a030b; }
+.btn-rojo:active, .btn-guardar:active{ transform:translateY(2px); box-shadow:0 2px 0 #7a030b; }
+.kpi[aria-pressed="true"]{ background:linear-gradient(135deg,rgba(227,6,19,.28),#1c1c1c 60%); box-shadow:0 3px 0 #D4AF37; }
+.sexo-btn[data-active="1"], .tab-sexo[data-active="1"]{ box-shadow:0 3px 0 #E30613; }
+
+.manual input, .campo input, .campo select, .barra input, .barra select{ font-family:var(--f-txt); }
+@media (max-width:520px){ header.top h1{ font-size:24px; } }
+/* La letra angosta se ve más chica: subir un poco las etiquetas */
+.ing-tot span, .kpi .klbl{ font-size:13px !important; }
+.dot-status{ font-size:13px; }
+.ing-sub{ font-size:14px !important; }

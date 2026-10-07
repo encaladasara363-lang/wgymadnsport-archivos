@@ -1290,3 +1290,12 @@ Siempre que el usuario pida agregar una nueva receta de comidas saludables (más
 5. **Actualizar el contador en status-bar** — cambiar `<span class="status-count">` al número total de recetas y el nombre de la `status-label` a la última receta agregada
 6. **Publicar directamente en `main`** — no esperar PR ni rama de desarrollo, para que quede reflejada inmediatamente en el sitio en vivo
 7. **Confirmarle al usuario el link en vivo** y la receta agregada al cierre
+
+## Estilo deportivo del mesón y Control Físico (desde 07-10-2026)
+
+A pedido de la dueña ("me encanta el diseño de la caja"), `control.html` y
+`control-fisico.html` cargan `estilo-deportivo.css` (el mismo estilo de la
+Caja nueva: logo grande, franja roja/dorada, títulos en Rubik Distressed con
+barra roja inclinada, números en Anton, botones en Barlow Condensed cursiva).
+Es solo una capa de apariencia encima de su CSS propio: no toca el
+funcionamiento. Si se cambia, subir el `?v=` del enlace en los dos archivos.
