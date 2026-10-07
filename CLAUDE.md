@@ -348,6 +348,10 @@ ver cuándo el gym está más vacío.
   (`COACH_GRUPOS`), primero los que comparten más músculos y usan otro
   equipo, sin repetir el mismo ejercicio con otro nombre. Se hacen las
   mismas series y repeticiones de la rutina.
+  **"🏋️ Abrir mi rutina" (07-10-2026, la dueña: "así mi gente no tiene que
+  escanear su rutina a cada rato"):** el coach muestra un botón rojo que
+  abre `<id>.html` de la rutina elegida (cerrado y en el menú, bajo "Tu
+  rutina · Cambiar"); sin rutina elegida dice "Elegir mi rutina".
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
