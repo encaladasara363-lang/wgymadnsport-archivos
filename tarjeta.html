@@ -1999,10 +1999,9 @@ function renderEvolucion(s){
   var volver = '<button type="button" class="pago-btn sec" data-coach="menu">← Volver a las preguntas</button>';
   function pintar(h){ box.innerHTML = html + h; }
   if(coachVista === "cerrado"){
-   /* 07-10-2026 (la dueña): abrir la rutina desde aquí, sin escanear el QR del cartel cada vez. */
-   pintar((rid ? '<a class="pago-btn principal coach-abrir" href="' + esc(rid) + '.html">🏋️ Abrir mi rutina · ' + esc(coachNombre(rid)) + '</a>'
-     : '') +
-    '<button type="button" class="pago-btn ' + (rid ? 'sec' : 'principal') + ' coach-abrir" data-coach="rutinas">📚 Ver todas las rutinas</button>' +
+   /* 07-10-2026 (la dueña): las rutinas se abren SOLO desde "Ver todas las
+      rutinas"; se sacó el botón "Abrir mi rutina" ("no debería abrir nada"). */
+   pintar('<button type="button" class="pago-btn principal coach-abrir" data-coach="rutinas">📚 Ver todas las rutinas</button>' +
     '<p class="cal-sub">Resuelve tus dudas sobre tu rutina: qué te toca hoy, cómo hacer cada ejercicio y más.</p>' +
     '<button type="button" class="pago-btn sec" data-coach="menu">Preguntarle a mi coach</button>');
   } else if(coachVista === "rutinas" && !coachSexo(s)){
@@ -2025,8 +2024,7 @@ function renderEvolucion(s){
      return '<button type="button" class="coach-op' + (r[0] === rid ? ' on' : '') + '" data-rutina="' + r[0] + '">' + esc(r[1]) + '</button>';
     }).join("") + '</div>' + volver);
   } else if(coachVista === "menu"){
-   pintar((rid ? '<p class="coach-tu">Tu rutina: <b>' + esc(coachNombre(rid)) + '</b> · <button type="button" class="coach-link" data-coach="elegir">Cambiar</button></p>' +
-      '<a class="pago-btn principal coach-abrir" href="' + esc(rid) + '.html">🏋️ Abrir mi rutina</a>'
+   pintar((rid ? '<p class="coach-tu">Tu rutina: <b>' + esc(coachNombre(rid)) + '</b> · <button type="button" class="coach-link" data-coach="elegir">Cambiar</button></p>'
      : '<p class="coach-tu">Aún no me dices tu rutina · <button type="button" class="coach-link" data-coach="elegir">Elegirla</button></p>') +
     '<div class="coach-lista">' +
      '<button type="button" class="coach-op" data-coach="hoy">📅 ¿Qué me toca hoy?</button>' +
@@ -2226,7 +2224,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100705", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100706", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
