@@ -370,7 +370,9 @@ ver cuándo el gym está más vacío.
   `esPase()`) muestra la etiqueta dorada PASE DIARIO en vez de la nota
   de ficha, y el resumen "Pases diarios: N" con nombres y horas del día
   elegido, en mesón y tablet. El cobro se sigue anotando en la Caja
-  (artifact "Caja WGYMADNSPORT"). No pedir ni guardar teléfonos ahí:
+  (artifact "Caja WGYM", https://claude.ai/artifact/DgNKVW8XfuTFcnrtJCgQJq,
+  creado de cero el 07-10-2026 con botón "Pase diario"; la Caja antigua se
+  eliminó a pedido de la dueña). No pedir ni guardar teléfonos ahí:
   `listarIngresos` es público.
   **Acceso todo el día (03-10-2026):** el mismo botón además guarda a la
   persona como socio (`guardarSocio`, hoja "Socios") con plan "Pase
