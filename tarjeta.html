@@ -265,6 +265,8 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .coach-abrir{ font-size:15px !important; margin:0 0 12px !important; }
 .coach-lista{ display:flex; flex-direction:column; gap:7px; margin:0 0 6px; }
 .coach-op{ text-align:left; background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--rojo); border-radius:10px; padding:12px; color:#fff; font:inherit; font-size:14px; font-weight:700; cursor:pointer; }
+.coach-ruta{ display:flex; justify-content:space-between; align-items:center; gap:10px; text-decoration:none; }
+.coach-ruta span{ flex:0 0 auto; font-size:12px; font-weight:800; color:var(--dorado); text-transform:uppercase; letter-spacing:.04em; }
 .coach-op.on{ border-color:var(--dorado); background:#211c0c; }
 .coach-preg{ font-size:16px; font-weight:900; color:#fff; margin:0 0 10px; }
 .coach-resp{ background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:4px 12px; margin:0 0 6px; font-size:13.5px; line-height:1.5; color:#E8E8E8; }
@@ -1981,9 +1983,18 @@ function renderEvolucion(s){
   if(coachVista === "cerrado"){
    /* 07-10-2026 (la dueña): abrir la rutina desde aquí, sin escanear el QR del cartel cada vez. */
    pintar((rid ? '<a class="pago-btn principal coach-abrir" href="' + esc(rid) + '.html">🏋️ Abrir mi rutina · ' + esc(coachNombre(rid)) + '</a>'
-     : '<button type="button" class="pago-btn principal coach-abrir" data-coach="elegir">🏋️ Elegir mi rutina</button>') +
+     : '') +
+    '<button type="button" class="pago-btn ' + (rid ? 'sec' : 'principal') + ' coach-abrir" data-coach="rutinas">📚 Ver todas las rutinas</button>' +
     '<p class="cal-sub">Resuelve tus dudas sobre tu rutina: qué te toca hoy, cómo hacer cada ejercicio y más.</p>' +
     '<button type="button" class="pago-btn sec" data-coach="menu">Preguntarle a mi coach</button>');
+  } else if(coachVista === "rutinas"){
+   /* 07-10-2026 (la dueña): "que se abran todas mis rutinas y la gente pueda
+      elegirla". Cada una abre su página; la tarjeta recuerda la última abierta. */
+   pintar('<p class="coach-preg">📚 Todas las rutinas</p><p class="cal-sub">Toca una rutina para abrirla. La tarjeta recordará la que elegiste.</p>' +
+    '<div class="coach-lista">' + COACH_RUTINAS.map(function(r){
+     return '<a class="coach-op coach-ruta' + (r[0] === rid ? ' on' : '') + '" href="' + r[0] + '.html" data-abrir="' + r[0] + '">' + esc(r[1]) + '<span>' + (r[0] === rid ? 'Tu rutina · ' : '') + 'Abrir ›</span></a>';
+    }).join("") + '</div>' +
+    '<button type="button" class="pago-btn sec" data-coach="cerrado">Cerrar</button>');
   } else if(coachVista === "elegir" || (!rid && (coachVista === "hoy" || coachVista === "ejercicios" || coachVista === "ej" || coachVista === "ocupada" || coachVista === "reemp"))){
    pintar('<p class="cal-sub">¿Con qué rutina entrenas? Es la del cartel con QR que escaneaste. Elígela una vez y después la abres desde aquí, sin escanear.</p>' +
     '<div class="coach-lista">' + COACH_RUTINAS.map(function(r){
@@ -2083,6 +2094,8 @@ function renderEvolucion(s){
    });
   }
   box.onclick = function(ev){
+   var a = ev.target.closest("a[data-abrir]");
+   if(a){ coachGuardar(s, a.getAttribute("data-abrir")); return; }
    var b = ev.target.closest("button"); if(!b) return;
    if(b.hasAttribute("data-rutina")){ coachGuardar(s, b.getAttribute("data-rutina")); coachVista = "menu"; coachSel = null; }
    else if(b.hasAttribute("data-info")) coachVista = "info:" + b.getAttribute("data-info");
@@ -2188,7 +2201,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100703", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100704", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();

@@ -351,7 +351,8 @@ ver cuándo el gym está más vacío.
   **"🏋️ Abrir mi rutina" (07-10-2026, la dueña: "así mi gente no tiene que
   escanear su rutina a cada rato"):** el coach muestra un botón rojo que
   abre `<id>.html` de la rutina elegida (cerrado y en el menú, bajo "Tu
-  rutina · Cambiar"); sin rutina elegida dice "Elegir mi rutina".
+  rutina · Cambiar"). Además "📚 Ver todas las rutinas" (vista `rutinas`)
+  lista las 12 y cada una abre su página al tocarla, guardando la elegida.
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
