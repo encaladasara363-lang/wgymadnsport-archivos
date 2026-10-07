@@ -1,6 +1,9 @@
 """Video promocional vertical con la marca WGYM ADN SPORT.
 
 Uso: python3 scripts/video-promo.py <video_fuente> <salida.mp4> ["LÍNEA 1" "LÍNEA 2"]
+Variables opcionales: LENTA="desde,hasta" repite ese tramo en cámara lenta
+(a la mitad de velocidad, con cuadros intermedios) después del video;
+CIERRE=segundos del cierre (2,5 por defecto).
 
 - 720x1280, fondo negro con brillo rojo, el video centrado (fondo difuminado
   de sí mismo si no es vertical).
@@ -21,7 +24,8 @@ F = lambda f, s: ImageFont.truetype(os.path.join(REPO, f), s)
 rubik = lambda s: F('assets/font-rubik-distressed.ttf', s)
 anton = lambda s: F('contenido/fuentes/Anton.ttf', s)
 barlow = lambda s: F('contenido/fuentes/BarlowCondensed.ttf', s)
-CIERRE = 2.5
+CIERRE = float(os.environ.get('CIERRE', 2.5))
+LENTA = os.environ.get('LENTA')
 
 src, out = sys.argv[1], sys.argv[2]
 L1, L2 = (sys.argv[3], sys.argv[4]) if len(sys.argv) > 4 else ("ROMPE TUS", "LÍMITES")
@@ -29,6 +33,12 @@ L1, L2 = (sys.argv[3], sys.argv[4]) if len(sys.argv) > 4 else ("ROMPE TUS", "LÍ
 tmp = tempfile.mkdtemp()
 subprocess.run([FF, '-v', 'error', '-i', src, '-map', '0:v:0', '-r', str(FPS), os.path.join(tmp, '%04d.png')], check=True)
 frames = [Image.open(f).convert('RGB') for f in sorted(glob.glob(os.path.join(tmp, '*.png')))]
+if LENTA:
+    a, b = [float(x) for x in LENTA.split(',')]
+    tl = tempfile.mkdtemp()
+    subprocess.run([FF, '-v', 'error', '-ss', str(a), '-t', str(b - a), '-i', src, '-map', '0:v:0',
+                    '-vf', 'setpts=2*PTS,minterpolate=fps=%d:mi_mode=mci' % FPS, os.path.join(tl, '%04d.png')], check=True)
+    frames += [Image.open(f).convert('RGB') for f in sorted(glob.glob(os.path.join(tl, '*.png')))]
 logo = Image.open(os.path.join(REPO, 'maquinas-wgymadnsport/comun/logo.png')).convert('RGBA')
 logo = logo.resize((380, int(380 * logo.height / logo.width)), Image.LANCZOS)
 
