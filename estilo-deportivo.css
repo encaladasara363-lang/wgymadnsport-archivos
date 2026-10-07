@@ -123,3 +123,12 @@ table.socios td.mon{ color:#fff; }
  #histBody td:first-child{ white-space:normal; }
  #histBody button[data-fecha]{ display:block; margin:6px 0 0 !important; }
 }
+
+/* "Enviar historial a su tarjeta QR" más grande (07-10-2026) */
+.hist > .btn-copy{
+ display:block; width:calc(100% - 24px) !important; margin:14px 12px 14px !important;
+ padding:16px 14px !important; font-size:19px !important; letter-spacing:.06em !important;
+ background:#D4AF37 !important; color:#0A0A0B !important; border:0 !important; border-radius:12px !important;
+ box-shadow:0 4px 0 #8a6f1c; white-space:normal !important; }
+.hist > .btn-copy:active{ transform:translateY(2px); box-shadow:0 2px 0 #8a6f1c; }
+.hist > .btn-copy:disabled{ opacity:.6; }
