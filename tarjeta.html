@@ -266,6 +266,9 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .coach-lista{ display:flex; flex-direction:column; gap:7px; margin:0 0 6px; }
 .coach-op{ text-align:left; background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--rojo); border-radius:10px; padding:12px; color:#fff; font:inherit; font-size:14px; font-weight:700; cursor:pointer; }
 .coach-sexo button{ padding:14px 6px !important; font-size:14px !important; }
+.coach-bloq{ background:#2a0d10; border:1px solid var(--rojo); border-radius:10px; padding:12px; margin:0 0 8px; }
+.coach-bloq b{ display:block; color:#fff; font-size:15px; margin:0 0 4px; }
+.coach-bloq span{ display:block; color:#E8E8E8; font-size:13px; line-height:1.45; }
 .coach-ruta{ display:flex; justify-content:space-between; align-items:center; gap:10px; text-decoration:none; }
 .coach-ruta span{ flex:0 0 auto; font-size:12px; font-weight:800; color:var(--dorado); text-transform:uppercase; letter-spacing:.04em; }
 .coach-op.on{ border-color:var(--dorado); background:#211c0c; }
@@ -1061,6 +1064,7 @@ function renderEvolucion(s){
  if(!socioActual || normName(socioActual.nombre) !== normName(s.nombre) || normName(socioActual.apellido) !== normName(s.apellido)) return;
  socioActual.plan = s.plan; socioActual.monto = s.monto; socioActual.vencimiento = s.vencimiento;
  try{ renderCard(socioActual); renderPago(socioActual); }catch(e){}
+ try{ renderCoach(socioActual); }catch(e){}
  }
  function socioApiATarjeta_(s){
  return { nombre:s.n, apellido:s.a, rut:"Sin Rut", plan:s.plan, monto:Number(s.monto)||0,
@@ -1996,6 +2000,21 @@ function renderEvolucion(s){
   box.hidden = false;
   var esc = escapeHtml, rid = coachRutinaDe(s);
   var html = '<p class="pago-kicker">🤖 Mi coach virtual</p>';
+  /* 07-10-2026 (la dueña): con la mensualidad vencida, rutinas y coach quedan
+     bloqueados. Cuando recepción renueva en el mesón, la tarjeta recibe la
+     fecha nueva de la hoja (actualizarTarjeta_) y se desbloquea sola. */
+  if(estadoDe(s.vencimiento).cls === "danger"){
+   box.innerHTML = html + '<div class="coach-bloq"><b>🔒 Tus rutinas están bloqueadas</b>' +
+    '<span>Tu mensualidad venció el ' + esc(s.vencimiento || "") + '. Paga tu mensualidad y, cuando recepción la renueve, se desbloquean solas.</span></div>' +
+    (document.getElementById("pagoAbrir") ? '<button type="button" class="pago-btn principal" data-pagar="1">💳 Pagar mi mensualidad</button>' : '');
+   box.onclick = function(ev){
+    if(!ev.target.closest("[data-pagar]")) return;
+    var pb = document.getElementById("pagoAbrir"), pc = document.getElementById("pagoCard");
+    if(pb) pb.click();
+    if(pc) pc.scrollIntoView({ behavior:"smooth", block:"start" });
+   };
+   return;
+  }
   var volver = '<button type="button" class="pago-btn sec" data-coach="menu">← Volver a las preguntas</button>';
   function pintar(h){ box.innerHTML = html + h; }
   if(coachVista === "cerrado"){
@@ -2224,7 +2243,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100706", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026100707", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
