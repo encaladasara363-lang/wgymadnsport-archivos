@@ -370,6 +370,14 @@ ver cuándo el gym está más vacío.
   la hoja (`listarSocios`) y vale la fecha MÁS NUEVA: la renovación del mesón
   desbloquea al tiro y un socio cargado solo en el mesón también entra.
   Al cambiar el motor, subir `motor-rutina.js?v=` en las 12 páginas.
+  **Tarjeta completa bloqueada (07-10-2026, la dueña: "los vencidos aún
+  entran a su tarjeta virtual"):** con el plan vencido (`tarjetaBloqueada_`,
+  pase diario vencido incluido) `unlockCardView` muestra solo `#bloqueoCard`
+  ("🔒 Tarjeta bloqueada" + "💳 Pagar mi mensualidad"), la ficha
+  (MEMBRESÍA VENCIDA) y el cuadro de pago: no registra ingreso (ni con el QR
+  de la puerta), sin "en vivo", calorías, coach, evolución, bandas ni
+  candados. Si la hoja trae otra fecha, `actualizarTarjeta_` vuelve a llamar
+  a `unlockCardView` y la tarjeta se desbloquea (o bloquea) sola.
   **Nombre ya escrito (07-10-2026):** la tarjeta abre cada rutina con
   `?socio=Nombre Apellido`; `ponerNombre()` del motor lo pone en el casillero
   y lo borra de la dirección. Sin parámetro usa el último nombre que entró en
