@@ -17,6 +17,8 @@ config.json:
   partes: lista en orden; cada una con video, desde, hasta (segundos),
     repetir (opcional; la última parte se repite y su vuelta se empalma sola),
     recorte (opcional): [x, y, ancho, alto] para recortar la fuente antes,
+    encoger (opcional, ej. 0.84): achica el video y lo baja, para que el logo
+      no tape algo que llega arriba (discos sobre la cabeza),
     musculo (opcional): [[cx, cy, rx, ry], ...] óvalos en px de 720x1280,
     solo_piel (opcional, true): false si el músculo está bajo ropa oscura (glúteos): pinta solo lo oscuro,
     seguir (opcional): [y0, y1, x0, x1] zona con textura a media
@@ -48,7 +50,12 @@ def leer_frames(path, desde, hasta, recorte=None):
     return [Image.open(f).convert('RGB') for f in sorted(glob.glob(os.path.join(tmp, '*.png')))]
 
 
-def a_vertical(im):
+def a_vertical(im, encoger=None):
+    if encoger:  # achica el video (ej. 0.84) para que el logo no tape lo de arriba
+        fg = im.resize((int(W * encoger), int(H * encoger)), Image.LANCZOS)
+        bg = ImageEnhance.Brightness(im.resize((W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(30))).enhance(0.45)
+        bg.paste(fg, ((W - fg.width) // 2, H - fg.height - int(H * (1 - encoger) * 0.15)))
+        return bg
     if abs(im.width / im.height - W / H) < 0.02:
         return im.resize((W, H), Image.LANCZOS)
     fg = im.resize((W, int(W * im.height / im.width)), Image.LANCZOS)
@@ -116,7 +123,7 @@ def main(carpeta):
     X = 8  # cuadros de fundido entre partes
     secuencia, extra = [], []
     for n, p in enumerate(cfg['partes']):
-        fr = [a_vertical(f) for f in leer_frames(os.path.join(carpeta, p['video']), p['desde'], p['hasta'], p.get('recorte'))]
+        fr = [a_vertical(f, p.get('encoger')) for f in leer_frames(os.path.join(carpeta, p['video']), p['desde'], p['hasta'], p.get('recorte'))]
         if p.get('repetir') and n == len(cfg['partes']) - 1:
             m = len(fr) - X
             fr = [Image.blend(fr[m + i], fr[i], (i + 1) / (X + 1)) if i < X else fr[i] for i in range(m)]
