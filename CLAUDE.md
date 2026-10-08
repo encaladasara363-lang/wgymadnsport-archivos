@@ -703,6 +703,12 @@ mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
   todo el ejercicio (pedido de la dueña).
 - Listas: `hombre/pantorrilla-sentado` (04-10-2026) y `hombre/hip-thrust`
   (05-10-2026, glúteos marcados sobre el short con `solo_piel:false`).
+- `mujer/elevacion-lateral-discos` (08-10-2026): video de Grok (Gemini cambiaba
+  la cara por la de la chica de referencia y Grok la primera vez hizo un press;
+  hubo que pedir "brazos estirados, como saltos de tijera, NOT a shoulder
+  press"). Usa `encoger: 0.84` (opción nueva del script) para que el logo no
+  tape los discos sobre la cabeza. Nunca subir al repo el video de referencia
+  de otra persona: solo la imagen y el video generados con la modelo.
 - Gemini recorta lo vertical: subirle siempre la versión horizontal con
   costados difuminados y el modelo al 88 % del alto; luego `recorte` en el
   config saca solo la foto.
