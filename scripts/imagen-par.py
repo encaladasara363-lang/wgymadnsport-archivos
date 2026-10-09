@@ -28,7 +28,9 @@ if ovalos:
     m = np.zeros((H, W), np.float32)
     for cx, cy, rx, ry in ovalos:
         m = np.maximum(m, np.clip(1.3 - (((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2), 0, 1))
-    m = ndimage.gaussian_filter(m * piel, 4) * 0.6
+    if os.environ.get('SOLO_PIEL', '1') != '0':  # SOLO_PIEL=0 marca también sobre la ropa (glúteos)
+        m = m * piel
+    m = ndimage.gaussian_filter(m, 4) * 0.6
     for c, v in enumerate((235, 20, 30)):
         a[..., c] = a[..., c] * (1 - m) + v * m
     im = Image.fromarray(a.clip(0, 255).astype('uint8'))
