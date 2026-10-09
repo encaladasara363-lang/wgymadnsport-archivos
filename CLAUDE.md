@@ -701,6 +701,12 @@ mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
   se devuelva; el ejercicio (`fuentes/ejercicio-palanca-abierta-gemini.mp4`)
   se generó desde el último cuadro del seguro, así la palanca sigue abierta
   todo el ejercicio (pedido de la dueña).
+- `hombre/pantorrilla-sentado` (09-10-2026): Grok y Gemini no lograron el
+  ejercicio con la palanca abierta (estiraban las piernas) y la dueña se quedó
+  sin videos de Gemini; el ejercicio de `ejercicio-gemini.mp4` (palanca
+  cerrada) se recorta con `recorte` + `encaje` (opción nueva del script) para
+  que la palanca no se vea. Si se consigue un video bueno, usar
+  `fuentes/para-gemini-ejercicio.jpg` o la foto de la mujer con el hombre.
 - Listas: `hombre/pantorrilla-sentado` (04-10-2026) y `hombre/hip-thrust`
   (05-10-2026, glúteos marcados sobre el short con `solo_piel:false`).
 - `mujer/elevacion-lateral-discos` (08-10-2026): video de Grok (Gemini cambiaba

@@ -13,9 +13,38 @@
       "desde": 3.0,
       "hasta": 7.84,
       "repetir": 3,
-      "musculo": [[365, 780, 70, 115], [505, 760, 34, 95]],
-      "seguir": [330, 450, 150, 215],
-      "nota": "Ejercicio: pantorrillas parpadeando en rojo"
+      "musculo": [
+        [
+          402,
+          793,
+          69,
+          114
+        ],
+        [
+          540,
+          773,
+          34,
+          94
+        ]
+      ],
+      "seguir": [
+        337,
+        456,
+        169,
+        233
+      ],
+      "nota": "Ejercicio: recortado para que no se vea la palanca cerrada (la de Gemini quedó cerrada); pantorrillas en rojo",
+      "recorte": [
+        0,
+        0,
+        545,
+        1050
+      ],
+      "encaje": {
+        "alto": 1040,
+        "x": 40,
+        "y": 20
+      }
     }
   ]
 }
