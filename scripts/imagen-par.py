@@ -1,5 +1,5 @@
 """Imagen de rutina con el diseño WGYM ADN SPORT: foto del ejercicio (inicio o
-final) con el logo oficial abajo a la derecha, una pastilla "INICIO"/"FINAL"
+final) con el logo oficial arriba a la derecha (sin recuadro), una pastilla "INICIO"/"FINAL"
 y el músculo trabajado marcado en rojo (fijo, sin parpadeo).
 
 Uso: python3 scripts/imagen-par.py <foto> <salida.webp> <INICIO|FINAL> [cx,cy,rx,ry ...]
@@ -8,7 +8,7 @@ Los óvalos del músculo van en px de la imagen final (600 de ancho).
 import sys, os
 import numpy as np
 from scipy import ndimage
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RED = (227, 6, 19); GOLD = (212, 175, 55)
@@ -36,10 +36,14 @@ if ovalos:
 d = ImageDraw.Draw(im)
 logo = Image.open(os.path.join(REPO, 'maquinas-wgymadnsport/comun/logo.png')).convert('RGBA')
 logo = logo.resize((200, int(200 * logo.height / logo.width)), Image.LANCZOS)
-sombra = Image.new('RGBA', im.size, (0, 0, 0, 0)); ds = ImageDraw.Draw(sombra)
-ds.rounded_rectangle((W - 222, H - logo.height - 26, W - 8, H - 8), 16, fill=(10, 10, 11, 150))
+# Logo arriba a la derecha, sin recuadro: solo una sombra suave para que se lea.
+x0, y0 = W - logo.width - 12, 10
+alfa = logo.split()[3].point(lambda v: v * 0.7)
+sombra = Image.new('RGBA', im.size, (0, 0, 0, 0))
+sombra.paste(Image.new('RGBA', logo.size, (0, 0, 0, 255)), (x0 + 2, y0 + 3), alfa)
+sombra = sombra.filter(ImageFilter.GaussianBlur(5))
 im = Image.alpha_composite(im.convert('RGBA'), sombra)
-im.alpha_composite(logo, (W - 215, H - logo.height - 18))
+im.alpha_composite(logo, (x0, y0))
 d = ImageDraw.Draw(im)
 f = ImageFont.truetype(os.path.join(REPO, 'assets/font-rubik-distressed.ttf'), 40)
 tw = d.textlength(etiqueta, font=f)
