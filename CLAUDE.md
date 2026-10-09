@@ -709,6 +709,8 @@ mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
   press"). Usa `encoger: 0.84` (opción nueva del script) para que el logo no
   tape los discos sobre la cabeza. Nunca subir al repo el video de referencia
   de otra persona: solo la imagen y el video generados con la modelo.
+- `mujer/curl-biceps-discos` (09-10-2026, "CURL DE BÍCEPS CON DISCOS · 3 × 15"):
+  video horizontal de Grok recortado al centro con `recorte`; bíceps en rojo.
 - Gemini recorta lo vertical: subirle siempre la versión horizontal con
   costados difuminados y el modelo al 88 % del alto; luego `recorte` en el
   config saca solo la foto.

@@ -1,0 +1,16 @@
+{
+  "titulo": "CURL DE BÍCEPS CON DISCOS",
+  "series": "3 × 15",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [200, 0, 360, 416],
+      "repetir": 2,
+      "musculo": [[200, 635, 30, 45], [446, 635, 30, 45]],
+      "seguir": [280, 330, 150, 210],
+      "nota": "Bíceps parpadeando en rojo; video horizontal de Grok recortado al centro"
+    }
+  ]
+}
