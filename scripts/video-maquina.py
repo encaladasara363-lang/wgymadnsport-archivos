@@ -19,6 +19,8 @@ config.json:
     recorte (opcional): [x, y, ancho, alto] para recortar la fuente antes,
     encoger (opcional, ej. 0.84): achica el video y lo baja, para que el logo
       no tape algo que llega arriba (discos sobre la cabeza),
+    encaje (opcional): {"alto", "x", "y"} pega la fuente (ya recortada) con ese
+      alto, sin deformarla, en esa posición sobre su fondo difuminado,
     musculo (opcional): [[cx, cy, rx, ry], ...] óvalos en px de 720x1280,
     solo_piel (opcional, true): false si el músculo está bajo ropa oscura (glúteos): pinta solo lo oscuro,
     seguir (opcional): [y0, y1, x0, x1] zona con textura a media
@@ -50,7 +52,12 @@ def leer_frames(path, desde, hasta, recorte=None):
     return [Image.open(f).convert('RGB') for f in sorted(glob.glob(os.path.join(tmp, '*.png')))]
 
 
-def a_vertical(im, encoger=None):
+def a_vertical(im, encoger=None, encaje=None):
+    if encaje:  # {"alto", "x", "y"}: pega la fuente con ese alto (sin deformar) sobre su fondo difuminado
+        fh = encaje['alto']; fg = im.resize((int(im.width * fh / im.height), fh), Image.LANCZOS)
+        bg = ImageEnhance.Brightness(im.resize((W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(30))).enhance(0.45)
+        bg.paste(fg, (encaje['x'], encaje['y']))
+        return bg
     if encoger:  # achica el video (ej. 0.84) para que el logo no tape lo de arriba
         fg = im.resize((int(W * encoger), int(H * encoger)), Image.LANCZOS)
         bg = ImageEnhance.Brightness(im.resize((W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(30))).enhance(0.45)
@@ -123,7 +130,7 @@ def main(carpeta):
     X = 8  # cuadros de fundido entre partes
     secuencia, extra = [], []
     for n, p in enumerate(cfg['partes']):
-        fr = [a_vertical(f, p.get('encoger')) for f in leer_frames(os.path.join(carpeta, p['video']), p['desde'], p['hasta'], p.get('recorte'))]
+        fr = [a_vertical(f, p.get('encoger'), p.get('encaje')) for f in leer_frames(os.path.join(carpeta, p['video']), p['desde'], p['hasta'], p.get('recorte'))]
         if p.get('repetir') and n == len(cfg['partes']) - 1:
             m = len(fr) - X
             fr = [Image.blend(fr[m + i], fr[i], (i + 1) / (X + 1)) if i < X else fr[i] for i in range(m)]
