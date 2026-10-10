@@ -805,7 +805,16 @@ function cargarProductos(){
  if(window.WGYMNUTRI_DEMO) return;
  pedirScript({ action:"listarProductos" }).then(function(d){
   if(!d || !d.ok || !Array.isArray(d.productos)) return;
-  integrarProductos(d.productos); lsSet(CLAVE_PROD, d.productos);
+  // Lo que quedó solo en este teléfono (escaneado antes de instalar el script o sin
+  // conexión) se sube ahora a la planilla, para que lo vean todos (10-10-2026).
+  var srv = d.productos, clave = function(f){ return f[0] ? "c" + f[0] : "n" + normName(f[1] + " " + (f[2] || "")); };
+  var hay = {}; srv.forEach(function(f){ hay[clave(f)] = 1; });
+  var pendientes = (lsGet(CLAVE_PROD, []) || []).filter(function(f){ return f && f[1] && !hay[clave(f)]; });
+  pendientes.forEach(function(f){
+   pedirScript({ action:"guardarProducto", codigo:f[0] || "", nombre:f[1], marca:f[2] || "", k:f[3], p:f[4], c:f[5], g:f[6], porcG:f[7] || 0, porcTxt:f[8] || "", origen:"off" });
+  });
+  var todo = srv.concat(pendientes);
+  integrarProductos(todo); lsSet(CLAVE_PROD, todo);
  });
 }
 function guardarProductoCompartido(a, origen){
@@ -1438,7 +1447,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101013", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101014", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
