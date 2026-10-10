@@ -196,3 +196,15 @@ body{ color:#111114; font-weight:500; }
 .porc-rec b{ font-size:22px; font-weight:800; color:#111114; }
 .porc-rec small{ font-size:14px; font-weight:600; color:#3F3F46; }
 #dPorc{ margin-bottom:12px; }
+
+/* Todo un 10 % más grande (10-10-2026, la dueña: "agrándame un poco más todas las letras") */
+body{ zoom:1.1; }
+/* Ajustes para el 10 % más grande */
+.gate .logo{ width:min(62vw,240px) !important; }
+.agua-vasos{ grid-template-columns:repeat(auto-fill,minmax(26px,1fr)) !important; gap:6px !important; }
+.macro .fila{ font-size:15px !important; }
+.macro .fila em{ font-size:14.5px !important; }
+.anillo-box{ grid-template-columns:118px minmax(0,1fr) !important; }
+.anillo, .anillo svg{ width:118px !important; height:118px !important; }
+.anillo .centro b{ font-size:30px !important; }
+.anillo .centro span{ font-size:12px !important; }
