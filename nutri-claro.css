@@ -247,8 +247,14 @@ body{ zoom:1.1; }
 .uni-falta summary{ cursor:pointer; font-weight:800; font-size:16px; color:#6B4E00; }
 #dUni{ margin-bottom:10px; }
 /* Bebidas energéticas e isotónicas (10-10-2026) */
-.bebidas-card .beb-bts{display:grid;gap:10px;margin-top:8px}
-.bebidas-card .beb-bts .btn{font-size:19px;padding:15px}
+.comida-card .beb-bts,.bebidas-card .beb-bts{display:grid;gap:10px;margin-top:8px}
+.comida-card .beb-bts .btn,.bebidas-card .beb-bts .btn{font-size:19px;padding:15px}
 /* Aviso "Pon WGYMNUTRI en tu pantalla de inicio": fondo claro para que se lea */
 #tabHoy .aviso[style*="160c0d"]{background:#fff4f4 !important;border-color:#e30613 !important}
 #tabHoy .aviso[style*="160c0d"] p,#tabHoy .aviso[style*="160c0d"] b{color:#111 !important}
+/* Cuadros de comida (10-10-2026): hora y kcal sin cortarse, botones en una línea */
+.comida-card .cab{align-items:center}
+.comida-card .cab h3{font-size:22px !important;display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px}
+.comida-card .cab h3 .hora-com{font-size:17px !important;padding:2px 9px !important;margin:0 !important}
+.comida-card .cab small{white-space:nowrap;font-size:17px !important;color:#1A1A1E !important;font-weight:700}
+.comida-card .beb-bts .btn,.bebidas-card .beb-bts .btn{white-space:nowrap;font-size:18px !important}

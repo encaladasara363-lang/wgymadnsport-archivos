@@ -1461,6 +1461,12 @@ probado: ella se activó desde el mesón y entró a la app).
   Energéticas; `esLiq`) muestra «✅ Contenido: 1 lata (473 ml)», botones ½ lata / 1
   lata / 2 latas / 100 ml (botella para Powerade, Gatorade, Electrolit, agua),
   «¿Cuántos ml tomaste?» y sin el cuadro de láminas; en «Hoy» se ve en ml (`it.ml`).
+- **Cada comida en su propio cuadro (10-10-2026, pedido de la dueña: "así, como
+  Energéticas"):** en «Hoy», desayuno, colaciones, almuerzo, snack y cena van en
+  cuadros separados (`.comida-card`) con su hora, kcal, alimentos y dos botones:
+  «📷 Escanear alimento» (abre la cámara para esa comida) y «＋ Agregar alimento»
+  (abre la búsqueda). La dueña irá mandando fotos de referencia para dejar la app
+  más profesional, de a un cambio.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
