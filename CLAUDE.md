@@ -1523,6 +1523,10 @@ probado: ella se activó desde el mesón y entró a la app).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
   escaneados los botones muestran gramos (ej. 17 g · 34 g · 68 g · 100 g) en vez de
   «½ porción · 1 porción · 2 porciones».
+- **Toda la app en MAYÚSCULAS, cursiva y negrita (10-10-2026, pedido de la dueña):** al
+  final de `nutri-claro.css` (`text-transform:uppercase; font-style:italic;
+  font-weight:800` en todo menos los SVG); la barra de abajo no se corta (`#nav`
+  sin salto de línea, 13 px).
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
