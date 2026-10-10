@@ -421,6 +421,40 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 .hint2 b{ color:var(--dorado); }  
 </style>  
   
+<!-- Intro animada al abrir la tarjeta (10-10-2026, pedido de la dueña). Sin
+     sonido, se salta con un toque y nunca bloquea el ingreso: si el video no
+     carga en 3 s, se cierra sola. -->
+<style>
+#introTarjeta{ position:fixed; inset:0; z-index:9999; background:#000; display:flex; align-items:center; justify-content:center; transition:opacity .5s ease; }
+#introTarjeta.fuera{ opacity:0; pointer-events:none; }
+#introTarjeta video{ width:min(100vw,100vh); height:min(100vw,100vh); object-fit:cover; }
+#introSaltar{ position:absolute; right:16px; top:calc(16px + env(safe-area-inset-top, 0px)); background:rgba(0,0,0,.55); color:#fff; border:1px solid #D4AF37; border-radius:999px; padding:10px 18px; font:800 15px/1 system-ui, sans-serif; letter-spacing:.04em; cursor:pointer; }
+</style>
+<div id="introTarjeta">
+ <video id="introVideo" muted autoplay playsinline preload="auto" poster="assets/intro-tarjeta-poster.jpg">
+  <source src="assets/intro-tarjeta.mp4" type="video/mp4">
+  <source src="assets/intro-tarjeta.webm" type="video/webm">
+ </video>
+ <button type="button" id="introSaltar">Saltar ›</button>
+</div>
+<script>
+(function(){
+ var caja = document.getElementById("introTarjeta"), v = document.getElementById("introVideo"), listo = false;
+ function cerrar(){
+  if(listo) return; listo = true;
+  caja.classList.add("fuera");
+  setTimeout(function(){ try{ v.pause(); }catch(e){} caja.remove(); }, 550);
+ }
+ document.getElementById("introSaltar").addEventListener("click", cerrar);
+ caja.addEventListener("click", cerrar);
+ v.addEventListener("ended", cerrar);
+ v.addEventListener("error", cerrar);
+ /* Si no empieza a reproducirse en 3 s (mala señal o el celular no deja), se cierra. */
+ setTimeout(function(){ if(!listo && (v.paused || v.readyState < 2)) cerrar(); }, 3000);
+ setTimeout(cerrar, 16000);
+ try{ var x = v.play(); if(x) x["catch"](function(){ cerrar(); }); }catch(e){ cerrar(); }
+})();
+</script>
 <div id="appRoot" artifact-local>
   
 <!-- ===================== GATE (default view) ===================== -->  
@@ -2330,7 +2364,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101003", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101004", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
