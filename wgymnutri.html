@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=18">
+<link rel="stylesheet" href="nutri-claro.css?v=19">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -337,7 +337,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=7"></script>
+<script src="nutri-alimentos.js?v=8"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -668,14 +668,17 @@ function renderOnb(){
 }
 
 /* ═══ 4. Pantalla principal ═══ */
-var COMIDAS = [["desayuno","☕","Desayuno"],["colacion1","🍎","Colación de la mañana"],["almuerzo","🍲","Almuerzo"],["once","🍿","Snack"],["cena","🌙","Cena"],["colacion2","🥛","Colación de la noche"]];
+var COMIDAS = [["desayuno","☕","Desayuno"],["colacion1","🍎","Colación de la mañana"],["almuerzo","🍲","Almuerzo"],["once","🍿","Snack"],["cena","🌙","Cena"],["colacion2","🥛","Colación de la noche"],["bebidas","🥤","Bebidas"]];
+/* Bebidas energéticas e isotónicas (10-10-2026, la dueña: "ponme para escanear bebidas
+   energéticas o Powerade"): cuadro aparte en «Hoy», sin hora de comida. */
+var COMIDAS_HORA = COMIDAS.filter(function(c){ return c[0] !== "bebidas"; }), CAT_BEB = "🥤 Energéticas e isotónicas";
 /* Horario de comidas de cada socio (10-10-2026, pedido de la dueña). Se guarda solo
    en su teléfono (D.horas). Sirve para elegir la comida al tocar "+" y para avisar. */
 var HORAS_DEF = { desayuno:"08:00", colacion1:"11:00", almuerzo:"13:30", once:"17:30", cena:"20:30", colacion2:"22:30" };
 function horaDe(k){ var hs = (D && D.horas) || {}; return hs[k] || HORAS_DEF[k]; }
 function aMin(hhmm){ var p = String(hhmm || "").split(":"); return (+p[0] || 0) * 60 + (+p[1] || 0); }
 function comidaPorHora(){
- var ahora = new Date().getHours() * 60 + new Date().getMinutes(), lista = COMIDAS.map(function(c){ return [c[0], aMin(horaDe(c[0]))]; }).sort(function(a, b){ return a[1] - b[1]; });
+ var ahora = new Date().getHours() * 60 + new Date().getMinutes(), lista = COMIDAS_HORA.map(function(c){ return [c[0], aMin(horaDe(c[0]))]; }).sort(function(a, b){ return a[1] - b[1]; });
  var elegida = lista[0][0];
  // La comida cuya hora está más cerca (desde 1 hora antes en adelante)
  lista.forEach(function(c){ if(ahora >= c[1] - 60) elegida = c[0]; });
@@ -726,7 +729,7 @@ function recordatorio(){
  var h = new Date().getHours(), t = totales(diaSel), x = diaDe(diaSel), M = D.metas;
  if(recOn("horas")){
   var ahoraM = h * 60 + new Date().getMinutes(), pend = null;
-  COMIDAS.forEach(function(cm){ var hm = aMin(horaDe(cm[0])); if(ahoraM >= hm + 30 && ahoraM < hm + 180 && !(x.c[cm[0]] || []).length) pend = cm; });
+  COMIDAS_HORA.forEach(function(cm){ var hm = aMin(horaDe(cm[0])); if(ahoraM >= hm + 30 && ahoraM < hm + 180 && !(x.c[cm[0]] || []).length) pend = cm; });
   if(pend) return ["🕒", "Tu " + pend[2].toLowerCase() + " era a las " + horaDe(pend[0]) + ". ¿Ya comiste? Regístralo con el botón +."];
  }
  if(recOn("desayuno") && h >= 11 && !(x.c.desayuno || []).length && !t.n) return ["🍳", "¿Ya tomaste desayuno? Regístralo para empezar tu día y no cortar tu racha 🔥."];
@@ -751,13 +754,18 @@ function renderHoy(){
  for(var i = 0; i < Math.max(M.agua, x.agua); i++) h += '<button type="button" class="vaso' + (i < x.agua ? " lleno" : "") + '" data-i="' + i + '" aria-label="Vaso ' + (i + 1) + '"></button>';
  h += '</div><p class="muted" style="font-size:13px;margin:8px 0 0">Toca un vaso cada vez que tomes uno (250 ml).</p></div>';
  h += '<div class="card">';
- COMIDAS.forEach(function(cm){
+ COMIDAS_HORA.forEach(function(cm){
   var its = x.c[cm[0]] || [], kc = its.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
   h += '<div class="comida"><div class="cab"><h3>' + cm[1] + ' ' + cm[2] + ' <span class="hora-com">' + horaDe(cm[0]) + '</span></h3><small>' + (its.length ? miles(kc) + " kcal" : "") + '</small></div>';
   its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + esc(it.n) + '</b><span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
   h += '<button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar ' + (/^(desayuno|almuerzo|once)$/.test(cm[0]) ? "al " : "a la ") + cm[2].toLowerCase() + '</button></div>';
  });
  h += '</div>';
+ var bebs = x.c.bebidas || [], kb = bebs.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
+ h += '<div class="card bebidas-card"><div class="cab"><h3>🥤 Bebidas</h3><small>' + (bebs.length ? miles(kb) + " kcal" : "") + '</small></div>' +
+  '<p class="muted" style="font-size:15px;margin:0 0 10px">Energéticas, isotónicas, Powerade, Gatorade, Red Bull, Monster…</p>';
+ bebs.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + esc(it.n) + '</b><span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="bebidas" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
+ h += '<div class="beb-bts"><button type="button" class="btn rojo" id="bebScan">📷 Escanear bebida</button><button type="button" class="add-l" id="bebBus">🔎 Buscar bebida</button></div></div>';
  if(!estaInstalada() && !DENTRO_TARJETA && !lsGet(CLAVE_INST, false)) h += '<div class="aviso" style="background:#160c0d;border-color:#5a1a1f"><span class="e">📲</span><p><b>Pon WGYMNUTRI en tu pantalla de inicio</b><br><span class="muted" style="font-size:14px">Ábrela con un toque, como cualquier app.</span></p><button type="button" id="instIr" class="btn rojo chico" style="width:auto">Instalar</button></div>';
  var box = $("tabHoy"); box.innerHTML = h;
  requestAnimationFrame(function(){ requestAnimationFrame(function(){ var p = $("anilloProg"); if(p) p.style.strokeDashoffset = C * (1 - pct); }); });
@@ -770,7 +778,9 @@ function renderHoy(){
   if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
   renderHoy(); revisarLogros();
  }; });
- box.querySelectorAll(".add-l").forEach(function(b){ b.onclick = function(){ abrirAgregar(b.dataset.m); }; });
+ box.querySelectorAll(".add-l[data-m]").forEach(function(b){ b.onclick = function(){ abrirAgregar(b.dataset.m); }; });
+ $("bebScan").onclick = function(){ abrirAgregar("bebidas", "escanear"); };
+ $("bebBus").onclick = function(){ agr.q = ""; abrirAgregar("bebidas", "buscar"); };
  box.querySelectorAll(".item .x").forEach(function(b){ b.onclick = function(){
   var xx = diaDe(diaSel); xx.c[b.dataset.m].splice(+b.dataset.j, 1); setDia(diaSel, xx); guardar(); renderHoy(); $("rachaNum").textContent = racha();
  }; });
@@ -847,7 +857,7 @@ function ajustarAlTeclado(){
 if(window.visualViewport){ visualViewport.addEventListener("resize", ajustarAlTeclado); visualViewport.addEventListener("scroll", ajustarAlTeclado); }
 $("velo").addEventListener("click", function(e){ if(e.target === $("velo")) cerrarHoja(); });
 document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !$("velo").hidden) cerrarHoja(); });
-function abrirAgregar(comida){ agr.comida = comida; renderAgregar(); }
+function abrirAgregar(comida, modo){ agr.comida = comida; if(modo) agr.modo = modo; renderAgregar(); }
 function renderAgregar(){
  pararCamara();
  var modos = [["buscar","🔎 Buscar"],["escanear","▮▯▮ Escanear"],["recientes","🕘 Recientes"],["favs","★ Favoritas"],["manual","✍️ Manual"]];
@@ -930,7 +940,8 @@ function modoBuscar(){
   if(!t){
    var cats = {}; ALIM.forEach(function(a, i){ (cats[a.cat] = cats[a.cat] || []).push(i); });
    h += '<p class="muted" style="font-size:14px;margin:10px 0 0">Escribe un alimento o una marca: buscamos en la lista del gimnasio y en productos en línea.</p>';
-   Object.keys(cats).forEach(function(k){ h += '<p class="sub">' + esc(k) + '</p>' + cats[k].map(function(i){ return filaAlim(ALIM[i], i, "a"); }).join(""); });
+   var claves = Object.keys(cats); if(agr.comida === "bebidas" && cats[CAT_BEB]) claves = [CAT_BEB].concat(claves.filter(function(k){ return k !== CAT_BEB; }));
+   claves.forEach(function(k){ h += '<p class="sub">' + esc(k) + '</p>' + cats[k].map(function(i){ return filaAlim(ALIM[i], i, "a"); }).join(""); });
   }else{
    // Singular y plural cuentan igual (10-10-2026: "huevos" no encontraba "huevo duro").
    var palabras = t.split(" ").filter(Boolean).map(function(w){
@@ -998,7 +1009,7 @@ function detalle(a){
  var est0 = esGr ? unidadesPorcion(a) : null;
  if(est0 && est0.est && !a.porcG){ a = Object.assign({}, a, { porcG:Math.round(est0.porcG), porcTxt:"" }); }
  var h = '<div class="cab" style="margin-bottom:6px"><h3 style="font-size:22px;text-transform:none;letter-spacing:0">' + esc(a.n) + '</h3><button type="button" class="chip" id="dVolver">‹ Volver</button></div>' +
-  '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + (a.cat === "Marcas" ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
+  '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + (a.cat === "Marcas" || a.cat === CAT_BEB ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
  if(esGr && a.porcG){
   // Porción recomendada de la etiqueta (Open Food Facts), 10-10-2026: la dueña escaneó un pan y no veía la porción.
   gramos = a.porcG;
@@ -1377,7 +1388,7 @@ function renderPerfil(){
   '<div class="campo" style="margin-top:12px"><label for="aguaMeta">Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta">' + [6,7,8,9,10,11,12,14].map(function(n){ return '<option' + (n === M.agua ? " selected" : "") + '>' + n + '</option>'; }).join("") + '</select></div>' +
   '<button type="button" class="btn sec chico" id="recalc" style="margin-top:12px">Recalcular con mis datos</button></div>' +
   '<div class="card"><p class="kick">🕒 Mis horas de comida</p><p class="muted" style="margin:6px 0 10px">Escribe a qué hora haces cada comida. Así la app elige la comida correcta y te recuerda si se te pasó.</p>' +
-   '<div class="horas-com">' + COMIDAS.map(function(c){ return '<label class="hc-fila"><span>' + c[1] + ' ' + c[2] + '</span><input type="time" class="inp" data-hora="' + c[0] + '" value="' + horaDe(c[0]) + '"></label>'; }).join("") + '</div></div>' +
+   '<div class="horas-com">' + COMIDAS_HORA.map(function(c){ return '<label class="hc-fila"><span>' + c[1] + ' ' + c[2] + '</span><input type="time" class="inp" data-hora="' + c[0] + '" value="' + horaDe(c[0]) + '"></label>'; }).join("") + '</div></div>' +
   '<div class="card"><p class="kick">🔔 Mis recordatorios</p><p class="muted" style="margin:6px 0 10px">Marca los que quieras ver al abrir WGYMNUTRI. Son opcionales.</p>' +
    RECORDATORIOS.map(function(r){ return '<label class="rec-op"><input type="checkbox" data-rec="' + r[0] + '"' + (recOn(r[0]) ? ' checked' : '') + '><span class="rec-e">' + r[1] + '</span><span class="rec-tx"><b>' + r[2] + '</b><small>' + r[3] + '</small></span><span class="rec-sw" aria-hidden="true"></span></label>'; }).join("") + '</div>' +
   '<div class="card"><p class="kick">📲 App en tu teléfono</p>' + (estaInstalada() ? '<p class="muted">✅ WGYMNUTRI ya está en tu pantalla de inicio.</p>'
@@ -1450,7 +1461,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101018", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101019", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

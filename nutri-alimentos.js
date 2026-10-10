@@ -262,9 +262,6 @@ window.NUTRI_ALIMENTOS = [
  ["Coca-Cola", "1 lata (350 ml)", 140, 0, 37, 0, "Marcas"],
  ["Coca-Cola Zero", "1 lata (350 ml)", 1, 0, 0, 0, "Marcas"],
  ["Néctar Watt's", "1 caja (200 ml)", 100, 0, 25, 0, "Marcas"],
- ["Gatorade", "1 botella (500 ml)", 125, 0, 31, 0, "Marcas"],
- ["Red Bull", "1 lata (250 ml)", 112, 0, 28, 0, "Marcas"],
- ["Monster Energy", "1 lata (473 ml)", 210, 0, 54, 0, "Marcas"],
 
  /* Suplementos */
  ["Proteína whey", "1 scoop (30 g)", 120, 24, 3, 1.5, "Suplementos"],
@@ -607,7 +604,6 @@ window.NUTRI_ALIMENTOS = [
  ["Néctar Andina del Valle", "1 caja (200 ml)", 100, 0, 25, 0, "Marcas"],
  ["Jugo Watt's light", "1 caja (200 ml)", 20, 0, 5, 0, "Marcas"],
  ["Jugo en polvo Zuko (preparado)", "1 vaso (200 ml)", 70, 0, 17.5, 0, "Marcas"],
- ["Powerade", "1 botella (500 ml)", 125, 0, 31, 0, "Marcas"],
  ["Cerveza Cristal", "1 lata (350 ml)", 150, 1.6, 13, 0, "Marcas"],
  ["Cerveza Escudo", "1 lata (350 ml)", 155, 1.6, 13, 0, "Marcas"],
  ["Helado Savory Chirimoya Alegre", "1 unidad", 160, 2, 25, 6, "Marcas"],
@@ -676,5 +672,19 @@ window.NUTRI_ALIMENTOS = [
  ["Barra Wild Protein", "1 unidad (45 g)", 180, 15, 14, 7.5, "Suplementos"],
  ["Barra Max Pro", "1 unidad (60 g)", 210, 18, 22, 6, "Suplementos"],
  ["Barra de proteína Winkler Nutrition", "1 unidad (60 g)", 215, 20, 20, 7, "Suplementos"],
- ["Batido de proteína listo para tomar", "1 botella (330 ml)", 160, 25, 10, 2.5, "Suplementos"]
+ ["Batido de proteína listo para tomar", "1 botella (330 ml)", 160, 25, 10, 2.5, "Suplementos"],
+ // Energéticas e isotónicas (10-10-2026, pedido de la dueña): valores aproximados por envase.
+ ["Powerade", "1 botella (500 ml)", 125, 0, 31, 0, "🥤 Energéticas e isotónicas"],
+ ["Powerade Zero", "1 botella (500 ml)", 5, 0, 1, 0, "🥤 Energéticas e isotónicas"],
+ ["Gatorade", "1 botella (500 ml)", 125, 0, 31, 0, "🥤 Energéticas e isotónicas"],
+ ["Gatorade Zero", "1 botella (500 ml)", 5, 0, 1, 0, "🥤 Energéticas e isotónicas"],
+ ["Electrolit", "1 botella (625 ml)", 63, 0, 15, 0, "🥤 Energéticas e isotónicas"],
+ ["Red Bull", "1 lata (250 ml)", 112, 0, 28, 0, "🥤 Energéticas e isotónicas"],
+ ["Red Bull Sugarfree", "1 lata (250 ml)", 8, 0, 1, 0, "🥤 Energéticas e isotónicas"],
+ ["Monster Energy", "1 lata (473 ml)", 210, 0, 54, 0, "🥤 Energéticas e isotónicas"],
+ ["Monster Ultra (sin azúcar)", "1 lata (473 ml)", 10, 0, 2.5, 0, "🥤 Energéticas e isotónicas"],
+ ["Monster Mango Loco", "1 lata (473 ml)", 210, 0, 52, 0, "🥤 Energéticas e isotónicas"],
+ ["Score Energy Drink", "1 lata (473 ml)", 218, 0, 54, 0, "🥤 Energéticas e isotónicas"],
+ ["Score sin azúcar", "1 lata (473 ml)", 10, 0, 2, 0, "🥤 Energéticas e isotónicas"],
+ ["Burn", "1 lata (250 ml)", 118, 0, 29, 0, "🥤 Energéticas e isotónicas"],
 ];
