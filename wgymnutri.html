@@ -759,7 +759,8 @@ function modoEscanear(){
  function sinCamara(){ $("camBox").hidden = true; $("camTxt").textContent = "No pudimos abrir la cámara. Revisa el permiso de cámara del navegador, o escribe el número del código aquí abajo."; }
  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ sinCamara(); return; }
  var nativo = "BarcodeDetector" in window;
- (nativo && BarcodeDetector.getSupportedFormats ? BarcodeDetector.getSupportedFormats() : Promise.resolve([])).then(function(f){
+ var formatos; try{ formatos = nativo && BarcodeDetector.getSupportedFormats ? BarcodeDetector.getSupportedFormats() : Promise.resolve([]); }catch(e){ formatos = Promise.resolve([]); }
+ formatos["catch"](function(){ return []; }).then(function(f){ try{
   if(nativo && f.indexOf("ean_13") >= 0){
    var det = new BarcodeDetector({ formats:["ean_13","ean_8","upc_a","upc_e"] });
    navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment" }, audio:false }).then(function(st){
@@ -773,7 +774,7 @@ function modoEscanear(){
     cam.zx.decodeFromConstraints({ video:{ facingMode:"environment" }, audio:false }, vid, function(r){ if(r) encontrado(r.getText()); })["catch"](sinCamara);
    })["catch"](sinCamara);
   }
- });
+ }catch(e){ sinCamara(); } });
 }
 function leido(code){
  var r = $("codRes"); if(!r) return;
