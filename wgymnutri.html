@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=25">
+<link rel="stylesheet" href="nutri-claro.css?v=26">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -880,9 +880,22 @@ function renderHoy(){
   '<div class="macros">' + macro("m-p", "Proteína", t.p, M.p) + macro("m-c", "Carbohidratos", t.c, M.c) + macro("m-g", "Grasas", t.g, M.g) + '</div></div>' +
   '<div class="kcal-linea"><span>Meta <b>' + miles(M.kcal) + '</b></span><span>Comidas <b>' + miles(t.k) + '</b></span></div></div>';
  h += '<div class="frase"><small>Frase del día</small>' + esc(fraseDelDia()) + '</div>';
- h += '<div class="card"><div class="cab"><h3>💧 Agua</h3><span>' + x.agua + ' / ' + M.agua + ' vasos</span></div><div class="agua-vasos">';
- for(var i = 0; i < Math.max(M.agua, x.agua); i++) h += '<button type="button" class="vaso' + (i < x.agua ? " lleno" : "") + '" data-i="' + i + '" aria-label="Vaso ' + (i + 1) + '"></button>';
- h += '</div><p class="muted" style="font-size:13px;margin:8px 0 0">Toca un vaso cada vez que tomes uno (250 ml).</p></div>';
+ /* Agua en vasos de 250 ml o botellas de 500 ml (10-10-2026, pedido de la dueña). Se guarda
+    siempre en vasos (x.agua); una botella = 2 vasos. Cada teléfono recuerda la elección. */
+ var enBot = D.aguaUnidad !== "vaso", litros = function(v){ return String(r1(v * 0.25)).replace(".", ","); };
+ h += '<div class="card"><div class="cab"><h3>💧 Agua</h3><span>' + litros(x.agua) + ' / ' + litros(M.agua) + ' L</span></div>' +
+  '<div class="agua-unid"><button type="button" class="chip" data-au="botella" aria-pressed="' + enBot + '">🍶 Botellas 500 ml</button><button type="button" class="chip" data-au="vaso" aria-pressed="' + !enBot + '">🥛 Vasos 250 ml</button></div>';
+ if(enBot){
+  var nb = Math.ceil(Math.max(M.agua, x.agua) / 2);
+  h += '<div class="agua-botellas">';
+  for(var i = 0; i < nb; i++){ var lleno = x.agua >= (i + 1) * 2, medio = !lleno && x.agua === i * 2 + 1;
+   h += '<button type="button" class="botella' + (lleno ? " llena" : medio ? " media" : "") + '" data-b="' + i + '" aria-label="Botella ' + (i + 1) + '"><i></i></button>'; }
+  h += '</div><p class="muted" style="font-size:15px;margin:8px 0 0">' + Math.floor(x.agua / 2) + (x.agua % 2 ? ' y media' : '') + ' de ' + nb + ' botellas. Toca una botella cada vez que te tomes una (500 ml).</p></div>';
+ } else {
+  h += '<div class="agua-vasos">';
+  for(var i = 0; i < Math.max(M.agua, x.agua); i++) h += '<button type="button" class="vaso' + (i < x.agua ? " lleno" : "") + '" data-i="' + i + '" aria-label="Vaso ' + (i + 1) + '"></button>';
+  h += '</div><p class="muted" style="font-size:15px;margin:8px 0 0">' + x.agua + ' de ' + M.agua + ' vasos. Toca un vaso cada vez que tomes uno (250 ml).</p></div>';
+ }
  /* Cada comida en su propio cuadro, como «Energéticas» (10-10-2026, pedido de la dueña),
     con «Escanear alimento» y «Agregar alimento». */
  comidasVisibles(x).forEach(function(cm){
@@ -904,6 +917,12 @@ function renderHoy(){
  box.querySelectorAll(".st-dia").forEach(function(b){ b.onclick = function(){ if(b.dataset.f <= hoyISO()){ diaSel = b.dataset.f; renderHoy(); } }; });
  if($("avisoX")) $("avisoX").onclick = function(){ lsSet("wgymnutri_aviso_oculto_v1", hoyISO()); renderHoy(); };
  if($("instIr")) $("instIr").onclick = instalar;
+ box.querySelectorAll("[data-au]").forEach(function(b){ b.onclick = function(){ D.aguaUnidad = b.dataset.au; guardar(); renderHoy(); }; });
+ box.querySelectorAll(".botella").forEach(function(v){ v.onclick = function(){
+  var i = +v.dataset.b, xx = diaDe(diaSel); xx.agua = (xx.agua >= (i + 1) * 2) ? i * 2 : (i + 1) * 2; setDia(diaSel, xx); guardar();
+  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
+  renderHoy(); revisarLogros();
+ }; });
  box.querySelectorAll(".vaso").forEach(function(v){ v.onclick = function(){
   var i = +v.dataset.i, xx = diaDe(diaSel); xx.agua = (i < xx.agua) ? i : i + 1; setDia(diaSel, xx); guardar();
   if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
@@ -1690,7 +1709,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101029", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101030", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

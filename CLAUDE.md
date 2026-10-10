@@ -1508,6 +1508,10 @@ probado: ella se activó desde el mesón y entró a la app).
   quiero ese aviso"):** «¿Viene en láminas…?» aparece solo en productos rebanables
   (`rebanable`: queso, jamón, pavo, fiambres, pan, galletas, tortillas…). Yogur, postres,
   flan, kéfir (`esPote`) se muestran como «1 pote (155 g)» con ½ pote / 1 pote / 2 potes.
+- **Agua en botellas de 500 ml (10-10-2026, pedido de la dueña):** el cuadro «💧 Agua» de
+  «Hoy» muestra por defecto botellas de 500 ml (una botella = 2 vasos; media botella si
+  quedó un vaso suelto) y deja cambiar a «Vasos 250 ml» (`D.aguaUnidad`, solo en el
+  teléfono). El total se ve en litros. Se sigue guardando en vasos (`x.agua`).
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
