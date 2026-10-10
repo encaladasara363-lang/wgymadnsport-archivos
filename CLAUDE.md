@@ -1414,6 +1414,16 @@ probado: ella se activó desde el mesón y entró a la app).
   marcas chilenas aproximadas) + **productos en línea** de Open Food Facts
   (gratis) que se buscan solos al escribir (0,7 s, con caché; primero Chile y
   luego el mundo) + código de barras, favoritas, recientes y manual.
+- **Productos escaneados para todos (10-10-2026, la dueña: "escanear una vez y
+  que quede para todos"):** hoja «Productos» de la planilla, acciones públicas
+  `listarProductos`/`guardarProducto` en `docs/apps-script/Ingresos.gs` (solo
+  datos de etiqueta, nada personal; nunca pisa un producto ya guardado, solo
+  suma «Veces»). La app los carga al entrar (`cargarProductos`, copia en
+  `wgymnutri_productos_v1`), los muestra en la búsqueda como «📷 Escaneados en
+  WGYM», al escanear busca primero ahí y después en Open Food Facts (lo que
+  encuentra se guarda solo), y si no existe en ningún lado ofrece «➕ Crear este
+  producto para todos» con la tabla de la etiqueta (valores por 100 g).
+  **Requiere instalar la versión nueva del script (Versión 13).**
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

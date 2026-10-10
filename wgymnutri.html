@@ -696,7 +696,7 @@ function racha(){
  return n;
 }
 function iniciarApp(){
- vista("vApp"); diaSel = hoyISO();
+ vista("vApp"); diaSel = hoyISO(); cargarProductos();
  $("saludo").textContent = "Hola, " + socio.n.split(" ")[0] + (esPase(socio) ? " · Pase diario (solo hoy)" : "");
  mostrarTab("tabHoy");
 }
@@ -780,6 +780,42 @@ function porcionTxt(it){ var m = it.x || 1; return it.gr ? Math.round(it.gr * m)
 /* ═══ 5. Agregar comida: buscar, escanear, recientes, favoritas, manual ═══ */
 var agr = { comida:"desayuno", modo:"buscar", q:"" };
 var ALIM = (window.NUTRI_ALIMENTOS || []).map(function(a){ return { n:a[0], p:a[1], k:a[2], pr:a[3], c:a[4], g:a[5], cat:a[6], nn:normName(a[0]) }; });
+/* Productos escaneados por los socios (10-10-2026, la dueña: "escanear una vez y que
+   quede para todos"). Viven en la hoja "Productos" (listarProductos / guardarProducto
+   del Apps Script); el teléfono guarda la última lista para buscar sin internet. */
+var CAT_PROD = "📷 Escaneados en WGYM", CLAVE_PROD = "wgymnutri_productos_v1";
+function aAlimProd(f){ return { n:f[1], marca:f[2], gr:100, p:"100 g", k:+f[3] || 0, pr:+f[4] || 0, c:+f[5] || 0, g:+f[6] || 0, porcG:+f[7] || 0, porcTxt:f[8] || "", code:f[0] || "", cat:CAT_PROD, nn:normName(f[1] + " " + (f[2] || "")) }; }
+function integrarProductos(lista){
+ if(!Array.isArray(lista)) return;
+ ALIM = ALIM.filter(function(a){ return a.cat !== CAT_PROD; }).concat(lista.map(aAlimProd));
+}
+function porCodigoLocal(code){ return code ? ALIM.filter(function(a){ return a.cat === CAT_PROD && a.code === code; })[0] || null : null; }
+function pedirScript(params, espera){
+ return new Promise(function(ok){
+  var cb = "wgymNutriP_" + Date.now() + "_" + Math.floor(Math.random() * 1e6), listo = false, sc = document.createElement("script");
+  function fin(r){ if(listo) return; listo = true; clearTimeout(t); try{ delete window[cb]; }catch(e){} sc.remove(); ok(r); }
+  var t = setTimeout(function(){ fin(null); }, espera || 15000);
+  window[cb] = function(d){ fin(d || null); };
+  sc.onerror = function(){ fin(null); };
+  sc.src = CHECKIN_URL + "?" + Object.keys(params).map(function(k){ return k + "=" + encodeURIComponent(params[k]); }).join("&") + "&callback=" + cb + "&_=" + Date.now();
+  document.body.appendChild(sc);
+ });
+}
+function cargarProductos(){
+ if(window.WGYMNUTRI_DEMO) return;
+ pedirScript({ action:"listarProductos" }).then(function(d){
+  if(!d || !d.ok || !Array.isArray(d.productos)) return;
+  integrarProductos(d.productos); lsSet(CLAVE_PROD, d.productos);
+ });
+}
+function guardarProductoCompartido(a, origen){
+ if(window.WGYMNUTRI_DEMO || !a || !a.gr) return;
+ if(a.code && porCodigoLocal(a.code)) return;
+ var fila = [a.code || "", a.n, a.marca || "", a.k, a.pr, a.c, a.g, a.porcG || 0, a.porcTxt || ""];
+ var l = lsGet(CLAVE_PROD, []) || []; l.push(fila); lsSet(CLAVE_PROD, l); integrarProductos(l);
+ pedirScript({ action:"guardarProducto", codigo:a.code || "", nombre:a.n, marca:a.marca || "", k:a.k, p:a.pr, c:a.c, g:a.g, porcG:a.porcG || 0, porcTxt:a.porcTxt || "", origen:origen || "off" });
+}
+integrarProductos(lsGet(CLAVE_PROD, null) || []);
 function abrirHoja(html){ $("hoja").innerHTML = '<div class="asa"></div>' + html; $("velo").hidden = false; document.body.style.overflow = "hidden"; ajustarAlTeclado(); }
 function cerrarHoja(){ pararCamara(); $("velo").hidden = true; document.body.style.overflow = ""; }
 /* Con el teclado abierto (iPhone), la hoja se ajusta al espacio visible para que la
@@ -830,7 +866,7 @@ function modoBuscar(){
     return v; });
    var lista = ALIM.map(function(a, i){ return [a, i]; }).filter(function(x){ return palabras.every(function(vs){ return vs.some(function(w){ return x[0].nn.indexOf(w) >= 0; }); }); });
    // Primero los que empiezan con lo escrito y los básicos fitness; las marcas y la comida rápida al final.
-   function puntaje(a){ var p = 0; if(palabras[0].some(function(w){ return a.nn.indexOf(w) === 0; })) p -= 4; if(/fitness/i.test(a.cat)) p -= 5; if(a.cat === "Marcas" || a.cat === "Comida rápida") p += 2; return p; }
+   function puntaje(a){ var p = 0; if(palabras[0].some(function(w){ return a.nn.indexOf(w) === 0; })) p -= 4; if(/fitness/i.test(a.cat)) p -= 5; if(a.cat === CAT_PROD) p -= 3; if(a.cat === "Marcas" || a.cat === "Comida rápida") p += 2; return p; }
    lista.sort(function(x, y){ return puntaje(x[0]) - puntaje(y[0]) || x[1] - y[1]; });
    var vistosN = {}; lista = lista.filter(function(x){ if(vistosN[x[0].nn]) return false; vistosN[x[0].nn] = 1; return true; });
    h += '<p class="sub">Lista del gimnasio</p>' + (lista.length ? lista.map(function(x){ return filaAlim(x[0], x[1], "a"); }).join("") : '<p class="muted" style="margin:6px 0">Sin resultados en la lista.</p>');
@@ -922,6 +958,7 @@ function claveAl(a){ return normName(a.n) + "|" + (a.marca || "") + "|" + a.k; }
 function esFav(a){ var k = claveAl(a); return D.favs.some(function(f){ return claveAl(f) === k; }); }
 function alternarFav(a){ var k = claveAl(a); if(esFav(a)) D.favs = D.favs.filter(function(f){ return claveAl(f) !== k; }); else D.favs.unshift(base(a)); guardar(); }
 function agregar(a, mult, esGr){
+ if(a && a.off) guardarProductoCompartido(a, "off");
  var it = base(a); it.x = r1(mult * 100) / 100; it.t = Date.now();
  if(esGr){ it.gr = 100; }
  var x = diaDe(diaSel); (x.c[agr.comida] = x.c[agr.comida] || []).push(it); setDia(diaSel, x);
@@ -938,7 +975,7 @@ function offAAlim(p){
  if(k == null && nu["energy_100g"] != null) k = nu["energy_100g"] / 4.184;
  if(k == null) return null;
  return { n:(p.product_name_es || p.product_name || "Producto").trim(), marca:(p.brands || "").split(",")[0].trim(), gr:Number(p.serving_quantity) || 100,
-  porcG:Math.round(Number(p.serving_quantity) || 0), porcTxt:String(p.serving_size || "").trim(),
+  porcG:Math.round(Number(p.serving_quantity) || 0), porcTxt:String(p.serving_size || "").trim(), code:String(p.code || ""), off:true,
   k:Math.round(k), pr:r1(nu.proteins_100g || 0), c:r1(nu.carbohydrates_100g || 0), g:r1(nu.fat_100g || 0) };
 }
 var OFF_CAMPOS = "code,product_name,product_name_es,brands,nutriments,serving_quantity,serving_size";
@@ -1010,14 +1047,42 @@ function modoEscanear(){
 }
 function leido(code){
  var r = $("codRes"); if(!r) return;
- $("camTxt").textContent = "Código " + code + " · buscando el producto…";
  D.cont.escaneos = (D.cont.escaneos || 0) + 1; guardar();
+ var local = porCodigoLocal(code);
+ if(local){ revisarLogros(); detalle(local); return; }      /* ya lo escaneó alguien del gimnasio */
+ $("camTxt").textContent = "Código " + code + " · buscando el producto…";
  productoOFF(code).then(function(a){
-  if(a){ revisarLogros(); detalle(a); return; }
-  $("camTxt").textContent = a === undefined ? "Sin conexión. Revisa tu internet e intenta de nuevo." : "Este producto (" + code + ") todavía no está en la base de datos. Agrégalo en «Manual» con los datos de la etiqueta.";
-  r.innerHTML = '<button type="button" class="btn sec chico" id="reEsc" style="margin-top:10px">Escanear otro</button>';
+  if(a){ a.code = a.code || code; guardarProductoCompartido(a, "off"); revisarLogros(); detalle(a); return; }
+  if(a === undefined){
+   $("camTxt").textContent = "No pudimos buscarlo en línea. Revisa tu internet o créalo con los datos de la etiqueta.";
+  } else {
+   $("camTxt").textContent = "Este producto (" + code + ") todavía no está en ninguna lista. Créalo una sola vez con los datos de la etiqueta y quedará para todos los socios.";
+  }
+  r.innerHTML = '<button type="button" class="btn rojo" id="crearProd" style="margin-top:10px">➕ Crear este producto para todos</button><button type="button" class="btn sec chico" id="reEsc" style="margin-top:8px">Escanear otro</button>';
+  $("crearProd").onclick = function(){ formProducto(code); };
   $("reEsc").onclick = function(){ modoEscanear(); };
  });
+}
+function formProducto(code){
+ var c = $("agrCuerpo");
+ function campo(id, lab, ph, num){ return '<div class="campo"><label for="' + id + '">' + lab + '</label><input class="inp" id="' + id + '" placeholder="' + ph + '"' + (num ? ' type="text" inputmode="decimal" autocomplete="off"' : '') + '></div>'; }
+ c.innerHTML = '<div class="stack"><p class="kick">➕ Nuevo producto · código ' + esc(code) + '</p>' +
+  '<p class="muted" style="margin:0">Copia los datos de la tabla nutricional de la etiqueta, columna <b>«100 g»</b> (o «100 ml»).</p>' +
+  campo("pN", "Nombre del producto", "Ej: Yogur protein frutilla") + campo("pM", "Marca", "Ej: Soprole") +
+  '<div class="fila2">' + campo("pK", "Kcal en 100 g", "—", 1) + campo("pPr", "Proteína en 100 g", "—", 1) + '</div>' +
+  '<div class="fila2">' + campo("pC", "Carbohidratos en 100 g", "—", 1) + campo("pG", "Grasas en 100 g", "—", 1) + '</div>' +
+  '<div class="fila2">' + campo("pPg", "Porción (gramos)", "Ej: 30", 1) + campo("pPt", "Porción (texto)", "Ej: 1 pote") + '</div>' +
+  '<p class="err" id="pErr" hidden></p><button type="button" class="btn rojo" id="pOk">Guardar para todos</button><button type="button" class="btn sec chico" id="pVolver">‹ Volver a escanear</button></div>';
+ function v(id){ return Number(String($(id).value).replace(",", ".")); }
+ $("pVolver").onclick = function(){ modoEscanear(); };
+ $("pOk").onclick = function(){
+  var a = { code:code, n:$("pN").value.trim(), marca:$("pM").value.trim(), gr:100, p:"100 g", k:v("pK"), pr:v("pPr") || 0, c:v("pC") || 0, g:v("pG") || 0, porcG:v("pPg") || 0, porcTxt:$("pPt").value.trim() };
+  var e = $("pErr");
+  if(a.n.length < 2 || !(a.k >= 0 && a.k <= 900) || !$("pK").value.trim() || a.pr > 100 || a.c > 100 || a.g > 100){ e.textContent = "Revisa el nombre y los valores por 100 g (las calorías van de 0 a 900)."; e.hidden = false; return; }
+  a.cat = CAT_PROD; a.nn = normName(a.n + " " + a.marca);
+  guardarProductoCompartido(a, "manual"); toast("✅ Producto guardado para todos los socios");
+  detalle(porCodigoLocal(code) || a);
+ };
 }
 
 /* ═══ 6. Progreso: resumen semanal, peso, medallas, compartir ═══ */
@@ -1276,7 +1341,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101006", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101007", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

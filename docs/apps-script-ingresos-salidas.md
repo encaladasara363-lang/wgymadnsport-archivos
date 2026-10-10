@@ -99,3 +99,21 @@ Comprobar: el link del script terminado en `/exec?action=listarNutri` debe
 mostrar `{"ok":true,"nutri":true,...`. Mientras no se instale, nadie puede
 usar WGYMNUTRI (todos ven la pantalla de pago) y la ficha del mesón dice
 «falta instalar».
+
+## Actualización productos escaneados de WGYMNUTRI (10-10-2026)
+
+`Ingresos.gs` trae dos acciones nuevas más: `listarProductos` y
+`guardarProducto`. Cuando alguien escanea un producto en WGYMNUTRI (o lo crea
+con la etiqueta), queda guardado en una hoja nueva, **«Productos»**, que se
+crea sola, y desde ahí lo ven todos los socios en la búsqueda. Solo guarda
+datos de etiquetas (nombre, marca, calorías y macros por 100 g), nada
+personal. Para corregir o borrar un producto, se edita o borra su fila en esa
+hoja.
+
+Se instala igual que la vez anterior: pegar **todo** el `Ingresos.gs` nuevo en
+el archivo **Ingresos**, guardar y **Implementar → Administrar
+implementaciones → lápiz ✏️ → Nueva versión → Implementar**.
+
+Comprobar: el link del script terminado en `/exec?action=listarProductos`
+debe mostrar `{"ok":true,"productos":[...]}`. Mientras no se instale, la app
+funciona igual que antes (cada teléfono recuerda lo que escaneó él mismo).
