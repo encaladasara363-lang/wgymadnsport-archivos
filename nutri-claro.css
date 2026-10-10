@@ -373,3 +373,18 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .tanque.lleno{box-shadow:0 0 0 3px #1F9D55, 0 8px 22px rgba(31,157,85,.3)}
 @media (prefers-reduced-motion:reduce){.tanque .ola,.tanque .burb{animation:none}.tanque .burb{display:none}}
 .tanque .ola{height:28px}.tanque .ola.o2{height:34px}
+
+/* Logo de la cabecera que resalta (10-10-2026, pedido de la dueña con su video del logo) */
+.logo-top{position:relative;flex:none;width:118px;height:118px;border-radius:50%;padding:4px;
+ background:conic-gradient(from 0deg,#D4AF37,#FFE58A,#E30613,#D4AF37,#FFE58A,#E30613,#D4AF37);
+ animation:logoGiro 6s linear infinite, logoBrillo 2.4s ease-in-out infinite}
+.logo-top video{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;background:#000;
+ animation:logoGiroInv 6s linear infinite}
+@keyframes logoGiro{to{transform:rotate(360deg)}}
+@keyframes logoGiroInv{to{transform:rotate(-360deg)}}
+@keyframes logoBrillo{0%,100%{box-shadow:0 0 14px 2px rgba(212,175,55,.55),0 8px 22px rgba(227,6,19,.35)}50%{box-shadow:0 0 28px 8px rgba(255,215,90,.85),0 10px 28px rgba(227,6,19,.5)}}
+@media (prefers-reduced-motion:reduce){.logo-top,.logo-top video{animation:none}}
+.top{gap:10px !important}
+.top .t{padding-right:56px !important}
+.top .t b, .top .t span{white-space:nowrap;overflow-wrap:normal !important;font-size:clamp(17px,5.2vw,26px) !important}
+.top .t b, .top .t span{overflow:hidden;text-overflow:ellipsis}
