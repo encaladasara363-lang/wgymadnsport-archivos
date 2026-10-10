@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=33">
+<link rel="stylesheet" href="nutri-claro.css?v=34">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -813,6 +813,7 @@ function fraseDelDia(){ var d = new Date(), ini = new Date(d.getFullYear(), 0, 0
 function totales(iso){
  var x = diaDe(iso), t = { k:0, p:0, c:0, g:0, n:0 };
  COMIDAS.forEach(function(cm){ (x.c[cm[0]] || []).forEach(function(it){ var m = it.x || 1; t.k += it.k * m; t.p += it.pr * m; t.c += it.c * m; t.g += it.g * m; t.n++; }); });
+ if(x.cafe){ t.k += x.cafe * 2; t.p += x.cafe * 0.3; }
  return t;
 }
 function racha(){
@@ -907,6 +908,12 @@ function renderHoy(){
   for(var i = 0; i < Math.max(M.agua, x.agua); i++) h += '<button type="button" class="vaso' + (i < x.agua ? " lleno" : "") + '" data-i="' + i + '" aria-label="Vaso ' + (i + 1) + '"></button>';
   h += '</div><p class="muted" style="font-size:15px;margin:8px 0 0">' + x.agua + ' de ' + M.agua + ' vasos. Toca un vaso cada vez que tomes uno (250 ml).</p></div>';
  }
+ /* Café en tazas de 250 ml (10-10-2026, pedido de la dueña). Café negro ≈2 kcal por taza: se suma
+    a las calorías del día; no se suma al agua. La leche o el azúcar se anotan aparte. */
+ var nc = x.cafe || 0, tz = Math.max(4, nc + 1);
+ h += '<div class="card cafe-card"><div class="cab"><h3>☕ Café</h3><span>' + nc + (nc === 1 ? ' taza' : ' tazas') + '</span></div><div class="tazas">';
+ for(var i = 0; i < tz; i++) h += '<button type="button" class="taza' + (i < nc ? " llena" : "") + '" data-t="' + i + '" aria-label="Taza ' + (i + 1) + '"><i></i></button>';
+ h += '</div><p class="muted" style="font-size:15px;margin:8px 0 0">Toca una taza por cada café de 250 ml. ¿Leche o azúcar? Agrégalos como alimento.</p></div>';
  /* Cada comida en su propio cuadro, como «Energéticas» (10-10-2026, pedido de la dueña),
     con «Escanear alimento» y «Agregar alimento». */
  comidasVisibles(x).forEach(function(cm){
@@ -939,6 +946,11 @@ function renderHoy(){
   var i = +v.dataset.i, xx = diaDe(diaSel); xx.agua = (i < xx.agua) ? i : i + 1; setDia(diaSel, xx); guardar();
   if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
   renderHoy(); revisarLogros();
+ }; });
+ box.querySelectorAll(".taza").forEach(function(v){ v.onclick = function(){
+  var i = +v.dataset.t, xx = diaDe(diaSel); xx.cafe = (i < (xx.cafe || 0)) ? i : i + 1; setDia(diaSel, xx); guardar();
+  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
+  renderHoy();
  }; });
  box.querySelectorAll(".add-l[data-m]").forEach(function(b){ b.onclick = function(){ agr.q = ""; abrirAgregar(b.dataset.m, "buscar"); }; });
  box.querySelectorAll(".scan-c").forEach(function(b){ b.onclick = function(){ abrirAgregar(b.dataset.m, "escanear"); }; });
@@ -1757,7 +1769,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101042", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101043", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

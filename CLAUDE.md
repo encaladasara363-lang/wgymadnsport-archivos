@@ -1513,6 +1513,10 @@ probado: ella se activó desde el mesón y entró a la app).
   (animado desde el valor anterior, `aguaPctPrev`), con litros, «de X L» y el %; borde verde
   y «¡Meta cumplida!» al llegar. Sin animación si el teléfono pide reducir movimiento. Los
   botones de unidad dicen solo «Botellas» / «Vasos» (con mayúsculas no cabían los ml).
+- **Café en tazas (10-10-2026, pedido de la dueña):** cuadro «☕ Café» bajo el agua, con tazas
+  de 250 ml que se tocan para llenar (`x.cafe` del día; siempre una taza vacía más). Café negro
+  ≈2 kcal y 0,3 g de proteína por taza, sumados en `totales`. **No se suma al agua** (ni el
+  café ni las energéticas ni la leche); la leche o el azúcar se anotan como alimento.
 - **Cuadro de láminas solo donde corresponde (10-10-2026, la dueña escaneó un yogur: "no
   quiero ese aviso"):** «¿Viene en láminas…?» aparece solo en productos rebanables
   (`rebanable`: queso, jamón, pavo, fiambres, pan, galletas, tortillas…). Yogur, postres,
