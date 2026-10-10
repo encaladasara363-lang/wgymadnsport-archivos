@@ -325,3 +325,31 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .cant-box label{font-size:18px !important}
 .cant-inp, #dGr{font-size:34px !important;text-align:center;padding:14px !important;border:3px solid #E30613 !important;border-radius:16px !important;font-family:var(--num) !important}
 .cant-box small{display:block;margin-top:6px;font-size:14px;color:#1A1A1E}
+
+/* Resumen ordenado + cuadro de calorías restantes (10-10-2026, pedido de la dueña) */
+.res2 .anillo-box{grid-template-columns:128px minmax(0,1fr) !important;gap:16px !important}
+.res2 .anillo, .res2 .anillo svg{width:128px !important;height:128px !important}
+.res2 .anillo .centro b{font-size:34px !important}
+.res2 .anillo .centro span{font-size:12px !important}
+.res-datos{display:flex;flex-direction:column;gap:10px;min-width:0}
+.res-datos div{background:rgba(255,255,255,.85);border:1px solid var(--line);border-radius:14px;padding:8px 12px}
+.res-datos span{display:block;font-size:14px;color:#1A1A1E}
+.res-datos b{font-family:var(--num);font-weight:400;font-size:30px;line-height:1.05;color:#111114}
+.res-datos b small{font-size:15px}
+.macros3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.macros3 .macro{background:rgba(255,255,255,.85);border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center;min-width:0}
+.macros3 .mn{display:block;font-size:14px;color:#1A1A1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.macros3 .mv{display:block;font-family:var(--num);font-weight:400;font-size:28px;line-height:1.1;color:#111114;white-space:nowrap}
+.macros3 .mv small{font-size:14px}
+.macros3 .barra{margin-top:6px;height:10px !important}
+.restantes{display:flex;align-items:center;gap:14px;border:3px solid #E30613;border-radius:20px;padding:14px 16px;background:linear-gradient(135deg,#FFF5F5,#FFFFFF);margin:14px 0}
+.restantes .e{font-size:40px;line-height:1}
+.restantes small{display:block;font-size:15px;color:#8A6500}
+.restantes b{display:block;font-family:var(--num);font-weight:400;font-size:48px;line-height:1;color:#111114}
+.restantes b em{font-size:20px;font-style:inherit}
+.restantes p{margin:4px 0 0;font-size:14px;color:#1A1A1E}
+.restantes.pasado b{color:#E30613}
+.res-datos b{font-size:28px;white-space:nowrap}
+.macros3 .mn{font-size:13px;letter-spacing:0 !important;text-overflow:clip}
+.macros3 .mv small{display:block;font-size:13px;font-family:inherit}
+.macros3 .macro{padding:10px 3px}.macros3 .mn{font-size:12.5px;padding-right:3px}
