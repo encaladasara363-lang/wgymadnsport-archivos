@@ -298,3 +298,15 @@ body{ zoom:1.1; }
 .cod-leido b{display:block;font-family:var(--num);font-weight:400;font-size:40px;letter-spacing:.06em;color:#141416;margin:2px 0 6px}
 .cod-leido span{display:block;font-size:16px;color:#1A1A1E}
 .foto-cod{display:block;text-align:center;margin-top:4px;font-size:19px !important}
+/* Agua en botellas de 500 ml (10-10-2026) */
+.agua-unid{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.agua-unid .chip{font-size:15px}
+.agua-botellas{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:10px;margin-top:12px}
+.botella{position:relative;width:100%;max-width:44px;height:74px;padding:0;border:0;background:none;margin:0 auto}
+.botella::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:36%;height:12px;border-radius:4px 4px 2px 2px;background:#1F7FC4}
+.botella i{position:absolute;left:0;right:0;top:10px;bottom:0;border:3px solid #9CC9E6;border-radius:12px 12px 14px 14px;background:#F2F8FC;overflow:hidden}
+.botella i::after{content:"";position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(180deg,#5cc8ff,#1f7fc4);transition:height .35s}
+.botella.media i::after{height:45%}
+.botella.llena i::after{height:88%}
+.botella.llena i,.botella.media i{border-color:#1F7FC4}
+.agua-unid{flex-wrap:nowrap !important}.agua-unid .chip{flex:1;min-width:0;font-size:14px !important;padding:9px 6px !important;white-space:nowrap}
