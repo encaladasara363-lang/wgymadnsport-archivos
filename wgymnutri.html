@@ -1322,7 +1322,7 @@ function modoEscanear(){
  var visto = { c:"", n:0 };
  function encontrado(code){ if(cam.leyendo) return;
   if(code !== visto.c){ visto.c = code; visto.n = 1; } else visto.n++;
-  if(visto.n < 2) return;
+  if(visto.n < (String(code).length <= 8 ? 2 : 1)) return;   /* EAN-13 ya trae dígito verificador */
   cam.leyendo = true; if(navigator.vibrate) try{ navigator.vibrate(60); }catch(e){} pararCamara(); leido(code); }
  function sinCamara(){ $("camBox").hidden = true; $("camTxt").textContent = "No pudimos abrir la cámara. Revisa el permiso de cámara del navegador, o escribe el número del código aquí abajo."; }
  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ sinCamara(); return; }
@@ -1338,12 +1338,29 @@ function modoEscanear(){
     cam.timer = setInterval(function(){ if(vid.readyState < 2) return; det.detect(vid).then(function(r){ if(r && r[0]) encontrado(r[0].rawValue); })["catch"](function(){}); }, 250);
    })["catch"](sinCamara);
   }else{
+   /* iPhone (10-10-2026, la dueña: "me funciona solo parada, no derecho"): se toma el
+      cuadrado del centro de la imagen y se lee tal cual y girado 90°, rápido y sin
+      TRY_HARDER, así lee el código acostado o parado sin tener que girar el teléfono. */
    cargarZXing().then(function(){
     var hints = new Map(); hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.UPC_E]);
-    hints.set(ZXing.DecodeHintType.TRY_HARDER, true);   /* también lee el código girado (latas: el código va parado) */
-    cam.zx = new ZXing.BrowserMultiFormatReader(hints, 250);
-    var alLeer = function(r){ if(r) encontrado(r.getText()); };
-    cam.zx.decodeFromConstraints(VIDEO, vid, alLeer)["catch"](function(){ return cam.zx.decodeFromConstraints({ video:{ facingMode:"environment" }, audio:false }, vid, alLeer); })["catch"](sinCamara);
+    var lector = new ZXing.MultiFormatReader(); lector.setHints(hints);
+    var cv = document.createElement("canvas"), cx = cv.getContext("2d", { willReadFrequently:true }), cvr = document.createElement("canvas"), cxr = cvr.getContext("2d", { willReadFrequently:true });
+    function intentar(c){ try{ var r = lector.decode(new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(new ZXing.HTMLCanvasElementLuminanceSource(c))), hints); return r ? r.getText() : null; }catch(e){ return null; } }
+    navigator.mediaDevices.getUserMedia(VIDEO)["catch"](function(){ return navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment" }, audio:false }); }).then(function(st){
+     cam.stream = st; vid.srcObject = st; vid.play()["catch"](function(){});
+     var ocupado = false;
+     cam.timer = setInterval(function(){
+      if(ocupado || vid.readyState < 2 || !vid.videoWidth) return; ocupado = true;
+      try{
+       var vw = vid.videoWidth, vh = vid.videoHeight, lado = Math.round(Math.min(vw, vh) * 0.9), T = Math.min(lado, 900);
+       cv.width = T; cv.height = T; cx.drawImage(vid, (vw - lado) / 2, (vh - lado) / 2, lado, lado, 0, 0, T, T);
+       var code = intentar(cv);
+       if(!code){ cvr.width = T; cvr.height = T; cxr.setTransform(1, 0, 0, 1, 0, 0); cxr.translate(T, 0); cxr.rotate(Math.PI / 2); cxr.drawImage(cv, 0, 0); code = intentar(cvr); }
+       if(code) encontrado(code);
+      }catch(e){}
+      ocupado = false;
+     }, 150);
+    })["catch"](sinCamara);
    })["catch"](sinCamara);
   }
  }catch(e){ sinCamara(); } });
@@ -1650,7 +1667,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101026", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101027", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

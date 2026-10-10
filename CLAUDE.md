@@ -1494,7 +1494,12 @@ probado: ella se activó desde el mesón y entró a la app).
   vivo sale borroso de cerca):** bajo la cámara, «📸 ¿No lo lee? Saca una foto del código»
   (`<input capture>`: la cámara del teléfono enfoca sola) y `leerFotoCodigo` lee la foto
   quieta, normal y girada 90°, con BarcodeDetector o ZXing (`TRY_HARDER`); probado con un
-  EAN-8 borroso acostado y parado. El video en vivo ahora pide 2 lecturas iguales.
+  EAN-8 borroso acostado y parado.
+- **Lector en vivo del iPhone rehecho (10-10-2026, la dueña: "me funciona solo parada, no
+  derecho"):** en vez de `decodeFromConstraints` + `TRY_HARDER` (lento), cada 150 ms se
+  toma el cuadrado central del video (≤900 px) y se lee con `MultiFormatReader` tal cual y
+  girado 90°. EAN-13 se acepta a la primera (trae dígito verificador); EAN-8 pide 2
+  lecturas iguales. Probado con cámara simulada: EAN-8 y EAN-13, acostados y parados.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
