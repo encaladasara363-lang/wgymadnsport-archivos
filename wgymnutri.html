@@ -1081,16 +1081,17 @@ function renderRec(){
  var box = $("tabRec"), h = '<h2 class="disp" style="font-size:34px">Recetas saludables</h2>';
  if(recAbierta >= 0){
   var r = RECETAS[recAbierta];
-  h += '<button type="button" class="chip" id="recVolver" style="align-self:flex-start">‹ Todas las recetas</button>' +
+  h += '<button type="button" class="btn sec chico" id="recVolver" style="align-self:flex-start;width:auto;padding:12px 18px">‹ Volver a las recetas</button>' +
    '<div class="card"><div style="font-size:54px;line-height:1">' + r.e + '</div><p class="kick" style="margin-top:8px">' + esc(r.cat) + ' · ' + r.min + ' min · ' + esc(r.porc) + '</p>' +
    '<h3 style="font-family:var(--cond);font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.03em;margin:4px 0 12px">' + esc(r.n) + '</h3>' +
    '<div class="det-macros"><div><b style="color:var(--gold2)">' + miles(r.k) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + r.p + '</b><span>Prot. g</span></div><div><b>' + r.c + '</b><span>Carb. g</span></div><div><b>' + r.g + '</b><span>Grasa g</span></div></div></div>' +
    '<div class="card"><p class="kick">Ingredientes</p><ul style="margin:8px 0 0;padding-left:20px;line-height:1.7">' + r.ing.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
    '<div class="card"><p class="kick">Preparación</p><ol style="margin:8px 0 0;padding-left:22px;line-height:1.7">' + r.pasos.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ol></div>' +
    '<button type="button" class="btn rojo" id="recAgregar">+ Agregar a mi día</button>' +
-   '<p class="muted center" style="font-size:13px;margin:0">Calorías aproximadas por porción.</p>';
+   '<p class="muted center" style="font-size:13px;margin:0">Calorías aproximadas por porción.</p>' +
+   '<button type="button" class="btn sec" id="recVolver2">‹ Volver a las recetas</button>';
   box.innerHTML = h;
-  $("recVolver").onclick = function(){ recAbierta = -1; renderRec(); window.scrollTo(0, 0); };
+  $("recVolver").onclick = $("recVolver2").onclick = cerrarReceta;
   $("recAgregar").onclick = function(){
    agr.comida = RECETA_COMIDA[r.cat] || comidaPorHora(); diaSel = hoyISO();
    agregar({ n:r.n, p:r.porc, k:r.k, pr:r.p, c:r.c, g:r.g, cat:"Receta" }, 1, false);
@@ -1107,8 +1108,19 @@ function renderRec(){
  h += '</div>';
  box.innerHTML = h;
  box.querySelectorAll("[data-cat]").forEach(function(b){ b.onclick = function(){ recCat = b.dataset.cat; renderRec(); }; });
- box.querySelectorAll("[data-r]").forEach(function(b){ b.onclick = function(){ recAbierta = +b.dataset.r; renderRec(); window.scrollTo(0, 0); }; });
+ box.querySelectorAll("[data-r]").forEach(function(b){ b.onclick = function(){
+  recScroll = window.scrollY; recAbierta = +b.dataset.r;
+  // El gesto "atrás" del teléfono vuelve a la lista en vez de salir (10-10-2026, la dueña: "no me puedo ir para atrás")
+  try{ history.pushState({ wgymReceta: recAbierta }, ""); }catch(e){}
+  renderRec(); window.scrollTo(0, 0); }; });
 }
+var recScroll = 0;
+function mostrarListaRecetas(){ recAbierta = -1; renderRec(); window.scrollTo(0, recScroll); }
+function cerrarReceta(){
+ if(history.state && history.state.wgymReceta != null){ try{ history.back(); return; }catch(e){} }
+ mostrarListaRecetas();
+}
+window.addEventListener("popstate", function(){ if(recAbierta >= 0) mostrarListaRecetas(); });
 function renderPerfil(){
  var P = D.perfil, M = D.metas;
  var h = '<h2 class="disp" style="font-size:34px">Mi perfil</h2><div class="card"><p class="kick">' + esc(socio.n + " " + socio.a) + '</p>' +
