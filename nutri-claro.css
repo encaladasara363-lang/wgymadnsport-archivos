@@ -239,3 +239,6 @@ body{ zoom:1.1; }
 .hora-com{ font-family:var(--num); font-size:16px; font-weight:400; color:#8A6500; background:#FFF4C9; border-radius:8px; padding:2px 8px; margin-left:4px; vertical-align:2px; }
 .hc-fila span{ flex:1; min-width:0; }
 .hc-fila input{ flex:none; width:150px; min-width:0; font-size:20px; }
+/* La hoja usa el alto visible (con teclado abierto) */
+.velo{ bottom:auto; height:100%; }
+.hoja{ max-height:94% !important; overscroll-behavior:contain; }
