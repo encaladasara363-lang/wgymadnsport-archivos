@@ -1449,6 +1449,11 @@ probado: ella se activó desde el mesón y entró a la app).
   **Cada vez que se cambie `wgymnutri.html`, subir los dos números juntos
   (AAAAMMDDNN).** Los números se escriben en casilleros de texto con
   `inputmode="decimal"` (los `type="number"` del iPhone borraban la coma: 63,1 → 631).
+- **Horas de comida (10-10-2026, pedido de la dueña):** en «Mi perfil», cuadro
+  «🕒 Mis horas de comida» (una hora por comida, `D.horas`, solo en el teléfono;
+  por defecto `HORAS_DEF`). La hora aparece junto a cada comida en «Hoy»,
+  `comidaPorHora()` elige la comida según esas horas al tocar «+», y el
+  recordatorio «Mis horas de comida» avisa si pasaron 30 min sin anotarla.
 - **Recordatorios opcionales (10-10-2026):** en «Mi perfil», cuadro «🔔 Mis
   recordatorios» con interruptores (desayuno, agua, proteína, aviso al pasar la
   meta; `RECORDATORIOS`/`recOn`, guardado en `D.recordar` del teléfono). Son
