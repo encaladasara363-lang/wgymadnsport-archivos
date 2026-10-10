@@ -43,3 +43,4 @@ html.oscuro .voz-mic{ border-color:#E30613 !important; }
 html.oscuro .supl-b.on{ background:#0F2A1B !important; border-color:#1F9D55 !important; }
 html.oscuro .entreno-av{ background:#0F2A1B !important; border-color:#1F9D55 !important; }
 html.oscuro .supl-b small{ color:#F2D16B !important; }
+html.oscuro details.compras summary b{ color:#F2D16B !important; }

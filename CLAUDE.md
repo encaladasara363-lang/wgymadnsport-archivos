@@ -1601,6 +1601,17 @@ probado: ella se activó desde el mesón y entró a la app).
     escrita («2 huevos, una marraqueta y 150 gramos de pollo»); `interpretarVoz` separa por
     comas/«y»/«con», entiende números en palabra y gramos, `mejorAlimento` busca en la lista y
     «Agregar todo» suma todo de una vez (`agregarVarios`).
+  - «🛒 Mi lista de compras» arriba de las recetas: en cada receta «🛒 Agregar a mi lista de
+    compras» suma sus ingredientes (`D.compras`, sin repetir), se marcan al comprar, «📋 Copiar
+    lista» para WhatsApp/Notas y «🗑 Vaciar».
+  - «📲 Mi semana para Instagram» en Progreso: imagen 1080×1920 (`compartirSemana`) con logo,
+    días en meta de los últimos 7, días entrenados, racha, proteína y agua promedio; se comparte
+    o se descarga. El botón antiguo quedó como «Compartir mi racha y medallas».
+  - «📷 Mis fotos de progreso» en Progreso: fotos achicadas a 1000 px guardadas SOLO en el
+    teléfono (IndexedDB `wgymnutri_fotos`, por socio; nunca se suben); tocar 2 muestra
+    ANTES/DESPUÉS con fecha; ✕ borra.
+  - «🍔 Comer fuera»: al abrir Buscar sin escribir, Comida chilena y Comida rápida salen
+    segundas. Si la dueña manda menús de locales de Tocopilla, se suman a esas categorías.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
