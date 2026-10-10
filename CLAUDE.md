@@ -1435,8 +1435,9 @@ probado: ella se activó desde el mesón y entró a la app).
   producto (`PESO_TIPICO`: queso laminado 17 g, jamón/pavo 12 g, salame 5 g, pan
   de molde 27 g, galleta de arroz 9 g, etc.), marcado «aproximado»; el envase
   queda como «✏️ ¿No calza? Corrígelo» con la acción `porcionProducto` (solo llena la
-  porción si todavía no tenía unidades). **Requiere reinstalar el script
-  (Versión 14)**; mientras, queda guardado solo en ese teléfono.
+  porción si todavía no tenía unidades). **Instalado por la dueña el
+  10-10-2026 a las 15:13 como Versión 14** (las acciones de productos responden
+  el motivo del error en vez de la página de Google; volver atrás: Versión 13).
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
