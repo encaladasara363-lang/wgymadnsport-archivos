@@ -1401,7 +1401,7 @@ no pagar fotos con IA): `wgymnutri.html` + `nutri-alimentos.js` (lista de
 alimentos con comidas chilenas; para sumar uno, agregar una línea) +
 `wgymnutri.webmanifest` + `sw-wgymnutri.js` (sin caché, como el de la
 tarjeta) + `assets/wgymnutri-*` (logo que mandó la dueña) +
-`assets/wgymnutri-logo-animado.mp4`/`.webm` (logo animado sin sonido en la entrada y la carga, pedido de la dueña) + `vendor/zxing-0.21.3.min.js` (lector de código de barras para iPhone; en
+`assets/wgymnutri-logo-animado.mp4`/`.webm` (logo animado sin sonido en la entrada y la carga, pedido de la dueña; desde el 10-10-2026 es su video nuevo del logo con el plato de comida, 15 s, `?v=2`, con `assets/wgymnutri-logo-inicio.webp` de imagen mientras carga) + `vendor/zxing-0.21.3.min.js` (lector de código de barras para iPhone; en
 Android se usa `BarcodeDetector`). Se entra con el QR de
 `cartel-qr-wgymnutri.html`/`.pdf`; la app no va dentro de la tarjeta (que ya
 tiene "Mis calorías del día"), pero desde el 10-10-2026 la tarjeta muestra un
