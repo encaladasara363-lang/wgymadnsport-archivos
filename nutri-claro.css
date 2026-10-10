@@ -119,3 +119,10 @@ h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transfo
 .btn.sec{ background:#F2D04B; border:0; color:#141416; box-shadow:0 4px 0 #B8901F; }
 .add-l{ background:#FFF4C9; border:2px dashed #E2C35A; color:#7A5A00; }
 .racha{ background:#F2D04B; border:0; color:#141416; box-shadow:0 3px 0 #B8901F; }
+
+/* Letras más grandes en las comidas (10-10-2026, la dueña: "las letras muy pequeñas") */
+.add-l{ font-size:22px !important; font-weight:800 !important; padding:18px 12px !important; color:#6B4E00 !important; }
+.comida .cab h3{ font-size:24px !important; font-weight:800 !important; }
+.comida .cab small{ font-size:18px !important; }
+.item .tx b{ font-size:19px; }
+.item .tx span{ font-size:15.5px; }
