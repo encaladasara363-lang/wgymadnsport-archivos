@@ -1391,8 +1391,10 @@ tarjeta) + `assets/wgymnutri-*` (logo que mandó la dueña) +
 Android se usa `BarcodeDetector`). Se entra **solo** con el QR de
 `cartel-qr-wgymnutri.html`/`.pdf` (pedido de la dueña: no va dentro de la
 tarjeta, que ya tiene "Mis calorías del día").
-- Registro de comida: búsqueda por nombre, código de barras y búsqueda de
-  supermercado con Open Food Facts (gratis), favoritas, recientes y manual.
+- Registro de comida: lista propia (`nutri-alimentos.js`, 520+ alimentos con
+  marcas chilenas aproximadas) + **productos en línea** de Open Food Facts
+  (gratis) que se buscan solos al escribir (0,7 s, con caché; primero Chile y
+  luego el mundo) + código de barras, favoritas, recientes y manual.
 - Encuesta inicial paso a paso con la misma fórmula que la tarjeta
   (Harris-Benedict, base técnica); rellena con `wgym_calorias_v1` si existe.
 - Extras: agua, peso con gráfico, racha, medallas con confeti, resumen

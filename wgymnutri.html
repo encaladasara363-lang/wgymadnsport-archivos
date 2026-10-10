@@ -634,31 +634,53 @@ function renderAgregar(){
  ({ buscar:modoBuscar, escanear:modoEscanear, recientes:modoLista.bind(null, "recientes"), favs:modoLista.bind(null, "favs"), manual:modoManual })[agr.modo]();
 }
 function filaAlim(a, i, grupo){ return '<button type="button" data-g="' + grupo + '" data-i="' + i + '"><div class="tx"><b>' + esc(a.n) + '</b><span>' + esc(a.gr ? (a.marca ? a.marca + " · " : "") + "por 100 g" : a.p) + ' · P ' + r1(a.pr) + ' · C ' + r1(a.c) + ' · G ' + r1(a.g) + '</span></div><span class="k">' + miles(a.k) + '</span></button>'; }
+/* Búsqueda: primero la lista del gimnasio (al instante) y, por detrás, productos
+   en línea de Open Food Facts (base de datos gratuita con miles de marcas).
+   Se busca solo después de 0,7 s sin escribir y se guarda cada respuesta,
+   para no saturar el servicio. */
+var cacheOFF = {};
 function modoBuscar(){
  var c = $("agrCuerpo");
- c.innerHTML = '<input class="inp" id="agrQ" type="search" placeholder="Ej: marraqueta, pollo, palta…" value="' + esc(agr.q) + '" autocomplete="off"><div class="res" id="agrRes"></div>';
- var q = $("agrQ"), off = [];
+ c.innerHTML = '<input class="inp" id="agrQ" type="search" placeholder="Ej: marraqueta, Colún, pan Ideal…" value="' + esc(agr.q) + '" autocomplete="off" enterkeyhint="search"><div class="res" id="agrRes"></div>';
+ var q = $("agrQ"), reloj = null, off = [], estado = "";
  function pintar(){
-  agr.q = q.value; var t = normName(q.value), h = "", lista;
+  if(!$("agrRes") || !document.body.contains(q)) return;   /* ya se cerró o cambió de pestaña */
+  agr.q = q.value; var t = normName(q.value), h = "";
   if(!t){
    var cats = {}; ALIM.forEach(function(a, i){ (cats[a.cat] = cats[a.cat] || []).push(i); });
+   h += '<p class="muted" style="font-size:14px;margin:10px 0 0">Escribe un alimento o una marca: buscamos en la lista del gimnasio y en productos en línea.</p>';
    Object.keys(cats).forEach(function(k){ h += '<p class="sub">' + esc(k) + '</p>' + cats[k].map(function(i){ return filaAlim(ALIM[i], i, "a"); }).join(""); });
   }else{
    var palabras = t.split(" ");
-   lista = ALIM.map(function(a, i){ return [a, i]; }).filter(function(x){ return palabras.every(function(w){ return x[0].nn.indexOf(w) >= 0; }); });
-   h += lista.length ? lista.map(function(x){ return filaAlim(x[0], x[1], "a"); }).join("") : '<p class="muted">No está en la lista del gimnasio. Busca en productos de supermercado o agrégalo en «Manual».</p>';
-   h += '<p class="sub">Productos de supermercado</p>';
-   h += off.length ? off.map(function(a, i){ return filaAlim(a, i, "o"); }).join("") : '<button type="button" class="add-l" id="offBtn">Buscar «' + esc(q.value) + '» en supermercado</button>';
+   var lista = ALIM.map(function(a, i){ return [a, i]; }).filter(function(x){ return palabras.every(function(w){ return x[0].nn.indexOf(w) >= 0; }); });
+   h += '<p class="sub">Lista del gimnasio</p>' + (lista.length ? lista.map(function(x){ return filaAlim(x[0], x[1], "a"); }).join("") : '<p class="muted" style="margin:6px 0">Sin resultados en la lista.</p>');
+   h += '<p class="sub">🌐 Productos en línea</p>';
+   if(t.length < 3) h += '<p class="muted" style="margin:6px 0">Escribe al menos 3 letras.</p>';
+   else if(estado === "buscando") h += '<p class="muted" style="margin:6px 0">Buscando productos en línea…</p>';
+   else if(estado === "error" && window.WGYMNUTRI_DEMO) h += '<p class="muted" style="margin:6px 0">En la vista previa no hay internet. En el sitio real aquí aparecen los productos en línea.</p>';
+   else if(estado === "error") h += '<p class="muted" style="margin:6px 0">No pudimos conectarnos. Revisa tu internet.</p> <button type="button" class="add-l" id="offRe">Reintentar</button>';
+   else if(estado === "listo" && off.length) h += off.map(function(a, i){ return filaAlim(a, i, "o"); }).join("");
+   else if(estado === "listo") h += '<p class="muted" style="margin:6px 0">No encontramos productos en línea. Prueba con otra palabra, escanea el código de barras o agrégalo en «Manual».</p>';
   }
   $("agrRes").innerHTML = h;
   $("agrRes").querySelectorAll("[data-g]").forEach(function(b){ b.onclick = function(){ detalle(b.dataset.g === "a" ? ALIM[+b.dataset.i] : off[+b.dataset.i]); }; });
-  if($("offBtn")) $("offBtn").onclick = function(){
-   this.textContent = "Buscando…"; this.disabled = true;
-   buscarOFF(q.value).then(function(l){ off = l; if(!l.length){ var b = $("offBtn"); if(b){ b.textContent = "No encontramos productos. Prueba con otra palabra o usa «Manual»."; } return; } pintar(); });
-  };
+  if($("offRe")) $("offRe").onclick = function(){ delete cacheOFF[normName(q.value)]; buscarEnLinea(); };
  }
- q.oninput = function(){ off = []; pintar(); };
- pintar(); setTimeout(function(){ q.focus(); }, 80);
+ function buscarEnLinea(){
+  var texto = q.value.trim(), clave = normName(texto);
+  if(clave.length < 3){ estado = ""; off = []; pintar(); return; }
+  if(cacheOFF[clave]){ off = cacheOFF[clave]; estado = "listo"; pintar(); return; }
+  estado = "buscando"; off = []; pintar();
+  buscarOFF(texto).then(function(l){
+   if(normName(q.value) !== clave) return;      /* ya escribió otra cosa */
+   if(l === null){ estado = "error"; pintar(); return; }
+   cacheOFF[clave] = l; off = l; estado = "listo"; pintar();
+  });
+ }
+ q.oninput = function(){ clearTimeout(reloj); estado = ""; off = []; pintar(); reloj = setTimeout(buscarEnLinea, 700); };
+ q.onkeydown = function(e){ if(e.key === "Enter"){ e.preventDefault(); clearTimeout(reloj); buscarEnLinea(); } };
+ pintar(); if(q.value) buscarEnLinea();
+ setTimeout(function(){ q.focus(); }, 80);
 }
 function modoLista(cual){
  var l = D[cual], c = $("agrCuerpo");
@@ -725,9 +747,22 @@ function offAAlim(p){
 }
 var OFF_CAMPOS = "code,product_name,product_name_es,brands,nutriments,serving_quantity";
 function buscarOFF(q){
- var u = "https://world.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&json=1&page_size=20&fields=" + OFF_CAMPOS +
-  "&tagtype_0=countries&tag_contains_0=contains&tag_0=chile&search_terms=" + encodeURIComponent(q);
- return fetch(u).then(function(r){ return r.json(); }).then(function(d){ return (d.products || []).map(offAAlim).filter(Boolean); })["catch"](function(){ return []; });
+ if(window.WGYMNUTRI_DEMO) return Promise.resolve(null);
+ /* Primero productos vendidos en Chile; si salen pocos, se completa con el resto del mundo.
+    Devuelve null si no hubo conexión. */
+ function pedir(chile){
+  var u = "https://world.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&json=1&page_size=24&sort_by=unique_scans_n&fields=" + OFF_CAMPOS +
+   (chile ? "&tagtype_0=countries&tag_contains_0=contains&tag_0=chile" : "") + "&search_terms=" + encodeURIComponent(q);
+  return fetch(u).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(d){ return (d.products || []).map(offAAlim).filter(Boolean); });
+ }
+ return pedir(true).then(function(cl){
+  if(cl.length >= 8) return cl;
+  return pedir(false).then(function(mu){
+   var vistos = {}, todo = [];
+   cl.concat(mu).forEach(function(a){ var k = normName(a.n + "|" + a.marca); if(!vistos[k]){ vistos[k] = 1; todo.push(a); } });
+   return todo.slice(0, 30);
+  })["catch"](function(){ return cl; });
+ })["catch"](function(){ return null; });
 }
 function productoOFF(code){
  return fetch("https://world.openfoodfacts.org/api/v2/product/" + encodeURIComponent(code) + ".json?fields=" + OFF_CAMPOS)
