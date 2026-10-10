@@ -213,3 +213,4 @@ body{ zoom:1.1; }
 .top .t span#saludo{ font-family:var(--display) !important; font-weight:400 !important; font-size:24px !important; letter-spacing:.03em !important; color:#E30613 !important; line-height:1.05; display:block; margin-top:2px; }
 .perfil-nombre{ margin:0 0 6px; font-family:var(--display); font-size:30px; line-height:1.05; text-transform:uppercase; letter-spacing:.02em; color:#111114; }
 .campo label{ font-size:16px !important; color:#111114 !important; }
+#borrarB{ background:#FFFFFF !important; border:2px solid #E30613 !important; color:#E30613 !important; box-shadow:0 4px 0 #E30613 !important; }
