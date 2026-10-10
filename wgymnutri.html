@@ -1124,6 +1124,49 @@ function htmlRetos(){
   (D.retoApodo ? '<p class="kick" style="margin:14px 0 6px">Ranking WGYM · ' + MESES[+hoyISO().slice(5, 7) - 1] + '</p><div id="rankBox"></div><button type="button" class="chip" id="retoSalir" style="margin-top:8px">Salir del ranking</button>'
    : '<div class="fila2" style="grid-template-columns:1fr auto;margin-top:12px"><input class="inp" id="retoApodo" maxlength="18" placeholder="Tu apodo (ej: LaFlaca)" autocomplete="off"><button type="button" class="btn rojo chico" id="retoUnir" style="width:auto">Unirme</button></div><p class="muted" style="font-size:13px;margin:6px 0 0">Usa un apodo: no pongas tu nombre completo.</p>') + '</div>';
 }
+/* Leer la etiqueta con la cámara (10-10-2026): lector de texto gratuito Tesseract dentro de la
+   app (vendor/tesseract-5.1.1, se descarga solo la primera vez que se usa, ~6 MB). */
+var ocrWorker = null;
+function cargarTesseract(){
+ if(ocrWorker) return ocrWorker;
+ var dir = new URL("vendor/tesseract-5.1.1/", location.href).href;
+ ocrWorker = new Promise(function(ok, mal){
+  function crear(){ window.Tesseract.createWorker("spa", 1, { workerPath:dir + "worker.min.js", corePath:dir, langPath:dir + "lang", gzip:true, workerBlobURL:false }).then(ok, mal); }
+  if(window.Tesseract) return crear();
+  var s = document.createElement("script"); s.src = dir + "tesseract.min.js"; s.onload = crear; s.onerror = mal; document.head.appendChild(s);
+ });
+ ocrWorker["catch"](function(){ ocrWorker = null; });
+ return ocrWorker;
+}
+function numsDe(l){ return (l.match(/\d+(?:[.,]\d+)?/g) || []).map(function(x){ return Number(x.replace(",", ".")); }); }
+function parseEtiqueta(txt){
+ var lineas = String(txt || "").split(/\n+/).map(function(l){ return l.trim(); }).filter(Boolean), out = {}, col100 = 0;
+ lineas.forEach(function(l){ var b = normName(l).toLowerCase();
+  if(/100\s*(g|ml)/.test(b) && /porc/.test(b)) col100 = b.search(/100\s*(g|ml)/) < b.search(/porc/) ? 0 : 1;
+  var mp = b.match(/porci[oó]n[^0-9]{0,20}(\d+(?:[.,]\d+)?)\s*(g|ml)/); if(mp && !out.porcG) out.porcG = Number(mp[1].replace(",", ".")); });
+ function valor(l, quitarKj){
+  var b = normName(l).toLowerCase(), n;
+  if(quitarKj && /kcal/.test(b) && /kj/.test(b)){ var i = b.indexOf("kcal"), antes = numsDe(b.slice(0, i)), despues = numsDe(b.slice(i)); n = despues.length >= 1 && antes.length <= 1 ? despues : antes; }
+  else n = numsDe(b.replace(/\(\s*(g|mg|kcal|ml)\s*\)/g, " ").replace(/100\s*(g|ml)/g, " "));
+  if(!n.length) return null; return n.length >= 2 ? n[col100] : n[0];
+ }
+ lineas.forEach(function(l){ var b = normName(l).toLowerCase();
+  if(out.k == null && /energ|calor/.test(b)) out.k = valor(l, true);
+  else if(out.p == null && /prote/.test(b)) out.p = valor(l);
+  else if(out.g == null && /(grasa|lipido)s?\s*total|^grasas?\b|grasa total/.test(b) && !/satur|trans|mono|poli/.test(b)) out.g = valor(l);
+  else if(out.c == null && /(h\.?\s*de\s*c|hidratos|carbohidrat)/.test(b) && !/azuc/.test(b)) out.c = valor(l);
+ });
+ return out;
+}
+function botonEtiqueta(id){ return '<label class="btn oro chico ocr-btn" style="display:flex;align-items:center;justify-content:center;cursor:pointer">📸 Leer la etiqueta con la cámara<input type="file" id="' + id + '" accept="image/*" capture="environment" hidden></label><p class="muted" id="' + id + 'Tx" style="font-size:13px;margin:4px 0 0">Saca una foto derecha y con luz a la tabla nutricional: la app llena los números. Revísalos antes de guardar.</p>'; }
+function leerEtiqueta(file, alListo){
+ var tx = function(m){ var e = document.querySelector(".ocr-btn + p"); if(e) e.textContent = m; };
+ tx("⏳ Preparando el lector (la primera vez demora un poco)…");
+ cargarTesseract().then(function(w){ tx("🔎 Leyendo la etiqueta…"); return achicarFoto(file).then(function(b){ return w.recognize(b); }); })
+  .then(function(r){ var d = parseEtiqueta(r && r.data && r.data.text); var n = ["k","p","c","g"].filter(function(k){ return d[k] != null; }).length;
+   tx(n ? "✅ Leí " + n + " de 4 valores. Revisa que coincidan con la etiqueta." : "No pude leer los números. Prueba con más luz y la tabla derecha, o escríbelos."); alListo(d); })
+  ["catch"](function(){ tx("No se pudo usar el lector en este teléfono. Escribe los números a mano."); });
+}
 var aguaPctPrev = 0;
 /* Vitamina C recomendada al día (10-10-2026, pedido de la dueña): 75 mg mujeres, 90 mg hombres
    (recomendación diaria de adultos del Instituto de Medicina de EE. UU.). */
@@ -1482,7 +1525,9 @@ function modoManual(){
  c.innerHTML = '<div class="stack"><div class="campo"><label for="mN">Nombre</label><input class="inp" id="mN" placeholder="Ej: Ensalada de la casa"></div>' +
   '<div class="campo"><label for="mP">Porción</label><input class="inp" id="mP" placeholder="Ej: 1 plato"></div>' +
   '<div class="fila4"><div class="campo"><label for="mK">Kcal</label><input class="inp" id="mK" type="text" inputmode="decimal" autocomplete="off"></div><div class="campo"><label for="mPr">Prot. g</label><input class="inp" id="mPr" type="text" inputmode="decimal" autocomplete="off"></div><div class="campo"><label for="mC">Carb. g</label><input class="inp" id="mC" type="text" inputmode="decimal" autocomplete="off"></div><div class="campo"><label for="mG">Grasa g</label><input class="inp" id="mG" type="text" inputmode="decimal" autocomplete="off"></div></div>' +
-  '<p class="muted" style="font-size:13px;margin:0">Los valores salen en la etiqueta del producto («por porción»).</p><p class="err" id="mErr" hidden></p><button type="button" class="btn rojo" id="mOk">Agregar</button></div>';
+  '<p class="muted" style="font-size:13px;margin:0">Los valores salen en la etiqueta del producto («por porción»).</p>' + botonEtiqueta("ocrM") + '<p class="err" id="mErr" hidden></p><button type="button" class="btn rojo" id="mOk">Agregar</button></div>';
+ $("ocrM").onchange = function(){ var f = this.files && this.files[0]; this.value = ""; if(!f) return;
+  leerEtiqueta(f, function(d){ var q = d.porcG ? d.porcG / 100 : 1; function pon(id, v){ if(v != null && $(id)) $(id).value = String(r1(v * q)).replace(".", ","); } pon("mK", d.k); pon("mPr", d.p); pon("mC", d.c); pon("mG", d.g); if(d.porcG && !$("mP").value) $("mP").value = d.porcG + " g"; }); };
  $("mOk").onclick = function(){
   function v(id){ return Number(String($(id).value).replace(",", ".")) || 0; }
   var n = $("mN").value.trim();
@@ -1787,7 +1832,7 @@ function formProducto(code){
  var c = $("agrCuerpo");
  function campo(id, lab, ph, num){ return '<div class="campo"><label for="' + id + '">' + lab + '</label><input class="inp" id="' + id + '" placeholder="' + ph + '"' + (num ? ' type="text" inputmode="decimal" autocomplete="off"' : '') + '></div>'; }
  c.innerHTML = '<div class="stack"><p class="kick">➕ Nuevo producto · código ' + esc(code) + '</p>' +
-  '<p class="muted" style="margin:0">Copia los datos de la tabla nutricional de la etiqueta, columna <b>«100 g»</b> (o «100 ml»).</p>' +
+  '<p class="muted" style="margin:0">Copia los datos de la tabla nutricional de la etiqueta, columna <b>«100 g»</b> (o «100 ml»).</p>' + botonEtiqueta("ocrP") +
   campo("pN", "Nombre del producto", "Ej: Yogur protein frutilla") + campo("pM", "Marca", "Ej: Soprole") +
   '<div class="fila2">' + campo("pK", "Kcal en 100 g", "—", 1) + campo("pPr", "Proteína en 100 g", "—", 1) + '</div>' +
   '<div class="fila2">' + campo("pC", "Carbohidratos en 100 g", "—", 1) + campo("pG", "Grasas en 100 g", "—", 1) + '</div>' +
@@ -1795,6 +1840,8 @@ function formProducto(code){
   '<p class="err" id="pErr" hidden></p><button type="button" class="btn rojo" id="pOk">Guardar para todos</button><button type="button" class="btn sec chico" id="pVolver">‹ Volver a escanear</button></div>';
  function v(id){ return Number(String($(id).value).replace(",", ".")); }
  $("pVolver").onclick = function(){ modoEscanear(); };
+ $("ocrP").onchange = function(){ var f = this.files && this.files[0]; this.value = ""; if(!f) return;
+  leerEtiqueta(f, function(d){ function pon(id, v){ if(v != null && $(id)) $(id).value = String(v).replace(".", ","); } pon("pK", d.k); pon("pPr", d.p); pon("pC", d.c); pon("pG", d.g); if(d.porcG) pon("pPg", d.porcG); }); };
  $("pOk").onclick = function(){
   var a = { code:code, n:$("pN").value.trim(), marca:$("pM").value.trim(), gr:100, p:"100 g", k:v("pK"), pr:v("pPr") || 0, c:v("pC") || 0, g:v("pG") || 0, porcG:v("pPg") || 0, porcTxt:$("pPt").value.trim() };
   var e = $("pErr");
@@ -2095,7 +2142,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101051", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101052", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
