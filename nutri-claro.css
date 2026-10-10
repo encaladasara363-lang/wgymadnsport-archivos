@@ -173,3 +173,19 @@ p.muted, div.muted, .muted{ color:#111114 !important; font-weight:600; }
 .cab span{ font-size:24px !important; color:#8A6500 !important; }
 .frase small{ color:#8A6500 !important; font-weight:800 !important; }
 .anillo-box{ gap:10px !important; }
+
+/* Letras bien marcadas en toda la app (10-10-2026, la dueña: "las letras no están marcadas") */
+body{ color:#111114; font-weight:500; }
+.card li{ font-size:18.5px; font-weight:600; color:#111114; line-height:1.6 !important; }
+.card li::marker{ color:#E30613; font-weight:800; }
+.kick{ color:#8A6500 !important; font-weight:800 !important; }
+.det-macros b, .plan-res b{ font-size:30px; }
+.det-macros span, .plan-res span{ color:#111114 !important; font-weight:800 !important; }
+.receta b{ font-size:20px !important; color:#111114; }
+.receta .muted{ font-size:16px !important; }
+.res button{ font-weight:600; color:#111114; }
+.inp{ font-weight:600; color:#111114; }
+.inp::placeholder{ color:#6B6B73; font-weight:500; }
+.nav button{ color:#3F3F46 !important; font-weight:800; }
+.nav button.on{ color:#E30613 !important; }
+.opc small{ font-weight:700 !important; }

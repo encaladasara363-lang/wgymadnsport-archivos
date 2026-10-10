@@ -231,7 +231,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=7">
+<link rel="stylesheet" href="nutri-claro.css?v=8">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -285,8 +285,9 @@ h1,h2,h3{margin:0;font-weight:400}
    <p class="kick">Contador de calorías de WGYMADNSPORT</p>
    <h2 class="disp" style="font-size:40px">Activa <span style="color:var(--gold)">WGYMNUTRI</span></h2>
    <p style="font-family:var(--num);font-size:46px;margin:6px 0 0;background:linear-gradient(90deg,#FF2D3A,#F2D16B);-webkit-background-clip:text;background-clip:text;color:transparent" id="pagoPrecio">$5.000</p>
-   <p class="muted" style="margin:0">al mes</p>
+   <p class="muted" style="margin:0" id="pagoDetalle">al mes</p>
   </div>
+  <div class="stack" id="pagoOfertas" style="text-align:left"></div>
   <div class="card" style="text-align:left">
    <ul style="margin:0;padding-left:20px;line-height:1.8">
     <li>Tu meta diaria de calorías y proteínas</li><li>Escáner de código de barras y miles de productos</li>
@@ -334,7 +335,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <div id="velo" class="velo" hidden><div class="hoja" id="hoja" role="dialog" aria-modal="true"></div></div>
 <canvas id="confeti" hidden></canvas>
 
-<script src="pago-datos.js?v=2"></script>
+<script src="pago-datos.js?v=3"></script>
 <script src="nutri-alimentos.js?v=4"></script>
 <script src="nutri-recetas.js?v=8"></script>
 <script>
@@ -507,16 +508,28 @@ function revisarNutri(esperando){
   else if(activa !== (antes && antes >= hoyISO()) && tabSel === "tabPerfil" && !$("vApp").hidden) renderPerfil();
  });
 }
+/* Ofertas (10-10-2026): 1 mes, 3 meses o pack con Full Mensual. */
+var ofertaSel = "mes";
+function ofertasNutri(){
+ var P = window.WGYM_PAGO || {};
+ return P.nutriOfertas || [{ id:"mes", nombre:(P.nutri || {}).nombre || "WGYMNUTRI mensual", precio:(P.nutri || {}).precio || 5000, meses:1, detalle:"1 mes de app" }];
+}
 function datosPago(){
- var P = window.WGYM_PAGO || {}, c = P.cuenta || {}, n = P.nutri || { nombre:"WGYMNUTRI mensual", precio:5000 };
+ var P = window.WGYM_PAGO || {}, c = P.cuenta || {}, L = ofertasNutri();
+ var n = L.filter(function(o){ return o.id === ofertaSel; })[0] || L[0];
  return { c:c, n:n, filas:[["Nombre", c.titular], ["RUT", c.rut], ["Banco", c.banco], ["Tipo de cuenta", c.tipo], ["Número de cuenta", c.numero], ["Email", c.correo], ["Monto", "$" + miles(n.precio)], ["Comentario", socio.n + " " + socio.a + " - " + n.nombre]] };
 }
 function mostrarPago(){
  cerrarHoja();
- var dp = datosPago(), h = nutriGuardado();
+ var dp = datosPago(), h = nutriGuardado(), L = ofertasNutri();
  $("pagoPrecio").textContent = "$" + miles(dp.n.precio);
+ $("pagoDetalle").textContent = dp.n.detalle || "al mes";
+ $("pagoOfertas").innerHTML = L.length < 2 ? "" : '<p class="kick" style="margin:0">Elige tu opción</p>' + L.map(function(o){
+  return '<button type="button" class="opc" data-oferta="' + esc(o.id) + '" aria-pressed="' + (o.id === dp.n.id) + '"><span class="e">' + (o.id === "pack" ? "💪" : o.id === "tri" ? "🔥" : "🥗") + '</span><span style="flex:1;min-width:0"><b>' + esc(o.nombre) + '</b><small>' + esc(o.detalle || "") + '</small></span><span style="font-family:var(--num);font-size:26px;white-space:nowrap">$' + miles(o.precio) + '</span></button>';
+ }).join("");
+ $("pagoOfertas").querySelectorAll("[data-oferta]").forEach(function(b){ b.onclick = function(){ ofertaSel = b.dataset.oferta; var y = window.scrollY; mostrarPago(); window.scrollTo(0, y); }; });
  $("pagoDatos").innerHTML = '<p class="kick" style="margin-bottom:8px">Transfiere a</p>' + dp.filas.filter(function(f){ return f[1]; }).map(function(f){ return '<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)"><span class="muted">' + esc(f[0]) + '</span><b style="text-align:right;overflow-wrap:anywhere">' + esc(f[1]) + '</b></div>'; }).join("");
- $("pagoWsp").href = "https://wa.me/" + (dp.c.whatsapp || "56975196394") + "?text=" + encodeURIComponent("Hola Sara, soy " + socio.n + " " + socio.a + ". Pagué WGYMNUTRI ($" + miles(dp.n.precio) + " al mes) por transferencia. Te envío el comprobante.");
+ $("pagoWsp").href = "https://wa.me/" + (dp.c.whatsapp || "56975196394") + "?text=" + encodeURIComponent("Hola Sara, soy " + socio.n + " " + socio.a + ". Pagué " + dp.n.nombre + " ($" + miles(dp.n.precio) + ") por transferencia. Te envío el comprobante.");
  var m = $("pagoMsg"); m.hidden = !h; if(h) m.textContent = "Tu WGYMNUTRI venció el " + h.split("-").reverse().join("-") + ". Renueva para seguir usándola.";
  vista("vPago");
 }

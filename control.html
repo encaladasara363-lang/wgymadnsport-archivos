@@ -1679,6 +1679,7 @@ function abrirFicha(s){
   '<button type="button" id="fMas7" data-mas="7">+7 días</button>'+
   '</div>'+(nuevo ? '' : '<div class="nutri-caja" id="fNutri"><span class="nt" id="fNutriTxt">🥗 WGYMNUTRI: revisando…</span>'+
   '<button type="button" class="n-act" id="fNutriAct">Activar 1 mes ($5.000)</button>'+
+  '<button type="button" class="n-act" id="fNutriAct3">Activar 3 meses ($12.000)</button>'+
   '<button type="button" class="n-quitar" id="fNutriQuitar" hidden>Quitar</button></div>')+
   '<p class="aviso" id="fAviso"></p></div>'+
   '<div class="pie"><button class="btn btn-linea" id="fCopiar" type="button">📋 Copiar</button>'+
@@ -1841,29 +1842,31 @@ function abrirFicha(s){
 
  /* WGYMNUTRI de pago: se activa por mes desde aquí (va directo a la hoja). */
  if(!nuevo){
-  var nTxt = velo.querySelector("#fNutriTxt"), nAct = velo.querySelector("#fNutriAct"), nQuit = velo.querySelector("#fNutriQuitar");
+  var nTxt = velo.querySelector("#fNutriTxt"), nAct = velo.querySelector("#fNutriAct"), nAct3 = velo.querySelector("#fNutriAct3"), nQuit = velo.querySelector("#fNutriQuitar");
   var pintarNutri = function(){
    if(!velo) return;
    var h = nutriHasta_(d.n, d.a), hoy = hoyISO();
-   if(nutriSoporte === false){ nTxt.innerHTML = "🥗 WGYMNUTRI: falta instalar la actualización del script (ver docs)."; nAct.disabled = true; nQuit.hidden = true; return; }
+   if(nutriSoporte === false){ nTxt.innerHTML = "🥗 WGYMNUTRI: falta instalar la actualización del script (ver docs)."; nAct.disabled = nAct3.disabled = true; nQuit.hidden = true; return; }
    if(nutriSoporte === null){ nTxt.textContent = "🥗 WGYMNUTRI: revisando…"; return; }
-   nAct.disabled = false;
-   if(h && h >= hoy){ nTxt.innerHTML = "🥗 WGYMNUTRI <b>activa</b> hasta el <b>" + h.split("-").reverse().join("-") + "</b>"; nAct.textContent = "Sumar 1 mes ($5.000)"; nQuit.hidden = false; }
-   else { nTxt.innerHTML = "🥗 WGYMNUTRI: " + (h ? "venció el " + h.split("-").reverse().join("-") : "sin activar"); nAct.textContent = "Activar 1 mes ($5.000)"; nQuit.hidden = true; }
+   nAct.disabled = nAct3.disabled = false;
+   if(h && h >= hoy){ nTxt.innerHTML = "🥗 WGYMNUTRI <b>activa</b> hasta el <b>" + h.split("-").reverse().join("-") + "</b>"; nAct.textContent = "Sumar 1 mes ($5.000)"; nAct3.textContent = "Sumar 3 meses ($12.000)"; nQuit.hidden = false; }
+   else { nTxt.innerHTML = "🥗 WGYMNUTRI: " + (h ? "venció el " + h.split("-").reverse().join("-") : "sin activar"); nAct.textContent = "Activar 1 mes ($5.000)"; nAct3.textContent = "Activar 3 meses ($12.000)"; nQuit.hidden = true; }
   };
   var guardarNutri = function(hasta){
-   nAct.disabled = true; nTxt.textContent = "🥗 WGYMNUTRI: guardando…";
+   nAct.disabled = nAct3.disabled = true; nTxt.textContent = "🥗 WGYMNUTRI: guardando…";
    llamarSocioApi_("activarNutri", { nombre:d.n, apellido:d.a, hasta:hasta }, function(ok, data){
     if(ok){ NUTRI[nutriLlave_(d.n, d.a)] = hasta; pintarNutri(); }
     else { pintarNutri(); var av = velo && velo.querySelector("#fAviso"); if(av) av.textContent = "No se pudo guardar WGYMNUTRI: " + data; }
    });
   };
-  nAct.addEventListener("click", function(){
+  var sumarNutri = function(meses){
    var h = nutriHasta_(d.n, d.a), hoy = hoyISO();
    var base = (h && h >= hoy) ? h : hoy, p = base.split("-");
-   var f = sumarMeses(new Date(+p[0], +p[1]-1, +p[2]), 1);
+   var f = sumarMeses(new Date(+p[0], +p[1]-1, +p[2]), meses);
    guardarNutri(f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-" + String(f.getDate()).padStart(2,"0"));
-  });
+  };
+  nAct.addEventListener("click", function(){ sumarNutri(1); });
+  nAct3.addEventListener("click", function(){ sumarNutri(3); });
   nQuit.addEventListener("click", function(){ guardarNutri(""); });
   pintarNutri(); cargarNutri_(pintarNutri);
  }
