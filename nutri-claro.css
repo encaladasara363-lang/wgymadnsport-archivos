@@ -462,3 +462,11 @@ details.compras summary b{font-size:14px;color:#B36B00}
 .foto-comp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .foto-comp figure{margin:0}.foto-comp img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:3px solid #D4AF37}
 .foto-comp figcaption{text-align:center;font-family:var(--cond);font-weight:800;font-size:14px;margin-top:4px}
+/* Retos del mes (10-10-2026) */
+.reto-l{margin-top:10px}.reto-l span{font-size:15px;font-weight:700}.reto-l b{float:right;font-family:var(--num);font-weight:400;font-size:18px}
+.reto-l .barra{clear:both;margin-top:4px;height:10px}.reto-l .barra i{background:linear-gradient(90deg,#D4AF37,#E30613) !important}
+.ranking{list-style:none;margin:0;padding:0}
+.ranking li{display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid var(--line)}
+.ranking .pos{width:34px;text-align:center;font-size:20px;font-style:normal;font-family:var(--num)}
+.ranking b{flex:1;font-size:16px}.ranking em{font-family:var(--num);font-size:18px;font-style:normal;color:#B36B00}
+.ranking li.yo{background:rgba(227,6,19,.10);border-radius:10px}

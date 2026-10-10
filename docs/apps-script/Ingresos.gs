@@ -563,6 +563,47 @@ function origenNutri_(e) {
   } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
 
+/* ── Retos del mes de WGYMNUTRI (Versión 17, 10-10-2026, la dueña: "quiero todas") ──
+   Ranking solo con APODO y PUNTOS: nunca nombre real ni datos de salud. Cada teléfono
+   se identifica con un código al azar (id) y solo actualiza su propia fila del mes. */
+function mesRetoOk_(m) { return /^\d{4}-\d{2}$/.test(String(m || "")); }
+function guardarReto_(e) {
+  try {
+    var p = e.parameter, mes = String(p.mes || ""), id = String(p.id || "").replace(/[^a-z0-9]/gi, "").slice(0, 24);
+    var apodo = String(p.apodo || "").replace(/[<>"]/g, "").trim().slice(0, 18), pts = Math.floor(Number(p.pts));
+    if (!mesRetoOk_(mes) || id.length < 8 || apodo.length < 2 || !(pts >= 0 && pts <= 93)) return respond_(e, { ok: false, error: "datos inválidos" });
+    var lock = LockService.getScriptLock();
+    if (!lock.tryLock(10000)) return respond_(e, { ok: false, error: "ocupado, intenta de nuevo" });
+    try {
+      var ss = SpreadsheetApp.openById(SHEET_ID), hoja = ss.getSheetByName("Retos");
+      if (!hoja) { hoja = ss.insertSheet("Retos"); hoja.appendRow(["Mes", "Id", "Apodo", "Puntos", "Actualizado"]); }
+      var n = hoja.getLastRow(), ahora = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm");
+      if (n >= 2) {
+        var vals = hoja.getRange(2, 1, n - 1, 2).getValues();
+        for (var i = 0; i < vals.length; i++) {
+          if (String(vals[i][0]) === mes && String(vals[i][1]) === id) { hoja.getRange(i + 2, 3, 1, 3).setValues([[apodo, pts, ahora]]); return respond_(e, { ok: true }); }
+        }
+      }
+      hoja.appendRow([mes, id, apodo, pts, ahora]);
+      return respond_(e, { ok: true });
+    } finally { lock.releaseLock(); }
+  } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
+}
+function listarRetos_(e) {
+  try {
+    var mes = String(e.parameter.mes || "");
+    if (!mesRetoOk_(mes)) return respond_(e, { ok: false, error: "mes inválido" });
+    var hoja = SpreadsheetApp.openById(SHEET_ID).getSheetByName("Retos"), out = [];
+    if (hoja && hoja.getLastRow() >= 2) {
+      hoja.getRange(2, 1, hoja.getLastRow() - 1, 4).getValues().forEach(function (r) {
+        if (String(r[0]) === mes && String(r[2]) !== "(salió)") out.push({ id: String(r[1]).slice(0, 6), apodo: String(r[2]), pts: Number(r[3]) || 0 });
+      });
+    }
+    out.sort(function (a, b) { return b.pts - a.pts; });
+    return respond_(e, { ok: true, retos: true, lista: out.slice(0, 30) });
+  } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
+}
+
 /* ── las dos entradas que llama Código.gs ───────────────────────────── */
 
 function accionIngresos_(e) {
@@ -577,6 +618,8 @@ function accionIngresos_(e) {
     case "guardarProducto": return guardarProducto_(e);
     case "porcionProducto": return porcionProducto_(e);
     case "origenNutri": return origenNutri_(e);
+    case "guardarReto": return guardarReto_(e);
+    case "listarRetos": return listarRetos_(e);
   }
   return null;
 }
