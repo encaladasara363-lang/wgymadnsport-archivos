@@ -1423,7 +1423,8 @@ probado: ella se activó desde el mesón y entró a la app).
   WGYM», al escanear busca primero ahí y después en Open Food Facts (lo que
   encuentra se guarda solo), y si no existe en ningún lado ofrece «➕ Crear este
   producto para todos» con la tabla de la etiqueta (valores por 100 g).
-  **Requiere instalar la versión nueva del script (Versión 13).**
+  **Instalado por la dueña el 10-10-2026 a las 14:06 como Versión 13** (misma
+  implementación y enlace; para volver atrás: lápiz → Versión 12).
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
