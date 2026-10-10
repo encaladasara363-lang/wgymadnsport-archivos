@@ -231,7 +231,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=12">
+<link rel="stylesheet" href="nutri-claro.css?v=13">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -729,7 +729,7 @@ function renderHoy(){
   h += '<button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar ' + (/^(desayuno|almuerzo)$/.test(cm[0]) ? "al " : "a la ") + cm[2].toLowerCase() + '</button></div>';
  });
  h += '</div>';
- if(!estaInstalada() && !lsGet(CLAVE_INST, false)) h += '<div class="aviso" style="background:#160c0d;border-color:#5a1a1f"><span class="e">📲</span><p><b>Pon WGYMNUTRI en tu pantalla de inicio</b><br><span class="muted" style="font-size:14px">Ábrela con un toque, como cualquier app.</span></p><button type="button" id="instIr" class="btn rojo chico" style="width:auto">Instalar</button></div>';
+ if(!estaInstalada() && !DENTRO_TARJETA && !lsGet(CLAVE_INST, false)) h += '<div class="aviso" style="background:#160c0d;border-color:#5a1a1f"><span class="e">📲</span><p><b>Pon WGYMNUTRI en tu pantalla de inicio</b><br><span class="muted" style="font-size:14px">Ábrela con un toque, como cualquier app.</span></p><button type="button" id="instIr" class="btn rojo chico" style="width:auto">Instalar</button></div>';
  var box = $("tabHoy"); box.innerHTML = h;
  requestAnimationFrame(function(){ requestAnimationFrame(function(){ var p = $("anilloProg"); if(p) p.style.strokeDashoffset = C * (1 - pct); }); });
  $("diaAnt").onclick = function(){ diaSel = sumaDias(diaSel, -1); renderHoy(); };
@@ -1155,7 +1155,8 @@ function renderPerfil(){
   '<div class="campo" style="margin-top:12px"><label for="aguaMeta">Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta">' + [6,7,8,9,10,11,12,14].map(function(n){ return '<option' + (n === M.agua ? " selected" : "") + '>' + n + '</option>'; }).join("") + '</select></div>' +
   '<button type="button" class="btn sec chico" id="recalc" style="margin-top:12px">Recalcular con mis datos</button></div>' +
   '<div class="card"><p class="kick">📲 App en tu teléfono</p>' + (estaInstalada() ? '<p class="muted">✅ WGYMNUTRI ya está en tu pantalla de inicio.</p>'
-   : (DENTRO_TARJETA && modoApp()) ? '<div class="muted">' + pasosDesdeTarjeta() + '</div><button type="button" class="btn rojo chico" id="instCopiarP">📋 Copiar enlace</button>'
+   : DENTRO_TARJETA ? '<p class="muted">✅ La abres desde tu <b>Tarjeta Virtual</b>: toca «Ver WGYMNUTRI» cada vez que la necesites. No hace falta instalar nada más.</p>' +
+     '<details class="inst-aparte"><summary>¿Prefieres un ícono aparte en tu pantalla de inicio?</summary><div class="muted">' + pasosDesdeTarjeta() + '</div><button type="button" class="btn sec chico" id="instCopiarP">📋 Copiar enlace</button></details>'
    : '<p class="muted">Ponla en tu pantalla de inicio para abrirla con un toque.</p><button type="button" class="btn rojo chico" id="instP">Poner en mi pantalla de inicio</button>') + '</div>' +
   '<div class="card"><p class="kick">🔐 Privacidad</p><p class="muted" style="font-size:14px;margin:6px 0 10px">Tus comidas, tu peso y tus datos se guardan solo en este teléfono. Nadie más los ve, ni siquiera el gimnasio.</p>' +
   '<button type="button" class="btn sec chico" id="salirB">Cambiar de socio</button><div style="height:8px"></div><button type="button" class="btn sec chico" id="borrarB">Borrar mis datos de este teléfono</button><div id="borrarConf"></div></div>' +
