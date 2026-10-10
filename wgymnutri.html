@@ -1187,8 +1187,9 @@ function detalle(a){
     comió en un cuadro grande y se calcula solo (10-10-2026, pedido de la dueña). */
  var porcLoc = "";
  if(!cuenta && !a.gr && agr.comida !== "bebidas" && a.cat !== CAT_BEB){
-  var mg = /(?:^|\()\s*(\d+(?:[.,]\d+)?)\s*g\s*\)?\s*$/i.exec(a.p || ""), nG = mg ? Number(mg[1].replace(",", ".")) : 0;
-  if(nG > 0){ var fG = 100 / nG; porcLoc = a.p; a = Object.assign({}, a, { k:a.k * fG, pr:a.pr * fG, c:a.c * fG, g:a.g * fG, gr:nG }); }
+  var mg = /(?:^|[\s(])(\d+(?:[.,]\d+)?)\s*g\b/i.exec(a.p || ""), nG = mg ? Number(mg[1].replace(",", ".")) : 0;
+  var esMl = false; if(!mg){ mg = /(?:^|[\s(])(\d+(?:[.,]\d+)?)\s*ml\b/i.exec(a.p || ""); nG = mg ? Number(mg[1].replace(",", ".")) : 0; esMl = !!mg; }
+  if(nG > 0){ var fG = 100 / nG; porcLoc = a.p; a = Object.assign({}, a, { k:a.k * fG, pr:a.pr * fG, c:a.c * fG, g:a.g * fG, gr:nG }); if(esMl) a.ml = true; }
  }
  var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
  /* Líquidos (10-10-2026, la dueña escaneó una Score: "debe decir la lata"): se muestra por
@@ -1756,7 +1757,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101041", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101042", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

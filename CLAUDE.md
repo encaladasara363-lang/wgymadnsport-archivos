@@ -1531,7 +1531,9 @@ probado: ella se activó desde el mesón y entró a la app).
   cuentan (huevos, avellanas, pistachos, castañas, maní en granos…) muestran un cuadro grande
   «¿Cuántas avellanas comiste?» (`#dCant`) y los de porción en gramos (avena 40 g, arroz, etc.)
   y los escaneados, «¿Cuántos gramos?» (`#dGr`, porción habitual como referencia); se escribe el
-  número y las calorías se calculan solas. Sin filas de botones de gramos. Frutos secos por
+  número y las calorías se calculan solas. Sin filas de botones de gramos. Vale para toda porción
+  que diga gramos en cualquier parte («150 g cocida», «1 taza (200 g)») y las de ml («1 vaso
+  (200 ml)» → «¿Cuántos ml tomaste?»); solo «1 taza», «1 plato» o «1 scoop» siguen con ½/1/2. Frutos secos por
   unidad en Básicos fitness: Avellanas (10), Pistachos (10), Castañas de cajú (10), Maní (10
   granos), Almendras (20).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
