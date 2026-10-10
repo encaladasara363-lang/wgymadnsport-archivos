@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WGYMNUTRI · WGYMADNSPORT</title>
 <meta name="description" content="WGYMNUTRI: el contador de calorías de los socios de WGYMADNSPORT Tocopilla.">
@@ -618,7 +619,8 @@ function renderOnb(){
  function opciones(lista, campo){
   return '<div class="opciones">' + lista.map(function(o){ return '<button type="button" class="opc" data-v="' + o[0] + '" aria-pressed="' + (String(d[campo]) === String(o[0])) + '"><span class="e">' + o[1] + '</span><span><b>' + o[2] + '</b><small>' + o[3] + '</small></span></button>'; }).join("") + '</div>';
  }
- function numero(campo, unidad, ph){ return '<div class="center" style="padding:20px 0"><input class="grande-inp" id="onbNum" type="text" inputmode="decimal" autocomplete="off" step="any" placeholder="' + ph + '" value="' + esc(d[campo]) + '"><p class="unidad">' + unidad + '</p></div>'; }
+ function valido(campo, v){ var L = { edad:[12,99], alt:[120,230], peso:[30,250] }[campo]; return v !== "" && v != null && (!L || (v >= L[0] && v <= L[1])); }
+ function numero(campo, unidad, ph){ return '<div class="center" style="padding:20px 0"><input class="grande-inp" id="onbNum" type="text" inputmode="decimal" autocomplete="off" step="any" placeholder="' + ph + '" value="' + esc(valido(campo, d[campo]) ? String(d[campo]).replace(".", ",") : "") + '"><p class="unidad">' + unidad + '</p></div>'; }
  if(k === "sexo") h += '<h2 class="disp" style="font-size:40px">¡Hola, ' + esc(socio.n.split(" ")[0]) + '!</h2><p class="muted">Responde 6 preguntas rápidas y calculamos tu meta diaria. ¿Eres…?</p>' + opciones([["F","👩","Mujer",""],["M","👨","Hombre",""]], "sexo");
  if(k === "edad") h += '<h2 class="disp" style="font-size:36px">¿Cuántos años tienes?</h2>' + numero("edad", "años", "30");
  if(k === "alt") h += '<h2 class="disp" style="font-size:36px">¿Cuánto mides?</h2>' + numero("alt", "centímetros", "165");
@@ -647,11 +649,14 @@ function renderOnb(){
  function leerNum(){ if(num) d[k] = Number(String(num.value).replace(",", ".")) || ""; }
  function siguiente(){
   leerNum();
-  var lim = { edad:[12,99,"Escribe tu edad (entre 12 y 99 años)."], alt:[120,230,"Escribe tu estatura en centímetros (por ejemplo 165)."], peso:[30,250,"Escribe tu peso en kilos (por ejemplo 70)."] };
+  var lim = { edad:[12,99,"Escribe tu edad (entre 12 y 99 años)."], alt:[120,230,"Escribe tu estatura en centímetros (por ejemplo 165)."], peso:[30,250,"Escribe tu peso en kilos, por ejemplo 70 o 63,1 (con coma)."] };
   var err = "";
   if((k === "sexo" || k === "act" || k === "obj") && !d[k]) err = "Elige una opción para seguir.";
   if(lim[k] && !(d[k] >= lim[k][0] && d[k] <= lim[k][1])) err = lim[k][2];
-  if(err){ var e = $("onbErr"); e.textContent = err; e.hidden = false; return; }
+  if(err){ var e = $("onbErr"); e.textContent = err; e.hidden = false;
+   // Si quedó un número imposible (ej. 631 por una coma perdida), se borra para escribirlo de nuevo.
+   if(lim[k] && num && d[k] !== ""){ d[k] = ""; num.value = ""; num.focus(); }
+   return; }
   if(k === "res"){
    D.perfil = { sexo:d.sexo, edad:d.edad, alt:d.alt, peso:d.peso, act:d.act, obj:d.obj };
    var m = calcular(D.perfil); D.metas = { kcal:m.kcal, p:m.p, c:m.c, g:m.g, agua:(D.metas && D.metas.agua) || 8 };
@@ -1227,6 +1232,19 @@ function instalar(){
 }
 if("serviceWorker" in navigator){ navigator.serviceWorker.register("sw-wgymnutri.js", { scope:"./wgymnutri" })["catch"](function(){}); }
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist()["catch"](function(){}); }catch(e){}
+
+/* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
+   número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
+var NUTRI_VERSION = "2026101001", ultimaRevVersion = 0;
+function revisarVersionNutri(){
+ if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
+ fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
+  t = String(t || "").trim();
+  if(/^\d{10}$/.test(t) && t > NUTRI_VERSION){ try{ if(sessionStorage.getItem("wgymnutri_recargado") === t) return; sessionStorage.setItem("wgymnutri_recargado", t); }catch(e){} location.reload(); }
+ })["catch"](function(){});
+}
+revisarVersionNutri();
+document.addEventListener("visibilitychange", function(){ if(document.visibilityState === "visible") revisarVersionNutri(); });
 
 /* Al volver a la app después de un rato, se revisa de nuevo el plan (renovó o venció). */
 document.addEventListener("visibilitychange", function(){

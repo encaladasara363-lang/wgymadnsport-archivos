@@ -1444,6 +1444,11 @@ probado: ella se activó desde el mesón y entró a la app).
   comentario y el WhatsApp a Sara). En el mesón la caja «🥗 WGYMNUTRI» trae
   «Activar 1 mes» y «Activar 3 meses»; el pack se registra renovando el Full
   Mensual en la ficha como siempre + «Activar 1 mes».
+- **Actualización automática (10-10-2026):** `wgymnutri.html` trae `NUTRI_VERSION`
+  y compara con `nutri-version.txt`; si el archivo es mayor, se recarga sola.
+  **Cada vez que se cambie `wgymnutri.html`, subir los dos números juntos
+  (AAAAMMDDNN).** Los números se escriben en casilleros de texto con
+  `inputmode="decimal"` (los `type="number"` del iPhone borraban la coma: 63,1 → 631).
 - **Recordatorios opcionales (10-10-2026):** en «Mi perfil», cuadro «🔔 Mis
   recordatorios» con interruptores (desayuno, agua, proteína, aviso al pasar la
   meta; `RECORDATORIOS`/`recOn`, guardado en `D.recordar` del teléfono). Son
