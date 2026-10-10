@@ -658,8 +658,8 @@ const MEDICIONES_URL = "https://wgymadnsport-mediciones.encaladasara363.chatgpt.
  '<button type="button" data-sexo="F" id="evoRefF">Mujer</button>' +
  '<button type="button" data-sexo="M" id="evoRefM">Hombre</button>' +
  '</div>' +
- '<div class="evo-ref-campo"><label>Peso (kg)</label><input type="number" inputmode="decimal" id="evoRefPeso" placeholder="—"></div>' +
- '<div class="evo-ref-campo"><label>Estatura (cm)</label><input type="number" inputmode="decimal" id="evoRefEstatura" placeholder="—"></div>' +
+ '<div class="evo-ref-campo"><label>Peso (kg)</label><input type="text" inputmode="decimal" autocomplete="off" id="evoRefPeso" placeholder="—"></div>' +
+ '<div class="evo-ref-campo"><label>Estatura (cm)</label><input type="text" inputmode="decimal" autocomplete="off" id="evoRefEstatura" placeholder="—"></div>' +
  '<button type="button" class="evo-ref-btn" id="evoRefCalcular">Ver mi rango</button>' +
  '<p class="evo-ref-aviso" id="evoRefAviso"></p>', "", editando);
  var sexoElegido = (guardado && guardado.sexo) || null;
@@ -677,8 +677,8 @@ const MEDICIONES_URL = "https://wgymadnsport-mediciones.encaladasara363.chatgpt.
  }
  box.querySelector("#evoRefCalcular").addEventListener("click", function(){
  var aviso = box.querySelector("#evoRefAviso");
- var peso = Number(box.querySelector("#evoRefPeso").value);
- var estatura = Number(box.querySelector("#evoRefEstatura").value);
+ var peso = Number(String(box.querySelector("#evoRefPeso").value).replace(",", "."));
+ var estatura = Number(String(box.querySelector("#evoRefEstatura").value).replace(",", "."));
  if(!sexoElegido){ aviso.textContent = "Elige si eres mujer u hombre."; return; }
  if(!peso || peso < 25 || peso > 300){ aviso.textContent = "Escribe un peso válido en kg."; return; }
  if(!estatura || estatura < 100 || estatura > 230){ aviso.textContent = "Escribe tu estatura en cm (ej: 165)."; return; }
@@ -2358,7 +2358,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101014", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101015", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
