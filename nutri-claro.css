@@ -246,3 +246,6 @@ body{ zoom:1.1; }
 .uni-falta{ margin:10px 0 0; background:#FFF8E6; border:2px dashed #E2C35A; border-radius:14px; padding:10px 12px; }
 .uni-falta summary{ cursor:pointer; font-weight:800; font-size:16px; color:#6B4E00; }
 #dUni{ margin-bottom:10px; }
+/* Bebidas energéticas e isotónicas (10-10-2026) */
+.bebidas-card .beb-bts{display:grid;gap:10px;margin-top:8px}
+.bebidas-card .beb-bts .btn{font-size:19px;padding:15px}
