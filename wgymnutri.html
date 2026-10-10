@@ -337,7 +337,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=9"></script>
+<script src="nutri-alimentos.js?v=10"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -936,7 +936,9 @@ function renderHoy(){
   var xx = diaDe(diaSel); xx.c[b.dataset.m].splice(+b.dataset.j, 1); setDia(diaSel, xx); guardar(); renderHoy(); $("rachaNum").textContent = racha();
  }; });
 }
-function porcionTxt(it){ var m = it.x || 1; return it.gr ? Math.round(it.gr * m) + (it.ml ? " ml" : " g") : (m === 1 ? it.p : (m === 0.5 ? "½" : String(m).replace(".", ",")) + " × " + it.p); }
+function porcionTxt(it){ var m = it.x || 1, u1 = !it.gr && String(it.p || "").match(/^1 (\S+)(.*)$/);
+ if(u1 && m === Math.round(m) && m > 1) return m + " " + plural(u1[1], m) + u1[2];
+ return it.gr ? Math.round(it.gr * m) + (it.ml ? " ml" : " g") : (m === 1 ? it.p : (m === 0.5 ? "½" : String(m).replace(".", ",")) + " × " + it.p); }
 
 /* ═══ 5. Agregar comida: buscar, escanear, recientes, favoritas, manual ═══ */
 var agr = { comida:"desayuno", modo:"buscar", q:"" };
@@ -1029,7 +1031,19 @@ function porcionES(t){
 /* Unidades de la porción (10-10-2026, la dueña: "cuántas láminas es la porción").
    Sale del texto de la porción ("2 láminas (34 g)", "2 slices") o de lo que se anotó. */
 var UNIDADES = ["lámina","rebanada","unidad","galleta","barra","pote","sobre","scoop","cucharada","taza","tajada","trozo"];
-function plural(u, n){ return n <= 1 ? u : (u === "unidad" ? "unidades" : u.replace(/a$/, "a") + "s"); }
+function plural(u, n){ return n <= 1 ? u : (u === "unidad" ? "unidades" : /ch$/.test(u) ? u + "es" : u + "s"); }
+/* Alimentos que se cuentan (huevos, unidades, rebanadas…): se muestran de a 1 y la persona
+   elige cuántos comió, 1 a 6 (10-10-2026, la dueña: "aparece medio huevo, es tonto"). */
+var CONTABLES = /^(\d+)\s+(huevos?|unidad(?:es)?|rebanadas?|l[aá]minas?|galletas?|marraquetas?|hallullas?|tostadas?|trozos?|claras?|panqueques?|empanadas?|s[aá]ndwich(?:es)?|wraps?|barras?|sobres?|potes?|latas?|botellas?|frutillas?|nueces|almendras?|tajadas?)\b\s*(.*)$/i;
+function porUnidad(a){
+ if(a.gr) return null;
+ var m = String(a.p || "").match(CONTABLES); if(!m) return null;
+ var n = +m[1]; if(!(n >= 1)) return null;
+ var w = m[2].toLowerCase(), sing = /unidades$/.test(w) ? "unidad" : /ches$/.test(w) ? w.slice(0, -2) : /nueces$/.test(w) ? "nuez" : w.replace(/s$/, "");
+ var resto = m[3] ? " " + m[3].replace(/^\(.*\)$/, "") : "";
+ if(n === 1) return { a:a, sing:sing, n:1 };
+ return { a:Object.assign({}, a, { p:"1 " + sing, k:a.k / n, pr:a.pr / n, c:a.c / n, g:a.g / n }), sing:sing, n:n };
+}
 /* Peso aproximado de 1 lámina/rebanada/unidad según el tipo de producto (10-10-2026,
    la dueña: "que calcule sola"). Solo se usa cuando la etiqueta no dice las unidades,
    y se muestra como estimado. [patrón, unidad, gramos por unidad, unidades por porción] */
@@ -1156,6 +1170,7 @@ function modoManual(){
  };
 }
 function detalle(a){
+ var cuenta = porUnidad(a); if(cuenta) a = cuenta.a;
  var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
  /* Líquidos (10-10-2026, la dueña escaneó una Score: "debe decir la lata"): se muestra por
     lata o botella en ml, sin el cuadro de láminas. */
@@ -1205,6 +1220,7 @@ function detalle(a){
  }
  if(esGr) h += '<div class="campo"><label for="dGr">' + (esLiq ? '¿Cuántos ml tomaste?' : '¿Cuántos gramos?') + '</label><input class="inp" id="dGr" type="text" inputmode="decimal" autocomplete="off" value="' + gramos + '"></div>' +
   (a.porcG || a.cat ? '' : '<p class="muted" style="margin:0;font-size:14px">' + (esLiq ? 'La etiqueta no dice cuánto trae: escribe los ml (mira el número grande de la ' + envase + ').' : 'Este producto no trae porción en su etiqueta: escribe los gramos que comiste.') + '</p>');
+ else if(cuenta) h += '<p class="kick">¿Cuántos ' + esc(plural(cuenta.sing, 2)) + ' comiste?</p><div class="mults" id="dMults">' + Array.apply(null, { length:Math.max(6, cuenta.n * 2) }).map(function(_, i){ return i + 1; }).map(function(k){ return '<button type="button" class="chip" data-x="' + k + '" aria-pressed="' + (k === 1) + '">' + k + ' ' + esc(plural(cuenta.sing, k)) + '</button>'; }).join("") + '</div>';
  else h += '<p class="kick">Porción: ' + esc(a.p) + '</p><div class="mults" id="dMults">' + [[0.5,"½"],[1,"1"],[1.5,"1½"],[2,"2"],[3,"3"]].map(function(m){ return '<button type="button" class="chip" data-x="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
  h += '<div class="det-macros" id="dMac" style="margin:14px 0"></div>' +
   '<div class="fila2"><button type="button" class="btn sec" id="dFav">' + (esFav(a) ? "★ En favoritas" : "☆ Favorita") + '</button><button type="button" class="btn rojo" id="dOk">Agregar</button></div>';
@@ -1717,7 +1733,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101031", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101032", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

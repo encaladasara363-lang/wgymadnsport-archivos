@@ -11,7 +11,6 @@ window.NUTRI_ALIMENTOS = [
  ["Pechuga de pollo a la plancha (100 g)", "100 g cocida", 165, 31, 0, 3.6, "⭐ Básicos fitness"],
  ["Pechuga de pavo a la plancha", "150 g cocida", 203, 44, 0, 2.5, "⭐ Básicos fitness"],
  ["Claras de huevo", "4 claras (130 g)", 68, 14, 1, 0.2, "⭐ Básicos fitness"],
- ["Huevos duros", "2 huevos", 155, 13, 1.1, 10.6, "⭐ Básicos fitness"],
  ["Huevo duro", "1 huevo", 78, 6.3, 0.6, 5.3, "⭐ Básicos fitness"],
  ["Omelette de claras", "4 claras + 1 huevo", 140, 20, 1.5, 5.5, "⭐ Básicos fitness"],
  ["Atún en agua", "1 lata escurrida (120 g)", 130, 29, 0, 1, "⭐ Básicos fitness"],

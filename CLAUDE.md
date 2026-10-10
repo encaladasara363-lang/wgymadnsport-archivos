@@ -1515,6 +1515,11 @@ probado: ella se activó desde el mesón y entró a la app).
   «Hoy» muestra por defecto botellas de 500 ml (una botella = 2 vasos; media botella si
   quedó un vaso suelto) y deja cambiar a «Vasos 250 ml» (`D.aguaUnidad`, solo en el
   teléfono). El total se ve en litros. Se sigue guardando en vasos (`x.agua`).
+- **Alimentos que se cuentan, de a 1 (10-10-2026, la dueña: "aparece medio huevo, es
+  tonto"):** si la porción es «N huevos/unidades/rebanadas/claras/galletas…» (`CONTABLES`,
+  `porUnidad`), el detalle pasa a «1 huevo» y pregunta «¿Cuántos huevos comiste?» con
+  botones 1 a 6 (o hasta el doble de la porción original, ej. claras hasta 8); en «Hoy» se
+  ve «3 huevos». Se sacó «Huevos duros (2 huevos)»: queda solo «Huevo duro».
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
