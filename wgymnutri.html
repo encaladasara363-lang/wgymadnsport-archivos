@@ -242,7 +242,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <main class="wrap" id="app">
  <!-- Entrada -->
  <section id="vGate" class="gate" hidden>
-  <video class="logo anim" poster="assets/wgymnutri-logo.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI animado"><source src="assets/wgymnutri-logo-animado.mp4" type="video/mp4"><source src="assets/wgymnutri-logo-animado.webm" type="video/webm"></video>
+  <video class="logo anim" poster="assets/wgymnutri-logo-inicio.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI animado"><source src="assets/wgymnutri-logo-animado.mp4?v=2" type="video/mp4"><source src="assets/wgymnutri-logo-animado.webm?v=2" type="video/webm"></video>
   <div>
    <p class="kick">WGYMADNSPORT · Tocopilla</p>
    <h1 class="disp">W<span class="r">GYM</span><span class="g">NUTRI</span></h1>
@@ -261,7 +261,7 @@ h1,h2,h3{margin:0;font-weight:400}
 
  <!-- Cargando -->
  <section id="vCarga" class="gate" hidden>
-  <video class="logo anim" poster="assets/wgymnutri-logo.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI animado"><source src="assets/wgymnutri-logo-animado.mp4" type="video/mp4"><source src="assets/wgymnutri-logo-animado.webm" type="video/webm"></video>
+  <video class="logo anim" poster="assets/wgymnutri-logo-inicio.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI animado"><source src="assets/wgymnutri-logo-animado.mp4?v=2" type="video/mp4"><source src="assets/wgymnutri-logo-animado.webm?v=2" type="video/webm"></video>
   <div class="spin"></div>
   <p class="muted" id="cargaTxt">Revisando tu plan…</p>
  </section>
@@ -1779,7 +1779,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101044", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101045", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
