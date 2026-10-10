@@ -392,6 +392,66 @@ function asistenciaDesde_(e) {
   return respond_(e, { ok: true, asistencia: true, desde: desde, dias: dias });
 }
 
+/* ── WGYMNUTRI de pago (10-10-2026, la dueña: "venderla a $5.000 al mes") ──
+   Hoja aparte "WGYMNUTRI" en la misma planilla: Nombre · Apellido ·
+   Activa hasta (AAAA-MM-DD) · Actualizado. La activa la dueña desde la
+   ficha del socio en el mesón (POST activarNutri con la clave de
+   administración). La app pregunta listarNutri (público: solo nombre y
+   fecha, como listarSocios). */
+var HOJA_NUTRI_ = "WGYMNUTRI";
+function hojaNutri_() {
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var hoja = ss.getSheetByName(HOJA_NUTRI_);
+  if (!hoja) {
+    hoja = ss.insertSheet(HOJA_NUTRI_);
+    hoja.appendRow(["Nombre", "Apellido", "Activa hasta", "Actualizado"]);
+    hoja.getRange("C:C").setNumberFormat("@");
+  }
+  return hoja;
+}
+function fechaNutri_(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, TZ_INGRESOS_, "yyyy-MM-dd");
+  return String(v || "").trim();
+}
+function listarNutri_(e) {
+  var cache = null;
+  try { cache = CacheService.getScriptCache(); } catch (err) {}
+  if (cache) {
+    var g = cache.get("nutri_lista");
+    if (g) { try { return respond_(e, JSON.parse(g)); } catch (err) {} }
+  }
+  var datos = hojaNutri_().getDataRange().getValues(), activos = [];
+  for (var i = 1; i < datos.length; i++) {
+    var h = fechaNutri_(datos[i][2]);
+    if (datos[i][0] && h) activos.push({ n: String(datos[i][0]), a: String(datos[i][1] || ""), hasta: h });
+  }
+  var resp = { ok: true, nutri: true, hoy: diaCL_(Date.now()), activos: activos };
+  if (cache) { try { cache.put("nutri_lista", JSON.stringify(resp), 30); } catch (err) {} }
+  return respond_(e, resp);
+}
+function activarNutri_(e) {
+  var p = e.parameter;
+  if (!claveValida_(p)) return respond_(e, { ok: false, error: "clave incorrecta" });
+  var nombreTxt = String(p.nombre || "").trim(), apellidoTxt = String(p.apellido || "").trim();
+  var nombre = normNombre_(nombreTxt), apellido = normNombre_(apellidoTxt);
+  var hasta = String(p.hasta || "").trim();          /* "" = quitar la activación */
+  if (!nombre) return respond_(e, { ok: false, error: "faltan datos" });
+  if (hasta && !/^\d{4}-\d{2}-\d{2}$/.test(hasta)) return respond_(e, { ok: false, error: "fecha inválida" });
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) return respond_(e, { ok: false, error: "ocupado, intenta de nuevo" });
+  try {
+    var hoja = hojaNutri_(), datos = hoja.getDataRange().getValues(), fila = 0;
+    for (var i = 1; i < datos.length; i++) {
+      if (normNombre_(datos[i][0]) === nombre && normNombre_(datos[i][1]) === apellido) { fila = i + 1; break; }
+    }
+    var ahora = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm");
+    if (fila) hoja.getRange(fila, 3, 1, 2).setValues([[hasta, ahora]]);
+    else hoja.appendRow([nombreTxt, apellidoTxt, hasta, ahora]);
+    try { CacheService.getScriptCache().remove("nutri_lista"); } catch (err) {}
+    return respond_(e, { ok: true, nutri: true, hasta: hasta });
+  } finally { lock.releaseLock(); }
+}
+
 /* ── las dos entradas que llama Código.gs ───────────────────────────── */
 
 function accionIngresos_(e) {
@@ -401,6 +461,7 @@ function accionIngresos_(e) {
     case "ingresoTarjeta": return ingresoTarjeta_(e);
     case "salidaSocio": return salidaSocio_(e);
     case "asistenciaDesde": return asistenciaDesde_(e);
+    case "listarNutri": return listarNutri_(e);
   }
   return null;
 }
@@ -410,6 +471,7 @@ function accionIngresosPost_(e) {
     case "registrarIngreso": return registrarIngreso_(e);
     case "registrarSalida": return registrarSalida_(e);
     case "quitarSalida": return quitarSalida_(e);
+    case "activarNutri": return activarNutri_(e);
   }
   return null;
 }

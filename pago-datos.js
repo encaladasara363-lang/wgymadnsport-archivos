@@ -14,6 +14,8 @@ window.WGYM_PAGO = {
   correo: "encaladasara363@gmail.com",
   whatsapp: "56975196394"
  },
+ /* WGYMNUTRI (contador de calorías) se vende aparte, por mes (10-10-2026). */
+ nutri: { nombre: "WGYMNUTRI mensual", precio: 5000 },
  /* "re" reconoce el plan tal como está escrito en la ficha del socio
     (sin tildes y en minúsculas). El orden importa: el primero que calce. */
  planes: [

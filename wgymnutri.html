@@ -277,6 +277,32 @@ h1,h2,h3{margin:0;font-weight:400}
   </div>
  </section>
 
+ <!-- Pago de WGYMNUTRI ($5.000 al mes, 10-10-2026) -->
+ <section id="vPago" class="gate" hidden>
+  <img class="logo" src="assets/wgymnutri-logo.webp" alt="Logo WGYMNUTRI" style="width:min(48vw,180px)">
+  <div>
+   <p class="kick">Contador de calorías de WGYMADNSPORT</p>
+   <h2 class="disp" style="font-size:40px">Activa <span style="color:var(--gold)">WGYMNUTRI</span></h2>
+   <p style="font-family:var(--num);font-size:46px;margin:6px 0 0;background:linear-gradient(90deg,#FF2D3A,#F2D16B);-webkit-background-clip:text;background-clip:text;color:transparent" id="pagoPrecio">$5.000</p>
+   <p class="muted" style="margin:0">al mes</p>
+  </div>
+  <div class="card" style="text-align:left">
+   <ul style="margin:0;padding-left:20px;line-height:1.8">
+    <li>Tu meta diaria de calorías y proteínas</li><li>Escáner de código de barras y miles de productos</li>
+    <li>Más de 130 recetas saludables</li><li>Agua, peso, racha y medallas</li>
+   </ul>
+  </div>
+  <div class="card" style="text-align:left" id="pagoDatos"></div>
+  <p class="err" id="pagoMsg" hidden></p>
+  <div class="stack">
+   <button class="btn oro" type="button" id="pagoCopiar">📋 Copiar datos de transferencia</button>
+   <a class="btn rojo" id="pagoWsp" href="#" target="_blank" rel="noopener" style="text-decoration:none">💬 Enviar comprobante a Sara</a>
+   <p class="muted" style="margin:0;font-size:14px">Cuando Sara reciba tu pago, activa tu app desde recepción. WhatsApp de Sara: <b>+56 9 7519 6394</b></p>
+   <button class="btn sec chico" type="button" id="pagoRevisar">Ya pagué: revisar de nuevo</button>
+   <button class="btn sec chico" type="button" id="pagoOtro">No soy yo · cambiar nombre</button>
+  </div>
+ </section>
+
  <!-- Encuesta inicial -->
  <section id="vOnb" hidden></section>
 
@@ -307,6 +333,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <div id="velo" class="velo" hidden><div class="hoja" id="hoja" role="dialog" aria-modal="true"></div></div>
 <canvas id="confeti" hidden></canvas>
 
+<script src="pago-datos.js?v=2"></script>
 <script src="nutri-alimentos.js?v=4"></script>
 <script src="nutri-recetas.js?v=6"></script>
 <script>
@@ -334,7 +361,7 @@ function serialAISO(fv){ var d = new Date(Date.UTC(1899, 11, 30) + Number(fv) * 
 var DIAS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
 var MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 function fechaLarga(s){ var d = fechaDeISO(s); return DIAS[d.getDay()] + " " + d.getDate() + " de " + MESES[d.getMonth()]; }
-function vista(id){ ["vGate","vCarga","vBloqueo","vOnb","vApp"].forEach(function(v){ $(v).hidden = v !== id; }); $("nav").hidden = id !== "vApp"; window.scrollTo(0, 0); $(id).querySelectorAll("video").forEach(function(v){ try{ var x = v.play(); if(x) x["catch"](function(){}); }catch(e){} }); }
+function vista(id){ ["vGate","vCarga","vBloqueo","vPago","vOnb","vApp"].forEach(function(v){ $(v).hidden = v !== id; }); $("nav").hidden = id !== "vApp"; window.scrollTo(0, 0); $(id).querySelectorAll("video").forEach(function(v){ try{ var x = v.play(); if(x) x["catch"](function(){}); }catch(e){} }); }
 function toast(msg){ var t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 2600); }
 
 /* ═══ 1. Socios y bloqueo (misma lógica que tarjeta.html) ═══ */
@@ -418,10 +445,101 @@ function entrar(texto, silencioso){
 }
 function abrir(){
  if(bloqueado(socio)){ mostrarBloqueo(); return; }
+ var ns = nutriEstado();
+ if(ns === "pendiente"){ vista("vCarga"); $("cargaTxt").textContent = "Revisando tu suscripción…"; revisarNutri(true); return; }
+ if(ns === "no"){ mostrarPago(); return; }
+ if(nutriConsultado !== claveNutri()) revisarNutri(false);   /* abre al tiro con lo guardado y confirma por detrás */
  D = leerDatos();
  if(!D.perfil){ onb.paso = 0; onb.d = prellenar(); renderOnb(); vista("vOnb"); return; }
  iniciarApp();
 }
+/* ── WGYMNUTRI de pago ($5.000 al mes) ──
+   La dueña la activa desde la ficha del socio en el mesón (hoja "WGYMNUTRI",
+   acción listarNutri del Apps Script). Se guarda en el teléfono la última
+   fecha vista para abrir al instante; la hoja la confirma por detrás. Si el
+   script todavía no tiene la acción (no responde "nutri"), la app queda
+   libre para no dejar a nadie afuera por una instalación pendiente. */
+var CLAVE_NUTRI = "wgymnutri_activa_v1", nutriConsultado = "", nutriLibre = false;
+function claveNutri(){ return normName(socio.n + " " + socio.a); }
+function nutriGuardado(){ var t = lsGet(CLAVE_NUTRI, {}) || {}; return t[claveNutri()]; }
+function nutriEstado(){
+ if(nutriLibre) return "si";
+ var h = nutriGuardado();
+ if(h === undefined) return "pendiente";
+ return h && h >= hoyISO() ? "si" : "no";
+}
+function cargarNutri(){
+ if(window.WGYMNUTRI_DEMO){
+  var demo = {}; window.WGYMNUTRI_DEMO.forEach(function(x){ if(normName(x.n + " " + x.a) !== "SIN PAGO") demo[normName(x.n + " " + x.a)] = sumaDias(hoyISO(), 25); });
+  return Promise.resolve({ nutri:true, mapa:demo, demoLibre:true });
+ }
+ return new Promise(function(resolve){
+  var cb = "wgymNutriAct_" + Date.now(), listo = false, sc = document.createElement("script");
+  function fin(r){ if(listo) return; listo = true; clearTimeout(t); try{ delete window[cb]; }catch(e){} sc.remove(); resolve(r); }
+  var t = setTimeout(function(){ fin(null); }, 15000);
+  window[cb] = function(d){
+   if(!d || !d.nutri){ fin({ nutri:false }); return; }
+   var m = {}; (d.activos || []).forEach(function(x){ m[normName(x.n + " " + x.a)] = x.hasta; });
+   fin({ nutri:true, mapa:m });
+  };
+  sc.onerror = function(){ fin(null); };
+  sc.src = CHECKIN_URL + "?action=listarNutri&callback=" + cb + "&_=" + Date.now();
+  document.body.appendChild(sc);
+ });
+}
+function revisarNutri(esperando){
+ var k = claveNutri();
+ return cargarNutri().then(function(r){
+  if(!socio || claveNutri() !== k) return;
+  if(r === null){                     /* sin conexión: se usa lo guardado */
+   if(esperando){ var h = nutriGuardado(); if(h === undefined){ var t = lsGet(CLAVE_NUTRI, {}) || {}; t[k] = ""; lsSet(CLAVE_NUTRI, t); } abrir(); }
+   return;
+  }
+  nutriConsultado = k;
+  if(!r.nutri){ nutriLibre = true; if(esperando || !$("vPago").hidden) abrir(); return; }
+  var hasta = r.mapa[k] || (r.demoLibre && normName(socio.n + " " + socio.a) !== "SIN PAGO" ? sumaDias(hoyISO(), 25) : "");
+  var t2 = lsGet(CLAVE_NUTRI, {}) || {}, antes = t2[k]; t2[k] = hasta; lsSet(CLAVE_NUTRI, t2);
+  var activa = hasta && hasta >= hoyISO();
+  if(esperando) { abrir(); return; }
+  if(!activa && $("vPago").hidden && !bloqueado(socio)) mostrarPago();
+  else if(activa && !$("vPago").hidden){ abrir(); toast("✅ ¡WGYMNUTRI activada! Disfrútala."); confeti(); }
+  else if(activa !== (antes && antes >= hoyISO()) && tabSel === "tabPerfil" && !$("vApp").hidden) renderPerfil();
+ });
+}
+function datosPago(){
+ var P = window.WGYM_PAGO || {}, c = P.cuenta || {}, n = P.nutri || { nombre:"WGYMNUTRI mensual", precio:5000 };
+ return { c:c, n:n, filas:[["Nombre", c.titular], ["RUT", c.rut], ["Banco", c.banco], ["Tipo de cuenta", c.tipo], ["Número de cuenta", c.numero], ["Email", c.correo], ["Monto", "$" + miles(n.precio)], ["Comentario", socio.n + " " + socio.a + " - " + n.nombre]] };
+}
+function mostrarPago(){
+ cerrarHoja();
+ var dp = datosPago(), h = nutriGuardado();
+ $("pagoPrecio").textContent = "$" + miles(dp.n.precio);
+ $("pagoDatos").innerHTML = '<p class="kick" style="margin-bottom:8px">Transfiere a</p>' + dp.filas.filter(function(f){ return f[1]; }).map(function(f){ return '<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)"><span class="muted">' + esc(f[0]) + '</span><b style="text-align:right;overflow-wrap:anywhere">' + esc(f[1]) + '</b></div>'; }).join("");
+ $("pagoWsp").href = "https://wa.me/" + (dp.c.whatsapp || "56975196394") + "?text=" + encodeURIComponent("Hola Sara, soy " + socio.n + " " + socio.a + ". Pagué WGYMNUTRI ($" + miles(dp.n.precio) + " al mes) por transferencia. Te envío el comprobante.");
+ var m = $("pagoMsg"); m.hidden = !h; if(h) m.textContent = "Tu WGYMNUTRI venció el " + h.split("-").reverse().join("-") + ". Renueva para seguir usándola.";
+ vista("vPago");
+}
+function copiarTexto(txt){
+ if(navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(txt)["catch"](function(){ return copiarViejo(txt); });
+ return copiarViejo(txt);
+}
+function copiarViejo(txt){
+ return new Promise(function(ok, mal){
+  var t = document.createElement("textarea"); t.value = txt; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
+  document.body.appendChild(t); t.select(); t.setSelectionRange(0, txt.length);
+  var hecho = false; try{ hecho = document.execCommand("copy"); }catch(e){}
+  t.remove(); hecho ? ok() : mal(Error("no"));
+ });
+}
+$("pagoCopiar").addEventListener("click", function(){
+ var txt = datosPago().filas.filter(function(f){ return f[1]; }).map(function(f){ return f[0] + ": " + f[1]; }).join("\n");
+ copiarTexto(txt).then(function(){ toast("✅ Datos copiados. Pégalos en la app de tu banco."); })["catch"](function(){ toast("No se pudo copiar: copia los datos a mano."); });
+});
+$("pagoRevisar").addEventListener("click", function(){
+ var b = this; b.disabled = true; b.textContent = "Revisando…";
+ revisarNutri(false).then(function(){ b.disabled = false; b.textContent = "Ya pagué: revisar de nuevo"; if(!$("vPago").hidden) toast("Todavía no está activada. Si ya pagaste, avísale a Sara."); });
+});
+$("pagoOtro").addEventListener("click", salir);
 function reevaluar(){
  var v = $("vBloqueo").hidden === false;
  if(v && !bloqueado(socio)){ abrir(); toast("✅ Tu plan está al día. ¡App desbloqueada!"); }
@@ -447,7 +565,7 @@ $("gateForm").addEventListener("submit", intentarEntrar);
 $("gateBtn").addEventListener("click", intentarEntrar);
 $("gateNombre").addEventListener("keydown", function(e){ if(e.key === "Enter") intentarEntrar(e); });
 $("bloqOtro").addEventListener("click", salir);
-function salir(){ lsSet(CLAVE_SOCIO, ""); socio = null; D = null; $("gateNombre").value = ""; vista("vGate"); }
+function salir(){ lsSet(CLAVE_SOCIO, ""); socio = null; D = null; nutriConsultado = ""; nutriLibre = false; $("gateNombre").value = ""; vista("vGate"); }
 
 /* ═══ 2. Datos del socio: SOLO en este teléfono ═══ */
 var D = null;
@@ -993,7 +1111,7 @@ function renderRec(){
 function renderPerfil(){
  var P = D.perfil, M = D.metas;
  var h = '<h2 class="disp" style="font-size:34px">Mi perfil</h2><div class="card"><p class="kick">' + esc(socio.n + " " + socio.a) + '</p>' +
-  '<p class="muted" style="margin:6px 0 0">Plan: ' + esc(socio.plan || "") + ' · vence el ' + serialAISO(socio.fv).split("-").reverse().join("-") + '</p></div>' +
+  '<p class="muted" style="margin:6px 0 0">Plan: ' + esc(socio.plan || "") + ' · vence el ' + serialAISO(socio.fv).split("-").reverse().join("-") + '</p>' + (nutriGuardado() ? '<p class="muted" style="margin:4px 0 0">WGYMNUTRI activa hasta el ' + nutriGuardado().split("-").reverse().join("-") + '</p>' : '') + '</div>' +
   '<div class="card"><div class="cab"><h3>🎯 Mis metas</h3></div><div class="plan-res" style="margin-top:10px"><div><b style="color:var(--gold2)">' + miles(M.kcal) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + M.p + ' g</b><span>Proteína</span></div><div><b>' + M.c + ' g</b><span>Carbohidratos</span></div><div><b>' + M.g + ' g</b><span>Grasas</span></div></div>' +
   '<div class="campo" style="margin-top:12px"><label for="aguaMeta">Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta">' + [6,7,8,9,10,11,12,14].map(function(n){ return '<option' + (n === M.agua ? " selected" : "") + '>' + n + '</option>'; }).join("") + '</select></div>' +
   '<button type="button" class="btn sec chico" id="recalc" style="margin-top:12px">Recalcular con mis datos</button></div>' +
@@ -1037,6 +1155,7 @@ document.addEventListener("visibilitychange", function(){
  if(diaSel !== hoyISO() && tabSel === "tabHoy" && !$("vApp").hidden){ diaSel = hoyISO(); renderHoy(); }
  var cands = [[socio.n, socio.a]];
  cargarHoja().then(function(l){ var f = buscar(l, cands); if(f && aplicarFicha(f)) reevaluar(); else if(bloqueado(socio) && $("vBloqueo").hidden) mostrarBloqueo(); });
+ if(!bloqueado(socio)) revisarNutri(false);
 });
 
 /* Arranque */

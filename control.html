@@ -289,6 +289,14 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 .ficha .rapidos button.rap-oro{ background:var(--dorado); color:#151515;
  border-color:var(--dorado); font-weight:800; }
 .ficha .rapidos button.rap-oro:hover{ color:#151515; filter:brightness(1.08); }
+/* WGYMNUTRI de pago (10-10-2026): estado y botón de activar en la ficha. */
+.ficha .nutri-caja{ grid-column:1 / -1; border:1px solid #6b5a24; border-radius:12px; padding:10px 12px;
+ background:rgba(212,175,55,.07); display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; }
+.ficha .nutri-caja .nt{ flex:1 1 180px; font-size:14px; line-height:1.35; }
+.ficha .nutri-caja .nt b{ color:var(--dorado); }
+.ficha .nutri-caja button{ border-radius:9px; padding:8px 12px; font-weight:800; cursor:pointer; font-family:inherit; }
+.ficha .nutri-caja .n-act{ background:var(--dorado); color:#151515; border:0; }
+.ficha .nutri-caja .n-quitar{ background:transparent; color:#bbb; border:1px solid var(--line); }
 .ficha .aviso{ grid-column:1 / -1; color:var(--rojo-claro); font-size:13.5px; margin:0; }
 .ficha .pie{ display:flex; gap:9px; justify-content:flex-end; padding:0 20px 20px;
  flex-wrap:wrap; }
@@ -1616,6 +1624,27 @@ function borrar(s){
  });
 }
 
+/* ── WGYMNUTRI de pago (10-10-2026) ── quién la tiene activa (hoja "WGYMNUTRI"
+   del Apps Script, acción listarNutri). nutriSoporte: null = consultando,
+   false = el script todavía no tiene la acción, true = listo. */
+var NUTRI = {}, nutriSoporte = null;
+function nutriLlave_(n, a){ return (String(n || "") + "|" + String(a || "")).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim(); }
+function nutriHasta_(n, a){ return NUTRI[nutriLlave_(n, a)] || ""; }
+function cargarNutri_(listo){
+ if(!CHECKIN_URL){ nutriSoporte = false; if(listo) listo(); return; }
+ var cb = "wgymNutri_" + Date.now(), sc = document.createElement("script"), fin = false;
+ function terminar(){ if(fin) return; fin = true; try{ delete window[cb]; }catch(e){} sc.remove(); if(listo) listo(); }
+ window[cb] = function(data){
+  if(data && data.nutri){ nutriSoporte = true; NUTRI = {}; (data.activos || []).forEach(function(x){ NUTRI[nutriLlave_(x.n, x.a)] = x.hasta; }); }
+  else nutriSoporte = false;
+  terminar();
+ };
+ sc.onerror = function(){ terminar(); };
+ setTimeout(terminar, 15000);
+ sc.src = CHECKIN_URL + "?action=listarNutri&callback=" + cb + "&_=" + Date.now();
+ document.body.appendChild(sc);
+}
+
 /* ── ficha ──────────────────────────────────────────────────────────── */
 var velo = null;
 function abrirFicha(s){
@@ -1648,7 +1677,10 @@ function abrirFicha(s){
   '<button type="button" data-meses="3">Renovar 3 meses</button>'+
   '<button type="button" data-mas="15">+15 días</button>'+
   '<button type="button" id="fMas7" data-mas="7">+7 días</button>'+
-  '</div><p class="aviso" id="fAviso"></p></div>'+
+  '</div>'+(nuevo ? '' : '<div class="nutri-caja" id="fNutri"><span class="nt" id="fNutriTxt">🥗 WGYMNUTRI: revisando…</span>'+
+  '<button type="button" class="n-act" id="fNutriAct">Activar 1 mes ($5.000)</button>'+
+  '<button type="button" class="n-quitar" id="fNutriQuitar" hidden>Quitar</button></div>')+
+  '<p class="aviso" id="fAviso"></p></div>'+
   '<div class="pie"><button class="btn btn-linea" id="fCopiar" type="button">📋 Copiar</button>'+
   '<button class="btn btn-linea" id="fCancelar">Cancelar</button>'+
   '<button class="btn btn-rojo" id="fGuardar">Guardar</button></div></div>';
@@ -1807,6 +1839,34 @@ function abrirFicha(s){
   });
  });
 
+ /* WGYMNUTRI de pago: se activa por mes desde aquí (va directo a la hoja). */
+ if(!nuevo){
+  var nTxt = velo.querySelector("#fNutriTxt"), nAct = velo.querySelector("#fNutriAct"), nQuit = velo.querySelector("#fNutriQuitar");
+  var pintarNutri = function(){
+   if(!velo) return;
+   var h = nutriHasta_(d.n, d.a), hoy = hoyISO();
+   if(nutriSoporte === false){ nTxt.innerHTML = "🥗 WGYMNUTRI: falta instalar la actualización del script (ver docs)."; nAct.disabled = true; nQuit.hidden = true; return; }
+   if(nutriSoporte === null){ nTxt.textContent = "🥗 WGYMNUTRI: revisando…"; return; }
+   nAct.disabled = false;
+   if(h && h >= hoy){ nTxt.innerHTML = "🥗 WGYMNUTRI <b>activa</b> hasta el <b>" + h.split("-").reverse().join("-") + "</b>"; nAct.textContent = "Sumar 1 mes ($5.000)"; nQuit.hidden = false; }
+   else { nTxt.innerHTML = "🥗 WGYMNUTRI: " + (h ? "venció el " + h.split("-").reverse().join("-") : "sin activar"); nAct.textContent = "Activar 1 mes ($5.000)"; nQuit.hidden = true; }
+  };
+  var guardarNutri = function(hasta){
+   nAct.disabled = true; nTxt.textContent = "🥗 WGYMNUTRI: guardando…";
+   llamarSocioApi_("activarNutri", { nombre:d.n, apellido:d.a, hasta:hasta }, function(ok, data){
+    if(ok){ NUTRI[nutriLlave_(d.n, d.a)] = hasta; pintarNutri(); }
+    else { pintarNutri(); var av = velo && velo.querySelector("#fAviso"); if(av) av.textContent = "No se pudo guardar WGYMNUTRI: " + data; }
+   });
+  };
+  nAct.addEventListener("click", function(){
+   var h = nutriHasta_(d.n, d.a), hoy = hoyISO();
+   var base = (h && h >= hoy) ? h : hoy, p = base.split("-");
+   var f = sumarMeses(new Date(+p[0], +p[1]-1, +p[2]), 1);
+   guardarNutri(f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-" + String(f.getDate()).padStart(2,"0"));
+  });
+  nQuit.addEventListener("click", function(){ guardarNutri(""); });
+  pintarNutri(); cargarNutri_(pintarNutri);
+ }
  function cerrar(){
   if(!velo) return;
   velo.remove(); velo = null;
