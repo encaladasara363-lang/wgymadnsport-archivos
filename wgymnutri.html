@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=15">
+<link rel="stylesheet" href="nutri-claro.css?v=16">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -780,8 +780,16 @@ function porcionTxt(it){ var m = it.x || 1; return it.gr ? Math.round(it.gr * m)
 /* ═══ 5. Agregar comida: buscar, escanear, recientes, favoritas, manual ═══ */
 var agr = { comida:"desayuno", modo:"buscar", q:"" };
 var ALIM = (window.NUTRI_ALIMENTOS || []).map(function(a){ return { n:a[0], p:a[1], k:a[2], pr:a[3], c:a[4], g:a[5], cat:a[6], nn:normName(a[0]) }; });
-function abrirHoja(html){ $("hoja").innerHTML = '<div class="asa"></div>' + html; $("velo").hidden = false; document.body.style.overflow = "hidden"; }
+function abrirHoja(html){ $("hoja").innerHTML = '<div class="asa"></div>' + html; $("velo").hidden = false; document.body.style.overflow = "hidden"; ajustarAlTeclado(); }
 function cerrarHoja(){ pararCamara(); $("velo").hidden = true; document.body.style.overflow = ""; }
+/* Con el teclado abierto (iPhone), la hoja se ajusta al espacio visible para que la
+   lista de alimentos no quede tapada ni la pantalla salte (10-10-2026). */
+function ajustarAlTeclado(){
+ var v = window.visualViewport, velo = $("velo"); if(!v || !velo || velo.hidden) return;
+ var z = parseFloat(getComputedStyle(document.body).zoom) || 1;
+ velo.style.top = (v.offsetTop / z) + "px"; velo.style.height = (v.height / z) + "px"; velo.style.bottom = "auto";
+}
+if(window.visualViewport){ visualViewport.addEventListener("resize", ajustarAlTeclado); visualViewport.addEventListener("scroll", ajustarAlTeclado); }
 $("velo").addEventListener("click", function(e){ if(e.target === $("velo")) cerrarHoja(); });
 document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !$("velo").hidden) cerrarHoja(); });
 function abrirAgregar(comida){ agr.comida = comida; renderAgregar(); }
@@ -815,14 +823,16 @@ function modoBuscar(){
    h += '<p class="muted" style="font-size:14px;margin:10px 0 0">Escribe un alimento o una marca: buscamos en la lista del gimnasio y en productos en línea.</p>';
    Object.keys(cats).forEach(function(k){ h += '<p class="sub">' + esc(k) + '</p>' + cats[k].map(function(i){ return filaAlim(ALIM[i], i, "a"); }).join(""); });
   }else{
-   var palabras = t.split(" ");
-   var lista = ALIM.map(function(a, i){ return [a, i]; }).filter(function(x){ return palabras.every(function(w){ return x[0].nn.indexOf(w) >= 0; }); });
+   // Singular y plural cuentan igual (10-10-2026: "huevos" no encontraba "huevo duro").
+   var palabras = t.split(" ").filter(Boolean).map(function(w){
+    var v = [w]; if(w.length > 4 && /ES$/.test(w)) v.push(w.slice(0, -2)); if(w.length > 3 && /S$/.test(w)) v.push(w.slice(0, -1)); return v; });
+   var lista = ALIM.map(function(a, i){ return [a, i]; }).filter(function(x){ return palabras.every(function(vs){ return vs.some(function(w){ return x[0].nn.indexOf(w) >= 0; }); }); });
    h += '<p class="sub">Lista del gimnasio</p>' + (lista.length ? lista.map(function(x){ return filaAlim(x[0], x[1], "a"); }).join("") : '<p class="muted" style="margin:6px 0">Sin resultados en la lista.</p>');
    h += '<p class="sub">🌐 Productos en línea</p>';
    if(t.length < 3) h += '<p class="muted" style="margin:6px 0">Escribe al menos 3 letras.</p>';
    else if(estado === "buscando") h += '<p class="muted" style="margin:6px 0">Buscando productos en línea…</p>';
    else if(estado === "error" && window.WGYMNUTRI_DEMO) h += '<p class="muted" style="margin:6px 0">En la vista previa no hay internet. En el sitio real aquí aparecen los productos en línea.</p>';
-   else if(estado === "error") h += '<p class="muted" style="margin:6px 0">No pudimos conectarnos. Revisa tu internet.</p> <button type="button" class="add-l" id="offRe">Reintentar</button>';
+   else if(estado === "error") h += '<p class="muted" style="margin:6px 0">Los productos en línea no responden en este momento. La lista del gimnasio sigue funcionando, o escanea el código de barras.</p> <button type="button" class="add-l" id="offRe">Buscar de nuevo en línea</button>';
    else if(estado === "listo" && off.length) h += off.map(function(a, i){ return filaAlim(a, i, "o"); }).join("");
    else if(estado === "listo") h += '<p class="muted" style="margin:6px 0">No encontramos productos en línea. Prueba con otra palabra, escanea el código de barras o agrégalo en «Manual».</p>';
   }
@@ -836,12 +846,15 @@ function modoBuscar(){
   if(cacheOFF[clave]){ off = cacheOFF[clave]; estado = "listo"; pintar(); return; }
   estado = "buscando"; off = []; pintar();
   buscarOFF(texto).then(function(l){
+   if(l === null) return new Promise(function(ok){ setTimeout(ok, 1500); }).then(function(){ return normName(q.value) === clave ? buscarOFF(texto) : null; });
+   return l;
+  }).then(function(l){
    if(normName(q.value) !== clave) return;      /* ya escribió otra cosa */
    if(l === null){ estado = "error"; pintar(); return; }
    cacheOFF[clave] = l; off = l; estado = "listo"; pintar();
   });
  }
- q.oninput = function(){ clearTimeout(reloj); estado = ""; off = []; pintar(); reloj = setTimeout(buscarEnLinea, 700); };
+ q.oninput = function(){ clearTimeout(reloj); estado = ""; off = []; pintar(); reloj = setTimeout(buscarEnLinea, 900); };
  q.onkeydown = function(e){ if(e.key === "Enter"){ e.preventDefault(); clearTimeout(reloj); buscarEnLinea(); } };
  pintar(); if(q.value) buscarEnLinea();
  setTimeout(function(){ q.focus(); }, 80);
@@ -1257,7 +1270,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101002", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101003", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
