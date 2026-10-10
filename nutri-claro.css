@@ -424,3 +424,25 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .vitc-hoy .barra.po i{background:linear-gradient(90deg,#E8C547,#D4A017) !important}
 .vitc-hoy .barra.fi i{background:linear-gradient(90deg,#7CB342,#33691E) !important}
 .det-macros .vitc-det .mic-l{background:none !important;border:0 !important;padding:2px 0 !important;border-radius:0}.vitc-det .mic-l span{white-space:nowrap;font-size:14px}.vitc-det .mic-l b{font-size:20px !important}.vitc-det .mic-l small{font-size:12px}
+
+/* Ideas nuevas (10-10-2026): ¿Qué como ahora?, suplementos, repetir de ayer, entrenamiento y voz */
+.sug-it{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#FBF9F5;border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:8px;cursor:pointer}
+.sug-it .tx{flex:1;min-width:0}.sug-it b{display:block;font-size:16px}.sug-it small{display:block;font-size:13px;color:#1A1A1E}
+.sug-it .mas{flex:none;width:36px;height:36px;border-radius:50%;background:#E30613;color:#fff !important;display:flex;align-items:center;justify-content:center;font-size:22px;font-style:normal}
+.supl-l{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.supl-b{display:flex;align-items:center;gap:8px;background:#FBF9F5;border:2px solid var(--line);border-radius:30px;padding:8px 14px 8px 8px;cursor:pointer}
+.supl-b .ck{width:28px;height:28px;border-radius:50%;border:2px solid #C9C2B4;display:flex;align-items:center;justify-content:center;font-size:16px;font-style:normal}
+.supl-b.on{border-color:#1F9D55;background:#EAF8F0}.supl-b.on .ck{background:#1F9D55;border-color:#1F9D55;color:#fff !important}
+.supl-b b{font-size:15px}.supl-b small{font-size:12px;color:#B36B00 !important}
+.supl-ed{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.rep-ay{display:block;width:100%;margin:10px 0 0;background:#EEF6FF;border:2px dashed #7FBFEA;color:#0D2F55;border-radius:14px;padding:12px;font-family:var(--cond);font-weight:800;font-size:15px;text-transform:uppercase;cursor:pointer}
+.st-dia{position:relative}.st-ent{position:absolute;top:-6px;right:2px;font-size:14px;font-style:normal}
+.entreno-av{border-color:#1F9D55 !important;background:#EAF8F0 !important}
+.voz-mic{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;padding:18px 12px;border:3px solid #E30613;border-radius:20px;background:#FFF5F5;cursor:pointer}
+.voz-mic span{font-size:44px;font-style:normal}.voz-mic b{font-size:18px}.voz-mic small{font-size:13px;color:#1A1A1E}
+.voz-mic.oye{animation:vozPulso 1s ease-in-out infinite}
+@keyframes vozPulso{0%,100%{box-shadow:0 0 0 0 rgba(227,6,19,.5)}50%{box-shadow:0 0 0 12px rgba(227,6,19,0)}}
+.voz-it{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.voz-it .tx{flex:1;min-width:0}.voz-it b{display:block}.voz-it span{font-size:13px}.voz-it .k{font-family:var(--num);font-size:20px}
+.voz-it.no b{color:#B00010}
+textarea.inp{resize:vertical;font-family:inherit;font-size:17px}

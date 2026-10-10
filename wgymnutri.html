@@ -232,7 +232,10 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=36">
+<link rel="stylesheet" href="nutri-claro.css?v=37">
+<link rel="stylesheet" href="nutri-oscuro.css?v=2">
+<script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
+try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -878,6 +881,124 @@ function recordatorio(){
  if(recOn("agua") && h >= 20 && x.agua < M.agua) return ["💧", "Te faltan " + (M.agua - x.agua) + " vasos de agua para tu meta de hoy."];
  return null;
 }
+/* ═══ Ideas nuevas (10-10-2026, la dueña: «quiero todas») ═══ */
+/* ¿Qué como ahora? Sugiere alimentos de la lista que calzan con lo que falta del día. */
+var POOL_SUG = ["⭐ Básicos fitness","Frutas","Verduras","Legumbres","Lácteos","Carnes y huevos"], sugOff = 0;
+function alimPermitido(a){
+ var P = D && D.perfil; if(!P) return true;
+ var t = normName(a.n).toLowerCase();
+ if(P.dieta === "vegetariana" && NO_VEGETARIANO.test(t)) return false;
+ return !(P.evita || []).some(function(e){ return EVITA_PALABRAS[e] && EVITA_PALABRAS[e].test(t); });
+}
+function sugerencias(t, M){
+ var rest = M.kcal - t.k, fP = M.p - t.p, vistos = {}, pool = ALIM.filter(function(a){
+  if(POOL_SUG.indexOf(a.cat) < 0 || vistos[a.nn] || !alimPermitido(a) || a.k < 15) return false; vistos[a.nn] = 1; return true; });
+ var modo, lista;
+ if(rest < 80){ modo = "lleno"; lista = pool.filter(function(a){ return a.cat === "Verduras" && a.k <= 60; }).sort(function(a, b){ return a.k - b.k; }); }
+ else if(fP >= 15){ modo = "prot"; lista = pool.filter(function(a){ return a.k <= rest && a.pr >= 8; }).sort(function(a, b){ return b.pr / b.k - a.pr / a.k; }); }
+ else { modo = "equil"; var fiMeta = metaMicro("fi"); lista = pool.filter(function(a){ return a.k <= rest && /Frutas|Verduras|Legumbres|Básicos/.test(a.cat); })
+  .sort(function(a, b){ var sa = ((a.fi || 0) * (t.fi < fiMeta ? 3 : 1) + (a.vc || 0) / 20) / a.k, sb = ((b.fi || 0) * (t.fi < fiMeta ? 3 : 1) + (b.vc || 0) / 20) / b.k; return sb - sa; }); }
+ var kept = []; lista.forEach(function(a){ if(kept.length < 16 && !kept.some(function(k){ return a.nn.indexOf(k.nn) === 0 || k.nn.indexOf(a.nn) === 0 || a.nn.split(" ").slice(0, 3).join(" ") === k.nn.split(" ").slice(0, 3).join(" "); })) kept.push(a); });
+ return { modo:modo, rest:rest, fP:fP, lista:kept };
+}
+function htmlSugerencias(t, M){
+ var s = sugerencias(t, M); if(!s.lista.length) return "";
+ var n = s.lista.length, ver = []; for(var i = 0; i < Math.min(4, n); i++) ver.push(s.lista[(sugOff * 4 + i) % n]);
+ var tx = s.modo === "lleno" ? "Ya llegaste a tu meta de hoy. Si tienes hambre, elige verduras: casi no suman calorías." :
+  s.modo === "prot" ? "Te faltan <b>" + Math.round(s.fP) + " g de proteína</b> y <b>" + miles(s.rest) + " kcal</b>. Estas opciones te ayudan:" :
+  "Vas bien con la proteína. Te quedan <b>" + miles(s.rest) + " kcal</b>: suma fibra y vitaminas con estas opciones:";
+ return '<div class="card sug-card"><div class="cab"><h3>🤔 ¿Qué como ahora?</h3>' + (n > 4 ? '<button type="button" class="chip" id="sugOtra">🔄 Otras</button>' : '') + '</div><p class="muted" style="margin:6px 0 10px">' + tx + '</p>' +
+  ver.map(function(a){ return '<button type="button" class="sug-it" data-sug="' + ALIM.indexOf(a) + '"><span class="tx"><b>' + esc(a.n) + '</b><small>' + esc(a.p) + ' · ' + miles(a.k) + ' kcal · P ' + r1(a.pr) + ' g</small></span><span class="mas">＋</span></button>'; }).join("") + '</div>';
+}
+/* Mis suplementos: un check por día, con racha. Solo en el teléfono. */
+function suplLista(){ return Array.isArray(D.supl) ? D.supl : ["Creatina","Proteína"]; }
+function rachaSupl(n){ var c = 0, d = hoyISO(); if(!((diaDe(d).supl || {})[n])) d = sumaDias(d, -1); while((diaDe(d).supl || {})[n]){ c++; d = sumaDias(d, -1); } return c; }
+function htmlSupl(x){
+ var l = suplLista(), hecho = x.supl || {};
+ return '<div class="card supl-card"><div class="cab"><h3>💊 Mis suplementos</h3><button type="button" class="chip" id="suplEd">✏️ Editar</button></div>' +
+  (l.length ? '<div class="supl-l">' + l.map(function(n, i){ var r = rachaSupl(n); return '<button type="button" class="supl-b' + (hecho[n] ? " on" : "") + '" data-supl="' + i + '"><span class="ck">' + (hecho[n] ? "✓" : "") + '</span><b>' + esc(n) + '</b>' + (r ? '<small>🔥 ' + r + (r === 1 ? ' día' : ' días') + '</small>' : '') + '</button>'; }).join("") + '</div>' : '<p class="muted">Toca «Editar» para agregar los suplementos que tomas.</p>') +
+  '<div id="suplEdBox" hidden><div class="fila2" style="grid-template-columns:1fr auto;margin-top:10px"><input class="inp" id="suplIn" placeholder="Ej: Omega 3" autocomplete="off"><button type="button" class="btn oro chico" id="suplAdd" style="width:auto">Agregar</button></div>' +
+  l.map(function(n, i){ return '<div class="supl-ed"><span>' + esc(n) + '</span><button type="button" class="chip" data-supl-x="' + i + '">Quitar</button></div>'; }).join("") + '</div>' +
+  '<p class="muted" style="font-size:13px;margin:8px 0 0">Toca cada uno cuando lo tomes. La dosis te la indica tu profesor o nutricionista.</p></div>';
+}
+/* Días de entrenamiento: los ingresos al gimnasio (tarjeta o mesón) marcan el día. */
+var CLAVE_ENTRENO = "wgymnutri_entreno_v1", entrenoPedido = false;
+function diasEntreno(){ var t = lsGet(CLAVE_ENTRENO, {}) || {}; return t[claveNutri()] || {}; }
+function cargarEntreno(){
+ if(entrenoPedido || window.WGYMNUTRI_DEMO) return; entrenoPedido = true;
+ pedirScript({ action:"asistenciaDesde", desde:sumaDias(hoyISO(), -60) }, 25000).then(function(r){
+  if(!r || !r.dias) return; var mios = r.dias[claveNutri()] || {}, t = lsGet(CLAVE_ENTRENO, {}) || {}, antes = JSON.stringify(t[claveNutri()] || {});
+  t[claveNutri()] = Object.assign({}, t[claveNutri()] || {}, mios); lsSet(CLAVE_ENTRENO, t);
+  if(antes !== JSON.stringify(t[claveNutri()]) && tabSel === "tabHoy" && !$("vApp").hidden) renderHoy();
+ });
+}
+/* Dictar la comida con la voz: «dos huevos y una marraqueta». */
+var NUM_PAL = { un:1, uno:1, una:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9, diez:10, once:11, doce:12, quince:15, veinte:20, medio:0.5, media:0.5 };
+function mejorAlimento(q){
+ var t = normName(q); if(!t) return null;
+ var ws = t.split(" ").filter(function(w){ return w.length > 1 && ["DE","DEL","LA","EL","LOS","LAS","CON","SIN","UN","UNA"].indexOf(w) < 0; });
+ if(!ws.length) return null;
+ var vars = ws.map(function(w){ var v = [w]; if(w.length > 4 && /ES$/.test(w)) v.push(w.slice(0, -2)); if(w.length > 3 && /S$/.test(w)) v.push(w.slice(0, -1)); return v; });
+ var cand = ALIM.filter(function(a){ return vars.every(function(vs){ return vs.some(function(w){ return a.nn.indexOf(w) >= 0; }); }); });
+ if(!cand.length) cand = ALIM.filter(function(a){ return vars.some(function(vs){ return vs.some(function(w){ return w.length > 3 && a.nn.indexOf(w) >= 0; }); }); });
+ if(!cand.length) return null;
+ function pts(a){ var p = a.nn.length / 40; if(vars[0].some(function(w){ return a.nn.indexOf(w) === 0; })) p -= 4; if(/fitness/i.test(a.cat)) p -= 2; if(a.cat === CAT_PROD) p -= 1; if(a.cat === "Marcas" || a.cat === "Comida rápida") p += 3; return p; }
+ cand.sort(function(a, b){ return pts(a) - pts(b); });
+ return cand[0];
+}
+function gramosDe(a){ var m = /(?:^|[\s(])(\d+(?:[.,]\d+)?)\s*(g|ml)\b/i.exec(a.p || ""); return m ? Number(m[1].replace(",", ".")) : 0; }
+function interpretarVoz(txt){
+ var t = String(txt || "").toLowerCase().replace(/[.;]/g, ",").replace(/\b(me )?(comí|comi|tomé|tome|almorcé|almorce|cené|cene|desayuné|desayune)\b/g, " ");
+ return t.split(/,|\s+y\s+|\s+más\s+|\s+mas\s+|\s+con\s+/).map(function(p){ return p.trim(); }).filter(Boolean).map(function(p){
+  var cant = 0, gr = 0, m = p.match(/^(\d+(?:[.,]\d+)?)\s*(gramos|gramo|grs?|g)\b\s*(de\s+)?/);
+  if(m){ gr = Number(m[1].replace(",", ".")); p = p.slice(m[0].length); }
+  else { m = p.match(/^(\d+(?:[.,]\d+)?)\s+/); if(m){ cant = Number(m[1].replace(",", ".")); p = p.slice(m[0].length); }
+   else { m = p.match(/^(\S+)\s+/); if(m && NUM_PAL[m[1]] != null){ cant = NUM_PAL[m[1]]; p = p.slice(m[0].length); } } }
+  p = p.replace(/^(de|del)\s+/, "");
+  var a = mejorAlimento(p), mult = 1, al = a;
+  if(a){
+   var cu = porUnidad(a), g0 = gramosDe(a);
+   if(gr && g0){ mult = gr / g0; }
+   else if(cu){ al = cu.a; mult = cant || cu.n; }
+   else mult = cant || 1;
+  }
+  return { txt:p, a:al, mult:mult, gr:gr };
+ });
+}
+function modoVoz(){
+ var c = $("agrCuerpo"), SR = window.SpeechRecognition || window.webkitSpeechRecognition, items = [];
+ c.innerHTML = (SR ? '<button type="button" class="voz-mic" id="vozMic"><span>🎤</span><b>Toca y di lo que comiste</b><small>Ej: «dos huevos y una marraqueta»</small></button>' : '<p class="muted">Tu teléfono no permite dictar aquí. Escribe la frase y se calcula igual.</p>') +
+  '<div class="campo" style="margin-top:12px"><label for="vozTx">Lo que comiste</label><textarea class="inp" id="vozTx" rows="2" placeholder="Ej: 2 huevos, una marraqueta y 150 gramos de pollo"></textarea></div>' +
+  '<button type="button" class="btn sec chico" id="vozBus">Calcular</button><div id="vozRes"></div>';
+ function pintarRes(){
+  var ok = items.filter(function(x){ return x.a; }), tot = ok.reduce(function(s, x){ return s + x.a.k * x.mult; }, 0);
+  $("vozRes").innerHTML = items.length ? '<div class="res" style="margin-top:10px">' + items.map(function(x, i){ return x.a ?
+    '<div class="voz-it"><div class="tx"><b>' + esc(x.a.n) + '</b><span>' + esc(porcionTxt(Object.assign(base(x.a), { x:x.mult }))) + '</span></div><span class="k">' + miles(x.a.k * x.mult) + '</span><button type="button" class="x" data-vx="' + i + '" aria-label="Quitar">✕</button></div>' :
+    '<div class="voz-it no"><div class="tx"><b>«' + esc(x.txt) + '»</b><span>No lo encontré: búscalo en 🔎 Buscar</span></div><button type="button" class="x" data-vx="' + i + '" aria-label="Quitar">✕</button></div>'; }).join("") + '</div>' +
+   (ok.length ? '<button type="button" class="btn rojo" id="vozOk" style="margin-top:10px">Agregar todo (' + miles(tot) + ' kcal)</button>' : '') : '';
+  document.querySelectorAll("[data-vx]").forEach(function(b){ b.onclick = function(){ items.splice(+b.dataset.vx, 1); pintarRes(); }; });
+  if($("vozOk")) $("vozOk").onclick = function(){ agregarVarios(items.filter(function(x){ return x.a; })); };
+ }
+ function calcular(){ items = interpretarVoz($("vozTx").value); pintarRes(); }
+ $("vozBus").onclick = calcular;
+ if(SR) $("vozMic").onclick = function(){
+  var r = new SR(), b = this; r.lang = "es-CL"; r.interimResults = true; r.maxAlternatives = 1;
+  b.classList.add("oye"); b.querySelector("b").textContent = "Te escucho…";
+  r.onresult = function(ev){ var s = ""; for(var i = 0; i < ev.results.length; i++) s += ev.results[i][0].transcript; $("vozTx").value = s; };
+  r.onerror = function(ev){ toast(ev.error === "not-allowed" ? "Permite el micrófono para dictar." : "No te escuché bien. Prueba de nuevo o escríbelo."); };
+  r.onend = function(){ b.classList.remove("oye"); b.querySelector("b").textContent = "Toca y di lo que comiste"; if($("vozTx").value.trim()) calcular(); };
+  try{ r.start(); }catch(e){ toast("No se pudo usar el micrófono."); }
+ };
+}
+function agregarVarios(lista){
+ var x = diaDe(diaSel); x.c[agr.comida] = x.c[agr.comida] || [];
+ lista.forEach(function(it0, i){ if(it0.a && it0.a.off) guardarProductoCompartido(it0.a, "off"); var it = base(it0.a); it.x = r1(it0.mult * 100) / 100; it.t = Date.now() + i; x.c[agr.comida].push(it);
+  var k = claveAl(it0.a); D.recientes = [base(it0.a)].concat(D.recientes.filter(function(r){ return claveAl(r) !== k; })).slice(0, 25); });
+ setDia(diaSel, x); D.cont.comidas = (D.cont.comidas || 0) + lista.length; guardar(); cerrarHoja();
+ toast("✅ " + lista.length + (lista.length === 1 ? " alimento agregado" : " alimentos agregados"));
+ if(tabSel !== "tabHoy") mostrarTab("tabHoy"); else { renderHoy(); $("rachaNum").textContent = racha(); }
+ revisarLogros();
+}
 var aguaPctPrev = 0;
 /* Vitamina C recomendada al día (10-10-2026, pedido de la dueña): 75 mg mujeres, 90 mg hombres
    (recomendación diaria de adultos del Instituto de Medicina de EE. UU.). */
@@ -892,10 +1013,11 @@ function renderHoy(){
  var h = '<div class="dia-nav"><button type="button" id="diaAnt" aria-label="Semana anterior">‹</button><b>' + (esHoy ? "Hoy · " : "") + fechaLarga(diaSel) + '</b><button type="button" id="diaSig" aria-label="Semana siguiente"' + (sumaDias(lunesDe(diaSel), 7) > hoyISO() ? " disabled" : "") + '>›</button></div>';
  /* Franja de la semana (10-10-2026, pedido de la dueña, como Fitia): L a D con un punto en cada
     día que tiene comidas registradas; se toca un día para verlo. */
- var lun = lunesDe(diaSel);
+ var lun = lunesDe(diaSel), ent = diasEntreno(); cargarEntreno();
  h += '<div class="semana-tira">' + ["L","M","M","J","V","S","D"].map(function(l, i){
   var f = sumaDias(lun, i), xd = D.dias[f], con = xd && Object.keys(xd.c || {}).some(function(k){ return (xd.c[k] || []).length; });
-  return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i></button>'; }).join("") + '</div>';
+  return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + (ent[f] ? " ent" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i>' + (ent[f] ? '<em class="st-ent" aria-label="Entrenaste">💪</em>' : '') + '</button>'; }).join("") + '</div>';
+ if(ent[diaSel]) h += '<div class="aviso entreno-av"><span class="e">💪</span><p><b>' + (esHoy ? 'Hoy entrenaste en WGYM' : 'Este día entrenaste en WGYM') + '</b><br><span class="muted" style="font-size:15px">Después de entrenar, suma 15 a 25 g de proteína dentro de las 2 horas siguientes.</span></p></div>';
  var av = recordatorio();
  if(av) h += '<div class="aviso"><span class="e">' + av[0] + '</span><p>' + esc(av[1]) + '</p><button type="button" id="avisoX" aria-label="Ocultar aviso">×</button></div>';
  /* Cuadro de resumen ordenado (10-10-2026, pedido de la dueña): anillo con el % comido, comidas
@@ -908,6 +1030,8 @@ function renderHoy(){
   '<div class="vitc-hoy">' + MICROS.map(function(mc){ var v = t[mc[0]], meta = metaMicro(mc[0]); return '<div class="mic-h"><div class="fila"><span>' + mc[1] + '</span><b>' + (mc[2] === "mg" ? miles(v) : String(r1(v)).replace(".", ",")) + ' <small>/ ' + miles(meta) + ' ' + mc[2] + '</small></b></div><div class="barra ' + mc[0] + '"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }).join("") +
   (Math.max(t.vcSin, t.poSin, t.fiSin) ? '<small>' + Math.max(t.vcSin, t.poSin, t.fiSin) + ' alimento(s) de hoy no traen estos datos; el total puede ser mayor.</small>' : '') + '</div></div>';
  h += '<div class="restantes' + (rest < 0 ? " pasado" : "") + '"><span class="e">🔥</span><div><small>' + (rest < 0 ? "Te pasaste de tu meta" : "Calorías restantes") + '</small><b>' + miles(Math.abs(rest)) + ' <em>kcal</em></b><p>Meta ' + miles(M.kcal) + ' − comidas ' + miles(t.k) + '</p></div></div>';
+ if(esHoy) h += htmlSugerencias(t, M);
+ h += htmlSupl(x);
  /* Agua en vasos de 250 ml o botellas de 500 ml (10-10-2026, pedido de la dueña). Se guarda
     siempre en vasos (x.agua); una botella = 2 vasos. Cada teléfono recuerda la elección. */
  var enBot = D.aguaUnidad !== "vaso", litros = function(v){ return String(r1(v * 0.25)).replace(".", ","); };
@@ -943,6 +1067,8 @@ function renderHoy(){
   var its = x.c[cm[0]] || [], kc = its.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
   h += '<div class="card comida-card"><div class="cab"><h3>' + cm[1] + ' ' + cm[2] + ' <span class="hora-com">' + horaDe(cm[0]) + '</span></h3><small>' + (its.length ? miles(kc) + " kcal" : "") + '</small></div>';
   its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + esc(it.n) + '</b><span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
+  var ay = diaDe(sumaDias(diaSel, -1)).c[cm[0]] || [];
+  if(!its.length && ay.length) h += '<button type="button" class="rep-ay" data-rep="' + cm[0] + '">🔁 Repetir lo de ayer · ' + ay.length + (ay.length === 1 ? ' alimento' : ' alimentos') + ' · ' + miles(ay.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0)) + ' kcal</button>';
   h += '<div class="beb-bts"><button type="button" class="btn rojo scan-c" data-m="' + cm[0] + '">📷 Escanear alimento</button><button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar alimento</button></div></div>';
  });
  var bebs = x.c.bebidas || [], kb = bebs.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
@@ -976,6 +1102,18 @@ function renderHoy(){
   renderHoy();
  }; });
  box.querySelectorAll(".add-l[data-m]").forEach(function(b){ b.onclick = function(){ agr.q = ""; abrirAgregar(b.dataset.m, "buscar"); }; });
+ box.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){
+  var m = b.dataset.rep, xx = diaDe(diaSel), ay = diaDe(sumaDias(diaSel, -1)).c[m] || [];
+  xx.c[m] = (xx.c[m] || []).concat(ay.map(function(it, i){ return Object.assign({}, it, { t:Date.now() + i }); })); setDia(diaSel, xx); guardar();
+  toast("✅ Copiado lo de ayer"); renderHoy(); $("rachaNum").textContent = racha(); revisarLogros(); }; });
+ box.querySelectorAll("[data-sug]").forEach(function(b){ b.onclick = function(){ var a = ALIM[+b.dataset.sug]; abrirAgregar(comidaPorHora(), "buscar"); detalle(a); }; });
+ if($("sugOtra")) $("sugOtra").onclick = function(){ sugOff++; renderHoy(); };
+ box.querySelectorAll("[data-supl]").forEach(function(b){ b.onclick = function(){
+  var n = suplLista()[+b.dataset.supl], xx = diaDe(diaSel); xx.supl = xx.supl || {}; if(xx.supl[n]) delete xx.supl[n]; else xx.supl[n] = true; setDia(diaSel, xx); guardar();
+  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){} renderHoy(); }; });
+ if($("suplEd")) $("suplEd").onclick = function(){ $("suplEdBox").hidden = !$("suplEdBox").hidden; };
+ if($("suplAdd")) $("suplAdd").onclick = function(){ var v = $("suplIn").value.trim(); if(!v) return; var l = suplLista().slice(); if(l.indexOf(v) < 0) l.push(v.slice(0, 30)); D.supl = l; guardar(); renderHoy(); $("suplEdBox").hidden = false; };
+ box.querySelectorAll("[data-supl-x]").forEach(function(b){ b.onclick = function(){ var l = suplLista().slice(); l.splice(+b.dataset.suplX, 1); D.supl = l; guardar(); renderHoy(); $("suplEdBox").hidden = false; }; });
  box.querySelectorAll(".scan-c").forEach(function(b){ b.onclick = function(){ abrirAgregar(b.dataset.m, "escanear"); }; });
  $("bebScan").onclick = function(){ abrirAgregar("bebidas", "escanear"); };
  $("bebBus").onclick = function(){ agr.q = ""; abrirAgregar("bebidas", "buscar"); };
@@ -1060,7 +1198,7 @@ document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !$("v
 function abrirAgregar(comida, modo){ agr.comida = comida; if(modo) agr.modo = modo; renderAgregar(); }
 function renderAgregar(){
  pararCamara();
- var modos = [["buscar","🔎 Buscar"],["escanear","▮▯▮ Escanear"],["recientes","🕘 Recientes"],["favs","★ Favoritas"],["manual","✍️ Manual"]];
+ var modos = [["buscar","🔎 Buscar"],["voz","🎤 Voz"],["escanear","▮▯▮ Escanear"],["recientes","🕘 Recientes"],["favs","★ Favoritas"],["manual","✍️ Manual"]];
  var h = '<div class="cab" style="margin-bottom:10px"><h3>Agregar comida</h3><button type="button" class="chip" id="hX">Cerrar</button></div>' +
   '<div class="campo" style="margin-bottom:10px"><label for="agrComida">¿A qué comida?</label><select class="inp" id="agrComida">' + COMIDAS.filter(function(c){ return c[0] === "bebidas" || c[0] === agr.comida || comidasVisibles().some(function(v){ return v[0] === c[0]; }); }).map(function(c){ return '<option value="' + c[0] + '"' + (c[0] === agr.comida ? " selected" : "") + '>' + c[1] + ' ' + c[2] + '</option>'; }).join("") + '</select></div>' +
   '<div class="tabs">' + modos.map(function(m){ return '<button type="button" class="chip" data-modo="' + m[0] + '" aria-pressed="' + (agr.modo === m[0]) + '">' + m[1] + '</button>'; }).join("") + '</div><div id="agrCuerpo"></div>';
@@ -1068,7 +1206,7 @@ function renderAgregar(){
  $("hX").onclick = cerrarHoja;
  $("agrComida").onchange = function(){ agr.comida = this.value; };
  document.querySelectorAll("[data-modo]").forEach(function(b){ b.onclick = function(){ agr.modo = b.dataset.modo; renderAgregar(); }; });
- ({ buscar:modoBuscar, escanear:modoEscanear, recientes:modoLista.bind(null, "recientes"), favs:modoLista.bind(null, "favs"), manual:modoManual })[agr.modo]();
+ ({ buscar:modoBuscar, voz:modoVoz, escanear:modoEscanear, recientes:modoLista.bind(null, "recientes"), favs:modoLista.bind(null, "favs"), manual:modoManual })[agr.modo]();
 }
 function porcionES(t){
  return String(t || "").replace(/\bportions?\b/gi, function(m){ return /s$/i.test(m) ? "porciones" : "porción"; }).replace(/\bservings?\b/gi, "porción")
@@ -1720,6 +1858,8 @@ function cerrarReceta(){
  mostrarListaRecetas();
 }
 window.addEventListener("popstate", function(){ if(recAbierta >= 0) mostrarListaRecetas(); });
+function temaOscuro(){ return document.documentElement.classList.contains("oscuro"); }
+function ponerTema(t){ lsSet("wgymnutri_tema_v1", t); document.documentElement.classList.toggle("oscuro", t === "oscuro"); var m = document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content", t === "oscuro" ? "#0A0A0B" : "#FFFFFF"); }
 function renderPerfil(){
  var P = D.perfil, M = D.metas;
  var h = '<h2 class="disp" style="font-size:34px">Mi perfil</h2><div class="card"><p class="perfil-nombre">' + esc(socio.n + " " + socio.a) + '</p>' +
@@ -1729,6 +1869,7 @@ function renderPerfil(){
   '<div class="campo" style="margin-top:12px"><label for="aguaMeta">💧 Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta"><option value="auto"' + (M.aguaManual ? '' : ' selected') + '>Según mi peso: ' + aguaRecomendada(P) + ' vasos (' + String(r1(aguaRecomendada(P) * 0.25)).replace(".", ",") + ' L)</option>' + [6,7,8,9,10,11,12,13,14,15,16].map(function(n){ return '<option value="' + n + '"' + (M.aguaManual && n === M.agua ? " selected" : "") + '>' + n + ' vasos (' + String(r1(n * 0.25)).replace(".", ",") + ' L)</option>'; }).join("") + '</select></div>' +
   '<p class="muted" style="font-size:14px;margin:6px 0 0">Calculado con ≈35 ml por kilo de peso, más 2 vasos si entrenas. Con calor o entrenamientos largos, toma un poco más.</p>' +
   '<button type="button" class="btn sec chico" id="recalc" style="margin-top:12px">Recalcular con mis datos</button></div>' +
+  '<div class="card"><p class="kick">🎨 Fondo de la app</p><div class="agua-unid" style="margin-top:10px"><button type="button" class="chip" data-tema="oscuro" aria-pressed="' + temaOscuro() + '">🌙 Oscuro</button><button type="button" class="chip" data-tema="claro" aria-pressed="' + !temaOscuro() + '">☀️ Claro</button></div></div>' +
   '<div class="card"><p class="kick">🕒 Mis horas de comida</p><p class="muted" style="margin:6px 0 10px">Escribe a qué hora haces cada comida. Así la app elige la comida correcta y te recuerda si se te pasó.</p>' +
    '<div class="horas-com">' + comidasVisibles().map(function(c){ return '<label class="hc-fila"><span>' + c[1] + ' ' + c[2] + '</span><input type="time" class="inp" data-hora="' + c[0] + '" value="' + horaDe(c[0]) + '"></label>'; }).join("") + '</div></div>' +
   '<div class="card"><p class="kick">🔔 Mis recordatorios</p><p class="muted" style="margin:6px 0 10px">Marca los que quieras ver al abrir WGYMNUTRI. Son opcionales.</p>' +
@@ -1746,6 +1887,7 @@ function renderPerfil(){
   guardar(); toast("✅ Meta de agua: " + D.metas.agua + " vasos"); };
  $("recalc").onclick = function(){ onb.primera = false; onb.paso = 0; onb.slide = 0; onb.d = Object.assign({ meta:"", vel:"", comidas:"", dieta:"", evita:[] }, P, { evita:(P.evita || []).slice() }); renderOnb(); vista("vOnb"); };
  if($("instP")) $("instP").onclick = instalar;
+ document.querySelectorAll("#tabPerfil [data-tema]").forEach(function(b){ b.onclick = function(){ ponerTema(b.dataset.tema); renderPerfil(); }; });
  document.querySelectorAll("#tabPerfil [data-hora]").forEach(function(c){ c.onchange = function(){
   if(!/^\d{1,2}:\d{2}$/.test(c.value)) return;
   D.horas = D.horas || {}; D.horas[c.dataset.hora] = c.value; guardar(); toast("🕒 Hora guardada: " + c.value); }; });
@@ -1805,7 +1947,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101048", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101049", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
