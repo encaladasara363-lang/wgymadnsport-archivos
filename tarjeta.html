@@ -2306,7 +2306,7 @@ function renderEvolucion(s){
   var precio = (window.WGYM_PAGO && WGYM_PAGO.nutri && WGYM_PAGO.nutri.precio) || 5000;
   box.innerHTML = '<img src="assets/wgymnutri-logo.webp" alt="WGYMNUTRI">' +
    '<div class="np-tx"><p class="pago-kicker">🥗 Nuevo · WGYMNUTRI</p>' +
-   '<p>Tu contador de calorías: escanea tus comidas, más de 130 recetas saludables, racha y medallas. <b>' + clp(precio) + ' al mes</b>. Pídela en recepción.</p>' +
+   '<p>Tu contador de calorías: escanea tus comidas, más de 400 recetas saludables, racha y medallas. <b>' + clp(precio) + ' al mes</b>. Pídela en recepción.</p>' +
    '<a class="pago-btn principal" href="wgymnutri.html">Ver WGYMNUTRI</a></div>';
   box.hidden = false;
  }
@@ -2344,7 +2344,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101006", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101007", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
