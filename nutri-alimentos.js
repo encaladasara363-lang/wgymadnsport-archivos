@@ -165,6 +165,8 @@ window.NUTRI_ALIMENTOS = [
     dato exacto, escanear el código de barras o copiar la etiqueta en Manual. */
  ["Pan de molde blanco Ideal", "1 rebanada (27 g)", 70, 2.4, 13.5, 0.9, "Marcas"],
  ["Pan de molde integral Ideal", "1 rebanada (27 g)", 68, 3.2, 11.5, 1.1, "Marcas"],
+ ["Pan de molde Ideal Proteína", "1 rebanada (32 g)", 80, 6, 10, 1.8, "Marcas"],
+ ["Pan de molde Ideal Proteína (2 rebanadas)", "2 rebanadas (64 g)", 160, 12, 20, 3.6, "Marcas"],
  ["Pan hot dog Ideal", "1 unidad (45 g)", 125, 3.8, 23, 1.8, "Marcas"],
  ["Pan de hamburguesa Ideal", "1 unidad (60 g)", 165, 5, 30, 2.5, "Marcas"],
  ["Tortillas Ideal", "1 unidad (40 g)", 120, 3, 20, 3, "Marcas"],
