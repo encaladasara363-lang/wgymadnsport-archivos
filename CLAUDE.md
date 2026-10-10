@@ -1456,6 +1456,11 @@ probado: ella se activó desde el mesón y entró a la app).
   alta resolución con enfoque continuo y, en iPhone (ZXing), `TRY_HARDER`, que
   también lee el código parado (en latas y botellas va vertical; probado con un
   código girado 90°). El texto pide acercar el código y girar el teléfono de lado.
+- **Latas y botellas en ml (10-10-2026, la dueña escaneó una Score: "debe decir la
+  lata"):** en el detalle, un líquido (porción en ml, cuadro Energéticas o categoría
+  Energéticas; `esLiq`) muestra «✅ Contenido: 1 lata (473 ml)», botones ½ lata / 1
+  lata / 2 latas / 100 ml (botella para Powerade, Gatorade, Electrolit, agua),
+  «¿Cuántos ml tomaste?» y sin el cuadro de láminas; en «Hoy» se ve en ml (`it.ml`).
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

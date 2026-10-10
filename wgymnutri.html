@@ -785,7 +785,7 @@ function renderHoy(){
   var xx = diaDe(diaSel); xx.c[b.dataset.m].splice(+b.dataset.j, 1); setDia(diaSel, xx); guardar(); renderHoy(); $("rachaNum").textContent = racha();
  }; });
 }
-function porcionTxt(it){ var m = it.x || 1; return it.gr ? Math.round(it.gr * m) + " g" : (m === 1 ? it.p : (m === 0.5 ? "½" : String(m).replace(".", ",")) + " × " + it.p); }
+function porcionTxt(it){ var m = it.x || 1; return it.gr ? Math.round(it.gr * m) + (it.ml ? " ml" : " g") : (m === 1 ? it.p : (m === 0.5 ? "½" : String(m).replace(".", ",")) + " × " + it.p); }
 
 /* ═══ 5. Agregar comida: buscar, escanear, recientes, favoritas, manual ═══ */
 var agr = { comida:"desayuno", modo:"buscar", q:"" };
@@ -1006,11 +1006,20 @@ function modoManual(){
 }
 function detalle(a){
  var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
- var est0 = esGr ? unidadesPorcion(a) : null;
+ /* Líquidos (10-10-2026, la dueña escaneó una Score: "debe decir la lata"): se muestra por
+    lata o botella en ml, sin el cuadro de láminas. */
+ var esLiq = esGr && (a.ml || /\bml\b/i.test(a.porcTxt || "") || agr.comida === "bebidas" || a.cat === CAT_BEB);
+ if(esLiq){ if(!a.porcG && a.envaseG) a = Object.assign({}, a, { porcG:Math.round(a.envaseG) }); a = Object.assign({}, a, { ml:true }); }
+ var envase = /powerade|gatorade|electrolit|hydration|agua|isot[oó]nic/i.test(a.n + " " + (a.marca || "")) ? "botella" : "lata";
+ var est0 = esGr && !esLiq ? unidadesPorcion(a) : null;
  if(est0 && est0.est && !a.porcG){ a = Object.assign({}, a, { porcG:Math.round(est0.porcG), porcTxt:"" }); }
  var h = '<div class="cab" style="margin-bottom:6px"><h3 style="font-size:22px;text-transform:none;letter-spacing:0">' + esc(a.n) + '</h3><button type="button" class="chip" id="dVolver">‹ Volver</button></div>' +
   '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + (a.cat === "Marcas" || a.cat === CAT_BEB ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
- if(esGr && a.porcG){
+ if(esLiq && a.porcG){
+  gramos = a.porcG;
+  h += '<div class="porc-rec"><span>✅ Contenido</span><b>1 ' + envase + ' (' + a.porcG + ' ml)</b><small>información de la etiqueta del producto</small></div>' +
+   '<div class="mults" id="dPorc">' + [[0.5,"½ " + envase],[1,"1 " + envase],[2,"2 " + envase + "s"],[0,"100 ml"]].map(function(m){ return '<button type="button" class="chip" data-p="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
+ }else if(esGr && a.porcG){
   // Porción recomendada de la etiqueta (Open Food Facts), 10-10-2026: la dueña escaneó un pan y no veía la porción.
   gramos = a.porcG;
   var pt = textoPorcion(a), unE = unidadesPorcion(a);
@@ -1024,8 +1033,8 @@ function detalle(a){
   }
 
  }
- var unF = esGr ? unidadesPorcion(a) : null;
- if(esGr && (!unF || unF.est) && (a.code || a.off || a.cat === CAT_PROD)){
+ var unF = esGr && !esLiq ? unidadesPorcion(a) : null;
+ if(esGr && !esLiq && (!unF || unF.est) && (a.code || a.off || a.cat === CAT_PROD)){
   // Láminas según el envase (10-10-2026, la dueña: "no veo las letras chicas del empaque")
   h += '<details class="uni-falta"' + (a.porcG || unF ? '' : ' open') + '><summary>' + (unF ? '✏️ ¿No calza? Corrígelo con el envase' : '🧀 ¿Viene en láminas, rebanadas o unidades? Calcúlalo con el envase') + '</summary>' +
    '<p class="muted" style="margin:8px 0">Usa los números grandes del paquete: lo que pesa y cuántas trae.</p>' +
@@ -1034,8 +1043,8 @@ function detalle(a){
    '<div class="campo"><label for="eU">¿Qué son?</label><select class="inp" id="eU">' + UNIDADES.map(function(x){ return '<option value="' + x + '"' + (/queso|jam[oó]n|pavo|fiambre/i.test(a.n) && x === "lámina" ? " selected" : "") + '>' + plural(x, 2) + '</option>'; }).join("") + '</select></div>' +
    '<p class="muted" id="eRes" style="margin:6px 0;font-weight:800"></p><button type="button" class="btn sec chico" id="eOk">Guardar para todos</button></details>';
  }
- if(esGr) h += '<div class="campo"><label for="dGr">¿Cuántos gramos?</label><input class="inp" id="dGr" type="text" inputmode="decimal" autocomplete="off" value="' + gramos + '"></div>' +
-  (a.porcG || a.cat ? '' : '<p class="muted" style="margin:0;font-size:14px">Este producto no trae porción en su etiqueta: escribe los gramos que comiste.</p>');
+ if(esGr) h += '<div class="campo"><label for="dGr">' + (esLiq ? '¿Cuántos ml tomaste?' : '¿Cuántos gramos?') + '</label><input class="inp" id="dGr" type="text" inputmode="decimal" autocomplete="off" value="' + gramos + '"></div>' +
+  (a.porcG || a.cat ? '' : '<p class="muted" style="margin:0;font-size:14px">' + (esLiq ? 'La etiqueta no dice cuánto trae: escribe los ml (mira el número grande de la ' + envase + ').' : 'Este producto no trae porción en su etiqueta: escribe los gramos que comiste.') + '</p>');
  else h += '<p class="kick">Porción: ' + esc(a.p) + '</p><div class="mults" id="dMults">' + [[0.5,"½"],[1,"1"],[1.5,"1½"],[2,"2"],[3,"3"]].map(function(m){ return '<button type="button" class="chip" data-x="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
  h += '<div class="det-macros" id="dMac" style="margin:14px 0"></div>' +
   '<div class="fila2"><button type="button" class="btn sec" id="dFav">' + (esFav(a) ? "★ En favoritas" : "☆ Favorita") + '</button><button type="button" class="btn rojo" id="dOk">Agregar</button></div>';
@@ -1073,7 +1082,7 @@ function detalle(a){
  $("dFav").onclick = function(){ alternarFav(a); this.textContent = esFav(a) ? "★ En favoritas" : "☆ Favorita"; };
  $("dOk").onclick = function(){ if(esGr && !gramos) return; agregar(a, esGr ? gramos / 100 : mult, esGr); };
 }
-function base(a){ var b = { n:a.n, p:a.p, k:a.k, pr:a.pr, c:a.c, g:a.g }; if(a.gr){ b.gr = 100; b.p = "100 g"; if(a.porcG){ b.porcG = a.porcG; b.porcTxt = a.porcTxt || ""; } } if(a.marca) b.marca = a.marca; if(a.cat) b.cat = a.cat; return b; }
+function base(a){ var b = { n:a.n, p:a.p, k:a.k, pr:a.pr, c:a.c, g:a.g }; if(a.gr){ b.gr = 100; b.p = "100 g"; if(a.porcG){ b.porcG = a.porcG; b.porcTxt = a.porcTxt || ""; } if(a.ml){ b.ml = true; b.p = "100 ml"; } } if(a.marca) b.marca = a.marca; if(a.cat) b.cat = a.cat; return b; }
 function claveAl(a){ return normName(a.n) + "|" + (a.marca || "") + "|" + a.k; }
 function esFav(a){ var k = claveAl(a); return D.favs.some(function(f){ return claveAl(f) === k; }); }
 function alternarFav(a){ var k = claveAl(a); if(esFav(a)) D.favs = D.favs.filter(function(f){ return claveAl(f) !== k; }); else D.favs.unshift(base(a)); guardar(); }
@@ -1465,7 +1474,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101021", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101022", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
