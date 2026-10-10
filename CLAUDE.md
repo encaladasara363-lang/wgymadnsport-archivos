@@ -1564,6 +1564,13 @@ probado: ella se activó desde el mesón y entró a la app).
   (categoría «Verduras») siempre se anotan en gramos, aunque su porción diga «1 unidad». Se
   sumaron 21 verduras por 100 g (brócoli y coliflor crudos, zanahoria cruda/cocida, tomate
   cherry, rúcula, kale, pimentones, choclo, palmitos, brotes de soya, etc.).
+- **Vitamina C (10-10-2026, pedido de la dueña):** `window.NUTRI_VITC` al final de
+  `nutri-alimentos.js` (mg por porción, por nombre exacto; aproximada de tablas USDA; 0 en
+  carnes, lácteos, panes, grasas y endulzantes). Los productos de Open Food Facts la traen de
+  `vitamin-c_100g` si la informan. El detalle muestra «🍊 Vitamina C: X mg (Y % de lo que
+  necesitas al día)» o «sin dato» (nunca se inventa); «Hoy» suma el día contra 75 mg (mujer)
+  o 90 mg (hombre) y avisa cuántos alimentos no traen el dato. Se guarda en cada alimento
+  anotado (`it.vc`). Al agregar un alimento nuevo, sumarle su vitamina C a `NUTRI_VITC`.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
