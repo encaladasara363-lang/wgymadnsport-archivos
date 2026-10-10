@@ -414,3 +414,13 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .vitc-hoy .barra{margin-top:6px;height:10px}
 .vitc-hoy .barra i{background:linear-gradient(90deg,#F5A623,#FF7A00) !important}
 .vitc-hoy > small{display:block;margin-top:6px;font-size:12px;color:#6B6B73}
+/* Vitamina C, potasio y fibra juntos (10-10-2026) */
+.vitc-det{display:flex;flex-direction:column;gap:6px}
+.vitc-det .mic-l{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:baseline}
+.vitc-det .mic-l span{font-size:15px}
+.vitc-det .mic-l b.sd{font-family:inherit;font-size:14px !important;color:#6B6B73 !important}
+.vitc-det .mic-l small{min-width:62px;text-align:right}
+.vitc-hoy .mic-h + .mic-h{margin-top:8px}
+.vitc-hoy .barra.po i{background:linear-gradient(90deg,#E8C547,#D4A017) !important}
+.vitc-hoy .barra.fi i{background:linear-gradient(90deg,#7CB342,#33691E) !important}
+.det-macros .vitc-det .mic-l{background:none !important;border:0 !important;padding:2px 0 !important;border-radius:0}.vitc-det .mic-l span{white-space:nowrap;font-size:14px}.vitc-det .mic-l b{font-size:20px !important}.vitc-det .mic-l small{font-size:12px}
