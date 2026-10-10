@@ -323,7 +323,9 @@ ver cuándo el gym está más vacío.
   3 pasos, lema, confeti rojo/dorado). Nunca a socios antiguos ni a pases
   diarios. El teléfono guarda en `wgym_bienvenida_v1` a quién ya revisó y
   no vuelve a consultar.
-- **"🔥 Mis calorías del día" (05-10-2026, pedido de la dueña):** cuadro
+- **"🔥 Mis calorías del día" — SACADO de la tarjeta el 10-10-2026** (la dueña
+  vende WGYMNUTRI aparte y no quiere que la tarjeta lo regale; `renderCalorias`
+  ya no se llama y `#calCard` queda oculto; no volver a mostrarlo). Era un cuadro
   `#calCard` en la tarjeta (`renderCalorias()`). El socio elige sexo,
   edad, peso, estatura, actividad (×1,2 a ×1,9) y objetivo (bajar grasa /
   mantenerme / ganar músculo) y ve calorías, proteína, grasas y

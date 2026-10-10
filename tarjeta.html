@@ -2310,7 +2310,9 @@ function renderEvolucion(s){
  seguro_(function(){ renderPago(s); });
  calAbierto = false; calEditando = false;
  seguro_(renderNutriPromo_);
- seguro_(function(){ renderCalorias(s); });
+ /* "Mis calorías del día" se sacó de la tarjeta el 10-10-2026 (la dueña vende
+    WGYMNUTRI aparte). Los datos que el socio ya había guardado
+    (wgym_calorias_v1) quedan en su teléfono y WGYMNUTRI los usa para rellenar. */
  seguro_(function(){ renderCoach(s); });
  seguro_(function(){ renderEvolucion(s); });
  seguro_(pintarInstalar);
@@ -2326,7 +2328,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101001", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101002", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
