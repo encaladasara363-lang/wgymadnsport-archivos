@@ -514,6 +514,33 @@ function guardarProducto_(e) {
   } finally { lock.releaseLock(); }
 }
 
+/* porcionProducto (10-10-2026): anota en cuántas láminas/unidades viene la
+   porción de un producto ya guardado ("2 láminas (34 g)"). Solo escribe la
+   columna "Porción texto" y solo si todavía no dice unidades (no pisa un dato
+   bueno). Público, igual que guardarProducto. */
+function porcionProducto_(e) {
+  var p = e.parameter;
+  var codigo = String(p.codigo || "").replace(/\D/g, "").slice(0, 14);
+  var clave = normNombre_(String(p.nombre || "") + " " + String(p.marca || ""));
+  var txt = String(p.porcTxt || "").trim().slice(0, 40);
+  if (!/^\d+([.,]\d+)?\s+[a-zA-ZáéíóúñÁÉÍÓÚÑ]+/.test(txt)) return respond_(e, { ok: false, error: "porción inválida" });
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) return respond_(e, { ok: false, error: "ocupado, intenta de nuevo" });
+  try {
+    var hoja = hojaProductos_(), datos = hoja.getDataRange().getValues();
+    for (var i = 1; i < datos.length; i++) {
+      var mismo = codigo ? String(datos[i][0]) === codigo : normNombre_(datos[i][1] + " " + datos[i][2]) === clave;
+      if (!mismo) continue;
+      var actual = String(datos[i][8] || "");
+      if (/l[aá]mina|rebanada|unidad|galleta|barra|pote|sobre|scoop|cucharada|taza|tajada|trozo/i.test(actual)) return respond_(e, { ok: true, yaTenia: true });
+      hoja.getRange(i + 1, 9).setValue(txt);
+      try { CacheService.getScriptCache().remove("productos_lista"); } catch (err) {}
+      return respond_(e, { ok: true });
+    }
+    return respond_(e, { ok: false, error: "no encontrado" });
+  } finally { lock.releaseLock(); }
+}
+
 /* ── las dos entradas que llama Código.gs ───────────────────────────── */
 
 function accionIngresos_(e) {
@@ -526,6 +553,7 @@ function accionIngresos_(e) {
     case "listarNutri": return listarNutri_(e);
     case "listarProductos": return listarProductos_(e);
     case "guardarProducto": return guardarProducto_(e);
+    case "porcionProducto": return porcionProducto_(e);
   }
   return null;
 }
