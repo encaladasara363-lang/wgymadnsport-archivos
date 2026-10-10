@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=27">
+<link rel="stylesheet" href="nutri-claro.css?v=28">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -1200,7 +1200,10 @@ function detalle(a){
   var pt = textoPorcion(a), unE = unidadesPorcion(a);
   if(unE && unE.est) pt = unE.n + " " + plural(unE.u, unE.n) + " (" + a.porcG + " g)";
   h += '<div class="porc-rec"><span>✅ Porción recomendada</span><b>' + esc(pt) + '</b><small>' + (unE && unE.est ? 'láminas o unidades estimadas según el tipo de producto' : 'según la etiqueta del producto') + '</small></div>' +
-   '<div class="mults" id="dPorc">' + [[0.5, Math.round(a.porcG / 2) + " g"],[1, a.porcG + " g"],[2, Math.round(a.porcG * 2) + " g"],[0,"100 g"]].filter(function(m, i, arr){ return m[0] !== 0 || a.porcG !== 100; }).map(function(m){ return '<button type="button" class="chip" data-p="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
+   /* Gramos de 5 en 5, de 10 a 100, más la porción de la etiqueta (10-10-2026, la dueña:
+      "quiero poner 20 gramos y no hay"). */
+   (function(){ var gs = []; for(var q = 10; q <= 100; q += 5) gs.push(q); if(gs.indexOf(a.porcG) < 0) gs.push(a.porcG); gs.sort(function(x, y){ return x - y; });
+    return '<div class="gramos-fila" id="dGrs">' + gs.map(function(q){ return '<button type="button" class="chip" data-g="' + q + '" aria-pressed="' + (q === a.porcG) + '">' + q + ' g</button>'; }).join("") + '</div>'; })();
   var un = unidadesPorcion(a);
   if(un){
    h += '<p class="kick" style="margin:12px 0 6px">¿Cuántas ' + plural(un.u, 2) + ' comiste? <span style="font-weight:600;text-transform:none;letter-spacing:0">(1 ' + un.u + ' ≈ ' + r1(un.g) + ' g' + (un.est ? ', aproximado' : '') + ')</span></p><div class="mults" id="dUni">' +
@@ -1232,8 +1235,10 @@ function detalle(a){
  }
  pintar();
  $("dVolver").onclick = function(){ renderAgregar(); };
- if(esGr) $("dGr").oninput = function(){ gramos = Number(String(this.value).replace(",", ".")) || 0; if($("dPorc")) $("dPorc").querySelectorAll("[data-p]").forEach(function(x){ x.setAttribute("aria-pressed", "false"); }); pintar(); };
- function marcar(sel, b){ document.querySelectorAll("#dPorc [data-p], #dUni [data-u]").forEach(function(y){ y.setAttribute("aria-pressed", String(y === b)); }); }
+ if(esGr) $("dGr").oninput = function(){ gramos = Number(String(this.value).replace(",", ".")) || 0; document.querySelectorAll("#dPorc [data-p], #dGrs [data-g]").forEach(function(x){ x.setAttribute("aria-pressed", String(x.dataset.g && +x.dataset.g === gramos)); }); pintar(); };
+ function marcar(sel, b){ document.querySelectorAll("#dPorc [data-p], #dUni [data-u], #dGrs [data-g]").forEach(function(y){ y.setAttribute("aria-pressed", String(y === b)); }); }
+ if($("dGrs")){ $("dGrs").querySelectorAll("[data-g]").forEach(function(b){ b.onclick = function(){ gramos = +b.dataset.g; $("dGr").value = gramos; marcar(0, b); pintar(); }; });
+  var sel = $("dGrs").querySelector('[aria-pressed="true"]'); if(sel) setTimeout(function(){ try{ sel.scrollIntoView({ block:"nearest", inline:"center" }); }catch(e){} }, 50); }
  if($("dPorc")) $("dPorc").querySelectorAll("[data-p]").forEach(function(b){ b.onclick = function(){
   var x = +b.dataset.p; gramos = x ? Math.round(a.porcG * x) : 100; $("dGr").value = gramos; marcar(0, b); pintar(); }; });
  if($("dUni")){ var un2 = unidadesPorcion(a); $("dUni").querySelectorAll("[data-u]").forEach(function(b){ b.onclick = function(){
@@ -1733,7 +1738,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101034", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101035", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
