@@ -1602,6 +1602,11 @@ probado: ella se activó desde el mesón y entró a la app).
   meta; `RECORDATORIOS`/`recOn`, guardado en `D.recordar` del teléfono). Son
   avisos al abrir la app: una página web no puede mandar notificaciones con la
   app cerrada sin un servicio de envío (push) aparte.
+- **Logo de la cabecera que resalta (10-10-2026, la dueña mandó un video de su logo):**
+  arriba a la izquierda de la app, `.logo-top` con `assets/wgymnutri-logo-cabecera.mp4`/`.webm`
+  (los primeros 4,4 s del video, de frente, ida y vuelta para que el bucle no salte; sin
+  sonido, 320 px), aro dorado/rojo que gira y brillo dorado que pulsa. Nombre y saludo en una
+  sola línea (con «…» si no cabe).
 - **Diseño (10-10-2026):** fondo blanco con el estilo de la tablet de la puerta
   (`nutri-claro.css`, va encima del CSS de la app; subir `?v=` al cambiarlo),
   letras grandes y negras a pedido de la dueña. Recetario solo saludable

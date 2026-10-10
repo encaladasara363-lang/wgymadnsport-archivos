@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=32">
+<link rel="stylesheet" href="nutri-claro.css?v=33">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -312,7 +312,7 @@ h1,h2,h3{margin:0;font-weight:400}
  <!-- App -->
  <section id="vApp" hidden>
   <header class="top">
-   <img src="assets/wgymnutri-logo.webp" alt="WGYMNUTRI">
+   <div class="logo-top"><video poster="assets/wgymnutri-logo.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI"><source src="assets/wgymnutri-logo-cabecera.mp4" type="video/mp4"><source src="assets/wgymnutri-logo-cabecera.webm" type="video/webm"></video></div>
    <div class="t"><b>WGYMNUTRI</b><span id="saludo">Hola</span></div>
    <div class="racha" id="rachaChip" title="Días seguidos registrando comida">🔥 <span id="rachaNum">0</span></div>
   </header>
@@ -1756,7 +1756,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101040", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101041", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
