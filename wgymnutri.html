@@ -231,7 +231,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=8">
+<link rel="stylesheet" href="nutri-claro.css?v=9">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -840,7 +840,16 @@ function detalle(a){
  var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
  var h = '<div class="cab" style="margin-bottom:6px"><h3 style="font-size:22px;text-transform:none;letter-spacing:0">' + esc(a.n) + '</h3><button type="button" class="chip" id="dVolver">‹ Volver</button></div>' +
   '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + (a.cat === "Marcas" ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
- if(esGr) h += '<div class="campo"><label for="dGr">¿Cuántos gramos?</label><input class="inp" id="dGr" type="number" inputmode="decimal" value="' + gramos + '"></div>';
+ if(esGr && a.porcG){
+  // Porción recomendada de la etiqueta (Open Food Facts), 10-10-2026: la dueña escaneó un pan y no veía la porción.
+  gramos = a.porcG;
+  var pt = a.porcTxt && a.porcTxt.indexOf(String(a.porcG)) < 0 ? a.porcTxt + " (" + a.porcG + " g)" : (a.porcTxt || a.porcG + " g");
+  h += '<div class="porc-rec"><span>✅ Porción recomendada</span><b>' + esc(pt) + '</b><small>según la etiqueta del producto</small></div>' +
+   '<div class="mults" id="dPorc">' + [[0.5,"½ porción"],[1,"1 porción"],[2,"2 porciones"],[0,"100 g"]].map(function(m){ return '<button type="button" class="chip" data-p="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
+
+ }
+ if(esGr) h += '<div class="campo"><label for="dGr">¿Cuántos gramos?</label><input class="inp" id="dGr" type="number" inputmode="decimal" value="' + gramos + '"></div>' +
+  (a.porcG || a.cat ? '' : '<p class="muted" style="margin:0;font-size:14px">Este producto no trae porción en su etiqueta: escribe los gramos que comiste.</p>');
  else h += '<p class="kick">Porción: ' + esc(a.p) + '</p><div class="mults" id="dMults">' + [[0.5,"½"],[1,"1"],[1.5,"1½"],[2,"2"],[3,"3"]].map(function(m){ return '<button type="button" class="chip" data-x="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
  h += '<div class="det-macros" id="dMac" style="margin:14px 0"></div>' +
   '<div class="fila2"><button type="button" class="btn sec" id="dFav">' + (esFav(a) ? "★ En favoritas" : "☆ Favorita") + '</button><button type="button" class="btn rojo" id="dOk">Agregar</button></div>';
@@ -852,12 +861,15 @@ function detalle(a){
  }
  pintar();
  $("dVolver").onclick = function(){ renderAgregar(); };
- if(esGr) $("dGr").oninput = function(){ gramos = Number(String(this.value).replace(",", ".")) || 0; pintar(); };
+ if(esGr) $("dGr").oninput = function(){ gramos = Number(String(this.value).replace(",", ".")) || 0; if($("dPorc")) $("dPorc").querySelectorAll("[data-p]").forEach(function(x){ x.setAttribute("aria-pressed", "false"); }); pintar(); };
+ if($("dPorc")) $("dPorc").querySelectorAll("[data-p]").forEach(function(b){ b.onclick = function(){
+  var x = +b.dataset.p; gramos = x ? Math.round(a.porcG * x) : 100; $("dGr").value = gramos;
+  $("dPorc").querySelectorAll("[data-p]").forEach(function(y){ y.setAttribute("aria-pressed", String(y === b)); }); pintar(); }; });
  else $("dMults").querySelectorAll("[data-x]").forEach(function(b){ b.onclick = function(){ mult = +b.dataset.x; $("dMults").querySelectorAll("[data-x]").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); }); pintar(); }; });
  $("dFav").onclick = function(){ alternarFav(a); this.textContent = esFav(a) ? "★ En favoritas" : "☆ Favorita"; };
  $("dOk").onclick = function(){ if(esGr && !gramos) return; agregar(a, esGr ? gramos / 100 : mult, esGr); };
 }
-function base(a){ var b = { n:a.n, p:a.p, k:a.k, pr:a.pr, c:a.c, g:a.g }; if(a.gr){ b.gr = 100; b.p = "100 g"; } if(a.marca) b.marca = a.marca; if(a.cat) b.cat = a.cat; return b; }
+function base(a){ var b = { n:a.n, p:a.p, k:a.k, pr:a.pr, c:a.c, g:a.g }; if(a.gr){ b.gr = 100; b.p = "100 g"; if(a.porcG){ b.porcG = a.porcG; b.porcTxt = a.porcTxt || ""; } } if(a.marca) b.marca = a.marca; if(a.cat) b.cat = a.cat; return b; }
 function claveAl(a){ return normName(a.n) + "|" + (a.marca || "") + "|" + a.k; }
 function esFav(a){ var k = claveAl(a); return D.favs.some(function(f){ return claveAl(f) === k; }); }
 function alternarFav(a){ var k = claveAl(a); if(esFav(a)) D.favs = D.favs.filter(function(f){ return claveAl(f) !== k; }); else D.favs.unshift(base(a)); guardar(); }
@@ -878,9 +890,10 @@ function offAAlim(p){
  if(k == null && nu["energy_100g"] != null) k = nu["energy_100g"] / 4.184;
  if(k == null) return null;
  return { n:(p.product_name_es || p.product_name || "Producto").trim(), marca:(p.brands || "").split(",")[0].trim(), gr:Number(p.serving_quantity) || 100,
+  porcG:Math.round(Number(p.serving_quantity) || 0), porcTxt:String(p.serving_size || "").trim(),
   k:Math.round(k), pr:r1(nu.proteins_100g || 0), c:r1(nu.carbohydrates_100g || 0), g:r1(nu.fat_100g || 0) };
 }
-var OFF_CAMPOS = "code,product_name,product_name_es,brands,nutriments,serving_quantity";
+var OFF_CAMPOS = "code,product_name,product_name_es,brands,nutriments,serving_quantity,serving_size";
 function buscarOFF(q){
  if(window.WGYMNUTRI_DEMO) return Promise.resolve(null);
  /* Primero productos vendidos en Chile; si salen pocos, se completa con el resto del mundo.

@@ -189,3 +189,10 @@ body{ color:#111114; font-weight:500; }
 .nav button{ color:#3F3F46 !important; font-weight:800; }
 .nav button.on{ color:#E30613 !important; }
 .opc small{ font-weight:700 !important; }
+
+/* Porción recomendada de la etiqueta (productos escaneados) */
+.porc-rec{ display:flex; flex-direction:column; gap:2px; background:#EEF9EE; border:2px solid #5CA85C; border-radius:14px; padding:12px 14px; margin:0 0 10px; }
+.porc-rec span{ font-family:var(--cond); font-weight:800; font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:#2E7D32; }
+.porc-rec b{ font-size:22px; font-weight:800; color:#111114; }
+.porc-rec small{ font-size:14px; font-weight:600; color:#3F3F46; }
+#dPorc{ margin-bottom:12px; }
