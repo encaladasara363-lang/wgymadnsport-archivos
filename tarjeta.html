@@ -423,7 +423,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 </style>  
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,600;0,700;1,700;1,800&family=Barlow:wght@400;500;600;700&family=Rubik+Distressed&display=swap">
-<link rel="stylesheet" href="tarjeta-deportivo.css?v=4">
+<link rel="stylesheet" href="tarjeta-deportivo.css?v=5">
   
 <div id="appRoot" artifact-local>
   
@@ -587,6 +587,17 @@ const MEDICIONES_URL = "https://wgymadnsport-mediciones.encaladasara363.chatgpt.
  de ese rango se avisa que es una referencia direccional, no una
  medición hecha en su mismo grupo de edad. */
  var GRASA_REF_CHIREF = { F:29.6, M:21.6 };
+ /* Cuadro plegable (10-10-2026, la dueña: "que se pueda abrir y cerrar y no
+    ocupe tanto espacio"). Cerrado muestra solo el título y, si ya se sabe,
+    el rango de peso; cada teléfono recuerda si lo dejó abierto. */
+ var CLAVE_RANGO_ABIERTO = "wgym_rango_abierto_v1";
+ function plegarRango_(inner, resumen, forzar){
+  var abierto = !!forzar; if(!abierto) try{ abierto = localStorage.getItem(CLAVE_RANGO_ABIERTO) === "1"; }catch(e){}
+  return '<details class="evo-ref evo-ref-plegable"' + (abierto ? ' open' : '') + ' ontoggle="try{localStorage.setItem(\'' + CLAVE_RANGO_ABIERTO + '\', this.open ? \'1\' : \'0\')}catch(e){}">' +
+   '<summary><span class="rp-tit">⚖️ Tu peso saludable según tu estatura</span>' + (resumen ? '<span class="rp-res">' + resumen + '</span>' : '') + '<span class="rp-flecha">Ver ▼</span></summary>' +
+   '<div class="rp-cuerpo">' + inner + '</div></details>';
+ }
+ function resumenRango_(altura){ return Math.round(18.5*altura*altura*10)/10 + ' a ' + Math.round(24.9*altura*altura*10)/10 + ' kg'; }
  function rangoSaludableHTML(sexo, altura, fueraDeMuestra){
  var pesoMin = Math.round(18.5 * altura * altura * 10) / 10;
  var pesoMax = Math.round(24.9 * altura * altura * 10) / 10;
@@ -607,7 +618,7 @@ const MEDICIONES_URL = "https://wgymadnsport-mediciones.encaladasara363.chatgpt.
  if(peso == null || !imc) return "";
  var altura = Math.sqrt(peso / imc);
  var fueraDeMuestra = Number(edad) < 20 || Number(edad) > 29;
- return '<div class="evo-ref">' + rangoSaludableHTML(sexo, altura, fueraDeMuestra) + '</div>';
+ return plegarRango_(rangoSaludableHTML(sexo, altura, fueraDeMuestra), resumenRango_(altura));
  }
  /* Para socios SIN medición (la mayoría): no hay peso/estatura guardados
  en ningún lado público, así que se le pide al socio que los escriba él
@@ -635,15 +646,13 @@ const MEDICIONES_URL = "https://wgymadnsport-mediciones.encaladasara363.chatgpt.
  var guardado = !editando && leerRangoGuardado(s);
  if(guardado){
  var altura = Number(guardado.estatura) / 100;
- box.innerHTML = '<div class="evo-ref">' +
- rangoSaludableHTML(guardado.sexo, altura, false) +
- '<button type="button" class="evo-ref-editar" id="evoRefEditar">Editar mis datos</button>' +
- '</div>';
+ box.innerHTML = plegarRango_(rangoSaludableHTML(guardado.sexo, altura, false) +
+ '<button type="button" class="evo-ref-editar" id="evoRefEditar">Editar mis datos</button>', resumenRango_(altura));
  var btnEd = box.querySelector("#evoRefEditar");
  if(btnEd) btnEd.addEventListener("click", function(){ cajaRangoAuto(s, box, true); });
  return;
  }
- box.innerHTML = '<div class="evo-ref"><p class="mt">Tu rango saludable</p>' +
+ box.innerHTML = plegarRango_('<p class="mt">Tu rango saludable</p>' +
  '<p class="mtxt">Escribe tu peso y tu estatura para ver tu rango de peso normal y el % de grasa de referencia. Solo se guarda en tu teléfono.</p>' +
  '<div class="evo-ref-sexo">' +
  '<button type="button" data-sexo="F" id="evoRefF">Mujer</button>' +
@@ -652,8 +661,7 @@ const MEDICIONES_URL = "https://wgymadnsport-mediciones.encaladasara363.chatgpt.
  '<div class="evo-ref-campo"><label>Peso (kg)</label><input type="number" inputmode="decimal" id="evoRefPeso" placeholder="—"></div>' +
  '<div class="evo-ref-campo"><label>Estatura (cm)</label><input type="number" inputmode="decimal" id="evoRefEstatura" placeholder="—"></div>' +
  '<button type="button" class="evo-ref-btn" id="evoRefCalcular">Ver mi rango</button>' +
- '<p class="evo-ref-aviso" id="evoRefAviso"></p>' +
- '</div>';
+ '<p class="evo-ref-aviso" id="evoRefAviso"></p>', "", editando);
  var sexoElegido = (guardado && guardado.sexo) || null;
  var btnF = box.querySelector("#evoRefF"), btnM = box.querySelector("#evoRefM");
  function pintarSexo(){
@@ -2350,7 +2358,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101012", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101013", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();

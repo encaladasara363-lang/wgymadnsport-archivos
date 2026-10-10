@@ -163,3 +163,14 @@ footer.footer2 .name{ font-size:15px; }
 .nutri-promo .np-lista b{ color:#F2D04B; }
 .nutri-promo{ flex-direction:column; align-items:stretch !important; }
 .nutri-promo img{ width:120px !important; height:120px !important; align-self:center; }
+
+/* "Tu peso saludable según tu estatura" plegable (10-10-2026) */
+.evo-ref-plegable{ padding:0 !important; overflow:hidden; }
+.evo-ref-plegable > summary{ list-style:none; cursor:pointer; display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px; padding:14px 16px; }
+.evo-ref-plegable > summary::-webkit-details-marker{ display:none; }
+.evo-ref-plegable .rp-tit{ flex:1 1 100%; font-family:var(--f-cond); font-weight:800; font-size:17px; letter-spacing:.06em; text-transform:uppercase; color:#7FC4F0; }
+.evo-ref-plegable .rp-res{ font-family:var(--f-num); font-size:24px; color:#FFFFFF; }
+.evo-ref-plegable .rp-flecha{ margin-left:auto; font-family:var(--f-cond); font-weight:800; font-size:16px; color:#7FC4F0; border:1.5px solid #4C9FD6; border-radius:999px; padding:4px 12px; }
+.evo-ref-plegable[open] .rp-flecha{ font-size:0; }
+.evo-ref-plegable[open] .rp-flecha::after{ content:"Cerrar ▲"; font-size:16px; }
+.evo-ref-plegable .rp-cuerpo{ padding:0 16px 14px; }
