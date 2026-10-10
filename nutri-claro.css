@@ -1,0 +1,103 @@
+/* WGYMNUTRI · tema claro con el estilo del mesón (prueba del 10-10-2026, pedido
+   de la dueña: "más clarito y más llamativo, que se note más mi logo").
+   Va ENCIMA del CSS de wgymnutri.html: solo cambia la apariencia. */
+:root{
+ --bg:#FFFFFF; --panel:#FFFFFF; --panel2:#FFFFFF; --line:#ECE6DC;
+ --fg:#141416; --muted:#6B6B73; --gold:#B8901F; --gold2:#C99A1E;
+ color-scheme:light;
+}
+html,body{ background:#F7F5F1; color:var(--fg); }
+body{ background:
+ radial-gradient(120% 40% at 50% -5%, rgba(227,6,19,.10), transparent 60%),
+ repeating-linear-gradient(135deg, rgba(0,0,0,.018) 0 2px, transparent 2px 9px), #F7F5F1; }
+
+/* Encabezado grande con el logo bien visible y la franja roja/dorada del mesón */
+.top{ flex-wrap:wrap; position:relative; padding:6px 0 22px; margin-bottom:16px; }
+.top::after{ content:""; position:absolute; left:-16px; right:-16px; bottom:0; height:8px;
+ background:repeating-linear-gradient(-45deg,#E30613 0 14px,transparent 14px 20px,#D4AF37 20px 24px,transparent 24px 30px); }
+.top img{ width:96px; height:96px; filter:drop-shadow(0 6px 14px rgba(227,6,19,.35)); }
+.top .t{ padding-right:70px; }
+.top .t b{ font-size:clamp(19px,5.6vw,28px); line-height:1; color:#141416; overflow-wrap:anywhere; }
+.top .t span{ font-family:var(--cond); font-weight:700; font-size:16px; letter-spacing:.06em; text-transform:uppercase; color:#E30613; }
+.racha{ position:absolute; top:4px; right:0; background:#FFF4E0; border:2px solid #E7B54A; color:#B36B00; box-shadow:0 3px 0 #E7B54A; }
+
+/* Tarjetas blancas con borde rojo a la izquierda y sombra suave */
+.card{ background:#FFFFFF; border:1px solid var(--line); border-left:4px solid #E30613; box-shadow:0 6px 18px rgba(20,20,22,.07); }
+.kick{ color:#B8901F; }
+.cab h3, .comida .cab h3{ color:#141416; }
+.cab h3::before{ content:""; display:inline-block; width:6px; height:16px; background:#E30613; transform:skewX(-18deg); margin-right:8px; vertical-align:-1px; }
+.comida .cab h3::before{ display:none; }
+h2.disp{ color:#141416; display:flex; align-items:center; gap:10px; }
+h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transform:skewX(-18deg); flex:none; }
+.gate h1.disp::before, #vPago h2.disp::before, .logro-pop h2.disp::before, .bloq h2.disp::before, #vOnb h2.disp::before{ display:none; }
+.muted{ color:var(--muted); }
+
+/* Botones como el mesón: angostos, cursiva y con "escalón" */
+.btn.rojo{ box-shadow:0 4px 0 #7a030b; }
+.btn.oro{ box-shadow:0 4px 0 #8a6a12; color:#141414; }
+.btn.sec{ background:#FFFFFF; border:2px solid #E2DBCF; color:#141416; font-style:italic; box-shadow:0 3px 0 #E2DBCF; }
+.inp{ background:#FFFFFF; border:2px solid #E2DBCF; color:#141416; }
+.inp:focus{ outline:2px solid #E30613; border-color:transparent; }
+.campo label{ color:#6B6B73; }
+
+/* Entrada: logo más grande */
+.gate .logo{ width:min(76vw,300px); }
+.gate h1 .g{ color:#C99A1E; }
+
+/* Anillo y macros */
+.anillo .fondo{ stroke:#F1ECE3; }
+.barra{ background:#F1ECE3; }
+.anillo .centro b{ color:#141416; }
+.kcal-linea{ border-top-color:var(--line); }
+.kcal-linea b{ color:#141416; }
+.m-g i{ background:linear-gradient(90deg,#6B6B73,#2A2A30); }
+.macro .fila em{ color:#6B6B73; }
+
+.frase{ background:linear-gradient(90deg,rgba(227,6,19,.10),transparent); color:#141416; }
+.aviso{ background:#FFF8E6; border:1px solid #F0D58A; color:#3A2E00; }
+.aviso button{ color:#8A7A50; }
+
+/* Agua */
+.vaso{ border-color:#9CC9E6; background:#F2F8FC; }
+
+/* Comidas */
+.item .tx span{ color:#6B6B73; }
+.item .x{ color:#9A9AA2; }
+.add-l{ background:#FFF8E6; border-color:#E7C76A; color:#9A6F00; }
+
+/* Barra de abajo clara con el botón rojo */
+.nav{ background:rgba(255,255,255,.96); border-top:1px solid var(--line); box-shadow:0 -6px 20px rgba(20,20,22,.06); }
+.nav button{ color:#8A8A92; }
+.nav button.on{ color:#E30613; }
+.nav .mas{ border-color:#FFFFFF; }
+
+/* Hoja para agregar comida */
+.velo{ background:rgba(20,20,22,.45); }
+.hoja{ background:#FFFFFF; border-color:var(--line); }
+.hoja .asa{ background:#DDD6CA; }
+.chip{ background:#FFFFFF; border:2px solid #E2DBCF; color:#141416; }
+.chip[aria-pressed="true"]{ background:#E30613; border-color:#E30613; color:#fff; }
+.res button{ border-bottom-color:var(--line); color:#141416; }
+.res button span{ color:#6B6B73; }
+.res button .k{ color:#C99A1E; }
+.det-macros div, .plan-res div{ background:#FBF9F5; border:1px solid var(--line); }
+.det-macros span, .plan-res span{ color:#6B6B73; }
+.opc{ background:#FFFFFF; border:2px solid #E2DBCF; color:#141416; }
+.opc small{ color:#6B6B73; }
+.opc[aria-pressed="true"]{ border-color:#E30613; background:#FFF1F1; box-shadow:0 3px 0 #E30613; }
+.grande-inp{ color:#141416; }
+
+/* Progreso */
+.semana .bar.n{ background:#ECE6DC; }
+.semana .col span{ color:#6B6B73; }
+.medalla{ background:#FBF9F5; border:1px solid var(--line); }
+.medalla small{ color:#6B6B73; }
+.medalla.on{ background:linear-gradient(180deg,#FFF6DD,#FFFFFF); border-color:#E7C76A; }
+.peso-graf text[fill="#F5F5F6"]{ fill:#141416; }
+
+.toast{ background:#141416; color:#fff; }
+.logro-pop .card{ border-left-width:1px; }
+.cam{ background:#141416; }
+
+/* Pantalla de pago: el título cabe en teléfonos angostos */
+#vPago h2.disp{ font-size:clamp(26px,8.6vw,40px) !important; line-height:1.05; justify-content:center; flex-wrap:wrap; }

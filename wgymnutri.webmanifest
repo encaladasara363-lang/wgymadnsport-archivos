@@ -7,8 +7,8 @@
   "scope": ".",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0A0A0B",
-  "theme_color": "#0A0A0B",
+  "background_color": "#F7F5F1",
+  "theme_color": "#F7F5F1",
   "icons": [
     { "src": "assets/wgymnutri-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "assets/wgymnutri-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
