@@ -1444,13 +1444,14 @@ probado: ella se activó desde el mesón y entró a la app).
   carbohidratos como `hc` (Versión 15 del script, que acepta `hc` y `c`;
   instalada por la dueña el 10-10-2026 a las 15:27, verificada idéntica al repo).
   Nunca usar `c` ni `sid` como nombre de parámetro en llamadas al script.
-- **Bebidas (10-10-2026, pedido de la dueña: "para escanear bebidas energéticas o
-  Powerade"):** en «Hoy», después de las comidas, cuadro «🥤 Bebidas» (comida
-  `bebidas`, sin hora: `COMIDAS_HORA` la deja fuera de horas y recordatorios) con
-  «📷 Escanear bebida» y «🔎 Buscar bebida». Categoría «🥤 Energéticas e
-  isotónicas» en `nutri-alimentos.js` (Powerade, Gatorade, Electrolit, Red Bull,
-  Monster, Score, Burn y sus versiones sin azúcar; valores aproximados), que sale
-  primero al buscar desde ese cuadro.
+- **Energéticas (10-10-2026, pedido de la dueña: "para escanear bebidas energéticas o
+  Powerade"; "no le pongas bebidas, pon energética"):** en «Hoy», después de las
+  comidas, cuadro «⚡ Energéticas» (clave interna `bebidas`, sin hora:
+  `COMIDAS_HORA` la deja fuera de horas y recordatorios) con «📷 Escanear
+  energética» y «🔎 Buscar energética». Categoría «⚡ Energéticas» en
+  `nutri-alimentos.js` (Monster, Score, Red Bull, Burn, Rockstar, Prime, Celsius,
+  Bang, Powerade, Gatorade, Electrolit y sus versiones sin azúcar; valores
+  aproximados), que sale primero al buscar desde ese cuadro.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
