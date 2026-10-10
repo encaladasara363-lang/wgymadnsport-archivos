@@ -1580,6 +1580,27 @@ probado: ella se activó desde el mesón y entró a la app).
   Lo anotado antes (o guardado en favoritas/recientes) sin esos datos se completa solo desde la
   lista por nombre (`microDe`/`completarMicros`, ajustado a 100 g o a la unidad), caso
   «tengo pimentón y no me marca» (10-10-2026).
+- **Tema oscuro por defecto (10-10-2026, la dueña vio la prueba y dijo «quiero todas»):**
+  `nutri-oscuro.css` va después de `nutri-claro.css` y actúa con `<html class="oscuro">`; un
+  script en el `<head>` lo pone antes de pintar según `wgymnutri_tema_v1` (por defecto
+  «oscuro»). En «Mi perfil», cuadro «🎨 Fondo de la app» con 🌙 Oscuro / ☀️ Claro
+  (`ponerTema`). Al cambiar estilos nuevos, revisar que se vean en los dos temas.
+- **Ideas nuevas (10-10-2026, la dueña eligió todas):**
+  - «🤔 ¿Qué como ahora?» en «Hoy» (solo el día de hoy): `sugerencias()` mira lo que falta
+    (proteína ≥15 g → más proteína por kcal; si no, fibra y vitamina C; si ya cumplió, verduras
+    livianas), respeta dieta vegetariana y lo que no come (`alimPermitido`), 4 opciones con
+    «＋» que abren el detalle, «🔄 Otras» rota.
+  - «💊 Mis suplementos»: lista editable (`D.supl`, por defecto Creatina y Proteína), un check
+    por día (`x.supl`) con racha; sin dosis (las indica el profesor o nutricionista).
+  - «🔁 Repetir lo de ayer» en cada comida vacía si ayer tuvo esa comida.
+  - Días de entrenamiento: `asistenciaDesde` (60 días) marca con 💪 los días con ingreso al
+    gimnasio en la franja de la semana y muestra «Hoy entrenaste en WGYM» con el recordatorio
+    de 15 a 25 g de proteína en las 2 horas siguientes (base técnica). Solo se guardan los días
+    del propio socio (`wgymnutri_entreno_v1`).
+  - «🎤 Voz» en Agregar comida: dictado del teléfono (`SpeechRecognition`, es-CL) o frase
+    escrita («2 huevos, una marraqueta y 150 gramos de pollo»); `interpretarVoz` separa por
+    comas/«y»/«con», entiende números en palabra y gramos, `mejorAlimento` busca en la lista y
+    «Agregar todo» suma todo de una vez (`agregarVarios`).
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

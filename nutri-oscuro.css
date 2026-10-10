@@ -37,3 +37,9 @@ html.oscuro .muted, html.oscuro small{ color:#C9C9D1 !important; }
 html.oscuro .botella i, html.oscuro .vaso{ background:#0E1A24 !important; border-color:#3B6E91 !important; }
 html.oscuro .hora-com{ background:#2A2210 !important; border-color:#8A6A12 !important; }
 html.oscuro #dGr, html.oscuro #dCant, html.oscuro input, html.oscuro select{ color:#F5F5F6 !important; -webkit-text-fill-color:#F5F5F6 !important; }
+html.oscuro .sug-it, html.oscuro .supl-b, html.oscuro .rep-ay, html.oscuro .voz-mic{ background:#1C1C21 !important; border-color:#33333B !important; }
+html.oscuro .rep-ay{ border-color:#3B6E91 !important; }
+html.oscuro .voz-mic{ border-color:#E30613 !important; }
+html.oscuro .supl-b.on{ background:#0F2A1B !important; border-color:#1F9D55 !important; }
+html.oscuro .entreno-av{ background:#0F2A1B !important; border-color:#1F9D55 !important; }
+html.oscuro .supl-b small{ color:#F2D16B !important; }
