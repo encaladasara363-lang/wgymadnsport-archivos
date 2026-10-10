@@ -1618,6 +1618,13 @@ probado: ella se activó desde el mesón y entró a la app).
     el top 10 de `listarRetos` (hoja «Retos»; cada teléfono se identifica con `D.retoId` al
     azar). **Necesita la Versión 17 del Apps Script** (`docs/apps-script-ingresos-salidas.md`);
     sin ella el ranking dice que se activa al actualizar el sistema.
+  - «📸 Leer la etiqueta con la cámara» en «Crear este producto para todos» (valores por 100 g)
+    y en «✍️ Manual» (por porción): Tesseract gratis dentro del repo
+    (`vendor/tesseract-5.1.1/`, español `best_int`; ~6 MB que el teléfono baja solo la primera
+    vez que se usa). `parseEtiqueta` busca Energía (kcal, ignora kJ), Proteínas, Grasas totales
+    (no saturadas/trans) y H. de C. disponibles (no azúcares), elige la columna «100 g» según
+    el encabezado y lee la porción. Siempre pide revisar los números antes de guardar. Probado
+    con una etiqueta chilena: 4 de 4 valores correctos.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
