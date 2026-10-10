@@ -1425,6 +1425,13 @@ probado: ella se activó desde el mesón y entró a la app).
   producto para todos» con la tabla de la etiqueta (valores por 100 g).
   **Instalado por la dueña el 10-10-2026 a las 14:06 como Versión 13** (misma
   implementación y enlace; para volver atrás: lápiz → Versión 12).
+  **Láminas y unidades (10-10-2026, la dueña):** si la porción dice unidades
+  («2 láminas (34 g)», o «2 slices» de Open Food Facts) el detalle muestra
+  «¿Cuántas láminas comiste?» con botones 1-6 (`unidadesPorcion`; queso, jamón y
+  fiambres van en láminas). Si no lo dice, «¿Se come en láminas…? Indícalo una
+  vez» lo guarda para todos con la acción `porcionProducto` (solo llena la
+  porción si todavía no tenía unidades). **Requiere reinstalar el script
+  (Versión 14)**; mientras, queda guardado solo en ese teléfono.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
