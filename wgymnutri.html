@@ -246,10 +246,10 @@ h1,h2,h3{margin:0;font-weight:400}
   <form id="gateForm" class="stack" autocomplete="on">
    <div class="campo" style="text-align:left">
     <label for="gateNombre">Tu nombre y apellido</label>
-    <input class="inp" id="gateNombre" name="name" autocomplete="name" placeholder="Ej: Ana González" required>
+    <input class="inp" id="gateNombre" name="name" autocomplete="name" placeholder="Ej: Ana González" enterkeyhint="go">
    </div>
    <p class="err" id="gateErr" hidden></p>
-   <button class="btn rojo" type="submit" id="gateBtn">Entrar</button>
+   <button class="btn rojo" type="button" id="gateBtn">Entrar</button>
   </form>
   <p class="muted" style="font-size:13px">Tus comidas y tu peso se guardan solo en este teléfono.</p>
  </section>
@@ -431,7 +431,17 @@ function mostrarBloqueo(){
   : "Tu mensualidad venció el " + f + ". Renueva tu plan para volver a usar WGYMNUTRI.";
  vista("vBloqueo");
 }
-$("gateForm").addEventListener("submit", function(e){ e.preventDefault(); $("gateErr").hidden = true; var t = $("gateNombre").value.trim(); if(t) entrar(t); });
+/* Entrar con el botón o con Enter, sin depender del envío del formulario
+   (algunos visores bloquean el "submit" de los formularios). */
+function intentarEntrar(e){
+ if(e) e.preventDefault();
+ var t = $("gateNombre").value.trim(), er = $("gateErr");
+ if(!t){ er.textContent = "Escribe tu nombre y apellido."; er.hidden = false; $("gateNombre").focus(); return; }
+ er.hidden = true; entrar(t);
+}
+$("gateForm").addEventListener("submit", intentarEntrar);
+$("gateBtn").addEventListener("click", intentarEntrar);
+$("gateNombre").addEventListener("keydown", function(e){ if(e.key === "Enter") intentarEntrar(e); });
 $("bloqOtro").addEventListener("click", salir);
 function salir(){ lsSet(CLAVE_SOCIO, ""); socio = null; D = null; $("gateNombre").value = ""; vista("vGate"); }
 
@@ -741,8 +751,9 @@ function modoEscanear(){
  var c = $("agrCuerpo");
  c.innerHTML = '<div class="cam" id="camBox"><video id="camVid" playsinline muted autoplay></video><div class="marco"></div><div class="laser"></div></div>' +
   '<p class="muted center" id="camTxt" style="margin:10px 0">Apunta al código de barras del producto.</p>' +
-  '<form id="codForm" class="fila2" style="grid-template-columns:1fr auto"><input class="inp" id="codIn" inputmode="numeric" placeholder="¿No lee? Escribe los números"><button class="btn sec chico" style="width:auto">Buscar</button></form><div id="codRes"></div>';
- $("codForm").onsubmit = function(e){ e.preventDefault(); var v = $("codIn").value.replace(/\D/g, ""); if(v.length >= 6) leido(v); };
+  '<form id="codForm" class="fila2" style="grid-template-columns:1fr auto"><input class="inp" id="codIn" inputmode="numeric" placeholder="¿No lee? Escribe los números"><button type="button" id="codOk" class="btn sec chico" style="width:auto">Buscar</button></form><div id="codRes"></div>';
+ function porCodigo(e){ if(e) e.preventDefault(); var v = $("codIn").value.replace(/\D/g, ""); if(v.length >= 6) leido(v); }
+ $("codForm").onsubmit = porCodigo; $("codOk").onclick = porCodigo; $("codIn").onkeydown = function(e){ if(e.key === "Enter") porCodigo(e); };
  var vid = $("camVid");
  function encontrado(code){ if(cam.leyendo) return; cam.leyendo = true; if(navigator.vibrate) try{ navigator.vibrate(60); }catch(e){} pararCamara(); leido(code); }
  function sinCamara(){ $("camBox").hidden = true; $("camTxt").textContent = "No pudimos abrir la cámara. Revisa el permiso de cámara del navegador, o escribe el número del código aquí abajo."; }
@@ -854,20 +865,22 @@ function renderProg(){
   var dif = r1(ps[ps.length - 1].kg - ps[0].kg);
   h += '<p class="muted" style="margin:6px 0 0;font-size:14px">' + (dif === 0 ? "Sin cambios" : (dif < 0 ? "Bajaste " : "Subiste ") + String(Math.abs(dif)).replace(".", ",") + " kg") + ' desde el ' + ps[0].f.split("-").reverse().join("-") + '.</p>';
  }else h += '<p class="muted" style="margin:8px 0">Registra tu peso una vez por semana, siempre a la misma hora y en ayunas, para ver tu gráfico.</p>';
- h += '<form id="pesoForm" class="fila2" style="grid-template-columns:1fr auto;margin-top:10px"><input class="inp" id="pesoIn" type="number" inputmode="decimal" step="0.1" placeholder="Tu peso de hoy (kg)"><button class="btn oro chico" style="width:auto">Guardar</button></form></div>';
+ h += '<form id="pesoForm" class="fila2" style="grid-template-columns:1fr auto;margin-top:10px"><input class="inp" id="pesoIn" type="number" inputmode="decimal" step="0.1" placeholder="Tu peso de hoy (kg)"><button type="button" id="pesoOk" class="btn oro chico" style="width:auto">Guardar</button></form></div>';
  /* Medallas */
  var ganadas = LOGROS.filter(function(l){ return D.logros[l[0]]; }).length;
  h += '<div class="card"><div class="cab"><h3>🏆 Medallas</h3><span>' + ganadas + ' / ' + LOGROS.length + '</span></div><div class="medallas" style="margin-top:12px">' +
   LOGROS.map(function(l){ var on = !!D.logros[l[0]]; return '<div class="medalla ' + (on ? "on" : "off") + '"><span class="e">' + l[1] + '</span><b>' + esc(l[2]) + '</b><small>' + esc(l[3]) + '</small></div>'; }).join("") + '</div></div>';
  h += '<button type="button" class="btn rojo" id="compartir">📤 Compartir mi progreso</button>';
  var box = $("tabProg"); box.innerHTML = h;
- $("pesoForm").onsubmit = function(e){
-  e.preventDefault(); var v = Number(String($("pesoIn").value).replace(",", "."));
+ function guardarPeso(e){
+  if(e) e.preventDefault(); var v = Number(String($("pesoIn").value).replace(",", "."));
   if(!(v >= 30 && v <= 250)){ toast("Escribe tu peso en kilos, por ejemplo 68,5."); return; }
   var f = hoyISO(); D.pesos = D.pesos.filter(function(p){ return p.f !== f; }); D.pesos.push({ f:f, kg:r1(v) }); D.pesos.sort(function(a, b){ return a.f < b.f ? -1 : 1; });
   D.cont.pesoManual = true; if(D.perfil) D.perfil.peso = r1(v);
   guardar(); renderProg(); toast("✅ Peso guardado"); revisarLogros();
- };
+ }
+ $("pesoForm").onsubmit = guardarPeso; $("pesoOk").onclick = guardarPeso;
+ $("pesoIn").onkeydown = function(e){ if(e.key === "Enter") guardarPeso(e); };
  $("compartir").onclick = compartir;
 }
 function compartir(){
