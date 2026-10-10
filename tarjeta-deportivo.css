@@ -112,3 +112,47 @@ footer.footer2 .name{ font-family:var(--f-cond); letter-spacing:.2em; }
 .member-card .mc-row b{ color:#F2D04B !important; font-size:24px !important; }
 .member-card .mc-status .pill{ font-size:15px; padding:6px 14px; background:rgba(8,8,9,.88); }
 .member-card::after{ background:repeating-linear-gradient(-60deg,transparent 0 18px,rgba(212,175,55,.11) 18px 22px) !important; }
+
+/* ===== Letras más grandes en toda la tarjeta (10-10-2026, la dueña: "está todo muy pequeño") ===== */
+body{ font-size:17px; }
+/* Evolución física */
+.evo-kicker, .evo-meta .mt, .evo-ref .mt, .evo-pin .mt, .evo-hist-tit{ font-size:15px !important; letter-spacing:.08em !important; }
+.evo-stat{ padding:14px 10px !important; }
+.evo-stat .n{ font-family:var(--f-num); font-weight:400 !important; font-size:34px !important; }
+.evo-stat .l{ font-size:14px !important; font-weight:800 !important; color:#E6E6E6 !important; }
+.evo-chip{ font-size:14px !important; padding:5px 12px !important; }
+.evo-chip .dot{ width:8px; height:8px; }
+.evo-fecha{ font-size:16px !important; color:#E6E6E6 !important; }
+.evo-meta p.mtxt, .evo-ref p.mtxt{ font-size:17.5px !important; color:#F2F2F2 !important; line-height:1.55 !important; }
+.evo-ref p.mtxt-nota{ font-size:15px !important; color:#CFCFCF !important; }
+.evo-ref-campo label{ font-size:14px !important; color:#E6E6E6 !important; }
+.evo-ref-campo input{ font-size:18px !important; padding:12px !important; }
+.evo-ref-sexo button, .evo-ref-btn{ font-size:17px !important; padding:12px !important; }
+.evo-ref-aviso, .evo-ref-editar, .evo-pin-ok{ font-size:15px !important; }
+.evo-row{ font-size:16.5px !important; padding:10px 0 !important; border-bottom:1px solid rgba(255,255,255,.08); }
+.evo-row span{ color:#E6E6E6 !important; }
+.evo-row b{ font-size:16.5px; }
+.evo-hist{ max-height:none !important; }
+.evo-pin p{ font-size:16.5px !important; color:#F2F2F2 !important; }
+.evo-pin button{ font-size:17px !important; padding:13px !important; }
+.evo-pin .err{ font-size:15px !important; }
+/* Bandas, candados y notas */
+.band-chip{ font-size:16px !important; padding:10px 14px !important; }
+.band-note{ font-size:16px !important; color:#E6E6E6 !important; }
+.band-msg{ font-size:16px !important; }
+.band-btn{ font-size:20px !important; }
+/* Horario, ingreso, pago, coach e instalar */
+.hor-tit{ font-size:15px !important; }
+.hor-dias button{ font-size:16px !important; padding:10px 0 !important; }
+.hor-horas span, .hor-ley{ font-size:15px !important; color:#E6E6E6 !important; }
+.hor-vacio{ font-size:18px !important; }
+.salida-sub, .salida-nota, .salida-err{ font-size:16.5px !important; color:#E6E6E6 !important; }
+.pago-plan, .pago-nota, .cal-sub, .coach-sub2, .coach-resp, .inst-ya, .inst-pasos li{ font-size:16.5px !important; }
+.pago-datos .fila{ font-size:16.5px !important; padding:10px 0 !important; }
+.pago-datos .fila span{ color:#E6E6E6 !important; }
+.coach-op{ font-size:17px !important; padding:13px 14px !important; }
+.nutri-promo .np-tx p{ font-size:16.5px !important; }
+.mc-plan{ font-size:19px !important; }
+.mc-veredicto .vfavor{ font-size:16px !important; }
+.routine-blocked, .expiry-banner{ font-size:16px !important; }
+footer.footer2 .name{ font-size:15px; }
