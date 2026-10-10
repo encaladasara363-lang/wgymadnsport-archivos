@@ -311,6 +311,13 @@ ver cuándo el gym está más vacío.
   va **primero**, arriba de todo. Al registrarse se ve "✅ Tu ingreso está
   registrado (HH:MM)"; una lista atrasada de la hoja no vuelve a mostrar
   el botón durante 2 min (`ingresoHecho`).
+- **Diseño de la tablet en la tarjeta (10-10-2026, pedido de la dueña: "ese
+  diseño", mismo de `pantalla.html`, fondo oscuro):** `tarjeta-deportivo.css`
+  va encima del CSS de `tarjeta.html` (solo apariencia): logo grande + franja
+  roja/dorada, ficha del socio como el cuadro «Último ingreso» (degradado rojo
+  con rayas doradas, borde verde/dorado/rojo según el estado), cuadros con
+  borde dorado y títulos en Rubik Distressed amarillo, botones secundarios
+  amarillos. Al cambiarlo, subir su `?v=` y `TARJETA_VERSION`.
 - **Logo animado en la entrada (10-10-2026, pedido de la dueña):** en la
   pantalla donde se escribe el nombre, `#gateVideo` reproduce en bucle y sin
   sonido `assets/intro-tarjeta.mp4`/`.webm` (logo ADN Sport 3D) en vez del logo
