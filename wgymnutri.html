@@ -231,7 +231,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=13">
+<link rel="stylesheet" href="nutri-claro.css?v=14">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -695,16 +695,23 @@ function mostrarTab(id){
 document.querySelectorAll(".nav [data-tab]").forEach(function(b){ b.addEventListener("click", function(){ mostrarTab(b.dataset.tab); }); });
 $("navMas").addEventListener("click", function(){ abrirAgregar(comidaPorHora()); });
 
+/* Recordatorios opcionales (10-10-2026, pedido de la dueña): cada socio elige
+   en su perfil cuáles quiere ver. Se guardan solo en su teléfono. */
+var RECORDATORIOS = [["desayuno","🍳","Registrar el desayuno","Desde las 11:00 si aún no anotas nada."],
+ ["agua","💧","Tomar agua","A mediodía y en la noche si vas atrasado con los vasos."],
+ ["proteina","💪","Completar la proteína","En la tarde, si te falta bastante para tu meta."],
+ ["meta","⚠️","Aviso al pasar mi meta","Cuando comes más calorías que tu meta del día."]];
+function recOn(k){ var r = (D && D.recordar) || {}; return r[k] !== false; }
 function recordatorio(){
  if(diaSel !== hoyISO()) return null;
  var oc = lsGet("wgymnutri_aviso_oculto_v1", "");
  if(oc === hoyISO()) return null;
  var h = new Date().getHours(), t = totales(diaSel), x = diaDe(diaSel), M = D.metas;
- if(h >= 11 && !(x.c.desayuno || []).length && !t.n) return ["🍳", "¿Ya tomaste desayuno? Regístralo para empezar tu día y no cortar tu racha 🔥."];
- if(h >= 13 && x.agua < M.agua / 2) return ["💧", "¿Ya tomaste agua? Llevas " + x.agua + " de " + M.agua + " vasos. ¡Toca un vaso cada vez que tomes uno!"];
- if(h >= 17 && t.n && M.p - t.p > 25) return ["💪", "Te faltan " + Math.round(M.p - t.p) + " g de proteína para tu meta de hoy. Pollo, huevo, atún o yogur proteico te ayudan."];
- if(t.n && t.k > M.kcal) return ["⚠️", "Hoy pasaste tu meta por " + miles(t.k - M.kcal) + " kcal. Mañana es otra oportunidad: prioriza verduras y proteína."];
- if(h >= 20 && x.agua < M.agua) return ["💧", "Te faltan " + (M.agua - x.agua) + " vasos de agua para tu meta de hoy."];
+ if(recOn("desayuno") && h >= 11 && !(x.c.desayuno || []).length && !t.n) return ["🍳", "¿Ya tomaste desayuno? Regístralo para empezar tu día y no cortar tu racha 🔥."];
+ if(recOn("agua") && h >= 13 && x.agua < M.agua / 2) return ["💧", "¿Ya tomaste agua? Llevas " + x.agua + " de " + M.agua + " vasos. ¡Toca un vaso cada vez que tomes uno!"];
+ if(recOn("proteina") && h >= 17 && t.n && M.p - t.p > 25) return ["💪", "Te faltan " + Math.round(M.p - t.p) + " g de proteína para tu meta de hoy. Pollo, huevo, atún o yogur proteico te ayudan."];
+ if(recOn("meta") && t.n && t.k > M.kcal) return ["⚠️", "Hoy pasaste tu meta por " + miles(t.k - M.kcal) + " kcal. Mañana es otra oportunidad: prioriza verduras y proteína."];
+ if(recOn("agua") && h >= 20 && x.agua < M.agua) return ["💧", "Te faltan " + (M.agua - x.agua) + " vasos de agua para tu meta de hoy."];
  return null;
 }
 function renderHoy(){
@@ -1154,6 +1161,8 @@ function renderPerfil(){
   '<div class="card"><div class="cab"><h3>🎯 Mis metas</h3></div><div class="plan-res" style="margin-top:10px"><div><b style="color:var(--gold2)">' + miles(M.kcal) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + M.p + ' g</b><span>Proteína</span></div><div><b>' + M.c + ' g</b><span>Carbohidratos</span></div><div><b>' + M.g + ' g</b><span>Grasas</span></div></div>' +
   '<div class="campo" style="margin-top:12px"><label for="aguaMeta">Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta">' + [6,7,8,9,10,11,12,14].map(function(n){ return '<option' + (n === M.agua ? " selected" : "") + '>' + n + '</option>'; }).join("") + '</select></div>' +
   '<button type="button" class="btn sec chico" id="recalc" style="margin-top:12px">Recalcular con mis datos</button></div>' +
+  '<div class="card"><p class="kick">🔔 Mis recordatorios</p><p class="muted" style="margin:6px 0 10px">Marca los que quieras ver al abrir WGYMNUTRI. Son opcionales.</p>' +
+   RECORDATORIOS.map(function(r){ return '<label class="rec-op"><input type="checkbox" data-rec="' + r[0] + '"' + (recOn(r[0]) ? ' checked' : '') + '><span class="rec-e">' + r[1] + '</span><span class="rec-tx"><b>' + r[2] + '</b><small>' + r[3] + '</small></span><span class="rec-sw" aria-hidden="true"></span></label>'; }).join("") + '</div>' +
   '<div class="card"><p class="kick">📲 App en tu teléfono</p>' + (estaInstalada() ? '<p class="muted">✅ WGYMNUTRI ya está en tu pantalla de inicio.</p>'
    : DENTRO_TARJETA ? '<p class="muted">✅ La abres desde tu <b>Tarjeta Virtual</b>: toca «Ver WGYMNUTRI» cada vez que la necesites. No hace falta instalar nada más.</p>' +
      '<details class="inst-aparte"><summary>¿Prefieres un ícono aparte en tu pantalla de inicio?</summary><div class="muted">' + pasosDesdeTarjeta() + '</div><button type="button" class="btn sec chico" id="instCopiarP">📋 Copiar enlace</button></details>'
@@ -1165,6 +1174,9 @@ function renderPerfil(){
  $("aguaMeta").onchange = function(){ D.metas.agua = +this.value; guardar(); toast("✅ Meta de agua: " + this.value + " vasos"); };
  $("recalc").onclick = function(){ onb.paso = 0; onb.d = Object.assign({}, P); renderOnb(); vista("vOnb"); };
  if($("instP")) $("instP").onclick = instalar;
+ document.querySelectorAll("#tabPerfil [data-rec]").forEach(function(c){ c.onchange = function(){
+  D.recordar = D.recordar || {}; D.recordar[c.dataset.rec] = c.checked; guardar();
+  toast(c.checked ? "🔔 Recordatorio activado" : "🔕 Recordatorio desactivado"); }; });
  if($("instCopiarP")) $("instCopiarP").onclick = copiarEnlaceNutri;
  $("borrarB").onclick = function(){
   $("borrarConf").innerHTML = '<p class="err" style="margin:10px 0">¿Seguro? Se borran tus comidas, peso y medallas de este teléfono. No se puede deshacer.</p><div class="fila2"><button type="button" class="btn sec chico" id="bNo">Cancelar</button><button type="button" class="btn rojo chico" id="bSi">Sí, borrar</button></div>';
