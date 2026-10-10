@@ -318,3 +318,4 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 #nav button{ font-size:13px !important; letter-spacing:0 !important; }
 .comida-card .add-l, .bebidas-card .add-l{ font-size:19px !important; }
 .macro .fila{gap:6px}.macro .fila span{font-size:15px !important;min-width:0}.macro .fila em{font-size:15px !important;white-space:nowrap}
+.gramos-fila{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}.gramos-fila .chip{flex:0 0 auto;scroll-snap-align:center;min-width:72px}

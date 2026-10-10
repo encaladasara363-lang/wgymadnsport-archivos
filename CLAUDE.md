@@ -1527,6 +1527,9 @@ probado: ella se activó desde el mesón y entró a la app).
   final de `nutri-claro.css` (`text-transform:uppercase; font-style:italic;
   font-weight:800` en todo menos los SVG); la barra de abajo no se corta (`#nav`
   sin salto de línea, 13 px).
+- **Gramos de 5 en 5 (10-10-2026, la dueña: "quiero poner 20 g y no hay"):** en productos
+  escaneados, fila deslizable `#dGrs` con 10, 15, 20… 100 g más la porción de la etiqueta
+  (marcada); tocar uno pone esos gramos.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
