@@ -822,9 +822,9 @@ function guardarProductoCompartido(a, origen){
  var fila = [a.code || "", a.n, a.marca || "", a.k, a.pr, a.c, a.g, a.porcG || 0, a.porcTxt || ""];
  if(!(a.code && porCodigoLocal(a.code))){ var l = lsGet(CLAVE_PROD, []) || []; l.push(fila); lsSet(CLAVE_PROD, l); integrarProductos(l); }
  // Siempre se avisa a la planilla: si ya lo tenía, solo suma "Veces" (nunca lo duplica).
- pedirScript({ action:"guardarProducto", codigo:a.code || "", nombre:a.n, marca:a.marca || "", k:a.k, p:a.pr, c:a.c, g:a.g, porcG:a.porcG || 0, porcTxt:a.porcTxt || "", origen:origen || "off" }).then(function(d){
+ pedirScript({ action:"guardarProducto", codigo:a.code || "", nombre:a.n, marca:a.marca || "", k:a.k, p:a.pr, c:a.c, g:a.g, porcG:a.porcG || 0, porcTxt:a.porcTxt || "", origen:origen || "off" }, 40000).then(function(d){
   if(d && d.ok) toast(d.nuevo ? "📷 Guardado para todos los socios" : "📷 Ya estaba guardado para todos");
-  else toast("⚠️ No se pudo guardar para todos: " + ((d && d.error) || "sin conexión con la planilla"));
+  else if(d && d.error) toast("⚠️ No se pudo guardar para todos: " + d.error);
  });
 }
 function guardarPorcionCompartida(a, txt){
@@ -1450,7 +1450,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101016", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101017", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
