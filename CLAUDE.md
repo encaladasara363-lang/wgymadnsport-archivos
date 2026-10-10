@@ -1490,6 +1490,11 @@ probado: ella se activó desde el mesón y entró a la app).
   medias. Si no está en ninguna lista, se oculta la cámara y se muestra el número leído
   en grande para compararlo con el del envase: «Sí coincide: crear este producto» o
   «No coincide: escanear de nuevo».
+- **Foto del código (10-10-2026, la dueña: "pucha no me reconoce"; en iPhone el video en
+  vivo sale borroso de cerca):** bajo la cámara, «📸 ¿No lo lee? Saca una foto del código»
+  (`<input capture>`: la cámara del teléfono enfoca sola) y `leerFotoCodigo` lee la foto
+  quieta, normal y girada 90°, con BarcodeDetector o ZXing (`TRY_HARDER`); probado con un
+  EAN-8 borroso acostado y parado. El video en vivo ahora pide 2 lecturas iguales.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
