@@ -153,3 +153,9 @@ p.muted, div.muted{ font-size:17px !important; line-height:1.45; color:#3F3F46 !
 .medalla small{ font-size:14px !important; }
 .nav button{ font-size:13px; }
 .btn.chico{ font-size:17px !important; }
+
+/* Textos de ayuda bien negros (10-10-2026, la dueña: "márcalas bien negras") */
+:root{ --muted:#1A1A1E; }
+p.muted, div.muted, .muted{ color:#111114 !important; font-weight:600; }
+.opc small, .item .tx span, .res button span, .det-macros span, .plan-res span, .medalla small,
+.semana .col span, .leyenda, .macro .fila em, .campo label, .anillo .centro span, .comida .cab small{ color:#1A1A1E !important; font-weight:600; }
