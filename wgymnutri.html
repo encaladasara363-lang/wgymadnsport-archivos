@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=24">
+<link rel="stylesheet" href="nutri-claro.css?v=25">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -1261,6 +1261,34 @@ function pararCamara(){
  if(cam.stream){ cam.stream.getTracks().forEach(function(t){ t.stop(); }); cam.stream = null; }
  cam.leyendo = false;
 }
+function leerFotoCodigo(file){
+ return new Promise(function(ok){
+  var url = URL.createObjectURL(file), img = new Image();
+  img.onerror = function(){ URL.revokeObjectURL(url); ok(null); };
+  img.onload = function(){
+   var lienzos = [0, 90].map(function(giro){
+    var esc = Math.min(1, 1600 / Math.max(img.width, img.height)), w = Math.round(img.width * esc), h = Math.round(img.height * esc);
+    var cv = document.createElement("canvas"), cx = cv.getContext("2d");
+    if(giro){ cv.width = h; cv.height = w; cx.translate(h, 0); cx.rotate(Math.PI / 2); } else { cv.width = w; cv.height = h; }
+    cx.drawImage(img, 0, 0, w, h); return cv;
+   });
+   URL.revokeObjectURL(url);
+   var intentoNativo = ("BarcodeDetector" in window) ? new BarcodeDetector({ formats:["ean_13","ean_8","upc_a","upc_e"] }).detect(lienzos[0]).then(function(r){ return r && r[0] ? r[0].rawValue : null; })["catch"](function(){ return null; }) : Promise.resolve(null);
+   intentoNativo.then(function(code){
+    if(code) return ok(code);
+    cargarZXing().then(function(){
+     var hints = new Map(); hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.UPC_E]); hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
+     var lector = new ZXing.MultiFormatReader(); lector.setHints(hints);
+     for(var i = 0; i < lienzos.length; i++){
+      try{ var bmp = new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(new ZXing.HTMLCanvasElementLuminanceSource(lienzos[i]))); var r = lector.decode(bmp, hints); if(r) return ok(r.getText()); }catch(e){}
+     }
+     ok(null);
+    })["catch"](function(){ ok(null); });
+   });
+  };
+  img.src = url;
+ });
+}
 function cargarZXing(){
  return new Promise(function(ok, mal){
   if(window.ZXing) return ok();
@@ -1271,16 +1299,30 @@ function modoEscanear(){
  var c = $("agrCuerpo");
  c.innerHTML = '<div class="cam" id="camBox"><video id="camVid" playsinline muted autoplay></video><div class="marco"></div><div class="laser"></div></div>' +
   '<p class="muted center" id="camTxt" style="margin:10px 0">Acerca el código de barras hasta que llene el recuadro.<br>En latas y botellas, el código puede estar parado: <b>gira el teléfono de lado</b>.</p>' +
+  '<label class="btn rojo foto-cod" for="fotoCod">📸 ¿No lo lee? Saca una foto del código</label><input type="file" id="fotoCod" accept="image/*" capture="environment" hidden>' +
+  '<p class="muted center" id="fotoTxt" style="margin:6px 0 10px;font-size:15px">La cámara del teléfono enfoca mejor de cerca. Toma la foto con el código bien nítido.</p>' +
   '<form id="codForm" class="fila2" style="grid-template-columns:1fr auto"><input class="inp" id="codIn" inputmode="numeric" placeholder="¿No lee? Escribe los números"><button type="button" id="codOk" class="btn sec chico" style="width:auto">Buscar</button></form><div id="codRes"></div>';
  function porCodigo(e){ if(e) e.preventDefault(); var v = $("codIn").value.replace(/\D/g, ""); if(v.length >= 6) leido(v); }
  $("codForm").onsubmit = porCodigo; $("codOk").onclick = porCodigo; $("codIn").onkeydown = function(e){ if(e.key === "Enter") porCodigo(e); };
  var vid = $("camVid");
+ /* Foto del código (10-10-2026, la dueña: "pucha no me reconoce"; en iPhone la imagen en vivo
+    sale borrosa de cerca). La cámara del teléfono enfoca sola y se lee la foto quieta, también
+    girada 90°, con BarcodeDetector (Android) o ZXing (iPhone). */
+ $("fotoCod").onchange = function(){
+  var f = this.files && this.files[0]; if(!f) return;
+  $("fotoTxt").textContent = "Leyendo la foto…";
+  leerFotoCodigo(f).then(function(code){
+   if(code){ pararCamara(); if(navigator.vibrate) try{ navigator.vibrate(60); }catch(e){} leido(code); }
+   else $("fotoTxt").textContent = "No se pudo leer el código en la foto. Prueba con más luz y el código más grande, o escribe los números aquí abajo.";
+  });
+  this.value = "";
+ };
  /* Se acepta un código solo si se lee igual 2 veces seguidas (3 si es corto, de 8 dígitos):
     así no se cuela una lectura a medias (10-10-2026, un código no aparecía en ninguna lista). */
  var visto = { c:"", n:0 };
  function encontrado(code){ if(cam.leyendo) return;
   if(code !== visto.c){ visto.c = code; visto.n = 1; } else visto.n++;
-  if(visto.n < (String(code).length <= 8 ? 3 : 2)) return;
+  if(visto.n < 2) return;
   cam.leyendo = true; if(navigator.vibrate) try{ navigator.vibrate(60); }catch(e){} pararCamara(); leido(code); }
  function sinCamara(){ $("camBox").hidden = true; $("camTxt").textContent = "No pudimos abrir la cámara. Revisa el permiso de cámara del navegador, o escribe el número del código aquí abajo."; }
  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ sinCamara(); return; }
@@ -1608,7 +1650,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101025", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101026", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
