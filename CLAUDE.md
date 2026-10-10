@@ -1484,6 +1484,12 @@ probado: ella se activó desde el mesón y entró a la app).
 - **Franja de la semana en «Hoy» (10-10-2026, como Fitia):** L a D de la semana con
   punto verde en los días con comidas registradas; tocar un día lo muestra; ‹ › cambian
   de semana.
+- **Escáner confirma el código (10-10-2026, la dueña: "no me escanean"; en realidad leyó
+  80725848 y ese producto no estaba en ninguna lista):** un código se acepta solo si se
+  lee igual 2 veces seguidas (3 si tiene 8 dígitos), para que no se cuele una lectura a
+  medias. Si no está en ninguna lista, se oculta la cámara y se muestra el número leído
+  en grande para compararlo con el del envase: «Sí coincide: crear este producto» o
+  «No coincide: escanear de nuevo».
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

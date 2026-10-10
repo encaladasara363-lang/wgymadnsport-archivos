@@ -293,3 +293,7 @@ body{ zoom:1.1; }
 .st-dia.con i{background:#1FA34A}
 .st-dia.hoy b{color:#C99A1E}
 .st-dia.sel .st-l{background:#141416;color:#fff}
+.cod-leido{background:#FFF4C9;border:2px solid #D4AF37;border-radius:16px;padding:14px;text-align:center;margin-top:6px}
+.cod-leido small{display:block;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7A5A00;font-size:13px}
+.cod-leido b{display:block;font-family:var(--num);font-weight:400;font-size:40px;letter-spacing:.06em;color:#141416;margin:2px 0 6px}
+.cod-leido span{display:block;font-size:16px;color:#1A1A1E}
