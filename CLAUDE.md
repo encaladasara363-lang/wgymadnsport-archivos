@@ -1397,8 +1397,9 @@ tarjeta, que ya tiene "Mis calorías del día").
   (Harris-Benedict, base técnica); rellena con `wgym_calorias_v1` si existe.
 - Extras: agua, peso con gráfico, racha, medallas con confeti, resumen
   semanal (verde/rojo), tarjeta para compartir, recordatorios al abrir,
-  comidas por momento (con once) y frase del día. Recetas: enlaza a
-  `comidas-saludables.html`.
+  comidas por momento (con once) y frase del día. Recetas: recetario
+  propio en `nutri-recetas.js` (la dueña NO quiere sus recetas de
+  `comidas-saludables.html` aquí), cada una con «Agregar a mi día».
 - **Bloqueo igual a la tarjeta:** plan vencido → app bloqueada entera con
   "Pagar mi mensualidad" (`pagar.html`). Pase diario: solo ese día. Vale la
   fecha más nueva entre la copia del teléfono, `socios.json` y la hoja.

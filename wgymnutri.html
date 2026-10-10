@@ -19,7 +19,7 @@
   WGYMNUTRI (10/2026, pedido de la dueña): contador de calorías aparte de la
   tarjeta virtual, al estilo Cal AI pero gratis (sin fotos con IA): búsqueda
   por nombre (nutri-alimentos.js), código de barras (Open Food Facts) y
-  comidas manuales. Se entra con el QR de cartel-qr-wgymnutri.html.
+  comidas manuales; recetario propio en nutri-recetas.js. Se entra con el QR de cartel-qr-wgymnutri.html.
   - Mismo bloqueo que la tarjeta: con el plan vencido se bloquea entera.
     Pase diario: solo el día de su pase. Fecha = la más nueva entre la
     copia del teléfono, socios.json y la hoja (listarSocios).
@@ -305,6 +305,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <canvas id="confeti" hidden></canvas>
 
 <script src="nutri-alimentos.js?v=1"></script>
+<script src="nutri-recetas.js?v=1"></script>
 <script>
 (function(){
 "use strict";
@@ -916,13 +917,40 @@ function compartir(){
 }
 
 /* ═══ 7. Recetas y perfil ═══ */
+var recCat = "Todas", recAbierta = -1;
+var RECETAS = window.NUTRI_RECETAS || [];
+var RECETA_COMIDA = { "Desayuno":"desayuno", "Almuerzo":"almuerzo", "Cena":"cena", "Colación":"colacion1", "Postre":"once" };
 function renderRec(){
- $("tabRec").innerHTML = '<h2 class="disp" style="font-size:34px">Recetas saludables</h2>' +
-  '<p class="muted" style="margin:0">Recetas nutritivas del catálogo oficial de WGYMADNSPORT, con ingredientes y preparación paso a paso.</p>' +
-  '<a class="card receta" href="comidas-saludables.html"><span class="e">🥟</span><span style="flex:1;min-width:0"><b style="display:block;font-family:var(--cond);font-size:20px;text-transform:uppercase;letter-spacing:.04em">Empanadas de carne picada de pino</b><span class="muted">Ver receta completa ›</span></span></a>' +
-  '<a class="btn oro" href="comidas-saludables.html" style="text-decoration:none">📖 Ver todo el catálogo</a>' +
-  '<div class="card"><p class="kick">Ideas rápidas con tu lista de comidas</p><ul class="muted" style="margin:8px 0 0;padding-left:18px;line-height:1.6">' +
-  '<li>Desayuno proteico: avena + yogur proteico + plátano.</li><li>Almuerzo: pechuga a la plancha + arroz integral + ensalada chilena.</li><li>Once liviana: pan integral + quesillo + tomate.</li><li>Colación: un puñado de almendras o una fruta.</li></ul></div>';
+ var box = $("tabRec"), h = '<h2 class="disp" style="font-size:34px">Recetas saludables</h2>';
+ if(recAbierta >= 0){
+  var r = RECETAS[recAbierta];
+  h += '<button type="button" class="chip" id="recVolver" style="align-self:flex-start">‹ Todas las recetas</button>' +
+   '<div class="card"><div style="font-size:54px;line-height:1">' + r.e + '</div><p class="kick" style="margin-top:8px">' + esc(r.cat) + ' · ' + r.min + ' min · ' + esc(r.porc) + '</p>' +
+   '<h3 style="font-family:var(--cond);font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.03em;margin:4px 0 12px">' + esc(r.n) + '</h3>' +
+   '<div class="det-macros"><div><b style="color:var(--gold2)">' + miles(r.k) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + r.p + '</b><span>Prot. g</span></div><div><b>' + r.c + '</b><span>Carb. g</span></div><div><b>' + r.g + '</b><span>Grasa g</span></div></div></div>' +
+   '<div class="card"><p class="kick">Ingredientes</p><ul style="margin:8px 0 0;padding-left:20px;line-height:1.7">' + r.ing.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
+   '<div class="card"><p class="kick">Preparación</p><ol style="margin:8px 0 0;padding-left:22px;line-height:1.7">' + r.pasos.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ol></div>' +
+   '<button type="button" class="btn rojo" id="recAgregar">+ Agregar a mi día</button>' +
+   '<p class="muted center" style="font-size:13px;margin:0">Calorías aproximadas por porción.</p>';
+  box.innerHTML = h;
+  $("recVolver").onclick = function(){ recAbierta = -1; renderRec(); window.scrollTo(0, 0); };
+  $("recAgregar").onclick = function(){
+   agr.comida = RECETA_COMIDA[r.cat] || comidaPorHora(); diaSel = hoyISO();
+   agregar({ n:r.n, p:r.porc, k:r.k, pr:r.p, c:r.c, g:r.g, cat:"Receta" }, 1, false);
+  };
+  return;
+ }
+ var cats = ["Todas"].concat(RECETAS.map(function(r){ return r.cat; }).filter(function(c, i, a){ return a.indexOf(c) === i; }));
+ h += '<p class="muted" style="margin:0">Recetas fáciles y nutritivas, con sus calorías. Agrégalas a tu día con un toque.</p>' +
+  '<div class="tabs">' + cats.map(function(c){ return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === recCat) + '">' + esc(c) + '</button>'; }).join("") + '</div><div class="stack">';
+ RECETAS.forEach(function(r, i){
+  if(recCat !== "Todas" && r.cat !== recCat) return;
+  h += '<button type="button" class="card receta" data-r="' + i + '" style="width:100%;text-align:left"><span class="e">' + r.e + '</span><span style="flex:1;min-width:0"><b style="display:block;font-family:var(--cond);font-size:19px;text-transform:uppercase;letter-spacing:.03em">' + esc(r.n) + '</b><span class="muted" style="font-size:14px">' + esc(r.cat) + ' · ' + r.min + ' min · P ' + r.p + ' g</span></span><span style="font-family:var(--num);font-size:20px;color:var(--gold2);white-space:nowrap">' + miles(r.k) + '<small style="font-family:var(--cond);font-size:12px;color:var(--muted)"> kcal</small></span></button>';
+ });
+ h += '</div>';
+ box.innerHTML = h;
+ box.querySelectorAll("[data-cat]").forEach(function(b){ b.onclick = function(){ recCat = b.dataset.cat; renderRec(); }; });
+ box.querySelectorAll("[data-r]").forEach(function(b){ b.onclick = function(){ recAbierta = +b.dataset.r; renderRec(); window.scrollTo(0, 0); }; });
 }
 function renderPerfil(){
  var P = D.perfil, M = D.metas;
