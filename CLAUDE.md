@@ -1571,6 +1571,12 @@ probado: ella se activó desde el mesón y entró a la app).
   necesitas al día)» o «sin dato» (nunca se inventa); «Hoy» suma el día contra 75 mg (mujer)
   o 90 mg (hombre) y avisa cuántos alimentos no traen el dato. Se guarda en cada alimento
   anotado (`it.vc`). Al agregar un alimento nuevo, sumarle su vitamina C a `NUTRI_VITC`.
+  **Potasio y fibra (10-10-2026, pedido de la dueña):** mismo sistema con `window.NUTRI_POT`
+  (mg) y `window.NUTRI_FIB` (g) por porción (tablas USDA aproximadas; ~314 alimentos), de Open
+  Food Facts `potassium_100g`/`fiber_100g`, guardados como `it.po`/`it.fi`. `MICROS` y
+  `metaMicro()`: potasio 2.600 mg mujer / 3.400 mg hombre, fibra 25 g / 38 g. El detalle y
+  «Hoy» muestran los tres (vitamina C, potasio, fibra) con barra; cada taza de café suma 116 mg
+  de potasio. Al agregar un alimento nuevo, sumarlo también a esas dos tablas.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

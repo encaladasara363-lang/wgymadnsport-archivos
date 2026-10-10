@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=35">
+<link rel="stylesheet" href="nutri-claro.css?v=36">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -337,7 +337,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=13"></script>
+<script src="nutri-alimentos.js?v=14"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -811,9 +811,9 @@ var diaSel = hoyISO(), tabSel = "tabHoy";
 var FRASES = ["Donde hay calidad no hay competencia","La disciplina le gana a la motivación","Lo que comes hoy es tu cuerpo de mañana","Un día a la vez, una comida a la vez","No cuentes los días, haz que los días cuenten","Tu único rival eres tú de ayer","La constancia es el secreto de tu éxito","Entrena duro, come limpio, descansa bien","El progreso no se negocia","Pequeños cambios, grandes resultados","Hoy también se suma","Si fuera fácil, todos lo harían","El cuerpo logra lo que la mente cree","Sin excusas, con resultados","Cuida tu cuerpo: es el único lugar donde vives","La proteína construye, la constancia transforma","Come para rendir, no para llenarte","Tu meta no se toma vacaciones","Hazlo por ti","Cada comida es una decisión","El sudor de hoy es el orgullo de mañana","Mejor hecho que perfecto","Nadie dijo que era fácil, dijimos que valía la pena","Hidrátate, enfócate, avanza","La perseverancia es el secreto de tu éxito","Fuerte por dentro, fuerte por fuera","Hoy eliges ser tu mejor versión","Disciplina hoy, libertad mañana","El que registra, progresa","WGYMADNSPORT: tu mejor versión empieza aquí"];
 function fraseDelDia(){ var d = new Date(), ini = new Date(d.getFullYear(), 0, 0); return FRASES[Math.floor((d - ini) / 86400000) % FRASES.length]; }
 function totales(iso){
- var x = diaDe(iso), t = { k:0, p:0, c:0, g:0, n:0, vc:0, vcSin:0 };
- COMIDAS.forEach(function(cm){ (x.c[cm[0]] || []).forEach(function(it){ var m = it.x || 1; t.k += it.k * m; t.p += it.pr * m; t.c += it.c * m; t.g += it.g * m; t.n++; if(typeof it.vc === "number") t.vc += it.vc * m; else t.vcSin++; }); });
- if(x.cafe){ t.k += x.cafe * 2; t.p += x.cafe * 0.3; }
+ var x = diaDe(iso), t = { k:0, p:0, c:0, g:0, n:0, vc:0, vcSin:0, po:0, poSin:0, fi:0, fiSin:0 };
+ COMIDAS.forEach(function(cm){ (x.c[cm[0]] || []).forEach(function(it){ var m = it.x || 1; t.k += it.k * m; t.p += it.pr * m; t.c += it.c * m; t.g += it.g * m; t.n++; if(typeof it.vc === "number") t.vc += it.vc * m; else t.vcSin++; if(typeof it.po === "number") t.po += it.po * m; else t.poSin++; if(typeof it.fi === "number") t.fi += it.fi * m; else t.fiSin++; }); });
+ if(x.cafe){ t.k += x.cafe * 2; t.p += x.cafe * 0.3; t.po += x.cafe * 116; }
  return t;
 }
 function racha(){
@@ -868,6 +868,10 @@ var aguaPctPrev = 0;
 /* Vitamina C recomendada al día (10-10-2026, pedido de la dueña): 75 mg mujeres, 90 mg hombres
    (recomendación diaria de adultos del Instituto de Medicina de EE. UU.). */
 function metaVitC(){ return D.perfil && D.perfil.sexo === "M" ? 90 : 75; }
+/* Potasio y fibra (10-10-2026, pedido de la dueña): potasio 2.600 mg mujeres / 3.400 mg hombres
+   y fibra 25 g / 38 g (ingesta adecuada de adultos de las Academias Nacionales de EE. UU.). */
+var MICROS = [["vc","🍊 Vitamina C","mg"],["po","🍌 Potasio","mg"],["fi","🌾 Fibra","g"]];
+function metaMicro(k){ var h = D.perfil && D.perfil.sexo === "M"; return k === "vc" ? metaVitC() : k === "po" ? (h ? 3400 : 2600) : (h ? 38 : 25); }
 function renderHoy(){
  var M = D.metas, t = totales(diaSel), x = diaDe(diaSel), esHoy = diaSel === hoyISO();
  var rest = M.kcal - t.k, pct = Math.min(1, t.k / M.kcal), C = 2 * Math.PI * 62;
@@ -887,8 +891,8 @@ function renderHoy(){
  h += '<div class="card res2"><div class="anillo-box"><div class="anillo' + (rest < 0 ? " pasado" : "") + '"><svg viewBox="0 0 150 150"><circle class="fondo" cx="75" cy="75" r="62"/><circle class="prog" id="anilloProg" cx="75" cy="75" r="62" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/></svg><div class="centro"><b>' + Math.round(t.k / M.kcal * 100) + '%</b><span>de tu meta</span></div></div>' +
   '<div class="res-datos"><div><span>🍽 Comidas</span><b>' + miles(t.k) + '<small> kcal</small></b></div><div><span>🎯 Meta</span><b>' + miles(M.kcal) + '<small> kcal</small></b></div></div></div>' +
   '<div class="macros3">' + macro("m-p", "Proteína", t.p, M.p) + macro("m-c", "Carbos", t.c, M.c) + macro("m-g", "Grasas", t.g, M.g) + '</div>' +
-  '<div class="vitc-hoy"><div class="fila"><span>🍊 Vitamina C</span><b>' + Math.round(t.vc) + ' <small>/ ' + metaVitC() + ' mg</small></b></div><div class="barra"><i style="width:' + Math.min(100, t.vc / metaVitC() * 100) + '%"></i></div>' +
-  (t.vcSin ? '<small>' + t.vcSin + (t.vcSin === 1 ? ' alimento no trae' : ' alimentos no traen') + ' el dato de vitamina C</small>' : '') + '</div></div>';
+  '<div class="vitc-hoy">' + MICROS.map(function(mc){ var v = t[mc[0]], meta = metaMicro(mc[0]); return '<div class="mic-h"><div class="fila"><span>' + mc[1] + '</span><b>' + (mc[2] === "mg" ? miles(v) : String(r1(v)).replace(".", ",")) + ' <small>/ ' + miles(meta) + ' ' + mc[2] + '</small></b></div><div class="barra ' + mc[0] + '"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }).join("") +
+  (Math.max(t.vcSin, t.poSin, t.fiSin) ? '<small>' + Math.max(t.vcSin, t.poSin, t.fiSin) + ' alimento(s) de hoy no traen estos datos; el total puede ser mayor.</small>' : '') + '</div></div>';
  h += '<div class="restantes' + (rest < 0 ? " pasado" : "") + '"><span class="e">🔥</span><div><small>' + (rest < 0 ? "Te pasaste de tu meta" : "Calorías restantes") + '</small><b>' + miles(Math.abs(rest)) + ' <em>kcal</em></b><p>Meta ' + miles(M.kcal) + ' − comidas ' + miles(t.k) + '</p></div></div>';
  /* Agua en vasos de 250 ml o botellas de 500 ml (10-10-2026, pedido de la dueña). Se guarda
     siempre en vasos (x.agua); una botella = 2 vasos. Cada teléfono recuerda la elección. */
@@ -971,7 +975,7 @@ function porcionTxt(it){ var m = it.x || 1, u1 = !it.gr && String(it.p || "").ma
 
 /* ═══ 5. Agregar comida: buscar, escanear, recientes, favoritas, manual ═══ */
 var agr = { comida:"desayuno", modo:"buscar", q:"" };
-var ALIM = (window.NUTRI_ALIMENTOS || []).map(function(a){ return { n:a[0], p:a[1], k:a[2], pr:a[3], c:a[4], g:a[5], cat:a[6], vc:(window.NUTRI_VITC || {})[a[0]], nn:normName(a[0]) }; });
+var ALIM = (window.NUTRI_ALIMENTOS || []).map(function(a){ return { n:a[0], p:a[1], k:a[2], pr:a[3], c:a[4], g:a[5], cat:a[6], vc:(window.NUTRI_VITC || {})[a[0]], po:(window.NUTRI_POT || {})[a[0]], fi:(window.NUTRI_FIB || {})[a[0]], nn:normName(a[0]) }; });
 /* Productos escaneados por los socios (10-10-2026, la dueña: "escanear una vez y que
    quede para todos"). Viven en la hoja "Productos" (listarProductos / guardarProducto
    del Apps Script); el teléfono guarda la última lista para buscar sin internet. */
@@ -1071,7 +1075,7 @@ function porUnidad(a){
  var w = m[2].toLowerCase(), sing = /(unidad|mitad)es$/.test(w) ? w.slice(0, -2) : /ches$/.test(w) ? w.slice(0, -2) : /nueces$/.test(w) ? "nuez" : w.replace(/s$/, "");
  var resto = m[3] ? " " + m[3].replace(/^\(.*\)$/, "") : "";
  if(n === 1) return { a:a, sing:sing, n:1 };
- return { a:Object.assign({}, a, { p:"1 " + sing, k:a.k / n, pr:a.pr / n, c:a.c / n, g:a.g / n, vc:typeof a.vc === "number" ? a.vc / n : a.vc }), sing:sing, n:n };
+ return { a:Object.assign({}, a, { p:"1 " + sing, k:a.k / n, pr:a.pr / n, c:a.c / n, g:a.g / n, vc:typeof a.vc === "number" ? a.vc / n : a.vc, po:typeof a.po === "number" ? a.po / n : a.po, fi:typeof a.fi === "number" ? a.fi / n : a.fi }), sing:sing, n:n };
 }
 /* Peso aproximado de 1 lámina/rebanada/unidad según el tipo de producto (10-10-2026,
    la dueña: "que calcule sola"). Solo se usa cuando la etiqueta no dice las unidades,
@@ -1216,7 +1220,7 @@ function detalle(a){
  if(!cuenta && !a.gr && agr.comida !== "bebidas" && a.cat !== CAT_BEB){
   var mg = /(?:^|[\s(])(\d+(?:[.,]\d+)?)\s*g\b/i.exec(a.p || ""), nG = mg ? Number(mg[1].replace(",", ".")) : 0;
   var esMl = false; if(!mg){ mg = /(?:^|[\s(])(\d+(?:[.,]\d+)?)\s*ml\b/i.exec(a.p || ""); nG = mg ? Number(mg[1].replace(",", ".")) : 0; esMl = !!mg; }
-  if(nG > 0){ var fG = 100 / nG; porcLoc = a.p; a = Object.assign({}, a, { k:a.k * fG, pr:a.pr * fG, c:a.c * fG, g:a.g * fG, gr:nG, vc:typeof a.vc === "number" ? a.vc * fG : a.vc }); if(esMl) a.ml = true; }
+  if(nG > 0){ var fG = 100 / nG; porcLoc = a.p; a = Object.assign({}, a, { k:a.k * fG, pr:a.pr * fG, c:a.c * fG, g:a.g * fG, gr:nG, vc:typeof a.vc === "number" ? a.vc * fG : a.vc, po:typeof a.po === "number" ? a.po * fG : a.po, fi:typeof a.fi === "number" ? a.fi * fG : a.fi }); if(esMl) a.ml = true; }
  }
  var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
  /* Líquidos (10-10-2026, la dueña escaneó una Score: "debe decir la lata"): se muestra por
@@ -1277,7 +1281,7 @@ function detalle(a){
  function pintar(){
   var f = factor();
   $("dMac").innerHTML = '<div><b style="color:var(--gold2)">' + miles(a.k * f) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + r1(a.pr * f) + '</b><span>Prot. g</span></div><div><b>' + r1(a.c * f) + '</b><span>Carb. g</span></div><div><b>' + r1(a.g * f) + '</b><span>Grasa g</span></div>' +
-   '<div class="vitc-det">🍊 Vitamina C: <b>' + (typeof a.vc === "number" ? r1(a.vc * f) + ' mg</b> <small>(' + Math.round(a.vc * f / metaVitC() * 100) + '% de lo que necesitas al día)</small>' : 'sin dato</b> <small>(este alimento no lo informa)</small>') + '</div>';
+   '<div class="vitc-det">' + MICROS.map(function(mc){ var v = a[mc[0]]; return '<div class="mic-l"><span>' + mc[1] + '</span>' + (typeof v === "number" ? '<b>' + (mc[2] === "mg" ? miles(v * f) : String(r1(v * f)).replace(".", ",")) + ' ' + mc[2] + '</b><small>' + Math.round(v * f / metaMicro(mc[0]) * 100) + '% del día</small>' : '<b class="sd">sin dato</b><small></small>') + '</div>'; }).join("") + '</div>';
  }
  pintar();
  $("dVolver").onclick = function(){ renderAgregar(); };
@@ -1310,7 +1314,7 @@ function detalle(a){
  $("dFav").onclick = function(){ alternarFav(a); this.textContent = esFav(a) ? "★ En favoritas" : "☆ Favorita"; };
  $("dOk").onclick = function(){ if(!esGr && !mult) return; if(esGr && !gramos) return; agregar(a, esGr ? gramos / 100 : mult, esGr); };
 }
-function base(a){ var b = { n:a.n, p:a.p, k:a.k, pr:a.pr, c:a.c, g:a.g }; if(a.gr){ b.gr = 100; b.p = "100 g"; if(a.porcG){ b.porcG = a.porcG; b.porcTxt = a.porcTxt || ""; } if(a.ml){ b.ml = true; b.p = "100 ml"; } } if(a.marca) b.marca = a.marca; if(a.cat) b.cat = a.cat; if(typeof a.vc === "number") b.vc = a.vc; return b; }
+function base(a){ var b = { n:a.n, p:a.p, k:a.k, pr:a.pr, c:a.c, g:a.g }; if(a.gr){ b.gr = 100; b.p = "100 g"; if(a.porcG){ b.porcG = a.porcG; b.porcTxt = a.porcTxt || ""; } if(a.ml){ b.ml = true; b.p = "100 ml"; } } if(a.marca) b.marca = a.marca; if(a.cat) b.cat = a.cat; if(typeof a.vc === "number") b.vc = a.vc; if(typeof a.po === "number") b.po = a.po; if(typeof a.fi === "number") b.fi = a.fi; return b; }
 function claveAl(a){ return normName(a.n) + "|" + (a.marca || "") + "|" + a.k; }
 function esFav(a){ var k = claveAl(a); return D.favs.some(function(f){ return claveAl(f) === k; }); }
 function alternarFav(a){ var k = claveAl(a); if(esFav(a)) D.favs = D.favs.filter(function(f){ return claveAl(f) !== k; }); else D.favs.unshift(base(a)); guardar(); }
@@ -1333,7 +1337,8 @@ function offAAlim(p){
  if(k == null) return null;
  return { n:(p.product_name_es || p.product_name || "Producto").trim(), marca:(p.brands || "").split(",")[0].trim(), gr:Number(p.serving_quantity) || 100,
   porcG:Math.round(Number(p.serving_quantity) || 0), porcTxt:String(p.serving_size || "").trim(), code:String(p.code || ""), off:true, envaseG:Math.round(Number(p.product_quantity) || 0),
-  k:Math.round(k), pr:r1(nu.proteins_100g || 0), c:r1(nu.carbohydrates_100g || 0), g:r1(nu.fat_100g || 0), vc:nu["vitamin-c_100g"] != null && !isNaN(nu["vitamin-c_100g"]) ? r1(nu["vitamin-c_100g"] * 1000) : undefined };
+  k:Math.round(k), pr:r1(nu.proteins_100g || 0), c:r1(nu.carbohydrates_100g || 0), g:r1(nu.fat_100g || 0), vc:nu["vitamin-c_100g"] != null && !isNaN(nu["vitamin-c_100g"]) ? r1(nu["vitamin-c_100g"] * 1000) : undefined,
+  po:nu.potassium_100g != null && !isNaN(nu.potassium_100g) ? Math.round(nu.potassium_100g * 1000) : undefined, fi:nu.fiber_100g != null && !isNaN(nu.fiber_100g) ? r1(nu.fiber_100g) : undefined };
 }
 var OFF_CAMPOS = "code,product_name,product_name_es,brands,nutriments,serving_quantity,serving_size,product_quantity";
 function buscarOFF(q){
@@ -1785,7 +1790,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101046", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101047", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
