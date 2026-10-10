@@ -96,5 +96,6 @@ sola la primera vez. No hay que tocar `Código.gs`.
    **Nueva versión** → **Implementar** (no "Nueva implementación").
 
 Comprobar: el link del script terminado en `/exec?action=listarNutri` debe
-mostrar `{"ok":true,"nutri":true,...`. Mientras no se instale, WGYMNUTRI
-queda gratis para todos y la ficha del mesón dice «falta instalar».
+mostrar `{"ok":true,"nutri":true,...`. Mientras no se instale, nadie puede
+usar WGYMNUTRI (todos ven la pantalla de pago) y la ficha del mesón dice
+«falta instalar».

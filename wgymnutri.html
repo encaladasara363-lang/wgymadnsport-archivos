@@ -457,8 +457,8 @@ function abrir(){
    La dueña la activa desde la ficha del socio en el mesón (hoja "WGYMNUTRI",
    acción listarNutri del Apps Script). Se guarda en el teléfono la última
    fecha vista para abrir al instante; la hoja la confirma por detrás. Si el
-   script todavía no tiene la acción (no responde "nutri"), la app queda
-   libre para no dejar a nadie afuera por una instalación pendiente. */
+   script todavía no tiene la acción, nadie la tiene activa: la dueña no la
+   quiere gratis (10-10-2026). */
 var CLAVE_NUTRI = "wgymnutri_activa_v1", nutriConsultado = "", nutriLibre = false;
 function claveNutri(){ return normName(socio.n + " " + socio.a); }
 function nutriGuardado(){ var t = lsGet(CLAVE_NUTRI, {}) || {}; return t[claveNutri()]; }
@@ -496,7 +496,7 @@ function revisarNutri(esperando){
    return;
   }
   nutriConsultado = k;
-  if(!r.nutri){ nutriLibre = true; if(esperando || !$("vPago").hidden) abrir(); return; }
+  if(!r.nutri) r = { nutri:true, mapa:{} };   /* script sin la acción: nadie la tiene activa (la dueña no la quiere gratis) */
   var hasta = r.mapa[k] || (r.demoLibre && normName(socio.n + " " + socio.a) !== "SIN PAGO" ? sumaDias(hoyISO(), 25) : "");
   var t2 = lsGet(CLAVE_NUTRI, {}) || {}, antes = t2[k]; t2[k] = hasta; lsSet(CLAVE_NUTRI, t2);
   var activa = hasta && hasta >= hoyISO();

@@ -1422,7 +1422,7 @@ cobro en el Apps Script**; volver a llamar `renderNutriPromo_` cuando lo pida.
   borra), que guarda en la hoja «WGYMNUTRI» con `activarNutri` (POST con la
   clave de administración); la app lee `listarNutri`. Ambas acciones viven en
   `docs/apps-script/Ingresos.gs` (instrucciones en
-  `docs/apps-script-ingresos-salidas.md`). Mientras el script no tenga
-  `listarNutri`, la app queda libre (no deja a nadie afuera). El teléfono
+  `docs/apps-script-ingresos-salidas.md`). Nunca es gratis (la dueña, 10-10-2026): si el script no
+  tiene `listarNutri`, nadie la tiene activa y todos ven la pantalla de pago. El teléfono
   guarda la última fecha vista (`wgymnutri_activa_v1`) para abrir al instante.
 
