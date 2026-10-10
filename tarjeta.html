@@ -2309,7 +2309,9 @@ function renderEvolucion(s){
  seguro_(function(){ anotarDia(s); });
  seguro_(function(){ renderPago(s); });
  calAbierto = false; calEditando = false;
- seguro_(renderNutriPromo_);
+ /* Aviso de WGYMNUTRI apagado el 10-10-2026 a pedido de la dueña hasta que
+    instale el cobro (listarNutri/activarNutri). Para volver a mostrarlo,
+    reactivar la línea: seguro_(renderNutriPromo_); */
  /* "Mis calorías del día" se sacó de la tarjeta el 10-10-2026 (la dueña vende
     WGYMNUTRI aparte). Los datos que el socio ya había guardado
     (wgym_calorias_v1) quedan en su teléfono y WGYMNUTRI los usa para rellenar. */
@@ -2328,7 +2330,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101002", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101003", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();

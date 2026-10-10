@@ -1395,7 +1395,8 @@ Android se usa `BarcodeDetector`). Se entra con el QR de
 tiene "Mis calorías del día"), pero desde el 10-10-2026 la tarjeta muestra un
 aviso `#nutriCard` (`renderNutriPromo_`, oculto si la tarjeta está bloqueada)
 con el precio y «Ver WGYMNUTRI», para que todos sepan que existe (pedido de la
-dueña).
+dueña). **Apagado el mismo día a pedido de ella hasta que instale el
+cobro en el Apps Script**; volver a llamar `renderNutriPromo_` cuando lo pida.
 - Registro de comida: lista propia (`nutri-alimentos.js`, 520+ alimentos con
   marcas chilenas aproximadas) + **productos en línea** de Open Food Facts
   (gratis) que se buscan solos al escribir (0,7 s, con caché; primero Chile y
