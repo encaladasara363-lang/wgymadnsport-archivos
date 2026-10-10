@@ -1386,18 +1386,26 @@ function modoEscanear(){
     function intentar(c){ try{ var r = lector.decode(new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(new ZXing.HTMLCanvasElementLuminanceSource(c))), hints); return r ? r.getText() : null; }catch(e){ return null; } }
     navigator.mediaDevices.getUserMedia(VIDEO)["catch"](function(){ return navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment" }, audio:false }); }).then(function(st){
      cam.stream = st; vid.srcObject = st; vid.play()["catch"](function(){});
-     var ocupado = false;
+     /* Más rápido (10-10-2026, la dueña: "ahora se demora más"): una sola lectura por vuelta,
+        alternando una franja acostada (código derecho) y una parada (código de lata), cada
+        90 ms y en tamaño chico, en vez de leer dos veces el cuadro grande. */
+     var ocupado = false, vuelta = 0;
      cam.timer = setInterval(function(){
       if(ocupado || vid.readyState < 2 || !vid.videoWidth) return; ocupado = true;
       try{
-       var vw = vid.videoWidth, vh = vid.videoHeight, lado = Math.round(Math.min(vw, vh) * 0.9), T = Math.min(lado, 900);
-       cv.width = T; cv.height = T; cx.drawImage(vid, (vw - lado) / 2, (vh - lado) / 2, lado, lado, 0, 0, T, T);
-       var code = intentar(cv);
-       if(!code){ cvr.width = T; cvr.height = T; cxr.setTransform(1, 0, 0, 1, 0, 0); cxr.translate(T, 0); cxr.rotate(Math.PI / 2); cxr.drawImage(cv, 0, 0); code = intentar(cvr); }
+       var vw = vid.videoWidth, vh = vid.videoHeight, code = null, parado = (vuelta++ % 3) === 2;
+       if(!parado){
+        var sw = vw * 0.92, sh = Math.min(vh, sw * 0.45), W = Math.min(720, Math.round(sw)), H = Math.round(W * sh / sw);
+        cv.width = W; cv.height = H; cx.drawImage(vid, (vw - sw) / 2, (vh - sh) / 2, sw, sh, 0, 0, W, H); code = intentar(cv);
+       } else {
+        var sh2 = vh * 0.85, sw2 = Math.min(vw, sh2 * 0.45), W2 = Math.min(720, Math.round(sh2)), H2 = Math.round(W2 * sw2 / sh2);
+        cvr.width = W2; cvr.height = H2; cxr.setTransform(1, 0, 0, 1, 0, 0); cxr.translate(W2, 0); cxr.rotate(Math.PI / 2);
+        cxr.drawImage(vid, (vw - sw2) / 2, (vh - sh2) / 2, sw2, sh2, 0, 0, H2, W2); code = intentar(cvr);
+       }
        if(code) encontrado(code);
       }catch(e){}
       ocupado = false;
-     }, 150);
+     }, 90);
     })["catch"](sinCamara);
    })["catch"](sinCamara);
   }
@@ -1709,7 +1717,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101030", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101031", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

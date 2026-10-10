@@ -1500,6 +1500,9 @@ probado: ella se activó desde el mesón y entró a la app).
   toma el cuadrado central del video (≤900 px) y se lee con `MultiFormatReader` tal cual y
   girado 90°. EAN-13 se acepta a la primera (trae dígito verificador); EAN-8 pide 2
   lecturas iguales. Probado con cámara simulada: EAN-8 y EAN-13, acostados y parados.
+  **Más rápido (10-10-2026, "ahora se demora más"):** una sola lectura por vuelta cada 90 ms,
+  alternando una franja acostada (2 de cada 3 vueltas) y una parada girada, en ≤720 px;
+  en la prueba lee en menos de 1 s (incluye abrir la cámara).
 - **Agua según el peso (10-10-2026, pedido de la dueña):** `aguaRecomendada` = ≈35 ml por
   kilo + 500 ml si entrena (actividad ≥ ligera), en vasos de 250 ml (6 a 16). Es la meta
   por defecto, se recalcula al cambiar el peso y se muestra en «Tu plan está listo». En
