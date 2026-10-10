@@ -1441,7 +1441,7 @@ probado: ella se activó desde el mesón y entró a la app).
   (Harris-Benedict, base técnica); rellena con `wgym_calorias_v1` si existe.
 - Extras: agua, peso con gráfico, racha, medallas con confeti, resumen
   semanal (verde/rojo), tarjeta para compartir, recordatorios al abrir,
-  comidas por momento (con once) y frase del día. Recetas: recetario
+  comidas por momento (la once se llama «Snack» desde el 10-10-2026, la clave interna sigue siendo `once`) y frase del día. Recetas: recetario
   propio en `nutri-recetas.js` (la dueña NO quiere sus recetas de
   `comidas-saludables.html` aquí), cada una con «Agregar a mi día».
 - **Bloqueo igual a la tarjeta:** plan vencido → app bloqueada entera con
