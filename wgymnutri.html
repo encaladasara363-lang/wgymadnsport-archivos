@@ -337,7 +337,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=5"></script>
+<script src="nutri-alimentos.js?v=6"></script>
 <script src="nutri-recetas.js?v=8"></script>
 <script>
 (function(){
@@ -1274,7 +1274,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101004", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101005", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
