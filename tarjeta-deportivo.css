@@ -156,3 +156,10 @@ body{ font-size:17px; }
 .mc-veredicto .vfavor{ font-size:16px !important; }
 .routine-blocked, .expiry-banner{ font-size:16px !important; }
 footer.footer2 .name{ font-size:15px; }
+
+/* Aviso de WGYMNUTRI con lista (escáner destacado), 10-10-2026 */
+.nutri-promo .np-lista{ margin:6px 0 8px; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px; }
+.nutri-promo .np-lista li{ font-size:16.5px; line-height:1.4; color:#F2F2F2; }
+.nutri-promo .np-lista b{ color:#F2D04B; }
+.nutri-promo{ flex-direction:column; align-items:stretch !important; }
+.nutri-promo img{ width:120px !important; height:120px !important; align-self:center; }

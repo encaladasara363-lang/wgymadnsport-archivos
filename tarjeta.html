@@ -423,7 +423,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 </style>  
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,600;0,700;1,700;1,800&family=Barlow:wght@400;500;600;700&family=Rubik+Distressed&display=swap">
-<link rel="stylesheet" href="tarjeta-deportivo.css?v=3">
+<link rel="stylesheet" href="tarjeta-deportivo.css?v=4">
   
 <div id="appRoot" artifact-local>
   
@@ -2309,7 +2309,10 @@ function renderEvolucion(s){
   var precio = (window.WGYM_PAGO && WGYM_PAGO.nutri && WGYM_PAGO.nutri.precio) || 5000;
   box.innerHTML = '<img src="assets/wgymnutri-logo.webp" alt="WGYMNUTRI">' +
    '<div class="np-tx"><p class="pago-kicker">🥗 Nuevo · WGYMNUTRI</p>' +
-   '<p>Tu contador de calorías: escanea tus comidas, más de 400 recetas saludables, racha y medallas. <b>' + clp(precio) + ' al mes</b> o <b>3 meses por $12.000</b>. Pídela en recepción.</p>' +
+   '<p>Tu contador de calorías y proteínas:</p>' +
+   '<ul class="np-lista"><li>📷 <b>Escanea el código de barras</b> de tus productos y ve sus calorías al instante</li>' +
+   '<li>🥗 Más de 400 recetas saludables</li><li>🔥 Tu meta diaria, agua, racha y medallas</li></ul>' +
+   '<p><b>' + clp(precio) + ' al mes</b> o <b>3 meses por $12.000</b>. Pídela en recepción.</p>' +
    '<a class="pago-btn principal" href="wgymnutri.html">Ver WGYMNUTRI</a></div>';
   box.hidden = false;
  }
@@ -2347,7 +2350,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101011", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101012", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
