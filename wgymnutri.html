@@ -305,7 +305,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <canvas id="confeti" hidden></canvas>
 
 <script src="nutri-alimentos.js?v=1"></script>
-<script src="nutri-recetas.js?v=1"></script>
+<script src="nutri-recetas.js?v=2"></script>
 <script>
 (function(){
 "use strict";
@@ -919,7 +919,7 @@ function compartir(){
 /* ═══ 7. Recetas y perfil ═══ */
 var recCat = "Todas", recAbierta = -1;
 var RECETAS = window.NUTRI_RECETAS || [];
-var RECETA_COMIDA = { "Desayuno":"desayuno", "Almuerzo":"almuerzo", "Cena":"cena", "Colación":"colacion1", "Postre":"once" };
+var RECETA_COMIDA = { "Desayuno":"desayuno", "Almuerzo":"almuerzo", "Once":"once", "Cena":"cena", "Colación":"colacion1", "Postre":"once" };
 function renderRec(){
  var box = $("tabRec"), h = '<h2 class="disp" style="font-size:34px">Recetas saludables</h2>';
  if(recAbierta >= 0){
@@ -940,7 +940,7 @@ function renderRec(){
   };
   return;
  }
- var cats = ["Todas"].concat(RECETAS.map(function(r){ return r.cat; }).filter(function(c, i, a){ return a.indexOf(c) === i; }));
+ var cats = ["Todas","Desayuno","Almuerzo","Once","Cena","Colación","Postre"].filter(function(c){ return c === "Todas" || RECETAS.some(function(r){ return r.cat === c; }); });
  h += '<p class="muted" style="margin:0">Recetas fáciles y nutritivas, con sus calorías. Agrégalas a tu día con un toque.</p>' +
   '<div class="tabs">' + cats.map(function(c){ return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === recCat) + '">' + esc(c) + '</button>'; }).join("") + '</div><div class="stack">';
  RECETAS.forEach(function(r, i){
