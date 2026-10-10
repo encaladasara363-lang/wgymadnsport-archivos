@@ -1558,6 +1558,12 @@ probado: ella se activó desde el mesón y entró a la app).
 - **Proteína/carbohidratos/grasas más grandes (10-10-2026, pedido de la dueña):** en el
   cuadro de calorías de «Hoy», cada macro va con el nombre arriba (19 px) y «X / Y G»
   debajo (21 px), para que quepan grandes junto al anillo.
+- **Verduras en gramos y búsqueda con errores (10-10-2026, la dueña escribió «penino» y no
+  salía nada):** si no hay coincidencia exacta, la búsqueda prueba palabras parecidas (1 letra
+  distinta, 2 en palabras de 7+ letras) y las muestra como «¿Quisiste decir…?». Las verduras
+  (categoría «Verduras») siempre se anotan en gramos, aunque su porción diga «1 unidad». Se
+  sumaron 21 verduras por 100 g (brócoli y coliflor crudos, zanahoria cruda/cocida, tomate
+  cherry, rúcula, kale, pimentones, choclo, palmitos, brotes de soya, etc.).
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
