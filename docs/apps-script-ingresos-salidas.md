@@ -117,3 +117,20 @@ implementaciones → lápiz ✏️ → Nueva versión → Implementar**.
 Comprobar: el link del script terminado en `/exec?action=listarProductos`
 debe mostrar `{"ok":true,"productos":[...]}`. Mientras no se instale, la app
 funciona igual que antes (cada teléfono recuerda lo que escaneó él mismo).
+
+## Actualización retos del mes de WGYMNUTRI (Versión 17, 10-10-2026)
+
+`Ingresos.gs` trae dos acciones nuevas: `guardarReto` y `listarRetos`. Los
+socios que se unen al «🏆 Retos del mes» (en Progreso) aparecen en un ranking
+del gimnasio **solo con su apodo y sus puntos** (días que cumplieron agua,
+proteína y registro de comidas). Todo queda en una hoja nueva, **«Retos»**, que
+se crea sola. Para borrar a alguien del ranking, se borra su fila en esa hoja.
+
+Se instala igual que las veces anteriores: pegar **todo** el `Ingresos.gs`
+nuevo en el archivo **Ingresos**, guardar y **Implementar → Administrar
+implementaciones → lápiz ✏️ → Nueva versión → Implementar**.
+
+Comprobar: el link del script terminado en
+`/exec?action=listarRetos&mes=2026-10` debe mostrar `{"ok":true,"retos":true,...`.
+Mientras no se instale, los retos y puntos se ven igual en cada teléfono y el
+ranking muestra «se activa cuando el gimnasio actualice su sistema».
