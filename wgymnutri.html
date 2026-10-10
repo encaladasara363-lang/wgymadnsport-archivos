@@ -396,6 +396,11 @@ function entrar(texto, silencioso){
   if(f && aplicarFicha(f)) refrescar();
   if(f) decidir();
   pendientes--;
+  if(!pendientes && !socio && window.WGYMNUTRI_DEMO){
+   /* Vista previa: cualquier nombre entra como socio al día. */
+   var pd = String(texto).trim().split(/\s+/), hoyS = Math.round((Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()) - Date.UTC(1899, 11, 30)) / 86400000);
+   aplicarFicha({ n:pd[0].toUpperCase(), a:(pd.slice(1).join(" ") || "PRUEBA").toUpperCase(), plan:"Full Mensual", fv:hoyS + 20 }); decidir(); return;
+  }
   if(!pendientes && !socio){
    lsSet(CLAVE_SOCIO, "");
    vista("vGate");
