@@ -69,6 +69,7 @@ h1,h2,h3{margin:0;font-weight:400}
 /* Pantalla de entrada */
 .gate{min-height:88vh;display:flex;flex-direction:column;justify-content:center;gap:18px;text-align:center}
 .gate .logo{width:min(64vw,250px);margin:0 auto;display:block;filter:drop-shadow(0 10px 30px rgba(227,6,19,.45));animation:latido 3.2s ease-in-out infinite}
+.gate video.logo{aspect-ratio:1;border-radius:50%;object-fit:cover;background:#000;animation:none}
 @keyframes latido{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
 .gate h1{font-size:clamp(44px,13vw,64px)}
 .gate h1 .r{color:var(--red2)} .gate h1 .g{color:var(--gold)}
@@ -236,7 +237,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <main class="wrap" id="app">
  <!-- Entrada -->
  <section id="vGate" class="gate" hidden>
-  <img class="logo" src="assets/wgymnutri-logo.webp" alt="Logo WGYMNUTRI">
+  <video class="logo anim" poster="assets/wgymnutri-logo.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI animado"><source src="assets/wgymnutri-logo-animado.mp4" type="video/mp4"><source src="assets/wgymnutri-logo-animado.webm" type="video/webm"></video>
   <div>
    <p class="kick">WGYMADNSPORT · Tocopilla</p>
    <h1 class="disp">W<span class="r">GYM</span><span class="g">NUTRI</span></h1>
@@ -255,7 +256,7 @@ h1,h2,h3{margin:0;font-weight:400}
 
  <!-- Cargando -->
  <section id="vCarga" class="gate" hidden>
-  <img class="logo" src="assets/wgymnutri-logo.webp" alt="">
+  <video class="logo anim" poster="assets/wgymnutri-logo.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI animado"><source src="assets/wgymnutri-logo-animado.mp4" type="video/mp4"><source src="assets/wgymnutri-logo-animado.webm" type="video/webm"></video>
   <div class="spin"></div>
   <p class="muted" id="cargaTxt">Revisando tu plan…</p>
  </section>
@@ -329,7 +330,7 @@ function serialAISO(fv){ var d = new Date(Date.UTC(1899, 11, 30) + Number(fv) * 
 var DIAS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
 var MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 function fechaLarga(s){ var d = fechaDeISO(s); return DIAS[d.getDay()] + " " + d.getDate() + " de " + MESES[d.getMonth()]; }
-function vista(id){ ["vGate","vCarga","vBloqueo","vOnb","vApp"].forEach(function(v){ $(v).hidden = v !== id; }); $("nav").hidden = id !== "vApp"; window.scrollTo(0, 0); }
+function vista(id){ ["vGate","vCarga","vBloqueo","vOnb","vApp"].forEach(function(v){ $(v).hidden = v !== id; }); $("nav").hidden = id !== "vApp"; window.scrollTo(0, 0); $(id).querySelectorAll("video").forEach(function(v){ try{ var x = v.play(); if(x) x["catch"](function(){}); }catch(e){} }); }
 function toast(msg){ var t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 2600); }
 
 /* ═══ 1. Socios y bloqueo (misma lógica que tarjeta.html) ═══ */
