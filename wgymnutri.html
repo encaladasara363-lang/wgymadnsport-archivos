@@ -304,7 +304,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <div id="velo" class="velo" hidden><div class="hoja" id="hoja" role="dialog" aria-modal="true"></div></div>
 <canvas id="confeti" hidden></canvas>
 
-<script src="nutri-alimentos.js?v=1"></script>
+<script src="nutri-alimentos.js?v=2"></script>
 <script src="nutri-recetas.js?v=3"></script>
 <script>
 (function(){
@@ -682,7 +682,7 @@ function modoManual(){
 function detalle(a){
  var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
  var h = '<div class="cab" style="margin-bottom:6px"><h3 style="font-size:22px;text-transform:none;letter-spacing:0">' + esc(a.n) + '</h3><button type="button" class="chip" id="dVolver">‹ Volver</button></div>' +
-  '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + '</p>';
+  '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + (a.cat === "Marcas" ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
  if(esGr) h += '<div class="campo"><label for="dGr">¿Cuántos gramos?</label><input class="inp" id="dGr" type="number" inputmode="decimal" value="' + gramos + '"></div>';
  else h += '<p class="kick">Porción: ' + esc(a.p) + '</p><div class="mults" id="dMults">' + [[0.5,"½"],[1,"1"],[1.5,"1½"],[2,"2"],[3,"3"]].map(function(m){ return '<button type="button" class="chip" data-x="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
  h += '<div class="det-macros" id="dMac" style="margin:14px 0"></div>' +
