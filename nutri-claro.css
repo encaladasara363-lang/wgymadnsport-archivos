@@ -388,3 +388,16 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .top .t{padding-right:56px !important}
 .top .t b, .top .t span{white-space:nowrap;overflow-wrap:normal !important;font-size:clamp(17px,5.2vw,26px) !important}
 .top .t b, .top .t span{overflow:hidden;text-overflow:ellipsis}
+
+/* Café en tazas de 250 ml (10-10-2026, pedido de la dueña) */
+.cafe-card .cab span{color:#6B3E1E !important}
+.tazas{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px}
+.taza{position:relative;width:52px;height:50px;padding:0;border:3px solid #C9A27E;border-top:none;border-radius:0 0 18px 18px;background:#FBF6F0;overflow:visible;cursor:pointer}
+.taza::before{content:"";position:absolute;right:-14px;top:8px;width:12px;height:18px;border:3px solid #C9A27E;border-left:none;border-radius:0 10px 10px 0}
+.taza i{position:absolute;left:0;right:0;bottom:0;height:0;border-radius:0 0 14px 14px;background:linear-gradient(180deg,#8B5A2B,#4A2B12);transition:height .35s}
+.taza.llena{border-color:#6B3E1E}.taza.llena::before{border-color:#6B3E1E}
+.taza.llena i{height:82%}
+.taza.llena::after{content:"";position:absolute;left:14px;top:-16px;width:6px;height:12px;border-radius:6px;background:rgba(150,110,80,.35);box-shadow:12px 2px 0 rgba(150,110,80,.3);animation:vapor 2s ease-in-out infinite}
+@keyframes vapor{0%{transform:translateY(4px);opacity:0}50%{opacity:1}100%{transform:translateY(-6px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.taza.llena::after{animation:none}}
+.cafe-card .cab h3{white-space:nowrap}
