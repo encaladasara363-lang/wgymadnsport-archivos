@@ -618,7 +618,7 @@ function renderOnb(){
  function opciones(lista, campo){
   return '<div class="opciones">' + lista.map(function(o){ return '<button type="button" class="opc" data-v="' + o[0] + '" aria-pressed="' + (String(d[campo]) === String(o[0])) + '"><span class="e">' + o[1] + '</span><span><b>' + o[2] + '</b><small>' + o[3] + '</small></span></button>'; }).join("") + '</div>';
  }
- function numero(campo, unidad, ph){ return '<div class="center" style="padding:20px 0"><input class="grande-inp" id="onbNum" type="number" inputmode="decimal" step="any" placeholder="' + ph + '" value="' + esc(d[campo]) + '"><p class="unidad">' + unidad + '</p></div>'; }
+ function numero(campo, unidad, ph){ return '<div class="center" style="padding:20px 0"><input class="grande-inp" id="onbNum" type="text" inputmode="decimal" autocomplete="off" step="any" placeholder="' + ph + '" value="' + esc(d[campo]) + '"><p class="unidad">' + unidad + '</p></div>'; }
  if(k === "sexo") h += '<h2 class="disp" style="font-size:40px">¡Hola, ' + esc(socio.n.split(" ")[0]) + '!</h2><p class="muted">Responde 6 preguntas rápidas y calculamos tu meta diaria. ¿Eres…?</p>' + opciones([["F","👩","Mujer",""],["M","👨","Hombre",""]], "sexo");
  if(k === "edad") h += '<h2 class="disp" style="font-size:36px">¿Cuántos años tienes?</h2>' + numero("edad", "años", "30");
  if(k === "alt") h += '<h2 class="disp" style="font-size:36px">¿Cuánto mides?</h2>' + numero("alt", "centímetros", "165");
@@ -827,7 +827,7 @@ function modoManual(){
  var c = $("agrCuerpo");
  c.innerHTML = '<div class="stack"><div class="campo"><label for="mN">Nombre</label><input class="inp" id="mN" placeholder="Ej: Ensalada de la casa"></div>' +
   '<div class="campo"><label for="mP">Porción</label><input class="inp" id="mP" placeholder="Ej: 1 plato"></div>' +
-  '<div class="fila4"><div class="campo"><label for="mK">Kcal</label><input class="inp" id="mK" type="number" inputmode="decimal"></div><div class="campo"><label for="mPr">Prot. g</label><input class="inp" id="mPr" type="number" inputmode="decimal"></div><div class="campo"><label for="mC">Carb. g</label><input class="inp" id="mC" type="number" inputmode="decimal"></div><div class="campo"><label for="mG">Grasa g</label><input class="inp" id="mG" type="number" inputmode="decimal"></div></div>' +
+  '<div class="fila4"><div class="campo"><label for="mK">Kcal</label><input class="inp" id="mK" type="text" inputmode="decimal" autocomplete="off"></div><div class="campo"><label for="mPr">Prot. g</label><input class="inp" id="mPr" type="text" inputmode="decimal" autocomplete="off"></div><div class="campo"><label for="mC">Carb. g</label><input class="inp" id="mC" type="text" inputmode="decimal" autocomplete="off"></div><div class="campo"><label for="mG">Grasa g</label><input class="inp" id="mG" type="text" inputmode="decimal" autocomplete="off"></div></div>' +
   '<p class="muted" style="font-size:13px;margin:0">Los valores salen en la etiqueta del producto («por porción»).</p><p class="err" id="mErr" hidden></p><button type="button" class="btn rojo" id="mOk">Agregar</button></div>';
  $("mOk").onclick = function(){
   function v(id){ return Number(String($(id).value).replace(",", ".")) || 0; }
@@ -848,7 +848,7 @@ function detalle(a){
    '<div class="mults" id="dPorc">' + [[0.5,"½ porción"],[1,"1 porción"],[2,"2 porciones"],[0,"100 g"]].map(function(m){ return '<button type="button" class="chip" data-p="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
 
  }
- if(esGr) h += '<div class="campo"><label for="dGr">¿Cuántos gramos?</label><input class="inp" id="dGr" type="number" inputmode="decimal" value="' + gramos + '"></div>' +
+ if(esGr) h += '<div class="campo"><label for="dGr">¿Cuántos gramos?</label><input class="inp" id="dGr" type="text" inputmode="decimal" autocomplete="off" value="' + gramos + '"></div>' +
   (a.porcG || a.cat ? '' : '<p class="muted" style="margin:0;font-size:14px">Este producto no trae porción en su etiqueta: escribe los gramos que comiste.</p>');
  else h += '<p class="kick">Porción: ' + esc(a.p) + '</p><div class="mults" id="dMults">' + [[0.5,"½"],[1,"1"],[1.5,"1½"],[2,"2"],[3,"3"]].map(function(m){ return '<button type="button" class="chip" data-x="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
  h += '<div class="det-macros" id="dMac" style="margin:14px 0"></div>' +
@@ -1050,7 +1050,7 @@ function renderProg(){
   var dif = r1(ps[ps.length - 1].kg - ps[0].kg);
   h += '<p class="muted" style="margin:6px 0 0;font-size:14px">' + (dif === 0 ? "Sin cambios" : (dif < 0 ? "Bajaste " : "Subiste ") + String(Math.abs(dif)).replace(".", ",") + " kg") + ' desde el ' + ps[0].f.split("-").reverse().join("-") + '.</p>';
  }else h += '<p class="muted" style="margin:8px 0">Registra tu peso una vez por semana, siempre a la misma hora y en ayunas, para ver tu gráfico.</p>';
- h += '<form id="pesoForm" class="fila2" style="grid-template-columns:1fr auto;margin-top:10px"><input class="inp" id="pesoIn" type="number" inputmode="decimal" step="0.1" placeholder="Tu peso de hoy (kg)"><button type="button" id="pesoOk" class="btn oro chico" style="width:auto">Guardar</button></form></div>';
+ h += '<form id="pesoForm" class="fila2" style="grid-template-columns:1fr auto;margin-top:10px"><input class="inp" id="pesoIn" type="text" inputmode="decimal" autocomplete="off" step="0.1" placeholder="Tu peso de hoy (kg)"><button type="button" id="pesoOk" class="btn oro chico" style="width:auto">Guardar</button></form></div>';
  /* Medallas */
  var ganadas = LOGROS.filter(function(l){ return D.logros[l[0]]; }).length;
  h += '<div class="card"><div class="cab"><h3>🏆 Medallas</h3><span>' + ganadas + ' / ' + LOGROS.length + '</span></div><div class="medallas" style="margin-top:12px">' +
