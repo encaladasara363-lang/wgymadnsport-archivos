@@ -337,6 +337,7 @@ function toast(msg){ var t = document.createElement("div"); t.className = "toast
 function listaLocal(){ var l = lsGet(CLAVE_LISTA, []); return Array.isArray(l) ? l : []; }
 function guardarListaLocal(lista){ lsSet(CLAVE_LISTA, lista.map(function(s){ return { n:s.n, a:s.a, plan:s.plan, monto:s.monto, fv:s.fv, medid:s.medid || "" }; })); }
 function cargarHoja(){
+ if(window.WGYMNUTRI_DEMO) return Promise.resolve(window.WGYMNUTRI_DEMO);  /* solo en la vista previa */
  return new Promise(function(resolve){
   var cb = "wgymNutriSocios_" + Date.now(), listo = false, script = document.createElement("script");
   function fin(l){ if(listo) return; listo = true; clearTimeout(reloj); try{ delete window[cb]; }catch(e){ window[cb] = undefined; } script.remove(); resolve(l); }
@@ -348,6 +349,7 @@ function cargarHoja(){
  });
 }
 function cargarJson(){
+ if(window.WGYMNUTRI_DEMO) return Promise.resolve(window.WGYMNUTRI_DEMO);
  return fetch("socios.json?v=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.json(); })
   .then(function(d){ return (d && d.socios || []).map(function(s){ return { n:s.n, a:s.a, plan:s.plan, monto:s.monto, fv:s.fv }; }); })
   ["catch"](function(){ return []; });
