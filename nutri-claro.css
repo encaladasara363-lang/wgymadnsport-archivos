@@ -353,3 +353,23 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .macros3 .mn{font-size:13px;letter-spacing:0 !important;text-overflow:clip}
 .macros3 .mv small{display:block;font-size:13px;font-family:inherit}
 .macros3 .macro{padding:10px 3px}.macros3 .mn{font-size:12.5px;padding-right:3px}
+
+/* Tanque de agua animado (10-10-2026, pedido de la dueña) */
+.tanque{position:relative;width:190px;height:190px;margin:16px auto 6px;border-radius:50%;overflow:hidden;
+ background:#EEF6FC;border:6px solid #fff;box-shadow:0 0 0 3px #7FBFEA, 0 8px 22px rgba(30,120,200,.25)}
+.tanque .liquido{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,#7DB8F2,#3E86E0);transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+.tanque .ola{position:absolute;left:0;bottom:calc(100% - 2px);width:200%;height:18px;animation:olaMov 3s linear infinite}
+.tanque .ola path{fill:#7DB8F2}
+.tanque .ola.o2{opacity:.5;height:22px;animation-duration:5s;animation-direction:reverse}
+@keyframes olaMov{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tanque .burb{position:absolute;bottom:-12px;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.75);animation:burbSube 3.2s ease-in infinite}
+.tanque .b1{left:22%;animation-delay:0s}.tanque .b2{left:48%;width:6px;height:6px;animation-delay:1.1s}
+.tanque .b3{left:66%;animation-delay:2s}.tanque .b4{left:36%;width:5px;height:5px;animation-delay:2.6s}
+@keyframes burbSube{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-150px);opacity:0}}
+.tanque .tq-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:2}
+.tanque .tq-txt b{font-family:var(--num);font-weight:400;font-size:40px;line-height:1;color:#0D2F55;text-shadow:0 1px 0 rgba(255,255,255,.7)}
+.tanque .tq-txt span{font-size:15px;color:#0D2F55}
+.tanque .tq-txt em{margin-top:4px;font-size:14px;color:#0D2F55;background:rgba(255,255,255,.7);border-radius:10px;padding:2px 8px}
+.tanque.lleno{box-shadow:0 0 0 3px #1F9D55, 0 8px 22px rgba(31,157,85,.3)}
+@media (prefers-reduced-motion:reduce){.tanque .ola,.tanque .burb{animation:none}.tanque .burb{display:none}}
+.tanque .ola{height:28px}.tanque .ola.o2{height:34px}
