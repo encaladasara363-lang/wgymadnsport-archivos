@@ -1379,3 +1379,31 @@ tabla, bajo "Solo si algo falla:" (`.emergencia`). También se sacó "Ver
 estado" del buscador "¿No alcanzó a escanear?": se elige tocando la
 sugerencia o con Enter. Desde el 07-10-2026 la tablet (`pantalla.html`) también
 carga `estilo-deportivo.css`: al cambiar el `?v=`, cambiarlo en los TRES archivos.
+
+## WGYMNUTRI — contador de calorías aparte (desde 10/2026)
+
+App propia para socios, al estilo Cal AI pero **gratis** (la dueña eligió
+no pagar fotos con IA): `wgymnutri.html` + `nutri-alimentos.js` (lista de
+alimentos con comidas chilenas; para sumar uno, agregar una línea) +
+`wgymnutri.webmanifest` + `sw-wgymnutri.js` (sin caché, como el de la
+tarjeta) + `assets/wgymnutri-*` (logo que mandó la dueña) +
+`assets/wgymnutri-logo-animado.mp4`/`.webm` (logo animado sin sonido en la entrada y la carga, pedido de la dueña) + `vendor/zxing-0.21.3.min.js` (lector de código de barras para iPhone; en
+Android se usa `BarcodeDetector`). Se entra **solo** con el QR de
+`cartel-qr-wgymnutri.html`/`.pdf` (pedido de la dueña: no va dentro de la
+tarjeta, que ya tiene "Mis calorías del día").
+- Registro de comida: lista propia (`nutri-alimentos.js`, 520+ alimentos con
+  marcas chilenas aproximadas) + **productos en línea** de Open Food Facts
+  (gratis) que se buscan solos al escribir (0,7 s, con caché; primero Chile y
+  luego el mundo) + código de barras, favoritas, recientes y manual.
+- Encuesta inicial paso a paso con la misma fórmula que la tarjeta
+  (Harris-Benedict, base técnica); rellena con `wgym_calorias_v1` si existe.
+- Extras: agua, peso con gráfico, racha, medallas con confeti, resumen
+  semanal (verde/rojo), tarjeta para compartir, recordatorios al abrir,
+  comidas por momento (con once) y frase del día. Recetas: recetario
+  propio en `nutri-recetas.js` (la dueña NO quiere sus recetas de
+  `comidas-saludables.html` aquí), cada una con «Agregar a mi día».
+- **Bloqueo igual a la tarjeta:** plan vencido → app bloqueada entera con
+  "Pagar mi mensualidad" (`pagar.html`). Pase diario: solo ese día. Vale la
+  fecha más nueva entre la copia del teléfono, `socios.json` y la hoja.
+- **Datos de salud solo en el teléfono** (`wgymnutri_v1_<NOMBRE>`): nunca en
+  la hoja ni en el repo.
