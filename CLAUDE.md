@@ -1430,7 +1430,11 @@ probado: ella se activó desde el mesón y entró a la app).
   «¿Cuántas láminas comiste?» con botones 1-6 (`unidadesPorcion`; queso, jamón y
   fiambres van en láminas). Si no lo dice, «🧀 ¿Viene en láminas…? Calcúlalo con
   el envase» pide el peso del envase y cuántas trae (números grandes del
-  paquete; Open Food Facts rellena el peso si lo tiene) y lo guarda para todos con la acción `porcionProducto` (solo llena la
+  paquete; Open Food Facts rellena el peso si lo tiene) y lo guarda para todos.
+  Si la etiqueta no dice unidades, la app las **estima sola** según el tipo de
+  producto (`PESO_TIPICO`: queso laminado 17 g, jamón/pavo 12 g, salame 5 g, pan
+  de molde 27 g, galleta de arroz 9 g, etc.), marcado «aproximado»; el envase
+  queda como «✏️ ¿No calza? Corrígelo» con la acción `porcionProducto` (solo llena la
   porción si todavía no tenía unidades). **Requiere reinstalar el script
   (Versión 14)**; mientras, queda guardado solo en ese teléfono.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos

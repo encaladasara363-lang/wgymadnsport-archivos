@@ -857,8 +857,32 @@ function porcionES(t){
    Sale del texto de la porción ("2 láminas (34 g)", "2 slices") o de lo que se anotó. */
 var UNIDADES = ["lámina","rebanada","unidad","galleta","barra","pote","sobre","scoop","cucharada","taza","tajada","trozo"];
 function plural(u, n){ return n <= 1 ? u : (u === "unidad" ? "unidades" : u.replace(/a$/, "a") + "s"); }
+/* Peso aproximado de 1 lámina/rebanada/unidad según el tipo de producto (10-10-2026,
+   la dueña: "que calcule sola"). Solo se usa cuando la etiqueta no dice las unidades,
+   y se muestra como estimado. [patrón, unidad, gramos por unidad, unidades por porción] */
+var PESO_TIPICO = [
+ [/queso.*(lamin|gouda|mantecoso|chanco|cheddar|edam|sandwich)|queso laminado/i, "lámina", 17, 2],
+ [/jam[oó]n|pechuga de pavo|pavo laminado|mortadela|fiambre|lomo ahumado|pastrami/i, "lámina", 12, 3],
+ [/salame|salami|chorizo laminado/i, "lámina", 5, 5],
+ [/pan.*(molde|integral|blanco|centeno|lactal|sandwich)|pan de molde/i, "rebanada", 27, 2],
+ [/galleta.*arroz|tortita de arroz|arroz inflado/i, "galleta", 9, 2],
+ [/galleta|cracker|soda/i, "galleta", 8, 4],
+ [/tortilla|wrap|rapiditas|fajita/i, "unidad", 40, 1],
+ [/pita/i, "unidad", 60, 1],
+ [/barra|barrita/i, "barra", 40, 1]
+];
+function unidadEstimada(a){
+ var r = PESO_TIPICO.filter(function(x){ return x[0].test(a.n || ""); })[0];
+ if(!r) return null;
+ var porc = a.porcG || r[2] * r[3], n = Math.max(1, Math.round(porc / r[2]));
+ return { n:n, u:r[1], g:porc / n, est:true, porcG:porc };
+}
 function unidadesPorcion(a){
- if(!a || !a.porcG) return null;
+ if(!a || !a.gr) return null;
+ if(!a.porcG || !/(l[aá]mina|rebanada|unidad|galleta|barra|pote|sobre|scoop|cucharada|taza|tajada|trozo|slice|piece|portion)/i.test(porcionDe(a))){
+  var e = unidadEstimada(a); if(e) return e;
+ }
+ if(!a.porcG) return null;
  var m = porcionDe(a).match(/(\d+(?:[.,]\d+)?)\s*(l[aá]minas?|rebanadas?|unidad(?:es)?|galletas?|barras?|potes?|sobres?|scoops?|cucharadas?|tazas?|tajadas?|trozos?)/i);
  if(!m) return null;
  var n = parseFloat(m[1].replace(",", ".")), w = m[2].toLowerCase().replace(/^laminas?$/, "lámina");
@@ -959,24 +983,28 @@ function modoManual(){
 }
 function detalle(a){
  var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
+ var est0 = esGr ? unidadesPorcion(a) : null;
+ if(est0 && est0.est && !a.porcG){ a = Object.assign({}, a, { porcG:Math.round(est0.porcG), porcTxt:"" }); }
  var h = '<div class="cab" style="margin-bottom:6px"><h3 style="font-size:22px;text-transform:none;letter-spacing:0">' + esc(a.n) + '</h3><button type="button" class="chip" id="dVolver">‹ Volver</button></div>' +
   '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + (a.cat === "Marcas" ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
  if(esGr && a.porcG){
   // Porción recomendada de la etiqueta (Open Food Facts), 10-10-2026: la dueña escaneó un pan y no veía la porción.
   gramos = a.porcG;
-  var pt = textoPorcion(a);
-  h += '<div class="porc-rec"><span>✅ Porción recomendada</span><b>' + esc(pt) + '</b><small>según la etiqueta del producto</small></div>' +
+  var pt = textoPorcion(a), unE = unidadesPorcion(a);
+  if(unE && unE.est) pt = unE.n + " " + plural(unE.u, unE.n) + " (" + a.porcG + " g)";
+  h += '<div class="porc-rec"><span>✅ Porción recomendada</span><b>' + esc(pt) + '</b><small>' + (unE && unE.est ? 'láminas o unidades estimadas según el tipo de producto' : 'según la etiqueta del producto') + '</small></div>' +
    '<div class="mults" id="dPorc">' + [[0.5,"½ porción"],[1,"1 porción"],[2,"2 porciones"],[0,"100 g"]].map(function(m){ return '<button type="button" class="chip" data-p="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
   var un = unidadesPorcion(a);
   if(un){
-   h += '<p class="kick" style="margin:12px 0 6px">¿Cuántas ' + plural(un.u, 2) + ' comiste? <span style="font-weight:600;text-transform:none;letter-spacing:0">(1 ' + un.u + ' ≈ ' + r1(un.g) + ' g)</span></p><div class="mults" id="dUni">' +
+   h += '<p class="kick" style="margin:12px 0 6px">¿Cuántas ' + plural(un.u, 2) + ' comiste? <span style="font-weight:600;text-transform:none;letter-spacing:0">(1 ' + un.u + ' ≈ ' + r1(un.g) + ' g' + (un.est ? ', aproximado' : '') + ')</span></p><div class="mults" id="dUni">' +
     [1,2,3,4,5,6].map(function(k){ return '<button type="button" class="chip" data-u="' + k + '" aria-pressed="' + (k === un.n) + '">' + k + ' ' + plural(un.u, k) + '</button>'; }).join("") + '</div>';
   }
 
  }
- if(esGr && !unidadesPorcion(a) && (a.code || a.off || a.cat === CAT_PROD)){
+ var unF = esGr ? unidadesPorcion(a) : null;
+ if(esGr && (!unF || unF.est) && (a.code || a.off || a.cat === CAT_PROD)){
   // Láminas según el envase (10-10-2026, la dueña: "no veo las letras chicas del empaque")
-  h += '<details class="uni-falta"' + (a.porcG ? '' : ' open') + '><summary>🧀 ¿Viene en láminas, rebanadas o unidades? Calcúlalo con el envase</summary>' +
+  h += '<details class="uni-falta"' + (a.porcG || unF ? '' : ' open') + '><summary>' + (unF ? '✏️ ¿No calza? Corrígelo con el envase' : '🧀 ¿Viene en láminas, rebanadas o unidades? Calcúlalo con el envase') + '</summary>' +
    '<p class="muted" style="margin:8px 0">Usa los números grandes del paquete: lo que pesa y cuántas trae.</p>' +
    '<div class="fila2"><div class="campo"><label for="eG">Peso del envase (g)</label><input class="inp" id="eG" type="text" inputmode="decimal" autocomplete="off" placeholder="Ej: 250" value="' + (a.envaseG || "") + '"></div>' +
    '<div class="campo"><label for="eN">¿Cuántas trae?</label><input class="inp" id="eN" type="text" inputmode="decimal" autocomplete="off" placeholder="Ej: 10"></div></div>' +
@@ -1410,7 +1438,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101012", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101013", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
