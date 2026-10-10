@@ -1119,10 +1119,9 @@ function pintarRanking(){
 function htmlRetos(){
  var r = retosMes(), dm = +hoyISO().slice(8);
  return '<div class="card retos-card"><div class="cab"><h3>🏆 Retos del mes</h3><span>' + r.pts + ' pts</span></div>' +
-  '<p class="muted" style="font-size:14px;margin:6px 0 10px">Cada día que cumples suma 1 punto por reto. El ranking del gimnasio muestra solo tu apodo y tus puntos.</p>' +
+  '<p class="muted" style="font-size:14px;margin:6px 0 10px">Cada día que cumples suma 1 punto por reto. ¡Supera tus puntos del mes pasado!</p>' +
   [["💧","Tomar tu meta de agua", r.agua], ["💪","Llegar a tu proteína", r.prot], ["📝","Anotar tus comidas", r.reg]].map(function(k){ return '<div class="reto-l"><span>' + k[0] + ' ' + k[1] + '</span><b>' + k[2] + ' / ' + dm + '</b><div class="barra"><i style="width:' + Math.min(100, k[2] / dm * 100) + '%"></i></div></div>'; }).join("") +
-  (D.retoApodo ? '<p class="kick" style="margin:14px 0 6px">Ranking WGYM · ' + MESES[+hoyISO().slice(5, 7) - 1] + '</p><div id="rankBox"></div><button type="button" class="chip" id="retoSalir" style="margin-top:8px">Salir del ranking</button>'
-   : '<div class="fila2" style="grid-template-columns:1fr auto;margin-top:12px"><input class="inp" id="retoApodo" maxlength="18" placeholder="Tu apodo (ej: LaFlaca)" autocomplete="off"><button type="button" class="btn rojo chico" id="retoUnir" style="width:auto">Unirme</button></div><p class="muted" style="font-size:13px;margin:6px 0 0">Usa un apodo: no pongas tu nombre completo.</p>') + '</div>';
+  '</div>';
 }
 /* Leer la etiqueta con la cámara (10-10-2026): lector de texto gratuito Tesseract dentro de la
    app (vendor/tesseract-5.1.1, se descarga solo la primera vez que se usa, ~6 MB). */
@@ -1953,12 +1952,6 @@ function renderProg(){
  $("pesoIn").onkeydown = function(e){ if(e.key === "Enter") guardarPeso(e); };
  $("compartir").onclick = compartir;
  $("semanaIG").onclick = compartirSemana;
- if($("retoUnir")) $("retoUnir").onclick = function(){ var v = $("retoApodo").value.replace(/[<>"]/g, "").trim();
-  if(v.length < 2){ toast("Escribe un apodo de al menos 2 letras."); return; }
-  D.retoApodo = v.slice(0, 18); guardar(); renderProg(); enviarReto(true).then(cargarRanking); toast("🏆 Te uniste al ranking como " + D.retoApodo); };
- if($("retoSalir")) $("retoSalir").onclick = function(){ if(!confirm("¿Salir del ranking? Tus puntos se siguen contando en tu teléfono.")) return;
-  pedirScript({ action:"guardarReto", mes:mesActual(), id:retoId(), apodo:"(salió)", pts:0 }, 15000); D.retoApodo = ""; guardar(); renderProg(); };
- if(D.retoApodo){ pintarRanking(); enviarReto(false).then(cargarRanking); }
  $("fotoIn").onchange = function(){ var f = this.files && this.files[0]; this.value = ""; if(!f) return;
   toast("Guardando foto…"); achicarFoto(f).then(fotoGuardar).then(function(){ toast("✅ Foto guardada en tu teléfono"); pintarFotos(); })["catch"](function(){ toast("No se pudo guardar la foto."); }); };
  pintarFotos();
@@ -2142,7 +2135,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101052", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101053", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

@@ -120,6 +120,8 @@ funciona igual que antes (cada teléfono recuerda lo que escaneó él mismo).
 
 ## Actualización retos del mes de WGYMNUTRI (Versión 17, 10-10-2026)
 
+> **Sin uso desde el 10-10-2026:** la dueña pidió sacar el ranking de WGYMNUTRI. No hace falta instalar esta versión.
+
 `Ingresos.gs` trae dos acciones nuevas: `guardarReto` y `listarRetos`. Los
 socios que se unen al «🏆 Retos del mes» (en Progreso) aparecen en un ranking
 del gimnasio **solo con su apodo y sus puntos** (días que cumplieron agua,
