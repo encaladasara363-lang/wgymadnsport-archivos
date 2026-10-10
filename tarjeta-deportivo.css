@@ -1,0 +1,107 @@
+/* Tarjeta virtual · estilo deportivo del mesón (10-10-2026, pedido de la dueña:
+   "el mismo diseño del mesón, manteniendo el color oscuro").
+   Va ENCIMA del CSS de tarjeta.html: solo cambia la apariencia. */
+:root{
+ --f-marca:'Rubik Distressed','Anton',Impact,sans-serif;
+ --f-num:'Anton',Impact,sans-serif;
+ --f-txt:'Barlow','Segoe UI',Arial,sans-serif;
+ --f-cond:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+ --card:#151517;
+ color-scheme:dark;
+}
+body{ font-family:var(--f-txt);
+ background:
+  radial-gradient(120% 35% at 50% -5%, rgba(227,6,19,.22), transparent 60%),
+  repeating-linear-gradient(135deg, rgba(255,255,255,.018) 0 2px, transparent 2px 9px), #0A0A0B; }
+h1,h2,h3{ font-family:var(--f-marca); font-weight:400; letter-spacing:.03em; }
+
+/* Entrada */
+.gate-kicker, .gate-label{ font-family:var(--f-cond); font-size:14px; letter-spacing:.18em; }
+.gate-card h2{ font-size:28px; }
+.gate-btn{ font-family:var(--f-cond); font-style:italic; font-weight:800; font-size:20px; letter-spacing:.08em;
+ border-radius:14px; box-shadow:0 5px 0 #7a030b; background:linear-gradient(180deg,#FF2A35,#E30613 55%,#B8040F); }
+.gate-btn:active{ transform:translateY(3px); box-shadow:0 2px 0 #7a030b; }
+.gate-input{ border-radius:14px; border-width:2px; }
+
+/* Encabezado: logo grande y franja roja/dorada del mesón */
+header.masthead2{ position:relative; background:transparent; border-bottom:0; padding:22px 20px 30px; }
+header.masthead2::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:8px;
+ background:repeating-linear-gradient(-45deg,#E30613 0 14px,transparent 14px 20px,#D4AF37 20px 24px,transparent 24px 30px); }
+header.masthead2 .logo{ width:min(88%,330px); filter:drop-shadow(0 8px 22px rgba(227,6,19,.35)); }
+header.masthead2 .gymname{ font-family:var(--f-cond); font-size:15px; letter-spacing:.2em; }
+header.masthead2 h1{ font-size:34px; }
+header.masthead2 .sub{ font-family:var(--f-cond); font-size:15px; letter-spacing:.06em; text-transform:uppercase; }
+
+/* Cuadros con borde rojo a la izquierda y sombra */
+.salida-card, .inst-card, .pago-card, .evo-card, .member-card{
+ border-radius:16px; border-width:2px !important; box-shadow:0 10px 24px -12px rgba(0,0,0,.8); }
+.salida-card, .inst-card, .pago-card, .evo-card{ background:#151517; }
+.nutri-promo{ background:linear-gradient(135deg,#2a0306,#151517 60%); }
+
+/* Títulos de cada cuadro con la barra roja inclinada */
+.pago-kicker, .salida-kicker, .evo-kicker, .mc-kicker, .coach-preg{
+ font-family:var(--f-marca) !important; font-size:19px !important; letter-spacing:.04em !important; font-weight:400 !important;
+ color:#F2D04B !important; text-transform:uppercase;
+ display:flex; align-items:center; gap:9px; }
+.salida-kicker{ justify-content:center; }
+.pago-kicker::before, .salida-kicker::before, .evo-kicker::before, .mc-kicker::before, .coach-preg::before{
+ content:""; width:7px; height:20px; background:#E30613; transform:skewX(-18deg); flex:none; }
+.inst-card > p:first-child{ font-family:var(--f-cond); font-size:15px; letter-spacing:.14em; }
+
+/* Nombre del socio y veredicto con letra rugosa */
+.mc-name{ font-family:var(--f-marca); font-weight:400; font-size:28px; letter-spacing:.03em; }
+.mc-veredicto .vfallo{ font-family:var(--f-marca); font-weight:400; font-size:24px; letter-spacing:.03em; }
+.mc-plan, .mc-row, .mc-veredicto .vdet{ font-family:var(--f-cond); font-size:16px; letter-spacing:.03em; }
+.mc-row b{ font-family:var(--f-num); font-weight:400; font-size:18px; letter-spacing:.03em; }
+
+/* Números grandes en Anton */
+.salida-num, .pago-monto, .evo-stat .n, .stat .val{ font-family:var(--f-num) !important; font-weight:400 !important; letter-spacing:.01em; }
+.salida-num{ font-size:72px; }
+
+/* Botones: letra angosta, cursiva, mayúscula y con "escalón" */
+.pago-btn, .band-btn, .bv-btn, .evo-ref-btn, .coach-op, .band-chip, .hor-dias button, .cal-seg button, .evo-ref-sexo button{
+ font-family:var(--f-cond) !important; font-style:italic; font-weight:800; letter-spacing:.07em; }
+.pago-btn{ font-size:18px; border-radius:14px; }
+.pago-btn.principal, .pago-btn:not(.sec):not(.wsp){ box-shadow:0 5px 0 #7a030b; }
+.pago-btn.sec{ box-shadow:0 4px 0 #6b5414; border-width:2px; }
+.pago-btn.wsp{ box-shadow:0 5px 0 #0f5b2c; }
+.pago-btn:active, .band-btn:active{ transform:translateY(3px); }
+.band-btn{ font-size:18px; border-radius:14px; }
+
+/* Pie */
+footer.footer2 .slogan{ font-family:var(--f-marca); font-weight:400; font-size:22px; letter-spacing:.04em; }
+footer.footer2 .name{ font-family:var(--f-cond); letter-spacing:.2em; }
+
+/* ===== Igual que la tablet de la puerta (10-10-2026, la dueña: "ese diseño") ===== */
+/* Ficha del socio = cuadro "ÚLTIMO INGRESO": degradado rojo con rayas doradas */
+.member-card{ background:linear-gradient(135deg,rgba(227,6,19,.30) 0%,#161616 55%,#0A0A0A 100%) !important; border-color:#5CA85C !important; }
+.member-card::before{ display:none; }
+.member-card::after{ content:""; position:absolute; right:-30px; top:0; bottom:0; width:170px; pointer-events:none;
+ background:repeating-linear-gradient(-60deg,transparent 0 18px,rgba(212,175,55,.16) 18px 22px); }
+.member-card > *{ position:relative; z-index:1; }
+.mc-kicker{ justify-content:center; font-family:var(--f-cond) !important; font-size:15px !important; letter-spacing:.2em !important; color:#D4AF37 !important; }
+.mc-kicker::before{ display:none; }
+.mc-name{ text-align:center; font-size:34px; line-height:1.05; }
+.mc-plan{ text-align:center; }
+.mc-veredicto{ background:transparent !important; border:0 !important; padding:4px 0 0; }
+.mc-veredicto .vfallo{ font-size:30px; line-height:1.05; }
+.mc-veredicto .vdet{ display:inline-block; margin-top:12px; padding:9px 18px; border-radius:999px; font-family:var(--f-num) !important;
+ font-size:18px !important; letter-spacing:.02em; font-weight:400 !important; }
+.mc-veredicto[data-v="ok"] .vdet{ background:rgba(92,168,92,.22); color:#7BE07B; }
+.mc-veredicto[data-v="warn"] .vdet{ background:rgba(212,175,55,.22); color:#F2D04B; }
+.mc-veredicto[data-v="bad"] .vdet{ background:rgba(232,92,92,.22); color:#FF8A8A; }
+.member-card:has(.mc-veredicto[data-v="warn"]){ border-color:#D4AF37 !important; }
+.member-card:has(.mc-veredicto[data-v="bad"]){ border-color:#E85C5C !important; }
+.mc-veredicto .vturno{ display:inline-block; border:2px solid currentColor; border-radius:999px; padding:7px 18px; font-family:var(--f-num); font-weight:400; font-size:19px; }
+
+/* "Dentro ahora" = cuadro verde de la tablet */
+.salida-card{ border-color:#5CA85C !important; background:linear-gradient(180deg,rgba(92,168,92,.10),#151517 70%) !important; }
+.salida-num{ color:#7BE07B; }
+.salida-lbl{ font-family:var(--f-marca) !important; font-weight:400 !important; color:#7BE07B !important; font-size:20px !important; letter-spacing:.04em; }
+
+/* Cuadros con borde dorado como "BANDAS PEDIDAS" */
+.pago-card, .inst-card, .evo-card{ border-color:#D4AF37 !important; }
+.bloqueo-card{ border-color:#E30613 !important; }
+.pago-monto{ font-size:44px !important; }
+.pago-btn.sec{ background:#F2D04B; color:#0A0A0B; border-color:#F2D04B; }
+.band-chip{ border-radius:12px; }
