@@ -231,7 +231,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=11">
+<link rel="stylesheet" href="nutri-claro.css?v=12">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -1154,14 +1154,17 @@ function renderPerfil(){
   '<div class="card"><div class="cab"><h3>🎯 Mis metas</h3></div><div class="plan-res" style="margin-top:10px"><div><b style="color:var(--gold2)">' + miles(M.kcal) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + M.p + ' g</b><span>Proteína</span></div><div><b>' + M.c + ' g</b><span>Carbohidratos</span></div><div><b>' + M.g + ' g</b><span>Grasas</span></div></div>' +
   '<div class="campo" style="margin-top:12px"><label for="aguaMeta">Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta">' + [6,7,8,9,10,11,12,14].map(function(n){ return '<option' + (n === M.agua ? " selected" : "") + '>' + n + '</option>'; }).join("") + '</select></div>' +
   '<button type="button" class="btn sec chico" id="recalc" style="margin-top:12px">Recalcular con mis datos</button></div>' +
-  '<div class="card"><p class="kick">📲 App en tu teléfono</p><p class="muted" style="font-size:14px">' + (estaInstalada() ? "WGYMNUTRI ya está en tu pantalla de inicio." : "Ponla en tu pantalla de inicio para abrirla con un toque.") + '</p>' + (estaInstalada() ? "" : '<button type="button" class="btn rojo chico" id="instP">Poner en mi pantalla de inicio</button>') + '</div>' +
+  '<div class="card"><p class="kick">📲 App en tu teléfono</p>' + (estaInstalada() ? '<p class="muted">✅ WGYMNUTRI ya está en tu pantalla de inicio.</p>'
+   : (DENTRO_TARJETA && modoApp()) ? '<div class="muted">' + pasosDesdeTarjeta() + '</div><button type="button" class="btn rojo chico" id="instCopiarP">📋 Copiar enlace</button>'
+   : '<p class="muted">Ponla en tu pantalla de inicio para abrirla con un toque.</p><button type="button" class="btn rojo chico" id="instP">Poner en mi pantalla de inicio</button>') + '</div>' +
   '<div class="card"><p class="kick">🔐 Privacidad</p><p class="muted" style="font-size:14px;margin:6px 0 10px">Tus comidas, tu peso y tus datos se guardan solo en este teléfono. Nadie más los ve, ni siquiera el gimnasio.</p>' +
-  '<button type="button" class="btn sec chico" id="salirB">Cambiar de socio</button><div style="height:8px"></div><button type="button" class="btn sec chico" id="borrarB" style="color:#FF6B74">Borrar mis datos de este teléfono</button><div id="borrarConf"></div></div>' +
+  '<button type="button" class="btn sec chico" id="salirB">Cambiar de socio</button><div style="height:8px"></div><button type="button" class="btn sec chico" id="borrarB">Borrar mis datos de este teléfono</button><div id="borrarConf"></div></div>' +
   '<p class="center" style="font-family:var(--cond);font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase">Donde hay calidad no hay competencia</p>';
  $("tabPerfil").innerHTML = h;
  $("aguaMeta").onchange = function(){ D.metas.agua = +this.value; guardar(); toast("✅ Meta de agua: " + this.value + " vasos"); };
  $("recalc").onclick = function(){ onb.paso = 0; onb.d = Object.assign({}, P); renderOnb(); vista("vOnb"); };
  if($("instP")) $("instP").onclick = instalar;
+ if($("instCopiarP")) $("instCopiarP").onclick = copiarEnlaceNutri;
  $("salirB").onclick = salir;
  $("borrarB").onclick = function(){
   $("borrarConf").innerHTML = '<p class="err" style="margin:10px 0">¿Seguro? Se borran tus comidas, peso y medallas de este teléfono. No se puede deshacer.</p><div class="fila2"><button type="button" class="btn sec chico" id="bNo">Cancelar</button><button type="button" class="btn rojo chico" id="bSi">Sí, borrar</button></div>';
@@ -1173,8 +1176,33 @@ function renderPerfil(){
 /* ═══ 8. Instalar en la pantalla de inicio ═══ */
 var promptInst = null;
 window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); promptInst = e; });
-function estaInstalada(){ return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
+function modoApp(){ return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
+/* Abierta desde la Tarjeta Virtual instalada (10-10-2026): se ve como app, pero es la
+   tarjeta la que está en la pantalla de inicio, no WGYMNUTRI. La tarjeta abre con ?desde=tarjeta. */
+var DENTRO_TARJETA = false;
+try{
+ if(/[?&]desde=tarjeta/.test(location.search)){ sessionStorage.setItem("wgymnutri_desde_tarjeta", "1"); history.replaceState(null, "", location.pathname); }
+ DENTRO_TARJETA = sessionStorage.getItem("wgymnutri_desde_tarjeta") === "1";
+}catch(e){}
+function estaInstalada(){ return modoApp() && !DENTRO_TARJETA; }
+var URL_NUTRI = "https://encaladasara363-lang.github.io/wgymadnsport-archivos/wgymnutri.html";
+function pasosDesdeTarjeta(){
+ var ios = /iPhone|iPad|iPod/i.test(navigator.userAgent || "");
+ return '<p>Estás usando WGYMNUTRI <b>dentro de tu Tarjeta Virtual</b>. Para tenerla como app aparte en tu pantalla de inicio:</p>' +
+  '<ol style="line-height:1.7;padding-left:22px;margin:8px 0">' +
+  (ios ? '<li>Toca <b>«Copiar enlace»</b> aquí abajo.</li><li>Abre <b>Safari</b> y pega el enlace arriba, en la barra de direcciones.</li><li>Toca <b>Compartir</b> (el cuadrado con la flecha ↑) y elige <b>«Agregar a inicio»</b>.</li>'
+       : '<li>Toca <b>«Copiar enlace»</b> aquí abajo.</li><li>Abre <b>Chrome</b> y pega el enlace arriba, en la barra de direcciones.</li><li>Toca los <b>tres puntos (⋮)</b> y elige <b>«Instalar app»</b> o <b>«Agregar a la pantalla principal»</b>.</li>') +
+  '</ol><p style="margin:0 0 8px">La primera vez escribe tu nombre otra vez; después abre directo.</p>';
+}
+function copiarEnlaceNutri(){ copiarTexto(URL_NUTRI).then(function(){ toast("✅ Enlace copiado. Pégalo en " + (/iPhone|iPad|iPod/i.test(navigator.userAgent || "") ? "Safari" : "Chrome") + "."); })["catch"](function(){ toast("Copia este enlace: " + URL_NUTRI); }); }
 function instalar(){
+ if(DENTRO_TARJETA && modoApp()){
+  abrirHoja('<div class="cab" style="margin-bottom:10px"><h3>📲 Instalar WGYMNUTRI</h3><button type="button" class="chip" id="hX">Cerrar</button></div>' + pasosDesdeTarjeta() +
+   '<button type="button" class="btn rojo" id="instCopiar">📋 Copiar enlace</button><button type="button" class="btn sec chico" id="instNo" style="margin-top:8px">No mostrar más el aviso</button>');
+  $("hX").onclick = cerrarHoja; $("instCopiar").onclick = copiarEnlaceNutri;
+  $("instNo").onclick = function(){ lsSet(CLAVE_INST, true); cerrarHoja(); if(tabSel === "tabHoy") renderHoy(); };
+  return;
+ }
  if(promptInst){ promptInst.prompt(); promptInst.userChoice.then(function(){ promptInst = null; lsSet(CLAVE_INST, true); if(tabSel === "tabHoy") renderHoy(); }); return; }
  var ua = navigator.userAgent || "", ios = /iPhone|iPad|iPod/i.test(ua), red = /Instagram|FBAN|FBAV|TikTok|musical_ly/i.test(ua);
  abrirHoja('<div class="cab" style="margin-bottom:10px"><h3>📲 Instalar WGYMNUTRI</h3><button type="button" class="chip" id="hX">Cerrar</button></div>' +
