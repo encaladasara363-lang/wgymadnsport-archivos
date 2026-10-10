@@ -1,0 +1,39 @@
+/* WGYMNUTRI · tema oscuro (prueba del 10-10-2026, la dueña: "quiero ver cómo se ve con el
+   fondo oscuro"). Va DESPUÉS de nutri-claro.css y solo actúa con <html class="oscuro">. */
+html.oscuro{ --bg:#0A0A0B; --panel:#141417; --panel2:#1C1C21; --line:#2A2A31; --fg:#F5F5F6; --muted:#C9C9D1; --gold:#D4AF37; --gold2:#F2D16B; color-scheme:dark; }
+html.oscuro, html.oscuro body{ background:#0A0A0B !important; }
+html.oscuro body{ background:
+ radial-gradient(120% 40% at 50% -5%, rgba(227,6,19,.22), transparent 60%),
+ repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 9px), #0A0A0B !important; }
+/* Texto claro en todo, menos donde hay color propio */
+html.oscuro body *:not([style*="color"]):not(svg):not(svg *){ color:#F5F5F6 !important; }
+/* Cuadros */
+html.oscuro .card, html.oscuro .hoja, html.oscuro .semana-tira{ background:#141417 !important; border-color:#2A2A31 !important; box-shadow:0 6px 18px rgba(0,0,0,.5) !important; }
+html.oscuro .card{ border-left:4px solid #E30613 !important; }
+html.oscuro .card:has(.anillo-box){ background:linear-gradient(135deg,#2A0B0E,#141417 60%) !important; border:2px solid #E30613 !important; }
+html.oscuro .det-macros div, html.oscuro .plan-res div, html.oscuro .medalla, html.oscuro .res-datos div, html.oscuro .macros3 .macro, html.oscuro .vitc-hoy, html.oscuro .opc, html.oscuro .chip, html.oscuro .inp, html.oscuro .grande-inp{ background:#1C1C21 !important; border-color:#33333B !important; }
+html.oscuro .chip[aria-pressed="true"], html.oscuro .opc[aria-pressed="true"]{ background:#E30613 !important; border-color:#E30613 !important; }
+html.oscuro .barra, html.oscuro .anillo .fondo{ background:#2A2A31 !important; stroke:#2A2A31 !important; }
+html.oscuro .restantes{ background:linear-gradient(135deg,#2A0B0E,#141417) !important; }
+html.oscuro .aviso, html.oscuro .uni-falta, html.oscuro .cod-leido, html.oscuro .porc-rec{ background:#241D0B !important; border-color:#8A6A12 !important; }
+html.oscuro .add-l{ background:#1E1A0C !important; border-color:#8A6A12 !important; }
+html.oscuro .det-macros .vitc-det{ background:#241808 !important; border-color:#F5A623 !important; }
+html.oscuro .nav{ background:rgba(10,10,11,.95) !important; border-top-color:#2A2A31 !important; }
+html.oscuro .nav .mas{ border-color:#0A0A0B !important; }
+html.oscuro .nav button:not(.on){ color:#8A8A92 !important; }
+html.oscuro .nav button.on{ color:#FF2D3A !important; }
+html.oscuro .st-dia.sel .st-l{ background:#F5F5F6 !important; color:#0A0A0B !important; }
+html.oscuro .tanque{ background:#0E1A24 !important; border-color:#141417 !important; }
+html.oscuro .taza{ background:#1C1C21 !important; }
+/* Acentos que vuelven a su color */
+html.oscuro .kick, html.oscuro .restantes small, html.oscuro .hora-com, html.oscuro .add-l, html.oscuro .add-l *, html.oscuro .st-dia.hoy b, html.oscuro .gate h1 .g, html.oscuro .res-datos b small, html.oscuro .cab > span{ color:#F2D16B !important; }
+html.oscuro .top .t span, html.oscuro .gate h1 .r, html.oscuro .restantes.pasado b{ color:#FF2D3A !important; }
+html.oscuro .vitc-det b, html.oscuro .vitc-hoy .fila b{ color:#FFB547 !important; }
+html.oscuro .cafe-card .cab span{ color:#D9A97A !important; }
+html.oscuro .btn.sec, html.oscuro .btn.sec *, html.oscuro .racha, html.oscuro .racha *, html.oscuro .btn.oro, html.oscuro .btn.oro *{ color:#141416 !important; }
+html.oscuro .tanque .tq-txt b, html.oscuro .tanque .tq-txt span, html.oscuro .tanque .tq-txt em{ color:#EAF6FF !important; text-shadow:0 1px 3px rgba(0,0,0,.6) !important; }
+html.oscuro .tanque .tq-txt em{ background:rgba(0,0,0,.35) !important; }
+html.oscuro .muted, html.oscuro small{ color:#C9C9D1 !important; }
+html.oscuro .botella i, html.oscuro .vaso{ background:#0E1A24 !important; border-color:#3B6E91 !important; }
+html.oscuro .hora-com{ background:#2A2210 !important; border-color:#8A6A12 !important; }
+html.oscuro #dGr, html.oscuro #dCant, html.oscuro input, html.oscuro select{ color:#F5F5F6 !important; -webkit-text-fill-color:#F5F5F6 !important; }
