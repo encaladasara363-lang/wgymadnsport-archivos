@@ -1431,4 +1431,16 @@ probado: ella se activó desde el mesón y entró a la app).
   `docs/apps-script-ingresos-salidas.md`). Nunca es gratis (la dueña, 10-10-2026): si el script no
   tiene `listarNutri`, nadie la tiene activa y todos ven la pantalla de pago. El teléfono
   guarda la última fecha vista (`wgymnutri_activa_v1`) para abrir al instante.
+- **Ofertas (10-10-2026, pedido de la dueña):** en `pago-datos.js`
+  (`nutriOfertas`): 1 mes $5.000 · 3 meses $12.000 · pack «Full Mensual +
+  WGYMNUTRI» $36.000. La pantalla de pago deja elegir la opción (cambia monto,
+  comentario y el WhatsApp a Sara). En el mesón la caja «🥗 WGYMNUTRI» trae
+  «Activar 1 mes» y «Activar 3 meses»; el pack se registra renovando el Full
+  Mensual en la ficha como siempre + «Activar 1 mes».
+- **Diseño (10-10-2026):** fondo blanco con el estilo de la tablet de la puerta
+  (`nutri-claro.css`, va encima del CSS de la app; subir `?v=` al cambiarlo),
+  letras grandes y negras a pedido de la dueña. Recetario solo saludable
+  (438 recetas, sin pan blanco, frituras, embutidos ni postres con azúcar).
+  Al abrir una receta se usa `history.pushState`: el gesto «atrás» del
+  teléfono vuelve a la lista.
 

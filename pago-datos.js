@@ -16,6 +16,14 @@ window.WGYM_PAGO = {
  },
  /* WGYMNUTRI (contador de calorías) se vende aparte, por mes (10-10-2026). */
  nutri: { nombre: "WGYMNUTRI mensual", precio: 5000 },
+ /* Ofertas de WGYMNUTRI (10-10-2026, pedido de la dueña). "meses" = meses de
+    app que la dueña activa en el mesón. El pack incluye 1 mes de Full Mensual:
+    ese mes de gimnasio se renueva en la ficha como siempre. */
+ nutriOfertas: [
+  { id: "mes",  nombre: "WGYMNUTRI 1 mes",          precio: 5000,  meses: 1, detalle: "1 mes de app" },
+  { id: "tri",  nombre: "WGYMNUTRI 3 meses",        precio: 12000, meses: 3, detalle: "3 meses de app · ahorras $3.000" },
+  { id: "pack", nombre: "Full Mensual + WGYMNUTRI", precio: 36000, meses: 1, detalle: "1 mes de gimnasio + 1 mes de app · ahorras $2.000" }
+ ],
  /* "re" reconoce el plan tal como está escrito en la ficha del socio
     (sin tildes y en minúsculas). El orden importa: el primero que calce. */
  planes: [
