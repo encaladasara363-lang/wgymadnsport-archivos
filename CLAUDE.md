@@ -1444,6 +1444,11 @@ probado: ella se activó desde el mesón y entró a la app).
   comentario y el WhatsApp a Sara). En el mesón la caja «🥗 WGYMNUTRI» trae
   «Activar 1 mes» y «Activar 3 meses»; el pack se registra renovando el Full
   Mensual en la ficha como siempre + «Activar 1 mes».
+- **Recordatorios opcionales (10-10-2026):** en «Mi perfil», cuadro «🔔 Mis
+  recordatorios» con interruptores (desayuno, agua, proteína, aviso al pasar la
+  meta; `RECORDATORIOS`/`recOn`, guardado en `D.recordar` del teléfono). Son
+  avisos al abrir la app: una página web no puede mandar notificaciones con la
+  app cerrada sin un servicio de envío (push) aparte.
 - **Diseño (10-10-2026):** fondo blanco con el estilo de la tablet de la puerta
   (`nutri-claro.css`, va encima del CSS de la app; subir `?v=` al cambiarlo),
   letras grandes y negras a pedido de la dueña. Recetario solo saludable
