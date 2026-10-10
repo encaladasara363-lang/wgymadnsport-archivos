@@ -105,3 +105,10 @@ footer.footer2 .name{ font-family:var(--f-cond); letter-spacing:.2em; }
 .pago-monto{ font-size:44px !important; }
 .pago-btn.sec{ background:#F2D04B; color:#0A0A0B; border-color:#F2D04B; }
 .band-chip{ border-radius:12px; }
+
+/* Fila "Vencimiento" legible sobre las rayas (10-10-2026, la dueña: "eso no se entiende") */
+.member-card .mc-row{ background:rgba(8,8,9,.88); border:1px solid rgba(212,175,55,.35); border-radius:12px; padding:12px 16px; margin-top:6px; }
+.member-card .mc-row span{ color:#FFFFFF !important; font-family:var(--f-cond); font-weight:800; font-size:18px; letter-spacing:.08em; text-transform:uppercase; }
+.member-card .mc-row b{ color:#F2D04B !important; font-size:24px !important; }
+.member-card .mc-status .pill{ font-size:15px; padding:6px 14px; background:rgba(8,8,9,.88); }
+.member-card::after{ background:repeating-linear-gradient(-60deg,transparent 0 18px,rgba(212,175,55,.11) 18px 22px) !important; }
