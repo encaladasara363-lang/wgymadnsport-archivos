@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=30">
+<link rel="stylesheet" href="nutri-claro.css?v=31">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -875,11 +875,14 @@ function renderHoy(){
   return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i></button>'; }).join("") + '</div>';
  var av = recordatorio();
  if(av) h += '<div class="aviso"><span class="e">' + av[0] + '</span><p>' + esc(av[1]) + '</p><button type="button" id="avisoX" aria-label="Ocultar aviso">×</button></div>';
- function macro(cls, nombre, v, meta){ return '<div class="macro ' + cls + '"><div class="fila"><span>' + nombre + '</span><em>' + Math.round(v) + ' / ' + meta + ' g</em></div><div class="barra"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }
- h += '<div class="card"><div class="anillo-box"><div class="anillo' + (rest < 0 ? " pasado" : "") + '"><svg viewBox="0 0 150 150"><circle class="fondo" cx="75" cy="75" r="62"/><circle class="prog" id="anilloProg" cx="75" cy="75" r="62" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/></svg><div class="centro"><b>' + miles(Math.abs(rest)) + '</b><span>' + (rest < 0 ? "kcal de más" : "kcal restantes") + '</span></div></div>' +
-  '<div class="macros">' + macro("m-p", "Proteína", t.p, M.p) + macro("m-c", "Carbohidratos", t.c, M.c) + macro("m-g", "Grasas", t.g, M.g) + '</div></div>' +
-  '<div class="kcal-linea"><span>Meta <b>' + miles(M.kcal) + '</b></span><span>Comidas <b>' + miles(t.k) + '</b></span></div></div>';
- h += '<div class="frase"><small>Frase del día</small>' + esc(fraseDelDia()) + '</div>';
+ /* Cuadro de resumen ordenado (10-10-2026, pedido de la dueña): anillo con el % comido, comidas
+    y meta al lado, los 3 macros en columnas abajo y, en vez de la frase del día, un cuadro
+    grande de calorías restantes. */
+ function macro(cls, nombre, v, meta){ return '<div class="macro ' + cls + '"><span class="mn">' + nombre + '</span><b class="mv">' + Math.round(v) + '<small> / ' + meta + ' g</small></b><div class="barra"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }
+ h += '<div class="card res2"><div class="anillo-box"><div class="anillo' + (rest < 0 ? " pasado" : "") + '"><svg viewBox="0 0 150 150"><circle class="fondo" cx="75" cy="75" r="62"/><circle class="prog" id="anilloProg" cx="75" cy="75" r="62" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/></svg><div class="centro"><b>' + Math.round(t.k / M.kcal * 100) + '%</b><span>de tu meta</span></div></div>' +
+  '<div class="res-datos"><div><span>🍽 Comidas</span><b>' + miles(t.k) + '<small> kcal</small></b></div><div><span>🎯 Meta</span><b>' + miles(M.kcal) + '<small> kcal</small></b></div></div></div>' +
+  '<div class="macros3">' + macro("m-p", "Proteína", t.p, M.p) + macro("m-c", "Carbos", t.c, M.c) + macro("m-g", "Grasas", t.g, M.g) + '</div></div>';
+ h += '<div class="restantes' + (rest < 0 ? " pasado" : "") + '"><span class="e">🔥</span><div><small>' + (rest < 0 ? "Te pasaste de tu meta" : "Calorías restantes") + '</small><b>' + miles(Math.abs(rest)) + ' <em>kcal</em></b><p>Meta ' + miles(M.kcal) + ' − comidas ' + miles(t.k) + '</p></div></div>';
  /* Agua en vasos de 250 ml o botellas de 500 ml (10-10-2026, pedido de la dueña). Se guarda
     siempre en vasos (x.agua); una botella = 2 vasos. Cada teléfono recuerda la elección. */
  var enBot = D.aguaUnidad !== "vaso", litros = function(v){ return String(r1(v * 0.25)).replace(".", ","); };
@@ -1744,7 +1747,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101038", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101039", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
