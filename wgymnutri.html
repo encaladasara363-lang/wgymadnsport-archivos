@@ -819,9 +819,9 @@ function cargarProductos(){
 }
 function guardarProductoCompartido(a, origen){
  if(window.WGYMNUTRI_DEMO || !a || !a.gr) return;
- if(a.code && porCodigoLocal(a.code)) return;
  var fila = [a.code || "", a.n, a.marca || "", a.k, a.pr, a.c, a.g, a.porcG || 0, a.porcTxt || ""];
- var l = lsGet(CLAVE_PROD, []) || []; l.push(fila); lsSet(CLAVE_PROD, l); integrarProductos(l);
+ if(!(a.code && porCodigoLocal(a.code))){ var l = lsGet(CLAVE_PROD, []) || []; l.push(fila); lsSet(CLAVE_PROD, l); integrarProductos(l); }
+ // Siempre se avisa a la planilla: si ya lo tenía, solo suma "Veces" (nunca lo duplica).
  pedirScript({ action:"guardarProducto", codigo:a.code || "", nombre:a.n, marca:a.marca || "", k:a.k, p:a.pr, c:a.c, g:a.g, porcG:a.porcG || 0, porcTxt:a.porcTxt || "", origen:origen || "off" });
 }
 function guardarPorcionCompartida(a, txt){
@@ -1155,7 +1155,7 @@ function leido(code){
  var r = $("codRes"); if(!r) return;
  D.cont.escaneos = (D.cont.escaneos || 0) + 1; guardar();
  var local = porCodigoLocal(code);
- if(local){ revisarLogros(); detalle(local); return; }      /* ya lo escaneó alguien del gimnasio */
+ if(local){ guardarProductoCompartido(local, "off"); revisarLogros(); detalle(local); return; }      /* ya lo escaneó alguien del gimnasio: se confirma en la planilla */
  $("camTxt").textContent = "Código " + code + " · buscando el producto…";
  productoOFF(code).then(function(a){
   if(a){ a.code = a.code || code; guardarProductoCompartido(a, "off"); revisarLogros(); detalle(a); return; }
@@ -1447,7 +1447,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101014", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101015", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
