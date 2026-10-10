@@ -1452,6 +1452,10 @@ probado: ella se activó desde el mesón y entró a la app).
   `nutri-alimentos.js` (Monster, Score, Red Bull, Burn, Rockstar, Prime, Celsius,
   Bang, Powerade, Gatorade, Electrolit y sus versiones sin azúcar; valores
   aproximados), que sale primero al buscar desde ese cuadro.
+- **Escáner más fuerte (10-10-2026, la dueña: una lata Monster no se leía):** video en
+  alta resolución con enfoque continuo y, en iPhone (ZXing), `TRY_HARDER`, que
+  también lee el código parado (en latas y botellas va vertical; probado con un
+  código girado 90°). El texto pide acercar el código y girar el teléfono de lado.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

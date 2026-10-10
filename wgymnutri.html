@@ -1139,7 +1139,7 @@ function cargarZXing(){
 function modoEscanear(){
  var c = $("agrCuerpo");
  c.innerHTML = '<div class="cam" id="camBox"><video id="camVid" playsinline muted autoplay></video><div class="marco"></div><div class="laser"></div></div>' +
-  '<p class="muted center" id="camTxt" style="margin:10px 0">Apunta al código de barras del producto.</p>' +
+  '<p class="muted center" id="camTxt" style="margin:10px 0">Acerca el código de barras hasta que llene el recuadro.<br>En latas y botellas, el código puede estar parado: <b>gira el teléfono de lado</b>.</p>' +
   '<form id="codForm" class="fila2" style="grid-template-columns:1fr auto"><input class="inp" id="codIn" inputmode="numeric" placeholder="¿No lee? Escribe los números"><button type="button" id="codOk" class="btn sec chico" style="width:auto">Buscar</button></form><div id="codRes"></div>';
  function porCodigo(e){ if(e) e.preventDefault(); var v = $("codIn").value.replace(/\D/g, ""); if(v.length >= 6) leido(v); }
  $("codForm").onsubmit = porCodigo; $("codOk").onclick = porCodigo; $("codIn").onkeydown = function(e){ if(e.key === "Enter") porCodigo(e); };
@@ -1147,20 +1147,24 @@ function modoEscanear(){
  function encontrado(code){ if(cam.leyendo) return; cam.leyendo = true; if(navigator.vibrate) try{ navigator.vibrate(60); }catch(e){} pararCamara(); leido(code); }
  function sinCamara(){ $("camBox").hidden = true; $("camTxt").textContent = "No pudimos abrir la cámara. Revisa el permiso de cámara del navegador, o escribe el número del código aquí abajo."; }
  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ sinCamara(); return; }
+ /* Video en alta resolución y con enfoque continuo (10-10-2026: el código de una lata no se leía). */
+ var VIDEO = { video:{ facingMode:"environment", width:{ ideal:1920 }, height:{ ideal:1080 }, advanced:[{ focusMode:"continuous" }] }, audio:false };
  var nativo = "BarcodeDetector" in window;
  var formatos; try{ formatos = nativo && BarcodeDetector.getSupportedFormats ? BarcodeDetector.getSupportedFormats() : Promise.resolve([]); }catch(e){ formatos = Promise.resolve([]); }
  formatos["catch"](function(){ return []; }).then(function(f){ try{
   if(nativo && f.indexOf("ean_13") >= 0){
    var det = new BarcodeDetector({ formats:["ean_13","ean_8","upc_a","upc_e"] });
-   navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment" }, audio:false }).then(function(st){
+   navigator.mediaDevices.getUserMedia(VIDEO)["catch"](function(){ return navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment" }, audio:false }); }).then(function(st){
     cam.stream = st; vid.srcObject = st; vid.play()["catch"](function(){});
     cam.timer = setInterval(function(){ if(vid.readyState < 2) return; det.detect(vid).then(function(r){ if(r && r[0]) encontrado(r[0].rawValue); })["catch"](function(){}); }, 250);
    })["catch"](sinCamara);
   }else{
    cargarZXing().then(function(){
     var hints = new Map(); hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.UPC_E]);
+    hints.set(ZXing.DecodeHintType.TRY_HARDER, true);   /* también lee el código girado (latas: el código va parado) */
     cam.zx = new ZXing.BrowserMultiFormatReader(hints, 250);
-    cam.zx.decodeFromConstraints({ video:{ facingMode:"environment" }, audio:false }, vid, function(r){ if(r) encontrado(r.getText()); })["catch"](sinCamara);
+    var alLeer = function(r){ if(r) encontrado(r.getText()); };
+    cam.zx.decodeFromConstraints(VIDEO, vid, alLeer)["catch"](function(){ return cam.zx.decodeFromConstraints({ video:{ facingMode:"environment" }, audio:false }, vid, alLeer); })["catch"](sinCamara);
    })["catch"](sinCamara);
   }
  }catch(e){ sinCamara(); } });
@@ -1461,7 +1465,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101020", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101021", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
