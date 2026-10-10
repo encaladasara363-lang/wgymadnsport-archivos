@@ -101,3 +101,21 @@ h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transfo
 
 /* Pantalla de pago: el título cabe en teléfonos angostos */
 #vPago h2.disp{ font-size:clamp(26px,8.6vw,40px) !important; line-height:1.05; justify-content:center; flex-wrap:wrap; }
+
+/* ===== Mismo estilo de la tablet de la puerta, en blanco (10-10-2026, pedido de la dueña) ===== */
+/* Cuadros con borde dorado completo, como "BANDAS PEDIDAS" */
+.card{ border:2px solid #E2C35A; border-left:2px solid #E2C35A; border-radius:18px; }
+/* Títulos en letra rugosa con la barra roja */
+.cab h3{ font-family:var(--display); font-weight:400; letter-spacing:.04em; text-transform:uppercase; color:#141416; }
+.comida .cab h3{ font-family:var(--body); text-transform:none; letter-spacing:0; }
+.kick{ font-family:var(--cond); letter-spacing:.18em; color:#B8901F; }
+/* Cuadro principal (meta del día) = "ÚLTIMO INGRESO": degradado rojo suave con rayas doradas */
+.card:has(.anillo-box){ position:relative; overflow:hidden; border-color:#E30613;
+ background:linear-gradient(135deg,rgba(227,6,19,.12) 0%,#FFFFFF 55%,#FFFDF6 100%); }
+.card:has(.anillo-box)::after{ content:""; position:absolute; right:-30px; top:0; bottom:0; width:150px; pointer-events:none;
+ background:repeating-linear-gradient(-60deg,transparent 0 18px,rgba(212,175,55,.20) 18px 22px); }
+.card:has(.anillo-box) > *{ position:relative; z-index:1; }
+/* Botones secundarios amarillos como "DEVOLVER" */
+.btn.sec{ background:#F2D04B; border:0; color:#141416; box-shadow:0 4px 0 #B8901F; }
+.add-l{ background:#FFF4C9; border:2px dashed #E2C35A; color:#7A5A00; }
+.racha{ background:#F2D04B; border:0; color:#141416; box-shadow:0 3px 0 #B8901F; }
