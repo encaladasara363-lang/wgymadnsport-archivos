@@ -1159,14 +1159,13 @@ function renderPerfil(){
      '<details class="inst-aparte"><summary>¿Prefieres un ícono aparte en tu pantalla de inicio?</summary><div class="muted">' + pasosDesdeTarjeta() + '</div><button type="button" class="btn sec chico" id="instCopiarP">📋 Copiar enlace</button></details>'
    : '<p class="muted">Ponla en tu pantalla de inicio para abrirla con un toque.</p><button type="button" class="btn rojo chico" id="instP">Poner en mi pantalla de inicio</button>') + '</div>' +
   '<div class="card"><p class="kick">🔐 Privacidad</p><p class="muted" style="font-size:14px;margin:6px 0 10px">Tus comidas, tu peso y tus datos se guardan solo en este teléfono. Nadie más los ve, ni siquiera el gimnasio.</p>' +
-  '<button type="button" class="btn sec chico" id="salirB">Cambiar de socio</button><div style="height:8px"></div><button type="button" class="btn sec chico" id="borrarB">Borrar mis datos de este teléfono</button><div id="borrarConf"></div></div>' +
+  '<button type="button" class="btn sec chico" id="borrarB">Borrar mis datos de este teléfono</button><div id="borrarConf"></div></div>' +
   '<p class="center" style="font-family:var(--cond);font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase">Donde hay calidad no hay competencia</p>';
  $("tabPerfil").innerHTML = h;
  $("aguaMeta").onchange = function(){ D.metas.agua = +this.value; guardar(); toast("✅ Meta de agua: " + this.value + " vasos"); };
  $("recalc").onclick = function(){ onb.paso = 0; onb.d = Object.assign({}, P); renderOnb(); vista("vOnb"); };
  if($("instP")) $("instP").onclick = instalar;
  if($("instCopiarP")) $("instCopiarP").onclick = copiarEnlaceNutri;
- $("salirB").onclick = salir;
  $("borrarB").onclick = function(){
   $("borrarConf").innerHTML = '<p class="err" style="margin:10px 0">¿Seguro? Se borran tus comidas, peso y medallas de este teléfono. No se puede deshacer.</p><div class="fila2"><button type="button" class="btn sec chico" id="bNo">Cancelar</button><button type="button" class="btn rojo chico" id="bSi">Sí, borrar</button></div>';
   $("bNo").onclick = function(){ $("borrarConf").innerHTML = ""; };
