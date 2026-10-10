@@ -159,3 +159,17 @@ p.muted, div.muted{ font-size:17px !important; line-height:1.45; color:#3F3F46 !
 p.muted, div.muted, .muted{ color:#111114 !important; font-weight:600; }
 .opc small, .item .tx span, .res button span, .det-macros span, .plan-res span, .medalla small,
 .semana .col span, .leyenda, .macro .fila em, .campo label, .anillo .centro span, .comida .cab small{ color:#1A1A1E !important; font-weight:600; }
+
+/* Pantalla Hoy más grande y marcada (10-10-2026, la dueña: "muy pequeñas y poco marcadas") */
+.aviso p{ font-size:19px; font-weight:700; color:#111114; line-height:1.4; }
+.aviso button{ font-size:26px; color:#111114 !important; }
+.anillo .centro b{ font-size:36px !important; color:#111114; }
+.anillo .centro span{ font-size:14px !important; font-weight:800 !important; color:#111114 !important; }
+.macro .fila{ font-size:16.5px !important; font-weight:800 !important; letter-spacing:0 !important; color:#111114; }
+.macro .fila em{ font-size:16px !important; font-weight:800 !important; color:#111114 !important; }
+.barra{ height:10px; }
+.kcal-linea{ font-size:19px !important; font-weight:800 !important; color:#111114 !important; }
+.kcal-linea b{ font-size:24px !important; color:#111114 !important; }
+.cab span{ font-size:24px !important; color:#8A6500 !important; }
+.frase small{ color:#8A6500 !important; font-weight:800 !important; }
+.anillo-box{ gap:10px !important; }
