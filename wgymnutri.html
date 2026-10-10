@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=20">
+<link rel="stylesheet" href="nutri-claro.css?v=22">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -753,14 +753,14 @@ function renderHoy(){
  h += '<div class="card"><div class="cab"><h3>💧 Agua</h3><span>' + x.agua + ' / ' + M.agua + ' vasos</span></div><div class="agua-vasos">';
  for(var i = 0; i < Math.max(M.agua, x.agua); i++) h += '<button type="button" class="vaso' + (i < x.agua ? " lleno" : "") + '" data-i="' + i + '" aria-label="Vaso ' + (i + 1) + '"></button>';
  h += '</div><p class="muted" style="font-size:13px;margin:8px 0 0">Toca un vaso cada vez que tomes uno (250 ml).</p></div>';
- h += '<div class="card">';
+ /* Cada comida en su propio cuadro, como «Energéticas» (10-10-2026, pedido de la dueña),
+    con «Escanear alimento» y «Agregar alimento». */
  COMIDAS_HORA.forEach(function(cm){
   var its = x.c[cm[0]] || [], kc = its.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
-  h += '<div class="comida"><div class="cab"><h3>' + cm[1] + ' ' + cm[2] + ' <span class="hora-com">' + horaDe(cm[0]) + '</span></h3><small>' + (its.length ? miles(kc) + " kcal" : "") + '</small></div>';
+  h += '<div class="card comida-card"><div class="cab"><h3>' + cm[1] + ' ' + cm[2] + ' <span class="hora-com">' + horaDe(cm[0]) + '</span></h3><small>' + (its.length ? miles(kc) + " kcal" : "") + '</small></div>';
   its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + esc(it.n) + '</b><span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
-  h += '<button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar ' + (/^(desayuno|almuerzo|once)$/.test(cm[0]) ? "al " : "a la ") + cm[2].toLowerCase() + '</button></div>';
+  h += '<div class="beb-bts"><button type="button" class="btn rojo scan-c" data-m="' + cm[0] + '">📷 Escanear alimento</button><button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar alimento</button></div></div>';
  });
- h += '</div>';
  var bebs = x.c.bebidas || [], kb = bebs.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
  h += '<div class="card bebidas-card"><div class="cab"><h3>⚡ Energéticas</h3><small>' + (bebs.length ? miles(kb) + " kcal" : "") + '</small></div>' +
   '<p class="muted" style="font-size:15px;margin:0 0 10px">Monster, Score, Red Bull, Burn, Powerade y más.</p>';
@@ -778,7 +778,8 @@ function renderHoy(){
   if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
   renderHoy(); revisarLogros();
  }; });
- box.querySelectorAll(".add-l[data-m]").forEach(function(b){ b.onclick = function(){ abrirAgregar(b.dataset.m); }; });
+ box.querySelectorAll(".add-l[data-m]").forEach(function(b){ b.onclick = function(){ agr.q = ""; abrirAgregar(b.dataset.m, "buscar"); }; });
+ box.querySelectorAll(".scan-c").forEach(function(b){ b.onclick = function(){ abrirAgregar(b.dataset.m, "escanear"); }; });
  $("bebScan").onclick = function(){ abrirAgregar("bebidas", "escanear"); };
  $("bebBus").onclick = function(){ agr.q = ""; abrirAgregar("bebidas", "buscar"); };
  box.querySelectorAll(".item .x").forEach(function(b){ b.onclick = function(){
@@ -1474,7 +1475,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101022", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101023", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
