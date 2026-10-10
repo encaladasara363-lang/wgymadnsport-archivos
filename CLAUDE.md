@@ -1504,6 +1504,10 @@ probado: ella se activó desde el mesón y entró a la app).
   kilo + 500 ml si entrena (actividad ≥ ligera), en vasos de 250 ml (6 a 16). Es la meta
   por defecto, se recalcula al cambiar el peso y se muestra en «Tu plan está listo». En
   «Mi perfil» se elige «Según mi peso» o un número fijo (`D.metas.aguaManual`).
+- **Cuadro de láminas solo donde corresponde (10-10-2026, la dueña escaneó un yogur: "no
+  quiero ese aviso"):** «¿Viene en láminas…?» aparece solo en productos rebanables
+  (`rebanable`: queso, jamón, pavo, fiambres, pan, galletas, tortillas…). Yogur, postres,
+  flan, kéfir (`esPote`) se muestran como «1 pote (155 g)» con ½ pote / 1 pote / 2 potes.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

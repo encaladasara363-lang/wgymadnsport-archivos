@@ -1143,7 +1143,12 @@ function detalle(a){
  var esLiq = esGr && (a.ml || /\bml\b/i.test(a.porcTxt || "") || agr.comida === "bebidas" || a.cat === CAT_BEB);
  if(esLiq){ if(!a.porcG && a.envaseG) a = Object.assign({}, a, { porcG:Math.round(a.envaseG) }); a = Object.assign({}, a, { ml:true }); }
  var envase = /powerade|gatorade|electrolit|hydration|agua|isot[oó]nic/i.test(a.n + " " + (a.marca || "")) ? "botella" : "lata";
- var est0 = esGr && !esLiq ? unidadesPorcion(a) : null;
+ /* El cuadro de láminas/envase solo para lo que viene en láminas, rebanadas o unidades
+    (10-10-2026, la dueña escaneó un yogur: "no quiero ese aviso"). Yogur y postres: por pote. */
+ var nomAl = normName(a.n + " " + (a.marca || "") + " " + (a.porcTxt || "")).toLowerCase();
+ var rebanable = /queso|jamon|pavo|fiambre|salame|mortadela|longaniza|pan|galleta|tostada|rebanad|lamina|tajada|barra|tortilla|wrap|pita|hallulla|marraqueta/.test(nomAl);
+ var esPote = !esLiq && /yog|postre|flan|jalea|kefir|leche cultivada|protein power|pote/.test(nomAl) && !rebanable;
+ var est0 = esGr && !esLiq && !esPote ? unidadesPorcion(a) : null;
  if(est0 && est0.est && !a.porcG){ a = Object.assign({}, a, { porcG:Math.round(est0.porcG), porcTxt:"" }); }
  var h = '<div class="cab" style="margin-bottom:6px"><h3 style="font-size:22px;text-transform:none;letter-spacing:0">' + esc(a.n) + '</h3><button type="button" class="chip" id="dVolver">‹ Volver</button></div>' +
   '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + (a.cat === "Marcas" || a.cat === CAT_BEB ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
@@ -1151,6 +1156,10 @@ function detalle(a){
   gramos = a.porcG;
   h += '<div class="porc-rec"><span>✅ Contenido</span><b>1 ' + envase + ' (' + a.porcG + ' ml)</b><small>información de la etiqueta del producto</small></div>' +
    '<div class="mults" id="dPorc">' + [[0.5,"½ " + envase],[1,"1 " + envase],[2,"2 " + envase + "s"],[0,"100 ml"]].map(function(m){ return '<button type="button" class="chip" data-p="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
+ }else if(esPote && a.porcG){
+  gramos = a.porcG;
+  h += '<div class="porc-rec"><span>✅ Porción recomendada</span><b>1 pote (' + a.porcG + ' g)</b><small>según la etiqueta del producto</small></div>' +
+   '<div class="mults" id="dPorc">' + [[0.5,"½ pote"],[1,"1 pote"],[2,"2 potes"],[0,"100 g"]].map(function(m){ return '<button type="button" class="chip" data-p="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
  }else if(esGr && a.porcG){
   // Porción recomendada de la etiqueta (Open Food Facts), 10-10-2026: la dueña escaneó un pan y no veía la porción.
   gramos = a.porcG;
@@ -1165,8 +1174,8 @@ function detalle(a){
   }
 
  }
- var unF = esGr && !esLiq ? unidadesPorcion(a) : null;
- if(esGr && !esLiq && (!unF || unF.est) && (a.code || a.off || a.cat === CAT_PROD)){
+ var unF = esGr && !esLiq && !esPote ? unidadesPorcion(a) : null;
+ if(esGr && !esLiq && !esPote && rebanable && (!unF || unF.est) && (a.code || a.off || a.cat === CAT_PROD)){
   // Láminas según el envase (10-10-2026, la dueña: "no veo las letras chicas del empaque")
   h += '<details class="uni-falta"' + (a.porcG || unF ? '' : ' open') + '><summary>' + (unF ? '✏️ ¿No calza? Corrígelo con el envase' : '🧀 ¿Viene en láminas, rebanadas o unidades? Calcúlalo con el envase') + '</summary>' +
    '<p class="muted" style="margin:8px 0">Usa los números grandes del paquete: lo que pesa y cuántas trae.</p>' +
@@ -1681,7 +1690,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101028", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101029", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
