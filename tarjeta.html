@@ -235,6 +235,13 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .hor-ley i{ display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:4px; vertical-align:-1px; }
 .salida-err{ font-size:12.5px; color:var(--danger); font-weight:700; min-height:0; margin:6px 0 0; }
 .pago-card{ margin:14px 16px 0; background:var(--card); border:1px solid var(--dorado); border-radius:14px; padding:16px; }
+/* Aviso de WGYMNUTRI (10-10-2026, la dueña: "que todos sepan que existe"). */
+.nutri-promo{ display:flex; gap:14px; align-items:center; background:linear-gradient(135deg,#2a0306,#141417 60%); }
+.nutri-promo img{ width:78px; height:78px; flex:none; border-radius:50%; }
+.nutri-promo .np-tx{ flex:1; min-width:0; }
+.nutri-promo .np-tx p{ margin:0 0 8px; font-size:14px; line-height:1.4; color:#ddd; }
+.nutri-promo .np-tx b{ color:var(--dorado); }
+.nutri-promo a.pago-btn{ display:block; text-align:center; text-decoration:none; }
 .pago-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 6px; }
 .pago-monto{ display:inline-block; font-size:34px; font-weight:900; color:#FFD84D; line-height:1.1; margin:2px 0 0; padding:6px 16px; border:2px solid var(--dorado); border-radius:12px; background:#211c0c; }
 .pago-plan{ font-size:12.5px; color:var(--gris-soft); font-weight:700; margin:2px 0 12px; }
@@ -444,6 +451,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="pago-card bloqueo-card" id="bloqueoCard" hidden></div>
  <div class="member-card" id="memberCard"></div>
  <div class="pago-card" id="pagoCard" hidden></div>
+ <div class="pago-card nutri-promo" id="nutriCard" hidden></div>
  <div class="pago-card cal-card" id="calCard" hidden></div>
  <div class="pago-card cal-card coach-card" id="coachCard" hidden></div>
  <div class="evo-card" id="evoCard" hidden></div>
@@ -478,7 +486,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 
 </div>
 
-<script src="pago-datos.js?v=1"></script>
+<script src="pago-datos.js?v=2"></script>
 <script>  
 const LOGO_B64 = "assets/logo-oficial.webp";
 /* Se completa con el link de "Implementar como app web" de Google Apps Script. */
@@ -2254,7 +2262,7 @@ function renderEvolucion(s){
  function tarjetaBloqueada_(s){ return !!s && estadoDe(s.vencimiento).cls === "danger"; }
  function mostrarBloqueo_(s){
   var bloq = tarjetaBloqueada_(s), box = document.getElementById("bloqueoCard");
-  ["instCard","calCard","coachCard","evoCard"].forEach(function(id){ if(bloq) document.getElementById(id).hidden = true; });
+  ["instCard","nutriCard","calCard","coachCard","evoCard"].forEach(function(id){ if(bloq) document.getElementById(id).hidden = true; });
   Array.prototype.forEach.call(document.querySelectorAll("#cardView .band-box"), function(b){ b.hidden = bloq; });
   box.hidden = !bloq;
   if(!bloq){ box.innerHTML = ""; return false; }
@@ -2274,6 +2282,18 @@ function renderEvolucion(s){
   });
   return true;
  }
+ /* Aviso de WGYMNUTRI: la app aparte de contar calorías, de pago mensual.
+    El socio toca "Ver WGYMNUTRI"; si no la tiene activa, la app le muestra
+    cómo pagarla y la dueña la activa desde el mesón. */
+ function renderNutriPromo_(){
+  var box = document.getElementById("nutriCard"); if(!box) return;
+  var precio = (window.WGYM_PAGO && WGYM_PAGO.nutri && WGYM_PAGO.nutri.precio) || 5000;
+  box.innerHTML = '<img src="assets/wgymnutri-logo.webp" alt="WGYMNUTRI">' +
+   '<div class="np-tx"><p class="pago-kicker">🥗 Nuevo · WGYMNUTRI</p>' +
+   '<p>Tu contador de calorías: escanea tus comidas, más de 130 recetas saludables, racha y medallas. <b>' + clp(precio) + ' al mes</b>. Pídela en recepción.</p>' +
+   '<a class="pago-btn principal" href="wgymnutri.html">Ver WGYMNUTRI</a></div>';
+  box.hidden = false;
+ }
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
@@ -2289,6 +2309,7 @@ function renderEvolucion(s){
  seguro_(function(){ anotarDia(s); });
  seguro_(function(){ renderPago(s); });
  calAbierto = false; calEditando = false;
+ seguro_(renderNutriPromo_);
  seguro_(function(){ renderCalorias(s); });
  seguro_(function(){ renderCoach(s); });
  seguro_(function(){ renderEvolucion(s); });
@@ -2305,7 +2326,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026100711", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101001", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();

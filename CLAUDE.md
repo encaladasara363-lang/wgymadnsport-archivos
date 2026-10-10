@@ -1388,9 +1388,12 @@ alimentos con comidas chilenas; para sumar uno, agregar una línea) +
 `wgymnutri.webmanifest` + `sw-wgymnutri.js` (sin caché, como el de la
 tarjeta) + `assets/wgymnutri-*` (logo que mandó la dueña) +
 `assets/wgymnutri-logo-animado.mp4`/`.webm` (logo animado sin sonido en la entrada y la carga, pedido de la dueña) + `vendor/zxing-0.21.3.min.js` (lector de código de barras para iPhone; en
-Android se usa `BarcodeDetector`). Se entra **solo** con el QR de
-`cartel-qr-wgymnutri.html`/`.pdf` (pedido de la dueña: no va dentro de la
-tarjeta, que ya tiene "Mis calorías del día").
+Android se usa `BarcodeDetector`). Se entra con el QR de
+`cartel-qr-wgymnutri.html`/`.pdf`; la app no va dentro de la tarjeta (que ya
+tiene "Mis calorías del día"), pero desde el 10-10-2026 la tarjeta muestra un
+aviso `#nutriCard` (`renderNutriPromo_`, oculto si la tarjeta está bloqueada)
+con el precio y «Ver WGYMNUTRI», para que todos sepan que existe (pedido de la
+dueña).
 - Registro de comida: lista propia (`nutri-alimentos.js`, 520+ alimentos con
   marcas chilenas aproximadas) + **productos en línea** de Open Food Facts
   (gratis) que se buscan solos al escribir (0,7 s, con caché; primero Chile y
