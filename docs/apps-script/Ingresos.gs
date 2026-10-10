@@ -452,6 +452,68 @@ function activarNutri_(e) {
   } finally { lock.releaseLock(); }
 }
 
+/* ── Productos escaneados de WGYMNUTRI (10-10-2026, la dueña: "escanear una
+   vez y que quede para todos mis socios") ──────────────────────────────────
+   Hoja aparte "Productos": Código · Nombre · Marca · Kcal/100 g · Prot/100 g ·
+   Carb/100 g · Grasa/100 g · Porción g · Porción texto · Origen · Agregado ·
+   Veces. Solo datos de etiquetas de productos (nada personal), por eso las dos
+   acciones son públicas, como listarSocios:
+     listarProductos → la lista completa (caché 2 min).
+     guardarProducto → agrega un producto nuevo (lo escaneó un socio o lo creó
+                       a mano con la etiqueta). Si el código ya existe, solo
+                       suma 1 a "Veces": nunca pisa un producto guardado. Los
+                       valores se revisan (rangos posibles) antes de guardar.
+   Para corregir o borrar un producto, se edita o borra su fila en la hoja. */
+var HOJA_PRODUCTOS_ = "Productos";
+function hojaProductos_() {
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var hoja = ss.getSheetByName(HOJA_PRODUCTOS_);
+  if (!hoja) {
+    hoja = ss.insertSheet(HOJA_PRODUCTOS_);
+    hoja.appendRow(["Código", "Nombre", "Marca", "Kcal/100 g", "Prot/100 g", "Carb/100 g", "Grasa/100 g", "Porción g", "Porción texto", "Origen", "Agregado", "Veces"]);
+    hoja.getRange("A:A").setNumberFormat("@");
+  }
+  return hoja;
+}
+function listarProductos_(e) {
+  var cache = null;
+  try { cache = CacheService.getScriptCache(); } catch (err) {}
+  if (cache) { var g = cache.get("productos_lista"); if (g) { try { return respond_(e, JSON.parse(g)); } catch (err) {} } }
+  var datos = hojaProductos_().getDataRange().getValues(), lista = [];
+  for (var i = 1; i < datos.length; i++) {
+    var f = datos[i]; if (!f[1]) continue;
+    lista.push([String(f[0] || ""), String(f[1]), String(f[2] || ""), Number(f[3]) || 0, Number(f[4]) || 0, Number(f[5]) || 0, Number(f[6]) || 0, Number(f[7]) || 0, String(f[8] || "")]);
+  }
+  var resp = { ok: true, productos: lista };
+  if (cache) { try { cache.put("productos_lista", JSON.stringify(resp), 120); } catch (err) {} }
+  return respond_(e, resp);
+}
+function numProd_(v, max) { var n = Number(String(v == null ? "" : v).replace(",", ".")); return isFinite(n) && n >= 0 && n <= max ? Math.round(n * 10) / 10 : null; }
+function guardarProducto_(e) {
+  var p = e.parameter;
+  var codigo = String(p.codigo || "").replace(/\D/g, "").slice(0, 14);
+  var nombre = String(p.nombre || "").trim().slice(0, 80), marca = String(p.marca || "").trim().slice(0, 40);
+  var k = numProd_(p.k, 900), pr = numProd_(p.p, 100), c = numProd_(p.c, 100), g = numProd_(p.g, 100);
+  var porcG = numProd_(p.porcG, 2000) || 0, porcTxt = String(p.porcTxt || "").trim().slice(0, 40);
+  var origen = String(p.origen || "") === "manual" ? "manual" : "Open Food Facts";
+  if (nombre.length < 2 || k === null || pr === null || c === null || g === null) return respond_(e, { ok: false, error: "datos incompletos" });
+  if (codigo && codigo.length < 6) return respond_(e, { ok: false, error: "código inválido" });
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) return respond_(e, { ok: false, error: "ocupado, intenta de nuevo" });
+  try {
+    var hoja = hojaProductos_(), datos = hoja.getDataRange().getValues(), clave = normNombre_(nombre + " " + marca);
+    for (var i = 1; i < datos.length; i++) {
+      var mismo = codigo ? String(datos[i][0]) === codigo : (!datos[i][0] && normNombre_(datos[i][1] + " " + datos[i][2]) === clave);
+      if (mismo) { hoja.getRange(i + 1, 12).setValue((Number(datos[i][11]) || 1) + 1); return respond_(e, { ok: true, existia: true }); }
+    }
+    if (datos.length > 6000) return respond_(e, { ok: false, error: "lista llena" });
+    var ahora = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm");
+    hoja.appendRow([codigo, nombre, marca, k, pr, c, g, porcG, porcTxt, origen, ahora, 1]);
+    try { CacheService.getScriptCache().remove("productos_lista"); } catch (err) {}
+    return respond_(e, { ok: true, nuevo: true });
+  } finally { lock.releaseLock(); }
+}
+
 /* ── las dos entradas que llama Código.gs ───────────────────────────── */
 
 function accionIngresos_(e) {
@@ -462,6 +524,8 @@ function accionIngresos_(e) {
     case "salidaSocio": return salidaSocio_(e);
     case "asistenciaDesde": return asistenciaDesde_(e);
     case "listarNutri": return listarNutri_(e);
+    case "listarProductos": return listarProductos_(e);
+    case "guardarProducto": return guardarProducto_(e);
   }
   return null;
 }
