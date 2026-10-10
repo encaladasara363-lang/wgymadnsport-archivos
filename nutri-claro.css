@@ -130,3 +130,26 @@ h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transfo
 /* Textos de ayuda grises: más grandes y oscuros para que se lean (10-10-2026) */
 :root{ --muted:#4F4F57; }
 p.muted, div.muted{ font-size:17px !important; line-height:1.45; color:#3F3F46 !important; }
+
+/* Letras más grandes en toda la app (10-10-2026, la dueña: "son muy pequeñas") */
+.opc b{ font-size:26px !important; }
+.opc small{ font-size:18px !important; color:#3F3F46 !important; }
+.opc .e, .opc > span:first-child{ font-size:34px; }
+.kick{ font-size:15px !important; }
+.campo label{ font-size:15px !important; }
+.plan-res span, .det-macros span{ font-size:14px !important; }
+.top .t span{ font-size:17px !important; }
+.anillo .centro span{ font-size:13px !important; }
+.macro .fila{ font-size:16px !important; }
+.macro .fila em{ font-size:15px !important; }
+.frase small{ font-size:14px !important; }
+.item .tx span, .res button span{ font-size:15.5px !important; color:#4F4F57 !important; }
+.res button{ font-size:18px; }
+.chip{ font-size:16px !important; }
+.res .sub{ font-size:14px !important; }
+.semana .col span, .leyenda{ font-size:15px !important; }
+.semana .meta em{ font-size:14px !important; }
+.medalla b{ font-size:16px !important; }
+.medalla small{ font-size:14px !important; }
+.nav button{ font-size:13px; }
+.btn.chico{ font-size:17px !important; }
