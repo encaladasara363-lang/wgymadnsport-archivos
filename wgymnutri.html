@@ -338,7 +338,7 @@ h1,h2,h3{margin:0;font-weight:400}
 
 <script src="pago-datos.js?v=3"></script>
 <script src="nutri-alimentos.js?v=7"></script>
-<script src="nutri-recetas.js?v=8"></script>
+<script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
 "use strict";
@@ -668,7 +668,7 @@ function renderOnb(){
 }
 
 /* ═══ 4. Pantalla principal ═══ */
-var COMIDAS = [["desayuno","☕","Desayuno"],["colacion1","🍎","Colación de la mañana"],["almuerzo","🍲","Almuerzo"],["once","🫖","Once"],["cena","🌙","Cena"],["colacion2","🥛","Colación de la noche"]];
+var COMIDAS = [["desayuno","☕","Desayuno"],["colacion1","🍎","Colación de la mañana"],["almuerzo","🍲","Almuerzo"],["once","🍿","Snack"],["cena","🌙","Cena"],["colacion2","🥛","Colación de la noche"]];
 /* Horario de comidas de cada socio (10-10-2026, pedido de la dueña). Se guarda solo
    en su teléfono (D.horas). Sirve para elegir la comida al tocar "+" y para avisar. */
 var HORAS_DEF = { desayuno:"08:00", colacion1:"11:00", almuerzo:"13:30", once:"17:30", cena:"20:30", colacion2:"22:30" };
@@ -755,7 +755,7 @@ function renderHoy(){
   var its = x.c[cm[0]] || [], kc = its.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
   h += '<div class="comida"><div class="cab"><h3>' + cm[1] + ' ' + cm[2] + ' <span class="hora-com">' + horaDe(cm[0]) + '</span></h3><small>' + (its.length ? miles(kc) + " kcal" : "") + '</small></div>';
   its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + esc(it.n) + '</b><span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
-  h += '<button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar ' + (/^(desayuno|almuerzo)$/.test(cm[0]) ? "al " : "a la ") + cm[2].toLowerCase() + '</button></div>';
+  h += '<button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar ' + (/^(desayuno|almuerzo|once)$/.test(cm[0]) ? "al " : "a la ") + cm[2].toLowerCase() + '</button></div>';
  });
  h += '</div>';
  if(!estaInstalada() && !DENTRO_TARJETA && !lsGet(CLAVE_INST, false)) h += '<div class="aviso" style="background:#160c0d;border-color:#5a1a1f"><span class="e">📲</span><p><b>Pon WGYMNUTRI en tu pantalla de inicio</b><br><span class="muted" style="font-size:14px">Ábrela con un toque, como cualquier app.</span></p><button type="button" id="instIr" class="btn rojo chico" style="width:auto">Instalar</button></div>';
@@ -1270,7 +1270,7 @@ function compartir(){
 /* ═══ 7. Recetas y perfil ═══ */
 var recCat = "Todas", recAbierta = -1;
 var RECETAS = window.NUTRI_RECETAS || [];
-var RECETA_COMIDA = { "Desayuno":"desayuno", "Almuerzo":"almuerzo", "Once":"once", "Cena":"cena", "Colación":"colacion1", "Postre":"once" };
+var RECETA_COMIDA = { "Desayuno":"desayuno", "Almuerzo":"almuerzo", "Snack":"once", "Cena":"cena", "Colación":"colacion1", "Postre":"once" };
 function renderRec(){
  var box = $("tabRec"), h = '<h2 class="disp" style="font-size:34px">Recetas saludables</h2>';
  if(recAbierta >= 0){
@@ -1292,7 +1292,7 @@ function renderRec(){
   };
   return;
  }
- var cats = ["Todas","Desayuno","Almuerzo","Once","Cena","Colación","Postre"].filter(function(c){ return c === "Todas" || RECETAS.some(function(r){ return r.cat === c; }); });
+ var cats = ["Todas","Desayuno","Almuerzo","Snack","Cena","Colación","Postre"].filter(function(c){ return c === "Todas" || RECETAS.some(function(r){ return r.cat === c; }); });
  h += '<p class="muted" style="margin:0">Recetas fáciles y nutritivas, con sus calorías. Agrégalas a tu día con un toque.</p>' +
   '<div class="tabs">' + cats.map(function(c){ return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === recCat) + '">' + esc(c) + '</button>'; }).join("") + '</div><div class="stack">';
  RECETAS.forEach(function(r, i){
@@ -1396,7 +1396,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101010", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101011", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
