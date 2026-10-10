@@ -126,3 +126,7 @@ h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transfo
 .comida .cab small{ font-size:18px !important; }
 .item .tx b{ font-size:19px; }
 .item .tx span{ font-size:15.5px; }
+
+/* Textos de ayuda grises: más grandes y oscuros para que se lean (10-10-2026) */
+:root{ --muted:#4F4F57; }
+p.muted, div.muted{ font-size:17px !important; line-height:1.45; color:#3F3F46 !important; }
