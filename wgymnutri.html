@@ -841,7 +841,16 @@ function renderAgregar(){
  document.querySelectorAll("[data-modo]").forEach(function(b){ b.onclick = function(){ agr.modo = b.dataset.modo; renderAgregar(); }; });
  ({ buscar:modoBuscar, escanear:modoEscanear, recientes:modoLista.bind(null, "recientes"), favs:modoLista.bind(null, "favs"), manual:modoManual })[agr.modo]();
 }
-function filaAlim(a, i, grupo){ return '<button type="button" data-g="' + grupo + '" data-i="' + i + '"><div class="tx"><b>' + esc(a.n) + '</b><span>' + esc(a.gr ? (a.marca ? a.marca + " · " : "") + "por 100 g" : a.p) + ' · P ' + r1(a.pr) + ' · C ' + r1(a.c) + ' · G ' + r1(a.g) + '</span></div><span class="k">' + miles(a.k) + '</span></button>'; }
+function filaAlim(a, i, grupo){
+ // Productos por 100 g con porción de etiqueta: se muestra la porción recomendada y sus valores (10-10-2026).
+ var f = 1, txt;
+ if(a.gr && a.porcG){
+  f = a.porcG / 100;
+  var pt = a.porcTxt && a.porcTxt.indexOf(String(a.porcG)) < 0 ? a.porcTxt + " (" + a.porcG + " g)" : (a.porcTxt || a.porcG + " g");
+  txt = (a.marca ? a.marca + " · " : "") + "✅ Porción: " + pt;
+ } else txt = a.gr ? (a.marca ? a.marca + " · " : "") + "por 100 g" : a.p;
+ return '<button type="button" data-g="' + grupo + '" data-i="' + i + '"><div class="tx"><b>' + esc(a.n) + '</b><span>' + esc(txt) + ' · P ' + r1(a.pr * f) + ' · C ' + r1(a.c * f) + ' · G ' + r1(a.g * f) + '</span></div><span class="k">' + miles(a.k * f) + '</span></button>';
+}
 /* Búsqueda: primero la lista del gimnasio (al instante) y, por detrás, productos
    en línea de Open Food Facts (base de datos gratuita con miles de marcas).
    Se busca solo después de 0,7 s sin escribir y se guarda cada respuesta,
@@ -1341,7 +1350,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101007", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101008", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
