@@ -1467,6 +1467,22 @@ probado: ella se activó desde el mesón y entró a la app).
   «📷 Escanear alimento» (abre la cámara para esa comida) y «＋ Agregar alimento»
   (abre la búsqueda). La dueña irá mandando fotos de referencia para dejar la app
   más profesional, de a un cambio.
+- **Inicio al estilo Fitia (10-10-2026; la dueña revisó Fitia y eligió todas las partes
+  ofrecidas):** 3 pantallas de bienvenida con frases (`SLIDES`, solo la primera vez),
+  barra de avance, objetivo con «Bajar grasa y ganar músculo» (`recomp`: mantención
+  −250, proteína 2,2 g/kg), peso meta (no bajo IMC 18,5), velocidad al bajar
+  (`DEFICITS` 250/375/500, tope 1 % del peso por semana), comidas al día (3-6:
+  `COMIDAS_POR_N`/`comidasVisibles`, solo esos cuadros en «Hoy»), tipo de dieta
+  (normal, alta en proteína ≈2,2 g/kg, baja en carbohidratos con grasas al 40 %,
+  vegetariana), lo que no come (`EVITAS`; `recetaPermitida` oculta esas recetas),
+  «¿Cómo conociste WGYMNUTRI?» (acción `origenNutri` → hoja «Cómo nos conocieron»,
+  solo fecha y respuesta; **requiere Versión 16 del script**; mientras, queda
+  pendiente en el teléfono y se reenvía) y «¡Tu plan está listo!» animado con fecha
+  estimada de meta (≈7.000 kcal por kg) y gráfico. Ganar músculo no muestra fecha
+  (sin superávit inventado). Todo se guarda solo en el teléfono (`D.perfil`).
+- **Franja de la semana en «Hoy» (10-10-2026, como Fitia):** L a D de la semana con
+  punto verde en los días con comidas registradas; tocar un día lo muestra; ‹ › cambian
+  de semana.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

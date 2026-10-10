@@ -548,6 +548,21 @@ function porcionProductoReal_(e) {
   } finally { lock.releaseLock(); }
 }
 
+/* origenNutri (10-10-2026, la dueña: saber qué publicidad funciona): guarda la respuesta a
+   «¿Cómo conociste WGYMNUTRI?» en la hoja «Cómo nos conocieron» (fecha y respuesta; sin nombre
+   ni datos de salud). Público, como guardarProducto. */
+var ORIGENES_NUTRI_ = ["gimnasio", "tarjeta", "amigo", "instagram", "facebook", "tiktok", "otro"];
+function origenNutri_(e) {
+  try {
+    var o = String(e.parameter.origen || "").toLowerCase();
+    if (ORIGENES_NUTRI_.indexOf(o) < 0) return respond_(e, { ok: false, error: "respuesta inválida" });
+    var ss = SpreadsheetApp.openById(SHEET_ID), hoja = ss.getSheetByName("Cómo nos conocieron");
+    if (!hoja) { hoja = ss.insertSheet("Cómo nos conocieron"); hoja.appendRow(["Fecha", "Respuesta"]); }
+    hoja.appendRow([Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm"), o]);
+    return respond_(e, { ok: true });
+  } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
+}
+
 /* ── las dos entradas que llama Código.gs ───────────────────────────── */
 
 function accionIngresos_(e) {
@@ -561,6 +576,7 @@ function accionIngresos_(e) {
     case "listarProductos": return listarProductos_(e);
     case "guardarProducto": return guardarProducto_(e);
     case "porcionProducto": return porcionProducto_(e);
+    case "origenNutri": return origenNutri_(e);
   }
   return null;
 }
