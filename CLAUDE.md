@@ -311,12 +311,11 @@ ver cuándo el gym está más vacío.
   va **primero**, arriba de todo. Al registrarse se ve "✅ Tu ingreso está
   registrado (HH:MM)"; una lista atrasada de la hoja no vuelve a mostrar
   el botón durante 2 min (`ingresoHecho`).
-- **Intro animada al abrir (10-10-2026, pedido de la dueña):** `#introTarjeta`
-  al principio de `tarjeta.html` reproduce `assets/intro-tarjeta.mp4`/`.webm`
-  (logo ADN Sport 3D, 15 s, sin sonido) a pantalla completa, con «Saltar ›»
-  (o tocando la pantalla). Nunca bloquea: se cierra al terminar, con error, o
-  si a los 3 s no arrancó. Si la dueña reclama que demora, ofrecer acortarla
-  o mostrarla una vez al día.
+- **Logo animado en la entrada (10-10-2026, pedido de la dueña):** en la
+  pantalla donde se escribe el nombre, `#gateVideo` reproduce en bucle y sin
+  sonido `assets/intro-tarjeta.mp4`/`.webm` (logo ADN Sport 3D) en vez del logo
+  fijo; si no carga, vuelve `#gateLogoImg`. (Primero se puso como intro a
+  pantalla completa y la dueña pidió moverla aquí.)
 - **Entrada rápida (05-10-2026, la dueña: "sale Buscando... y se demora"):**
   la tarjeta guarda en el teléfono la lista de socios (`wgym_lista_socios_v1`,
   mismo dato público sin RUT) y el último nombre escrito

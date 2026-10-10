@@ -57,6 +57,7 @@ button{ font-family:inherit; }
 .gate{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }  
 .gate-card{ width:100%; max-width:340px; text-align:center; }  
 .gate-logo{ width:min(78%,260px); height:auto; object-fit:contain; margin-bottom:14px; }
+.gate-video{ display:block; margin:0 auto 14px; aspect-ratio:1; border-radius:18px; object-fit:cover; background:#000; box-shadow:0 10px 30px rgba(227,6,19,.35); }
 .gate-kicker{ font-size:12px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 10px; }  
 .gate-card h2{ font-size:22px; margin:0 0 8px; }  
 .gate-sub{ font-size:13px; color:var(--gris); margin:0 0 20px; font-weight:600; }  
@@ -421,46 +422,18 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 .hint2 b{ color:var(--dorado); }  
 </style>  
   
-<!-- Intro animada al abrir la tarjeta (10-10-2026, pedido de la dueña). Sin
-     sonido, se salta con un toque y nunca bloquea el ingreso: si el video no
-     carga en 3 s, se cierra sola. -->
-<style>
-#introTarjeta{ position:fixed; inset:0; z-index:9999; background:#000; display:flex; align-items:center; justify-content:center; transition:opacity .5s ease; }
-#introTarjeta.fuera{ opacity:0; pointer-events:none; }
-#introTarjeta video{ width:min(100vw,100vh); height:min(100vw,100vh); object-fit:cover; }
-#introSaltar{ position:absolute; right:16px; top:calc(16px + env(safe-area-inset-top, 0px)); background:rgba(0,0,0,.55); color:#fff; border:1px solid #D4AF37; border-radius:999px; padding:10px 18px; font:800 15px/1 system-ui, sans-serif; letter-spacing:.04em; cursor:pointer; }
-</style>
-<div id="introTarjeta">
- <video id="introVideo" muted autoplay playsinline preload="auto" poster="assets/intro-tarjeta-poster.jpg">
-  <source src="assets/intro-tarjeta.mp4" type="video/mp4">
-  <source src="assets/intro-tarjeta.webm" type="video/webm">
- </video>
- <button type="button" id="introSaltar">Saltar ›</button>
-</div>
-<script>
-(function(){
- var caja = document.getElementById("introTarjeta"), v = document.getElementById("introVideo"), listo = false;
- function cerrar(){
-  if(listo) return; listo = true;
-  caja.classList.add("fuera");
-  setTimeout(function(){ try{ v.pause(); }catch(e){} caja.remove(); }, 550);
- }
- document.getElementById("introSaltar").addEventListener("click", cerrar);
- caja.addEventListener("click", cerrar);
- v.addEventListener("ended", cerrar);
- v.addEventListener("error", cerrar);
- /* Si no empieza a reproducirse en 3 s (mala señal o el celular no deja), se cierra. */
- setTimeout(function(){ if(!listo && (v.paused || v.readyState < 2)) cerrar(); }, 3000);
- setTimeout(cerrar, 16000);
- try{ var x = v.play(); if(x) x["catch"](function(){ cerrar(); }); }catch(e){ cerrar(); }
-})();
-</script>
 <div id="appRoot" artifact-local>
   
 <!-- ===================== GATE (default view) ===================== -->  
 <div id="gate" class="gate">  
  <div class="gate-card">  
- <img class="gate-logo" id="gateLogoImg" alt="WGYMADNSPORT">  
+ <!-- Logo animado donde se escribe el nombre (10-10-2026, pedido de la dueña):
+      sin sonido y en bucle. Si el video no carga, se ve el logo de siempre. -->
+ <video class="gate-logo gate-video" id="gateVideo" muted autoplay loop playsinline preload="auto" poster="assets/intro-tarjeta-poster.jpg" aria-label="Logo WGYMADNSPORT animado">
+  <source src="assets/intro-tarjeta.mp4" type="video/mp4">
+  <source src="assets/intro-tarjeta.webm" type="video/webm">
+ </video>
+ <img class="gate-logo" id="gateLogoImg" alt="WGYMADNSPORT" hidden>  
  <p class="gate-kicker">WGYMADNSPORT Tocopilla</p>  
  <h2>Acceso a tu tarjeta virtual</h2>
  <p class="gate-sub">Escribe tu nombre y apellido juntos, como está registrado en el gimnasio</p>  
@@ -927,6 +900,15 @@ function renderEvolucion(s){
  }
 
  document.getElementById("gateLogoImg").src = LOGO_B64;
+ /* Si el logo animado no se puede reproducir, se muestra el logo fijo. */
+ (function(){
+  var gv = document.getElementById("gateVideo"), gi = document.getElementById("gateLogoImg");
+  if(!gv) return;
+  function fijo(){ gv.hidden = true; gi.hidden = false; }
+  gv.addEventListener("error", fijo);   /* sin captura: un mp4 que falla no cuenta si el webm funciona */
+  var fuentes = gv.querySelectorAll("source"); if(fuentes.length) fuentes[fuentes.length - 1].addEventListener("error", fijo);
+  try{ var x = gv.play(); if(x) x["catch"](function(){}); }catch(e){}
+ })();
  document.getElementById("cardLogoImg").src = LOGO_B64;
   
  /* La ficha de cada socio llega en vivo desde el Apps Script compartido
@@ -2364,7 +2346,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101004", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101005", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
