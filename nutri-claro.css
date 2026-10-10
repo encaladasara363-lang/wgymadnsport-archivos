@@ -242,3 +242,4 @@ body{ zoom:1.1; }
 /* La hoja usa el alto visible (con teclado abierto) */
 .velo{ bottom:auto; height:100%; }
 .hoja{ max-height:94% !important; overscroll-behavior:contain; }
+.tag-wgym{ display:inline-block; font-style:normal; font-family:var(--cond); font-weight:800; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#fff; background:#E30613; border-radius:6px; padding:2px 8px; margin:3px 0 2px; }
