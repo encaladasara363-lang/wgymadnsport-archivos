@@ -337,7 +337,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=11"></script>
+<script src="nutri-alimentos.js?v=12"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -1060,7 +1060,7 @@ function plural(u, n){ return n <= 1 ? u : /z$/.test(u) ? u.slice(0, -1) + "ces"
    elige cuántos comió, 1 a 6 (10-10-2026, la dueña: "aparece medio huevo, es tonto"). */
 var CONTABLES = /^(\d+)\s+(huevos?|unidad(?:es)?|rebanadas?|l[aá]minas?|galletas?|marraquetas?|hallullas?|tostadas?|trozos?|claras?|panqueques?|empanadas?|s[aá]ndwich(?:es)?|wraps?|barras?|sobres?|potes?|latas?|botellas?|frutillas?|nueces|almendras?|tajadas?|avellanas?|pistachos?|casta[nñ]as?|granos?|mitad(?:es)?)\b\s*(.*)$/i;
 function porUnidad(a){
- if(a.gr) return null;
+ if(a.gr || a.cat === "Verduras") return null;   /* verduras siempre en gramos (10-10-2026, la dueña) */
  var m = String(a.p || "").match(CONTABLES); if(!m) return null;
  var n = +m[1]; if(!(n >= 1)) return null;
  var w = m[2].toLowerCase(), sing = /(unidad|mitad)es$/.test(w) ? w.slice(0, -2) : /ches$/.test(w) ? w.slice(0, -2) : /nueces$/.test(w) ? "nuez" : w.replace(/s$/, "");
@@ -1141,8 +1141,18 @@ function modoBuscar(){
    // Primero los que empiezan con lo escrito y los básicos fitness; las marcas y la comida rápida al final.
    function puntaje(a){ var p = 0; if(palabras[0].some(function(w){ return a.nn.indexOf(w) === 0; })) p -= 4; if(/fitness/i.test(a.cat)) p -= 5; if(a.cat === CAT_PROD) p -= 3; if(a.cat === "Marcas" || a.cat === "Comida rápida") p += 2; return p; }
    lista.sort(function(x, y){ return puntaje(x[0]) - puntaje(y[0]) || x[1] - y[1]; });
+   /* Con una letra mal escrita igual encuentra (10-10-2026, la dueña escribió «penino»). */
+   var parecido = false;
+   if(!lista.length){
+    var qws = t.split(" ").filter(function(w){ return w.length >= 3; });
+    var cerca = function(a, b){ var m = a.length, n = b.length; if(Math.abs(m - n) > 2) return 9; var d = [], i, j; for(i = 0; i <= m; i++){ d[i] = [i]; } for(j = 1; j <= n; j++) d[0][j] = j;
+     for(i = 1; i <= m; i++) for(j = 1; j <= n; j++) d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1)); return d[m][n]; };
+    if(qws.length) lista = ALIM.map(function(a, i){ return [a, i]; }).filter(function(x){ var ws = x[0].nn.split(/[^A-Z0-9]+/).filter(Boolean);
+     return qws.every(function(q){ var tope = q.length >= 7 ? 2 : 1; return ws.some(function(w){ return cerca(q, w.slice(0, q.length)) <= tope || cerca(q, w) <= tope; }); }); });
+    parecido = lista.length > 0;
+   }
    var vistosN = {}; lista = lista.filter(function(x){ if(vistosN[x[0].nn]) return false; vistosN[x[0].nn] = 1; return true; });
-   h += '<p class="sub">Lista del gimnasio</p>' + (lista.length ? lista.map(function(x){ return filaAlim(x[0], x[1], "a"); }).join("") : '<p class="muted" style="margin:6px 0">Sin resultados en la lista.</p>');
+   h += '<p class="sub">' + (parecido ? '¿Quisiste decir…?' : 'Lista del gimnasio') + '</p>' + (lista.length ? lista.map(function(x){ return filaAlim(x[0], x[1], "a"); }).join("") : '<p class="muted" style="margin:6px 0">Sin resultados en la lista.</p>');
    h += '<p class="sub">🌐 Productos en línea</p>';
    if(t.length < 3) h += '<p class="muted" style="margin:6px 0">Escribe al menos 3 letras.</p>';
    else if(estado === "buscando") h += '<p class="muted" style="margin:6px 0">Buscando productos en línea…</p>';
@@ -1769,7 +1779,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101043", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101044", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
