@@ -249,3 +249,6 @@ body{ zoom:1.1; }
 /* Bebidas energéticas e isotónicas (10-10-2026) */
 .bebidas-card .beb-bts{display:grid;gap:10px;margin-top:8px}
 .bebidas-card .beb-bts .btn{font-size:19px;padding:15px}
+/* Aviso "Pon WGYMNUTRI en tu pantalla de inicio": fondo claro para que se lea */
+#tabHoy .aviso[style*="160c0d"]{background:#fff4f4 !important;border-color:#e30613 !important}
+#tabHoy .aviso[style*="160c0d"] p,#tabHoy .aviso[style*="160c0d"] b{color:#111 !important}
