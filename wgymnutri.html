@@ -618,6 +618,14 @@ function fechaMeta(d, m){
  var dias = Math.ceil((d.peso - d.meta) * 7000 / m.def), f = new Date(); f.setDate(f.getDate() + dias);
  return { dias:dias, f:f, kgSem:r1(m.def * 7 / 7000) };
 }
+/* Agua según el peso (10-10-2026, pedido de la dueña): ≈35 ml por kilo al día (guía general
+   de hidratación) + 2 vasos (500 ml) si entrena, por lo que se pierde en sudor. En vasos de
+   250 ml, entre 6 y 16. Es una estimación: con calor o entrenamientos largos se toma más. */
+function aguaRecomendada(d){
+ if(!d || !(d.peso > 0)) return 8;
+ var ml = d.peso * 35 + ((d.act || 1.2) >= 1.375 ? 500 : 0);
+ return Math.max(6, Math.min(16, Math.ceil(ml / 250)));
+}
 function fechaLindaMeta(f){ return f.getDate() + " de " + ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"][f.getMonth()] + (f.getFullYear() !== new Date().getFullYear() ? " de " + f.getFullYear() : ""); }
 function prellenar(){
  var t = lsGet(CLAVE_CAL, {}) || {}, x = t[normName(socio.n + " " + socio.a)] || {};
@@ -688,7 +696,7 @@ function renderOnb(){
   var m = calcular(d), fm = fechaMeta(d, m);
   h += '<h2 class="disp" style="font-size:40px">Tu plan, ' + esc(socio.n.split(" ")[0]) + '</h2>' +
    '<div class="card center plan-pop"><p class="kick">Calorías al día</p><b class="kcal-grande" id="resKcal" data-n="' + m.kcal + '">0</b><p class="muted" style="margin:0">kcal · ' + esc(nombreObj(d.obj)) + '</p></div>' +
-   '<div class="plan-res plan-pop2"><div><b style="color:var(--red2)">' + m.p + ' g</b><span>Proteína</span></div><div><b style="color:var(--gold2)">' + m.c + ' g</b><span>Carbohidratos</span></div><div><b>' + m.g + ' g</b><span>Grasas</span></div><div><b style="color:#5cc8ff">8</b><span>Vasos de agua</span></div></div>';
+   '<div class="plan-res plan-pop2"><div><b style="color:var(--red2)">' + m.p + ' g</b><span>Proteína</span></div><div><b style="color:var(--gold2)">' + m.c + ' g</b><span>Carbohidratos</span></div><div><b>' + m.g + ' g</b><span>Grasas</span></div><div><b style="color:#5cc8ff">' + aguaRecomendada(d) + '</b><span>Vasos de agua (' + String(r1(aguaRecomendada(d) * 0.25)).replace(".", ",") + ' L)</span></div></div>';
   if(fm){
    h += '<div class="card plan-pop3"><p class="kick">🎯 Tu meta: ' + String(d.meta).replace(".", ",") + ' kg</p><p class="fecha-meta">Llegarás cerca del <b>' + fechaLindaMeta(fm.f) + '</b></p>' +
     '<svg class="graf-meta" viewBox="0 0 300 120" role="img" aria-label="Tu peso bajando hasta la meta"><defs><linearGradient id="gm" x1="0" x2="1"><stop offset="0" stop-color="#E30613"/><stop offset="1" stop-color="#D4AF37"/></linearGradient></defs>' +
@@ -743,7 +751,8 @@ function renderOnb(){
   if(k === "conoce"){ D.conocio = d.conoce; guardar(); enviarOrigen(d.conoce); }
   if(k === "res"){
    D.perfil = { sexo:d.sexo, edad:d.edad, alt:d.alt, peso:d.peso, act:d.act, obj:d.obj, meta:d.meta || "", vel:d.vel || "", comidas:d.comidas || 6, dieta:d.dieta || "normal", evita:(d.evita || []).slice() };
-   var m = calcular(D.perfil); D.metas = { kcal:m.kcal, p:m.p, c:m.c, g:m.g, agua:(D.metas && D.metas.agua) || 8 };
+   var m = calcular(D.perfil), manual = D.metas && D.metas.aguaManual;
+   D.metas = { kcal:m.kcal, p:m.p, c:m.c, g:m.g, agua:manual ? D.metas.agua : aguaRecomendada(D.perfil), aguaManual:!!manual };
    if(!D.pesos.length) D.pesos.push({ f:hoyISO(), kg:d.peso });
    guardar(); iniciarApp(); revisarLogros(); return;
   }
@@ -813,6 +822,7 @@ function racha(){
  return n;
 }
 function iniciarApp(){
+ if(D.perfil && D.metas && !D.metas.aguaManual && D.metas.agua !== aguaRecomendada(D.perfil)){ D.metas.agua = aguaRecomendada(D.perfil); guardar(); }
  vista("vApp"); diaSel = hoyISO(); cargarProductos();
  $("saludo").textContent = "Hola, " + socio.n.split(" ")[0] + (esPase(socio) ? " · Pase diario (solo hoy)" : "");
  mostrarTab("tabHoy");
@@ -1497,6 +1507,7 @@ function renderProg(){
   if(!(v >= 30 && v <= 250)){ toast("Escribe tu peso en kilos, por ejemplo 68,5."); return; }
   var f = hoyISO(); D.pesos = D.pesos.filter(function(p){ return p.f !== f; }); D.pesos.push({ f:f, kg:r1(v) }); D.pesos.sort(function(a, b){ return a.f < b.f ? -1 : 1; });
   D.cont.pesoManual = true; if(D.perfil) D.perfil.peso = r1(v);
+  if(D.perfil && D.metas && !D.metas.aguaManual) D.metas.agua = aguaRecomendada(D.perfil);   /* el agua sigue al peso */
   guardar(); renderProg(); toast("✅ Peso guardado"); revisarLogros();
  }
  $("pesoForm").onsubmit = guardarPeso; $("pesoOk").onclick = guardarPeso;
@@ -1591,7 +1602,8 @@ function renderPerfil(){
   '<p class="muted" style="margin:6px 0 0">Plan: ' + esc(socio.plan || "") + ' · vence el <span style="white-space:nowrap">' + serialAISO(socio.fv).split("-").reverse().join("-") + '</span></p>' + (nutriGuardado() ? '<p class="muted" style="margin:4px 0 0">WGYMNUTRI activa hasta el <span style="white-space:nowrap">' + nutriGuardado().split("-").reverse().join("-") + '</span></p>' : '') + '</div>' +
   '<div class="card"><div class="cab"><h3>🎯 Mis metas</h3></div><div class="plan-res" style="margin-top:10px"><div><b style="color:var(--gold2)">' + miles(M.kcal) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + M.p + ' g</b><span>Proteína</span></div><div><b>' + M.c + ' g</b><span>Carbohidratos</span></div><div><b>' + M.g + ' g</b><span>Grasas</span></div></div>' +
   (function(){ var fm = P.obj === "bajar" ? fechaMeta(P, calcular(P)) : null; return '<p class="muted" style="margin:12px 0 0">🎯 ' + esc(nombreObj(P.obj)) + (P.meta ? ' · meta ' + String(P.meta).replace(".", ",") + ' kg' : '') + (fm ? ' · cerca del ' + fechaLindaMeta(fm.f) : '') + '</p>'; })() +
-  '<div class="campo" style="margin-top:12px"><label for="aguaMeta">Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta">' + [6,7,8,9,10,11,12,14].map(function(n){ return '<option' + (n === M.agua ? " selected" : "") + '>' + n + '</option>'; }).join("") + '</select></div>' +
+  '<div class="campo" style="margin-top:12px"><label for="aguaMeta">💧 Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta"><option value="auto"' + (M.aguaManual ? '' : ' selected') + '>Según mi peso: ' + aguaRecomendada(P) + ' vasos (' + String(r1(aguaRecomendada(P) * 0.25)).replace(".", ",") + ' L)</option>' + [6,7,8,9,10,11,12,13,14,15,16].map(function(n){ return '<option value="' + n + '"' + (M.aguaManual && n === M.agua ? " selected" : "") + '>' + n + ' vasos (' + String(r1(n * 0.25)).replace(".", ",") + ' L)</option>'; }).join("") + '</select></div>' +
+  '<p class="muted" style="font-size:14px;margin:6px 0 0">Calculado con ≈35 ml por kilo de peso, más 2 vasos si entrenas. Con calor o entrenamientos largos, toma un poco más.</p>' +
   '<button type="button" class="btn sec chico" id="recalc" style="margin-top:12px">Recalcular con mis datos</button></div>' +
   '<div class="card"><p class="kick">🕒 Mis horas de comida</p><p class="muted" style="margin:6px 0 10px">Escribe a qué hora haces cada comida. Así la app elige la comida correcta y te recuerda si se te pasó.</p>' +
    '<div class="horas-com">' + comidasVisibles().map(function(c){ return '<label class="hc-fila"><span>' + c[1] + ' ' + c[2] + '</span><input type="time" class="inp" data-hora="' + c[0] + '" value="' + horaDe(c[0]) + '"></label>'; }).join("") + '</div></div>' +
@@ -1605,7 +1617,9 @@ function renderPerfil(){
   '<button type="button" class="btn sec chico" id="borrarB">Borrar mis datos de este teléfono</button><div id="borrarConf"></div></div>' +
   '<p class="center" style="font-family:var(--cond);font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase">Donde hay calidad no hay competencia</p>';
  $("tabPerfil").innerHTML = h;
- $("aguaMeta").onchange = function(){ D.metas.agua = +this.value; guardar(); toast("✅ Meta de agua: " + this.value + " vasos"); };
+ $("aguaMeta").onchange = function(){
+  if(this.value === "auto"){ D.metas.aguaManual = false; D.metas.agua = aguaRecomendada(P); } else { D.metas.aguaManual = true; D.metas.agua = +this.value; }
+  guardar(); toast("✅ Meta de agua: " + D.metas.agua + " vasos"); };
  $("recalc").onclick = function(){ onb.primera = false; onb.paso = 0; onb.slide = 0; onb.d = Object.assign({ meta:"", vel:"", comidas:"", dieta:"", evita:[] }, P, { evita:(P.evita || []).slice() }); renderOnb(); vista("vOnb"); };
  if($("instP")) $("instP").onclick = instalar;
  document.querySelectorAll("#tabPerfil [data-hora]").forEach(function(c){ c.onchange = function(){
@@ -1667,7 +1681,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101027", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101028", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

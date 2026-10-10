@@ -1500,6 +1500,10 @@ probado: ella se activó desde el mesón y entró a la app).
   toma el cuadrado central del video (≤900 px) y se lee con `MultiFormatReader` tal cual y
   girado 90°. EAN-13 se acepta a la primera (trae dígito verificador); EAN-8 pide 2
   lecturas iguales. Probado con cámara simulada: EAN-8 y EAN-13, acostados y parados.
+- **Agua según el peso (10-10-2026, pedido de la dueña):** `aguaRecomendada` = ≈35 ml por
+  kilo + 500 ml si entrena (actividad ≥ ligera), en vasos de 250 ml (6 a 16). Es la meta
+  por defecto, se recalcula al cambiar el peso y se muestra en «Tu plan está listo». En
+  «Mi perfil» se elige «Según mi peso» o un número fijo (`D.metas.aguaManual`).
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
