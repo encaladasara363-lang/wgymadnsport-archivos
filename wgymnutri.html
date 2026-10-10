@@ -810,9 +810,23 @@ function comidaPorHora(){
 var diaSel = hoyISO(), tabSel = "tabHoy";
 var FRASES = ["Donde hay calidad no hay competencia","La disciplina le gana a la motivación","Lo que comes hoy es tu cuerpo de mañana","Un día a la vez, una comida a la vez","No cuentes los días, haz que los días cuenten","Tu único rival eres tú de ayer","La constancia es el secreto de tu éxito","Entrena duro, come limpio, descansa bien","El progreso no se negocia","Pequeños cambios, grandes resultados","Hoy también se suma","Si fuera fácil, todos lo harían","El cuerpo logra lo que la mente cree","Sin excusas, con resultados","Cuida tu cuerpo: es el único lugar donde vives","La proteína construye, la constancia transforma","Come para rendir, no para llenarte","Tu meta no se toma vacaciones","Hazlo por ti","Cada comida es una decisión","El sudor de hoy es el orgullo de mañana","Mejor hecho que perfecto","Nadie dijo que era fácil, dijimos que valía la pena","Hidrátate, enfócate, avanza","La perseverancia es el secreto de tu éxito","Fuerte por dentro, fuerte por fuera","Hoy eliges ser tu mejor versión","Disciplina hoy, libertad mañana","El que registra, progresa","WGYMADNSPORT: tu mejor versión empieza aquí"];
 function fraseDelDia(){ var d = new Date(), ini = new Date(d.getFullYear(), 0, 0); return FRASES[Math.floor((d - ini) / 86400000) % FRASES.length]; }
+/* Alimentos anotados (o en favoritas/recientes) antes de que existieran vitamina C, potasio y
+   fibra (10-10-2026, la dueña: «tengo pimentón y no me marca»): se completan desde la lista del
+   gimnasio por nombre, ajustando a la porción guardada (por 100 g o por unidad). */
+function microDe(it, key){
+ if(typeof it[key] === "number") return it[key];
+ if(it.marca || it.code) return undefined;
+ var nn = normName(it.n), al = null;
+ for(var i = 0; i < ALIM.length; i++) if(ALIM[i].nn === nn){ al = ALIM[i]; break; }
+ if(!al || typeof al[key] !== "number") return undefined;
+ if(it.gr){ var m = /(?:^|[\s(])(\d+(?:[.,]\d+)?)\s*(g|ml)\b/i.exec(al.p || ""), q = m ? Number(m[1].replace(",", ".")) : 0; return q > 0 ? al[key] * 100 / q : undefined; }
+ if(it.p && it.p !== al.p){ var cu = porUnidad(al); return cu && cu.n > 1 ? al[key] / cu.n : al[key]; }
+ return al[key];
+}
+function completarMicros(a){ var b = null; ["vc","po","fi"].forEach(function(k){ if(typeof a[k] !== "number"){ var v = microDe(a, k); if(typeof v === "number"){ b = b || Object.assign({}, a); b[k] = v; } } }); return b || a; }
 function totales(iso){
  var x = diaDe(iso), t = { k:0, p:0, c:0, g:0, n:0, vc:0, vcSin:0, po:0, poSin:0, fi:0, fiSin:0 };
- COMIDAS.forEach(function(cm){ (x.c[cm[0]] || []).forEach(function(it){ var m = it.x || 1; t.k += it.k * m; t.p += it.pr * m; t.c += it.c * m; t.g += it.g * m; t.n++; if(typeof it.vc === "number") t.vc += it.vc * m; else t.vcSin++; if(typeof it.po === "number") t.po += it.po * m; else t.poSin++; if(typeof it.fi === "number") t.fi += it.fi * m; else t.fiSin++; }); });
+ COMIDAS.forEach(function(cm){ (x.c[cm[0]] || []).forEach(function(it){ var m = it.x || 1; t.k += it.k * m; t.p += it.pr * m; t.c += it.c * m; t.g += it.g * m; t.n++; var vc = microDe(it, "vc"), po = microDe(it, "po"), fi = microDe(it, "fi"); if(typeof vc === "number") t.vc += vc * m; else t.vcSin++; if(typeof po === "number") t.po += po * m; else t.poSin++; if(typeof fi === "number") t.fi += fi * m; else t.fiSin++; }); });
  if(x.cafe){ t.k += x.cafe * 2; t.p += x.cafe * 0.3; t.po += x.cafe * 116; }
  return t;
 }
@@ -1213,6 +1227,7 @@ function modoManual(){
  };
 }
 function detalle(a){
+ a = completarMicros(a);
  var cuenta = porUnidad(a); if(cuenta) a = cuenta.a;
  /* Alimentos de la lista con porción en gramos (ej. avena 40 g): se escribe cuántos gramos se
     comió en un cuadro grande y se calcula solo (10-10-2026, pedido de la dueña). */
@@ -1790,7 +1805,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101047", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101048", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
