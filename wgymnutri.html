@@ -817,10 +817,10 @@ function guardarProductoCompartido(a, origen){
 }
 function guardarPorcionCompartida(a, txt){
  var l = lsGet(CLAVE_PROD, []) || [], hecho = false;
- l.forEach(function(f){ if((a.code && f[0] === a.code) || (!a.code && normName(f[1] + " " + (f[2] || "")) === normName(a.n + " " + (a.marca || "")))){ f[8] = txt; hecho = true; } });
+ l.forEach(function(f){ if((a.code && f[0] === a.code) || (!a.code && normName(f[1] + " " + (f[2] || "")) === normName(a.n + " " + (a.marca || "")))){ f[8] = txt; if(!(+f[7]) && a.porcG) f[7] = a.porcG; hecho = true; } });
  if(!hecho){ guardarProductoCompartido(a, a.off ? "off" : "manual"); l = lsGet(CLAVE_PROD, []) || []; }
  lsSet(CLAVE_PROD, l); integrarProductos(l);
- if(!window.WGYMNUTRI_DEMO) pedirScript({ action:"porcionProducto", codigo:a.code || "", nombre:a.n, marca:a.marca || "", porcTxt:txt });
+ if(!window.WGYMNUTRI_DEMO) pedirScript({ action:"porcionProducto", codigo:a.code || "", nombre:a.n, marca:a.marca || "", porcTxt:txt, porcG:a.porcG || 0 });
 }
 integrarProductos(lsGet(CLAVE_PROD, null) || []);
 function abrirHoja(html){ $("hoja").innerHTML = '<div class="asa"></div>' + html; $("velo").hidden = false; document.body.style.overflow = "hidden"; ajustarAlTeclado(); }
@@ -971,13 +971,17 @@ function detalle(a){
   if(un){
    h += '<p class="kick" style="margin:12px 0 6px">¿Cuántas ' + plural(un.u, 2) + ' comiste? <span style="font-weight:600;text-transform:none;letter-spacing:0">(1 ' + un.u + ' ≈ ' + r1(un.g) + ' g)</span></p><div class="mults" id="dUni">' +
     [1,2,3,4,5,6].map(function(k){ return '<button type="button" class="chip" data-u="' + k + '" aria-pressed="' + (k === un.n) + '">' + k + ' ' + plural(un.u, k) + '</button>'; }).join("") + '</div>';
-  } else if(a.code || a.cat === CAT_PROD){
-   h += '<details class="uni-falta"><summary>¿Se come en láminas, rebanadas o unidades? Indícalo una vez</summary>' +
-    '<div class="fila2" style="margin-top:8px"><input class="inp" id="uN" type="text" inputmode="decimal" autocomplete="off" placeholder="Cuántas (ej: 2)"><select class="inp" id="uU">' +
-    UNIDADES.map(function(x){ return '<option value="' + x + '">' + plural(x, 2) + '</option>'; }).join("") + '</select></div>' +
-    '<p class="muted" style="margin:6px 0">La porción de ' + a.porcG + ' g trae esa cantidad. Queda guardado para todos los socios.</p><button type="button" class="btn sec chico" id="uOk">Guardar</button></details>';
   }
 
+ }
+ if(esGr && !unidadesPorcion(a) && (a.code || a.off || a.cat === CAT_PROD)){
+  // Láminas según el envase (10-10-2026, la dueña: "no veo las letras chicas del empaque")
+  h += '<details class="uni-falta"' + (a.porcG ? '' : ' open') + '><summary>🧀 ¿Viene en láminas, rebanadas o unidades? Calcúlalo con el envase</summary>' +
+   '<p class="muted" style="margin:8px 0">Usa los números grandes del paquete: lo que pesa y cuántas trae.</p>' +
+   '<div class="fila2"><div class="campo"><label for="eG">Peso del envase (g)</label><input class="inp" id="eG" type="text" inputmode="decimal" autocomplete="off" placeholder="Ej: 250" value="' + (a.envaseG || "") + '"></div>' +
+   '<div class="campo"><label for="eN">¿Cuántas trae?</label><input class="inp" id="eN" type="text" inputmode="decimal" autocomplete="off" placeholder="Ej: 10"></div></div>' +
+   '<div class="campo"><label for="eU">¿Qué son?</label><select class="inp" id="eU">' + UNIDADES.map(function(x){ return '<option value="' + x + '"' + (/queso|jam[oó]n|pavo|fiambre/i.test(a.n) && x === "lámina" ? " selected" : "") + '>' + plural(x, 2) + '</option>'; }).join("") + '</select></div>' +
+   '<p class="muted" id="eRes" style="margin:6px 0;font-weight:800"></p><button type="button" class="btn sec chico" id="eOk">Guardar para todos</button></details>';
  }
  if(esGr) h += '<div class="campo"><label for="dGr">¿Cuántos gramos?</label><input class="inp" id="dGr" type="text" inputmode="decimal" autocomplete="off" value="' + gramos + '"></div>' +
   (a.porcG || a.cat ? '' : '<p class="muted" style="margin:0;font-size:14px">Este producto no trae porción en su etiqueta: escribe los gramos que comiste.</p>');
@@ -998,12 +1002,22 @@ function detalle(a){
   var x = +b.dataset.p; gramos = x ? Math.round(a.porcG * x) : 100; $("dGr").value = gramos; marcar(0, b); pintar(); }; });
  if($("dUni")){ var un2 = unidadesPorcion(a); $("dUni").querySelectorAll("[data-u]").forEach(function(b){ b.onclick = function(){
   gramos = Math.round(un2.g * (+b.dataset.u) * 10) / 10; $("dGr").value = String(gramos).replace(".", ","); marcar(0, b); pintar(); }; }); }
- if($("uOk")) $("uOk").onclick = function(){
-  var n = Number(String($("uN").value).replace(",", ".")), u = $("uU").value;
-  if(!(n > 0 && n <= 50)){ toast("Escribe cuántas trae la porción (ej: 2)."); return; }
-  var txt = String(n).replace(".", ",") + " " + plural(u, n) + " (" + a.porcG + " g)";
-  a.porcTxt = txt; guardarPorcionCompartida(a, txt); toast("✅ Guardado: la porción son " + txt); detalle(a);
- };
+ function calcEnvase(){
+  var g = Number(String($("eG").value).replace(",", ".")), n = Number(String($("eN").value).replace(",", ".")), u = $("eU").value;
+  if(!(g > 0 && n > 0)) return null;
+  var porU = g / n, porc = a.porcG || 0, cant = porc ? Math.max(1, Math.round(porc / porU)) : 1;
+  return { u:u, porU:porU, cant:cant, porcG: porc || Math.round(porU) };
+ }
+ if($("eOk")){
+  var pintaE = function(){ var c = calcEnvase(); $("eRes").textContent = c ? "1 " + c.u + " ≈ " + r1(c.porU) + " g" + (a.porcG ? " · la porción (" + a.porcG + " g) son " + c.cant + " " + plural(c.u, c.cant) : "") : ""; };
+  ["eG","eN","eU"].forEach(function(id){ $(id).oninput = pintaE; $(id).onchange = pintaE; }); pintaE();
+  $("eOk").onclick = function(){
+   var c = calcEnvase(); if(!c){ toast("Escribe el peso del envase y cuántas trae."); return; }
+   if(!a.porcG){ a.porcG = Math.round(c.porU); c.cant = 1; }
+   var txt = c.cant + " " + plural(c.u, c.cant) + " (" + a.porcG + " g)";
+   a.porcTxt = txt; guardarPorcionCompartida(a, txt); toast("✅ Listo: 1 " + c.u + " ≈ " + r1(c.porU) + " g"); detalle(a);
+  };
+ }
  if(!esGr) $("dMults").querySelectorAll("[data-x]").forEach(function(b){ b.onclick = function(){ mult = +b.dataset.x; $("dMults").querySelectorAll("[data-x]").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); }); pintar(); }; });
  $("dFav").onclick = function(){ alternarFav(a); this.textContent = esFav(a) ? "★ En favoritas" : "☆ Favorita"; };
  $("dOk").onclick = function(){ if(esGr && !gramos) return; agregar(a, esGr ? gramos / 100 : mult, esGr); };
@@ -1030,10 +1044,10 @@ function offAAlim(p){
  if(k == null && nu["energy_100g"] != null) k = nu["energy_100g"] / 4.184;
  if(k == null) return null;
  return { n:(p.product_name_es || p.product_name || "Producto").trim(), marca:(p.brands || "").split(",")[0].trim(), gr:Number(p.serving_quantity) || 100,
-  porcG:Math.round(Number(p.serving_quantity) || 0), porcTxt:String(p.serving_size || "").trim(), code:String(p.code || ""), off:true,
+  porcG:Math.round(Number(p.serving_quantity) || 0), porcTxt:String(p.serving_size || "").trim(), code:String(p.code || ""), off:true, envaseG:Math.round(Number(p.product_quantity) || 0),
   k:Math.round(k), pr:r1(nu.proteins_100g || 0), c:r1(nu.carbohydrates_100g || 0), g:r1(nu.fat_100g || 0) };
 }
-var OFF_CAMPOS = "code,product_name,product_name_es,brands,nutriments,serving_quantity,serving_size";
+var OFF_CAMPOS = "code,product_name,product_name_es,brands,nutriments,serving_quantity,serving_size,product_quantity";
 function buscarOFF(q){
  if(window.WGYMNUTRI_DEMO) return Promise.resolve(null);
  /* Primero productos vendidos en Chile; si salen pocos, se completa con el resto del mundo.
@@ -1396,7 +1410,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101011", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101012", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

@@ -534,6 +534,8 @@ function porcionProducto_(e) {
       var actual = String(datos[i][8] || "");
       if (/l[aá]mina|rebanada|unidad|galleta|barra|pote|sobre|scoop|cucharada|taza|tajada|trozo/i.test(actual)) return respond_(e, { ok: true, yaTenia: true });
       hoja.getRange(i + 1, 9).setValue(txt);
+      var pg = numProd_(p.porcG, 2000);
+      if (pg && !(Number(datos[i][7]) > 0)) hoja.getRange(i + 1, 8).setValue(pg);
       try { CacheService.getScriptCache().remove("productos_lista"); } catch (err) {}
       return respond_(e, { ok: true });
     }
