@@ -98,3 +98,6 @@ h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transfo
 .toast{ background:#141416; color:#fff; }
 .logro-pop .card{ border-left-width:1px; }
 .cam{ background:#141416; }
+
+/* Pantalla de pago: el título cabe en teléfonos angostos */
+#vPago h2.disp{ font-size:clamp(26px,8.6vw,40px) !important; line-height:1.05; justify-content:center; flex-wrap:wrap; }
