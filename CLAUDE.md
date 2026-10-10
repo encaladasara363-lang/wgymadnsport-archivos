@@ -1520,6 +1520,14 @@ probado: ella se activó desde el mesón y entró a la app).
   `porUnidad`), el detalle pasa a «1 huevo» y pregunta «¿Cuántos huevos comiste?» con
   botones 1 a 6 (o hasta el doble de la porción original, ej. claras hasta 8); en «Hoy» se
   ve «3 huevos». Se sacó «Huevos duros (2 huevos)»: queda solo «Huevo duro».
+- **Cantidad escrita a mano (10-10-2026, la dueña: "quiero avellanas solas, siempre me como
+  10"; "poner un rectángulo donde cada socio pueda poner la cantidad"):** los alimentos que se
+  cuentan (huevos, avellanas, pistachos, castañas, maní en granos…) muestran un cuadro grande
+  «¿Cuántas avellanas comiste?» (`#dCant`) y los de porción en gramos (avena 40 g, arroz, etc.)
+  y los escaneados, «¿Cuántos gramos?» (`#dGr`, porción habitual como referencia); se escribe el
+  número y las calorías se calculan solas. Sin filas de botones de gramos. Frutos secos por
+  unidad en Básicos fitness: Avellanas (10), Pistachos (10), Castañas de cajú (10), Maní (10
+  granos), Almendras (20).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
   escaneados los botones muestran gramos (ej. 17 g · 34 g · 68 g · 100 g) en vez de
   «½ porción · 1 porción · 2 porciones».
