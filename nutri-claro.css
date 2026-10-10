@@ -214,3 +214,6 @@ body{ zoom:1.1; }
 .perfil-nombre{ margin:0 0 6px; font-family:var(--display); font-size:30px; line-height:1.05; text-transform:uppercase; letter-spacing:.02em; color:#111114; }
 .campo label{ font-size:16px !important; color:#111114 !important; }
 #borrarB{ background:#FFFFFF !important; border:2px solid #E30613 !important; color:#E30613 !important; box-shadow:0 4px 0 #E30613 !important; }
+.inst-aparte{ margin-top:10px; }
+.inst-aparte summary{ cursor:pointer; font-weight:700; color:#8A6500; font-size:16px; text-decoration:underline; }
+.inst-aparte[open] summary{ margin-bottom:8px; }
