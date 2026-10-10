@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=29">
+<link rel="stylesheet" href="nutri-claro.css?v=30">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -337,7 +337,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=10"></script>
+<script src="nutri-alimentos.js?v=11"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -1031,15 +1031,15 @@ function porcionES(t){
 /* Unidades de la porción (10-10-2026, la dueña: "cuántas láminas es la porción").
    Sale del texto de la porción ("2 láminas (34 g)", "2 slices") o de lo que se anotó. */
 var UNIDADES = ["lámina","rebanada","unidad","galleta","barra","pote","sobre","scoop","cucharada","taza","tajada","trozo"];
-function plural(u, n){ return n <= 1 ? u : (u === "unidad" ? "unidades" : /ch$/.test(u) ? u + "es" : u + "s"); }
+function plural(u, n){ return n <= 1 ? u : /z$/.test(u) ? u.slice(0, -1) + "ces" : /(ch|[dlnr])$/.test(u) ? u + "es" : u + "s"; }
 /* Alimentos que se cuentan (huevos, unidades, rebanadas…): se muestran de a 1 y la persona
    elige cuántos comió, 1 a 6 (10-10-2026, la dueña: "aparece medio huevo, es tonto"). */
-var CONTABLES = /^(\d+)\s+(huevos?|unidad(?:es)?|rebanadas?|l[aá]minas?|galletas?|marraquetas?|hallullas?|tostadas?|trozos?|claras?|panqueques?|empanadas?|s[aá]ndwich(?:es)?|wraps?|barras?|sobres?|potes?|latas?|botellas?|frutillas?|nueces|almendras?|tajadas?)\b\s*(.*)$/i;
+var CONTABLES = /^(\d+)\s+(huevos?|unidad(?:es)?|rebanadas?|l[aá]minas?|galletas?|marraquetas?|hallullas?|tostadas?|trozos?|claras?|panqueques?|empanadas?|s[aá]ndwich(?:es)?|wraps?|barras?|sobres?|potes?|latas?|botellas?|frutillas?|nueces|almendras?|tajadas?|avellanas?|pistachos?|casta[nñ]as?|granos?|mitad(?:es)?)\b\s*(.*)$/i;
 function porUnidad(a){
  if(a.gr) return null;
  var m = String(a.p || "").match(CONTABLES); if(!m) return null;
  var n = +m[1]; if(!(n >= 1)) return null;
- var w = m[2].toLowerCase(), sing = /unidades$/.test(w) ? "unidad" : /ches$/.test(w) ? w.slice(0, -2) : /nueces$/.test(w) ? "nuez" : w.replace(/s$/, "");
+ var w = m[2].toLowerCase(), sing = /(unidad|mitad)es$/.test(w) ? w.slice(0, -2) : /ches$/.test(w) ? w.slice(0, -2) : /nueces$/.test(w) ? "nuez" : w.replace(/s$/, "");
  var resto = m[3] ? " " + m[3].replace(/^\(.*\)$/, "") : "";
  if(n === 1) return { a:a, sing:sing, n:1 };
  return { a:Object.assign({}, a, { p:"1 " + sing, k:a.k / n, pr:a.pr / n, c:a.c / n, g:a.g / n }), sing:sing, n:n };
@@ -1171,6 +1171,13 @@ function modoManual(){
 }
 function detalle(a){
  var cuenta = porUnidad(a); if(cuenta) a = cuenta.a;
+ /* Alimentos de la lista con porción en gramos (ej. avena 40 g): se escribe cuántos gramos se
+    comió en un cuadro grande y se calcula solo (10-10-2026, pedido de la dueña). */
+ var porcLoc = "";
+ if(!cuenta && !a.gr && agr.comida !== "bebidas" && a.cat !== CAT_BEB){
+  var mg = /(?:^|\()\s*(\d+(?:[.,]\d+)?)\s*g\s*\)?\s*$/i.exec(a.p || ""), nG = mg ? Number(mg[1].replace(",", ".")) : 0;
+  if(nG > 0){ var fG = 100 / nG; porcLoc = a.p; a = Object.assign({}, a, { k:a.k * fG, pr:a.pr * fG, c:a.c * fG, g:a.g * fG, gr:nG }); }
+ }
  var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
  /* Líquidos (10-10-2026, la dueña escaneó una Score: "debe decir la lata"): se muestra por
     lata o botella en ml, sin el cuadro de láminas. */
@@ -1182,7 +1189,7 @@ function detalle(a){
  var nomAl = normName(a.n + " " + (a.marca || "") + " " + (a.porcTxt || "")).toLowerCase();
  var rebanable = /queso|jamon|pavo|fiambre|salame|mortadela|longaniza|pan|galleta|tostada|rebanad|lamina|tajada|barra|tortilla|wrap|pita|hallulla|marraqueta/.test(nomAl);
  var esPote = !esLiq && /yog|postre|flan|jalea|kefir|leche cultivada|protein power|pote/.test(nomAl) && !rebanable;
- var est0 = esGr && !esLiq && !esPote ? unidadesPorcion(a) : null;
+ var est0 = esGr && !esLiq && !esPote && !porcLoc ? unidadesPorcion(a) : null;
  if(est0 && est0.est && !a.porcG){ a = Object.assign({}, a, { porcG:Math.round(est0.porcG), porcTxt:"" }); }
  var h = '<div class="cab" style="margin-bottom:6px"><h3 style="font-size:22px;text-transform:none;letter-spacing:0">' + esc(a.n) + '</h3><button type="button" class="chip" id="dVolver">‹ Volver</button></div>' +
   '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + (a.cat === "Marcas" || a.cat === CAT_BEB ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
@@ -1200,10 +1207,7 @@ function detalle(a){
   var pt = textoPorcion(a), unE = unidadesPorcion(a);
   if(unE && unE.est) pt = unE.n + " " + plural(unE.u, unE.n) + " (" + a.porcG + " g)";
   h += '<div class="porc-rec"><span>✅ Porción recomendada</span><b>' + esc(pt) + '</b><small>' + (unE && unE.est ? 'láminas o unidades estimadas según el tipo de producto' : 'según la etiqueta del producto') + '</small></div>' +
-   /* Gramos de 5 en 5, de 10 a 100, más la porción de la etiqueta (10-10-2026, la dueña:
-      "quiero poner 20 gramos y no hay"). */
-   (function(){ var gs = []; for(var q = 10; q <= 100; q += 5) gs.push(q); if(gs.indexOf(a.porcG) < 0) gs.push(a.porcG); gs.sort(function(x, y){ return x - y; });
-    return '<div class="gramos-fila" id="dGrs">' + gs.map(function(q){ return '<button type="button" class="chip" data-g="' + q + '" aria-pressed="' + (q === a.porcG) + '">' + q + ' g</button>'; }).join("") + '</div>'; })();
+   '';   /* sin fila de gramos: se escribe la cantidad en «¿Cuántos gramos?» (10-10-2026, pedido de la dueña) */
   var un = unidadesPorcion(a);
   if(un){
    h += '<p class="kick" style="margin:12px 0 6px">¿Cuántas ' + plural(un.u, 2) + ' comiste? <span style="font-weight:600;text-transform:none;letter-spacing:0">(1 ' + un.u + ' ≈ ' + r1(un.g) + ' g' + (un.est ? ', aproximado' : '') + ')</span></p><div class="mults" id="dUni">' +
@@ -1221,9 +1225,10 @@ function detalle(a){
    '<div class="campo"><label for="eU">¿Qué son?</label><select class="inp" id="eU">' + UNIDADES.map(function(x){ return '<option value="' + x + '"' + (/queso|jam[oó]n|pavo|fiambre/i.test(a.n) && x === "lámina" ? " selected" : "") + '>' + plural(x, 2) + '</option>'; }).join("") + '</select></div>' +
    '<p class="muted" id="eRes" style="margin:6px 0;font-weight:800"></p><button type="button" class="btn sec chico" id="eOk">Guardar para todos</button></details>';
  }
- if(esGr) h += '<div class="campo"><label for="dGr">' + (esLiq ? '¿Cuántos ml tomaste?' : '¿Cuántos gramos?') + '</label><input class="inp" id="dGr" type="text" inputmode="decimal" autocomplete="off" value="' + gramos + '"></div>' +
+ if(porcLoc) h += '<p class="kick">Porción habitual: ' + esc(porcLoc) + '</p>';
+ if(esGr) h += '<div class="campo cant-box"><label for="dGr">' + (esLiq ? '¿Cuántos ml tomaste?' : '¿Cuántos gramos?') + '</label><input class="inp" id="dGr" type="text" inputmode="decimal" autocomplete="off" value="' + gramos + '"><small>escribe la cantidad y se calcula solo</small></div>' +
   (a.porcG || a.cat ? '' : '<p class="muted" style="margin:0;font-size:14px">' + (esLiq ? 'La etiqueta no dice cuánto trae: escribe los ml (mira el número grande de la ' + envase + ').' : 'Este producto no trae porción en su etiqueta: escribe los gramos que comiste.') + '</p>');
- else if(cuenta) h += '<p class="kick">¿Cuántos ' + esc(plural(cuenta.sing, 2)) + ' comiste?</p><div class="mults" id="dMults">' + Array.apply(null, { length:Math.max(6, cuenta.n * 2) }).map(function(_, i){ return i + 1; }).map(function(k){ return '<button type="button" class="chip" data-x="' + k + '" aria-pressed="' + (k === 1) + '">' + k + ' ' + esc(plural(cuenta.sing, k)) + '</button>'; }).join("") + '</div>';
+ else if(cuenta){ mult = cuenta.n; h += '<div class="campo cant-box"><label for="dCant">¿' + (/[aá]$|d$|z$|ón$/.test(cuenta.sing) && !/huevo|pistacho|grano/.test(cuenta.sing) ? 'Cuántas ' : 'Cuántos ') + esc(plural(cuenta.sing, 2)) + ' comiste?</label><input class="inp cant-inp" id="dCant" type="text" inputmode="decimal" autocomplete="off" value="' + cuenta.n + '"><small>1 ' + esc(cuenta.sing) + ' = ' + miles(a.k) + ' kcal · escribe la cantidad y se calcula solo</small></div>'; }
  else h += '<p class="kick">Porción: ' + esc(a.p) + '</p><div class="mults" id="dMults">' + [[0.5,"½"],[1,"1"],[1.5,"1½"],[2,"2"],[3,"3"]].map(function(m){ return '<button type="button" class="chip" data-x="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
  h += '<div class="det-macros" id="dMac" style="margin:14px 0"></div>' +
   '<div class="fila2"><button type="button" class="btn sec" id="dFav">' + (esFav(a) ? "★ En favoritas" : "☆ Favorita") + '</button><button type="button" class="btn rojo" id="dOk">Agregar</button></div>';
@@ -1259,9 +1264,10 @@ function detalle(a){
    a.porcTxt = txt; guardarPorcionCompartida(a, txt); toast("✅ Listo: 1 " + c.u + " ≈ " + r1(c.porU) + " g"); detalle(a);
   };
  }
- if(!esGr) $("dMults").querySelectorAll("[data-x]").forEach(function(b){ b.onclick = function(){ mult = +b.dataset.x; $("dMults").querySelectorAll("[data-x]").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); }); pintar(); }; });
+ if($("dCant")) $("dCant").oninput = function(){ mult = Number(String(this.value).replace(",", ".")) || 0; pintar(); };
+ if(!esGr && $("dMults")) $("dMults").querySelectorAll("[data-x]").forEach(function(b){ b.onclick = function(){ mult = +b.dataset.x; $("dMults").querySelectorAll("[data-x]").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); }); pintar(); }; });
  $("dFav").onclick = function(){ alternarFav(a); this.textContent = esFav(a) ? "★ En favoritas" : "☆ Favorita"; };
- $("dOk").onclick = function(){ if(esGr && !gramos) return; agregar(a, esGr ? gramos / 100 : mult, esGr); };
+ $("dOk").onclick = function(){ if(!esGr && !mult) return; if(esGr && !gramos) return; agregar(a, esGr ? gramos / 100 : mult, esGr); };
 }
 function base(a){ var b = { n:a.n, p:a.p, k:a.k, pr:a.pr, c:a.c, g:a.g }; if(a.gr){ b.gr = 100; b.p = "100 g"; if(a.porcG){ b.porcG = a.porcG; b.porcTxt = a.porcTxt || ""; } if(a.ml){ b.ml = true; b.p = "100 ml"; } } if(a.marca) b.marca = a.marca; if(a.cat) b.cat = a.cat; return b; }
 function claveAl(a){ return normName(a.n) + "|" + (a.marca || "") + "|" + a.k; }
@@ -1738,7 +1744,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101036", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101038", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
