@@ -337,7 +337,7 @@ h1,h2,h3{margin:0;font-weight:400}
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=6"></script>
+<script src="nutri-alimentos.js?v=7"></script>
 <script src="nutri-recetas.js?v=8"></script>
 <script>
 (function(){
@@ -825,7 +825,9 @@ function modoBuscar(){
   }else{
    // Singular y plural cuentan igual (10-10-2026: "huevos" no encontraba "huevo duro").
    var palabras = t.split(" ").filter(Boolean).map(function(w){
-    var v = [w]; if(w.length > 4 && /ES$/.test(w)) v.push(w.slice(0, -2)); if(w.length > 3 && /S$/.test(w)) v.push(w.slice(0, -1)); return v; });
+    var v = [w]; if(w.length > 4 && /ES$/.test(w)) v.push(w.slice(0, -2)); if(w.length > 3 && /S$/.test(w)) v.push(w.slice(0, -1));
+    if(w.length >= 8) v.push(w.slice(0, -3));   // "monohidratada" encuentra "monohidrato"
+    return v; });
    var lista = ALIM.map(function(a, i){ return [a, i]; }).filter(function(x){ return palabras.every(function(vs){ return vs.some(function(w){ return x[0].nn.indexOf(w) >= 0; }); }); });
    // Primero los que empiezan con lo escrito y los básicos fitness; las marcas y la comida rápida al final.
    function puntaje(a){ var p = 0; if(palabras[0].some(function(w){ return a.nn.indexOf(w) === 0; })) p -= 4; if(/fitness/i.test(a.cat)) p -= 5; if(a.cat === "Marcas" || a.cat === "Comida rápida") p += 2; return p; }
@@ -1274,7 +1276,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101005", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101006", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
