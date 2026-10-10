@@ -258,3 +258,38 @@ body{ zoom:1.1; }
 .comida-card .cab h3 .hora-com{font-size:17px !important;padding:2px 9px !important;margin:0 !important}
 .comida-card .cab small{white-space:nowrap;font-size:17px !important;color:#1A1A1E !important;font-weight:700}
 .comida-card .beb-bts .btn,.bebidas-card .beb-bts .btn{white-space:nowrap;font-size:18px !important}
+/* Inicio al estilo Fitia (10-10-2026) */
+.onb-prog{height:8px;border-radius:8px;background:#E8E3D8;overflow:hidden}
+.onb-prog i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#E30613,#D4AF37);transition:width .45s ease}
+.onb-anim{animation:onbEntra .35s ease both}
+@keyframes onbEntra{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.bienv{text-align:center;padding:18px 4px 6px}
+.bienv-logo{width:120px;height:auto;margin:0 auto 8px;display:block}
+.bienv-e{font-size:76px;line-height:1;margin:6px 0 10px;animation:latido 2.2s ease-in-out infinite}
+.bienv-tx{font-size:19px;color:#1A1A1E;line-height:1.5;margin:8px 0 18px}
+.bienv-dots{display:flex;justify-content:center;gap:8px}
+.bienv-dots i{width:10px;height:10px;border-radius:10px;background:#D9D3C6;transition:all .3s}
+.bienv-dots i.on{width:28px;background:#E30613}
+.evita{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opc.chico-op{flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:14px 8px}
+.opc.chico-op b{font-size:17px}
+.kcal-grande{font-family:var(--num);font-size:68px;font-weight:400;line-height:1.05;display:block;background:linear-gradient(90deg,#E30613,#C99A1E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.plan-pop{animation:pop .5s ease both}.plan-pop2{animation:pop .5s .35s ease both}.plan-pop3{animation:pop .5s .7s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+.fecha-meta{font-size:21px;color:#141416;margin:6px 0 4px}
+.fecha-meta b{color:#E30613}
+.graf-meta{width:100%;height:auto;margin:6px 0}
+.graf-linea{stroke-dasharray:400;stroke-dashoffset:400;animation:dibuja 1.4s .9s ease forwards}
+@keyframes dibuja{to{stroke-dashoffset:0}}
+.plan-chips{display:flex;flex-wrap:wrap;gap:8px}
+.plan-chips span{background:#FFF4C9;color:#5A4300;border-radius:20px;padding:7px 12px;font-weight:700;font-size:15px}
+/* Franja de la semana en «Hoy» */
+.semana-tira{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:#fff;border:2px solid #E9DFC4;border-radius:18px;padding:10px 6px}
+.st-dia{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:4px 0;color:#141416;font:inherit}
+.st-dia:disabled{opacity:.35}
+.st-l{font-weight:800;font-size:15px;width:30px;height:30px;line-height:30px;border-radius:30px;text-align:center}
+.st-dia b{font-family:var(--num);font-weight:400;font-size:22px}
+.st-dia i{width:8px;height:8px;border-radius:8px;background:#D9D3C6}
+.st-dia.con i{background:#1FA34A}
+.st-dia.hoy b{color:#C99A1E}
+.st-dia.sel .st-l{background:#141416;color:#fff}
