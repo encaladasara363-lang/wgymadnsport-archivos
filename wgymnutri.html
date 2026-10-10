@@ -811,7 +811,7 @@ function cargarProductos(){
   var hay = {}; srv.forEach(function(f){ hay[clave(f)] = 1; });
   var pendientes = (lsGet(CLAVE_PROD, []) || []).filter(function(f){ return f && f[1] && !hay[clave(f)]; });
   pendientes.forEach(function(f){
-   pedirScript({ action:"guardarProducto", codigo:f[0] || "", nombre:f[1], marca:f[2] || "", k:f[3], p:f[4], c:f[5], g:f[6], porcG:f[7] || 0, porcTxt:f[8] || "", origen:"off" });
+   pedirScript({ action:"guardarProducto", codigo:f[0] || "", nombre:f[1], marca:f[2] || "", k:f[3], p:f[4], hc:f[5], g:f[6], porcG:f[7] || 0, porcTxt:f[8] || "", origen:"off" });
   });
   var todo = srv.concat(pendientes);
   integrarProductos(todo); lsSet(CLAVE_PROD, todo);
@@ -822,7 +822,7 @@ function guardarProductoCompartido(a, origen){
  var fila = [a.code || "", a.n, a.marca || "", a.k, a.pr, a.c, a.g, a.porcG || 0, a.porcTxt || ""];
  if(!(a.code && porCodigoLocal(a.code))){ var l = lsGet(CLAVE_PROD, []) || []; l.push(fila); lsSet(CLAVE_PROD, l); integrarProductos(l); }
  // Siempre se avisa a la planilla: si ya lo tenía, solo suma "Veces" (nunca lo duplica).
- pedirScript({ action:"guardarProducto", codigo:a.code || "", nombre:a.n, marca:a.marca || "", k:a.k, p:a.pr, c:a.c, g:a.g, porcG:a.porcG || 0, porcTxt:a.porcTxt || "", origen:origen || "off" }, 40000).then(function(d){
+ pedirScript({ action:"guardarProducto", codigo:a.code || "", nombre:a.n, marca:a.marca || "", k:a.k, p:a.pr, hc:a.c, g:a.g, porcG:a.porcG || 0, porcTxt:a.porcTxt || "", origen:origen || "off" }, 40000).then(function(d){
   if(d && d.ok) toast(d.nuevo ? "📷 Guardado para todos los socios" : "📷 Ya estaba guardado para todos");
   else if(d && d.error) toast("⚠️ No se pudo guardar para todos: " + d.error);
  });
@@ -1450,7 +1450,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101017", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101018", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
