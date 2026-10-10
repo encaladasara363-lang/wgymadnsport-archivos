@@ -475,7 +475,8 @@ function hojaProductos_() {
   }
   return hoja;
 }
-function listarProductos_(e) {
+function listarProductos_(e) { try { return listarProductosReal_(e); } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); } }
+function listarProductosReal_(e) {
   var cache = null;
   try { cache = CacheService.getScriptCache(); } catch (err) {}
   if (cache) { var g = cache.get("productos_lista"); if (g) { try { return respond_(e, JSON.parse(g)); } catch (err) {} } }
@@ -489,7 +490,8 @@ function listarProductos_(e) {
   return respond_(e, resp);
 }
 function numProd_(v, max) { var n = Number(String(v == null ? "" : v).replace(",", ".")); return isFinite(n) && n >= 0 && n <= max ? Math.round(n * 10) / 10 : null; }
-function guardarProducto_(e) {
+function guardarProducto_(e) { try { return guardarProductoReal_(e); } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); } }
+function guardarProductoReal_(e) {
   var p = e.parameter;
   var codigo = String(p.codigo || "").replace(/\D/g, "").slice(0, 14);
   var nombre = String(p.nombre || "").trim().slice(0, 80), marca = String(p.marca || "").trim().slice(0, 40);
@@ -518,7 +520,8 @@ function guardarProducto_(e) {
    porción de un producto ya guardado ("2 láminas (34 g)"). Solo escribe la
    columna "Porción texto" y solo si todavía no dice unidades (no pisa un dato
    bueno). Público, igual que guardarProducto. */
-function porcionProducto_(e) {
+function porcionProducto_(e) { try { return porcionProductoReal_(e); } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); } }
+function porcionProductoReal_(e) {
   var p = e.parameter;
   var codigo = String(p.codigo || "").replace(/\D/g, "").slice(0, 14);
   var clave = normNombre_(String(p.nombre || "") + " " + String(p.marca || ""));
