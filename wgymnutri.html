@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=31">
+<link rel="stylesheet" href="nutri-claro.css?v=32">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -863,6 +863,7 @@ function recordatorio(){
  if(recOn("agua") && h >= 20 && x.agua < M.agua) return ["💧", "Te faltan " + (M.agua - x.agua) + " vasos de agua para tu meta de hoy."];
  return null;
 }
+var aguaPctPrev = 0;
 function renderHoy(){
  var M = D.metas, t = totales(diaSel), x = diaDe(diaSel), esHoy = diaSel === hoyISO();
  var rest = M.kcal - t.k, pct = Math.min(1, t.k / M.kcal), C = 2 * Math.PI * 62;
@@ -887,7 +888,14 @@ function renderHoy(){
     siempre en vasos (x.agua); una botella = 2 vasos. Cada teléfono recuerda la elección. */
  var enBot = D.aguaUnidad !== "vaso", litros = function(v){ return String(r1(v * 0.25)).replace(".", ","); };
  h += '<div class="card"><div class="cab"><h3>💧 Agua</h3><span>' + litros(x.agua) + ' / ' + litros(M.agua) + ' L</span></div>' +
-  '<div class="agua-unid"><button type="button" class="chip" data-au="botella" aria-pressed="' + enBot + '">🍶 Botellas 500 ml</button><button type="button" class="chip" data-au="vaso" aria-pressed="' + !enBot + '">🥛 Vasos 250 ml</button></div>';
+  '<div class="agua-unid"><button type="button" class="chip" data-au="botella" aria-pressed="' + enBot + '">🍶 Botellas</button><button type="button" class="chip" data-au="vaso" aria-pressed="' + !enBot + '">🥛 Vasos</button></div>';
+ /* Tanque de agua animado (10-10-2026, pedido de la dueña con un video de referencia): círculo
+    con agua que ondea y burbujas; el nivel sube con lo que se toma. */
+ var olaP = 'M0 10 Q25 0 50 10 T100 10 T150 10 T200 10 V40 H0Z', aPct = Math.min(1, M.agua ? x.agua / M.agua : 0);
+ h += '<div class="tanque' + (aPct >= 1 ? ' lleno' : '') + '"><div class="liquido" id="aguaLiq" style="height:' + Math.round((typeof aguaPctPrev === "number" ? aguaPctPrev : 0) * 100) + '%">' +
+  '<svg class="ola o1" viewBox="0 0 200 40" preserveAspectRatio="none"><path d="' + olaP + '"/></svg><svg class="ola o2" viewBox="0 0 200 40" preserveAspectRatio="none"><path d="' + olaP + '"/></svg>' +
+  '<i class="burb b1"></i><i class="burb b2"></i><i class="burb b3"></i><i class="burb b4"></i></div>' +
+  '<div class="tq-txt"><b>' + litros(x.agua) + ' L</b><span>de ' + litros(M.agua) + ' L</span>' + (aPct >= 1 ? '<em>¡Meta cumplida! 💪</em>' : '<em>' + Math.round(aPct * 100) + '%</em>') + '</div></div>';
  if(enBot){
   var nb = Math.ceil(Math.max(M.agua, x.agua) / 2);
   h += '<div class="agua-botellas">';
@@ -920,6 +928,7 @@ function renderHoy(){
  box.querySelectorAll(".st-dia").forEach(function(b){ b.onclick = function(){ if(b.dataset.f <= hoyISO()){ diaSel = b.dataset.f; renderHoy(); } }; });
  if($("avisoX")) $("avisoX").onclick = function(){ lsSet("wgymnutri_aviso_oculto_v1", hoyISO()); renderHoy(); };
  if($("instIr")) $("instIr").onclick = instalar;
+ if($("aguaLiq")){ var aNew = Math.min(1, M.agua ? x.agua / M.agua : 0); requestAnimationFrame(function(){ requestAnimationFrame(function(){ if($("aguaLiq")) $("aguaLiq").style.height = Math.round(aNew * 100) + "%"; }); }); aguaPctPrev = aNew; }
  box.querySelectorAll("[data-au]").forEach(function(b){ b.onclick = function(){ D.aguaUnidad = b.dataset.au; guardar(); renderHoy(); }; });
  box.querySelectorAll(".botella").forEach(function(v){ v.onclick = function(){
   var i = +v.dataset.b, xx = diaDe(diaSel); xx.agua = (xx.agua >= (i + 1) * 2) ? i * 2 : (i + 1) * 2; setDia(diaSel, xx); guardar();
@@ -1747,7 +1756,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101039", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101040", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){

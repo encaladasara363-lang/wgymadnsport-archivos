@@ -1507,6 +1507,12 @@ probado: ella se activó desde el mesón y entró a la app).
   kilo + 500 ml si entrena (actividad ≥ ligera), en vasos de 250 ml (6 a 16). Es la meta
   por defecto, se recalcula al cambiar el peso y se muestra en «Tu plan está listo». En
   «Mi perfil» se elige «Según mi peso» o un número fijo (`D.metas.aguaManual`).
+- **Tanque de agua animado (10-10-2026, la dueña mandó un video de referencia de otra app):**
+  en el cuadro «💧 Agua», sobre las botellas, un círculo (`.tanque`, `#aguaLiq`) con agua que
+  ondea (dos olas SVG en movimiento) y burbujas que suben; el nivel sube con lo tomado
+  (animado desde el valor anterior, `aguaPctPrev`), con litros, «de X L» y el %; borde verde
+  y «¡Meta cumplida!» al llegar. Sin animación si el teléfono pide reducir movimiento. Los
+  botones de unidad dicen solo «Botellas» / «Vasos» (con mayúsculas no cabían los ml).
 - **Cuadro de láminas solo donde corresponde (10-10-2026, la dueña escaneó un yogur: "no
   quiero ese aviso"):** «¿Viene en láminas…?» aparece solo en productos rebanables
   (`rebanable`: queso, jamón, pavo, fiambres, pan, galletas, tortillas…). Yogur, postres,
