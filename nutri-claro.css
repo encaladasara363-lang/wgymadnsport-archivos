@@ -230,3 +230,12 @@ body{ zoom:1.1; }
 .rec-op input:checked ~ .rec-sw{ background:#2E9E4F; }
 .rec-op input:checked ~ .rec-sw::after{ left:25px; }
 .rec-op input:focus-visible ~ .rec-sw{ outline:3px solid #E30613; outline-offset:2px; }
+
+/* Horas de comida del socio (10-10-2026) */
+.horas-com{ display:flex; flex-direction:column; }
+.hc-fila{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 0; border-top:1px solid var(--line); }
+.hc-fila span{ font-size:18px; font-weight:700; color:#111114; }
+.hc-fila input{ width:auto; min-width:118px; text-align:center; font-family:var(--num); font-size:22px; padding:8px 10px; }
+.hora-com{ font-family:var(--num); font-size:16px; font-weight:400; color:#8A6500; background:#FFF4C9; border-radius:8px; padding:2px 8px; margin-left:4px; vertical-align:2px; }
+.hc-fila span{ flex:1; min-width:0; }
+.hc-fila input{ flex:none; width:150px; min-width:0; font-size:20px; }
