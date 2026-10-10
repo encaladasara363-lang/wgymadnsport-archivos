@@ -1438,6 +1438,11 @@ probado: ella se activó desde el mesón y entró a la app).
   porción si todavía no tenía unidades). **Instalado por la dueña el
   10-10-2026 a las 15:13 como Versión 14** (las acciones de productos responden
   el motivo del error en vez de la página de Google; volver atrás: Versión 13).
+  **Ojo: Google reserva el parámetro `c` en las URL del script** (elige la
+  cuenta): con carbohidratos distintos de 0 la petición nunca llegaba (página
+  «No se pudo abrir el archivo»). Desde 10-10-2026 la app manda los
+  carbohidratos como `hc` (Versión 15 del script, que acepta `hc` y `c`).
+  Nunca usar `c` ni `sid` como nombre de parámetro en llamadas al script.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

@@ -495,7 +495,9 @@ function guardarProductoReal_(e) {
   var p = e.parameter;
   var codigo = String(p.codigo || "").replace(/\D/g, "").slice(0, 14);
   var nombre = String(p.nombre || "").trim().slice(0, 80), marca = String(p.marca || "").trim().slice(0, 40);
-  var k = numProd_(p.k, 900), pr = numProd_(p.p, 100), c = numProd_(p.c, 100), g = numProd_(p.g, 100);
+  /* Carbohidratos en "hc": Google reserva el parámetro "c" en las URL de los
+     scripts (elige la cuenta) y con c distinto de 0 la petición nunca llega. */
+  var k = numProd_(p.k, 900), pr = numProd_(p.p, 100), c = numProd_(p.hc != null ? p.hc : p.c, 100), g = numProd_(p.g, 100);
   var porcG = numProd_(p.porcG, 2000) || 0, porcTxt = String(p.porcTxt || "").trim().slice(0, 40);
   var origen = String(p.origen || "") === "manual" ? "manual" : "Open Food Facts";
   if (nombre.length < 2 || k === null || pr === null || c === null || g === null) return respond_(e, { ok: false, error: "datos incompletos" });
