@@ -1414,6 +1414,11 @@ probado: ella se activó desde el mesón y entró a la app).
   marcas chilenas aproximadas) + **productos en línea** de Open Food Facts
   (gratis) que se buscan solos al escribir (0,7 s, con caché; primero Chile y
   luego el mundo) + código de barras, favoritas, recientes y manual.
+- **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
+  fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
+  avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
+  acepta singular/plural, muestra primero los básicos fitness y lo que empieza
+  con lo escrito, deja marcas y comida rápida al final y no repite nombres.
 - Encuesta inicial paso a paso con la misma fórmula que la tarjeta
   (Harris-Benedict, base técnica); rellena con `wgym_calorias_v1` si existe.
 - Extras: agua, peso con gráfico, racha, medallas con confeti, resumen
