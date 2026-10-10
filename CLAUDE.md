@@ -1612,12 +1612,11 @@ probado: ella se activó desde el mesón y entró a la app).
     ANTES/DESPUÉS con fecha; ✕ borra.
   - «🍔 Comer fuera»: al abrir Buscar sin escribir, Comida chilena y Comida rápida salen
     segundas. Si la dueña manda menús de locales de Tocopilla, se suman a esas categorías.
-  - «🏆 Retos del mes» en Progreso: 3 retos automáticos (días con meta de agua, con meta de
-    proteína y con comidas anotadas; 1 punto por reto y día, `retosMes`). Unirse con un APODO
-    (`D.retoApodo`; nunca el nombre real) envía solo apodo + puntos con `guardarReto` y muestra
-    el top 10 de `listarRetos` (hoja «Retos»; cada teléfono se identifica con `D.retoId` al
-    azar). **Necesita la Versión 17 del Apps Script** (`docs/apps-script-ingresos-salidas.md`);
-    sin ella el ranking dice que se activa al actualizar el sistema.
+  - «🏆 Retos del mes» en Progreso: 3 retos automáticos y personales (días con meta de agua,
+    con meta de proteína y con comidas anotadas; 1 punto por reto y día, `retosMes`). **Sin
+    ranking** (la dueña, 10-10-2026: «el ranking no lo quiero aquí»): se sacó el apodo y la
+    lista; las acciones `guardarReto`/`listarRetos` quedan en `Ingresos.gs` sin uso y NO hace
+    falta instalar la Versión 17 por ellas.
   - «📸 Leer la etiqueta con la cámara» en «Crear este producto para todos» (valores por 100 g)
     y en «✍️ Manual» (por porción): Tesseract gratis dentro del repo
     (`vendor/tesseract-5.1.1/`, español `best_int`; ~6 MB que el teléfono baja solo la primera
