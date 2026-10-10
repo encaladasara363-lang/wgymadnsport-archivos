@@ -1407,3 +1407,16 @@ tarjeta, que ya tiene "Mis calorías del día").
   fecha más nueva entre la copia del teléfono, `socios.json` y la hoja.
 - **Datos de salud solo en el teléfono** (`wgymnutri_v1_<NOMBRE>`): nunca en
   la hoja ni en el repo.
+- **De pago: $5.000 al mes (10-10-2026, pedido de la dueña).** Precio en
+  `pago-datos.js` (`nutri`). Quien no la tiene activa ve la pantalla
+  «Activa WGYMNUTRI» (`#vPago`: datos de transferencia, copiar, WhatsApp a
+  Sara, «Ya pagué: revisar de nuevo»). La dueña la activa desde la **ficha
+  del socio en el mesón** (`control.html`, caja «🥗 WGYMNUTRI»: «Activar 1
+  mes ($5.000)» suma un mes desde hoy o desde la fecha vigente; «Quitar» la
+  borra), que guarda en la hoja «WGYMNUTRI» con `activarNutri` (POST con la
+  clave de administración); la app lee `listarNutri`. Ambas acciones viven en
+  `docs/apps-script/Ingresos.gs` (instrucciones en
+  `docs/apps-script-ingresos-salidas.md`). Mientras el script no tenga
+  `listarNutri`, la app queda libre (no deja a nadie afuera). El teléfono
+  guarda la última fecha vista (`wgymnutri_activa_v1`) para abrir al instante.
+

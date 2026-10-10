@@ -79,3 +79,22 @@ pruebas se borran esas páginas y esa hoja.
 
 Ninguna borra ni mueve filas de la hoja. La respuesta antigua (sin
 `action`, los últimos 20) y la acción `checkin` siguen iguales.
+
+## Actualización WGYMNUTRI de pago (10-10-2026)
+
+`Ingresos.gs` trae dos acciones nuevas: `listarNutri` (la app WGYMNUTRI
+pregunta quién la tiene activa) y `activarNutri` (el botón «Activar 1 mes
+($5.000)» de la ficha del socio en el mesón, con la clave de
+administración). Guardan todo en una hoja nueva, **«WGYMNUTRI»**, que se crea
+sola la primera vez. No hay que tocar `Código.gs`.
+
+1. Abre el proyecto del script (enlace de arriba) y entra al archivo
+   **Ingresos**.
+2. Selecciona todo (Ctrl + A), bórralo y pega **todo** el contenido nuevo de
+   [`docs/apps-script/Ingresos.gs`](apps-script/Ingresos.gs). Guarda (💾).
+3. **Implementar → Administrar implementaciones** → lápiz ✏️ → "Versión":
+   **Nueva versión** → **Implementar** (no "Nueva implementación").
+
+Comprobar: el link del script terminado en `/exec?action=listarNutri` debe
+mostrar `{"ok":true,"nutri":true,...`. Mientras no se instale, WGYMNUTRI
+queda gratis para todos y la ficha del mesón dice «falta instalar».
