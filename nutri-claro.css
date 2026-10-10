@@ -208,3 +208,8 @@ body{ zoom:1.1; }
 .anillo, .anillo svg{ width:118px !important; height:118px !important; }
 .anillo .centro b{ font-size:30px !important; }
 .anillo .centro span{ font-size:12px !important; }
+
+/* Nombre del socio bien llamativo (10-10-2026, la dueña: "los nombres apenas se ven") */
+.top .t span#saludo{ font-family:var(--display) !important; font-weight:400 !important; font-size:24px !important; letter-spacing:.03em !important; color:#E30613 !important; line-height:1.05; display:block; margin-top:2px; }
+.perfil-nombre{ margin:0 0 6px; font-family:var(--display); font-size:30px; line-height:1.05; text-transform:uppercase; letter-spacing:.02em; color:#111114; }
+.campo label{ font-size:16px !important; color:#111114 !important; }
