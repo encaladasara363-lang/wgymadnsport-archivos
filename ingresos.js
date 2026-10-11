@@ -27,6 +27,12 @@
 var TZ = "America/Santiago";
 var PREFIJO = "wgym_ingresos_v1_";
 var DIAS_GUARDADOS = 60;
+/* Salida automática (11-10-2026, la dueña: "las personas no se me salen en
+   dos horas"): quien no marca su salida deja de estar "dentro" a las 2 horas
+   de su ingreso, en mesón y tablet (igual que el "Ahora" de la tarjeta). Solo
+   se muestra así: la hoja no se toca y MARCAR SALIDA sigue funcionando antes. */
+var AUTO_SALIDA_MS = 2 * 3600000;
+function salidaAuto(r){ return !r.salida && Date.now() - r.ts >= AUTO_SALIDA_MS ? r.ts + AUTO_SALIDA_MS : 0; }
 
 function diaCL(ts){
  try{
@@ -268,12 +274,14 @@ function crear(op){
   return t.split(" ").every(function(p){ return nom.indexOf(p) > -1; });
  }
  function itemHtml(r, tipo){
-  var abierta = !r.salida;
+  var auto = tipo === "hist" ? salidaAuto(r) : 0;
+  var abierta = !r.salida && !auto;
   /* Pase diario (registrado desde el cuadro "Pase diario" del mesón):
      etiqueta dorada en vez de la nota de ficha de socio, que no tiene. */
   var extra = esPase(r) ? '<span class="ing-est pase">PASE DIARIO</span>' : op.extraHtml ? op.extraHtml(r) : "";
   var est = abierta
    ? '<span class="ing-est dentro">DENTRO</span>'
+   : auto ? '<span class="ing-est salio">SALIDA AUTOMÁTICA · ' + horaCL(auto) + '</span>'
    : '<span class="ing-est salio">SALIDA REGISTRADA · ' + horaCL(r.salida) + '</span>';
   var hora = tipo === "dentro"
    ? '<span class="hr">desde ' + horaCL(r.desde) + (r.veces > 1 ? ' · ' + r.veces + ' ingresos' : '') + '</span>'
@@ -283,7 +291,7 @@ function crear(op){
    var off = modoNuevo !== true || pendientes[persona(r)];
    btn = '<button type="button" class="ing-btn" data-sal="' + esc(persona(r)) + '"' +
     (off ? ' disabled title="' + (modoNuevo === false ? 'Falta actualizar el Apps Script' : 'Guardando…') + '"' : '') + '>Marcar salida</button>';
-  }else if(tipo === "hist" && r.fila && modoNuevo === true){
+  }else if(tipo === "hist" && r.salida && r.fila && modoNuevo === true){
    btn = '<button type="button" class="ing-des" data-fila="' + r.fila + '" data-ts="' + r.ts + '">Deshacer</button>';
   }
   return '<div class="ing-item ' + (abierta ? "dentro" : "salio") + '">' +
@@ -305,7 +313,7 @@ function crear(op){
    if(!porP[k]){ porP[k] = { nombre:r.nombre, apellido:r.apellido, ts:r.ts, desde:0, veces:0, salida:0, abiertas:0, venc:"" }; ordenP.push(k); }
    if(esPase(r)) porP[k].venc = r.venc;
    var g = porP[k]; g.veces++;
-   if(!r.salida){ g.abiertas++; if(!g.desde || r.ts < g.desde) g.desde = r.ts; }
+   if(!r.salida && !salidaAuto(r)){ g.abiertas++; if(!g.desde || r.ts < g.desde) g.desde = r.ts; }
   });
   /* Socios que vienen varias veces al día: cada fila del historial dice
      qué ingreso del día es ("ingreso 2 de 3"). */
@@ -392,7 +400,7 @@ function crear(op){
  var enCurso = false;
  function marcarTodos(){
   var claves = {}, lista = [];
-  filas.forEach(function(x){ var k = persona(x); if(!x.salida && !claves[k]){ claves[k] = 1; lista.push(x); } });
+  filas.forEach(function(x){ var k = persona(x); if(!x.salida && !salidaAuto(x) && !claves[k]){ claves[k] = 1; lista.push(x); } });
   if(lista.length < 2 || !confirm("¿Marcar la salida de las " + lista.length + " personas que siguen dentro?")) return;
   enCurso = true;
   var bt = $(".ing-todos"), hechas = 0, fallas = 0, d = dia;

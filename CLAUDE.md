@@ -267,7 +267,12 @@ siempre) el socio lo consulta sin registrar ingreso: ese es el objetivo,
 ver cuándo el gym está más vacío.
 - **"Ahora" del celular** cuenta solo ingresos sin salida de las últimas
   `VENTANA_DENTRO_H` (2) horas (05-10-2026: la tablet marcaba 7 y había 1; antes 3) — a quien olvidó marcar salida se le deja
-  de contar. Mesón y tablet siguen mostrando a todos hasta que se marque.
+  de contar. **Desde 11-10-2026 (la dueña: "las personas no se me salen en dos
+  horas") mesón y tablet hacen lo mismo:** en `ingresos.js` (`salidaAuto`,
+  `AUTO_SALIDA_MS`) quien no marcó salida sale solo de "Dentro" a las 2 h de su
+  ingreso y el historial dice "SALIDA AUTOMÁTICA · HH:MM" (sin "Deshacer"). Es
+  solo de pantalla: la hoja no se toca. Al cambiar `ingresos.js`, subir su `?v=`
+  en `control.html` y `pantalla.html`.
 - **"Elige tu horario"**: gráfico por hora y día con el promedio de
   personas, de `horarios.json` (solo promedios, sin nombres), generado con
   `scripts/generar-horarios.py` desde la hoja de ingresos descargada como
