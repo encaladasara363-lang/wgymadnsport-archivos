@@ -1712,6 +1712,10 @@ probado: ella se activó desde el mesón y entró a la app).
   Básicos fitness, Energéticas y Endulzantes muestran esa etiqueta roja (`agregadoWgym`); los
   escaneados siguen con «📷 Escaneado en WGYM». Desde el 11-10-2026 la etiqueta también sale en los alimentos ya anotados en cada comida de «Hoy» (`tagWgym`; la dueña: "el maicena no sale, el chocolate tampoco"). **Al agregar un alimento a pedido de la dueña,
   sumar su nombre a `NUTRI_WGYM`.**
+- **📳 Vibración al anotar (11-10-2026, la dueña eligió la idea 6):** `vibrar(ms)` da un golpecito
+  al agregar un alimento, un plato o varios por voz, y al tocar agua/café o leer un código. Android:
+  `navigator.vibrate`; iPhone (no tiene esa función): un interruptor `<input switch>` escondido
+  que iOS 18 o más nuevo acompaña con un golpecito del sistema (en iOS antiguos no vibra, sin error).
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
