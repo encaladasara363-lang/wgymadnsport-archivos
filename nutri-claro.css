@@ -483,6 +483,19 @@ details.compras summary b{font-size:14px;color:#B36B00}
 .medidas-ult{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
 .medidas-ult div{min-width:calc(33% - 10px)}
 .medidas-ult b{white-space:nowrap;font-size:24px !important}.medidas-ult b small{font-size:14px;margin-left:2px}.medidas-ult span{white-space:nowrap}
+.med-estado{margin:8px 0 0;padding:9px 12px;border-radius:12px;font-size:14px;line-height:1.35}
+.med-estado.ok{background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.5)}
+.med-estado.toca{background:rgba(212,175,55,.16);border:1px solid rgba(212,175,55,.6)}
+details.mes-a-mes{margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+details.mes-a-mes summary{cursor:pointer;font-family:var(--cond);font-weight:800;font-size:15px;padding:4px 0}
+.mam-total{margin:8px 0;font-size:14px;line-height:1.6}
+.mam-mes{border-top:1px solid var(--line);padding:8px 0}
+.mam-tit{font-family:var(--cond);font-weight:800;font-size:16px;display:flex;justify-content:space-between;align-items:baseline}.mam-tit small{font-size:12px;opacity:.7}
+.mam-vals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}
+.mam-vals span{display:flex;flex-direction:column;align-items:center;background:rgba(127,127,127,.12);border-radius:10px;padding:6px 2px;min-width:0}
+.mam-vals i{font-style:normal;font-size:11px;white-space:nowrap}.mam-vals b{font-family:var(--num);font-size:18px;white-space:nowrap}
+.dif{font-style:normal;font-size:12px;font-weight:800;white-space:nowrap}.dif.baja,.dif.sube{color:#F2D16B}.dif.igual{opacity:.6}
+.sem-fila{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;border-top:1px solid var(--line);padding:7px 0;font-size:14px}.sem-fila span{white-space:nowrap}.sem-fila b{font-family:var(--num);font-size:17px}
 .med-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}
 .med-grid label{display:flex;flex-direction:column;gap:4px;min-width:0}
 .med-grid label span{font-size:13px;line-height:1.2}

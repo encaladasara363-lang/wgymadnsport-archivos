@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=43">
+<link rel="stylesheet" href="nutri-claro.css?v=44">
 <link rel="stylesheet" href="nutri-oscuro.css?v=6">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -1084,8 +1084,9 @@ function textoChiref(cin){
  return t;
 }
 function htmlMedidas(){
- var ms = D.medidas.slice(-12), ult = ms[ms.length - 1];
+ var ms = D.medidas.slice(-12), ult = ms[ms.length - 1], mesHoy = hoyISO().slice(0, 7);
  var h = '<div class="card"><div class="cab"><h3>📏 Mis medidas</h3><span>' + (ult ? String(ult.cin).replace(".", ",") + ' cm' : '') + '</span></div>';
+ h += '<p class="med-estado ' + (ult && ult.f.slice(0, 7) === mesHoy ? 'ok' : 'toca') + '">' + (ult && ult.f.slice(0, 7) === mesHoy ? '✅ Ya registraste tus medidas de ' + mesTxt(mesHoy) + '. Las próximas, en ' + mesTxt(mesSig(mesHoy)) + '.' : '📅 Te toca medirte este mes (' + mesTxt(mesHoy) + '). Se mide una vez al mes.') + '</p>';
  if(ms.length >= 2){
   var vs = ms.map(function(m){ return m.cin; }), lo = Math.min.apply(null, vs) - 1, hi = Math.max.apply(null, vs) + 1, W = 340, H = 130;
   var px = function(i){ return 24 + i * (W - 48) / (ms.length - 1); }, py = function(v){ return 14 + (hi - v) / (hi - lo) * (H - 40); };
@@ -1097,7 +1098,8 @@ function htmlMedidas(){
  if(ult){
   h += '<div class="medidas-ult">' + MED_CAMPOS.filter(function(c){ return ult[c[0]]; }).map(function(c){ return '<div><span>' + c[2] + '</span><b>' + String(ult[c[0]]).replace(".", ",") + '<small>' + (c[3] === "%" ? '%' : ' cm') + '</small></b></div>'; }).join("") + '</div>' +
    '<p class="muted" style="font-size:14px;margin:8px 0 0">📊 Tu cintura está ' + textoChiref(ult.cin) + '. Referencia: estudio chileno con personas activas y sanas de 20 a 29 años; no es una meta obligatoria.</p>';
- } else h += '<p class="muted" style="margin:8px 0">Mídete con una huincha, siempre a la misma hora, una vez cada 2 semanas. Ninguna medida es obligatoria salvo la cintura.</p>';
+ } else h += '<p class="muted" style="margin:8px 0">Mídete con una huincha, siempre a la misma hora, una vez al mes. Ninguna medida es obligatoria salvo la cintura.</p>';
+ h += htmlMesAMes();
  var imc = imcActual();
  if(imc) h += '<p class="muted" style="font-size:14px;margin:8px 0 0">⚖️ Tu IMC (con tu último peso y tu estatura): <b>' + String(imc).replace(".", ",") + '</b> · ' + (imc < 18.5 ? "bajo el rango normal" : imc < 25 ? "rango normal (18,5 a 24,9)" : imc < 30 ? "sobrepeso (25 a 29,9)" : "obesidad (30 o más)") + ' según la OMS.</p>';
  h += '<div class="med-grid" style="margin-top:10px">' + MED_CAMPOS.map(function(c){ return '<label><span>' + c[1] + '</span><input class="inp" id="med_' + c[0] + '" type="text" inputmode="decimal" autocomplete="off" placeholder="' + (c[3] === "%" ? "%" : "cm") + '"></label>'; }).join("") + '</div>' +
@@ -1108,6 +1110,27 @@ function htmlMedidas(){
    cadera/glúteos, muslo, brazo relajado y % de grasa de la báscula). [clave, etiqueta casillero,
    etiqueta corta, unidad, mínimo, máximo]. El peso va en su propio cuadro y el IMC se calcula. */
 var MED_CAMPOS = [["cin","Cintura (altura del ombligo)","Cintura","cm",40,200],["abd","Abdomen bajo","Abdomen","cm",40,220],["cad","Cadera / glúteos","Cadera","cm",50,220],["mus","Muslo","Muslo","cm",25,120],["bra","Brazo relajado","Brazo","cm",15,70],["gra","Grasa corporal (báscula)","Grasa","%",3,70]];
+function mesTxt(ym){ return MESES[Number(ym.slice(5, 7)) - 1] + " " + ym.slice(0, 4); }
+function mesSig(ym){ var a = Number(ym.slice(0, 4)), m = Number(ym.slice(5, 7)) + 1; if(m > 12){ m = 1; a++; } return a + "-" + (m < 10 ? "0" : "") + m; }
+function difTxt(d, u){ if(!d) return '<em class="dif igual">=</em>'; return '<em class="dif ' + (d < 0 ? 'baja' : 'sube') + '">' + (d < 0 ? '▼ ' : '▲ ') + String(Math.abs(d)).replace(".", ",") + (u === "%" ? '%' : '') + '</em>'; }
+/* 📅 Mes a mes (11-10-2026, la dueña: "que las mediciones anteriores vayan quedando registradas
+   cada mes, para que vayan comparando mes a mes sus avances"): cada mes con sus medidas y la
+   diferencia contra el mes anterior, más el total desde la primera medición. */
+function htmlMesAMes(){
+ var todos = D.medidas.slice(); if(!todos.length) return "";
+ var h = '<details class="mes-a-mes"' + (todos.length >= 2 ? ' open' : '') + '><summary>📅 Mis avances mes a mes (' + todos.length + (todos.length === 1 ? ' mes' : ' meses') + ')</summary>';
+ if(todos.length >= 2){
+  var pri = todos[0], ul = todos[todos.length - 1];
+  h += '<div class="mam-total"><b>Desde ' + mesTxt(pri.f.slice(0, 7)) + ':</b> ' + MED_CAMPOS.filter(function(c){ return pri[c[0]] && ul[c[0]]; }).map(function(c){ return c[2] + ' ' + difTxt(r1(ul[c[0]] - pri[c[0]]), c[3]); }).join(' · ') + '</div>';
+ } else h += '<p class="muted" style="font-size:14px;margin:6px 0">El próximo mes vas a ver aquí cuánto cambiaste.</p>';
+ for(var i = todos.length - 1; i >= 0; i--){
+  var m = todos[i], ant = todos[i - 1];
+  h += '<div class="mam-mes"><div class="mam-tit">' + mesTxt(m.f.slice(0, 7)) + '<small>' + m.f.split("-").reverse().join("-") + '</small></div><div class="mam-vals">' +
+   MED_CAMPOS.filter(function(c){ return m[c[0]]; }).map(function(c){ var d = ant && ant[c[0]] ? r1(m[c[0]] - ant[c[0]]) : null;
+    return '<span><i>' + c[2] + '</i><b>' + String(m[c[0]]).replace(".", ",") + (c[3] === "%" ? '%' : ' cm') + '</b>' + (d === null ? '' : difTxt(d, c[3])) + '</span>'; }).join("") + '</div></div>';
+ }
+ return h + '<p class="muted" style="font-size:13px;margin:8px 0 0">▼ bajó · ▲ subió, comparado con el mes anterior. Nunca se borran los meses anteriores.</p></details>';
+}
 function imcActual(){
  var kg = D.pesos.length ? D.pesos[D.pesos.length - 1].kg : D.perfil && D.perfil.peso, cm = D.perfil && Number(D.perfil.alt);
  if(!(kg > 0 && cm > 0)) return 0; var m = cm > 3 ? cm / 100 : cm; return r1(kg / (m * m));
@@ -1118,8 +1141,10 @@ function guardarMedidas(){
   if(!(v >= c[4] && v <= c[5])){ if(!malo) malo = c; return; } reg[c[0]] = r1(v); });
  if(malo){ toast(malo[1] + ": escribe un número válido" + (malo[3] === "%" ? " en %, por ejemplo 22,5." : " en centímetros.")); return; }
  if(!reg.cin){ toast("Escribe al menos tu cintura en centímetros, por ejemplo 72,5."); return; }
- D.medidas = D.medidas.filter(function(m){ return m.f !== reg.f; }); D.medidas.push(reg);
- D.medidas.sort(function(a, b){ return a.f < b.f ? -1 : 1; }); guardar(); renderProg(); toast("✅ Medidas guardadas");
+ var mes = reg.f.slice(0, 7), habia = D.medidas.some(function(m){ return m.f.slice(0, 7) === mes; });
+ /* Una medición por mes: si ya había una este mes se corrige esa; las de meses anteriores nunca se borran. */
+ D.medidas = D.medidas.filter(function(m){ return m.f.slice(0, 7) !== mes; }); D.medidas.push(reg);
+ D.medidas.sort(function(a, b){ return a.f < b.f ? -1 : 1; }); guardar(); renderProg(); toast(habia ? "✅ Medidas de " + mesTxt(mes) + " corregidas" : "✅ Medidas de " + mesTxt(mes) + " guardadas");
 }
 /* 🗓 Menú de la semana (11-10-2026, pedido de la dueña): 7 días con recetas del recetario
    según la meta de calorías de cada socio y las comidas que hace; respeta lo que no come
@@ -2103,7 +2128,14 @@ function renderProg(){
   var dif = r1(ps[ps.length - 1].kg - ps[0].kg);
   h += '<p class="muted" style="margin:6px 0 0;font-size:14px">' + (dif === 0 ? "Sin cambios" : (dif < 0 ? "Bajaste " : "Subiste ") + String(Math.abs(dif)).replace(".", ",") + " kg") + ' desde el ' + ps[0].f.split("-").reverse().join("-") + '.</p>';
  }else h += '<p class="muted" style="margin:8px 0">Registra tu peso una vez por semana, siempre a la misma hora y en ayunas, para ver tu gráfico.</p>';
- h += '<form id="pesoForm" class="fila2" style="grid-template-columns:1fr auto;margin-top:10px"><input class="inp" id="pesoIn" type="text" inputmode="decimal" autocomplete="off" step="0.1" placeholder="Tu peso de hoy (kg)"><button type="button" id="pesoOk" class="btn oro chico" style="width:auto">Guardar</button></form></div>';
+ var semHoy = lunesDe(hoyISO()), pesoSem = D.pesos.filter(function(p){ return lunesDe(p.f) === semHoy; })[0];
+ h += '<p class="med-estado ' + (pesoSem ? 'ok' : 'toca') + '">' + (pesoSem ? '✅ Ya registraste tu peso de esta semana (' + String(pesoSem.kg).replace(".", ",") + ' kg). El próximo, desde el lunes ' + sumaDias(semHoy, 7).split("-").reverse().slice(0, 2).join("-") + '.' : '⚖️ Te toca pesarte esta semana: una vez por semana, en ayunas y a la misma hora.') + '</p>';
+ if(D.pesos.length >= 2){
+  var pAll = D.pesos.slice().reverse();
+  h += '<details class="mes-a-mes"><summary>📋 Mis pesos semana a semana (' + pAll.length + ')</summary>' + pAll.map(function(p, i){ var a = pAll[i + 1];
+   return '<div class="sem-fila"><span>Semana ' + lunesDe(p.f).split("-").reverse().slice(0, 2).join("/") + '</span><b>' + String(p.kg).replace(".", ",") + ' kg</b>' + (a ? difTxt(r1(p.kg - a.kg), "kg") : '<em class="dif igual">inicio</em>') + '</div>'; }).join("") + '</details>';
+ }
+ h += '<form id="pesoForm" class="fila2" style="grid-template-columns:1fr auto;margin-top:10px"><input class="inp" id="pesoIn" type="text" inputmode="decimal" autocomplete="off" step="0.1" placeholder="Peso de esta semana (kg)"><button type="button" id="pesoOk" class="btn oro chico" style="width:auto">Guardar</button></form></div>';
  h += htmlMedidas();
  h += htmlRetos();
  /* Medallas */
@@ -2118,10 +2150,12 @@ function renderProg(){
  function guardarPeso(e){
   if(e) e.preventDefault(); var v = Number(String($("pesoIn").value).replace(",", "."));
   if(!(v >= 30 && v <= 250)){ toast("Escribe tu peso en kilos, por ejemplo 68,5."); return; }
-  var f = hoyISO(); D.pesos = D.pesos.filter(function(p){ return p.f !== f; }); D.pesos.push({ f:f, kg:r1(v) }); D.pesos.sort(function(a, b){ return a.f < b.f ? -1 : 1; });
+  var f = hoyISO(), sem = lunesDe(f), habia = D.pesos.some(function(p){ return lunesDe(p.f) === sem; });
+  /* Un peso por semana (lunes a domingo): si ya había uno esta semana se corrige ese; las semanas anteriores quedan. */
+  D.pesos = D.pesos.filter(function(p){ return lunesDe(p.f) !== sem; }); D.pesos.push({ f:f, kg:r1(v) }); D.pesos.sort(function(a, b){ return a.f < b.f ? -1 : 1; });
   D.cont.pesoManual = true; if(D.perfil) D.perfil.peso = r1(v);
   if(D.perfil && D.metas && !D.metas.aguaManual) D.metas.agua = aguaRecomendada(D.perfil);   /* el agua sigue al peso */
-  guardar(); renderProg(); toast("✅ Peso guardado"); revisarLogros();
+  guardar(); renderProg(); toast(habia ? "✅ Peso de esta semana corregido" : "✅ Peso de esta semana guardado"); revisarLogros();
  }
  $("pesoForm").onsubmit = guardarPeso; $("pesoOk").onclick = guardarPeso;
  $("pesoIn").onkeydown = function(e){ if(e.key === "Enter") guardarPeso(e); };
@@ -2314,7 +2348,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101064", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101065", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
