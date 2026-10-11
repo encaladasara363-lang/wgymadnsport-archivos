@@ -1695,6 +1695,13 @@ probado: ella se activó desde el mesón y entró a la app).
     (`htmlMesAMes`: total desde la primera medición y cada mes con ▼/▲ contra el anterior) y
     «📋 Mis pesos semana a semana». Todo sigue solo en el teléfono: si el socio borra los datos
     del navegador o cambia de teléfono, el historial no se recupera.
+    **Cuadro ordenado con IMC (11-10-2026, la dueña: "quiero que me calcule el IMC… siento que
+    está muy desordenado"):** orden fijo: aviso del mes → «⚖️ Mi IMC» (`htmlImc`: número grande,
+    pastilla de color según OMS, barra 18,5/25/30 con marcador y el cálculo peso ÷ estatura²,
+    con el último peso semanal y la estatura del perfil) → «Mis medidas de <mes>» → «✏️ Anotar /
+    Corregir mis medidas» plegable (abierto si le toca, con los valores del mes ya puestos al
+    corregir) → «📅 Mis avances mes a mes» plegable (gráfico de cintura por mes, IMC de cada mes
+    guardado en `reg.imc` y la referencia CHIREF).
   - «🗓 Mi menú de la semana» en Recetas (`armarMenu`/`htmlMenu`, `D.menu`): 7 días con recetas
     de `nutri-recetas.js` según las comidas del socio (`MENU_CAT`, reparto `MENU_PESO`), lo que
     no come y sin repetir; «🛒 Pasar todo a mi lista de compras» y «🔄 Armar otro menú».
