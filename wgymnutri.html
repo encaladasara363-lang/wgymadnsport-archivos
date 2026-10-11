@@ -996,12 +996,21 @@ function modoVoz(){
   try{ r.start(); }catch(e){ b.classList.remove("oye"); b.querySelector("b").textContent = "Toca y di lo que comiste"; porTeclado(); }
  };
 }
+/* 📳 Vibración suave (11-10-2026, la dueña eligió la idea 6: "un pequeño golpe al anotar un
+   alimento"). Android usa navigator.vibrate; el iPhone no lo tiene, pero desde iOS 18 tocar un
+   interruptor (<input switch>) da un golpecito del sistema: se usa uno escondido. */
+function vibrar(ms){
+ try{ if(navigator.vibrate && navigator.vibrate(ms || 15)) return; }catch(e){}
+ try{ var l = vibrar.l; if(!l){ l = document.createElement("label"); l.setAttribute("aria-hidden", "true"); l.style.cssText = "position:fixed;left:-200px;top:0;width:1px;height:1px;overflow:hidden;opacity:0";
+   var i = document.createElement("input"); i.type = "checkbox"; i.setAttribute("switch", ""); i.tabIndex = -1; l.appendChild(i); document.body.appendChild(l); vibrar.l = l; }
+  l.click(); }catch(e){}
+}
 function agregarVarios(lista){
  var x = diaDe(diaSel); x.c[agr.comida] = x.c[agr.comida] || [];
  lista.forEach(function(it0, i){ if(it0.a && it0.a.off) guardarProductoCompartido(it0.a, "off"); var it = base(it0.a); it.x = r1(it0.mult * 100) / 100; it.t = Date.now() + i; x.c[agr.comida].push(it);
   var k = claveAl(it0.a); D.recientes = [base(it0.a)].concat(D.recientes.filter(function(r){ return claveAl(r) !== k; })).slice(0, 25); });
  setDia(diaSel, x); D.cont.comidas = (D.cont.comidas || 0) + lista.length; guardar(); cerrarHoja();
- toast("✅ " + lista.length + (lista.length === 1 ? " alimento agregado" : " alimentos agregados"));
+ vibrar(20); toast("✅ " + lista.length + (lista.length === 1 ? " alimento agregado" : " alimentos agregados"));
  if(tabSel !== "tabHoy") mostrarTab("tabHoy"); else { renderHoy(); $("rachaNum").textContent = racha(); }
  revisarLogros();
 }
@@ -1026,7 +1035,7 @@ function modoPlatos(){
   '<p class="muted" style="font-size:14px;margin-top:8px">Toca un plato para agregarlo a ' + esc(nombreComida(agr.comida).toLowerCase()) + '.</p>';
  c.querySelectorAll("[data-pl]").forEach(function(b){ b.onclick = function(){
   var p = D.platos[+b.dataset.pl], x = diaDe(diaSel); x.c[agr.comida] = (x.c[agr.comida] || []).concat(p.its.map(function(it, i){ return Object.assign({}, it, { t:Date.now() + i }); }));
-  setDia(diaSel, x); D.cont.comidas = (D.cont.comidas || 0) + p.its.length; guardar(); cerrarHoja(); toast("✅ Agregado: " + p.n);
+  setDia(diaSel, x); D.cont.comidas = (D.cont.comidas || 0) + p.its.length; guardar(); cerrarHoja(); vibrar(20); toast("✅ Agregado: " + p.n);
   if(tabSel !== "tabHoy") mostrarTab("tabHoy"); else { renderHoy(); $("rachaNum").textContent = racha(); } revisarLogros(); }; });
  c.querySelectorAll("[data-plx]").forEach(function(b){ b.onclick = function(){ var p = D.platos[+b.dataset.plx]; if(confirm("¿Borrar el plato «" + p.n + "»?")){ D.platos.splice(+b.dataset.plx, 1); guardar(); modoPlatos(); } }; });
 }
@@ -1458,17 +1467,17 @@ function renderHoy(){
  box.querySelectorAll("[data-au]").forEach(function(b){ b.onclick = function(){ D.aguaUnidad = b.dataset.au; guardar(); renderHoy(); }; });
  box.querySelectorAll(".botella").forEach(function(v){ v.onclick = function(){
   var i = +v.dataset.b, xx = diaDe(diaSel); xx.agua = (xx.agua >= (i + 1) * 2) ? i * 2 : (i + 1) * 2; setDia(diaSel, xx); guardar();
-  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
+  vibrar(15);
   renderHoy(); revisarLogros();
  }; });
  box.querySelectorAll(".vaso").forEach(function(v){ v.onclick = function(){
   var i = +v.dataset.i, xx = diaDe(diaSel); xx.agua = (i < xx.agua) ? i : i + 1; setDia(diaSel, xx); guardar();
-  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
+  vibrar(15);
   renderHoy(); revisarLogros();
  }; });
  box.querySelectorAll(".taza").forEach(function(v){ v.onclick = function(){
   var i = +v.dataset.t, xx = diaDe(diaSel); xx.cafe = (i < (xx.cafe || 0)) ? i : i + 1; setDia(diaSel, xx); guardar();
-  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
+  vibrar(15);
   renderHoy();
  }; });
  box.querySelectorAll(".add-l[data-m]").forEach(function(b){ b.onclick = function(){ agr.q = ""; abrirAgregar(b.dataset.m, "buscar"); }; });
@@ -1485,7 +1494,7 @@ function renderHoy(){
  if($("sugOtra")) $("sugOtra").onclick = function(){ sugOff++; renderHoy(); };
  box.querySelectorAll("[data-supl]").forEach(function(b){ b.onclick = function(){
   var n = suplLista()[+b.dataset.supl], xx = diaDe(diaSel); xx.supl = xx.supl || {}; if(xx.supl[n]) delete xx.supl[n]; else xx.supl[n] = true; setDia(diaSel, xx); guardar();
-  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){} renderHoy(); }; });
+  vibrar(15); renderHoy(); }; });
  if($("suplEd")) $("suplEd").onclick = function(){ $("suplEdBox").hidden = !$("suplEdBox").hidden; };
  if($("suplAdd")) $("suplAdd").onclick = function(){ var v = $("suplIn").value.trim(); if(!v) return; var l = suplLista().slice(); if(l.indexOf(v) < 0) l.push(v.slice(0, 30)); D.supl = l; guardar(); renderHoy(); $("suplEdBox").hidden = false; };
  box.querySelectorAll("[data-supl-x]").forEach(function(b){ b.onclick = function(){ var l = suplLista().slice(); l.splice(+b.dataset.suplX, 1); D.supl = l; guardar(); renderHoy(); $("suplEdBox").hidden = false; }; });
@@ -1863,7 +1872,7 @@ function agregar(a, mult, esGr){
  var x = diaDe(diaSel); (x.c[agr.comida] = x.c[agr.comida] || []).push(it); setDia(diaSel, x);
  var k = claveAl(a); D.recientes = [base(a)].concat(D.recientes.filter(function(r){ return claveAl(r) !== k; })).slice(0, 25);
  D.cont.comidas = (D.cont.comidas || 0) + 1;
- guardar(); cerrarHoja(); toast("✅ Agregado: " + a.n);
+ guardar(); cerrarHoja(); vibrar(20); toast("✅ Agregado: " + a.n);
  if(tabSel !== "tabHoy") mostrarTab("tabHoy"); else { renderHoy(); $("rachaNum").textContent = racha(); }
  revisarLogros();
 }
@@ -1963,7 +1972,7 @@ function modoEscanear(){
   var f = this.files && this.files[0]; if(!f) return;
   $("fotoTxt").textContent = "Leyendo la foto…";
   leerFotoCodigo(f).then(function(code){
-   if(code){ pararCamara(); if(navigator.vibrate) try{ navigator.vibrate(60); }catch(e){} leido(code); }
+   if(code){ pararCamara(); vibrar(60); leido(code); }
    else $("fotoTxt").textContent = "No se pudo leer el código en la foto. Prueba con más luz y el código más grande, o escribe los números aquí abajo.";
   });
   this.value = "";
@@ -1974,7 +1983,7 @@ function modoEscanear(){
  function encontrado(code){ if(cam.leyendo) return;
   if(code !== visto.c){ visto.c = code; visto.n = 1; } else visto.n++;
   if(visto.n < (String(code).length <= 8 ? 2 : 1)) return;   /* EAN-13 ya trae dígito verificador */
-  cam.leyendo = true; if(navigator.vibrate) try{ navigator.vibrate(60); }catch(e){} pararCamara(); leido(code); }
+  cam.leyendo = true; vibrar(60); pararCamara(); leido(code); }
  function sinCamara(){ $("camBox").hidden = true; $("camTxt").textContent = "No pudimos abrir la cámara. Revisa el permiso de cámara del navegador, o escribe el número del código aquí abajo."; }
  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ sinCamara(); return; }
  /* Video en alta resolución y con enfoque continuo (10-10-2026: el código de una lata no se leía). */
@@ -2366,7 +2375,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101070", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101071", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
