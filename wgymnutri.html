@@ -967,7 +967,11 @@ function interpretarVoz(txt){
 }
 function modoVoz(){
  var c = $("agrCuerpo"), SR = window.SpeechRecognition || window.webkitSpeechRecognition, items = [];
- c.innerHTML = (SR ? '<button type="button" class="voz-mic" id="vozMic"><span>🎤</span><b>Toca y di lo que comiste</b><small>Ej: «dos huevos y una marraqueta»</small></button>' : '<p class="muted">Tu teléfono no permite dictar aquí. Escribe la frase y se calcula igual.</p>') +
+ /* El micrófono se ve siempre (11-10-2026, la dueña: "no me aparece el micrófono"). En
+    iPhone (app en la pantalla de inicio, Chrome) la página no puede escuchar: el botón abre
+    el teclado para usar el 🎤 del propio teclado. */
+ c.innerHTML = '<button type="button" class="voz-mic" id="vozMic"><span>🎤</span><b>Toca y di lo que comiste</b><small>Ej: «dos huevos y una marraqueta»</small></button>' +
+  '<p class="muted" id="vozAyuda" hidden>Toca el <b>🎤 del teclado</b> (abajo, junto a la barra espaciadora) y di lo que comiste. Después toca «Calcular».</p>' +
   '<div class="campo" style="margin-top:12px"><label for="vozTx">Lo que comiste</label><textarea class="inp" id="vozTx" rows="2" placeholder="Ej: 2 huevos, una marraqueta y 150 gramos de pollo"></textarea></div>' +
   '<button type="button" class="btn sec chico" id="vozBus">Calcular</button><div id="vozRes"></div>';
  function pintarRes(){
@@ -981,13 +985,15 @@ function modoVoz(){
  }
  function calcular(){ items = interpretarVoz($("vozTx").value); pintarRes(); }
  $("vozBus").onclick = calcular;
- if(SR) $("vozMic").onclick = function(){
+ function porTeclado(){ $("vozAyuda").hidden = false; var t = $("vozTx"); t.focus(); try{ t.scrollIntoView({ block:"center" }); }catch(e){} }
+ $("vozMic").onclick = function(){
+  if(!SR){ porTeclado(); return; }
   var r = new SR(), b = this; r.lang = "es-CL"; r.interimResults = true; r.maxAlternatives = 1;
   b.classList.add("oye"); b.querySelector("b").textContent = "Te escucho…";
   r.onresult = function(ev){ var s = ""; for(var i = 0; i < ev.results.length; i++) s += ev.results[i][0].transcript; $("vozTx").value = s; };
-  r.onerror = function(ev){ toast(ev.error === "not-allowed" ? "Permite el micrófono para dictar." : "No te escuché bien. Prueba de nuevo o escríbelo."); };
+  r.onerror = function(ev){ if(ev.error === "service-not-allowed" || ev.error === "not-allowed" || ev.error === "audio-capture"){ toast(ev.error === "not-allowed" ? "Permite el micrófono o usa el 🎤 del teclado." : "Usa el 🎤 del teclado para dictar."); porTeclado(); } else toast("No te escuché bien. Prueba de nuevo o escríbelo."); };
   r.onend = function(){ b.classList.remove("oye"); b.querySelector("b").textContent = "Toca y di lo que comiste"; if($("vozTx").value.trim()) calcular(); };
-  try{ r.start(); }catch(e){ toast("No se pudo usar el micrófono."); }
+  try{ r.start(); }catch(e){ b.classList.remove("oye"); b.querySelector("b").textContent = "Toca y di lo que comiste"; porTeclado(); }
  };
 }
 function agregarVarios(lista){
@@ -2135,7 +2141,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101053", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101054", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
