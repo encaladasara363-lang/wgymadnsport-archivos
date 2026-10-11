@@ -600,26 +600,36 @@ function guardarReto_(e) {
     } finally { lock.releaseLock(); }
   } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
+function calcularRetos_(p, conNombre) {
+  var mes = diaCL_(Date.now()).slice(0, 7);
+  var hoja = SpreadsheetApp.openById(SHEET_ID).getSheetByName("Retos"), filas = [];
+  if (hoja && hoja.getLastRow() >= 2) {
+    /* Si una persona quedó repetida, vale su fila más nueva (la de más abajo). */
+    var porClave = {};
+    hoja.getRange(2, 1, hoja.getLastRow() - 1, 4).getValues().forEach(function (r) {
+      if (mesDe_(r[0]) === mes && r[3]) porClave[String(r[3])] = { id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]) };
+    });
+    Object.keys(porClave).forEach(function (k) { if (porClave[k].apodo !== "(salió)") filas.push(porClave[k]); });
+  }
+  var dias = filas.length ? diasDesde_(p, mes + "-01") : {};
+  var lista = filas.map(function (f) { var o = { id: f.id, apodo: f.apodo, pts: dias[f.clave] ? Object.keys(dias[f.clave]).length : 0 }; if (conNombre) o.nombre = f.clave; return o; });
+  lista.sort(function (a, b) { return b.pts - a.pts; });
+  return { ok: true, retos: true, mes: mes, lista: conNombre ? lista : lista.slice(0, 30) };
+}
 function listarRetos_(e) {
   try {
     var mes = diaCL_(Date.now()).slice(0, 7), cache = CacheService.getScriptCache(), guardado = cache.get("retos_" + mes);
     if (guardado) return respond_(e, JSON.parse(guardado));
-    var hoja = SpreadsheetApp.openById(SHEET_ID).getSheetByName("Retos"), filas = [];
-    if (hoja && hoja.getLastRow() >= 2) {
-      /* Si una persona quedó repetida, vale su fila más nueva (la de más abajo). */
-      var porClave = {};
-      hoja.getRange(2, 1, hoja.getLastRow() - 1, 4).getValues().forEach(function (r) {
-        if (mesDe_(r[0]) === mes && r[3]) porClave[String(r[3])] = { id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]) };
-      });
-      Object.keys(porClave).forEach(function (k) { if (porClave[k].apodo !== "(salió)") filas.push(porClave[k]); });
-    }
-    var dias = filas.length ? diasDesde_(e.parameter, mes + "-01") : {};
-    var lista = filas.map(function (f) { return { id: f.id, apodo: f.apodo, pts: dias[f.clave] ? Object.keys(dias[f.clave]).length : 0 }; });
-    lista.sort(function (a, b) { return b.pts - a.pts; });
-    var out = { ok: true, retos: true, mes: mes, lista: lista.slice(0, 30) };
+    var out = calcularRetos_(e.parameter, false);
     cache.put("retos_" + mes, JSON.stringify(out), 120);
     return respond_(e, out);
   } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
+}
+/* Ranking con nombres reales, solo para el mesón (POST con la clave de administración). */
+function rankingAdmin_(e) {
+  if (!claveValida_(e.parameter)) return respond_(e, { ok: false, error: "clave incorrecta" });
+  try { return respond_(e, calcularRetos_(e.parameter, true)); }
+  catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
 
 /* ── las dos entradas que llama Código.gs ───────────────────────────── */
@@ -648,6 +658,7 @@ function accionIngresosPost_(e) {
     case "registrarSalida": return registrarSalida_(e);
     case "quitarSalida": return quitarSalida_(e);
     case "activarNutri": return activarNutri_(e);
+    case "rankingAdmin": return rankingAdmin_(e);
   }
   return null;
 }

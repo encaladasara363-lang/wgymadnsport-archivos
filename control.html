@@ -314,6 +314,12 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
  .ficha .campos{ grid-template-columns:1fr; }
 }
 @media (prefers-reduced-motion:reduce){ *{ transition:none !important; animation:none !important; } }
+/* Ranking del mes en el mesón (11-10-2026) */
+.rank-ayuda{ font-size:13px; color:var(--gris-soft, #A3A3AD); margin:0 0 10px; }
+.rank-tabla{ width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
+.rank-tabla th{ text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#D4AF37; padding:6px 8px; border-bottom:1px solid #333; }
+.rank-tabla td{ padding:8px; border-bottom:1px solid #2a2a31; }
+.rank-tabla .rank-dias{ font-weight:800; color:#D4AF37; font-size:16px; }
 </style>
 
 <link rel="stylesheet" href="estilo-deportivo.css?v=6">
@@ -393,6 +399,15 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <div id="ingresosPanel"></div>
 
 <section class="kpis" id="kpis"></section>
+
+<div class="panel" id="rankPanel">
+<h2>🏆 Ranking del mes <span class="der" id="rankMes">tarjeta virtual</span></h2>
+<div class="cuerpo">
+<p class="rank-ayuda">Socios que se unieron al ranking desde su tarjeta: apodo, nombre real y días entrenados este mes. Los nombres solo se ven aquí, con tu clave.</p>
+<button class="btn btn-rojo" id="bRanking" type="button">Ver ranking del mes</button>
+<div id="rankAdmin"></div>
+</div>
+</div>
 
 <div class="panel">
 <h2>Socios del gimnasio <span class="der" id="conteo">—</span></h2>
@@ -609,6 +624,23 @@ function llamarSocioApi_(action, params, cb, reintento){
   })
   .catch(function(){ cb(false, "sin conexión"); });
 }
+/* 🏆 Ranking del mes con nombres reales (11-10-2026, la dueña: "no veo en el mesón dónde
+   está"). Acción rankingAdmin del Apps Script, POST con la clave de administración. */
+function escRank_(t){ return String(t == null ? "" : t).replace(/[&<>"']/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]; }); }
+function verRankingAdmin_(){
+ var box = document.getElementById("rankAdmin"), b = document.getElementById("bRanking");
+ b.disabled = true; b.textContent = "Cargando…";
+ llamarSocioApi_("rankingAdmin", {}, function(ok, d){
+  b.disabled = false; b.textContent = "🔄 Actualizar ranking";
+  if(!ok){ box.innerHTML = '<p class="rank-ayuda">' + (d === "sin conexión" ? 'Sin conexión. Revisa el internet e intenta de nuevo.' : d === "sin clave" ? 'Falta la clave de administración.' : 'No se pudo cargar (' + escRank_(d) + '). Si recién se agregó, falta actualizar el sistema de Google a la Versión 20.') + '</p>'; return; }
+  var l = d.lista || [];
+  document.getElementById("rankMes").textContent = (d.mes || "") + " · " + l.length + (l.length === 1 ? " socio" : " socios");
+  box.innerHTML = l.length ? '<table class="rank-tabla"><thead><tr><th>#</th><th>Apodo</th><th>Nombre real</th><th>Días</th></tr></thead><tbody>' +
+   l.map(function(x, i){ return '<tr><td>' + (i < 3 ? ["🥇","🥈","🥉"][i] : (i + 1) + "°") + '</td><td><b>' + escRank_(x.apodo) + '</b></td><td>' + escRank_(x.nombre) + '</td><td class="rank-dias">' + x.pts + '</td></tr>'; }).join("") + '</tbody></table>'
+   : '<p class="rank-ayuda">Todavía nadie se une al ranking este mes.</p>';
+ });
+}
+document.getElementById("bRanking").addEventListener("click", verRankingAdmin_);
 function guardarSocioApi(s, cb){
  llamarSocioApi_("guardarSocio", {
   nombre:s.n, apellido:s.a, plan:s.plan, monto:s.m,

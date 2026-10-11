@@ -413,6 +413,11 @@ ver cuándo el gym está más vacío.
   Con la Versión 17 quedaron filas repetidas de una misma persona («Sari» ×3). **Versión 19,
   instalada por la dueña el 10-10-2026 a las 21:31 y verificada idéntica al repo:** `guardarReto` actualiza la fila del mes por id O por
   nombre y `listarRetos` deja una sola entrada por persona (la fila más nueva).
+  **Ranking en el mesón (11-10-2026, la dueña: "no veo en el mesón dónde está"; eligió con
+  nombres):** panel «🏆 Ranking del mes» en `control.html` (antes de «Socios del gimnasio»),
+  botón «Ver ranking del mes» → `rankingAdmin` (POST con `ADMIN_KEY` vía `llamarSocioApi_`)
+  que entrega lugar, apodo, NOMBRE REAL y días de todos los unidos (`calcularRetos_` con
+  nombre). Los nombres nunca salen por las acciones públicas. **Necesita la Versión 20.**
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a

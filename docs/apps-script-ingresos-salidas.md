@@ -135,3 +135,11 @@ implementaciones → lápiz ✏️ → Nueva versión → Implementar**.
 Comprobar: el link del script terminado en `/exec?action=listarRetos` debe
 mostrar `{"ok":true,"retos":true,...`. Mientras no se instale, la tarjeta dice
 «El ranking se activa cuando el gimnasio actualice su sistema».
+
+### Versión 20 (11-10-2026): ranking con nombres en el mesón
+
+Acción nueva `rankingAdmin` (POST con la clave de administración): el mesón
+(`control.html`) muestra el ranking del mes con el apodo, el **nombre real** y
+los días de cada socio, para saber a quién premiar. Se instala igual: pegar todo
+`Ingresos.gs` en **INGRESOS.gs**, guardar, **Implementar → Administrar
+implementaciones → lápiz ✏️ → Nueva versión → Implementar**.
