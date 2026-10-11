@@ -340,7 +340,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=14"></script>
+<script src="nutri-alimentos.js?v=15"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -1539,7 +1539,7 @@ var UNIDADES = ["lámina","rebanada","unidad","galleta","barra","pote","sobre","
 function plural(u, n){ return n <= 1 ? u : /z$/.test(u) ? u.slice(0, -1) + "ces" : /(ch|[dlnr])$/.test(u) ? u + "es" : u + "s"; }
 /* Alimentos que se cuentan (huevos, unidades, rebanadas…): se muestran de a 1 y la persona
    elige cuántos comió, 1 a 6 (10-10-2026, la dueña: "aparece medio huevo, es tonto"). */
-var CONTABLES = /^(\d+)\s+(huevos?|unidad(?:es)?|rebanadas?|l[aá]minas?|galletas?|marraquetas?|hallullas?|tostadas?|trozos?|claras?|panqueques?|empanadas?|s[aá]ndwich(?:es)?|wraps?|barras?|sobres?|potes?|latas?|botellas?|frutillas?|nueces|almendras?|tajadas?|avellanas?|pistachos?|casta[nñ]as?|granos?|mitad(?:es)?)\b\s*(.*)$/i;
+var CONTABLES = /^(\d+)\s+(huevos?|unidad(?:es)?|rebanadas?|l[aá]minas?|galletas?|marraquetas?|hallullas?|tostadas?|trozos?|claras?|panqueques?|empanadas?|s[aá]ndwich(?:es)?|wraps?|barras?|sobres?|potes?|latas?|botellas?|frutillas?|nueces|almendras?|tajadas?|avellanas?|pistachos?|casta[nñ]as?|granos?|cuadr(?:it|adit)os?|mitad(?:es)?)\b\s*(.*)$/i;
 function porUnidad(a){
  if(a.gr || a.cat === "Verduras") return null;   /* verduras siempre en gramos (10-10-2026, la dueña) */
  var m = String(a.p || "").match(CONTABLES); if(!m) return null;
@@ -2298,7 +2298,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101057", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101058", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
