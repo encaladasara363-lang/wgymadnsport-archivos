@@ -496,6 +496,18 @@ details.mes-a-mes summary{cursor:pointer;font-family:var(--cond);font-weight:800
 .mam-vals i{font-style:normal;font-size:11px;white-space:nowrap}.mam-vals b{font-family:var(--num);font-size:18px;white-space:nowrap}
 .dif{font-style:normal;font-size:12px;font-weight:800;white-space:nowrap}.dif.baja,.dif.sube{color:#F2D16B}.dif.igual{opacity:.6}
 .sem-fila{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;border-top:1px solid var(--line);padding:7px 0;font-size:14px}.sem-fila span{white-space:nowrap}.sem-fila b{font-family:var(--num);font-size:17px}
+.med-sub{font-family:var(--cond);font-weight:800;font-size:15px;margin:12px 0 0;letter-spacing:.03em}
+.imc-box{margin-top:10px;border:1px solid rgba(212,175,55,.55);border-radius:14px;padding:12px}
+.imc-fila{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.imc-tit{font-family:var(--cond);font-weight:800;font-size:15px}
+.imc-num{font-family:var(--num);font-size:42px;line-height:1}
+.imc-cat{padding:6px 12px;border-radius:999px;font-family:var(--cond);font-weight:800;font-size:14px;white-space:nowrap;color:#0A0A0B}
+.imc-cat.bajo{background:#5FB4FF}.imc-cat.normal{background:#22C55E}.imc-cat.sobre{background:#F2C94C}.imc-cat.obes{background:#FF5A5F}
+.imc-barra{position:relative;display:flex;height:10px;border-radius:6px;overflow:visible;margin-top:12px}
+.imc-barra i{display:block;height:100%}.imc-barra .b1{width:17.5%;background:#5FB4FF;border-radius:6px 0 0 6px}.imc-barra .b2{width:32.5%;background:#22C55E}.imc-barra .b3{width:25%;background:#F2C94C}.imc-barra .b4{width:25%;background:#FF5A5F;border-radius:0 6px 6px 0}
+.imc-barra em{position:absolute;top:-5px;width:6px;height:20px;margin-left:-3px;background:#fff;border:2px solid #0A0A0B;border-radius:4px}
+.imc-marcas{position:relative;height:16px;font-size:11px}.imc-marcas span{position:absolute;transform:translateX(-50%)}.imc-marcas span:nth-child(1){left:17.5%}.imc-marcas span:nth-child(2){left:50%}.imc-marcas span:nth-child(3){left:75%}
+details.anotar summary{color:var(--gold2,#D4AF37)}
 .med-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}
 .med-grid label{display:flex;flex-direction:column;gap:4px;min-width:0}
 .med-grid label span{font-size:13px;line-height:1.2}
