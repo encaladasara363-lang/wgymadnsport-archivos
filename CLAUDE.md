@@ -1645,8 +1645,9 @@ probado: ella se activó desde el mesón y entró a la app).
     aparece el micrófono"):** en iPhone (app en la pantalla de inicio o Chrome) la página no
     puede escuchar; el botón 🎤 abre el casillero con el teclado y explica usar el 🎤 del
     teclado (`porTeclado`), también si el dictado falla con `not-allowed`/`service-not-allowed`. Desde el
-    11-10-2026 (pedido de la dueña) cada cuadro de comida trae además «🎤 Decir lo que comí»
-    (`data-mv`): abre Voz para esa comida y empieza a escuchar (o abre el teclado) al tiro.
+    11-10-2026 (pedido de la dueña) cada cuadro de comida traía además «🎤 Decir lo que comí»
+    (`data-mv`); **se sacó de los cuadros el mismo día** (la dueña: "este ya no me gusta"). La Voz sigue
+    como pestaña dentro de «Agregar comida».
   - «🛒 Mi lista de compras» arriba de las recetas: en cada receta «🛒 Agregar a mi lista de
     compras» suma sus ingredientes (`D.compras`, sin repetir), se marcan al comprar, «📋 Copiar
     lista» para WhatsApp/Notas y «🗑 Vaciar». Desde el 11-10-2026 el cuadro va en **amarillo** con letras negras en los

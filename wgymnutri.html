@@ -1439,7 +1439,7 @@ function renderHoy(){
   if(!its.length && ay.length) h += '<button type="button" class="rep-ay" data-rep="' + cm[0] + '">🔁 Repetir lo de ayer · ' + ay.length + (ay.length === 1 ? ' alimento' : ' alimentos') + ' · ' + miles(ay.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0)) + ' kcal</button>';
   /* «Guardar como plato» y «Copiar a otro día» (11-10-2026, pedido de la dueña). */
   if(its.length) h += '<div class="cc-mini"><button type="button" class="chip" data-plato="' + cm[0] + '">⭐ Guardar como plato</button><button type="button" class="chip" data-copiar="' + cm[0] + '">📋 Copiar a otro día</button></div>';
-  h += '<div class="beb-bts"><button type="button" class="btn rojo scan-c" data-m="' + cm[0] + '">📷 Escanear alimento</button><button type="button" class="add-l voz-c" data-mv="' + cm[0] + '">🎤 Decir lo que comí</button><button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar alimento</button></div></div>';
+  h += '<div class="beb-bts"><button type="button" class="btn rojo scan-c" data-m="' + cm[0] + '">📷 Escanear alimento</button><button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar alimento</button></div></div>';
  });
  var bebs = x.c.bebidas || [], kb = bebs.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
  h += '<div class="card bebidas-card"><div class="cab"><h3>⚡ Energéticas</h3><small>' + (bebs.length ? miles(kb) + " kcal" : "") + '</small></div>' +
@@ -2366,7 +2366,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101069", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101070", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
