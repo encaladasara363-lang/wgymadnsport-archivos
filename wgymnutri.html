@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=50">
+<link rel="stylesheet" href="nutri-claro.css?v=52">
 <link rel="stylesheet" href="nutri-oscuro.css?v=9">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -315,7 +315,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
  <!-- App -->
  <section id="vApp" hidden>
   <header class="top">
-   <div class="logo-top"><video poster="assets/wgymnutri-logo.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI"><source src="assets/wgymnutri-logo-cabecera.mp4" type="video/mp4"><source src="assets/wgymnutri-logo-cabecera.webm" type="video/webm"></video></div>
+   <div class="logo-top"><img id="avatarTop" class="avatar-top" alt="Mi foto" hidden><video poster="assets/wgymnutri-logo.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI"><source src="assets/wgymnutri-logo-cabecera.mp4" type="video/mp4"><source src="assets/wgymnutri-logo-cabecera.webm" type="video/webm"></video></div>
    <div class="t"><b>WGYMNUTRI</b><span id="saludo">Hola</span></div>
    <div class="racha" id="rachaChip" title="Días seguidos registrando comida">🔥 <span id="rachaNum">0</span></div>
    <div class="ent-tag" id="entTag" hidden style="color:#FFFFFF">💪 Hoy entrenaste en WGYM</div>
@@ -840,7 +840,7 @@ function racha(){
  while(totales(d).n){ n++; d = sumaDias(d, -1); }
  return n;
 }
-function pintarSaludo(){ $("saludo").textContent = "Hola, " + socio.n.split(" ")[0] + (esPase(socio) ? " · Pase diario (solo hoy)" : ""); }
+function pintarSaludo(){ seguroN_(pintarAvatar); $("saludo").textContent = "Hola, " + socio.n.split(" ")[0] + (esPase(socio) ? " · Pase diario (solo hoy)" : ""); }
 function iniciarApp(){
  if(D.perfil && D.metas && !D.metas.aguaManual && D.metas.agua !== aguaRecomendada(D.perfil)){ D.metas.agua = aguaRecomendada(D.perfil); guardar(); }
  vista("vApp"); diaSel = hoyISO(); cargarProductos();
@@ -1393,6 +1393,20 @@ function metaMicro(k){ var h = D.perfil && D.perfil.sexo === "M"; return k === "
 var NIVELES = [[0,"Novato","🌱"],[7,"Bronce","🥉"],[15,"Plata","🥈"],[30,"Oro","🥇"],[60,"Diamante","💎"]];
 function diasUsados(){ return Object.keys(D.dias).filter(function(k){ return totales(k).n; }).length; }
 function nivelDe(n){ var i = 0; while(i + 1 < NIVELES.length && n >= NIVELES[i + 1][0]) i++; return i; }
+/* 🌙 Resumen de la noche (11-10-2026, la dueña eligió la idea 6): desde las 21:00, un cuadro corto
+   con lo del día y un solo consejo (proteína que faltó, si se pasó de calorías o si no anotó nada). */
+function htmlNoche(){
+ if(new Date().getHours() < 21) return "";
+ var t = totales(hoyISO()), M = D.metas, h = '<div class="card noche-card"><div class="cab"><h3>🌙 Resumen de tu día</h3></div>';
+ if(!t.n) return h + '<p style="color:#FFD54A;margin:8px 0 0">Hoy no anotaste comidas. Si comiste algo, anótalo ahora: mañana partimos de nuevo con todo 💪</p></div>';
+ var pk = Math.round(t.k / M.kcal * 100), pp = M.p ? Math.round(t.p / M.p * 100) : 0, falta = Math.round(M.p - t.p), cons;
+ if(t.k > M.kcal * 1.05) cons = '🍽 Hoy te pasaste ' + miles(t.k - M.kcal) + ' kcal. No pasa nada: mañana vuelve a tu plan, sin saltarte comidas.';
+ else if(pp < 80) cons = '💪 Te faltaron ' + falta + ' g de proteína. Mañana suma, por ejemplo, una lata de atún (29 g) o 150 g de pechuga (46 g).';
+ else if(t.k < M.kcal * 0.7) cons = '⚠️ Comiste bastante menos de tu meta. Comer muy poco frena tus avances: mañana completa tus comidas.';
+ else cons = '🎉 ¡Excelente día! Cumpliste tu plan. Descansa bien: dormir también es parte del entrenamiento.';
+ return h + '<div class="noche-datos"><div><b style="color:#F2D16B">' + miles(t.k) + '</b><span>kcal · ' + pk + ' %</span></div><div><b style="color:#FF5A5F">' + Math.round(t.p) + ' g</b><span>proteína · ' + pp + ' %</span></div></div>' +
+  '<p style="color:#FFD54A;margin:10px 0 0;line-height:1.35">' + cons + '</p></div>';
+}
 function htmlRacha(){
  var r = racha(), hoyOk = !!totales(hoyISO()).n, du = diasUsados(), ni = nivelDe(du), N = NIVELES[ni], sig = NIVELES[ni + 1];
  var tam = r ? Math.min(1.6, 0.9 + r * 0.05) : 0.8, estado = !r ? "apagado" : hoyOk ? "vivo" : "peligro";
@@ -1433,6 +1447,7 @@ function renderHoy(){
  h += '<div class="semana-tira">' + ["L","M","M","J","V","S","D"].map(function(l, i){
   var f = sumaDias(lun, i), xd = D.dias[f], con = xd && Object.keys(xd.c || {}).some(function(k){ return (xd.c[k] || []).length; });
   return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + (ent[f] ? " ent" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i>' + (ent[f] ? '<em class="st-ent" aria-label="Entrenaste">💪</em>' : '') + '</button>'; }).join("") + '</div>';
+ if(esHoy) h += htmlNoche();
  if(esHoy) h += htmlRacha();
  if(ent[diaSel]) h += '<div class="aviso entreno-av"><span class="e">💪</span><p><b>' + (esHoy ? 'Después de entrenar' : 'Este día entrenaste en WGYM') + '</b><br><span class="muted" style="font-size:15px">Después de entrenar, suma 15 a 25 g de proteína dentro de las 2 horas siguientes.</span></p></div>';
  var av = recordatorio();
@@ -2308,6 +2323,13 @@ function compartir(){
 var recCat = "Todas", recAbierta = -1;
 var RECETAS = window.NUTRI_RECETAS || [];
 var RECETA_COMIDA = { "Desayuno":"desayuno", "Almuerzo":"almuerzo", "Snack":"once", "Cena":"cena", "Colación":"colacion1", "Postre":"once" };
+/* ⭐ Receta destacada del día (11-10-2026, la dueña eligió la idea 8): una distinta cada día, entre
+   las permitidas para el socio (respeta lo que no come); se abre como cualquier receta. */
+function htmlRecetaDia(){
+ var ok = []; RECETAS.forEach(function(r, i){ if(recetaPermitida(r)) ok.push(i); }); if(!ok.length) return "";
+ var d = Math.floor(fechaDeISO(hoyISO()).getTime() / 86400000), i = ok[(d * 7 + 3) % ok.length], r = RECETAS[i];
+ return '<div class="receta-dia"><p class="rd-kick" style="color:#141416">⭐ Receta del día</p><button type="button" class="card receta" data-r="' + i + '" style="width:100%;text-align:left"><span class="e">' + r.e + '</span><span style="flex:1;min-width:0"><b style="display:block;font-family:var(--cond);font-size:20px;text-transform:uppercase;letter-spacing:.03em">' + esc(r.n) + '</b><span class="muted" style="font-size:14px">' + esc(r.cat) + ' · ' + r.min + ' min · ' + miles(r.k) + ' kcal · ' + r.p + ' g proteína</span></span></button></div>';
+}
 function renderRec(){
  var box = $("tabRec"), h = '<h2 class="disp" style="font-size:34px">Recetas saludables</h2>';
  if(recAbierta >= 0){
@@ -2333,7 +2355,7 @@ function renderRec(){
  }
  var cats = ["Todas","Desayuno","Almuerzo","Snack","Cena","Colación","Postre"].filter(function(c){ return c === "Todas" || RECETAS.some(function(r){ return r.cat === c; }); });
  h += '<p class="muted" style="margin:0">Recetas fáciles y nutritivas, con sus calorías. Agrégalas a tu día con un toque.</p>' +
-  htmlMenu() + htmlCompras() +
+  htmlRecetaDia() + htmlMenu() + htmlCompras() +
   '<div class="tabs">' + cats.map(function(c){ return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === recCat) + '">' + esc(c) + '</button>'; }).join("") + '</div><div class="stack">';
  var ocultas = RECETAS.filter(function(r){ return (recCat === "Todas" || r.cat === recCat) && !recetaPermitida(r); }).length;
  if(ocultas) h += '<p class="muted" style="font-size:15px;margin:0 0 6px">🙈 Ocultamos ' + ocultas + ' recetas con alimentos que no comes. Cámbialo en «Mi perfil» → «Recalcular».</p>';
@@ -2368,9 +2390,25 @@ function cerrarReceta(){
 window.addEventListener("popstate", function(){ if(recAbierta >= 0) mostrarListaRecetas(); });
 function temaOscuro(){ return document.documentElement.classList.contains("oscuro"); }
 function ponerTema(t){ lsSet("wgymnutri_tema_v1", t); document.documentElement.classList.toggle("oscuro", t === "oscuro"); var m = document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content", t === "oscuro" ? "#0A0A0B" : "#FFFFFF"); }
+/* 📸 Foto de perfil (11-10-2026, la dueña eligió la idea 7): se achica a 240 px y se guarda SOLO en
+   este teléfono (nunca se sube). Aparece en un círculo sobre el logo de arriba y en «Mi perfil». */
+function claveFoto(){ return "wgymnutri_foto_v1_" + claveNutri(); }
+function fotoPerfil(){ try{ return localStorage.getItem(claveFoto()) || ""; }catch(e){ return ""; } }
+function pintarAvatar(){ var f = fotoPerfil(), im = $("avatarTop"); if(!im) return; if(f){ im.src = f; im.hidden = false; } else { im.removeAttribute("src"); im.hidden = true; } }
+function guardarFotoPerfil(file){
+ var url = URL.createObjectURL(file), img = new Image();
+ img.onerror = function(){ URL.revokeObjectURL(url); toast("No se pudo leer esa foto."); };
+ img.onload = function(){
+  var lado = Math.min(img.width, img.height), cv = document.createElement("canvas"); cv.width = cv.height = 240;
+  cv.getContext("2d").drawImage(img, (img.width - lado) / 2, (img.height - lado) / 2, lado, lado, 0, 0, 240, 240); URL.revokeObjectURL(url);
+  try{ localStorage.setItem(claveFoto(), cv.toDataURL("image/jpeg", 0.82)); }catch(e){ toast("No hay espacio en el teléfono para la foto."); return; }
+  pintarAvatar(); renderPerfil(); vibrar(20); toast("📸 Foto guardada");
+ };
+ img.src = url;
+}
 function renderPerfil(){
  var P = D.perfil, M = D.metas;
- var h = '<h2 class="disp" style="font-size:34px">Mi perfil</h2><div class="card"><p class="perfil-nombre">' + esc(socio.n + " " + socio.a) + '</p>' +
+ var h = '<h2 class="disp" style="font-size:34px">Mi perfil</h2><div class="card"><div class="perfil-foto">' + (fotoPerfil() ? '<img src="' + fotoPerfil() + '" alt="Mi foto">' : '<span class="pf-vacia" aria-hidden="true">👤</span>') + '<div class="pf-bts"><label class="btn oro chico" style="display:flex;align-items:center;justify-content:center;cursor:pointer">📸 ' + (fotoPerfil() ? 'Cambiar mi foto' : 'Poner mi foto') + '<input type="file" id="fotoPerfilIn" accept="image/*" hidden></label>' + (fotoPerfil() ? '<button type="button" class="btn sec chico" id="fotoPerfilX">Quitar foto</button>' : '') + '<p class="muted" style="font-size:12px;margin:0">🔒 Solo en este teléfono.</p></div></div><p class="perfil-nombre">' + esc(socio.n + " " + socio.a) + '</p>' +
   '<p class="muted" style="margin:6px 0 0">Plan: ' + esc(socio.plan || "") + ' · vence el <span style="white-space:nowrap">' + serialAISO(socio.fv).split("-").reverse().join("-") + '</span></p>' + (nutriGuardado() ? '<p class="muted" style="margin:4px 0 0">WGYMNUTRI activa hasta el <span style="white-space:nowrap">' + nutriGuardado().split("-").reverse().join("-") + '</span></p>' : '') + '</div>' +
   '<div class="card"><div class="cab"><h3>🎯 Mis metas</h3></div><div class="plan-res" style="margin-top:10px"><div><b style="color:var(--gold2)">' + miles(M.kcal) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + M.p + ' g</b><span>Proteína</span></div><div><b>' + M.c + ' g</b><span>Carbohidratos</span></div><div><b>' + M.g + ' g</b><span>Grasas</span></div></div>' +
   (function(){ var fm = P.obj === "bajar" ? fechaMeta(P, calcular(P)) : null; return '<p class="muted" style="margin:12px 0 0">🎯 ' + esc(nombreObj(P.obj)) + (P.meta ? ' · meta ' + String(P.meta).replace(".", ",") + ' kg' : '') + (fm ? ' · cerca del ' + fechaLindaMeta(fm.f) : '') + '</p>'; })() +
@@ -2390,6 +2428,8 @@ function renderPerfil(){
   '<button type="button" class="btn sec chico" id="borrarB">Borrar mis datos de este teléfono</button><div id="borrarConf"></div></div>' +
   '<p class="center" style="font-family:var(--cond);font-weight:700;letter-spacing:.1em;color:var(--gold);text-transform:uppercase">Donde hay calidad no hay competencia</p>';
  $("tabPerfil").innerHTML = h;
+ $("fotoPerfilIn").onchange = function(){ if(this.files && this.files[0]) guardarFotoPerfil(this.files[0]); };
+ if($("fotoPerfilX")) $("fotoPerfilX").onclick = function(){ if(confirm("¿Quitar tu foto?")){ try{ localStorage.removeItem(claveFoto()); }catch(e){} pintarAvatar(); renderPerfil(); } };
  $("aguaMeta").onchange = function(){
   if(this.value === "auto"){ D.metas.aguaManual = false; D.metas.agua = aguaRecomendada(P); } else { D.metas.aguaManual = true; D.metas.agua = +this.value; }
   guardar(); toast("✅ Meta de agua: " + D.metas.agua + " vasos"); };
@@ -2455,7 +2495,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101080", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101082", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
