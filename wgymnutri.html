@@ -1985,6 +1985,21 @@ function pararCamara(){
  if(cam.stream){ cam.stream.getTracks().forEach(function(t){ t.stop(); }); cam.stream = null; }
  cam.leyendo = false;
 }
+/* 🔊 «Bip» de caja de supermercado al leer un código (11-10-2026, la dueña eligió la idea 5).
+   El audio se prepara al tocar «Escanear» (los teléfonos solo dejan sonar después de un toque).
+   En iPhone no suena si el teléfono está en silencio. */
+var bipCtx = null;
+function prepararBip(){
+ try{ var AC = window.AudioContext || window.webkitAudioContext; if(!AC) return; if(!bipCtx){ bipCtx = new AC();
+   var b = bipCtx.createBuffer(1, 1, 22050), src = bipCtx.createBufferSource(); src.buffer = b; src.connect(bipCtx.destination); src.start(0); }
+  if(bipCtx.state === "suspended") bipCtx.resume(); }catch(e){}
+}
+function bip(){
+ try{ prepararBip(); if(!bipCtx) return; var t = bipCtx.currentTime + 0.01, o = bipCtx.createOscillator(), g = bipCtx.createGain();
+  o.type = "square"; o.frequency.setValueAtTime(1900, t);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.22, t + 0.008); g.gain.setValueAtTime(0.22, t + 0.11); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.14);
+  o.connect(g); g.connect(bipCtx.destination); o.start(t); o.stop(t + 0.16); }catch(e){}
+}
 function leerFotoCodigo(file){
  return new Promise(function(ok){
   var url = URL.createObjectURL(file), img = new Image();
@@ -2020,6 +2035,7 @@ function cargarZXing(){
  });
 }
 function modoEscanear(){
+ prepararBip();
  var c = $("agrCuerpo");
  c.innerHTML = '<div class="cam" id="camBox"><video id="camVid" playsinline muted autoplay></video><div class="marco"></div><div class="laser"></div></div>' +
   '<p class="muted center" id="camTxt" style="margin:10px 0">Acerca el código de barras hasta que llene el recuadro.<br>En latas y botellas, el código puede estar parado: <b>gira el teléfono de lado</b>.</p>' +
@@ -2036,7 +2052,7 @@ function modoEscanear(){
   var f = this.files && this.files[0]; if(!f) return;
   $("fotoTxt").textContent = "Leyendo la foto…";
   leerFotoCodigo(f).then(function(code){
-   if(code){ pararCamara(); vibrar(60); leido(code); }
+   if(code){ pararCamara(); vibrar(60); bip(); leido(code); }
    else $("fotoTxt").textContent = "No se pudo leer el código en la foto. Prueba con más luz y el código más grande, o escribe los números aquí abajo.";
   });
   this.value = "";
@@ -2047,7 +2063,7 @@ function modoEscanear(){
  function encontrado(code){ if(cam.leyendo) return;
   if(code !== visto.c){ visto.c = code; visto.n = 1; } else visto.n++;
   if(visto.n < (String(code).length <= 8 ? 2 : 1)) return;   /* EAN-13 ya trae dígito verificador */
-  cam.leyendo = true; vibrar(60); pararCamara(); leido(code); }
+  cam.leyendo = true; vibrar(60); bip(); pararCamara(); leido(code); }
  function sinCamara(){ $("camBox").hidden = true; $("camTxt").textContent = "No pudimos abrir la cámara. Revisa el permiso de cámara del navegador, o escribe el número del código aquí abajo."; }
  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ sinCamara(); return; }
  /* Video en alta resolución y con enfoque continuo (10-10-2026: el código de una lata no se leía). */
@@ -2439,7 +2455,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101079", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101080", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
