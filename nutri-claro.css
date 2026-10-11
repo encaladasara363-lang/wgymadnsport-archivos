@@ -50,7 +50,7 @@ h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transfo
 .anillo .centro b{ color:#141416; }
 .kcal-linea{ border-top-color:var(--line); }
 .kcal-linea b{ color:#141416; }
-.m-g i{ background:linear-gradient(90deg,#6B6B73,#2A2A30); }
+.m-g i{ background:linear-gradient(90deg,#0B5FD9,#3FA2FF); }
 .macro .fila em{ color:#6B6B73; }
 
 .frase{ background:linear-gradient(90deg,rgba(227,6,19,.10),transparent); color:#141416; }

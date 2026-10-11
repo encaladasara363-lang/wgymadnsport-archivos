@@ -129,7 +129,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .barra i{display:block;height:100%;border-radius:8px;transition:width .8s}
 .m-p i{background:linear-gradient(90deg,#b0000c,var(--red2))}
 .m-c i{background:linear-gradient(90deg,#9c7c1c,var(--gold2))}
-.m-g i{background:linear-gradient(90deg,#8d8d96,#e8e8ee)}
+.m-g i{background:linear-gradient(90deg,#0B5FD9,#3FA2FF)}
 .kcal-linea{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-family:var(--cond);font-weight:600;color:var(--muted);font-size:15px}
 .kcal-linea b{font-family:var(--num);font-weight:400;color:var(--fg);font-size:18px}
 
@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=41">
+<link rel="stylesheet" href="nutri-claro.css?v=42">
 <link rel="stylesheet" href="nutri-oscuro.css?v=6">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -2302,7 +2302,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101062", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101063", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

@@ -1598,7 +1598,7 @@ probado: ella se activó desde el mesón y entró a la app).
   en rojo «Te pasaste de tu meta» si se pasa).
 - **Proteína/carbohidratos/grasas más grandes (10-10-2026, pedido de la dueña):** en el
   cuadro de calorías de «Hoy», cada macro va con el nombre arriba (19 px) y «X / Y G»
-  debajo (21 px), para que quepan grandes junto al anillo.
+  debajo (21 px), para que quepan grandes junto al anillo. Barra de grasas en **azul** (11-10-2026, la dueña: en gris no se veía en el tema oscuro).
 - **Verduras en gramos y búsqueda con errores (10-10-2026, la dueña escribió «penino» y no
   salía nada):** si no hay coincidencia exacta, la búsqueda prueba palabras parecidas (1 letra
   distinta, 2 en palabras de 7+ letras) y las muestra como «¿Quisiste decir…?». Las verduras
