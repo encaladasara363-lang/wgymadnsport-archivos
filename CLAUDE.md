@@ -410,8 +410,8 @@ ver cuándo el gym está más vacío.
   **Versión 18 (instalada por la dueña el 10-10-2026 a las 21:23, verificada idéntica al repo):** la planilla convertía el mes «2026-10» en fecha y el
   ranking salía vacío («Todavía nadie se une»); `mesDe_` lo lee como texto y se escribe con
   apóstrofo. Nunca guardar textos tipo «AAAA-MM» sin apóstrofo en la planilla.
-  Con la Versión 17 quedaron filas repetidas de una misma persona («Sari» ×3). En el repo
-  (pendiente de instalar como Versión 19): `guardarReto` actualiza la fila del mes por id O por
+  Con la Versión 17 quedaron filas repetidas de una misma persona («Sari» ×3). **Versión 19,
+  instalada por la dueña el 10-10-2026 a las 21:31 y verificada idéntica al repo:** `guardarReto` actualiza la fila del mes por id O por
   nombre y `listarRetos` deja una sola entrada por persona (la fila más nueva).
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
