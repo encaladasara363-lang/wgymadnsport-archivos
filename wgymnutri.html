@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=46">
+<link rel="stylesheet" href="nutri-claro.css?v=47">
 <link rel="stylesheet" href="nutri-oscuro.css?v=6">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -1031,9 +1031,11 @@ function guardarPlato(m){
 function modoPlatos(){
  var c = $("agrCuerpo");
  if(!D.platos.length){ c.innerHTML = '<p class="muted">Aún no tienes platos. Anota tu comida de siempre (por ejemplo 2 huevos + marraqueta + palta) y en su cuadro toca <b>«⭐ Guardar como plato»</b>. Después la agregas aquí con un solo toque.</p>'; return; }
- c.innerHTML = '<div class="res">' + D.platos.map(function(p, i){
-  return '<div class="voz-it plato-it"><button type="button" class="tx" data-pl="' + i + '" style="text-align:left;background:none;border:0;color:inherit;padding:0;flex:1"><b>🍽 ' + esc(p.n) + '</b><span>' + esc(p.its.map(function(it){ return it.n; }).join(" + ")) + '</span></button><span class="k">' + miles(kcalDe(p.its)) + '</span><button type="button" class="x" data-plx="' + i + '" aria-label="Borrar plato">✕</button></div>'; }).join("") + '</div>' +
-  '<p class="muted" style="font-size:14px;margin-top:8px">Toca un plato para agregarlo a ' + esc(nombreComida(agr.comida).toLowerCase()) + '.</p>';
+ /* Lista de platos ordenada (11-10-2026, la dueña: "está más enredado"): una tarjeta por plato con
+    nombre, ingredientes, kcal y un ＋ grande para agregarlo; la ✕ para borrar va aparte. */
+ c.innerHTML = '<p class="muted" style="font-size:14px;margin:4px 0 10px">Toca un plato para agregarlo a <b>' + esc(nombreComida(agr.comida).toLowerCase()) + '</b>.</p><div class="platos-lista">' + D.platos.map(function(p, i){
+  return '<div class="plato-card"><button type="button" class="plato-main" data-pl="' + i + '"><span class="pl-tx"><b>🍽 ' + esc(p.n) + '</b><small>' + esc(p.its.map(function(it){ return it.n; }).join(" + ")) + '</small><em>' + miles(kcalDe(p.its)) + ' kcal · ' + p.its.length + (p.its.length === 1 ? ' alimento' : ' alimentos') + '</em></span><span class="pl-add" aria-hidden="true">＋</span></button>' +
+   '<button type="button" class="pl-x" data-plx="' + i + '" aria-label="Borrar plato ' + esc(p.n) + '">🗑</button></div>'; }).join("") + '</div>';
  c.querySelectorAll("[data-pl]").forEach(function(b){ b.onclick = function(){
   var p = D.platos[+b.dataset.pl], x = diaDe(diaSel); x.c[agr.comida] = (x.c[agr.comida] || []).concat(p.its.map(function(it, i){ return Object.assign({}, it, { t:Date.now() + i }); }));
   setDia(diaSel, x); D.cont.comidas = (D.cont.comidas || 0) + p.its.length; guardar(); cerrarHoja(); vibrar(20); toast("✅ Agregado: " + p.n);
@@ -2431,7 +2433,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101072", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101073", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
