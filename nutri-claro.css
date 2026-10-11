@@ -490,3 +490,10 @@ details.menu-sem summary::-webkit-details-marker{display:none}
 .menu-dia .kick span{font-size:12px;opacity:.8}
 .menu-it{display:flex;width:100%;align-items:center;gap:8px;background:none;border:0;border-bottom:1px solid var(--line);padding:9px 0;text-align:left;color:inherit;cursor:pointer}
 .menu-it span{width:86px;flex:none;font-size:12px;opacity:.8}.menu-it b{flex:1;min-width:0;font-size:15px}.menu-it em{font-style:normal;font-family:var(--num);font-size:17px}
+/* Lista de compras en amarillo (11-10-2026, la dueña: "está en negro y no la veía") */
+details.compras{background:#F2D16B !important;border:2px solid #D4AF37 !important}
+details.compras, details.compras *{color:#141416 !important}
+details.compras summary span{font-size:20px}
+details.compras summary b{background:#141416;color:#F2D16B !important;border-radius:999px;padding:4px 10px}
+details.compras .compra-it{border-bottom-color:rgba(20,20,22,.2)}
+details.compras .btn.sec{background:#141416 !important;border-color:#141416 !important;color:#F2D16B !important}

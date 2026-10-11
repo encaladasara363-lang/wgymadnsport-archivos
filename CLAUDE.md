@@ -1644,7 +1644,8 @@ probado: ella se activó desde el mesón y entró a la app).
     (`data-mv`): abre Voz para esa comida y empieza a escuchar (o abre el teclado) al tiro.
   - «🛒 Mi lista de compras» arriba de las recetas: en cada receta «🛒 Agregar a mi lista de
     compras» suma sus ingredientes (`D.compras`, sin repetir), se marcan al comprar, «📋 Copiar
-    lista» para WhatsApp/Notas y «🗑 Vaciar».
+    lista» para WhatsApp/Notas y «🗑 Vaciar». Desde el 11-10-2026 el cuadro va en **amarillo** con letras negras en los
+    dos temas (la dueña: "está en negro y no la veía").
   - «📲 Mi semana para Instagram» en Progreso: imagen 1080×1920 (`compartirSemana`) con logo,
     días en meta de los últimos 7, días entrenados, racha, proteína y agua promedio; se comparte
     o se descarga. El botón antiguo quedó como «Compartir mi racha y medallas».
