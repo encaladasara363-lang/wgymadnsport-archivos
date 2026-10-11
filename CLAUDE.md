@@ -1636,7 +1636,10 @@ probado: ella se activó desde el mesón y entró a la app).
   - «🎤 Voz» en Agregar comida: dictado del teléfono (`SpeechRecognition`, es-CL) o frase
     escrita («2 huevos, una marraqueta y 150 gramos de pollo»); `interpretarVoz` separa por
     comas/«y»/«con», entiende números en palabra y gramos, `mejorAlimento` busca en la lista y
-    «Agregar todo» suma todo de una vez (`agregarVarios`).
+    «Agregar todo» suma todo de una vez (`agregarVarios`). **Micrófono siempre visible (11-10-2026, la dueña: "no me
+    aparece el micrófono"):** en iPhone (app en la pantalla de inicio o Chrome) la página no
+    puede escuchar; el botón 🎤 abre el casillero con el teclado y explica usar el 🎤 del
+    teclado (`porTeclado`), también si el dictado falla con `not-allowed`/`service-not-allowed`.
   - «🛒 Mi lista de compras» arriba de las recetas: en cada receta «🛒 Agregar a mi lista de
     compras» suma sus ingredientes (`D.compras`, sin repetir), se marcan al comprar, «📋 Copiar
     lista» para WhatsApp/Notas y «🗑 Vaciar».
