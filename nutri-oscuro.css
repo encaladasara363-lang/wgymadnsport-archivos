@@ -49,3 +49,8 @@ html.oscuro .ranking em{ color:#F2D16B !important; }
 html.oscuro .medidas-ult div{ background:#1C1C21 !important; }
 html.oscuro .sin-sellos{ color:#2BD576 !important; }
 html.oscuro .sello span, html.oscuro .sello b{ color:#FFF !important; }
+/* Lista de compras amarilla también en oscuro (11-10-2026); clase repetida para ganarle a la regla general */
+html.oscuro details.compras.compras.compras{ background:#F2D16B !important; border-color:#D4AF37 !important; }
+html.oscuro body details.compras.compras.compras, html.oscuro body details.compras.compras.compras *{ color:#141416 !important; }
+html.oscuro body details.compras.compras.compras summary b, html.oscuro body details.compras.compras.compras .btn.sec, html.oscuro body details.compras.compras.compras .btn.sec *{ background-color:#141416 !important; color:#F2D16B !important; }
+html.oscuro body details.compras.compras.compras .btn.sec *{ background-color:transparent !important; }
