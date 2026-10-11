@@ -397,6 +397,15 @@ ver cuándo el gym está más vacío.
   y lo borra de la dirección. Sin parámetro usa el último nombre que entró en
   ese teléfono (`wgym_rutina_nombre_v1`) o el de la tarjeta
   (`wgym_ultimo_socio_v1`). El socio solo toca "Ingresar a mi rutina".
+- **🏆 Ranking del mes en la tarjeta (11-10-2026, la dueña: "pongámoslo en la tarjeta virtual
+  de los socios"):** cuadro `#rankCard` (`renderRanking_`, oculto con tarjeta bloqueada y en
+  pases diarios). Sin unirse muestra «Este mes llevas N días entrenando» (`asistenciaDesde`) y
+  pide un APODO; unido muestra su lugar y el top 10 (solo apodo y días) con «Salir del
+  ranking». Los puntos = días con ingreso en el mes, calculados por el Apps Script
+  (`guardarReto` guarda mes, id al azar del teléfono, apodo y nombre en la hoja privada
+  «Retos»; `listarRetos` cuenta los días con `diasDesde_` y entrega solo apodo + días, caché
+  120 s). El teléfono recuerda su apodo e id en `wgym_ranking_v1`. **Necesita la Versión 17
+  del Apps Script** (`docs/apps-script-ingresos-salidas.md`).
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
@@ -1615,8 +1624,8 @@ probado: ella se activó desde el mesón y entró a la app).
   - «🏆 Retos del mes» en Progreso: 3 retos automáticos y personales (días con meta de agua,
     con meta de proteína y con comidas anotadas; 1 punto por reto y día, `retosMes`). **Sin
     ranking** (la dueña, 10-10-2026: «el ranking no lo quiero aquí»): se sacó el apodo y la
-    lista; las acciones `guardarReto`/`listarRetos` quedan en `Ingresos.gs` sin uso y NO hace
-    falta instalar la Versión 17 por ellas.
+    lista. El ranking se movió a la tarjeta virtual (ver «🏆 Ranking del mes» en la sección de
+    la tarjeta).
   - «📸 Leer la etiqueta con la cámara» en «Crear este producto para todos» (valores por 100 g)
     y en «✍️ Manual» (por porción): Tesseract gratis dentro del repo
     (`vendor/tesseract-5.1.1/`, español `best_int`; ~6 MB que el teléfono baja solo la primera
