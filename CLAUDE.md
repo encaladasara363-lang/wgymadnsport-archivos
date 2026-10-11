@@ -417,7 +417,8 @@ ver cuándo el gym está más vacío.
   nombres):** panel «🏆 Ranking del mes» en `control.html` (antes de «Socios del gimnasio»),
   botón «Ver ranking del mes» → `rankingAdmin` (POST con `ADMIN_KEY` vía `llamarSocioApi_`)
   que entrega lugar, apodo, NOMBRE REAL y días de todos los unidos (`calcularRetos_` con
-  nombre). Los nombres nunca salen por las acciones públicas. **Necesita la Versión 20.**
+  nombre). Los nombres nunca salen por las acciones públicas. **Versión 20 instalada por la
+  dueña el 10-10-2026 a las 21:45, verificada idéntica al repo** (volver atrás: Versión 19).
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
