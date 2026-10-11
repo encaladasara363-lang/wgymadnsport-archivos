@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=42">
+<link rel="stylesheet" href="nutri-claro.css?v=43">
 <link rel="stylesheet" href="nutri-oscuro.css?v=6">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -1071,7 +1071,7 @@ function pintarSellos(a, liq){
  if(falta && a.code && !a.sellosPedidos){ a.sellosPedidos = true;
   productoOFF(a.code).then(function(o){ if(!o) return; ["az","sat","na"].forEach(function(k){ if(typeof a[k] !== "number" && typeof o[k] === "number") a[k] = o[k]; }); if($("dSellos") === box) box.innerHTML = htmlSellos(a, liq); }); }
 }
-/* 📏 Mis medidas (11-10-2026, pedido de la dueña): cintura y cadera, solo en el teléfono.
+/* 📏 Mis medidas (11-10-2026, pedido de la dueña): cintura, abdomen, cadera, muslo, brazo y % de grasa, solo en el teléfono.
    La cintura se ubica en los percentiles del estudio chileno CHIREF (personas activas de
    20-29 años; base técnica). Es una referencia, no una meta obligatoria. */
 var CHIREF_CINTURA = { F:[[5,63.4],[15,66.0],[25,67.0],[50,70.8],[75,75.1],[85,77.5],[95,84.2]], M:[[5,71.1],[15,73.3],[25,75.1],[50,78.3],[75,83.3],[85,85.6],[95,88.0]] };
@@ -1095,18 +1095,30 @@ function htmlMedidas(){
   h += '<p class="muted" style="margin:6px 0 0;font-size:14px">Cintura: ' + (dif === 0 ? "sin cambios" : (dif < 0 ? "bajaste " : "subiste ") + String(Math.abs(dif)).replace(".", ",") + " cm") + ' desde el ' + ms[0].f.split("-").reverse().join("-") + '.</p>';
  }
  if(ult){
-  h += '<div class="medidas-ult"><div><span>Cintura</span><b>' + String(ult.cin).replace(".", ",") + ' cm</b></div>' + (ult.cad ? '<div><span>Cadera</span><b>' + String(ult.cad).replace(".", ",") + ' cm</b></div>' : '') + '</div>' +
+  h += '<div class="medidas-ult">' + MED_CAMPOS.filter(function(c){ return ult[c[0]]; }).map(function(c){ return '<div><span>' + c[2] + '</span><b>' + String(ult[c[0]]).replace(".", ",") + '<small>' + (c[3] === "%" ? '%' : ' cm') + '</small></b></div>'; }).join("") + '</div>' +
    '<p class="muted" style="font-size:14px;margin:8px 0 0">📊 Tu cintura está ' + textoChiref(ult.cin) + '. Referencia: estudio chileno con personas activas y sanas de 20 a 29 años; no es una meta obligatoria.</p>';
- } else h += '<p class="muted" style="margin:8px 0">Mide tu cintura en la parte más angosta del abdomen y tu cadera en la parte más ancha, con una huincha, una vez cada 2 semanas.</p>';
- h += '<div class="fila2" style="margin-top:10px"><input class="inp" id="cinIn" type="text" inputmode="decimal" autocomplete="off" placeholder="Cintura (cm)"><input class="inp" id="cadIn" type="text" inputmode="decimal" autocomplete="off" placeholder="Cadera (cm)"></div>' +
+ } else h += '<p class="muted" style="margin:8px 0">Mídete con una huincha, siempre a la misma hora, una vez cada 2 semanas. Ninguna medida es obligatoria salvo la cintura.</p>';
+ var imc = imcActual();
+ if(imc) h += '<p class="muted" style="font-size:14px;margin:8px 0 0">⚖️ Tu IMC (con tu último peso y tu estatura): <b>' + String(imc).replace(".", ",") + '</b> · ' + (imc < 18.5 ? "bajo el rango normal" : imc < 25 ? "rango normal (18,5 a 24,9)" : imc < 30 ? "sobrepeso (25 a 29,9)" : "obesidad (30 o más)") + ' según la OMS.</p>';
+ h += '<div class="med-grid" style="margin-top:10px">' + MED_CAMPOS.map(function(c){ return '<label><span>' + c[1] + '</span><input class="inp" id="med_' + c[0] + '" type="text" inputmode="decimal" autocomplete="off" placeholder="' + (c[3] === "%" ? "%" : "cm") + '"></label>'; }).join("") + '</div>' +
   '<button type="button" class="btn oro chico" id="medOk" style="margin-top:8px">Guardar medidas</button><p class="muted" style="font-size:13px;margin:6px 0 0">🔒 Se guardan solo en este teléfono.</p></div>';
  return h;
 }
+/* Campos de «Mis medidas» (11-10-2026, la dueña mandó su tabla: cintura al ombligo, abdomen bajo,
+   cadera/glúteos, muslo, brazo relajado y % de grasa de la báscula). [clave, etiqueta casillero,
+   etiqueta corta, unidad, mínimo, máximo]. El peso va en su propio cuadro y el IMC se calcula. */
+var MED_CAMPOS = [["cin","Cintura (altura del ombligo)","Cintura","cm",40,200],["abd","Abdomen bajo","Abdomen","cm",40,220],["cad","Cadera / glúteos","Cadera","cm",50,220],["mus","Muslo","Muslo","cm",25,120],["bra","Brazo relajado","Brazo","cm",15,70],["gra","Grasa corporal (báscula)","Grasa","%",3,70]];
+function imcActual(){
+ var kg = D.pesos.length ? D.pesos[D.pesos.length - 1].kg : D.perfil && D.perfil.peso, cm = D.perfil && Number(D.perfil.alt);
+ if(!(kg > 0 && cm > 0)) return 0; var m = cm > 3 ? cm / 100 : cm; return r1(kg / (m * m));
+}
 function guardarMedidas(){
- var cin = Number(String($("cinIn").value).replace(",", ".")), cad = Number(String($("cadIn").value).replace(",", "."));
- if(!(cin >= 40 && cin <= 200)){ toast("Escribe tu cintura en centímetros, por ejemplo 72,5."); return; }
- if(cad && !(cad >= 50 && cad <= 220)){ toast("La cadera va en centímetros, por ejemplo 98."); return; }
- var f = hoyISO(); D.medidas = D.medidas.filter(function(m){ return m.f !== f; }); D.medidas.push({ f:f, cin:r1(cin), cad:cad ? r1(cad) : 0 });
+ var reg = { f:hoyISO() }, malo = null;
+ MED_CAMPOS.forEach(function(c){ var t = String($("med_" + c[0]).value).trim(); if(!t) return; var v = Number(t.replace(",", "."));
+  if(!(v >= c[4] && v <= c[5])){ if(!malo) malo = c; return; } reg[c[0]] = r1(v); });
+ if(malo){ toast(malo[1] + ": escribe un número válido" + (malo[3] === "%" ? " en %, por ejemplo 22,5." : " en centímetros.")); return; }
+ if(!reg.cin){ toast("Escribe al menos tu cintura en centímetros, por ejemplo 72,5."); return; }
+ D.medidas = D.medidas.filter(function(m){ return m.f !== reg.f; }); D.medidas.push(reg);
  D.medidas.sort(function(a, b){ return a.f < b.f ? -1 : 1; }); guardar(); renderProg(); toast("✅ Medidas guardadas");
 }
 /* 🗓 Menú de la semana (11-10-2026, pedido de la dueña): 7 días con recetas del recetario
@@ -2302,7 +2314,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101063", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101064", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
