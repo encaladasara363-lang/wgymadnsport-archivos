@@ -1734,6 +1734,13 @@ probado: ella se activó desde el mesón y entró a la app).
   1.900 Hz, 0,15 s, como caja de supermercado) suena junto a la vibración cuando se lee un código,
   en vivo o por foto. El audio se desbloquea al abrir «Escanear» (`prepararBip`), porque los
   teléfonos solo dejan sonar después de un toque. En iPhone no suena con el teléfono en silencio.
+- **🌙 Resumen de la noche, 📸 foto de perfil y ⭐ receta del día (11-10-2026, la dueña eligió 6, 7 y 8):**
+  - Desde las 21:00, «🌙 Resumen de tu día» arriba de «Hoy» (`htmlNoche`): kcal y proteína con % de la
+    meta y un solo consejo (se pasó, le faltó proteína, comió muy poco, o felicitación).
+  - Foto de perfil en «Mi perfil» (`guardarFotoPerfil`): recortada cuadrada a 240 px, guardada SOLO en el
+    teléfono (`wgymnutri_foto_v1_<NOMBRE>`), aparece como circulito dorado sobre el logo (`#avatarTop`).
+  - «⭐ Receta del día» arriba de Recetas (`htmlRecetaDia`): una distinta cada día entre las permitidas
+    (`recetaPermitida`); se abre como cualquier receta.
 - **📳 Vibración al anotar (11-10-2026, la dueña eligió la idea 6):** `vibrar(ms)` da un golpecito
   al agregar un alimento, un plato o varios por voz, y al tocar agua/café o leer un código. Android:
   `navigator.vibrate`; iPhone (no tiene esa función): un interruptor `<input switch>` escondido
