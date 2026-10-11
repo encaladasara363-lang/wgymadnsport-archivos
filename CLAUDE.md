@@ -1683,7 +1683,7 @@ probado: ella se activó desde el mesón y entró a la app).
     código). Sin dato, ese sello no se muestra; con los tres datos y sin sellos dice «Sin sellos».
   - «📏 Mis medidas» en Progreso (`htmlMedidas`, `D.medidas`, solo en el teléfono): cintura y
     cadera con gráfico y la cintura ubicada en los percentiles CHIREF (`CHIREF_CINTURA`), como
-    referencia, no meta. Desde el 11-10-2026 (la dueña mandó su tabla de medidas) trae también abdomen bajo,
+    referencia, no meta. Desde el 11-10-2026 (la dueña mandó su tabla de medidas) trae también abdomen bajo (casillero «Abdomen bajo (5 cm debajo del ombligo)», pedido de la dueña),
     muslo, brazo relajado y % de grasa de la Omron (casillero «Grasa corporal (Omron)», pedido de la dueña) (`MED_CAMPOS`; solo la cintura es obligatoria)
     y muestra el IMC calculado con el último peso y la estatura (`imcActual`, rangos OMS). Nunca
     escribir las medidas reales de nadie en el código: cada socio las anota en su teléfono.
