@@ -1725,7 +1725,10 @@ probado: ella se activó desde el mesón y entró a la app).
 - **Actualización automática (10-10-2026):** `wgymnutri.html` trae `NUTRI_VERSION`
   y compara con `nutri-version.txt`; si el archivo es mayor, se recarga sola.
   **Cada vez que se cambie `wgymnutri.html`, subir los dos números juntos
-  (AAAAMMDDNN).** Los números se escriben en casilleros de texto con
+  (AAAAMMDDNN).** Desde el 11-10-2026 la recarga usa `recargarFresco_` (dirección con `?nv=`,
+  que se borra al cargar): `location.reload()` traía la copia guardada del teléfono y los socios
+  no veían los alimentos nuevos (la dueña: "a mis socios no les aparece el dulce de maicena").
+  La tarjeta usa lo mismo. Los números se escriben en casilleros de texto con
   `inputmode="decimal"` (los `type="number"` del iPhone borraban la coma: 63,1 → 631).
 - **Horas de comida (10-10-2026, pedido de la dueña):** en «Mi perfil», cuadro
   «🕒 Mis horas de comida» (una hora por comida, `D.horas`, solo en el teléfono;

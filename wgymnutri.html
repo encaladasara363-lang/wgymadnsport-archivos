@@ -2298,12 +2298,19 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101059", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101060", ultimaRevVersion = 0;
+function recargarFresco_(v){
+ /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
+    guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
+    vieja, sin los alimentos nuevos. Con ?nv= en la dirección el teléfono la baja de nuevo. */
+ try{ var u = new URL(location.href); u.searchParams.set("nv", v); location.replace(u.toString()); }catch(e){ location.reload(); }
+}
+(function(){ try{ var u = new URL(location.href); if(u.searchParams.has("nv")){ u.searchParams.delete("nv"); history.replaceState(history.state, "", u.pathname + (u.searchParams.toString() ? "?" + u.searchParams.toString() : "") + u.hash); } }catch(e){} })();
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
   t = String(t || "").trim();
-  if(/^\d{10}$/.test(t) && t > NUTRI_VERSION){ try{ if(sessionStorage.getItem("wgymnutri_recargado") === t) return; sessionStorage.setItem("wgymnutri_recargado", t); }catch(e){} location.reload(); }
+  if(/^\d{10}$/.test(t) && t > NUTRI_VERSION){ try{ if(sessionStorage.getItem("wgymnutri_recargado") === t) return; sessionStorage.setItem("wgymnutri_recargado", t); }catch(e){} recargarFresco_(t); }
  })["catch"](function(){});
 }
 revisarVersionNutri();

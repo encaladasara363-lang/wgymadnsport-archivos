@@ -2437,14 +2437,21 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101102", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101103", ultimaRevisionVersion = 0;
+function recargarFresco_(v){
+ /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
+    guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
+    vieja, sin los alimentos nuevos. Con ?nv= en la dirección el teléfono la baja de nuevo. */
+ try{ var u = new URL(location.href); u.searchParams.set("nv", v); location.replace(u.toString()); }catch(e){ location.reload(); }
+}
+(function(){ try{ var u = new URL(location.href); if(u.searchParams.has("nv")){ u.searchParams.delete("nv"); history.replaceState(history.state, "", u.pathname + (u.searchParams.toString() ? "?" + u.searchParams.toString() : "") + u.hash); } }catch(e){} })();
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();
   try{
    fetch("tarjeta-version.txt?_=" + Date.now(), { cache:"no-store" })
     .then(function(r){ return r.ok ? r.text() : ""; })
-    .then(function(v){ v = String(v || "").trim(); if(/^\d{10}$/.test(v) && v > TARJETA_VERSION) location.reload(); })
+    .then(function(v){ v = String(v || "").trim(); if(/^\d{10}$/.test(v) && v > TARJETA_VERSION){ try{ if(sessionStorage.getItem("wgym_tarjeta_recargada") === v) return; sessionStorage.setItem("wgym_tarjeta_recargada", v); }catch(e){} recargarFresco_(v); } })
     ["catch"](function(){});
   }catch(e){}
  }
