@@ -1398,7 +1398,7 @@ function renderHoy(){
   '<div class="vitc-hoy">' + MICROS.map(function(mc){ var v = t[mc[0]], meta = metaMicro(mc[0]); return '<div class="mic-h"><div class="fila"><span>' + mc[1] + '</span><b>' + (mc[2] === "mg" ? miles(v) : String(r1(v)).replace(".", ",")) + ' <small>/ ' + miles(meta) + ' ' + mc[2] + '</small></b></div><div class="barra ' + mc[0] + '"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }).join("") +
   (Math.max(t.vcSin, t.poSin, t.fiSin) ? '<small>' + Math.max(t.vcSin, t.poSin, t.fiSin) + ' alimento(s) de hoy no traen estos datos; el total puede ser mayor.</small>' : '') + '</div></div>';
  h += '<div class="restantes' + (rest < 0 ? " pasado" : "") + '"><span class="e">🔥</span><div><small>' + (rest < 0 ? "Te pasaste de tu meta" : "Calorías restantes") + '</small><b>' + miles(Math.abs(rest)) + ' <em>kcal</em></b><p>Meta ' + miles(M.kcal) + ' − comidas ' + miles(t.k) + '</p></div></div>';
- if(esHoy) h += htmlSugerencias(t, M);
+ /* «¿Qué como ahora?» sacado el 11-10-2026 (la dueña: "no me gusta, no tiene sentido"). */
  h += htmlSupl(x);
  /* Agua en vasos de 250 ml o botellas de 500 ml (10-10-2026, pedido de la dueña). Se guarda
     siempre en vasos (x.agua); una botella = 2 vasos. Cada teléfono recuerda la elección. */
@@ -2366,7 +2366,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101068", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101069", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

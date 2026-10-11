@@ -1627,7 +1627,7 @@ probado: ella se activó desde el mesón y entró a la app).
   «oscuro»). En «Mi perfil», cuadro «🎨 Fondo de la app» con 🌙 Oscuro / ☀️ Claro
   (`ponerTema`). Al cambiar estilos nuevos, revisar que se vean en los dos temas.
 - **Ideas nuevas (10-10-2026, la dueña eligió todas):**
-  - «🤔 ¿Qué como ahora?» en «Hoy» (solo el día de hoy): `sugerencias()` mira lo que falta
+  - «🤔 ¿Qué como ahora?» — **SACADO de «Hoy» el 11-10-2026** (la dueña: "no me gusta, no tiene sentido"; `htmlSugerencias` ya no se llama, no volver a mostrarlo). Era, en «Hoy» (solo el día de hoy): `sugerencias()` mira lo que falta
     (proteína ≥15 g → más proteína por kcal; si no, fibra y vitamina C; si ya cumplió, verduras
     livianas), respeta dieta vegetariana y lo que no come (`alimPermitido`), 4 opciones con
     «＋» que abren el detalle, «🔄 Otras» rota.
