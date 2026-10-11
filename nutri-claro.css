@@ -558,3 +558,12 @@ details.compras .btn.sec{background:#141416 !important;border-color:#141416 !imp
 .pl-tx em{font-style:normal;font-family:var(--num);font-size:16px;color:#D4AF37}
 .pl-add{flex:0 0 44px;width:44px;height:44px;border-radius:50%;background:#E30613;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800}
 .pl-x{flex:0 0 42px;border-radius:14px;border:1px solid var(--line);background:transparent;font-size:20px;cursor:pointer;color:inherit}
+
+/* 💪 Cabecera roja los días de entrenamiento (11-10-2026, idea 2) */
+.top.entreno{background:linear-gradient(135deg,#7A0008 0%,#E30613 55%,#FF2D3A 100%);border-radius:18px;margin-left:-12px;margin-right:-12px;padding:8px 12px 30px !important;box-shadow:0 0 0 2px #D4AF37,0 8px 26px rgba(227,6,19,.55);animation:entPulso 2.4s ease-in-out infinite alternate}
+.top.entreno .t b{color:#FFFFFF !important}
+.top.entreno .t span#saludo{color:#FFE08A !important}
+.ent-tag{flex:0 0 100%;margin-top:8px;text-align:center;padding:7px 10px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid #F2D16B;font-family:var(--cond);font-weight:900;font-size:17px;letter-spacing:.04em}
+.ent-tag[hidden]{display:none !important}
+@keyframes entPulso{from{box-shadow:0 0 0 2px #D4AF37,0 6px 18px rgba(227,6,19,.45)}to{box-shadow:0 0 0 2px #F2D16B,0 8px 32px rgba(255,45,58,.8)}}
+@media (prefers-reduced-motion: reduce){.top.entreno{animation:none}}

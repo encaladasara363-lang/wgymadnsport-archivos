@@ -1726,6 +1726,10 @@ probado: ella se activó desde el mesón y entró a la app).
     proteína (≥ meta) o a las calorías (90-100 % de la meta); el anillo brilla dorado (`.meta-ok`).
   - Íconos por alimento (`iconoAlim`: palabras del nombre en `ICONOS`, si no la categoría en
     `ICONO_CAT`) en la búsqueda y en lo anotado. Solo adorno.
+- **💪 Cabecera roja los días de entrenamiento (11-10-2026, la dueña eligió la idea 2):** si hoy hay
+  ingreso al gimnasio (`diasEntreno()`, de `asistenciaDesde`), `header.top` toma la clase `entreno`
+  (degradado rojo con borde dorado que late) y aparece la pastilla «💪 Hoy entrenaste en WGYM»
+  (`#entTag`). El aviso verde de abajo pasa a decir «Después de entrenar» (sin repetir el título).
 - **📳 Vibración al anotar (11-10-2026, la dueña eligió la idea 6):** `vibrar(ms)` da un golpecito
   al agregar un alimento, un plato o varios por voz, y al tocar agua/café o leer un código. Android:
   `navigator.vibrate`; iPhone (no tiene esa función): un interruptor `<input switch>` escondido
