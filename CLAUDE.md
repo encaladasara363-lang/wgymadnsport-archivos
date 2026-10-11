@@ -1712,6 +1712,17 @@ probado: ella se activó desde el mesón y entró a la app).
   Básicos fitness, Energéticas y Endulzantes muestran esa etiqueta roja (`agregadoWgym`); los
   escaneados siguen con «📷 Escaneado en WGYM». Desde el 11-10-2026 la etiqueta también sale en los alimentos ya anotados en cada comida de «Hoy» (`tagWgym`; la dueña: "el maicena no sale, el chocolate tampoco"). **Al agregar un alimento a pedido de la dueña,
   sumar su nombre a `NUTRI_WGYM`.**
+- **🔥 Racha, 🍗 íconos, 🥇 niveles y 🎉 festejo (11-10-2026, la dueña eligió las ideas 1, 4, 3 y 2):**
+  - Cuadro de racha arriba de «Hoy» (`htmlRacha`): fueguito animado que crece con los días seguidos
+    anotando comida (`racha()`), titila rápido con «⚠️ Anota algo hoy o tu racha se apaga» si hoy no
+    anotó y queda gris en 0. El 🔥 de la cabecera brilla.
+  - Niveles por días con comida anotada (`NIVELES`, `diasUsados`): 🌱 Novato, 🥉 Bronce (7),
+    🥈 Plata (15), 🥇 Oro (30), 💎 Diamante (60), con barra hacia el siguiente. Al subir, confeti y
+    «¡Subiste de nivel!» (`revisarNivel`, `D.nivelVisto`; la primera vez no festeja lo ya ganado).
+  - Festejo (`revisarFestejo`, una vez por día en `x.fest`): confeti + vibración + aviso al llegar a la
+    proteína (≥ meta) o a las calorías (90-100 % de la meta); el anillo brilla dorado (`.meta-ok`).
+  - Íconos por alimento (`iconoAlim`: palabras del nombre en `ICONOS`, si no la categoría en
+    `ICONO_CAT`) en la búsqueda y en lo anotado. Solo adorno.
 - **📳 Vibración al anotar (11-10-2026, la dueña eligió la idea 6):** `vibrar(ms)` da un golpecito
   al agregar un alimento, un plato o varios por voz, y al tocar agua/café o leer un código. Android:
   `navigator.vibrate`; iPhone (no tiene esa función): un interruptor `<input switch>` escondido

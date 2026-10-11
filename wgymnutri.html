@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=45">
+<link rel="stylesheet" href="nutri-claro.css?v=46">
 <link rel="stylesheet" href="nutri-oscuro.css?v=6">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -839,10 +839,11 @@ function racha(){
  while(totales(d).n){ n++; d = sumaDias(d, -1); }
  return n;
 }
+function pintarSaludo(){ $("saludo").textContent = "Hola, " + socio.n.split(" ")[0] + (esPase(socio) ? " · Pase diario (solo hoy)" : ""); }
 function iniciarApp(){
  if(D.perfil && D.metas && !D.metas.aguaManual && D.metas.agua !== aguaRecomendada(D.perfil)){ D.metas.agua = aguaRecomendada(D.perfil); guardar(); }
  vista("vApp"); diaSel = hoyISO(); cargarProductos();
- $("saludo").textContent = "Hola, " + socio.n.split(" ")[0] + (esPase(socio) ? " · Pase diario (solo hoy)" : "");
+ pintarSaludo();
  mostrarTab("tabHoy");
 }
 function mostrarTab(id){
@@ -1384,6 +1385,36 @@ function metaVitC(){ return D.perfil && D.perfil.sexo === "M" ? 90 : 75; }
    y fibra 25 g / 38 g (ingesta adecuada de adultos de las Academias Nacionales de EE. UU.). */
 var MICROS = [["vc","🍊 Vitamina C","mg"],["po","🍌 Potasio","mg"],["fi","🌾 Fibra","g"]];
 function metaMicro(k){ var h = D.perfil && D.perfil.sexo === "M"; return k === "vc" ? metaVitC() : k === "po" ? (h ? 3400 : 2600) : (h ? 38 : 25); }
+/* 🔥 Racha con fueguito (idea 1), 🥇 niveles por constancia (idea 3) y 🎉 festejo al cumplir la
+   meta (idea 2) — 11-10-2026, la dueña eligió "1, 4, 3 y 2". */
+var NIVELES = [[0,"Novato","🌱"],[7,"Bronce","🥉"],[15,"Plata","🥈"],[30,"Oro","🥇"],[60,"Diamante","💎"]];
+function diasUsados(){ return Object.keys(D.dias).filter(function(k){ return totales(k).n; }).length; }
+function nivelDe(n){ var i = 0; while(i + 1 < NIVELES.length && n >= NIVELES[i + 1][0]) i++; return i; }
+function htmlRacha(){
+ var r = racha(), hoyOk = !!totales(hoyISO()).n, du = diasUsados(), ni = nivelDe(du), N = NIVELES[ni], sig = NIVELES[ni + 1];
+ var tam = r ? Math.min(1.6, 0.9 + r * 0.05) : 0.8, estado = !r ? "apagado" : hoyOk ? "vivo" : "peligro";
+ var txt = !r ? "Anota tu primera comida de hoy y enciende tu racha." : hoyOk ? "¡Vas muy bien! Mañana anota otra vez para que siga creciendo." : "⚠️ Anota algo hoy o tu racha se apaga.";
+ return '<div class="card racha-card ' + estado + '"><div class="fuego" style="--t:' + tam + '" aria-hidden="true"><span class="ll">🔥</span></div>' +
+  '<div class="racha-tx"><b class="racha-n">' + r + '<small>' + (r === 1 ? ' día seguido' : ' días seguidos') + '</small></b><p>' + txt + '</p>' +
+  '<div class="nivel"><span class="nivel-pill n' + ni + '">' + N[2] + ' Nivel ' + N[1] + '</span>' + (sig ? '<span class="nivel-falta">' + (sig[0] - du) + (sig[0] - du === 1 ? ' día' : ' días') + ' para ' + sig[2] + ' ' + sig[1] + '</span>' : '<span class="nivel-falta">¡Nivel máximo!</span>') + '</div>' +
+  (sig ? '<div class="nivel-barra"><i style="width:' + Math.round((du - N[0]) / (sig[0] - N[0]) * 100) + '%"></i></div>' : '') + '</div></div>';
+}
+function revisarNivel(){
+ var ni = nivelDe(diasUsados());
+ if(typeof D.nivelVisto !== "number"){ D.nivelVisto = ni; guardar(); return; }   /* la primera vez no festeja niveles ya ganados */
+ if(ni > D.nivelVisto){ D.nivelVisto = ni; guardar(); var N = NIVELES[ni]; confeti(); vibrar(40);
+  var p = document.createElement("div"); p.className = "logro-pop";
+  p.innerHTML = '<div class="card"><span class="e">' + N[2] + '</span><p class="kick">¡Subiste de nivel!</p><h2 class="disp" style="font-size:34px;margin:6px 0">Nivel ' + esc(N[1]) + '</h2><p class="muted">Llevas ' + diasUsados() + ' días anotando tus comidas. ¡Sigue así!</p><button type="button" class="btn oro">¡Vamos!</button></div>';
+  document.body.appendChild(p); p.querySelector("button").onclick = function(){ p.remove(); }; p.onclick = function(e){ if(e.target === p) p.remove(); };
+ }
+}
+function revisarFestejo(){
+ var hoy = hoyISO(), t = totales(hoy), M = D.metas, x = diaDe(hoy); if(!t.n || !M) return;
+ x.fest = x.fest || {}; var msg = null;
+ if(!x.fest.p && M.p && t.p >= M.p){ x.fest.p = 1; msg = "💪 ¡Cumpliste tu proteína de hoy!"; }
+ if(!x.fest.k && M.kcal && t.k >= M.kcal * 0.9 && t.k <= M.kcal){ x.fest.k = 1; msg = msg ? "🎉 ¡Cumpliste tu proteína y tus calorías de hoy!" : "🎯 ¡Llegaste a tu meta de calorías de hoy!"; }
+ if(msg){ setDia(hoy, x); guardar(); confeti(); vibrar(40); toast(msg); }
+}
 function renderHoy(){
  var M = D.metas, t = totales(diaSel), x = diaDe(diaSel), esHoy = diaSel === hoyISO();
  var rest = M.kcal - t.k, pct = Math.min(1, t.k / M.kcal), C = 2 * Math.PI * 62;
@@ -1394,6 +1425,7 @@ function renderHoy(){
  h += '<div class="semana-tira">' + ["L","M","M","J","V","S","D"].map(function(l, i){
   var f = sumaDias(lun, i), xd = D.dias[f], con = xd && Object.keys(xd.c || {}).some(function(k){ return (xd.c[k] || []).length; });
   return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + (ent[f] ? " ent" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i>' + (ent[f] ? '<em class="st-ent" aria-label="Entrenaste">💪</em>' : '') + '</button>'; }).join("") + '</div>';
+ if(esHoy) h += htmlRacha();
  if(ent[diaSel]) h += '<div class="aviso entreno-av"><span class="e">💪</span><p><b>' + (esHoy ? 'Hoy entrenaste en WGYM' : 'Este día entrenaste en WGYM') + '</b><br><span class="muted" style="font-size:15px">Después de entrenar, suma 15 a 25 g de proteína dentro de las 2 horas siguientes.</span></p></div>';
  var av = recordatorio();
  if(av) h += '<div class="aviso"><span class="e">' + av[0] + '</span><p>' + esc(av[1]) + '</p><button type="button" id="avisoX" aria-label="Ocultar aviso">×</button></div>';
@@ -1401,7 +1433,7 @@ function renderHoy(){
     y meta al lado, los 3 macros en columnas abajo y, en vez de la frase del día, un cuadro
     grande de calorías restantes. */
  function macro(cls, nombre, v, meta){ return '<div class="macro ' + cls + '"><span class="mn">' + nombre + '</span><b class="mv">' + Math.round(v) + '<small> / ' + meta + ' g</small></b><div class="barra"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }
- h += '<div class="card res2"><div class="anillo-box"><div class="anillo' + (rest < 0 ? " pasado" : "") + '"><svg viewBox="0 0 150 150"><circle class="fondo" cx="75" cy="75" r="62"/><circle class="prog" id="anilloProg" cx="75" cy="75" r="62" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/></svg><div class="centro"><b>' + Math.round(t.k / M.kcal * 100) + '%</b><span>de tu meta</span></div></div>' +
+ h += '<div class="card res2"><div class="anillo-box"><div class="anillo' + (rest < 0 ? " pasado" : (M.p && t.p >= M.p) || (t.k >= M.kcal * 0.9) ? " meta-ok" : "") + '"><svg viewBox="0 0 150 150"><circle class="fondo" cx="75" cy="75" r="62"/><circle class="prog" id="anilloProg" cx="75" cy="75" r="62" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/></svg><div class="centro"><b>' + Math.round(t.k / M.kcal * 100) + '%</b><span>de tu meta</span></div></div>' +
   '<div class="res-datos"><div><span>🍽 Comidas</span><b>' + miles(t.k) + '<small> kcal</small></b></div><div><span>🎯 Meta</span><b>' + miles(M.kcal) + '<small> kcal</small></b></div></div></div>' +
   '<div class="macros3">' + macro("m-p", "Proteína", t.p, M.p) + macro("m-c", "Carbos", t.c, M.c) + macro("m-g", "Grasas", t.g, M.g) + '</div>' +
   '<div class="vitc-hoy">' + MICROS.map(function(mc){ var v = t[mc[0]], meta = metaMicro(mc[0]); return '<div class="mic-h"><div class="fila"><span>' + mc[1] + '</span><b>' + (mc[2] === "mg" ? miles(v) : String(r1(v)).replace(".", ",")) + ' <small>/ ' + miles(meta) + ' ' + mc[2] + '</small></b></div><div class="barra ' + mc[0] + '"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }).join("") +
@@ -1443,7 +1475,7 @@ function renderHoy(){
  comidasVisibles(x).forEach(function(cm){
   var its = x.c[cm[0]] || [], kc = its.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
   h += '<div class="card comida-card"><div class="cab"><h3>' + cm[1] + ' ' + cm[2] + ' <span class="hora-com">' + horaDe(cm[0]) + '</span></h3><small>' + (its.length ? miles(kc) + " kcal" : "") + '</small></div>';
-  its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
+  its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
   var ay = diaDe(sumaDias(diaSel, -1)).c[cm[0]] || [];
   if(!its.length && ay.length) h += '<button type="button" class="rep-ay" data-rep="' + cm[0] + '">🔁 Repetir lo de ayer · ' + ay.length + (ay.length === 1 ? ' alimento' : ' alimentos') + ' · ' + miles(ay.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0)) + ' kcal</button>';
   /* «Guardar como plato» y «Copiar a otro día» (11-10-2026, pedido de la dueña). */
@@ -1453,7 +1485,7 @@ function renderHoy(){
  var bebs = x.c.bebidas || [], kb = bebs.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
  h += '<div class="card bebidas-card"><div class="cab"><h3>⚡ Energéticas</h3><small>' + (bebs.length ? miles(kb) + " kcal" : "") + '</small></div>' +
   '<p class="muted" style="font-size:15px;margin:0 0 10px">Monster, Score, Red Bull, Burn, Powerade y más.</p>';
- bebs.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="bebidas" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
+ bebs.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="bebidas" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
  h += '<div class="beb-bts"><button type="button" class="btn rojo" id="bebScan">📷 Escanear energética</button><button type="button" class="add-l" id="bebBus">🔎 Buscar energética</button></div></div>';
  if(!estaInstalada() && !DENTRO_TARJETA && !lsGet(CLAVE_INST, false)) h += '<div class="aviso" style="background:#160c0d;border-color:#5a1a1f"><span class="e">📲</span><p><b>Pon WGYMNUTRI en tu pantalla de inicio</b><br><span class="muted" style="font-size:14px">Ábrela con un toque, como cualquier app.</span></p><button type="button" id="instIr" class="btn rojo chico" style="width:auto">Instalar</button></div>';
  var box = $("tabHoy"); box.innerHTML = h;
@@ -1504,7 +1536,10 @@ function renderHoy(){
  box.querySelectorAll(".item .x").forEach(function(b){ b.onclick = function(){
   var xx = diaDe(diaSel); xx.c[b.dataset.m].splice(+b.dataset.j, 1); setDia(diaSel, xx); guardar(); renderHoy(); $("rachaNum").textContent = racha();
  }; });
+ if(diaSel === hoyISO()){ seguroN_(revisarFestejo); seguroN_(revisarNivel); }
+ seguroN_(pintarSaludo);
 }
+function seguroN_(f){ try{ f(); }catch(e){} }
 function porcionTxt(it){ var m = it.x || 1, u1 = !it.gr && String(it.p || "").match(/^1 (\S+)(.*)$/);
  if(u1 && m === Math.round(m) && m > 1) return m + " " + plural(u1[1], m) + u1[2];
  return it.gr ? Math.round(it.gr * m) + (it.ml ? " ml" : " g") : (m === 1 ? it.p : (m === 0.5 ? "½" : String(m).replace(".", ",")) + " × " + it.p); }
@@ -1653,6 +1688,27 @@ function textoPorcion(a){ var t = porcionDe(a); return t && t.indexOf(String(a.p
 var WGYM_SET = {}; (window.NUTRI_WGYM || []).forEach(function(n){ WGYM_SET[n] = 1; });
 function tagWgym(a){ return a && a.cat === CAT_PROD ? '<em class="tag-wgym">📷 Escaneado en WGYM</em>' : agregadoWgym(a) ? '<em class="tag-wgym">⭐ Agregado por WGYM</em>' : ''; }
 function agregadoWgym(a){ return !!a && a.cat !== CAT_PROD && (WGYM_SET[a.n] || /B[aá]sicos fitness|Energ[eé]ticas|Endulzantes/.test(a.cat || "")); }
+/* 🍗 Íconos por alimento (11-10-2026, la dueña eligió la idea 4): primero por palabras del nombre,
+   después por categoría. Solo adorno: no cambia ningún cálculo. */
+var ICONOS = [[/papas? fritas/,"🍟"],[/arroz con leche|leche asada|flan|postre|s[eé]mola|manjar|maicena/,"🍮"],[/caf[eé]|cappuccino|latte|mocaccino|cortado/,"☕"],[/\bt[eé]\b|t[eé] (verde|negro|helado)/,"🍵"],[/jugo/,"🧃"],[/cerveza/,"🍺"],[/vino|espumante/,"🍷"],[/piscola|whisky|ron /,"🥃"],
+ [/pizza/,"🍕"],[/completo|hot ?dog|italiano/,"🌭"],[/hamburguesa|churrasco|barros|chacarero|sandwich|s[aá]ndwich/,"🍔"],[/sushi/,"🍣"],[/empanada/,"🥟"],[/cazuela|sopa|caldo|charquic[aá]n|porotos con|lentejas con|pantruca/,"🍲"],
+ [/whey|prote[ií]na en polvo|case[ií]na|scoop|batido/,"💪"],[/creatina|omega|vitamina|c[aá]psula/,"💊"],
+ [/pollo|pavo|pechuga|trutro|\bala\b|nuggets/,"🍗"],[/jam[oó]n|vienesa|longaniza|salame|mortadela|chorizo|tocino|prieta|pat[eé]/,"🥓"],[/carne|vacuno|posta|lomo|bistec|filete|asiento|plateada|mechada|costillar|chuleta|cerdo|pulpa/,"🥩"],
+ [/huevo|clara|omelette/,"🥚"],[/camar[oó]n|chorito|macha|surimi/,"🦐"],[/at[uú]n|salm[oó]n|merluza|pescado|reineta|jurel|tilapia|sardina|congrio/,"🐟"],
+ [/queso|quesillo|cottage|ricotta/,"🧀"],[/leche|yogur|k[eé]fir/,"🥛"],
+ [/chocolate|cacao|brownie|trencito|sahne/,"🍫"],[/alfajor|galleta/,"🍪"],[/queque|torta|muffin|panqueque|kuchen/,"🧁"],[/helado/,"🍦"],
+ [/avena|granola|cereal|corn flakes/,"🥣"],[/pan|marraqueta|hallulla|tortilla|wrap|baguette|pita|tostada|crutones/,"🍞"],[/arroz|qu[ií]noa|cusc[uú]s|mote/,"🍚"],[/fideo|[ñn]oqui|pasta|tallar[ií]n|lasa[ñn]a/,"🍝"],
+ [/pur[eé]|papa|camote/,"🥔"],[/palta|guacamole/,"🥑"],[/pl[aá]tano/,"🍌"],[/manzana/,"🍎"],[/naranja|mandarina|pomelo/,"🍊"],[/frutilla|frambuesa|mora/,"🍓"],[/uva|pasas/,"🍇"],[/sand[ií]a|mel[oó]n/,"🍉"],[/pi[ñn]a/,"🍍"],[/kiwi/,"🥝"],[/durazno|damasco|huesillo/,"🍑"],[/pera/,"🍐"],[/cereza/,"🍒"],[/lim[oó]n/,"🍋"],[/mango|papaya/,"🥭"],[/coco/,"🥥"],[/ar[aá]ndano/,"🫐"],
+ [/tomate|pomarola/,"🍅"],[/br[oó]coli|coliflor|repollito/,"🥦"],[/zanahoria/,"🥕"],[/choclo/,"🌽"],[/pepino|zapallo italiano/,"🥒"],[/piment[oó]n|aj[ií]\b/,"🌶️"],[/champi[ñn]/,"🍄"],[/cebolla|cebollin|puerro/,"🧅"],[/berenjena/,"🍆"],[/lechuga|ensalada|espinaca|r[uú]cula|kale|acelga|repollo|apio/,"🥬"],
+ [/lenteja|garbanzo|poroto|edamame|soya|tofu|hummus|haba|arveja/,"🫘"],[/almendra|nuez|nueces|avellana|pistacho|casta[ñn]a|man[ií]|semilla|ch[ií]a/,"🥜"],
+ [/aceite|mantequilla|margarina|mayonesa|salsa|aderezo|vinagreta|mostaza|ketchup/,"🫒"],[/endulzante|az[uú]car|stevia|sucralosa|miel|eritritol|xilitol|sirope/,"🍯"],[/agua/,"💧"],[/bebida|cola|sprite|fanta/,"🥤"]];
+var ICONO_CAT = { "⚡ Energéticas":"⚡", "Bebidas":"🥤", "Frutas":"🍎", "Verduras":"🥦", "Lácteos":"🥛", "Carnes y huevos":"🍖", "Panes y cereales":"🍞", "Legumbres":"🫘", "Snacks y dulces":"🍬", "Comida chilena":"🍲", "Comida rápida":"🍔", "Grasas y salsas":"🫒", "Endulzantes":"🍯", "Suplementos":"💊" };
+function iconoAlim(a){
+ if(!a) return "🍽️"; if(a.cat === "⚡ Energéticas") return "⚡";
+ var n = normName(a.n || "").toLowerCase();
+ for(var i = 0; i < ICONOS.length; i++) if(ICONOS[i][0].test(n)) return ICONOS[i][1];
+ return ICONO_CAT[a.cat] || (a.cat === CAT_PROD ? "📦" : "🍽️");
+}
 function filaAlim(a, i, grupo){
  // Productos por 100 g con porción de etiqueta: se muestra la porción recomendada y sus valores (10-10-2026).
  var f = 1, txt;
@@ -1661,7 +1717,7 @@ function filaAlim(a, i, grupo){
   var pt = textoPorcion(a);
   txt = (a.marca ? a.marca + " · " : "") + "✅ Porción: " + pt;
  } else txt = a.gr ? (a.marca ? a.marca + " · " : "") + "por 100 g" : a.p;
- return '<button type="button" data-g="' + grupo + '" data-i="' + i + '"><div class="tx"><b>' + esc(a.n) + '</b>' + (a.cat === CAT_PROD ? '<em class="tag-wgym">📷 Escaneado en WGYM</em>' : agregadoWgym(a) ? '<em class="tag-wgym">⭐ Agregado por WGYM</em>' : '') + '<span>' + esc(txt) + ' · P ' + r1(a.pr * f) + ' · C ' + r1(a.c * f) + ' · G ' + r1(a.g * f) + '</span></div><span class="k">' + miles(a.k * f) + '</span></button>';
+ return '<button type="button" data-g="' + grupo + '" data-i="' + i + '"><div class="tx"><b>' + iconoAlim(a) + ' ' + esc(a.n) + '</b>' + (a.cat === CAT_PROD ? '<em class="tag-wgym">📷 Escaneado en WGYM</em>' : agregadoWgym(a) ? '<em class="tag-wgym">⭐ Agregado por WGYM</em>' : '') + '<span>' + esc(txt) + ' · P ' + r1(a.pr * f) + ' · C ' + r1(a.c * f) + ' · G ' + r1(a.g * f) + '</span></div><span class="k">' + miles(a.k * f) + '</span></button>';
 }
 /* Búsqueda: primero la lista del gimnasio (al instante) y, por detrás, productos
    en línea de Open Food Facts (base de datos gratuita con miles de marcas).
@@ -2375,7 +2431,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101071", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101072", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
