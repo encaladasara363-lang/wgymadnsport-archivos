@@ -1691,7 +1691,7 @@ probado: ella se activó desde el mesón y entró a la app).
   agregado por WGYM"):** en la búsqueda y el detalle, los alimentos pedidos por ella
   (`window.NUTRI_WGYM` al final de `nutri-alimentos.js`, por nombre exacto) y las categorías
   Básicos fitness, Energéticas y Endulzantes muestran esa etiqueta roja (`agregadoWgym`); los
-  escaneados siguen con «📷 Escaneado en WGYM». **Al agregar un alimento a pedido de la dueña,
+  escaneados siguen con «📷 Escaneado en WGYM». Desde el 11-10-2026 la etiqueta también sale en los alimentos ya anotados en cada comida de «Hoy» (`tagWgym`; la dueña: "el maicena no sale, el chocolate tampoco"). **Al agregar un alimento a pedido de la dueña,
   sumar su nombre a `NUTRI_WGYM`.**
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
