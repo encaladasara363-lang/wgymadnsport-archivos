@@ -1687,6 +1687,14 @@ probado: ella se activó desde el mesón y entró a la app).
     muslo, brazo relajado y % de grasa de la báscula (`MED_CAMPOS`; solo la cintura es obligatoria)
     y muestra el IMC calculado con el último peso y la estatura (`imcActual`, rangos OMS). Nunca
     escribir las medidas reales de nadie en el código: cada socio las anota en su teléfono.
+    **Medidas mensuales y peso semanal (11-10-2026, la dueña: "la medición se la harán mensual y
+    que las anteriores vayan quedando registradas, para comparar mes a mes"; "el peso que sea
+    semanal"):** una medición por mes (si se guarda otra el mismo mes, corrige esa) y un peso por
+    semana de lunes a domingo (ídem); los meses y semanas anteriores nunca se borran. Aviso verde
+    «Ya registraste…» / dorado «Te toca…» (`.med-estado`), «📅 Mis avances mes a mes»
+    (`htmlMesAMes`: total desde la primera medición y cada mes con ▼/▲ contra el anterior) y
+    «📋 Mis pesos semana a semana». Todo sigue solo en el teléfono: si el socio borra los datos
+    del navegador o cambia de teléfono, el historial no se recupera.
   - «🗓 Mi menú de la semana» en Recetas (`armarMenu`/`htmlMenu`, `D.menu`): 7 días con recetas
     de `nutri-recetas.js` según las comidas del socio (`MENU_CAT`, reparto `MENU_PESO`), lo que
     no come y sin repetir; «🛒 Pasar todo a mi lista de compras» y «🔄 Armar otro menú».
