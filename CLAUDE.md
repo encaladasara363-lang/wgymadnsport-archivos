@@ -1674,7 +1674,7 @@ probado: ella se activó desde el mesón y entró a la app).
     con una etiqueta chilena: 4 de 4 valores correctos.
 - **Cinco funciones nuevas (11-10-2026, la dueña eligió las opciones 1 a 5):**
   - «🍽 Mis platos»: en cada comida con alimentos, «⭐ Guardar como plato» (`guardarPlato`,
-    `D.platos`); en «Agregar comida», pestaña «🍽 Mis platos» (`modoPlatos`) lo agrega de un toque.
+    `D.platos`); en «Agregar comida», pestaña «🍽 Mis platos» (`modoPlatos`) lo agrega de un toque. Desde el 11-10-2026 (la dueña: "está más enredado") cada plato es una tarjeta (`.plato-card`) con nombre, ingredientes, kcal y un ＋ rojo grande, y 🗑 aparte para borrar.
   - «📋 Copiar a otro día» en cada comida con alimentos (`copiarComida`): elige día (hoy y los
     14 anteriores) y comida.
   - Sellos «ALTO EN» en productos envasados (`sellosDe`/`pintarSellos`): calorías, azúcares,
