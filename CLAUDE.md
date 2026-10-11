@@ -1578,6 +1578,9 @@ probado: ella se activó desde el mesón y entró a la app).
   granos), Almendras (20). Chocolate y Chocolate de leche van por **cuadraditos** («6 cuadraditos (30 g)»,
   ≈27 kcal cada uno; 11-10-2026, la dueña: "me como el chocolate por cuadraditos"); el amargo,
   «2 cuadraditos (20 g)». `CONTABLES` acepta «cuadraditos/cuadritos».
+  Dulces saludables (11-10-2026, pedido de la dueña): manjar sin azúcar, harina de avena,
+  dulce de maicena saludable, alfajor, galleta, panqueque, brownie, queque, muffin, torta,
+  barrita y bolitas de avena con manjar sin azúcar (valores aproximados caseros).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
   escaneados los botones muestran gramos (ej. 17 g · 34 g · 68 g · 100 g) en vez de
   «½ porción · 1 porción · 2 porciones».
