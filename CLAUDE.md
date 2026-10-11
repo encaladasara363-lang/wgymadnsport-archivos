@@ -1730,6 +1730,10 @@ probado: ella se activó desde el mesón y entró a la app).
   ingreso al gimnasio (`diasEntreno()`, de `asistenciaDesde`), `header.top` toma la clase `entreno`
   (degradado rojo con borde dorado que late) y aparece la pastilla «💪 Hoy entrenaste en WGYM»
   (`#entTag`). El aviso verde de abajo pasa a decir «Después de entrenar» (sin repetir el título).
+- **🔊 «Bip» al escanear (11-10-2026, la dueña eligió la idea 5):** `bip()` (Web Audio, onda cuadrada
+  1.900 Hz, 0,15 s, como caja de supermercado) suena junto a la vibración cuando se lee un código,
+  en vivo o por foto. El audio se desbloquea al abrir «Escanear» (`prepararBip`), porque los
+  teléfonos solo dejan sonar después de un toque. En iPhone no suena con el teléfono en silencio.
 - **📳 Vibración al anotar (11-10-2026, la dueña eligió la idea 6):** `vibrar(ms)` da un golpecito
   al agregar un alimento, un plato o varios por voz, y al tocar agua/café o leer un código. Android:
   `navigator.vibrate`; iPhone (no tiene esa función): un interruptor `<input switch>` escondido
