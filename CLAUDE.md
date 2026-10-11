@@ -1665,6 +1665,22 @@ probado: ella se activó desde el mesón y entró a la app).
     (no saturadas/trans) y H. de C. disponibles (no azúcares), elige la columna «100 g» según
     el encabezado y lee la porción. Siempre pide revisar los números antes de guardar. Probado
     con una etiqueta chilena: 4 de 4 valores correctos.
+- **Cinco funciones nuevas (11-10-2026, la dueña eligió las opciones 1 a 5):**
+  - «🍽 Mis platos»: en cada comida con alimentos, «⭐ Guardar como plato» (`guardarPlato`,
+    `D.platos`); en «Agregar comida», pestaña «🍽 Mis platos» (`modoPlatos`) lo agrega de un toque.
+  - «📋 Copiar a otro día» en cada comida con alimentos (`copiarComida`): elige día (hoy y los
+    14 anteriores) y comida.
+  - Sellos «ALTO EN» en productos envasados (`sellosDe`/`pintarSellos`): calorías, azúcares,
+    grasas saturadas y sodio con los límites de la ley chilena (100 g: 275 kcal, 10 g, 4 g,
+    400 mg; 100 ml: 70 kcal, 5 g, 3 g, 100 mg), desde Open Food Facts (`az`, `sat`, `na` en
+    `offAAlim`; si el producto viene de la hoja «Productos» se piden a Open Food Facts por el
+    código). Sin dato, ese sello no se muestra; con los tres datos y sin sellos dice «Sin sellos».
+  - «📏 Mis medidas» en Progreso (`htmlMedidas`, `D.medidas`, solo en el teléfono): cintura y
+    cadera con gráfico y la cintura ubicada en los percentiles CHIREF (`CHIREF_CINTURA`), como
+    referencia, no meta.
+  - «🗓 Mi menú de la semana» en Recetas (`armarMenu`/`htmlMenu`, `D.menu`): 7 días con recetas
+    de `nutri-recetas.js` según las comidas del socio (`MENU_CAT`, reparto `MENU_PESO`), lo que
+    no come y sin repetir; «🛒 Pasar todo a mi lista de compras» y «🔄 Armar otro menú».
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda

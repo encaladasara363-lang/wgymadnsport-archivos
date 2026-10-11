@@ -45,3 +45,7 @@ html.oscuro .entreno-av{ background:#0F2A1B !important; border-color:#1F9D55 !im
 html.oscuro .supl-b small{ color:#F2D16B !important; }
 html.oscuro details.compras summary b{ color:#F2D16B !important; }
 html.oscuro .ranking em{ color:#F2D16B !important; }
+/* 11-10-2026: medidas, sellos y menú */
+html.oscuro .medidas-ult div{ background:#1C1C21 !important; }
+html.oscuro .sin-sellos{ color:#2BD576 !important; }
+html.oscuro .sello span, html.oscuro .sello b{ color:#FFF !important; }
