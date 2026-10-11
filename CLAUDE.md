@@ -404,8 +404,9 @@ ver cuándo el gym está más vacío.
   ranking». Los puntos = días con ingreso en el mes, calculados por el Apps Script
   (`guardarReto` guarda mes, id al azar del teléfono, apodo y nombre en la hoja privada
   «Retos»; `listarRetos` cuenta los días con `diasDesde_` y entrega solo apodo + días, caché
-  120 s). El teléfono recuerda su apodo e id en `wgym_ranking_v1`. **Necesita la Versión 17
-  del Apps Script** (`docs/apps-script-ingresos-salidas.md`).
+  120 s). El teléfono recuerda su apodo e id en `wgym_ranking_v1`. **Versión 17 del Apps
+  Script instalada por la dueña el 10-10-2026 a las 21:13** (misma implementación y enlace;
+  INGRESOS.gs verificado idéntico al repo vía Drive; para volver atrás: lápiz → Versión 16).
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
   `TARJETA_VERSION` y compara con `tarjeta-version.txt` al volver a estar a
