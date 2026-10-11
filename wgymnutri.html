@@ -340,7 +340,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=16"></script>
+<script src="nutri-alimentos.js?v=17"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -1585,6 +1585,9 @@ function unidadesPorcion(a){
 /* Queso, jamón y fiambres se cortan en láminas, no en rebanadas. */
 function porcionDe(a){ var t = porcionES(a.porcTxt); return /queso|jam[oó]n|pavo|salame|mortadela|fiambre|pechuga/i.test(a.n || "") ? t.replace(/rebanadas/gi, "láminas").replace(/rebanada/gi, "lámina") : t; }
 function textoPorcion(a){ var t = porcionDe(a); return t && t.indexOf(String(a.porcG)) < 0 ? t + " (" + a.porcG + " g)" : (t || a.porcG + " g"); }
+/* «⭐ Agregado por WGYM» (11-10-2026, pedido de la dueña). */
+var WGYM_SET = {}; (window.NUTRI_WGYM || []).forEach(function(n){ WGYM_SET[n] = 1; });
+function agregadoWgym(a){ return !!a && a.cat !== CAT_PROD && (WGYM_SET[a.n] || /B[aá]sicos fitness|Energ[eé]ticas|Endulzantes/.test(a.cat || "")); }
 function filaAlim(a, i, grupo){
  // Productos por 100 g con porción de etiqueta: se muestra la porción recomendada y sus valores (10-10-2026).
  var f = 1, txt;
@@ -1593,7 +1596,7 @@ function filaAlim(a, i, grupo){
   var pt = textoPorcion(a);
   txt = (a.marca ? a.marca + " · " : "") + "✅ Porción: " + pt;
  } else txt = a.gr ? (a.marca ? a.marca + " · " : "") + "por 100 g" : a.p;
- return '<button type="button" data-g="' + grupo + '" data-i="' + i + '"><div class="tx"><b>' + esc(a.n) + '</b>' + (a.cat === CAT_PROD ? '<em class="tag-wgym">📷 Escaneado en WGYM</em>' : '') + '<span>' + esc(txt) + ' · P ' + r1(a.pr * f) + ' · C ' + r1(a.c * f) + ' · G ' + r1(a.g * f) + '</span></div><span class="k">' + miles(a.k * f) + '</span></button>';
+ return '<button type="button" data-g="' + grupo + '" data-i="' + i + '"><div class="tx"><b>' + esc(a.n) + '</b>' + (a.cat === CAT_PROD ? '<em class="tag-wgym">📷 Escaneado en WGYM</em>' : agregadoWgym(a) ? '<em class="tag-wgym">⭐ Agregado por WGYM</em>' : '') + '<span>' + esc(txt) + ' · P ' + r1(a.pr * f) + ' · C ' + r1(a.c * f) + ' · G ' + r1(a.g * f) + '</span></div><span class="k">' + miles(a.k * f) + '</span></button>';
 }
 /* Búsqueda: primero la lista del gimnasio (al instante) y, por detrás, productos
    en línea de Open Food Facts (base de datos gratuita con miles de marcas).
@@ -1712,7 +1715,7 @@ function detalle(a){
  var est0 = esGr && !esLiq && !esPote && !porcLoc ? unidadesPorcion(a) : null;
  if(est0 && est0.est && !a.porcG){ a = Object.assign({}, a, { porcG:Math.round(est0.porcG), porcTxt:"" }); }
  var h = '<div class="cab" style="margin-bottom:6px"><h3 style="font-size:22px;text-transform:none;letter-spacing:0">' + esc(a.n) + '</h3><button type="button" class="chip" id="dVolver">‹ Volver</button></div>' +
-  '<p class="muted" style="margin:0 0 12px">' + esc(a.marca || a.cat || "") + (a.cat === "Marcas" || a.cat === CAT_BEB ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
+  '<p class="muted" style="margin:0 0 12px">' + (agregadoWgym(a) ? '<em class="tag-wgym">⭐ Agregado por WGYM</em> ' : a.cat === CAT_PROD ? '<em class="tag-wgym">📷 Escaneado en WGYM</em> ' : '') + esc(a.marca || a.cat || "") + (a.cat === "Marcas" || a.cat === CAT_BEB ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
  if(esLiq && a.porcG){
   gramos = a.porcG;
   h += '<div class="porc-rec"><span>✅ Contenido</span><b>1 ' + envase + ' (' + a.porcG + ' ml)</b><small>información de la etiqueta del producto</small></div>' +
@@ -2298,7 +2301,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101060", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101061", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
