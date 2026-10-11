@@ -319,6 +319,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 .rank-tabla{ width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
 .rank-tabla th{ text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#D4AF37; padding:6px 8px; border-bottom:1px solid #333; }
 .rank-tabla td{ padding:8px; border-bottom:1px solid #2a2a31; }
+.rank-grupo{ margin:18px 0 0; font-size:15px; color:#fff; letter-spacing:.04em; text-transform:uppercase; } .rank-grupo:first-child{ margin-top:6px; }
 .rank-tabla .rank-dias{ font-weight:800; color:#D4AF37; font-size:16px; }
 </style>
 
@@ -635,8 +636,15 @@ function verRankingAdmin_(){
   if(!ok){ box.innerHTML = '<p class="rank-ayuda">' + (d === "sin conexión" ? 'Sin conexión. Revisa el internet e intenta de nuevo.' : d === "sin clave" ? 'Falta la clave de administración.' : 'No se pudo cargar (' + escRank_(d) + '). Si recién se agregó, falta actualizar el sistema de Google a la Versión 20.') + '</p>'; return; }
   var l = d.lista || [];
   document.getElementById("rankMes").textContent = (d.mes || "") + " · " + l.length + (l.length === 1 ? " socio" : " socios");
-  box.innerHTML = l.length ? '<table class="rank-tabla"><thead><tr><th>#</th><th>Apodo</th><th>Nombre real</th><th>Días</th></tr></thead><tbody>' +
-   l.map(function(x, i){ return '<tr><td>' + (i < 3 ? ["🥇","🥈","🥉"][i] : (i + 1) + "°") + '</td><td><b>' + escRank_(x.apodo) + '</b></td><td>' + escRank_(x.nombre) + '</td><td class="rank-dias">' + x.pts + '</td></tr>'; }).join("") + '</tbody></table>'
+  /* Un ranking por grupo de plan (11-10-2026, la dueña): Mensuales, Turno (máx. 14 días)
+     y 3 veces por semana (máx. 12). Semanal y pase diario no participan. */
+  var grupos = [["mensual", "Mensuales"], ["turno", "Plan Turno · máximo 14 días"], ["tres", "3 veces por semana · máximo 12 días"]];
+  box.innerHTML = l.length ? grupos.map(function(gr){
+   var lg = l.filter(function(x){ return (x.g || "mensual") === gr[0]; });
+   return '<h3 class="rank-grupo">' + gr[1] + ' · ' + lg.length + '</h3>' + (lg.length ? '<table class="rank-tabla"><thead><tr><th>#</th><th>Apodo</th><th>Nombre real</th><th>Días</th></tr></thead><tbody>' +
+    lg.map(function(x, i){ return '<tr><td>' + (i < 3 ? ["🥇","🥈","🥉"][i] : (i + 1) + "°") + '</td><td><b>' + escRank_(x.apodo) + '</b></td><td>' + escRank_(x.nombre) + '</td><td class="rank-dias">' + x.pts + '</td></tr>'; }).join("") + '</tbody></table>'
+    : '<p class="rank-ayuda">Nadie de este grupo se ha unido este mes.</p>');
+  }).join("") + (d.grupos ? '' : '<p class="rank-ayuda">Para separar por grupos falta actualizar el sistema de Google a la Versión 21: por ahora todos aparecen como Mensuales.</p>')
    : '<p class="rank-ayuda">Todavía nadie se une al ranking este mes.</p>';
  });
 }

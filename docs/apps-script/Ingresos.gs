@@ -576,6 +576,11 @@ function origenNutri_(e) {
 /* La planilla convierte "2026-10" en una fecha: se lee de vuelta como texto «AAAA-MM» y se
    escribe con apóstrofo para que quede como texto (corregido el 10-10-2026, 21:20). */
 function mesDe_(v) { return v instanceof Date ? Utilities.formatDate(v, TZ_INGRESOS_, "yyyy-MM") : String(v).replace(/^'/, "").slice(0, 7); }
+/* Grupos del ranking (Versión 21, 11-10-2026, la dueña: "los mensuales vienen casi todos
+   los días, el turno solo 14 y el 3 veces por semana 12"): cada socio compite solo con su
+   grupo. La tarjeta manda g = mensual | turno | tres según su plan (semanal y pase diario no
+   participan). Una fila sin grupo (de antes) cuenta como mensual. */
+function grupoReto_(v) { v = String(v || ""); return v === "turno" || v === "tres" ? v : "mensual"; }
 function guardarReto_(e) {
   try {
     var p = e.parameter, mes = diaCL_(Date.now()).slice(0, 7), id = String(p.id || "").replace(/[^a-z0-9]/gi, "").slice(0, 24);
@@ -585,16 +590,18 @@ function guardarReto_(e) {
     if (!lock.tryLock(10000)) return respond_(e, { ok: false, error: "ocupado, intenta de nuevo" });
     try {
       var ss = SpreadsheetApp.openById(SHEET_ID), hoja = ss.getSheetByName("Retos");
-      if (!hoja) { hoja = ss.insertSheet("Retos"); hoja.appendRow(["Mes", "Id", "Apodo", "Clave", "Actualizado"]); }
+      if (!hoja) { hoja = ss.insertSheet("Retos"); hoja.appendRow(["Mes", "Id", "Apodo", "Clave", "Actualizado", "Grupo"]); }
+      if (!hoja.getRange(1, 6).getValue()) hoja.getRange(1, 6).setValue("Grupo");
+      var grupo = grupoReto_(p.g);
       var n = hoja.getLastRow(), ahora = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm"), hecho = false;
       if (n >= 2) {
         /* Una sola fila por persona y mes: se busca por el código del teléfono o por el nombre. */
         var vals = hoja.getRange(2, 1, n - 1, 4).getValues();
         for (var i = vals.length - 1; i >= 0; i--) {
-          if (mesDe_(vals[i][0]) === mes && (String(vals[i][1]) === id || String(vals[i][3]) === clave)) { hoja.getRange(i + 2, 2, 1, 4).setValues([[id, apodo, clave, ahora]]); hecho = true; break; }
+          if (mesDe_(vals[i][0]) === mes && (String(vals[i][1]) === id || String(vals[i][3]) === clave)) { hoja.getRange(i + 2, 2, 1, 5).setValues([[id, apodo, clave, ahora, grupo]]); hecho = true; break; }
         }
       }
-      if (!hecho) hoja.appendRow(["'" + mes, id, apodo, clave, ahora]);
+      if (!hecho) hoja.appendRow(["'" + mes, id, apodo, clave, ahora, grupo]);
       CacheService.getScriptCache().remove("retos_" + mes);
       return respond_(e, { ok: true });
     } finally { lock.releaseLock(); }
@@ -606,15 +613,20 @@ function calcularRetos_(p, conNombre) {
   if (hoja && hoja.getLastRow() >= 2) {
     /* Si una persona quedó repetida, vale su fila más nueva (la de más abajo). */
     var porClave = {};
-    hoja.getRange(2, 1, hoja.getLastRow() - 1, 4).getValues().forEach(function (r) {
-      if (mesDe_(r[0]) === mes && r[3]) porClave[String(r[3])] = { id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]) };
+    hoja.getRange(2, 1, hoja.getLastRow() - 1, 6).getValues().forEach(function (r) {
+      if (mesDe_(r[0]) === mes && r[3]) porClave[String(r[3])] = { id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]), g: grupoReto_(r[5]) };
     });
     Object.keys(porClave).forEach(function (k) { if (porClave[k].apodo !== "(salió)") filas.push(porClave[k]); });
   }
   var dias = filas.length ? diasDesde_(p, mes + "-01") : {};
-  var lista = filas.map(function (f) { var o = { id: f.id, apodo: f.apodo, pts: dias[f.clave] ? Object.keys(dias[f.clave]).length : 0 }; if (conNombre) o.nombre = f.clave; return o; });
+  var lista = filas.map(function (f) { var o = { id: f.id, apodo: f.apodo, g: f.g, pts: dias[f.clave] ? Object.keys(dias[f.clave]).length : 0 }; if (conNombre) o.nombre = f.clave; return o; });
   lista.sort(function (a, b) { return b.pts - a.pts; });
-  return { ok: true, retos: true, mes: mes, lista: conNombre ? lista : lista.slice(0, 30) };
+  if (!conNombre) {
+    /* Lo público: hasta 30 por grupo. */
+    var cuenta = {};
+    lista = lista.filter(function (x) { cuenta[x.g] = (cuenta[x.g] || 0) + 1; return cuenta[x.g] <= 30; });
+  }
+  return { ok: true, retos: true, grupos: true, mes: mes, lista: lista };
 }
 function listarRetos_(e) {
   try {
