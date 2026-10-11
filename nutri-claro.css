@@ -480,7 +480,13 @@ details.compras summary b{font-size:14px;color:#B36B00}
 .sello span,.sello b{color:#FFF !important;font-style:normal !important;line-height:1.05}
 .sello span{font-size:12px;font-weight:900}.sello b{font-size:10.5px;font-weight:900;margin-top:2px}
 .sin-sellos{color:#16803C;font-weight:800;margin:6px 0;font-size:15px}
-.medidas-ult{display:flex;gap:10px;margin-top:10px}
+.medidas-ult{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.medidas-ult div{min-width:calc(33% - 10px)}
+.medidas-ult b{white-space:nowrap;font-size:24px !important}.medidas-ult b small{font-size:14px;margin-left:2px}.medidas-ult span{white-space:nowrap}
+.med-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}
+.med-grid label{display:flex;flex-direction:column;gap:4px;min-width:0}
+.med-grid label span{font-size:13px;line-height:1.2}
+.med-grid .inp{width:100%;min-width:0}
 .medidas-ult div{flex:1;background:#F6F3EC;border-radius:12px;padding:10px;text-align:center}
 .medidas-ult span{display:block;font-size:13px}.medidas-ult b{font-family:var(--num);font-size:26px}
 details.menu-sem summary{list-style:none;cursor:pointer}

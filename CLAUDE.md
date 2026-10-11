@@ -1683,7 +1683,10 @@ probado: ella se activó desde el mesón y entró a la app).
     código). Sin dato, ese sello no se muestra; con los tres datos y sin sellos dice «Sin sellos».
   - «📏 Mis medidas» en Progreso (`htmlMedidas`, `D.medidas`, solo en el teléfono): cintura y
     cadera con gráfico y la cintura ubicada en los percentiles CHIREF (`CHIREF_CINTURA`), como
-    referencia, no meta.
+    referencia, no meta. Desde el 11-10-2026 (la dueña mandó su tabla de medidas) trae también abdomen bajo,
+    muslo, brazo relajado y % de grasa de la báscula (`MED_CAMPOS`; solo la cintura es obligatoria)
+    y muestra el IMC calculado con el último peso y la estatura (`imcActual`, rangos OMS). Nunca
+    escribir las medidas reales de nadie en el código: cada socio las anota en su teléfono.
   - «🗓 Mi menú de la semana» en Recetas (`armarMenu`/`htmlMenu`, `D.menu`): 7 días con recetas
     de `nutri-recetas.js` según las comidas del socio (`MENU_CAT`, reparto `MENU_PESO`), lo que
     no come y sin repetir; «🛒 Pasar todo a mi lista de compras» y «🔄 Armar otro menú».
