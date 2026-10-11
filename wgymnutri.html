@@ -1109,7 +1109,7 @@ function htmlMedidas(){
 /* Campos de «Mis medidas» (11-10-2026, la dueña mandó su tabla: cintura al ombligo, abdomen bajo,
    cadera/glúteos, muslo, brazo relajado y % de grasa de la báscula). [clave, etiqueta casillero,
    etiqueta corta, unidad, mínimo, máximo]. El peso va en su propio cuadro y el IMC se calcula. */
-var MED_CAMPOS = [["cin","Cintura (altura del ombligo)","Cintura","cm",40,200],["abd","Abdomen bajo","Abdomen","cm",40,220],["cad","Cadera / glúteos","Cadera","cm",50,220],["mus","Muslo","Muslo","cm",25,120],["bra","Brazo relajado","Brazo","cm",15,70],["gra","Grasa corporal (báscula)","Grasa","%",3,70]];
+var MED_CAMPOS = [["cin","Cintura (altura del ombligo)","Cintura","cm",40,200],["abd","Abdomen bajo","Abdomen","cm",40,220],["cad","Cadera / glúteos","Cadera","cm",50,220],["mus","Muslo","Muslo","cm",25,120],["bra","Brazo relajado","Brazo","cm",15,70],["gra","Grasa corporal (Omron)","Grasa","%",3,70]];
 function mesTxt(ym){ return MESES[Number(ym.slice(5, 7)) - 1] + " " + ym.slice(0, 4); }
 function mesSig(ym){ var a = Number(ym.slice(0, 4)), m = Number(ym.slice(5, 7)) + 1; if(m > 12){ m = 1; a++; } return a + "-" + (m < 10 ? "0" : "") + m; }
 function difTxt(d, u){ if(!d) return '<em class="dif igual">=</em>'; return '<em class="dif ' + (d < 0 ? 'baja' : 'sube') + '">' + (d < 0 ? '▼ ' : '▲ ') + String(Math.abs(d)).replace(".", ",") + (u === "%" ? '%' : '') + '</em>'; }
@@ -2348,7 +2348,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101065", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101066", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
