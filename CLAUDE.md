@@ -1715,7 +1715,10 @@ probado: ella se activó desde el mesón y entró a la app).
 - **🔥 Racha, 🍗 íconos, 🥇 niveles y 🎉 festejo (11-10-2026, la dueña eligió las ideas 1, 4, 3 y 2):**
   - Cuadro de racha arriba de «Hoy» (`htmlRacha`): fueguito animado que crece con los días seguidos
     anotando comida (`racha()`), titila rápido con «⚠️ Anota algo hoy o tu racha se apaga» si hoy no
-    anotó y queda gris en 0. El 🔥 de la cabecera brilla.
+    anotó y queda gris en 0. El 🔥 de la cabecera brilla. Letras de color, nunca blancas (la dueña: "que no sea blanca, una que se
+    note"): número dorado, «días seguidos» y «X días para…» naranja, mensaje amarillo (rojo si está en
+    peligro), pastilla del nivel con letra negra. Van con `style` en línea porque el tema oscuro pinta
+    de blanco todo texto sin color propio (`html.oscuro body *:not([style*="color"])`).
   - Niveles por días con comida anotada (`NIVELES`, `diasUsados`): 🌱 Novato, 🥉 Bronce (7),
     🥈 Plata (15), 🥇 Oro (30), 💎 Diamante (60), con barra hacia el siguiente. Al subir, confeti y
     «¡Subiste de nivel!» (`revisarNivel`, `D.nivelVisto`; la primera vez no festeja lo ya ganado).

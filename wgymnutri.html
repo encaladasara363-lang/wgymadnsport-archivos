@@ -233,7 +233,7 @@ h1,h2,h3{margin:0;font-weight:400}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <link rel="stylesheet" href="nutri-claro.css?v=48">
-<link rel="stylesheet" href="nutri-oscuro.css?v=7">
+<link rel="stylesheet" href="nutri-oscuro.css?v=8">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
 </head>
@@ -1397,8 +1397,10 @@ function htmlRacha(){
  var tam = r ? Math.min(1.6, 0.9 + r * 0.05) : 0.8, estado = !r ? "apagado" : hoyOk ? "vivo" : "peligro";
  var txt = !r ? "Anota tu primera comida de hoy y enciende tu racha." : hoyOk ? "¡Vas muy bien! Mañana anota otra vez para que siga creciendo." : "⚠️ Anota algo hoy o tu racha se apaga.";
  return '<div class="card racha-card ' + estado + '"><div class="fuego" style="--t:' + tam + '" aria-hidden="true"><span class="ll">🔥</span></div>' +
-  '<div class="racha-tx"><b class="racha-n">' + r + '<small>' + (r === 1 ? ' día seguido' : ' días seguidos') + '</small></b><p>' + txt + '</p>' +
-  '<div class="nivel"><span class="nivel-pill n' + ni + '" style="color:#141416">' + N[2] + ' Nivel ' + N[1] + '</span>' + (sig ? '<span class="nivel-falta">' + (sig[0] - du) + (sig[0] - du === 1 ? ' día' : ' días') + ' para ' + sig[2] + ' ' + sig[1] + '</span>' : '<span class="nivel-falta">¡Nivel máximo!</span>') + '</div>' +
+  /* Letras de color (11-10-2026, la dueña: "que no sea blanca, una que se note"): estilo en línea
+     porque el tema oscuro pinta de blanco todo texto sin color propio. */
+  '<div class="racha-tx"><b class="racha-n" style="color:#F2D16B">' + r + '<small style="color:#FFB347">' + (r === 1 ? ' día seguido' : ' días seguidos') + '</small></b><p style="color:' + (estado === "peligro" ? '#FF6B6B' : '#FFD54A') + '">' + txt + '</p>' +
+  '<div class="nivel"><span class="nivel-pill n' + ni + '" style="color:#141416">' + N[2] + ' Nivel ' + N[1] + '</span>' + (sig ? '<span class="nivel-falta" style="color:#FFB347">' + (sig[0] - du) + (sig[0] - du === 1 ? ' día' : ' días') + ' para ' + sig[2] + ' ' + sig[1] + '</span>' : '<span class="nivel-falta" style="color:#FFB347">¡Nivel máximo!</span>') + '</div>' +
   (sig ? '<div class="nivel-barra"><i style="width:' + Math.round((du - N[0]) / (sig[0] - N[0]) * 100) + '%"></i></div>' : '') + '</div></div>';
 }
 function revisarNivel(){
@@ -2433,7 +2435,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101075", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101077", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
