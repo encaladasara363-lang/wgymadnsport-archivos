@@ -232,8 +232,8 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=48">
-<link rel="stylesheet" href="nutri-oscuro.css?v=8">
+<link rel="stylesheet" href="nutri-claro.css?v=50">
+<link rel="stylesheet" href="nutri-oscuro.css?v=9">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
 </head>
@@ -318,6 +318,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
    <div class="logo-top"><video poster="assets/wgymnutri-logo.webp" autoplay muted loop playsinline preload="auto" aria-label="Logo WGYMNUTRI"><source src="assets/wgymnutri-logo-cabecera.mp4" type="video/mp4"><source src="assets/wgymnutri-logo-cabecera.webm" type="video/webm"></video></div>
    <div class="t"><b>WGYMNUTRI</b><span id="saludo">Hola</span></div>
    <div class="racha" id="rachaChip" title="Días seguidos registrando comida">🔥 <span id="rachaNum">0</span></div>
+   <div class="ent-tag" id="entTag" hidden style="color:#FFFFFF">💪 Hoy entrenaste en WGYM</div>
   </header>
   <div id="tabHoy" class="stack"></div>
   <div id="tabProg" class="stack" hidden></div>
@@ -1426,11 +1427,14 @@ function renderHoy(){
  /* Franja de la semana (10-10-2026, pedido de la dueña, como Fitia): L a D con un punto en cada
     día que tiene comidas registradas; se toca un día para verlo. */
  var lun = lunesDe(diaSel), ent = diasEntreno(); cargarEntreno();
+ /* 💪 Cabecera roja los días que entrenó (11-10-2026, la dueña eligió la idea 2): si hoy tiene
+    ingreso al gimnasio, la parte de arriba se pone roja intensa con «Hoy entrenaste en WGYM». */
+ var hoyEnt = !!ent[hoyISO()], topEl = document.querySelector("header.top"); if(topEl) topEl.classList.toggle("entreno", hoyEnt); if($("entTag")) $("entTag").hidden = !hoyEnt;
  h += '<div class="semana-tira">' + ["L","M","M","J","V","S","D"].map(function(l, i){
   var f = sumaDias(lun, i), xd = D.dias[f], con = xd && Object.keys(xd.c || {}).some(function(k){ return (xd.c[k] || []).length; });
   return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + (ent[f] ? " ent" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i>' + (ent[f] ? '<em class="st-ent" aria-label="Entrenaste">💪</em>' : '') + '</button>'; }).join("") + '</div>';
  if(esHoy) h += htmlRacha();
- if(ent[diaSel]) h += '<div class="aviso entreno-av"><span class="e">💪</span><p><b>' + (esHoy ? 'Hoy entrenaste en WGYM' : 'Este día entrenaste en WGYM') + '</b><br><span class="muted" style="font-size:15px">Después de entrenar, suma 15 a 25 g de proteína dentro de las 2 horas siguientes.</span></p></div>';
+ if(ent[diaSel]) h += '<div class="aviso entreno-av"><span class="e">💪</span><p><b>' + (esHoy ? 'Después de entrenar' : 'Este día entrenaste en WGYM') + '</b><br><span class="muted" style="font-size:15px">Después de entrenar, suma 15 a 25 g de proteína dentro de las 2 horas siguientes.</span></p></div>';
  var av = recordatorio();
  if(av) h += '<div class="aviso"><span class="e">' + av[0] + '</span><p>' + esc(av[1]) + '</p><button type="button" id="avisoX" aria-label="Ocultar aviso">×</button></div>';
  /* Cuadro de resumen ordenado (10-10-2026, pedido de la dueña): anillo con el % comido, comidas
@@ -2435,7 +2439,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101077", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101079", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
