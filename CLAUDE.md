@@ -1687,6 +1687,12 @@ probado: ella se activó desde el mesón y entró a la app).
   - «🗓 Mi menú de la semana» en Recetas (`armarMenu`/`htmlMenu`, `D.menu`): 7 días con recetas
     de `nutri-recetas.js` según las comidas del socio (`MENU_CAT`, reparto `MENU_PESO`), lo que
     no come y sin repetir; «🛒 Pasar todo a mi lista de compras» y «🔄 Armar otro menú».
+- **Etiqueta «⭐ Agregado por WGYM» (11-10-2026, la dueña: "las cosas que te digo ponles
+  agregado por WGYM"):** en la búsqueda y el detalle, los alimentos pedidos por ella
+  (`window.NUTRI_WGYM` al final de `nutri-alimentos.js`, por nombre exacto) y las categorías
+  Básicos fitness, Energéticas y Endulzantes muestran esa etiqueta roja (`agregadoWgym`); los
+  escaneados siguen con «📷 Escaneado en WGYM». **Al agregar un alimento a pedido de la dueña,
+  sumar su nombre a `NUTRI_WGYM`.**
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
