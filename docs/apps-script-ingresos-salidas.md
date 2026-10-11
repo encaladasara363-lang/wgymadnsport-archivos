@@ -143,3 +143,11 @@ Acción nueva `rankingAdmin` (POST con la clave de administración): el mesón
 los días de cada socio, para saber a quién premiar. Se instala igual: pegar todo
 `Ingresos.gs` en **INGRESOS.gs**, guardar, **Implementar → Administrar
 implementaciones → lápiz ✏️ → Nueva versión → Implementar**.
+
+## Versión 21 (11-10-2026): ranking por grupos
+
+`guardarReto` guarda el grupo del plan (`g`: mensual, turno o tres) en la columna F
+«Grupo» de la hoja «Retos», y `listarRetos`/`rankingAdmin` lo devuelven en cada fila
+para que la tarjeta y el mesón muestren un ranking por grupo. Se instala igual que las
+anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar →
+Administrar implementaciones → lápiz → Versión nueva → Implementar.
