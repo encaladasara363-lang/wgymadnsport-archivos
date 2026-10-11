@@ -573,6 +573,9 @@ function origenNutri_(e) {
    calculados aquí desde la hoja de ingresos (nadie puede inflarlos). La hoja «Retos»
    guarda Mes, Id (código al azar del teléfono), Apodo y Clave (nombre en mayúsculas,
    para contar sus días; la hoja es privada). listarRetos entrega SOLO apodo y días. */
+/* La planilla convierte "2026-10" en una fecha: se lee de vuelta como texto «AAAA-MM» y se
+   escribe con apóstrofo para que quede como texto (corregido el 10-10-2026, 21:20). */
+function mesDe_(v) { return v instanceof Date ? Utilities.formatDate(v, TZ_INGRESOS_, "yyyy-MM") : String(v).replace(/^'/, "").slice(0, 7); }
 function guardarReto_(e) {
   try {
     var p = e.parameter, mes = diaCL_(Date.now()).slice(0, 7), id = String(p.id || "").replace(/[^a-z0-9]/gi, "").slice(0, 24);
@@ -587,10 +590,10 @@ function guardarReto_(e) {
       if (n >= 2) {
         var vals = hoja.getRange(2, 1, n - 1, 2).getValues();
         for (var i = 0; i < vals.length; i++) {
-          if (String(vals[i][0]) === mes && String(vals[i][1]) === id) { hoja.getRange(i + 2, 3, 1, 3).setValues([[apodo, clave, ahora]]); hecho = true; break; }
+          if (mesDe_(vals[i][0]) === mes && String(vals[i][1]) === id) { hoja.getRange(i + 2, 3, 1, 3).setValues([[apodo, clave, ahora]]); hecho = true; break; }
         }
       }
-      if (!hecho) hoja.appendRow([mes, id, apodo, clave, ahora]);
+      if (!hecho) hoja.appendRow(["'" + mes, id, apodo, clave, ahora]);
       CacheService.getScriptCache().remove("retos_" + mes);
       return respond_(e, { ok: true });
     } finally { lock.releaseLock(); }
@@ -603,7 +606,7 @@ function listarRetos_(e) {
     var hoja = SpreadsheetApp.openById(SHEET_ID).getSheetByName("Retos"), filas = [];
     if (hoja && hoja.getLastRow() >= 2) {
       hoja.getRange(2, 1, hoja.getLastRow() - 1, 4).getValues().forEach(function (r) {
-        if (String(r[0]) === mes && String(r[2]) !== "(salió)" && r[3]) filas.push({ id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]) });
+        if (mesDe_(r[0]) === mes && String(r[2]) !== "(salió)" && r[3]) filas.push({ id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]) });
       });
     }
     var dias = filas.length ? diasDesde_(e.parameter, mes + "-01") : {};
