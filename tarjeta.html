@@ -420,6 +420,17 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 .fab-admin:active{ background:var(--rojo-oscuro); }  
 .hint2{ font-size:12px; color:var(--gris-soft); margin:10px 0 0; line-height:1.5; }  
 .hint2 b{ color:var(--dorado); }  
+/* Ranking del mes (11-10-2026) */
+.rank-sub{ font-size:13px; color:#E8E8E8; margin:0 0 10px; line-height:1.45; }
+.rank-unir{ display:flex; gap:8px; } .rank-unir input{ flex:1; min-width:0; background:#111; border:1px solid #444; color:#fff; border-radius:10px; padding:12px; font-size:16px; }
+.rank-unir .pago-btn{ width:auto; margin:0; }
+.rank-nota{ font-size:12px; color:#A3A3AD; margin:6px 0 0; }
+.rank-yo{ font-size:15px; color:#fff; margin:0 0 8px; } .rank-yo b{ color:var(--dorado); }
+.rank-lista{ list-style:none; margin:0; padding:0; }
+.rank-lista li{ display:flex; align-items:center; gap:10px; padding:9px 6px; border-bottom:1px solid #2a2a31; }
+.rank-lista .pos{ width:32px; text-align:center; font-size:18px; } .rank-lista b{ flex:1; color:#fff; font-size:15px; } .rank-lista em{ font-style:normal; color:var(--dorado); font-weight:800; }
+.rank-lista li.yo{ background:rgba(227,6,19,.18); border-radius:10px; }
+.rank-salir{ margin-top:10px; background:none; border:1px solid #444; color:#ccc; border-radius:20px; padding:8px 14px; font-size:13px; }
 </style>  
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,600;0,700;1,700;1,800&family=Barlow:wght@400;500;600;700&family=Rubik+Distressed&display=swap">
@@ -464,6 +475,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="pago-card nutri-promo" id="nutriCard" hidden></div>
  <div class="pago-card cal-card" id="calCard" hidden></div>
  <div class="pago-card cal-card coach-card" id="coachCard" hidden></div>
+ <div class="pago-card rank-card" id="rankCard" hidden></div>
  <div class="evo-card" id="evoCard" hidden></div>
  <div class="band-box">
  <div class="band-colors" id="bandColors">
@@ -2289,7 +2301,7 @@ function renderEvolucion(s){
  function tarjetaBloqueada_(s){ return !!s && estadoDe(s.vencimiento).cls === "danger"; }
  function mostrarBloqueo_(s){
   var bloq = tarjetaBloqueada_(s), box = document.getElementById("bloqueoCard");
-  ["instCard","nutriCard","calCard","coachCard","evoCard"].forEach(function(id){ if(bloq) document.getElementById(id).hidden = true; });
+  ["instCard","nutriCard","calCard","coachCard","rankCard","evoCard"].forEach(function(id){ if(bloq) document.getElementById(id).hidden = true; });
   Array.prototype.forEach.call(document.querySelectorAll("#cardView .band-box"), function(b){ b.hidden = bloq; });
   box.hidden = !bloq;
   if(!bloq){ box.innerHTML = ""; return false; }
@@ -2324,6 +2336,52 @@ function renderEvolucion(s){
    '<a class="pago-btn principal" href="wgymnutri.html?desde=tarjeta">Ver WGYMNUTRI</a></div>';
   box.hidden = false;
  }
+ /* 🏆 Ranking del mes (11-10-2026, la dueña: "pongámoslo en la tarjeta virtual de los socios").
+    Días con ingreso al gimnasio en el mes, contados por el Apps Script desde la hoja de
+    ingresos (guardarReto / listarRetos, Versión 17). El socio se une con un APODO: el
+    ranking muestra solo apodos y días, nunca nombres. Pase diario no participa. */
+ var CLAVE_RANK = "wgym_ranking_v1";
+ function rankDatos_(s){ var t; try{ t = JSON.parse(localStorage.getItem(CLAVE_RANK) || "{}") || {}; }catch(e){ t = {}; } return { todo:t, k:normName(s.nombre + " " + s.apellido) }; }
+ function rankGuardar_(t){ try{ localStorage.setItem(CLAVE_RANK, JSON.stringify(t)); }catch(e){} }
+ function renderRanking_(s){
+  var box = document.getElementById("rankCard"); if(!box) return;
+  if(!CHECKIN_URL || /diario/i.test(s.plan || "")){ box.hidden = true; return; }
+  var R = rankDatos_(s), yo = R.todo[R.k], hoy = new Date();
+  var mesTx = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"][hoy.getMonth()];
+  box.hidden = false;
+  box.innerHTML = '<p class="pago-kicker">🏆 Ranking del mes · ' + mesTx + '</p><p class="rank-sub">Días que entrenaste en WGYM este mes. ¡Quien más viene, más arriba queda!</p><div id="rankCuerpo"><p class="rank-sub">Cargando…</p></div>';
+  var cuerpo = box.querySelector("#rankCuerpo");
+  function unirse(){
+   cuerpo.innerHTML = '<p class="rank-sub" id="rankMios"></p><div class="rank-unir"><input id="rankApodo" maxlength="18" placeholder="Tu apodo (ej: LaFlaca)" autocomplete="off"><button type="button" class="pago-btn principal" id="rankOk">Unirme</button></div><p class="rank-nota">Usa un apodo: en el ranking nunca aparece tu nombre.</p>';
+   var f = new Date(hoy.getFullYear(), hoy.getMonth(), 1), desde = f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-01";
+   salidaJsonp({ action:"asistenciaDesde", desde:desde }, function(d){ var el = document.getElementById("rankMios"); if(!el || !d || !d.dias) return; var n = d.dias[R.k] ? Object.keys(d.dias[R.k]).length : 0; el.innerHTML = 'Este mes llevas <b>' + n + (n === 1 ? ' día' : ' días') + '</b> entrenando.'; });
+   cuerpo.querySelector("#rankOk").addEventListener("click", function(){
+    var v = cuerpo.querySelector("#rankApodo").value.replace(/[<>"]/g, "").trim();
+    if(v.length < 2){ cuerpo.querySelector("#rankApodo").focus(); return; }
+    var id = (yo && yo.id) || (Math.random().toString(36).slice(2, 10) + Date.now().toString(36));
+    this.disabled = true; this.textContent = "Uniendo…";
+    salidaJsonp({ action:"guardarReto", id:id, apodo:v.slice(0, 18), n:s.nombre, a:s.apellido }, function(d){
+     if(d && d.ok){ R.todo[R.k] = { id:id, apodo:v.slice(0, 18) }; rankGuardar_(R.todo); renderRanking_(s); }
+     else { cuerpo.querySelector("#rankOk").disabled = false; cuerpo.querySelector("#rankOk").textContent = "Unirme"; cuerpo.querySelector(".rank-nota").textContent = d && d.error ? "No se pudo unir: " + d.error : "El ranking se activa cuando el gimnasio actualice su sistema. Prueba más tarde."; }
+    });
+   });
+  }
+  if(!yo){ unirse(); return; }
+  salidaJsonp({ action:"listarRetos" }, function(d){
+   if(!document.getElementById("rankCuerpo")) return;
+   if(!d || !d.retos){ cuerpo.innerHTML = '<p class="rank-sub">' + (d ? 'El ranking se activa cuando el gimnasio actualice su sistema.' : 'No se pudo cargar el ranking. Revisa tu internet.') + '</p>'; return; }
+   var mio = yo.id.slice(0, 6), l = d.lista || [], pos = -1; l.forEach(function(x, i){ if(x.id === mio) pos = i; });
+   if(pos < 0){ salidaJsonp({ action:"guardarReto", id:yo.id, apodo:yo.apodo, n:s.nombre, a:s.apellido }, function(){}); }
+   cuerpo.innerHTML = (pos >= 0 ? '<p class="rank-yo">Vas en el lugar <b>' + (pos + 1) + '°</b> con <b>' + l[pos].pts + (l[pos].pts === 1 ? ' día' : ' días') + '</b></p>' : '') +
+    (l.length ? '<ol class="rank-lista">' + l.slice(0, 10).map(function(x, i){ return '<li class="' + (x.id === mio ? 'yo' : '') + '"><span class="pos">' + (i < 3 ? ["🥇","🥈","🥉"][i] : (i + 1) + "°") + '</span><b>' + escapeHtml(x.apodo) + (x.id === mio ? ' (tú)' : '') + '</b><em>' + x.pts + (x.pts === 1 ? ' día' : ' días') + '</em></li>'; }).join("") + '</ol>' : '<p class="rank-sub">Todavía nadie se une este mes. ¡Sé el primero!</p>') +
+    '<button type="button" class="rank-salir" id="rankSalir">Salir del ranking</button>';
+   cuerpo.querySelector("#rankSalir").addEventListener("click", function(){
+    if(!confirm("¿Salir del ranking del mes?")) return;
+    salidaJsonp({ action:"guardarReto", id:yo.id, apodo:"(salió)", n:s.nombre, a:s.apellido }, function(){});
+    delete R.todo[R.k]; rankGuardar_(R.todo); renderRanking_(s);
+   });
+  });
+ }
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
@@ -2344,6 +2402,7 @@ function renderEvolucion(s){
     WGYMNUTRI aparte). Los datos que el socio ya había guardado
     (wgym_calorias_v1) quedan en su teléfono y WGYMNUTRI los usa para rellenar. */
  seguro_(function(){ renderCoach(s); });
+ seguro_(function(){ renderRanking_(s); });
  seguro_(function(){ renderEvolucion(s); });
  seguro_(pintarInstalar);
  seguro_(function(){ revisarBienvenida(s); });
@@ -2358,7 +2417,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101015", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101101", ultimaRevisionVersion = 0;
  function revisarVersion(){
   if(Date.now() - ultimaRevisionVersion < 60000) return;
   ultimaRevisionVersion = Date.now();

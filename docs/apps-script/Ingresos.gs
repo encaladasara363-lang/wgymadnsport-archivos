@@ -362,11 +362,7 @@ function claveDias_(nombre, apellido) {
     .replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
 }
 
-function asistenciaDesde_(e) {
-  var p = e.parameter;
-  var minimo = diaCL_(Date.now() - 75 * 864e5);
-  var desde = String(p.desde || "");
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(desde) || desde < minimo) desde = minimo;
+function diasDesde_(p, desde) {
   var sheet = hojaIngresos_(p);
   var dias = {};
   var fin = sheet.getLastRow();
@@ -389,6 +385,15 @@ function asistenciaDesde_(e) {
     }
     fin = ini - 1;
   }
+  return dias;
+}
+
+function asistenciaDesde_(e) {
+  var p = e.parameter;
+  var minimo = diaCL_(Date.now() - 75 * 864e5);
+  var desde = String(p.desde || "");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(desde) || desde < minimo) desde = minimo;
+  var dias = diasDesde_(p, desde);
   return respond_(e, { ok: true, asistencia: true, desde: desde, dias: dias });
 }
 
@@ -563,44 +568,50 @@ function origenNutri_(e) {
   } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
 
-/* ── Retos del mes de WGYMNUTRI (Versión 17, 10-10-2026, la dueña: "quiero todas") ──
-   Ranking solo con APODO y PUNTOS: nunca nombre real ni datos de salud. Cada teléfono
-   se identifica con un código al azar (id) y solo actualiza su propia fila del mes. */
-function mesRetoOk_(m) { return /^\d{4}-\d{2}$/.test(String(m || "")); }
+/* ── Ranking del mes en la TARJETA (Versión 17, 11-10-2026, la dueña: "pongámoslo en la
+   tarjeta virtual de los socios"). Puntos = días con ingreso al gimnasio en el mes,
+   calculados aquí desde la hoja de ingresos (nadie puede inflarlos). La hoja «Retos»
+   guarda Mes, Id (código al azar del teléfono), Apodo y Clave (nombre en mayúsculas,
+   para contar sus días; la hoja es privada). listarRetos entrega SOLO apodo y días. */
 function guardarReto_(e) {
   try {
-    var p = e.parameter, mes = String(p.mes || ""), id = String(p.id || "").replace(/[^a-z0-9]/gi, "").slice(0, 24);
-    var apodo = String(p.apodo || "").replace(/[<>"]/g, "").trim().slice(0, 18), pts = Math.floor(Number(p.pts));
-    if (!mesRetoOk_(mes) || id.length < 8 || apodo.length < 2 || !(pts >= 0 && pts <= 93)) return respond_(e, { ok: false, error: "datos inválidos" });
+    var p = e.parameter, mes = diaCL_(Date.now()).slice(0, 7), id = String(p.id || "").replace(/[^a-z0-9]/gi, "").slice(0, 24);
+    var apodo = String(p.apodo || "").replace(/[<>"]/g, "").trim().slice(0, 18), clave = claveDias_(p.n || "", p.a || "");
+    if (id.length < 8 || apodo.length < 2 || clave.length < 3) return respond_(e, { ok: false, error: "datos inválidos" });
     var lock = LockService.getScriptLock();
     if (!lock.tryLock(10000)) return respond_(e, { ok: false, error: "ocupado, intenta de nuevo" });
     try {
       var ss = SpreadsheetApp.openById(SHEET_ID), hoja = ss.getSheetByName("Retos");
-      if (!hoja) { hoja = ss.insertSheet("Retos"); hoja.appendRow(["Mes", "Id", "Apodo", "Puntos", "Actualizado"]); }
-      var n = hoja.getLastRow(), ahora = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm");
+      if (!hoja) { hoja = ss.insertSheet("Retos"); hoja.appendRow(["Mes", "Id", "Apodo", "Clave", "Actualizado"]); }
+      var n = hoja.getLastRow(), ahora = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm"), hecho = false;
       if (n >= 2) {
         var vals = hoja.getRange(2, 1, n - 1, 2).getValues();
         for (var i = 0; i < vals.length; i++) {
-          if (String(vals[i][0]) === mes && String(vals[i][1]) === id) { hoja.getRange(i + 2, 3, 1, 3).setValues([[apodo, pts, ahora]]); return respond_(e, { ok: true }); }
+          if (String(vals[i][0]) === mes && String(vals[i][1]) === id) { hoja.getRange(i + 2, 3, 1, 3).setValues([[apodo, clave, ahora]]); hecho = true; break; }
         }
       }
-      hoja.appendRow([mes, id, apodo, pts, ahora]);
+      if (!hecho) hoja.appendRow([mes, id, apodo, clave, ahora]);
+      CacheService.getScriptCache().remove("retos_" + mes);
       return respond_(e, { ok: true });
     } finally { lock.releaseLock(); }
   } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
 function listarRetos_(e) {
   try {
-    var mes = String(e.parameter.mes || "");
-    if (!mesRetoOk_(mes)) return respond_(e, { ok: false, error: "mes inválido" });
-    var hoja = SpreadsheetApp.openById(SHEET_ID).getSheetByName("Retos"), out = [];
+    var mes = diaCL_(Date.now()).slice(0, 7), cache = CacheService.getScriptCache(), guardado = cache.get("retos_" + mes);
+    if (guardado) return respond_(e, JSON.parse(guardado));
+    var hoja = SpreadsheetApp.openById(SHEET_ID).getSheetByName("Retos"), filas = [];
     if (hoja && hoja.getLastRow() >= 2) {
       hoja.getRange(2, 1, hoja.getLastRow() - 1, 4).getValues().forEach(function (r) {
-        if (String(r[0]) === mes && String(r[2]) !== "(salió)") out.push({ id: String(r[1]).slice(0, 6), apodo: String(r[2]), pts: Number(r[3]) || 0 });
+        if (String(r[0]) === mes && String(r[2]) !== "(salió)" && r[3]) filas.push({ id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]) });
       });
     }
-    out.sort(function (a, b) { return b.pts - a.pts; });
-    return respond_(e, { ok: true, retos: true, lista: out.slice(0, 30) });
+    var dias = filas.length ? diasDesde_(e.parameter, mes + "-01") : {};
+    var lista = filas.map(function (f) { return { id: f.id, apodo: f.apodo, pts: dias[f.clave] ? Object.keys(dias[f.clave]).length : 0 }; });
+    lista.sort(function (a, b) { return b.pts - a.pts; });
+    var out = { ok: true, retos: true, mes: mes, lista: lista.slice(0, 30) };
+    cache.put("retos_" + mes, JSON.stringify(out), 120);
+    return respond_(e, out);
   } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
 

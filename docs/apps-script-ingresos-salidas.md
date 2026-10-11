@@ -118,21 +118,20 @@ Comprobar: el link del script terminado en `/exec?action=listarProductos`
 debe mostrar `{"ok":true,"productos":[...]}`. Mientras no se instale, la app
 funciona igual que antes (cada teléfono recuerda lo que escaneó él mismo).
 
-## Actualización retos del mes de WGYMNUTRI (Versión 17, 10-10-2026)
+## Actualización ranking del mes en la tarjeta (Versión 17, 11-10-2026)
 
-> **Sin uso desde el 10-10-2026:** la dueña pidió sacar el ranking de WGYMNUTRI. No hace falta instalar esta versión.
-
-`Ingresos.gs` trae dos acciones nuevas: `guardarReto` y `listarRetos`. Los
-socios que se unen al «🏆 Retos del mes» (en Progreso) aparecen en un ranking
-del gimnasio **solo con su apodo y sus puntos** (días que cumplieron agua,
-proteína y registro de comidas). Todo queda en una hoja nueva, **«Retos»**, que
-se crea sola. Para borrar a alguien del ranking, se borra su fila en esa hoja.
+`Ingresos.gs` trae dos acciones nuevas: `guardarReto` y `listarRetos`. En la
+**tarjeta virtual** aparece «🏆 Ranking del mes»: el socio se une con un
+**apodo** y el ranking muestra solo apodos y **días con ingreso al gimnasio en
+el mes**. Los días los cuenta el script desde la hoja de ingresos (nadie puede
+inventarlos). Se crea sola una hoja nueva, **«Retos»** (mes, código del
+teléfono, apodo y nombre para contar sus días; la hoja es privada). Para sacar a
+alguien del ranking, se borra su fila en esa hoja.
 
 Se instala igual que las veces anteriores: pegar **todo** el `Ingresos.gs`
 nuevo en el archivo **Ingresos**, guardar y **Implementar → Administrar
 implementaciones → lápiz ✏️ → Nueva versión → Implementar**.
 
-Comprobar: el link del script terminado en
-`/exec?action=listarRetos&mes=2026-10` debe mostrar `{"ok":true,"retos":true,...`.
-Mientras no se instale, los retos y puntos se ven igual en cada teléfono y el
-ranking muestra «se activa cuando el gimnasio actualice su sistema».
+Comprobar: el link del script terminado en `/exec?action=listarRetos` debe
+mostrar `{"ok":true,"retos":true,...`. Mientras no se instale, la tarjeta dice
+«El ranking se activa cuando el gimnasio actualice su sistema».
