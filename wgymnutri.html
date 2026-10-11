@@ -1242,7 +1242,7 @@ function renderHoy(){
   its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + esc(it.n) + '</b><span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
   var ay = diaDe(sumaDias(diaSel, -1)).c[cm[0]] || [];
   if(!its.length && ay.length) h += '<button type="button" class="rep-ay" data-rep="' + cm[0] + '">🔁 Repetir lo de ayer · ' + ay.length + (ay.length === 1 ? ' alimento' : ' alimentos') + ' · ' + miles(ay.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0)) + ' kcal</button>';
-  h += '<div class="beb-bts"><button type="button" class="btn rojo scan-c" data-m="' + cm[0] + '">📷 Escanear alimento</button><button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar alimento</button></div></div>';
+  h += '<div class="beb-bts"><button type="button" class="btn rojo scan-c" data-m="' + cm[0] + '">📷 Escanear alimento</button><button type="button" class="add-l voz-c" data-mv="' + cm[0] + '">🎤 Decir lo que comí</button><button type="button" class="add-l" data-m="' + cm[0] + '">＋ Agregar alimento</button></div></div>';
  });
  var bebs = x.c.bebidas || [], kb = bebs.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
  h += '<div class="card bebidas-card"><div class="cab"><h3>⚡ Energéticas</h3><small>' + (bebs.length ? miles(kb) + " kcal" : "") + '</small></div>' +
@@ -1275,6 +1275,9 @@ function renderHoy(){
   renderHoy();
  }; });
  box.querySelectorAll(".add-l[data-m]").forEach(function(b){ b.onclick = function(){ agr.q = ""; abrirAgregar(b.dataset.m, "buscar"); }; });
+ /* 🎤 en cada comida (11-10-2026, pedido de la dueña): abre Voz para esa comida y empieza a
+    escuchar al tiro (o abre el teclado para su 🎤 en iPhone). */
+ box.querySelectorAll("[data-mv]").forEach(function(b){ b.onclick = function(){ agr.q = ""; abrirAgregar(b.dataset.mv, "voz"); if($("vozMic")) $("vozMic").click(); }; });
  box.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){
   var m = b.dataset.rep, xx = diaDe(diaSel), ay = diaDe(sumaDias(diaSel, -1)).c[m] || [];
   xx.c[m] = (xx.c[m] || []).concat(ay.map(function(it, i){ return Object.assign({}, it, { t:Date.now() + i }); })); setDia(diaSel, xx); guardar();
@@ -2141,7 +2144,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101054", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101055", ultimaRevVersion = 0;
 function revisarVersionNutri(){
  if(Date.now() - ultimaRevVersion < 60000) return; ultimaRevVersion = Date.now();
  fetch("nutri-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(t){
