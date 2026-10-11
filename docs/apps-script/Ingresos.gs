@@ -588,9 +588,10 @@ function guardarReto_(e) {
       if (!hoja) { hoja = ss.insertSheet("Retos"); hoja.appendRow(["Mes", "Id", "Apodo", "Clave", "Actualizado"]); }
       var n = hoja.getLastRow(), ahora = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm"), hecho = false;
       if (n >= 2) {
-        var vals = hoja.getRange(2, 1, n - 1, 2).getValues();
-        for (var i = 0; i < vals.length; i++) {
-          if (mesDe_(vals[i][0]) === mes && String(vals[i][1]) === id) { hoja.getRange(i + 2, 3, 1, 3).setValues([[apodo, clave, ahora]]); hecho = true; break; }
+        /* Una sola fila por persona y mes: se busca por el código del teléfono o por el nombre. */
+        var vals = hoja.getRange(2, 1, n - 1, 4).getValues();
+        for (var i = vals.length - 1; i >= 0; i--) {
+          if (mesDe_(vals[i][0]) === mes && (String(vals[i][1]) === id || String(vals[i][3]) === clave)) { hoja.getRange(i + 2, 2, 1, 4).setValues([[id, apodo, clave, ahora]]); hecho = true; break; }
         }
       }
       if (!hecho) hoja.appendRow(["'" + mes, id, apodo, clave, ahora]);
@@ -605,9 +606,12 @@ function listarRetos_(e) {
     if (guardado) return respond_(e, JSON.parse(guardado));
     var hoja = SpreadsheetApp.openById(SHEET_ID).getSheetByName("Retos"), filas = [];
     if (hoja && hoja.getLastRow() >= 2) {
+      /* Si una persona quedó repetida, vale su fila más nueva (la de más abajo). */
+      var porClave = {};
       hoja.getRange(2, 1, hoja.getLastRow() - 1, 4).getValues().forEach(function (r) {
-        if (mesDe_(r[0]) === mes && String(r[2]) !== "(salió)" && r[3]) filas.push({ id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]) });
+        if (mesDe_(r[0]) === mes && r[3]) porClave[String(r[3])] = { id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]) };
       });
+      Object.keys(porClave).forEach(function (k) { if (porClave[k].apodo !== "(salió)") filas.push(porClave[k]); });
     }
     var dias = filas.length ? diasDesde_(e.parameter, mes + "-01") : {};
     var lista = filas.map(function (f) { return { id: f.id, apodo: f.apodo, pts: dias[f.clave] ? Object.keys(dias[f.clave]).length : 0 }; });
