@@ -1587,6 +1587,8 @@ probado: ella se activó desde el mesón y entró a la app).
   Dulces saludables (11-10-2026, pedido de la dueña): manjar sin azúcar, harina de avena,
   dulce de maicena saludable, alfajor, galleta, panqueque, brownie, queque, muffin, torta,
   barrita y bolitas de avena con manjar sin azúcar (valores aproximados caseros).
+  Crevet Light Vitamina C 500 mg (12-10-2026, la dueña mandó la etiqueta): categoría Suplementos, «1 comprimido
+  (1,3 g)», 3,7 kcal, 1,2 g de carbohidratos, 500 mg de vitamina C; `CONTABLES` acepta «comprimidos/cápsulas».
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
   escaneados los botones muestran gramos (ej. 17 g · 34 g · 68 g · 100 g) en vez de
   «½ porción · 1 porción · 2 porciones».
