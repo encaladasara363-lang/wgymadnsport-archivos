@@ -309,15 +309,15 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 
   <p class="grupo-label">Carga esto en el Omron antes de medir</p>
   <div class="campo-grid" style="grid-template-columns:1fr 1fr">
-   <div class="campo"><label>Edad</label><input type="number" inputmode="numeric" id="inEdad" placeholder="—"></div>
-   <div class="campo"><label>Estatura (cm)</label><input type="number" inputmode="numeric" id="inEstatura" placeholder="—"></div>
+   <div class="campo"><label>Edad</label><input type="text" inputmode="numeric" autocomplete="off" id="inEdad" placeholder="—"></div>
+   <div class="campo"><label>Estatura (cm)</label><input type="text" inputmode="decimal" autocomplete="off" id="inEstatura" placeholder="—"></div>
   </div>
 
   <p class="grupo-label">Lo que te muestra el Omron al terminar</p>
   <div class="campo-grid">
-   <div class="campo"><label>Peso (kg)</label><input type="number" inputmode="decimal" step="0.1" id="inPeso" placeholder="—"></div>
-   <div class="campo"><label>% Grasa</label><input type="number" inputmode="decimal" step="0.1" id="inGrasa" placeholder="—"></div>
-   <div class="campo"><label>IMC</label><input type="number" inputmode="decimal" step="0.1" id="inImc" placeholder="—"></div>
+   <div class="campo"><label>Peso (kg)</label><input type="text" inputmode="decimal" autocomplete="off" id="inPeso" placeholder="—"></div>
+   <div class="campo"><label>% Grasa</label><input type="text" inputmode="decimal" autocomplete="off" id="inGrasa" placeholder="—"></div>
+   <div class="campo"><label>IMC</label><input type="text" inputmode="decimal" autocomplete="off" id="inImc" placeholder="—"></div>
   </div>
 
   <div class="chip-row">
@@ -591,8 +591,8 @@ document.getElementById("sexoRow").addEventListener("click", function(ev){
  actualizarChips();
 });
 function actualizarChips(){
- pintarChip(chipGrasa, "% Grasa", sexoActual && inGrasa.value !== "" ? bandaGrasa(sexoActual, inEdad.value, inGrasa.value) : null);
- pintarChip(chipImc, "IMC", inImc.value !== "" ? bandaImc(inImc.value) : null);
+ pintarChip(chipGrasa, "% Grasa", sexoActual && inGrasa.value !== "" ? bandaGrasa(sexoActual, inEdad.value, String(inGrasa.value).replace(",", ".")) : null);
+ pintarChip(chipImc, "IMC", inImc.value !== "" ? bandaImc(String(inImc.value).replace(",", ".")) : null);
 }
 [inEdad, inGrasa, inImc].forEach(function(el){ el.addEventListener("input", actualizarChips); });
 
@@ -653,16 +653,30 @@ document.getElementById("btnGuardar").addEventListener("click", async function()
     (inPeso.value==="" && inGrasa.value==="" && inImc.value==="")){
   msg.hidden=false; msg.textContent="Completa sexo, edad, estatura y al menos un resultado."; return;
  }
- var est=Number(inEstatura.value);
- if(est>0 && est<3) est=Math.round(est*100);
+ /* Números con coma o punto, y si falta la coma se corrige sola (12-10-2026: la dueña escribió
+    «454» de grasa en vez de 45,4 y el sitio rechazaba la medición sin decir qué estaba mal). */
+ function numMed_(el, min, max, nombre){
+  var t=String(el.value).trim().replace(",","."); if(t==="") return {v:null};
+  var v=Number(t); if(!isFinite(v)) return {err:nombre+": escribe solo el número."};
+  if(v>max && t.indexOf(".")<0 && v/10>=min && v/10<=max){ v=v/10; el.value=String(v).replace(".",","); }
+  if(v<min || v>max) return {err:nombre+" "+String(v).replace(".",",")+" no parece correcto (va entre "+min+" y "+max+")."};
+  return {v:Math.round(v*10)/10};
+ }
+ var est=Number(String(inEstatura.value).replace(",","."));
+ if(est>0 && est<3){ est=Math.round(est*100); inEstatura.value=est; }
+ if(!(est>=100 && est<=230)){ msg.hidden=false; msg.textContent="Estatura: escríbela en centímetros, por ejemplo 159."; return; }
+ var nEdad=numMed_(inEdad,5,110,"Edad"), nPeso=numMed_(inPeso,20,300,"Peso"), nGrasa=numMed_(inGrasa,3,70,"% grasa"), nImc=numMed_(inImc,10,80,"IMC");
+ var malo=[nEdad,nPeso,nGrasa,nImc].filter(function(x){return x.err;})[0];
+ if(malo){ msg.hidden=false; msg.textContent=malo.err+" Corrígelo y toca Guardar registro de nuevo."; actualizarChips(); return; }
+ actualizarChips();
  var clave="";
  try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
  if(!clave) clave=await pedirClaveMed_();
  if(!clave){msg.hidden=false;msg.textContent="No se envió: tocaste Cancelar sin escribir la clave. Toca Guardar registro de nuevo y escríbela.";return;}
- var registro={fecha:hoyISO(),edad:Number(inEdad.value),
-  peso:inPeso.value===""?null:Number(inPeso.value),
-  grasa:inGrasa.value===""?null:Number(inGrasa.value),
-  imc:inImc.value===""?null:Number(inImc.value)};
+ var registro={fecha:hoyISO(),edad:nEdad.v,
+  peso:nPeso.v,
+  grasa:nGrasa.v,
+  imc:nImc.v};
  var idPropuesto=s.medId||medIdDe(s.n,s.a);
  var params={clave:clave,
   medid:idPropuesto,
