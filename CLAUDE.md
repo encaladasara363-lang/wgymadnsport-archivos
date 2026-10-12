@@ -589,6 +589,12 @@ repositorio: los cambios los aplica la dueña.
   corrector; el `prompt()` del iPhone ponía mayúscula y la clave quedaba
   mal y se volvía a pedir a cada rato). Solo se guarda cuando el servicio
   la acepta; si la rechaza, el cuadro siguiente lo avisa.
+- **Números de la báscula (12-10-2026, la dueña: "no me quiere mandar las mediciones"; había escrito
+  % grasa «454» y estatura «1,59»):** los casilleros de `control-fisico.html` son de texto con
+  `inputmode="decimal"` (aceptan coma o punto). Antes de enviar, `numMed_` revisa rangos (edad 5-110,
+  peso 20-300, grasa 3-70, IMC 10-80, estatura 100-230 cm): si falta la coma y dividiendo por 10 calza,
+  la corrige sola en pantalla (454 → 45,4); la estatura en metros pasa a cm (1,59 → 159); si no calza,
+  dice qué casillero revisar en vez de mandar datos que el servicio rechaza.
 - **`mediciones.json` (público) quedó vacío el 02-10-2026**: la dueña
   subió las 32 mediciones antiguas al servicio (confirmadas) y se
   vació el archivo. No volver a escribir mediciones ahí; el historial
