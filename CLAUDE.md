@@ -495,6 +495,10 @@ ver cuándo el gym está más vacío.
   aviso abajo a la derecha "⏳ Guardando…" / "✅ Guardado en el sitio" /
   "⚠️ … Reintentar"). Al recargar, lo pendiente se vuelve a aplicar sobre
   la lista del sitio y se reenvía: ningún cambio se pierde.
+  **Nombres siempre en MAYÚSCULAS (12-10-2026, la dueña: "lo edito pero no cambia a
+  mayúscula"):** si al editar una ficha el nombre es el mismo pero estaba en minúsculas, se
+  guarda en mayúsculas; el pendiente lleva `renAnt` y `enviarPendientes` primero borra en la
+  hoja la fila antigua (`borrarSocio`) y después guarda la nueva, para que no quede repetida.
 - **Menos consultas y tablet sin "0 socios" (06-10-2026, la tablet decía
   "Lista del sitio · 0 socios"):** mesón y tablet consultan ingresos cada
   6 s (antes 4), bandas y candados cada 15 s (antes 4) y la tablet la

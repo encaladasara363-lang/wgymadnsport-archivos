@@ -691,6 +691,13 @@ function enviarPendientes(){
  enviandoPend = true; clearTimeout(relojPend);
  avisoPend_("⏳ Guardando " + (l.length === 1 ? "1 cambio" : l.length + " cambios") + " en el sitio…", "info");
  var d = l[0];
+ if(d.renAnt){
+  borrarSocioApi(d.renAnt, function(){
+   var l2 = leerPend_(); l2.forEach(function(x){ if(llavePend_(x) === llavePend_(d)) delete x.renAnt; }); escribirPend_(l2);
+   enviandoPend = false; enviarPendientes();
+  });
+  return;
+ }
  guardarSocioApi(d, function(ok, info){
   enviandoPend = false;
   if(ok){
@@ -710,7 +717,7 @@ function aplicarPendientes_(){
  leerPend_().forEach(function(d){
   var s = null;
   for(var i = 0; i < socios.length; i++){ if(llavePend_(socios[i]) === llavePend_(d)){ s = socios[i]; break; } }
-  if(s){ s.plan = d.plan; s.m = d.m; s.v = d.v; }
+  if(s){ s.n = d.n; s.a = d.a; s.plan = d.plan; s.m = d.m; s.v = d.v; }
   else socios.push({ id:idNuevo(), n:d.n, a:d.a, plan:d.plan, m:d.m, v:d.v, medid:d.medid || "" });
  });
 }
@@ -1748,7 +1755,7 @@ function abrirFicha(s){
   var partes = String(texto || "").trim().toUpperCase().split(/\s+/).filter(Boolean);
   if(!partes.length) return { n:"", a:"" };
   var comoEstaba = ((d.n || "") + " " + (d.a || "")).trim().toUpperCase();
-  if(!nuevo && partes.join(" ") === comoEstaba) return { n:d.n, a:d.a };
+  if(!nuevo && partes.join(" ") === comoEstaba) return { n:String(d.n || "").toUpperCase(), a:String(d.a || "").toUpperCase() };
   if(partes.length === 1) return { n:partes[0], a:"" };
   return { n:partes[0], a:partes.slice(1).join(" ") };
  }
@@ -1924,6 +1931,9 @@ function abrirFicha(s){
   if(!n && !a){ velo.querySelector("#fAviso").textContent = "Escribe el nombre y el apellido."; iN.focus(); return; }
   if(!iV.value){ velo.querySelector("#fAviso").textContent = "Falta la fecha de vencimiento."; iV.focus(); return; }
   var datos = { n:n, a:a, plan:sel.value, m:soloDigitos(iM.value), v:iV.value, medid:(s && s.medid) || "" };
+  /* Mismo nombre pero estaba en minúsculas (12-10-2026, la dueña: "lo edito pero no cambia a
+     mayúscula"): se guarda en MAYÚSCULAS y en la hoja se borra la fila antigua antes de guardar. */
+  if(!nuevo && (s.n !== n || s.a !== a) && llaveSocio(s) === (n + "|" + a)) datos.renAnt = { n:s.n, a:s.a };
   var vencimientoAnterior = nuevo ? "" : s.v;
   /* Se guarda al instante en este equipo y la hoja se actualiza por
      detrás (encolarGuardado): ya no hay que esperar a Google. */
