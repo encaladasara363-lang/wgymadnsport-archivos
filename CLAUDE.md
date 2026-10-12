@@ -1641,6 +1641,11 @@ probado: ella se activó desde el mesón y entró a la app).
     «＋» que abren el detalle, «🔄 Otras» rota.
   - «💊 Mis suplementos»: lista editable (`D.supl`, por defecto Creatina y Proteína), un check
     por día (`x.supl`) con racha; sin dosis (las indica el profesor o nutricionista).
+    **Desde el 12-10-2026 lo marcado suma al día** (la dueña marcó «Vitamina C» y el cuadro seguía en 0):
+    `suplAlim` busca el suplemento en la lista por nombre exacto o por palabra (`SUPL_ALIM`: vitamina C →
+    Crevet Light 500 mg, proteína → Proteína whey, omega → Omega 3, creatina, colágeno, multivitamínico,
+    glutamina, BCAA, cafeína, electrolitos, pre-entreno) y `totales` suma 1 unidad/porción de kcal, macros,
+    vitamina C, potasio y fibra. Cada pastilla muestra lo que aporta (`aporteSupl`, ej. «+500 mg vit. C»).
   - «🔁 Repetir lo de ayer» en cada comida vacía si ayer tuvo esa comida.
   - Días de entrenamiento: `asistenciaDesde` (60 días) marca con 💪 los días con ingreso al
     gimnasio en la franja de la semana y muestra «Hoy entrenaste en WGYM» con el recordatorio
