@@ -777,6 +777,17 @@ mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
   costados difuminados y el modelo al 88 % del alto; luego `recorte` en el
   config saca solo la foto.
 
+## Publicidad en video con socios (desde 12-10-2026)
+
+`scripts/video-promo-pro.py <video> <salida.mp4>` arma un aviso vertical 720×1280
+(30 fps) desde un video de un socio entrenando: logo de entrada, frases en Rubik
+Distressed con golpe de zoom (lista `FRASES`, con segundos de inicio y fin), barra
+roja/dorada de avance y un cierre de 4 s con «ÚNETE AL EQUIPO WGYM», los dos
+WhatsApp y la dirección. **La música es propia (sintetizada en el script)**: el audio
+original se descarta porque suele traer canciones con derechos. Nunca subir al repo
+el video del socio ni el aviso final; se envían a la dueña. Al publicarlo, Metricool
+en las 3 redes y solo después de que la dueña lo apruebe.
+
 ## Rutinas: contenido en JSON, nunca editar a mano el HTML (regla permanente, desde 10/2026)
 
 Las 12 rutinas de los carteles QR usan esta estructura (ver detalle
