@@ -2,7 +2,7 @@
 "hazme una publicidad para llamar gente con este socio de mi gym, potente, innovadora, moderna").
 
 Uso: python3 scripts/video-promo-pro.py <video_fuente_vertical> <salida.mp4>
-Variable opcional FRASES (JSON) para cambiar las frases sin tocar el script.
+Variable opcional FRASES (JSON) para cambiar las frases sin tocar el script; COLOR=1 para colores vivos sin oscurecer.
 
 - 720x1280 a 30 cuadros, video a pantalla completa con color más intenso y viñeta roja.
 - Logo grande que entra con destello y queda chico arriba a la izquierda.
@@ -59,7 +59,14 @@ for y in range(H):
     gd.line((0, y, W, y), fill=v)
 negro = Image.new('RGB', (W, H), (0, 0, 0))
 
+COLOR = os.environ.get('COLOR') == '1'  # COLOR=1: colores vivos, sin oscurecer (a pedido de una socia, 12-10-2026)
+if COLOR:
+    grad = grad.point(lambda v: int(v * .55))  # degradado de abajo más suave: solo lo justo para leer el texto
+
 def gradear(im):
+    if COLOR:
+        im = ImageEnhance.Contrast(im).enhance(1.08); im = ImageEnhance.Color(im).enhance(1.2)
+        return Image.composite(negro, im, grad)
     im = ImageEnhance.Contrast(im).enhance(1.18); im = ImageEnhance.Color(im).enhance(1.15)
     im = ImageEnhance.Brightness(im).enhance(.92)
     im = Image.composite(im, capa_roja, vin)
@@ -203,4 +210,6 @@ with wave.open(wav, 'wb') as w:
 subprocess.run([FF, '-v', 'error', '-y', '-framerate', str(FPS), '-i', os.path.join(salida, '%04d.png'), '-i', wav,
                 '-map', '0:v', '-map', '1:a', '-t', '%.3f' % dur, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '19',
                 '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', out], check=True)
+import shutil
+for _d in (tmp, salida): shutil.rmtree(_d, ignore_errors=True)  # no dejar GB de cuadros en el disco
 print(out, round(dur, 2), 's')

@@ -275,4 +275,6 @@ with wave.open(wav, 'wb') as w:
 subprocess.run([FF, '-v', 'error', '-y', '-framerate', str(FPS), '-i', os.path.join(tmp, '%04d.png'), '-i', wav,
                 '-map', '0:v', '-map', '1:a', '-t', '%.3f' % DUR, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '19',
                 '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', out], check=True)
+import shutil
+for _d in (tmp,): shutil.rmtree(_d, ignore_errors=True)  # no dejar GB de cuadros en el disco
 print(out, DUR, 's')
