@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=52">
+<link rel="stylesheet" href="nutri-claro.css?v=53">
 <link rel="stylesheet" href="nutri-oscuro.css?v=9">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -828,10 +828,26 @@ function microDe(it, key){
  return al[key];
 }
 function completarMicros(a){ var b = null; ["vc","po","fi"].forEach(function(k){ if(typeof a[k] !== "number"){ var v = microDe(a, k); if(typeof v === "number"){ b = b || Object.assign({}, a); b[k] = v; } } }); return b || a; }
+/* Suplementos marcados que suman al día (12-10-2026, la dueña marcó «Vitamina C» y el cuadro de
+   vitamina C seguía en 0): cada suplemento se busca en la lista de alimentos por su nombre (1 unidad
+   o 1 porción) y lo que trae se suma a calorías, macros y vitamina C/potasio/fibra. */
+var SUPL_ALIM = [[/vitamina\s*c|crevet/,"Crevet Light Vitamina C 500 mg"],[/prote[ií]na|whey/,"Proteína whey"],[/creatina/,"Creatina monohidrato"],[/omega/,"Omega 3"],[/col[aá]geno/,"Colágeno hidrolizado"],[/multivitam/,"Multivitamínico"],[/glutamina/,"Glutamina"],[/bcaa/,"BCAA en polvo"],[/cafe[ií]na/,"Cafeína en cápsula"],[/electrolit/,"Electrolitos en polvo sin azúcar"],[/pre.?entreno/,"Pre-entreno"]];
+function suplAlim(nombre){
+ var nn = normName(nombre || ""), bajo = nn.toLowerCase(), i, buscado = null;
+ for(i = 0; i < ALIM.length; i++) if(ALIM[i].nn === nn) return ALIM[i];
+ for(i = 0; i < SUPL_ALIM.length; i++) if(SUPL_ALIM[i][0].test(bajo)){ buscado = SUPL_ALIM[i][1]; break; }
+ if(!buscado) return null;
+ for(i = 0; i < ALIM.length; i++) if(ALIM[i].n === buscado) return ALIM[i];
+ return null;
+}
+function aporteSupl(nombre){ var a = suplAlim(nombre); if(!a) return ""; var t = [];
+ if(a.vc) t.push(miles(a.vc) + " mg vit. C"); if(a.pr >= 1) t.push(Math.round(a.pr) + " g prot."); if(a.k >= 5) t.push(Math.round(a.k) + " kcal");
+ return t.join(" · "); }
 function totales(iso){
  var x = diaDe(iso), t = { k:0, p:0, c:0, g:0, n:0, vc:0, vcSin:0, po:0, poSin:0, fi:0, fiSin:0 };
  COMIDAS.forEach(function(cm){ (x.c[cm[0]] || []).forEach(function(it){ var m = it.x || 1; t.k += it.k * m; t.p += it.pr * m; t.c += it.c * m; t.g += it.g * m; t.n++; var vc = microDe(it, "vc"), po = microDe(it, "po"), fi = microDe(it, "fi"); if(typeof vc === "number") t.vc += vc * m; else t.vcSin++; if(typeof po === "number") t.po += po * m; else t.poSin++; if(typeof fi === "number") t.fi += fi * m; else t.fiSin++; }); });
  if(x.cafe){ t.k += x.cafe * 2; t.p += x.cafe * 0.3; t.po += x.cafe * 116; }
+ Object.keys(x.supl || {}).forEach(function(n){ if(!x.supl[n]) return; var a = suplAlim(n); if(!a) return; t.k += a.k; t.p += a.pr; t.c += a.c; t.g += a.g; if(typeof a.vc === "number") t.vc += a.vc; if(typeof a.po === "number") t.po += a.po; if(typeof a.fi === "number") t.fi += a.fi; });
  return t;
 }
 function racha(){
@@ -918,10 +934,10 @@ function rachaSupl(n){ var c = 0, d = hoyISO(); if(!((diaDe(d).supl || {})[n])) 
 function htmlSupl(x){
  var l = suplLista(), hecho = x.supl || {};
  return '<div class="card supl-card"><div class="cab"><h3>💊 Mis suplementos</h3><button type="button" class="chip" id="suplEd">✏️ Editar</button></div>' +
-  (l.length ? '<div class="supl-l">' + l.map(function(n, i){ var r = rachaSupl(n); return '<button type="button" class="supl-b' + (hecho[n] ? " on" : "") + '" data-supl="' + i + '"><span class="ck">' + (hecho[n] ? "✓" : "") + '</span><b>' + esc(n) + '</b>' + (r ? '<small>🔥 ' + r + (r === 1 ? ' día' : ' días') + '</small>' : '') + '</button>'; }).join("") + '</div>' : '<p class="muted">Toca «Editar» para agregar los suplementos que tomas.</p>') +
+  (l.length ? '<div class="supl-l">' + l.map(function(n, i){ var r = rachaSupl(n); return '<button type="button" class="supl-b' + (hecho[n] ? " on" : "") + '" data-supl="' + i + '"><span class="ck">' + (hecho[n] ? "✓" : "") + '</span><b>' + esc(n) + '</b>' + (aporteSupl(n) ? '<em class="supl-ap" style="color:#F2D16B">+' + aporteSupl(n) + '</em>' : '') + (r ? '<small>🔥 ' + r + (r === 1 ? ' día' : ' días') + '</small>' : '') + '</button>'; }).join("") + '</div>' : '<p class="muted">Toca «Editar» para agregar los suplementos que tomas.</p>') +
   '<div id="suplEdBox" hidden><div class="fila2" style="grid-template-columns:1fr auto;margin-top:10px"><input class="inp" id="suplIn" placeholder="Ej: Omega 3" autocomplete="off"><button type="button" class="btn oro chico" id="suplAdd" style="width:auto">Agregar</button></div>' +
   l.map(function(n, i){ return '<div class="supl-ed"><span>' + esc(n) + '</span><button type="button" class="chip" data-supl-x="' + i + '">Quitar</button></div>'; }).join("") + '</div>' +
-  '<p class="muted" style="font-size:13px;margin:8px 0 0">Toca cada uno cuando lo tomes. La dosis te la indica tu profesor o nutricionista.</p></div>';
+  '<p class="muted" style="font-size:13px;margin:8px 0 0">Toca cada uno cuando lo tomes: lo que aporta (1 unidad o 1 porción) se suma a tu día. La dosis te la indica tu profesor o nutricionista.</p></div>';
 }
 /* Días de entrenamiento: los ingresos al gimnasio (tarjeta o mesón) marcan el día. */
 var CLAVE_ENTRENO = "wgymnutri_entreno_v1", entrenoPedido = false;
@@ -2495,7 +2511,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101084", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101085", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
