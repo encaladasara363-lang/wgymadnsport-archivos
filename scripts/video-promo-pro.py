@@ -2,6 +2,7 @@
 "hazme una publicidad para llamar gente con este socio de mi gym, potente, innovadora, moderna").
 
 Uso: python3 scripts/video-promo-pro.py <video_fuente_vertical> <salida.mp4>
+Variable opcional FRASES (JSON) para cambiar las frases sin tocar el script.
 
 - 720x1280 a 30 cuadros, video a pantalla completa con color más intenso y viñeta roja.
 - Logo grande que entra con destello y queda chico arriba a la izquierda.
@@ -31,6 +32,9 @@ FRASES = [  # (desde, hasta, línea 1, línea 2) en segundos del video
     (10.1, 14.4, "CADA REPETICIÓN", "CUENTA"),
     (15.0, 99, "SIN LÍMITES", "SIN EXCUSAS"),
 ]
+if os.environ.get('FRASES'):  # frases propias: FRASES='[[desde,hasta,"LÍNEA 1","LÍNEA 2"],...]'
+    import json
+    FRASES = [tuple(f) for f in json.loads(os.environ['FRASES'])]
 CIERRE = 4.0
 
 src, out = sys.argv[1], sys.argv[2]
