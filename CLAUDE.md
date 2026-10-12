@@ -1606,6 +1606,7 @@ probado: ella se activó desde el mesón y entró a la app).
   Crevet Light Vitamina C 500 mg (12-10-2026, la dueña mandó la etiqueta): categoría Suplementos, por unidad («1 unidad»,
   pedido de la dueña), 3,7 kcal, 1,2 g de carbohidratos, 500 mg de vitamina C; `CONTABLES` acepta «comprimidos/cápsulas».
   Chocolate blanco (12-10-2026, la dueña mandó foto de sus botones): «Chocolate blanco (botones)» por **discos** («10 discos (20 g)», ≈11 kcal cada uno) y «Chocolate blanco» por cuadraditos; `CONTABLES` acepta «discos».
+  Esencia de vainilla (12-10-2026, pedido de la dueña): «1 cucharadita» (12 kcal), se cuenta por cucharaditas; `CONTABLES` acepta «cucharaditas» solo si no traen gramos/ml entre paréntesis (azúcar, aceite, etc. siguen en gramos).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
   escaneados los botones muestran gramos (ej. 17 g · 34 g · 68 g · 100 g) en vez de
   «½ porción · 1 porción · 2 porciones».
