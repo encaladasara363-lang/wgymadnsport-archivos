@@ -788,6 +788,11 @@ original se descarta porque suele traer canciones con derechos. Nunca subir al r
 el video del socio ni el aviso final; se envían a la dueña. Al publicarlo, Metricool
 en las 3 redes y solo después de que la dueña lo apruebe.
 
+`scripts/video-ranking.py <salida.mp4>` (12-10-2026, pedido de la dueña, sin premio por ahora)
+arma la publicidad animada del 🏆 Ranking del mes (logo, trofeo, «¿Quién entrena más?», contador
+de días, podio con «¿TÚ?», los 3 rankings por plan, cómo unirse con apodo desde la tarjeta y
+cierre con los dos WhatsApp). Sin video de fuente y sin apodos ni nombres reales.
+
 ## Rutinas: contenido en JSON, nunca editar a mano el HTML (regla permanente, desde 10/2026)
 
 Las 12 rutinas de los carteles QR usan esta estructura (ver detalle
