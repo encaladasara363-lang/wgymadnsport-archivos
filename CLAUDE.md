@@ -783,7 +783,8 @@ mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
 (30 fps) desde un video de un socio entrenando: logo de entrada, frases en Rubik
 Distressed con golpe de zoom (lista `FRASES`, con segundos de inicio y fin), barra
 roja/dorada de avance y un cierre de 4 s con «ÚNETE AL EQUIPO WGYM», los dos
-WhatsApp y la dirección. **La música es propia (sintetizada en el script)**: el audio
+WhatsApp y la dirección. Variables opcionales: `FRASES` (JSON) y `COLOR=1` (colores vivos sin
+oscurecer, 12-10-2026: a una socia no le gustó la versión oscura). **La música es propia (sintetizada en el script)**: el audio
 original se descarta porque suele traer canciones con derechos. Nunca subir al repo
 el video del socio ni el aviso final; se envían a la dueña. Al publicarlo, Metricool
 en las 3 redes y solo después de que la dueña lo apruebe.
