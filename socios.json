@@ -1,5 +1,5 @@
 {
- "actualizado": "2026-10-06",
+ "actualizado": "2026-10-12",
  "nota": "Lista unica de socios. La leen la tarjeta virtual y todas las apps de rutina.",
  "socios": [
   {
@@ -231,19 +231,11 @@
   },
   {
    "n": "CARLOS",
-   "a": "BAHAMONDES",
+   "a": "BAHAMONDEZ",
    "rut": "Sin Rut",
-   "plan": "Pase Diario",
-   "monto": 4000,
-   "fv": 46300
-  },
-  {
-   "n": "CARLOS",
-   "a": "BAHOMONDES",
-   "rut": "Sin Rut",
-   "plan": "Pase Diario",
-   "monto": 4000,
-   "fv": 46300
+   "plan": "Full Mensual",
+   "monto": 33000,
+   "fv": 46335
   },
   {
    "n": "CELINDA",
