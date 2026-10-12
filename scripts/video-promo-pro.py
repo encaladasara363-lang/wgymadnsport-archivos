@@ -27,8 +27,7 @@ anton = lambda s: F('contenido/fuentes/Anton.ttf', s)
 barlow = lambda s: F('contenido/fuentes/BarlowCondensed.ttf', s)
 
 FRASES = [  # (desde, hasta, línea 1, línea 2) en segundos del video
-    (0.9, 4.7, "TU ESPALDA", "SE CONSTRUYE AQUÍ"),
-    (5.2, 9.6, "MÁQUINAS", "DE NIVEL PRO"),
+    (0.9, 9.6, "TU ESPALDA", "SE CONSTRUYE AQUÍ"),
     (10.1, 14.4, "CADA REPETICIÓN", "CUENTA"),
     (15.0, 99, "SIN LÍMITES", "SIN EXCUSAS"),
 ]
