@@ -1695,6 +1695,9 @@ var PESO_TIPICO = [
  [/jam[oó]n|pechuga de pavo|pavo laminado|mortadela|fiambre|lomo ahumado|pastrami/i, "lámina", 12, 3],
  [/salame|salami|chorizo laminado/i, "lámina", 5, 5],
  [/pan.*(molde|integral|blanco|centeno|lactal|sandwich)|pan de molde/i, "rebanada", 27, 2],
+ /* Pan de molde por marca aunque el nombre no diga «pan» (13-10-2026, la dueña escaneó «Blanco Ideal»
+    y no le salían las rebanadas). */
+ [/^(?!.*(queque|kuchen|torta|galleta|alfajor|bizcocho|muffin|donut|pastel|brownie|barra|tortilla|wrap|hallulla|marraqueta)).*\b(ideal|bimbo|castano|casta\u00f1o|fuchs|nutrabien|nutra bien)\b/i, "rebanada", 27, 2],
  [/galleta.*arroz|tortita de arroz|arroz inflado/i, "galleta", 9, 2],
  [/galleta|cracker|soda/i, "galleta", 8, 4],
  [/tortilla|wrap|rapiditas|fajita/i, "unidad", 40, 1],
@@ -1702,7 +1705,8 @@ var PESO_TIPICO = [
  [/barra|barrita/i, "barra", 40, 1]
 ];
 function unidadEstimada(a){
- var r = PESO_TIPICO.filter(function(x){ return x[0].test(a.n || ""); })[0];
+ var t = (a.n || "") + " " + (a.marca || "");
+ var r = PESO_TIPICO.filter(function(x){ return x[0].test(t); })[0];
  if(!r) return null;
  var porc = a.porcG || r[2] * r[3], n = Math.max(1, Math.round(porc / r[2]));
  return { n:n, u:r[1], g:porc / n, est:true, porcG:porc };
@@ -1870,7 +1874,7 @@ function detalle(a){
  /* El cuadro de láminas/envase solo para lo que viene en láminas, rebanadas o unidades
     (10-10-2026, la dueña escaneó un yogur: "no quiero ese aviso"). Yogur y postres: por pote. */
  var nomAl = normName(a.n + " " + (a.marca || "") + " " + (a.porcTxt || "")).toLowerCase();
- var rebanable = /queso|jamon|pavo|fiambre|salame|mortadela|longaniza|pan|galleta|tostada|rebanad|lamina|tajada|barra|tortilla|wrap|pita|hallulla|marraqueta/.test(nomAl);
+ var rebanable = /queso|jamon|pavo|fiambre|salame|mortadela|longaniza|pan|galleta|tostada|rebanad|lamina|tajada|barra|tortilla|wrap|pita|hallulla|marraqueta|\bideal\b|bimbo|castano|fuchs|nutra ?bien/.test(nomAl);
  var esPote = !esLiq && /yog|postre|flan|jalea|kefir|leche cultivada|protein power|pote/.test(nomAl) && !rebanable;
  var est0 = esGr && !esLiq && !esPote && !porcLoc ? unidadesPorcion(a) : null;
  if(est0 && est0.est && !a.porcG){ a = Object.assign({}, a, { porcG:Math.round(est0.porcG), porcTxt:"" }); }
@@ -2511,7 +2515,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101202", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101301", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
