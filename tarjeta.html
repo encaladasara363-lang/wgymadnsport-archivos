@@ -426,7 +426,6 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 .rank-unir .pago-btn{ width:auto; margin:0; }
 .rank-nota{ font-size:12px; color:#A3A3AD; margin:6px 0 0; }
 .rank-yo{ font-size:15px; color:#fff; margin:0 0 8px; } .rank-yo b{ color:var(--dorado); }
-.rank-otro{ font-family:"Barlow Condensed",sans-serif; font-weight:800; font-size:17px; letter-spacing:.04em; text-transform:uppercase; color:var(--dorado); margin:18px 0 6px; padding-top:12px; border-top:1px solid rgba(212,175,55,.35); }
 .rank-lista{ list-style:none; margin:0; padding:0; }
 .rank-lista li{ display:flex; align-items:center; gap:10px; padding:9px 6px; border-bottom:1px solid #2a2a31; }
 .rank-lista .pos{ width:32px; text-align:center; font-size:18px; } .rank-lista b{ flex:1; color:#fff; font-size:15px; } .rank-lista em{ font-style:normal; color:var(--dorado); font-weight:800; }
@@ -2356,25 +2355,17 @@ function renderEvolucion(s){
   if(/(tres|3) veces/.test(p)) return "tres";
   return "mensual";
  }
- /* Los otros dos rankings, debajo del propio (13-10-2026, la dueña: una socia de 3 veces por
-    semana no aparecía en el celular de su esposo, que es mensual, y creía que no estaba).
-    Cada grupo sigue compitiendo aparte; solo se muestran para que todos se vean. */
- function otrosRank_(todos, grupo){
-  return ["mensual","turno","tres"].filter(function(g){ return g !== grupo; }).map(function(g){
-   var l = todos.filter(function(x){ return (x.g || "mensual") === g; });
-   if(!l.length) return "";
-   return '<p class="rank-otro">🏅 Ranking ' + RANK_GRUPOS[g].t + '</p><ol class="rank-lista">' + l.slice(0, 10).map(function(x, i){ return '<li><span class="pos">' + (i < 3 ? ["🥇","🥈","🥉"][i] : (i + 1) + "°") + '</span><b>' + escapeHtml(x.apodo) + '</b><em>' + x.pts + (x.pts === 1 ? ' día' : ' días') + '</em></li>'; }).join("") + '</ol>';
-  }).join("");
- }
  function renderRanking_(s){
   var box = document.getElementById("rankCard"); if(!box) return;
   var grupo = grupoRank_(s.plan);
   if(!CHECKIN_URL || !grupo){ box.hidden = true; return; }
-  var G = RANK_GRUPOS[grupo];
   var R = rankDatos_(s), yo = R.todo[R.k], hoy = new Date();
   var mesTx = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"][hoy.getMonth()];
   box.hidden = false;
-  box.innerHTML = '<p class="pago-kicker">🏆 Ranking del mes · ' + mesTx + ' · ' + G.t + '</p><p class="rank-sub">Días que entrenaste en WGYM este mes. ' + G.sub + ' ¡Quien más viene, más arriba queda!</p><div id="rankCuerpo"><p class="rank-sub">Cargando…</p></div>';
+  /* Un solo ranking con todos los planes (13-10-2026, la dueña: "quiero que aparezcan todos los
+     planes en el celular de mis socios y yo solo ver qué plan corresponde a quién"). El grupo se
+     sigue guardando para que el mesón muestre el plan de cada uno. */
+  box.innerHTML = '<p class="pago-kicker">🏆 Ranking del mes · ' + mesTx + '</p><p class="rank-sub">Días que entrenaste en WGYM este mes, con todos los socios del gimnasio. ¡Quien más viene, más arriba queda!</p><div id="rankCuerpo"><p class="rank-sub">Cargando…</p></div>';
   var cuerpo = box.querySelector("#rankCuerpo");
   function unirse(){
    cuerpo.innerHTML = '<p class="rank-sub" id="rankMios"></p><div class="rank-unir"><input id="rankApodo" maxlength="18" placeholder="Tu apodo (ej: LaFlaca)" autocomplete="off"><button type="button" class="pago-btn principal" id="rankOk">Unirme</button></div><p class="rank-nota">Usa un apodo: en el ranking nunca aparece tu nombre.</p>';
@@ -2395,8 +2386,7 @@ function renderEvolucion(s){
   salidaJsonp({ action:"listarRetos" }, function(d){
    if(!document.getElementById("rankCuerpo")) return;
    if(!d || !d.retos){ cuerpo.innerHTML = '<p class="rank-sub">' + (d ? 'El ranking se activa cuando el gimnasio actualice su sistema.' : 'No se pudo cargar el ranking. Revisa tu internet.') + '</p>'; return; }
-   /* Solo los de su grupo (una fila sin grupo cuenta como mensual). */
-   var mio = yo.id.slice(0, 6), todos = d.lista || [], l = todos.filter(function(x){ return (x.g || "mensual") === grupo; }), pos = -1;
+   var mio = yo.id.slice(0, 6), todos = d.lista || [], l = todos.slice().sort(function(a, b){ return b.pts - a.pts; }), pos = -1;
    l.forEach(function(x, i){ if(x.id === mio) pos = i; });
    var enLista = todos.some(function(x){ return x.id === mio; });
    /* Si no aparece, o cambió de plan, se vuelve a guardar con su grupo actual. */
@@ -2404,8 +2394,7 @@ function renderEvolucion(s){
     salidaJsonp({ action:"guardarReto", id:yo.id, apodo:yo.apodo, n:s.nombre, a:s.apellido, g:grupo }, function(r){ if(r && r.ok){ yo.g = grupo; R.todo[R.k] = yo; rankGuardar_(R.todo); } });
    }
    cuerpo.innerHTML = (pos >= 0 ? '<p class="rank-yo">Vas en el lugar <b>' + (pos + 1) + '°</b> con <b>' + l[pos].pts + (l[pos].pts === 1 ? ' día' : ' días') + '</b></p>' : '') +
-    (l.length ? '<ol class="rank-lista">' + l.slice(0, 10).map(function(x, i){ return '<li class="' + (x.id === mio ? 'yo' : '') + '"><span class="pos">' + (i < 3 ? ["🥇","🥈","🥉"][i] : (i + 1) + "°") + '</span><b>' + escapeHtml(x.apodo) + (x.id === mio ? ' (tú)' : '') + '</b><em>' + x.pts + (x.pts === 1 ? ' día' : ' días') + '</em></li>'; }).join("") + '</ol>' : '<p class="rank-sub">Todavía nadie se une este mes. ¡Sé el primero!</p>') +
-    otrosRank_(todos, grupo) +
+    (l.length ? '<ol class="rank-lista">' + l.slice(0, 15).map(function(x, i){ return '<li class="' + (x.id === mio ? 'yo' : '') + '"><span class="pos">' + (i < 3 ? ["🥇","🥈","🥉"][i] : (i + 1) + "°") + '</span><b>' + escapeHtml(x.apodo) + (x.id === mio ? ' (tú)' : '') + '</b><em>' + x.pts + (x.pts === 1 ? ' día' : ' días') + '</em></li>'; }).join("") + '</ol>' : '<p class="rank-sub">Todavía nadie se une este mes. ¡Sé el primero!</p>') +
     '<button type="button" class="rank-salir" id="rankSalir">Salir del ranking</button>';
    cuerpo.querySelector("#rankSalir").addEventListener("click", function(){
     if(!confirm("¿Salir del ranking del mes?")) return;
@@ -2449,7 +2438,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101301", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101302", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
