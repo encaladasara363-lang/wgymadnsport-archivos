@@ -431,7 +431,7 @@ ver cuándo el gym está más vacío.
   cuadro. La tarjeta manda `g` en `guardarReto` (columna F «Grupo» de «Retos»; si el socio
   cambia de plan se vuelve a guardar sola) y muestra solo a los de su grupo. `listarRetos`
   entrega `g` por fila (hasta 30 por grupo) y `grupos:true`; el mesón muestra una tabla por
-  grupo. Una fila sin grupo cuenta como mensual. **Versión 21 instalada por la dueña el
+  grupo. Una fila sin grupo cuenta como mensual. **Desde el 13-10-2026 (la dueña: una socia de 3 veces por semana no salía en el celular de su esposo, mensual) la tarjeta muestra además, debajo del propio, los otros dos rankings (`otrosRank_`, solo apodo y días); cada grupo sigue compitiendo aparte.** **Versión 21 instalada por la dueña el
   11-10-2026 a las 2:27, verificada idéntica al repo vía Drive** (volver atrás: Versión 20).
 - **Actualización automática de la tarjeta (06-10-2026, la dueña: socios
   con "la app antigua" que no se registraban):** `tarjeta.html` trae
