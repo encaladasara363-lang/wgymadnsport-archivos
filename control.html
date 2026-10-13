@@ -319,7 +319,12 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 .rank-tabla{ width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
 .rank-tabla th{ text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#D4AF37; padding:6px 8px; border-bottom:1px solid #333; }
 .rank-tabla td{ padding:8px; border-bottom:1px solid #2a2a31; }
-.rank-grupo{ margin:18px 0 0; font-size:15px; color:#fff; letter-spacing:.04em; text-transform:uppercase; } .rank-grupo:first-child{ margin-top:6px; }
+.rank-carpeta{ margin:10px 0 0; border:1px solid rgba(212,175,55,.45); border-radius:12px; padding:4px 12px; }
+.rank-grupo{ margin:0; padding:10px 0; font-size:15px; color:#fff; letter-spacing:.04em; text-transform:uppercase; cursor:pointer; list-style:none; }
+.rank-grupo::-webkit-details-marker{ display:none; } .rank-grupo::after{ content:" ▼ Ver"; color:#D4AF37; font-size:13px; }
+.rank-carpeta[open] .rank-grupo::after{ content:" ▲ Cerrar"; }
+.rank-lider{ display:block; margin-top:4px; color:#D4AF37; font-size:13px; text-transform:none; letter-spacing:0; }
+.rank-carpeta .rank-tabla{ margin-bottom:10px; }
 .rank-tabla .rank-dias{ font-weight:800; color:#D4AF37; font-size:16px; }
 </style>
 
@@ -641,9 +646,11 @@ function verRankingAdmin_(){
   var grupos = [["mensual", "Mensuales"], ["turno", "Plan Turno · máximo 14 días"], ["tres", "3 veces por semana · máximo 12 días"]];
   box.innerHTML = l.length ? grupos.map(function(gr){
    var lg = l.filter(function(x){ return (x.g || "mensual") === gr[0]; });
-   return '<h3 class="rank-grupo">' + gr[1] + ' · ' + lg.length + '</h3>' + (lg.length ? '<table class="rank-tabla"><thead><tr><th>#</th><th>Apodo</th><th>Nombre real</th><th>Días</th></tr></thead><tbody>' +
+   /* Cada plan en su carpeta cerrada (13-10-2026, la dueña: "que no se haga tan larga la fila
+      para abajo"); el título ya muestra quién va primero. */
+   return '<details class="rank-carpeta"><summary class="rank-grupo">📁 ' + gr[1] + ' · ' + lg.length + (lg.length ? ' <span class="rank-lider">🥇 ' + escRank_(lg[0].apodo) + ' · ' + lg[0].pts + (lg[0].pts === 1 ? ' día' : ' días') + '</span>' : '') + '</summary>' + (lg.length ? '<table class="rank-tabla"><thead><tr><th>#</th><th>Apodo</th><th>Nombre real</th><th>Días</th></tr></thead><tbody>' +
     lg.map(function(x, i){ return '<tr><td>' + (i < 3 ? ["🥇","🥈","🥉"][i] : (i + 1) + "°") + '</td><td><b>' + escRank_(x.apodo) + '</b></td><td>' + escRank_(x.nombre) + '</td><td class="rank-dias">' + x.pts + '</td></tr>'; }).join("") + '</tbody></table>'
-    : '<p class="rank-ayuda">Nadie de este grupo se ha unido este mes.</p>');
+    : '<p class="rank-ayuda">Nadie de este grupo se ha unido este mes.</p>') + '</details>';
   }).join("") + (d.grupos ? '' : '<p class="rank-ayuda">Para separar por grupos falta actualizar el sistema de Google a la Versión 21: por ahora todos aparecen como Mensuales.</p>')
    : '<p class="rank-ayuda">Todavía nadie se une al ranking este mes.</p>';
  });
