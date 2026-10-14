@@ -7,7 +7,8 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 
 1. Sentadilla en Smith — ✅ aprobada (`fotos/01-*`).
 2. Hip thrust — en la máquina de hip thrust del gym (no con barra en
-   banco). Fotos listas (`fotos/02-*`), falta que la dueña las apruebe.
-3. Curl femoral a una pierna — pendiente (siguiente).
+   banco). ✅ aprobada el 14-10-2026 (`fotos/02-*`).
+3. Curl femoral a una pierna (de pie, 3 × 10-12 por pierna, isquiotibiales) —
+   en curso desde el 14-10-2026.
 
-Pausado el 09-10-2026 a pedido de la dueña.
+Pausado el 09-10-2026 y retomado el 14-10-2026.
