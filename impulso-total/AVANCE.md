@@ -9,7 +9,9 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 2. Hip thrust — en la máquina de hip thrust del gym (no con barra en
    banco). ✅ aprobada el 14-10-2026 (`fotos/02-*`).
 3. Curl femoral a una pierna (de pie, 3 × 10-12 por pierna, isquiotibiales) —
-   en curso desde el 14-10-2026.
+   ✅ video listo el 14-10-2026 (`maquinas-wgymadnsport/mujer/curl-femoral-de-pie`, máquina n.º 8
+   del segundo piso; foto con ChatGPT y video con Grok).
+4. Extensión de cuádriceps — pendiente (siguiente).
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
