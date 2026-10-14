@@ -1,0 +1,33 @@
+{
+  "titulo": "SENTADILLA EN SMITH",
+  "series": "3 × 10-12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [
+        402,
+        43,
+        475,
+        634
+      ],
+      "repetir": 2,
+      "nota": "Cuádriceps parpadeando en rojo (solo piel); video horizontal de Grok recortado a la foto del centro",
+      "musculo": [
+        [
+          292,
+          775,
+          40,
+          78
+        ],
+        [
+          382,
+          775,
+          40,
+          78
+        ]
+      ]
+    }
+  ]
+}
