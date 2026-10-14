@@ -55,3 +55,6 @@ Para armar o rehacer un video:
 |---|---|---|---|
 | Pantorrilla sentado | ✅ `hombre/pantorrilla-sentado` | ✅ `mujer/pantorrilla-sentado` | 3 × 15 |
 | Hip thrust | ✅ `hombre/hip-thrust` | ✅ `mujer/hip-thrust` | 4 × 12 |
+| Sentadilla en Smith | — | ✅ `mujer/sentadilla-smith` (Grok, 14-10-2026) | 3 × 10-12 |
+| Elevación lateral con discos | — | ✅ `mujer/elevacion-lateral-discos` | 3 × 12 |
+| Curl de bíceps con discos | — | ✅ `mujer/curl-biceps-discos` | 3 × 15 |
