@@ -12,3 +12,10 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    en curso desde el 14-10-2026.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
+
+**Videos de máquinas (14-10-2026, la dueña: "los videos que hemos hecho hay que ponerlos
+donde están las imágenes"):** en la vista previa (artifact «Impulso Total · Revisión»)
+reemplazan a las fotos: n.º 2 → `mujer/hip-thrust` (Hip thrust, 4 × 12), n.º 15 →
+`mujer/pantorrilla-sentado` (Pantorrilla sentado, 3 × 15), n.º 19 →
+`mujer/curl-biceps-discos` (Curl de bíceps con discos, 3 × 15). La elevación lateral con
+discos no tiene lugar en la rutina todavía.
