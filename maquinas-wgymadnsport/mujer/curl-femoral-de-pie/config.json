@@ -1,0 +1,27 @@
+{
+  "titulo": "CURL FEMORAL A UNA PIERNA",
+  "series": "3 × 10-12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [
+        330,
+        0,
+        480,
+        720
+      ],
+      "repetir": 2,
+      "nota": "Isquiotibiales de la pierna derecha parpadeando en rojo (solo piel); video horizontal de Grok recortado a la máquina n.º 8",
+      "musculo": [
+        [
+          228,
+          655,
+          42,
+          85
+        ]
+      ]
+    }
+  ]
+}
