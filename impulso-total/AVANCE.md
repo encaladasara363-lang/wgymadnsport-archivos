@@ -28,7 +28,7 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    de TikTok (no se sube). Video de Grok (la imagen es su primer cuadro); dorsal en rojo sobre el costado del top.
 8. Press militar — en curso (16-10-2026): máquina n.º 15 de la terraza (press de hombros con discos;
    `maquinas-wgymadnsport/mujer/press-militar/fuentes/maquina-15.jpg`). Referencia: video de TikTok (no se
-   sube). Falta: foto con la modelo en ChatGPT y video con Grok.
+   sube). Video de Grok armado (imagen = su primer cuadro), deltoides en rojo; en revisión.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 

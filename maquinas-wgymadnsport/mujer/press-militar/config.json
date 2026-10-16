@@ -1,0 +1,33 @@
+{
+  "titulo": "PRESS MILITAR",
+  "series": "3 × 8-10",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [
+        55,
+        0,
+        657,
+        1168
+      ],
+      "repetir": 1,
+      "nota": "Máquina n.º 15 (press de hombros con discos). Deltoides en rojo.",
+      "musculo": [
+        [
+          283,
+          432,
+          32,
+          40
+        ],
+        [
+          449,
+          432,
+          32,
+          40
+        ]
+      ]
+    }
+  ]
+}
