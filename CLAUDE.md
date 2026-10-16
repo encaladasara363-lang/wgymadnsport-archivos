@@ -1660,6 +1660,9 @@ probado: ella se activó desde el mesón y entró a la app).
   pasaste del máximo recomendado» al pasarse; el detalle dice «% del máximo». Topes OMS en
   `metaMicro`: azúcar 10 % de la meta de calorías ÷ 4 (≈50 g en 2.000 kcal, mínimo 25 g) y sodio
   2.000 mg. Al agregar un alimento nuevo, sumarlo también a esas dos tablas.
+- **Pastillas de «¡Tu plan está listo!» en negro (16-10-2026, la dueña: letras blancas sobre crema
+  no se leían):** en el tema oscuro `.plan-chips span` va amarillo con letra negra (`nutri-oscuro.css`,
+  con `.plan-chips.plan-chips` para ganarle a la regla que pinta todo de blanco).
 - **Tema oscuro por defecto (10-10-2026, la dueña vio la prueba y dijo «quiero todas»):**
   `nutri-oscuro.css` va después de `nutri-claro.css` y actúa con `<html class="oscuro">`; un
   script en el `<head>` lo pone antes de pintar según `wgymnutri_tema_v1` (por defecto
