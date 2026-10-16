@@ -19,10 +19,11 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    La referencia fue un video de TikTok (animación 3D de pantorrillas): no se sube al repo.
    Foto con la modelo lista (`imagen.jpg`: de espaldas, una hombrera en cada hombro y talones en
    el aire fuera del borde de la plataforma). Video con Grok (2.º intento) aprobado. **Día 1 completo.**
-6. Press de pecho sentado — en curso (16-10-2026): máquina n.º 14 de la terraza (press inclinado
+6. Press de pecho sentado — ✅ video aprobado el 16-10-2026 (`mujer/press-pecho-sentado`, 3 × 10-12, 2.º intento de Grok): máquina n.º 14 de la terraza (press inclinado
    tipo hammer, con discos; `maquinas-wgymadnsport/mujer/press-pecho-sentado/fuentes/maquina-14.jpg`).
    Referencia: video de TikTok (no se sube). Foto con la modelo lista (`imagen.jpg`, manillas a la
-   altura del pecho). Falta: video con Grok.
+   altura del pecho).
+7. Remo frontal — siguiente.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
