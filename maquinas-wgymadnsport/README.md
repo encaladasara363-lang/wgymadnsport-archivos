@@ -63,3 +63,4 @@ Para armar o rehacer un video:
 | Elevación de talones de pie (máquina con hombreras, terraza) | — | ✅ `mujer/elevacion-talones-de-pie` (Grok, 16-10-2026) | 3 × 12-15 |
 | Press de pecho sentado (máquina n.º 14, terraza) | — | ✅ `mujer/press-pecho-sentado` (Grok, 16-10-2026) | 3 × 10-12 |
 | Remo frontal (máquina n.º 23, terraza) | — | ✅ `mujer/remo-frontal` (Grok, 16-10-2026) | 3 × 10-12 |
+| Press militar (máquina n.º 15, terraza) | — | ✅ `mujer/press-militar` (Grok, 16-10-2026) | 3 × 8-10 |
