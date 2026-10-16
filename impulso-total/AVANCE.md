@@ -23,7 +23,9 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    tipo hammer, con discos; `maquinas-wgymadnsport/mujer/press-pecho-sentado/fuentes/maquina-14.jpg`).
    Referencia: video de TikTok (no se sube). Foto con la modelo lista (`imagen.jpg`, manillas a la
    altura del pecho).
-7. Remo frontal — siguiente.
+7. Remo frontal — en curso (16-10-2026): máquina n.º 23 de la terraza (remo sentado con discos y
+   apoyo de pecho; `maquinas-wgymadnsport/mujer/remo-frontal/fuentes/maquina-23.jpg`). Referencia: video
+   de TikTok (no se sube). Falta: foto con la modelo en ChatGPT y video con Grok.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
