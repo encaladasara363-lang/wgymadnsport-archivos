@@ -64,3 +64,4 @@ Para armar o rehacer un video:
 | Press de pecho sentado (máquina n.º 14, terraza) | — | ✅ `mujer/press-pecho-sentado` (Grok, 16-10-2026) | 3 × 10-12 |
 | Remo frontal (máquina n.º 23, terraza) | — | ✅ `mujer/remo-frontal` (Grok, 16-10-2026) | 3 × 10-12 |
 | Press militar (máquina n.º 15, terraza) | — | ✅ `mujer/press-militar` (Grok, 16-10-2026) | 3 × 8-10 |
+| Extensión de tríceps en polea (n.º 20, cuerda) | — | ✅ `mujer/extension-triceps-polea` (Grok, 16-10-2026) | 3 × 12-15 |
