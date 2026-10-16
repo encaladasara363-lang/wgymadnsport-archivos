@@ -232,8 +232,8 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=55">
-<link rel="stylesheet" href="nutri-oscuro.css?v=12">
+<link rel="stylesheet" href="nutri-claro.css?v=56">
+<link rel="stylesheet" href="nutri-oscuro.css?v=13">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
 </head>
@@ -341,7 +341,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=22"></script>
+<script src="nutri-alimentos.js?v=23"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -1402,9 +1402,11 @@ var aguaPctPrev = 0;
 function metaVitC(){ return D.perfil && D.perfil.sexo === "M" ? 90 : 75; }
 /* Potasio y fibra (10-10-2026, pedido de la dueña): potasio 2.600 mg mujeres / 3.400 mg hombres
    y fibra 25 g / 38 g (ingesta adecuada de adultos de las Academias Nacionales de EE. UU.). */
-/* Azúcar y sodio (16-10-2026, pedido de la dueña) son TOPES, no metas: OMS, azúcar < 10 % de las calorías
-   (≈50 g en 2.000 kcal; acá se cuentan los azúcares totales, la fruta y la leche también suman) y sodio < 2.000 mg. */
-var MICROS = [["vc","🍊 Vitamina C","mg"],["po","🍌 Potasio","mg"],["fi","🌾 Fibra","g"],["az","🍬 Azúcar","g",1],["na","🧂 Sodio","mg",1]];
+/* Azúcar y sodio (16-10-2026, pedido de la dueña) son TOPES, no metas. Azúcar LIBRE según la OMS (lo agregado,
+   miel y jugos; sin el azúcar propio de fruta entera, verduras ni leche): ideal < 5 % de las calorías (≈25 g en
+   2.000 kcal, azIdeal) y máximo < 10 % (≈50 g). Sodio < 2.000 mg. */
+function azIdeal(){ return Math.round(metaMicro("az") / 2); }
+var MICROS = [["vc","🍊 Vitamina C","mg"],["po","🍌 Potasio","mg"],["fi","🌾 Fibra","g"],["az","🍬 Azúcar añadida","g",1],["na","🧂 Sodio","mg",1]];
 function metaMicro(k){ var h = D.perfil && D.perfil.sexo === "M"; if(k === "az"){ var mk = D.metas && D.metas.kcal; return Math.max(25, Math.round((mk > 0 ? mk : 2000) * 0.1 / 4)); } if(k === "na") return 2000; return k === "vc" ? metaVitC() : k === "po" ? (h ? 3400 : 2600) : (h ? 38 : 25); }
 /* 🔥 Racha con fueguito (idea 1), 🥇 niveles por constancia (idea 3) y 🎉 festejo al cumplir la
    meta (idea 2) — 11-10-2026, la dueña eligió "1, 4, 3 y 2". */
@@ -1477,8 +1479,8 @@ function renderHoy(){
  h += '<div class="card res2"><div class="anillo-box"><div class="anillo' + (rest < 0 ? " pasado" : (M.p && t.p >= M.p) || (t.k >= M.kcal * 0.9) ? " meta-ok" : "") + '"><svg viewBox="0 0 150 150"><circle class="fondo" cx="75" cy="75" r="62"/><circle class="prog" id="anilloProg" cx="75" cy="75" r="62" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/></svg><div class="centro"><b>' + Math.round(t.k / M.kcal * 100) + '%</b><span>de tu meta</span></div></div>' +
   '<div class="res-datos"><div><span>🍽 Comidas</span><b>' + miles(t.k) + '<small> kcal</small></b></div><div><span>🎯 Meta</span><b>' + miles(M.kcal) + '<small> kcal</small></b></div></div></div>' +
   '<div class="macros3">' + macro("m-p", "Proteína", t.p, M.p) + macro("m-c", "Carbos", t.c, M.c) + macro("m-g", "Grasas", t.g, M.g) + '</div>' +
-  '<div class="vitc-hoy">' + MICROS.map(function(mc){ var v = t[mc[0]], meta = metaMicro(mc[0]), tope = mc[3], pasa = tope && v > meta; return '<div class="mic-h' + (tope ? ' tope' : '') + (pasa ? ' pasado' : '') + '"><div class="fila"><span>' + mc[1] + (tope ? ' <em class="tope-tag" style="color:#000;background:#F5D547;font-style:normal;font-size:11px;padding:1px 6px;border-radius:6px">TOPE</em>' : '') + '</span><b>' + (mc[2] === "mg" ? miles(v) : String(r1(v)).replace(".", ",")) + ' <small>/ ' + miles(meta) + ' ' + mc[2] + '</small></b></div><div class="barra ' + mc[0] + '"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div>' + (pasa ? '<small class="tope-aviso" style="color:#E30613;font-weight:800">⚠️ Te pasaste del máximo recomendado</small>' : '') + '</div>'; }).join("") +
-  '<small>🍬 Azúcar y 🧂 sodio son un <b>tope</b>: lo ideal es quedar bajo el máximo (OMS). La fruta y la leche también suman azúcar.</small>' + (Math.max(t.vcSin, t.poSin, t.fiSin, t.azSin, t.naSin) ? '<small>' + Math.max(t.vcSin, t.poSin, t.fiSin, t.azSin, t.naSin) + ' alimento(s) de hoy no traen estos datos; el total puede ser mayor.</small>' : '') + '</div></div>';
+  '<div class="vitc-hoy">' + MICROS.map(function(mc){ var v = t[mc[0]], meta = metaMicro(mc[0]), tope = mc[3], pasa = tope && v > meta, ideal = mc[0] === "az" ? azIdeal() : 0, medio = !pasa && ideal && v > ideal; return '<div class="mic-h' + (tope ? ' tope' : '') + (pasa ? ' pasado' : '') + (medio ? ' medio' : '') + '"><div class="fila"><span>' + mc[1] + (tope ? ' <em class="tope-tag" style="color:#000;background:#F5D547;font-style:normal;font-size:11px;padding:1px 6px;border-radius:6px">TOPE</em>' : '') + '</span><b>' + (mc[2] === "mg" ? miles(v) : String(r1(v)).replace(".", ",")) + ' <small>/ ' + miles(meta) + ' ' + mc[2] + '</small></b></div><div class="barra ' + mc[0] + '"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div>' + (ideal ? '<small class="az-ideal">Ideal: menos de ' + ideal + ' g · Máximo: ' + meta + ' g</small>' : '') + (pasa ? '<small class="tope-aviso" style="color:#E30613;font-weight:800">⚠️ Te pasaste del máximo recomendado</small>' : medio ? '<small class="tope-medio" style="color:#F39C12;font-weight:800">Pasaste lo ideal (' + ideal + ' g); trata de no llegar a ' + meta + ' g</small>' : '') + '</div>'; }).join("") +
+  '<small>🍬 Azúcar añadida y 🧂 sodio son un <b>tope</b> (OMS): lo ideal es quedar bajo el máximo. No cuenta el azúcar natural de la fruta entera, las verduras ni la leche; los jugos, la miel y lo endulzado sí. En productos escaneados se usa el azúcar de la etiqueta.</small>' + (Math.max(t.vcSin, t.poSin, t.fiSin, t.azSin, t.naSin) ? '<small>' + Math.max(t.vcSin, t.poSin, t.fiSin, t.azSin, t.naSin) + ' alimento(s) de hoy no traen estos datos; el total puede ser mayor.</small>' : '') + '</div></div>';
  h += '<div class="restantes' + (rest < 0 ? " pasado" : "") + '"><span class="e">🔥</span><div><small>' + (rest < 0 ? "Te pasaste de tu meta" : "Calorías restantes") + '</small><b>' + miles(Math.abs(rest)) + ' <em>kcal</em></b><p>Meta ' + miles(M.kcal) + ' − comidas ' + miles(t.k) + '</p></div></div>';
  /* «¿Qué como ahora?» sacado el 11-10-2026 (la dueña: "no me gusta, no tiene sentido"). */
  h += htmlSupl(x);
@@ -2517,7 +2519,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101602", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101603", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

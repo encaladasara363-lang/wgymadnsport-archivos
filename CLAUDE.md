@@ -1660,6 +1660,13 @@ probado: ella se activó desde el mesón y entró a la app).
   pasaste del máximo recomendado» al pasarse; el detalle dice «% del máximo». Topes OMS en
   `metaMicro`: azúcar 10 % de la meta de calorías ÷ 4 (≈50 g en 2.000 kcal, mínimo 25 g) y sodio
   2.000 mg. Al agregar un alimento nuevo, sumarlo también a esas dos tablas.
+  **Azúcar LIBRE desde el mismo 16-10-2026 (la dueña: "aquí me dice que el tope es 25 g"; eligió
+  la opción de contar solo el azúcar libre):** `NUTRI_AZU` ya no es azúcar total sino «🍬 Azúcar
+  añadida» según la OMS: lo agregado, miel, siropes y jugos; fruta entera (también seca), verduras,
+  legumbres, leche, yogur natural y queso cuentan 0, y en lácteos con sabor se resta la lactosa.
+  Se muestran las dos cifras: ideal 5 % de las calorías (`azIdeal`, ≈25 g en 2.000 kcal; barra
+  naranja y «Pasaste lo ideal…») y máximo 10 % (≈50 g; barra roja). Los productos escaneados usan
+  el azúcar total de su etiqueta (la ley chilena no separa la añadida).
 - **Pastillas de «¡Tu plan está listo!» en negro (16-10-2026, la dueña: letras blancas sobre crema
   no se leían):** en el tema oscuro `.plan-chips span` va amarillo con letra negra (`nutri-oscuro.css`,
   con `.plan-chips.plan-chips` para ganarle a la regla que pinta todo de blanco).
