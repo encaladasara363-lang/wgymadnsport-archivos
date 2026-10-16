@@ -1,0 +1,28 @@
+{
+  "titulo": "REMO FRONTAL",
+  "series": "3 × 10-12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [
+        40,
+        0,
+        657,
+        1168
+      ],
+      "repetir": 1,
+      "nota": "Máquina n.º 23. Dorsal (costado de la espalda, sobre el top negro, solo_piel false) en rojo; con solo_piel la pared amarilla se pintaba.",
+      "musculo": [
+        [
+          525,
+          452,
+          48,
+          42
+        ]
+      ],
+      "solo_piel": false
+    }
+  ]
+}
