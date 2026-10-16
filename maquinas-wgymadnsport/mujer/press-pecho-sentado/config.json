@@ -13,8 +13,22 @@
         1168
       ],
       "repetir": 1,
-      "nota": "Máquina n.º 14. Pendiente: el intento 1 de Grok (fuentes/intento1-grok-press-hombros.mp4) hizo un press de hombros; falta un video que empuje hacia adelante. Pecho en rojo sobre el top negro (solo_piel false).",
-      "musculo": []
+      "nota": "Máquina n.º 14. Segundo video de Grok (empuja hacia adelante; el intento 1 hizo press de hombros). Pecho en rojo sobre el top negro (solo_piel false).",
+      "musculo": [
+        [
+          328,
+          500,
+          58,
+          42
+        ],
+        [
+          422,
+          500,
+          58,
+          42
+        ]
+      ],
+      "solo_piel": false
     }
   ]
 }
