@@ -17,7 +17,8 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 5. Elevación de talones — en curso (16-10-2026): de pie en la máquina de pantorrilla con
    hombreras de la terraza (`maquinas-wgymadnsport/mujer/elevacion-talones-de-pie/fuentes/maquina.jpg`).
    La referencia fue un video de TikTok (animación 3D de pantorrillas): no se sube al repo.
-   Falta: foto con la modelo en ChatGPT y video con Grok.
+   Foto con la modelo lista (`imagen.jpg`: de espaldas, una hombrera en cada hombro y talones en
+   el aire fuera del borde de la plataforma). Falta: video con Grok.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
