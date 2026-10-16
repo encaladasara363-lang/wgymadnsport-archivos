@@ -69,3 +69,4 @@ html.oscuro body .vitc-hoy .mic-h small.tope-aviso{color:#FF5252 !important}
 /* «Tu plan está listo» (16-10-2026, la dueña: letras blancas sobre crema no se leían): pastillas con letra negra */
 html.oscuro body .plan-chips.plan-chips span, html.oscuro body .plan-chips.plan-chips span *{color:#111 !important}
 html.oscuro body .plan-chips.plan-chips span{background:#F5D547 !important;border:1px solid #D4AF37 !important}
+html.oscuro body .vitc-hoy .mic-h small.tope-medio{color:#FFB547 !important}

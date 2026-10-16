@@ -596,3 +596,6 @@ body #agrQ#agrQ::placeholder{ color:#5A4A10 !important; -webkit-text-fill-color:
 .vitc-hoy .tope-aviso{display:block;margin-top:2px}
 html body .vitc-hoy .mic-h small.tope-aviso{color:#E30613 !important}
 .vitc-hoy .mic-h.tope .fila b{white-space:nowrap}
+.vitc-hoy .mic-h.medio .barra i{background:linear-gradient(90deg,#FFC94D,#F39C12) !important}
+.vitc-hoy .az-ideal,.vitc-hoy .tope-medio{display:block;margin-top:2px}
+html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
