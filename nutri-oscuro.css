@@ -62,3 +62,6 @@ html.oscuro .top.entreno .t span#saludo{ color:#FFE08A !important; } html.oscuro
 /* Búsqueda en amarillo también en el tema oscuro (13-10-2026). */
 html.oscuro body #agrQ#agrQ{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #D4AF37 !important; }
 html.oscuro body #agrQ#agrQ::placeholder{ color:#5A4A10 !important; -webkit-text-fill-color:#5A4A10 !important; opacity:1; }
+
+/* Azúcar y sodio (16-10-2026): aviso de tope en rojo visible */
+html.oscuro body .vitc-hoy .mic-h small.tope-aviso{color:#FF5252 !important}

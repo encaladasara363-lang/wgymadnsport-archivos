@@ -232,8 +232,8 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=54">
-<link rel="stylesheet" href="nutri-oscuro.css?v=10">
+<link rel="stylesheet" href="nutri-claro.css?v=55">
+<link rel="stylesheet" href="nutri-oscuro.css?v=11">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
 </head>
@@ -341,7 +341,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=21"></script>
+<script src="nutri-alimentos.js?v=22"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -827,7 +827,7 @@ function microDe(it, key){
  if(it.p && it.p !== al.p){ var cu = porUnidad(al); return cu && cu.n > 1 ? al[key] / cu.n : al[key]; }
  return al[key];
 }
-function completarMicros(a){ var b = null; ["vc","po","fi"].forEach(function(k){ if(typeof a[k] !== "number"){ var v = microDe(a, k); if(typeof v === "number"){ b = b || Object.assign({}, a); b[k] = v; } } }); return b || a; }
+function completarMicros(a){ var b = null; ["vc","po","fi","az","na"].forEach(function(k){ if(typeof a[k] !== "number"){ var v = microDe(a, k); if(typeof v === "number"){ b = b || Object.assign({}, a); b[k] = v; } } }); return b || a; }
 /* Suplementos marcados que suman al día (12-10-2026, la dueña marcó «Vitamina C» y el cuadro de
    vitamina C seguía en 0): cada suplemento se busca en la lista de alimentos por su nombre (1 unidad
    o 1 porción) y lo que trae se suma a calorías, macros y vitamina C/potasio/fibra. */
@@ -844,10 +844,10 @@ function aporteSupl(nombre){ var a = suplAlim(nombre); if(!a) return ""; var t =
  if(a.vc) t.push(miles(a.vc) + " mg vit. C"); if(a.pr >= 1) t.push(Math.round(a.pr) + " g prot."); if(a.k >= 5) t.push(Math.round(a.k) + " kcal");
  return t.join(" · "); }
 function totales(iso){
- var x = diaDe(iso), t = { k:0, p:0, c:0, g:0, n:0, vc:0, vcSin:0, po:0, poSin:0, fi:0, fiSin:0 };
- COMIDAS.forEach(function(cm){ (x.c[cm[0]] || []).forEach(function(it){ var m = it.x || 1; t.k += it.k * m; t.p += it.pr * m; t.c += it.c * m; t.g += it.g * m; t.n++; var vc = microDe(it, "vc"), po = microDe(it, "po"), fi = microDe(it, "fi"); if(typeof vc === "number") t.vc += vc * m; else t.vcSin++; if(typeof po === "number") t.po += po * m; else t.poSin++; if(typeof fi === "number") t.fi += fi * m; else t.fiSin++; }); });
+ var x = diaDe(iso), t = { k:0, p:0, c:0, g:0, n:0, vc:0, vcSin:0, po:0, poSin:0, fi:0, fiSin:0, az:0, azSin:0, na:0, naSin:0 };
+ COMIDAS.forEach(function(cm){ (x.c[cm[0]] || []).forEach(function(it){ var m = it.x || 1; t.k += it.k * m; t.p += it.pr * m; t.c += it.c * m; t.g += it.g * m; t.n++; var vc = microDe(it, "vc"), po = microDe(it, "po"), fi = microDe(it, "fi"); if(typeof vc === "number") t.vc += vc * m; else t.vcSin++; if(typeof po === "number") t.po += po * m; else t.poSin++; if(typeof fi === "number") t.fi += fi * m; else t.fiSin++; var az = microDe(it, "az"), na = microDe(it, "na"); if(typeof az === "number") t.az += az * m; else t.azSin++; if(typeof na === "number") t.na += na * m; else t.naSin++; }); });
  if(x.cafe){ t.k += x.cafe * 2; t.p += x.cafe * 0.3; t.po += x.cafe * 116; }
- Object.keys(x.supl || {}).forEach(function(n){ if(!x.supl[n]) return; var a = suplAlim(n); if(!a) return; t.k += a.k; t.p += a.pr; t.c += a.c; t.g += a.g; if(typeof a.vc === "number") t.vc += a.vc; if(typeof a.po === "number") t.po += a.po; if(typeof a.fi === "number") t.fi += a.fi; });
+ Object.keys(x.supl || {}).forEach(function(n){ if(!x.supl[n]) return; var a = suplAlim(n); if(!a) return; t.k += a.k; t.p += a.pr; t.c += a.c; t.g += a.g; if(typeof a.vc === "number") t.vc += a.vc; if(typeof a.po === "number") t.po += a.po; if(typeof a.fi === "number") t.fi += a.fi; if(typeof a.az === "number") t.az += a.az; if(typeof a.na === "number") t.na += a.na; });
  return t;
 }
 function racha(){
@@ -1402,8 +1402,10 @@ var aguaPctPrev = 0;
 function metaVitC(){ return D.perfil && D.perfil.sexo === "M" ? 90 : 75; }
 /* Potasio y fibra (10-10-2026, pedido de la dueña): potasio 2.600 mg mujeres / 3.400 mg hombres
    y fibra 25 g / 38 g (ingesta adecuada de adultos de las Academias Nacionales de EE. UU.). */
-var MICROS = [["vc","🍊 Vitamina C","mg"],["po","🍌 Potasio","mg"],["fi","🌾 Fibra","g"]];
-function metaMicro(k){ var h = D.perfil && D.perfil.sexo === "M"; return k === "vc" ? metaVitC() : k === "po" ? (h ? 3400 : 2600) : (h ? 38 : 25); }
+/* Azúcar y sodio (16-10-2026, pedido de la dueña) son TOPES, no metas: OMS, azúcar < 10 % de las calorías
+   (≈50 g en 2.000 kcal; acá se cuentan los azúcares totales, la fruta y la leche también suman) y sodio < 2.000 mg. */
+var MICROS = [["vc","🍊 Vitamina C","mg"],["po","🍌 Potasio","mg"],["fi","🌾 Fibra","g"],["az","🍬 Azúcar","g",1],["na","🧂 Sodio","mg",1]];
+function metaMicro(k){ var h = D.perfil && D.perfil.sexo === "M"; if(k === "az"){ var mk = D.metas && D.metas.kcal; return Math.max(25, Math.round((mk > 0 ? mk : 2000) * 0.1 / 4)); } if(k === "na") return 2000; return k === "vc" ? metaVitC() : k === "po" ? (h ? 3400 : 2600) : (h ? 38 : 25); }
 /* 🔥 Racha con fueguito (idea 1), 🥇 niveles por constancia (idea 3) y 🎉 festejo al cumplir la
    meta (idea 2) — 11-10-2026, la dueña eligió "1, 4, 3 y 2". */
 var NIVELES = [[0,"Novato","🌱"],[7,"Bronce","🥉"],[15,"Plata","🥈"],[30,"Oro","🥇"],[60,"Diamante","💎"]];
@@ -1475,8 +1477,8 @@ function renderHoy(){
  h += '<div class="card res2"><div class="anillo-box"><div class="anillo' + (rest < 0 ? " pasado" : (M.p && t.p >= M.p) || (t.k >= M.kcal * 0.9) ? " meta-ok" : "") + '"><svg viewBox="0 0 150 150"><circle class="fondo" cx="75" cy="75" r="62"/><circle class="prog" id="anilloProg" cx="75" cy="75" r="62" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/></svg><div class="centro"><b>' + Math.round(t.k / M.kcal * 100) + '%</b><span>de tu meta</span></div></div>' +
   '<div class="res-datos"><div><span>🍽 Comidas</span><b>' + miles(t.k) + '<small> kcal</small></b></div><div><span>🎯 Meta</span><b>' + miles(M.kcal) + '<small> kcal</small></b></div></div></div>' +
   '<div class="macros3">' + macro("m-p", "Proteína", t.p, M.p) + macro("m-c", "Carbos", t.c, M.c) + macro("m-g", "Grasas", t.g, M.g) + '</div>' +
-  '<div class="vitc-hoy">' + MICROS.map(function(mc){ var v = t[mc[0]], meta = metaMicro(mc[0]); return '<div class="mic-h"><div class="fila"><span>' + mc[1] + '</span><b>' + (mc[2] === "mg" ? miles(v) : String(r1(v)).replace(".", ",")) + ' <small>/ ' + miles(meta) + ' ' + mc[2] + '</small></b></div><div class="barra ' + mc[0] + '"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }).join("") +
-  (Math.max(t.vcSin, t.poSin, t.fiSin) ? '<small>' + Math.max(t.vcSin, t.poSin, t.fiSin) + ' alimento(s) de hoy no traen estos datos; el total puede ser mayor.</small>' : '') + '</div></div>';
+  '<div class="vitc-hoy">' + MICROS.map(function(mc){ var v = t[mc[0]], meta = metaMicro(mc[0]), tope = mc[3], pasa = tope && v > meta; return '<div class="mic-h' + (tope ? ' tope' : '') + (pasa ? ' pasado' : '') + '"><div class="fila"><span>' + mc[1] + (tope ? ' <em class="tope-tag" style="color:#000;background:#F5D547;font-style:normal;font-size:11px;padding:1px 6px;border-radius:6px">TOPE</em>' : '') + '</span><b>' + (mc[2] === "mg" ? miles(v) : String(r1(v)).replace(".", ",")) + ' <small>/ ' + miles(meta) + ' ' + mc[2] + '</small></b></div><div class="barra ' + mc[0] + '"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div>' + (pasa ? '<small class="tope-aviso" style="color:#E30613;font-weight:800">⚠️ Te pasaste del máximo recomendado</small>' : '') + '</div>'; }).join("") +
+  '<small>🍬 Azúcar y 🧂 sodio son un <b>tope</b>: lo ideal es quedar bajo el máximo (OMS). La fruta y la leche también suman azúcar.</small>' + (Math.max(t.vcSin, t.poSin, t.fiSin, t.azSin, t.naSin) ? '<small>' + Math.max(t.vcSin, t.poSin, t.fiSin, t.azSin, t.naSin) + ' alimento(s) de hoy no traen estos datos; el total puede ser mayor.</small>' : '') + '</div></div>';
  h += '<div class="restantes' + (rest < 0 ? " pasado" : "") + '"><span class="e">🔥</span><div><small>' + (rest < 0 ? "Te pasaste de tu meta" : "Calorías restantes") + '</small><b>' + miles(Math.abs(rest)) + ' <em>kcal</em></b><p>Meta ' + miles(M.kcal) + ' − comidas ' + miles(t.k) + '</p></div></div>';
  /* «¿Qué como ahora?» sacado el 11-10-2026 (la dueña: "no me gusta, no tiene sentido"). */
  h += htmlSupl(x);
@@ -1585,7 +1587,7 @@ function porcionTxt(it){ var m = it.x || 1, u1 = !it.gr && String(it.p || "").ma
 
 /* ═══ 5. Agregar comida: buscar, escanear, recientes, favoritas, manual ═══ */
 var agr = { comida:"desayuno", modo:"buscar", q:"" };
-var ALIM = (window.NUTRI_ALIMENTOS || []).map(function(a){ return { n:a[0], p:a[1], k:a[2], pr:a[3], c:a[4], g:a[5], cat:a[6], vc:(window.NUTRI_VITC || {})[a[0]], po:(window.NUTRI_POT || {})[a[0]], fi:(window.NUTRI_FIB || {})[a[0]], nn:normName(a[0]) }; });
+var ALIM = (window.NUTRI_ALIMENTOS || []).map(function(a){ return { n:a[0], p:a[1], k:a[2], pr:a[3], c:a[4], g:a[5], cat:a[6], vc:(window.NUTRI_VITC || {})[a[0]], po:(window.NUTRI_POT || {})[a[0]], fi:(window.NUTRI_FIB || {})[a[0]], az:(window.NUTRI_AZU || {})[a[0]], na:(window.NUTRI_NA || {})[a[0]], nn:normName(a[0]) }; });
 /* Productos escaneados por los socios (10-10-2026, la dueña: "escanear una vez y que
    quede para todos"). Viven en la hoja "Productos" (listarProductos / guardarProducto
    del Apps Script); el teléfono guarda la última lista para buscar sin internet. */
@@ -1685,7 +1687,7 @@ function porUnidad(a){
  var w = m[2].toLowerCase(), sing = /(unidad|mitad)es$/.test(w) ? w.slice(0, -2) : /ches$/.test(w) ? w.slice(0, -2) : /nueces$/.test(w) ? "nuez" : w.replace(/s$/, "");
  var resto = m[3] ? " " + m[3].replace(/^\(.*\)$/, "") : "";
  if(n === 1) return { a:a, sing:sing, n:1 };
- return { a:Object.assign({}, a, { p:"1 " + sing, k:a.k / n, pr:a.pr / n, c:a.c / n, g:a.g / n, vc:typeof a.vc === "number" ? a.vc / n : a.vc, po:typeof a.po === "number" ? a.po / n : a.po, fi:typeof a.fi === "number" ? a.fi / n : a.fi }), sing:sing, n:n };
+ return { a:Object.assign({}, a, { p:"1 " + sing, k:a.k / n, pr:a.pr / n, c:a.c / n, g:a.g / n, vc:typeof a.vc === "number" ? a.vc / n : a.vc, po:typeof a.po === "number" ? a.po / n : a.po, fi:typeof a.fi === "number" ? a.fi / n : a.fi, az:typeof a.az === "number" ? a.az / n : a.az, na:typeof a.na === "number" ? a.na / n : a.na }), sing:sing, n:n };
 }
 /* Peso aproximado de 1 lámina/rebanada/unidad según el tipo de producto (10-10-2026,
    la dueña: "que calcule sola"). Solo se usa cuando la etiqueta no dice las unidades,
@@ -1863,7 +1865,7 @@ function detalle(a){
  if(!cuenta && !a.gr && agr.comida !== "bebidas" && a.cat !== CAT_BEB){
   var mg = /(?:^|[\s(])(\d+(?:[.,]\d+)?)\s*g\b/i.exec(a.p || ""), nG = mg ? Number(mg[1].replace(",", ".")) : 0;
   var esMl = false; if(!mg){ mg = /(?:^|[\s(])(\d+(?:[.,]\d+)?)\s*ml\b/i.exec(a.p || ""); nG = mg ? Number(mg[1].replace(",", ".")) : 0; esMl = !!mg; }
-  if(nG > 0){ var fG = 100 / nG; porcLoc = a.p; a = Object.assign({}, a, { k:a.k * fG, pr:a.pr * fG, c:a.c * fG, g:a.g * fG, gr:nG, vc:typeof a.vc === "number" ? a.vc * fG : a.vc, po:typeof a.po === "number" ? a.po * fG : a.po, fi:typeof a.fi === "number" ? a.fi * fG : a.fi }); if(esMl) a.ml = true; }
+  if(nG > 0){ var fG = 100 / nG; porcLoc = a.p; a = Object.assign({}, a, { k:a.k * fG, pr:a.pr * fG, c:a.c * fG, g:a.g * fG, gr:nG, vc:typeof a.vc === "number" ? a.vc * fG : a.vc, po:typeof a.po === "number" ? a.po * fG : a.po, fi:typeof a.fi === "number" ? a.fi * fG : a.fi, az:typeof a.az === "number" ? a.az * fG : a.az, na:typeof a.na === "number" ? a.na * fG : a.na }); if(esMl) a.ml = true; }
  }
  var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
  /* Líquidos (10-10-2026, la dueña escaneó una Score: "debe decir la lata"): se muestra por
@@ -1926,7 +1928,7 @@ function detalle(a){
  function pintar(){
   var f = factor();
   $("dMac").innerHTML = '<div><b style="color:var(--gold2)">' + miles(a.k * f) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + r1(a.pr * f) + '</b><span>Prot. g</span></div><div><b>' + r1(a.c * f) + '</b><span>Carb. g</span></div><div><b>' + r1(a.g * f) + '</b><span>Grasa g</span></div>' +
-   '<div class="vitc-det">' + MICROS.map(function(mc){ var v = a[mc[0]]; return '<div class="mic-l"><span>' + mc[1] + '</span>' + (typeof v === "number" ? '<b>' + (mc[2] === "mg" ? miles(v * f) : String(r1(v * f)).replace(".", ",")) + ' ' + mc[2] + '</b><small>' + Math.round(v * f / metaMicro(mc[0]) * 100) + '% del día</small>' : '<b class="sd">sin dato</b><small></small>') + '</div>'; }).join("") + '</div>';
+   '<div class="vitc-det">' + MICROS.map(function(mc){ var v = a[mc[0]]; return '<div class="mic-l"><span>' + mc[1] + '</span>' + (typeof v === "number" ? '<b>' + (mc[2] === "mg" ? miles(v * f) : String(r1(v * f)).replace(".", ",")) + ' ' + mc[2] + '</b><small>' + Math.round(v * f / metaMicro(mc[0]) * 100) + (mc[3] ? '% del máximo' : '% del día') + '</small>' : '<b class="sd">sin dato</b><small></small>') + '</div>'; }).join("") + '</div>';
  }
  pintar();
  if(conSellos) pintarSellos(a, esLiq);
@@ -2515,7 +2517,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101302", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101601", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

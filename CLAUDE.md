@@ -1653,6 +1653,13 @@ probado: ella se activó desde el mesón y entró a la app).
   Lo anotado antes (o guardado en favoritas/recientes) sin esos datos se completa solo desde la
   lista por nombre (`microDe`/`completarMicros`, ajustado a 100 g o a la unidad), caso
   «tengo pimentón y no me marca» (10-10-2026).
+  **Azúcar y sodio (16-10-2026, pedido de la dueña: "cuánta azúcar consumo y el tope"):** mismo
+  sistema con `window.NUTRI_AZU` (g de azúcares totales) y `window.NUTRI_NA` (mg) por porción para
+  toda la lista (aproximados USDA/etiquetas); los productos de Open Food Facts ya traían `az`/`na`
+  por 100 g. En `MICROS` van marcados como **tope** (4.º campo `1`): «TOPE», barra roja y «⚠️ Te
+  pasaste del máximo recomendado» al pasarse; el detalle dice «% del máximo». Topes OMS en
+  `metaMicro`: azúcar 10 % de la meta de calorías ÷ 4 (≈50 g en 2.000 kcal, mínimo 25 g) y sodio
+  2.000 mg. Al agregar un alimento nuevo, sumarlo también a esas dos tablas.
 - **Tema oscuro por defecto (10-10-2026, la dueña vio la prueba y dijo «quiero todas»):**
   `nutri-oscuro.css` va después de `nutri-claro.css` y actúa con `<html class="oscuro">`; un
   script en el `<head>` lo pone antes de pintar según `wgymnutri_tema_v1` (por defecto
