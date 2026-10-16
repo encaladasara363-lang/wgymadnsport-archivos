@@ -1,0 +1,33 @@
+{
+  "titulo": "ELEVACIÓN DE TALONES",
+  "series": "3 × 12-15",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [
+        40,
+        0,
+        657,
+        1168
+      ],
+      "repetir": 1,
+      "nota": "Segundo video de Grok (se queda sobre la plataforma, solo mueven los talones). Pantorrillas en rojo.",
+      "musculo": [
+        [
+          362,
+          728,
+          50,
+          82
+        ],
+        [
+          470,
+          734,
+          50,
+          82
+        ]
+      ]
+    }
+  ]
+}
