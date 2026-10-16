@@ -26,9 +26,12 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 7. Remo frontal — ✅ video aprobado el 16-10-2026 (`mujer/remo-frontal`, 3 × 10-12): máquina n.º 23 de la terraza (remo sentado con discos y
    apoyo de pecho; `maquinas-wgymadnsport/mujer/remo-frontal/fuentes/maquina-23.jpg`). Referencia: video
    de TikTok (no se sube). Video de Grok (la imagen es su primer cuadro); dorsal en rojo sobre el costado del top.
-8. Press militar — en curso (16-10-2026): máquina n.º 15 de la terraza (press de hombros con discos;
+8. Press militar — ✅ video aprobado el 16-10-2026 (`mujer/press-militar`, 3 × 8-10): máquina n.º 15 de la terraza (press de hombros con discos;
    `maquinas-wgymadnsport/mujer/press-militar/fuentes/maquina-15.jpg`). Referencia: video de TikTok (no se
-   sube). Video de Grok armado (imagen = su primer cuadro), deltoides en rojo; en revisión.
+   sube). Video de Grok armado (imagen = su primer cuadro), deltoides en rojo.
+9. Extensión de tríceps en polea — en curso (16-10-2026): máquina n.º 20 (polea doble, primer piso;
+   `maquinas-wgymadnsport/mujer/extension-triceps-polea/fuentes/maquina-20.jpg`). Referencia: video de
+   TikTok (no se sube). Falta: foto con la modelo en ChatGPT y video con Grok.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
