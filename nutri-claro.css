@@ -588,3 +588,11 @@ details.compras .btn.sec{background:#141416 !important;border-color:#141416 !imp
 /* Casillero de búsqueda en amarillo (13-10-2026, la dueña: se confundía con el de «¿A qué comida?»). */
 body #agrQ#agrQ{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #D4AF37 !important; }
 body #agrQ#agrQ::placeholder{ color:#5A4A10 !important; -webkit-text-fill-color:#5A4A10 !important; opacity:1; }
+
+/* Azúcar y sodio como tope (16-10-2026): barras propias y en rojo al pasarse */
+.vitc-hoy .barra.az i{background:linear-gradient(90deg,#F48FB1,#C2185B) !important}
+.vitc-hoy .barra.na i{background:linear-gradient(90deg,#90A4AE,#455A64) !important}
+.vitc-hoy .mic-h.pasado .barra i{background:linear-gradient(90deg,#FF5252,#E30613) !important}
+.vitc-hoy .tope-aviso{display:block;margin-top:2px}
+html body .vitc-hoy .mic-h small.tope-aviso{color:#E30613 !important}
+.vitc-hoy .mic-h.tope .fila b{white-space:nowrap}
