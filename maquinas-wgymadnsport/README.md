@@ -59,3 +59,4 @@ Para armar o rehacer un video:
 | Curl femoral a una pierna (de pie, máquina n.º 8 del 2.º piso) | — | ✅ `mujer/curl-femoral-de-pie` (Grok, 14-10-2026) | 3 × 10-12 |
 | Elevación lateral con discos | — | ✅ `mujer/elevacion-lateral-discos` | 3 × 12 |
 | Curl de bíceps con discos | — | ✅ `mujer/curl-biceps-discos` | 3 × 15 |
+| Extensión de cuádriceps (máquina n.º 1) | — | ✅ `mujer/extension-cuadriceps` (Grok, 16-10-2026) | 3 × 12-15 |
