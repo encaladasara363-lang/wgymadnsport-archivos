@@ -1,0 +1,20 @@
+{
+  "titulo": "PRESS DE PECHO SENTADO",
+  "series": "3 × 10-12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [
+        40,
+        0,
+        657,
+        1168
+      ],
+      "repetir": 1,
+      "nota": "Máquina n.º 14. Pendiente: el intento 1 de Grok (fuentes/intento1-grok-press-hombros.mp4) hizo un press de hombros; falta un video que empuje hacia adelante. Pecho en rojo sobre el top negro (solo_piel false).",
+      "musculo": []
+    }
+  ]
+}
