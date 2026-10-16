@@ -21,7 +21,8 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    el aire fuera del borde de la plataforma). Video con Grok (2.º intento) aprobado. **Día 1 completo.**
 6. Press de pecho sentado — en curso (16-10-2026): máquina n.º 14 de la terraza (press inclinado
    tipo hammer, con discos; `maquinas-wgymadnsport/mujer/press-pecho-sentado/fuentes/maquina-14.jpg`).
-   Referencia: video de TikTok (no se sube). Falta: foto con la modelo en ChatGPT y video con Grok.
+   Referencia: video de TikTok (no se sube). Foto con la modelo lista (`imagen.jpg`, manillas a la
+   altura del pecho). Falta: video con Grok.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
