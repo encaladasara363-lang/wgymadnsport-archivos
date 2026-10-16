@@ -14,7 +14,10 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 4. Extensión de cuádriceps — ✅ video listo el 16-10-2026 (3 × 12-15, como la rutina): la dueña mandó la foto de la máquina n.º 1
    (`maquinas-wgymadnsport/mujer/extension-cuadriceps/fuentes/maquina-1.jpg`). Foto con la modelo lista (ChatGPT,
    `imagen.jpg`, rodillo sobre el tobillo). Video con Grok listo; reemplaza la foto del n.º 4 en la vista previa.
-5. Siguiente ejercicio — pendiente.
+5. Elevación de talones — en curso (16-10-2026): de pie en la máquina de pantorrilla con
+   hombreras de la terraza (`maquinas-wgymadnsport/mujer/elevacion-talones-de-pie/fuentes/maquina.jpg`).
+   La referencia fue un video de TikTok (animación 3D de pantorrillas): no se sube al repo.
+   Falta: foto con la modelo en ChatGPT y video con Grok.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
