@@ -60,3 +60,4 @@ Para armar o rehacer un video:
 | Elevación lateral con discos | — | ✅ `mujer/elevacion-lateral-discos` | 3 × 12 |
 | Curl de bíceps con discos | — | ✅ `mujer/curl-biceps-discos` | 3 × 15 |
 | Extensión de cuádriceps (máquina n.º 1) | — | ✅ `mujer/extension-cuadriceps` (Grok, 16-10-2026) | 3 × 12-15 |
+| Elevación de talones de pie (máquina con hombreras, terraza) | — | ✅ `mujer/elevacion-talones-de-pie` (Grok, 16-10-2026) | 3 × 12-15 |
