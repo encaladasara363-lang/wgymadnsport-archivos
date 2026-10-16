@@ -1,0 +1,33 @@
+{
+  "titulo": "EXTENSIÓN DE CUÁDRICEPS",
+  "series": "3 × 12-15",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [
+        40,
+        0,
+        657,
+        1168
+      ],
+      "repetir": 2,
+      "nota": "Cuádriceps parpadeando en rojo; video vertical de Grok desde imagen.jpg (máquina n.º 1)",
+      "musculo": [
+        [
+          330,
+          628,
+          78,
+          46
+        ],
+        [
+          455,
+          612,
+          78,
+          44
+        ]
+      ]
+    }
+  ]
+}
