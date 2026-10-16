@@ -1,0 +1,27 @@
+{
+  "titulo": "EXTENSIÓN DE TRÍCEPS EN POLEA",
+  "series": "3 × 12-15",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [
+        318,
+        200,
+        450,
+        800
+      ],
+      "repetir": 1,
+      "nota": "Máquina n.º 20 (polea doble, primer piso), cuerda. Video de Grok recortado más cerca. Tríceps en rojo.",
+      "musculo": [
+        [
+          388,
+          430,
+          34,
+          82
+        ]
+      ]
+    }
+  ]
+}

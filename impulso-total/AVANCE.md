@@ -31,7 +31,8 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    sube). Video de Grok armado (imagen = su primer cuadro), deltoides en rojo.
 9. Extensión de tríceps en polea — en curso (16-10-2026): máquina n.º 20 (polea doble, primer piso;
    `maquinas-wgymadnsport/mujer/extension-triceps-polea/fuentes/maquina-20.jpg`). Referencia: video de
-   TikTok (no se sube). Falta: foto con la modelo en ChatGPT y video con Grok.
+   TikTok (no se sube). Varios intentos de Grok movían el brazo entero; el último sirve (codos quietos),
+   recortado más cerca. En revisión.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
