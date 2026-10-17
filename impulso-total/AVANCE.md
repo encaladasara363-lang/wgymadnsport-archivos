@@ -46,7 +46,9 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    máquina n.º 12 (hack squat rojo de la terraza), de frente al respaldo, pies ABAJO en la base y no en la
    plataforma (como el video de la dueña). Foto con la modelo lista (`mujer/hack-inversa/imagen.jpg`).
    Video de Grok (11 s, sin bloqueo) armado con glúteos en rojo que siguen el movimiento.
-13. Extensión de glúteo a una pierna en polea — siguiente.
+13. Extensión de glúteo a una pierna — en curso (17-10-2026): la dueña lo quiere en la palanca roja de patada
+   de glúteo de la terraza (rodillo detrás de la rodilla; `mujer/patada-gluteo/fuentes/maquina.jpg`), como su
+   video de referencia (no se sube). Falta: foto con la modelo en ChatGPT y video con Grok.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
