@@ -38,7 +38,9 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    manos junto a la cara (`mujer/crunch-acostado-polea/imagen.jpg`, muchos intentos en ChatGPT). Imagen aprobada: pies contra la
    base de la columna, manos sobre la cabeza y BARRA RECTA CORTA atrapada detrás de los codos, a la altura
    de la barbilla (como el video). Video de Grok (abdomen en rojo). **Día 2 completo.**
-11. Prensa de piernas — siguiente (día 3).
+11. Prensa de piernas — en curso (17-10-2026): prensa inclinada 45° de la terraza (carro rojo con discos;
+   `maquinas-wgymadnsport/mujer/prensa-piernas/fuentes/maquina.jpg`). Falta: foto con la modelo en ChatGPT y
+   video con Grok.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
