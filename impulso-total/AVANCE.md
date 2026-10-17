@@ -68,7 +68,8 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 21. Sentadilla goblet con mancuerna (3 × 10-12) — ✅ video del 17-10-2026 (`mujer/sentadilla-goblet`, la dueña: "ahora sí"):
    talones sobre las cuñas, DE FRENTE AL ESPEJO de la terraza (`fuentes/cuñas-espejo.jpg`), sentadilla profunda
    (hubo que pedir "thighs parallel to the floor or lower"). Trabaja cuádriceps (la dueña: con talones elevados
-   trabaja cuádriceps, no glúteo). **Sin rojo**, a pedido de ella ("déjalo así no más").
+   trabaja cuádriceps, no glúteo). Primero sin rojo ("déjalo así no más"); después, a pedido de ella, cuádriceps en rojo solo en el REFLEJO del
+   espejo (`espejo_muslos`), no en la mujer.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 

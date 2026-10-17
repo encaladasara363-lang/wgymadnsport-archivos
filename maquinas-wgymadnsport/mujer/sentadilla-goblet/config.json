@@ -12,7 +12,13 @@
         "y": 120
       },
       "repetir": 1,
-      "nota": "Ejercicio 21 de Impulso Total. Talones sobre las cuñas, de frente al espejo de la terraza (pedido de la dueña), mancuerna al pecho; sentadilla profunda. Sin rojo, a pedido de la dueña (17-10-2026)."
+      "nota": "Ejercicio 21 de Impulso Total. Talones sobre las cuñas, de frente al espejo de la terraza (pedido de la dueña), mancuerna al pecho; sentadilla profunda. Cuádriceps en rojo solo en el REFLEJO del espejo (prueba pedida por la dueña, 17-10-2026).",
+      "espejo_muslos": [
+        455,
+        400,
+        605,
+        580
+      ]
     }
   ]
 }

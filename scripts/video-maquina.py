@@ -32,6 +32,9 @@ config.json:
     muslos (opcional, con short_oscuro): true pinta los muslos (cuádriceps)
       bajo el short en vez del short; los óvalos van de pie (bajo el short) a
       sentadilla (muslo hacia la rodilla) según cuánto baja el short.
+    espejo_muslos (opcional): [x0, y0, x1, y1] zona (720x1280) del short negro
+      del REFLEJO en el espejo (persona de frente); pinta sus cuádriceps: bajo
+      el short de pie y a los costados del short en sentadilla.
 
 Requiere: pip install imageio-ffmpeg pillow numpy scipy
 """
@@ -166,6 +169,38 @@ def pintar_muslos(frames, zona):
     return out
 
 
+def pintar_espejo(frames, zona):
+    x0, y0, x1, y1 = zona
+    inf = []
+    for f in frames:
+        a = np.array(f)
+        reg = np.zeros((H, W), bool)
+        reg[y0:y1, x0:x1] = a[y0:y1, x0:x1].max(2) < 55
+        reg = ndimage.binary_opening(reg, np.ones((7, 7)))
+        lab, n = ndimage.label(reg)
+        m = lab == 1 + int(np.argmax(ndimage.sum(reg, lab, range(1, n + 1))))
+        ys, xs = np.where(m)
+        inf.append((np.percentile(ys, 95), np.percentile(xs, 3), np.percentile(xs, 97), m))
+    ybs = ndimage.uniform_filter1d(np.array([v[0] for v in inf]), 5)
+    lo, hi = np.percentile(ybs, 5), np.percentile(ybs, 95)
+    out = []
+    for i, f in enumerate(frames):
+        _, xl, xr, m = inf[i]; yb = ybs[i]
+        d = float(np.clip((yb - lo) / max(hi - lo, 1), 0, 1))
+        L = lambda s, e: int(s + (e - s) * d)
+        a = np.array(f).astype(np.float32); R, G, B = a[:, :, 0], a[:, :, 1], a[:, :, 2]
+        piel = (R > 110) & (B > 60) & (R - G > 12) & (R - B > 30) & ((G - B) < 60)
+        z = np.zeros((H, W), bool)
+        z[L(yb - 5, yb - 35):L(yb + 50, yb + 12), L(xl - 5, xl - 45):L(xr + 5, xr + 45)] = True
+        q = ndimage.binary_opening(piel & z & ~ndimage.binary_dilation(m, iterations=1), np.ones((3, 3)))
+        q = ndimage.gaussian_filter(q.astype(np.float32), 1.5)
+        k = np.clip((0.3 + 0.55 * (0.5 + 0.5 * math.sin(2 * math.pi * i / 12))) * q * 1.3, 0, 0.92)
+        for c, v in enumerate((235, 20, 30)):
+            a[:, :, c] = a[:, :, c] * (1 - k) + v * k
+        out.append(Image.fromarray(a.clip(0, 255).astype('uint8')))
+    return out
+
+
 def short_rojo(fr, zona, i):
     a = np.array(fr).astype(np.float32)
     m = mancha_short(fr, zona)
@@ -205,7 +240,9 @@ def main(carpeta):
         if p.get('repetir') and n == len(cfg['partes']) - 1:
             m = len(fr) - X
             fr = [Image.blend(fr[m + i], fr[i], (i + 1) / (X + 1)) if i < X else fr[i] for i in range(m)]
-        if p.get('short_oscuro') and p.get('muslos'):
+        if p.get('espejo_muslos'):
+            fr = pintar_espejo(fr, p['espejo_muslos'])
+        elif p.get('short_oscuro') and p.get('muslos'):
             fr = pintar_muslos(fr, p['short_oscuro'])
         elif p.get('short_oscuro'):
             fr = [short_rojo(f, p['short_oscuro'], i) for i, f in enumerate(fr)]
