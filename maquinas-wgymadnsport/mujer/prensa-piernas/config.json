@@ -3,17 +3,17 @@
   "series": "3 × 8-10",
   "partes": [
     {
-      "video": "fuentes/repeticion-sin-bloqueo.mp4",
+      "video": "fuentes/ejercicio-grok-sin-bloqueo.mp4",
       "desde": 0,
-      "hasta": 1.5,
+      "hasta": 11,
       "recorte": [
         0,
         200,
         816,
         904
       ],
-      "repetir": 4,
-      "nota": "Bajada 0,35-1,10 s del video de Grok + la misma bajada al revés (subida) = repetición que nunca estira las rodillas al tope (pedido de la dueña: bloqueo articular; Grok siempre las estiraba). Cuádriceps en rojo.",
+      "repetir": 1,
+      "nota": "Video de Grok con la indicación 'NO knee lockout' (11 s): nunca estira las rodillas al tope, como pidió la dueña (bloqueo articular). Cuádriceps en rojo.",
       "musculo": [
         [
           448,
