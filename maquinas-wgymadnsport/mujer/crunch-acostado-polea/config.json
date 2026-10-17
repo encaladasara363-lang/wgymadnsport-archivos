@@ -1,0 +1,27 @@
+{
+  "titulo": "CRUNCH ABDOMINAL EN POLEA",
+  "series": "3 × 12-15",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 6,
+      "recorte": [
+        0,
+        280,
+        816,
+        824
+      ],
+      "repetir": 1,
+      "nota": "Crunch acostado en la polea n.º 20 (pies contra la base, barra recta detrás de los codos), como el video de referencia de la dueña. Video horizontal: se pega entero sobre fondo difuminado. Abdomen en rojo.",
+      "musculo": [
+        [
+          458,
+          650,
+          68,
+          40
+        ]
+      ]
+    }
+  ]
+}
