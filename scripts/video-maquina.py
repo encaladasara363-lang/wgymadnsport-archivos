@@ -29,6 +29,7 @@ config.json:
     short_oscuro (opcional): [x0, y0, x1, y1] zona (720x1280) donde está el
       short negro; en cada cuadro se busca la mancha oscura más grande y se
       pinta esa (sin 'musculo'). Sigue los glúteos aunque se muevan mucho.
+      intensidad (opcional, 1 = normal): menos de 1 deja el rojo más sutil.
     muslos (opcional, con short_oscuro): true pinta los muslos (cuádriceps)
       bajo el short en vez del short; los óvalos van de pie (bajo el short) a
       sentadilla (muslo hacia la rodilla) según cuánto baja el short.
@@ -201,7 +202,7 @@ def pintar_espejo(frames, zona):
     return out
 
 
-def short_rojo(fr, zona, i):
+def short_rojo(fr, zona, i, fuerza=1.0):
     a = np.array(fr).astype(np.float32)
     m = mancha_short(fr, zona)
     if m is None:
@@ -209,7 +210,7 @@ def short_rojo(fr, zona, i):
     ys = np.where(m.any(1))[0]
     m[:ys[0] + int(0.18 * (ys[-1] - ys[0]))] = False  # sin la pretina
     m = ndimage.gaussian_filter(m.astype(np.float32), 3)
-    k = np.clip((0.25 + 0.5 * (0.5 + 0.5 * math.sin(2 * math.pi * i / 12))) * m * 1.45, 0, 0.95)
+    k = np.clip((0.25 + 0.5 * (0.5 + 0.5 * math.sin(2 * math.pi * i / 12))) * m * 1.45 * fuerza, 0, 0.95)
     for c, v in enumerate((235, 20, 30)):
         a[:, :, c] = a[:, :, c] * (1 - k) + v * k
     return Image.fromarray(a.clip(0, 255).astype('uint8'))
@@ -245,7 +246,7 @@ def main(carpeta):
         elif p.get('short_oscuro') and p.get('muslos'):
             fr = pintar_muslos(fr, p['short_oscuro'])
         elif p.get('short_oscuro'):
-            fr = [short_rojo(f, p['short_oscuro'], i) for i, f in enumerate(fr)]
+            fr = [short_rojo(f, p['short_oscuro'], i, p.get('intensidad', 1.0)) for i, f in enumerate(fr)]
         elif p.get('musculo'):
             offs = seguir(fr, p.get('seguir'))
             fr = [musculo_rojo(f, p['musculo'], offs[i], i, p.get('solo_piel', True)) for i, f in enumerate(fr)]
