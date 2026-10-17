@@ -97,3 +97,7 @@ discos no tiene lugar en la rutina todavía.
    mancuerna sobre la cadera, cámara en diagonal desde los pies. Grok le puso los pies sobre un disco.
    Glúteo en rojo chico sobre el short (`musculo_kf` cada 3 cuadros, ubicado donde el muslo se junta con el glúteo,
    porque la cámara se mueve; `solo_piel: "todo"`, intensidad 0.6). La primera versión "se movía mucho". **Aprobado.**
+
+25. Subida a banco (3 × 10 por lado) — en preparación (17-10-2026): la dueña la quiere como **step-up en polea**
+   (polea doble n.º 20, `mujer/patada-gluteo-polea/fuentes/maquina-20.jpg`): step al centro, una manilla de cada
+   polea baja en cada mano, de frente a la cámara (así las dos pilas se mueven y está bien).
