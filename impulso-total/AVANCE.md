@@ -35,7 +35,9 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    recortado más cerca.
 10. Crunch abdominal en polea — en curso (16-10-2026): la dueña lo quiere ACOSTADA como su video de
    referencia (TikTok, no se sube): pies hacia la polea n.º 20, cable por encima de las piernas hasta las
-   manos junto a la cara (`mujer/crunch-acostado-polea/imagen.jpg`, varios intentos en ChatGPT). Falta: video con Grok.
+   manos junto a la cara (`mujer/crunch-acostado-polea/imagen.jpg`, muchos intentos en ChatGPT). Imagen aprobada: pies contra la
+   base de la columna, manos sobre la cabeza y BARRA RECTA CORTA atrapada detrás de los codos, a la altura
+   de la barbilla (como el video). Falta: video con Grok.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
