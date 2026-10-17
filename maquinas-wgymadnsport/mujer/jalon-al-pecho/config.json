@@ -1,0 +1,38 @@
+{
+  "titulo": "JALÓN AL PECHO",
+  "series": "3 × 8-10",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 11,
+      "encaje": {
+        "alto": 910,
+        "x": 0,
+        "y": 140
+      },
+      "repetir": 1,
+      "nota": "Ejercicio 17 de Impulso Total. Máquina n.º 24 de la terraza (jalón tipo Hammer con discos), vista de espaldas.",
+      "musculo": [
+        [
+          418,
+          555,
+          28,
+          52
+        ],
+        [
+          520,
+          555,
+          28,
+          52
+        ]
+      ],
+      "seguir": [
+        255,
+        305,
+        195,
+        275
+      ]
+    }
+  ]
+}
