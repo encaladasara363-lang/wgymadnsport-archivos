@@ -55,8 +55,11 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    más repeticiones"; "dejemos ese video"); glúteo en rojo sobre el short.
 16. Press de pecho con mancuernas en banco — ✅ video aprobado el 17-10-2026 (`mujer/press-pecho-mancuernas`, 3 × 10-12):
    banco plano de la terraza (`fuentes/banco-plano.jpg`), video de Grok, pecho en rojo.
-17. Jalón al pecho (3 × 8-10) — en curso: máquina n.º 24 de la terraza (jalón con discos, barra roja arriba;
-   `mujer/jalon-al-pecho/fuentes/maquina-24.jpg`).
+17. Jalón al pecho (3 × 8-10) — ✅ video aprobado el 17-10-2026 (`mujer/jalon-al-pecho`): máquina n.º 24 de la terraza
+   (jalón tipo Hammer con discos; `fuentes/maquina-24.jpg`), vista de espaldas como la referencia de TikTok (no se
+   sube). Video de Grok, dorsales en rojo.
+18. Face pull en polea (3 × 12-15) — en curso: polea n.º 20 (`mujer/extension-triceps-polea/fuentes/maquina-20.jpg`),
+   sentada, de espaldas a la cámara, cuerda a la cara con los codos altos (referencia de TikTok, no se sube).
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
