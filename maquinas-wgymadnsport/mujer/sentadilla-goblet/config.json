@@ -13,20 +13,11 @@
       },
       "repetir": 1,
       "nota": "Ejercicio 21 de Impulso Total. Talones sobre las cuñas, de frente al espejo de la terraza (pedido de la dueña), mancuerna al pecho; sentadilla profunda.",
-      "musculo": [
-        [
-          218,
-          530,
-          48,
-          34
-        ]
-      ],
-      "solo_piel": false,
-      "seguir": [
-        230,
-        300,
-        70,
-        150
+      "short_oscuro": [
+        40,
+        380,
+        360,
+        820
       ]
     }
   ]

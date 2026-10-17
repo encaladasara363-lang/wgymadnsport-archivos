@@ -26,6 +26,9 @@ config.json:
       "todo" pinta piel y ropa por igual,
     seguir (opcional): [y0, y1, x0, x1] zona con textura a media
       resolución para seguir el movimiento del músculo.
+    short_oscuro (opcional): [x0, y0, x1, y1] zona (720x1280) donde está el
+      short negro; en cada cuadro se busca la mancha oscura más grande y se
+      pinta esa (sin 'musculo'). Sigue los glúteos aunque se muevan mucho.
 
 Requiere: pip install imageio-ffmpeg pillow numpy scipy
 """
@@ -118,6 +121,26 @@ def musculo_rojo(fr, ovalos, off, i, solo_piel=True):
     return Image.fromarray(a.clip(0, 255).astype('uint8'))
 
 
+def short_rojo(fr, zona, i):
+    x0, y0, x1, y1 = zona
+    a = np.array(fr).astype(np.float32)
+    reg = np.zeros((H, W), bool)
+    reg[y0:y1, x0:x1] = a[y0:y1, x0:x1].max(2) < 60
+    reg = ndimage.binary_opening(reg, np.ones((17, 17)))
+    lab, n = ndimage.label(reg)
+    if not n:
+        return fr
+    m = lab == 1 + int(np.argmax(ndimage.sum(reg, lab, range(1, n + 1))))
+    m = ndimage.binary_fill_holes(m)
+    ys = np.where(m.any(1))[0]
+    m[:ys[0] + int(0.18 * (ys[-1] - ys[0]))] = False  # sin la pretina
+    m = ndimage.gaussian_filter(m.astype(np.float32), 3)
+    k = np.clip((0.25 + 0.5 * (0.5 + 0.5 * math.sin(2 * math.pi * i / 12))) * m * 1.45, 0, 0.95)
+    for c, v in enumerate((235, 20, 30)):
+        a[:, :, c] = a[:, :, c] * (1 - k) + v * k
+    return Image.fromarray(a.clip(0, 255).astype('uint8'))
+
+
 def capa_marca(titulo, series):
     capa = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(capa)
     for y in range(1060, H):
@@ -143,7 +166,9 @@ def main(carpeta):
         if p.get('repetir') and n == len(cfg['partes']) - 1:
             m = len(fr) - X
             fr = [Image.blend(fr[m + i], fr[i], (i + 1) / (X + 1)) if i < X else fr[i] for i in range(m)]
-        if p.get('musculo'):
+        if p.get('short_oscuro'):
+            fr = [short_rojo(f, p['short_oscuro'], i) for i, f in enumerate(fr)]
+        elif p.get('musculo'):
             offs = seguir(fr, p.get('seguir'))
             fr = [musculo_rojo(f, p['musculo'], offs[i], i, p.get('solo_piel', True)) for i, f in enumerate(fr)]
         vuelta = list(fr)
