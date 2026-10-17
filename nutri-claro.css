@@ -599,3 +599,6 @@ html body .vitc-hoy .mic-h small.tope-aviso{color:#E30613 !important}
 .vitc-hoy .mic-h.medio .barra i{background:linear-gradient(90deg,#FFC94D,#F39C12) !important}
 .vitc-hoy .az-ideal,.vitc-hoy .tope-medio{display:block;margin-top:2px}
 html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
+
+/* Botón ✏️ Editar junto al basurero (17-10-2026) */
+.item .ed{background:none;border:0;font-size:22px;padding:4px 6px;cursor:pointer;line-height:1}

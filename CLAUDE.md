@@ -1619,6 +1619,9 @@ probado: ella se activó desde el mesón y entró a la app).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
   escaneados los botones muestran gramos (ej. 17 g · 34 g · 68 g · 100 g) en vez de
   «½ porción · 1 porción · 2 porciones».
+- **✏️ Editar un alimento anotado (17-10-2026, la dueña: "tengo que borrar la comida y agregarla de nuevo"):** cada
+  alimento de «Hoy» (comidas y energéticas) trae ✏️ junto al 🗑; `editarItem` abre una hoja con el cuadro grande de
+  cantidad (gramos/ml si `it.gr`, si no unidades o porciones), muestra kcal y macros al escribir y guarda en `it.x`.
 - **Casillero de búsqueda en amarillo (13-10-2026, la dueña: se confundía con «¿A qué comida?»):** `#agrQ` va con fondo amarillo y letra negra en los dos temas (al final de `nutri-claro.css` y `nutri-oscuro.css`).
 - **Toda la app en MAYÚSCULAS, cursiva y negrita (10-10-2026, pedido de la dueña):** al
   final de `nutri-claro.css` (`text-transform:uppercase; font-style:italic;
