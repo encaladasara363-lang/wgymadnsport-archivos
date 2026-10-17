@@ -1,0 +1,38 @@
+{
+  "titulo": "FACE PULL EN POLEA",
+  "series": "3 × 12-15",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok-placas-fijas.mp4",
+      "desde": 0,
+      "hasta": 11,
+      "encaje": {
+        "alto": 974,
+        "x": 0,
+        "y": 120
+      },
+      "repetir": 1,
+      "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, sentada de espaldas. Las placas de la columna izquierda se quedan quietas (parche del primer cuadro: x150-258, y318-560 de la fuente), a pedido de la dueña.",
+      "musculo": [
+        [
+          372,
+          615,
+          40,
+          30
+        ],
+        [
+          465,
+          642,
+          30,
+          30
+        ]
+      ],
+      "seguir": [
+        290,
+        340,
+        165,
+        250
+      ]
+    }
+  ]
+}
