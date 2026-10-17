@@ -1874,7 +1874,12 @@ function detalle(a){
     lata o botella en ml, sin el cuadro de láminas. */
  var esLiq = esGr && (a.ml || /\bml\b/i.test(a.porcTxt || "") || agr.comida === "bebidas" || a.cat === CAT_BEB);
  if(esLiq){ if(!a.porcG && a.envaseG) a = Object.assign({}, a, { porcG:Math.round(a.envaseG) }); a = Object.assign({}, a, { ml:true }); }
- var envase = /powerade|gatorade|electrolit|hydration|agua|isot[oó]nic/i.test(a.n + " " + (a.marca || "")) ? "botella" : "lata";
+ /* Envase según el producto (17-10-2026, la dueña escaneó una leche: "no debería aparecer lata si es leche"):
+    leche, jugo, néctar y batidos en caja; agua e isotónicas en botella; energéticas y bebidas en lata. */
+ var nomEnv = a.n + " " + (a.marca || "");
+ var envase = /leche|milk|jugo|n[eé]ctar|batido|bebible|cultivad|chocolatad|kefir|k[eé]fir|avena|almendra|soya|protein\+|yogur/i.test(nomEnv) ? "caja"
+  : /powerade|gatorade|electrolit|hydration|agua|isot[oó]nic|kombucha|t[eé] helado/i.test(nomEnv) ? "botella"
+  : /monster|red ?bull|score|burn|rockstar|prime|celsius|bang|energ|cola|pepsi|sprite|fanta|bilz|pap|kem|cerveza|t[oó]nica|bebida/i.test(nomEnv) || agr.comida === "bebidas" ? "lata" : "envase";
  /* El cuadro de láminas/envase solo para lo que viene en láminas, rebanadas o unidades
     (10-10-2026, la dueña escaneó un yogur: "no quiero ese aviso"). Yogur y postres: por pote. */
  var nomAl = normName(a.n + " " + (a.marca || "") + " " + (a.porcTxt || "")).toLowerCase();
@@ -2519,7 +2524,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101603", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101701", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
