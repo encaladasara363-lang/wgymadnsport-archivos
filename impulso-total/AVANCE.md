@@ -96,4 +96,4 @@ discos no tiene lugar en la rutina todavía.
    (`mujer/puente-gluteos/fuentes/colchoneta-azul.jpg`); referencia de TikTok (solo guía, no se sube): puente con una
    mancuerna sobre la cadera, cámara en diagonal desde los pies. Grok le puso los pies sobre un disco.
    Glúteo en rojo chico sobre el short (`musculo_kf` cada 3 cuadros, ubicado donde el muslo se junta con el glúteo,
-   porque la cámara se mueve; `solo_piel: "todo"`, intensidad 0.6). La primera versión "se movía mucho".
+   porque la cámara se mueve; `solo_piel: "todo"`, intensidad 0.6). La primera versión "se movía mucho". **Aprobado.**
