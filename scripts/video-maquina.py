@@ -22,7 +22,8 @@ config.json:
     encaje (opcional): {"alto", "x", "y"} pega la fuente (ya recortada) con ese
       alto, sin deformarla, en esa posición sobre su fondo difuminado,
     musculo (opcional): [[cx, cy, rx, ry], ...] óvalos en px de 720x1280,
-    solo_piel (opcional, true): false si el músculo está bajo ropa oscura (glúteos): pinta solo lo oscuro,
+    solo_piel (opcional, true): false si el músculo está bajo ropa oscura (glúteos): pinta solo lo oscuro;
+      "todo" pinta piel y ropa por igual,
     seguir (opcional): [y0, y1, x0, x1] zona con textura a media
       resolución para seguir el movimiento del músculo.
 
@@ -99,7 +100,10 @@ def seguir(frames, zona):
 def musculo_rojo(fr, ovalos, off, i, solo_piel=True):
     a = np.array(fr).astype(np.float32)
     R, G, B = a[:, :, 0], a[:, :, 1], a[:, :, 2]
-    piel = ((R > 85) & (G > 45) & (B > 25) & (R - G > 12) & (R - B > 22)) if solo_piel else ((R + G + B) / 3 < 75)  # ropa oscura
+    if solo_piel == 'todo':  # pinta piel y ropa por igual (espalda con peto, face pull)
+        piel = np.ones((H, W), bool)
+    else:
+        piel = ((R > 85) & (G > 45) & (B > 25) & (R - G > 12) & (R - B > 22)) if solo_piel else ((R + G + B) / 3 < 75)  # ropa oscura
     yy, xx = np.mgrid[0:H, 0:W]
     m = np.zeros((H, W), np.float32)
     for cx, cy, rx, ry in ovalos:
@@ -107,6 +111,8 @@ def musculo_rojo(fr, ovalos, off, i, solo_piel=True):
         m = np.maximum(m, np.clip(1.3 - e, 0, 1))
     m = ndimage.gaussian_filter(m * piel, 4)
     k = (0.25 + 0.5 * (0.5 + 0.5 * math.sin(2 * math.pi * i / 12))) * m
+    if solo_piel == 'todo':  # sobre ropa negra el rojo se pierde: más fuerte
+        k = np.clip(k * 1.45, 0, 0.95)
     for c, v in enumerate((235, 20, 30)):
         a[:, :, c] = a[:, :, c] * (1 - k) + v * k
     return Image.fromarray(a.clip(0, 255).astype('uint8'))

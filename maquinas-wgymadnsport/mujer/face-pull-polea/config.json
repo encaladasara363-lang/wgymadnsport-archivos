@@ -15,16 +15,16 @@
       "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, cámara atrás y un poco a la izquierda; ella de frente a la polea roja (sin cuerda atravesando la cabeza) y la otra columna tapada. Aprobado por la dueña el 17-10-2026 («por fin»).",
       "musculo": [
         [
-          442,
-          500,
+          460,
+          511,
           40,
-          48
+          40
         ],
         [
-          548,
-          490,
+          563,
+          495,
           32,
-          44
+          34
         ]
       ],
       "seguir": [
@@ -32,7 +32,8 @@
         270,
         160,
         300
-      ]
+      ],
+      "solo_piel": "todo"
     }
   ]
 }
