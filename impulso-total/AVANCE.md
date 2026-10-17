@@ -85,9 +85,9 @@ discos no tiene lugar en la rutina todavía.
    step, con la referencia de una "sentadilla split con mancuernas" con el pie de adelante elevado (video de
    TikTok, solo guía, no se sube). Trabaja cuádriceps (la dueña): rojo chico solo en el muslo del REFLEJO del espejo, marcado a mano cada 6
    cuadros (`musculo_kf`; "no tan marcado ni tan grandote"). Imagen a todo el ancho (`encaje` alto 1264, y −90),
-   sin franjas difuminadas a los costados (la dueña: "quisiera imagen completa").
+   sin franjas difuminadas a los costados (la dueña: "quisiera imagen completa"). **Aprobado.**
 
 23. Peso muerto sumo con mancuerna (3 × 10-12) — ✅ video del 17-10-2026 (`mujer/peso-muerto-sumo`, Grok): plataforma roja de sumo con dos
    apoyos (`mujer/peso-muerto-sumo/fuentes/plataforma-sumo.jpg`); la mujer DE FRENTE a la cámara, con UNA
    mancuerna (pedido de la dueña). El video de ejemplo que mandó es de una persona del gimnasio: no se sube.
-   Imagen completa; aductores (parte interna del muslo) en rojo chico con `musculo_kf` (dos óvalos).
+   Imagen completa; aductores (parte interna del muslo) en rojo chico con `musculo_kf` (dos óvalos). **Aprobado.**
