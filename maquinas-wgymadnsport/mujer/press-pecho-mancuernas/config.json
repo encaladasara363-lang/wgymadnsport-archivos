@@ -1,0 +1,39 @@
+{
+  "titulo": "PRESS DE PECHO CON MANCUERNAS",
+  "series": "3 × 10-12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 11,
+      "recorte": [
+        0,
+        0,
+        768,
+        1000
+      ],
+      "encaje": {
+        "alto": 937,
+        "x": 0,
+        "y": 140
+      },
+      "repetir": 1,
+      "nota": "Ejercicio 16 de Impulso Total. Banco plano de la terraza (fuentes/banco-plano.jpg).",
+      "musculo": [
+        [
+          275,
+          632,
+          50,
+          26
+        ]
+      ],
+      "solo_piel": false,
+      "seguir": [
+        295,
+        340,
+        105,
+        175
+      ]
+    }
+  ]
+}
