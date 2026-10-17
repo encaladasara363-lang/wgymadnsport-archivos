@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=56">
+<link rel="stylesheet" href="nutri-claro.css?v=57">
 <link rel="stylesheet" href="nutri-oscuro.css?v=13">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -1518,7 +1518,7 @@ function renderHoy(){
  comidasVisibles(x).forEach(function(cm){
   var its = x.c[cm[0]] || [], kc = its.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
   h += '<div class="card comida-card"><div class="cab"><h3>' + cm[1] + ' ' + cm[2] + ' <span class="hora-com">' + horaDe(cm[0]) + '</span></h3><small>' + (its.length ? miles(kc) + " kcal" : "") + '</small></div>';
-  its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
+  its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="ed" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Editar ' + esc(it.n) + '">✏️</button><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
   var ay = diaDe(sumaDias(diaSel, -1)).c[cm[0]] || [];
   if(!its.length && ay.length) h += '<button type="button" class="rep-ay" data-rep="' + cm[0] + '">🔁 Repetir lo de ayer · ' + ay.length + (ay.length === 1 ? ' alimento' : ' alimentos') + ' · ' + miles(ay.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0)) + ' kcal</button>';
   /* «Guardar como plato» y «Copiar a otro día» (11-10-2026, pedido de la dueña). */
@@ -1528,7 +1528,7 @@ function renderHoy(){
  var bebs = x.c.bebidas || [], kb = bebs.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
  h += '<div class="card bebidas-card"><div class="cab"><h3>⚡ Energéticas</h3><small>' + (bebs.length ? miles(kb) + " kcal" : "") + '</small></div>' +
   '<p class="muted" style="font-size:15px;margin:0 0 10px">Monster, Score, Red Bull, Burn, Powerade y más.</p>';
- bebs.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="x" data-m="bebidas" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
+ bebs.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="ed" data-m="bebidas" data-j="' + j + '" aria-label="Editar ' + esc(it.n) + '">✏️</button><button type="button" class="x" data-m="bebidas" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
  h += '<div class="beb-bts"><button type="button" class="btn rojo" id="bebScan">📷 Escanear energética</button><button type="button" class="add-l" id="bebBus">🔎 Buscar energética</button></div></div>';
  if(!estaInstalada() && !DENTRO_TARJETA && !lsGet(CLAVE_INST, false)) h += '<div class="aviso" style="background:#160c0d;border-color:#5a1a1f"><span class="e">📲</span><p><b>Pon WGYMNUTRI en tu pantalla de inicio</b><br><span class="muted" style="font-size:14px">Ábrela con un toque, como cualquier app.</span></p><button type="button" id="instIr" class="btn rojo chico" style="width:auto">Instalar</button></div>';
  var box = $("tabHoy"); box.innerHTML = h;
@@ -1576,6 +1576,7 @@ function renderHoy(){
  box.querySelectorAll(".scan-c").forEach(function(b){ b.onclick = function(){ abrirAgregar(b.dataset.m, "escanear"); }; });
  $("bebScan").onclick = function(){ abrirAgregar("bebidas", "escanear"); };
  $("bebBus").onclick = function(){ agr.q = ""; abrirAgregar("bebidas", "buscar"); };
+ box.querySelectorAll(".item .ed").forEach(function(b){ b.onclick = function(){ editarItem(b.dataset.m, +b.dataset.j); }; });
  box.querySelectorAll(".item .x").forEach(function(b){ b.onclick = function(){
   var xx = diaDe(diaSel); xx.c[b.dataset.m].splice(+b.dataset.j, 1); setDia(diaSel, xx); guardar(); renderHoy(); $("rachaNum").textContent = racha();
  }; });
@@ -1583,6 +1584,28 @@ function renderHoy(){
  seguroN_(pintarSaludo);
 }
 function seguroN_(f){ try{ f(); }catch(e){} }
+/* ✏️ Editar cantidad de un alimento ya anotado (17-10-2026, la dueña: "a veces tengo que cambiar los gramos
+   y tengo que borrar la comida y agregarla de nuevo"). En gramos/ml se escribe el total; si no, cuántas unidades
+   o porciones. Las calorías y macros se recalculan solas (it.x). */
+function editarItem(m, j){
+ var xx = diaDe(diaSel), it = (xx.c[m] || [])[j]; if(!it) return;
+ var u1 = !it.gr && String(it.p || "").match(/^1 (\S+)(.*)$/), mult = it.x || 1;
+ var etiqueta = it.gr ? (it.ml ? "¿Cuántos ml tomaste?" : "¿Cuántos gramos?") : u1 ? "Cantidad de " + plural(u1[1], 2) : "¿Cuántas porciones? (1 porción = " + it.p + ")";
+ var val = it.gr ? Math.round(it.gr * mult) : mult;
+ abrirHoja('<div class="cab"><h3>✏️ Editar</h3><button type="button" class="chip" id="edCerrar">Cerrar</button></div>' +
+  '<p style="font-size:19px;margin:4px 0 12px"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b></p>' +
+  '<div class="campo cant-box"><label for="edCant">' + esc(etiqueta) + '</label>' +
+  '<input class="inp cant-inp" id="edCant" type="text" inputmode="decimal" autocomplete="off" value="' + String(val).replace(".", ",") + '"></div>' +
+  '<p class="muted center" id="edRes" style="font-size:18px;margin:10px 0"></p>' +
+  '<button type="button" class="btn rojo" id="edOk">✅ Guardar cambio</button>');
+ function leer(){ var v = parseFloat(String($("edCant").value).replace(",", ".")); return v > 0 ? v : 0; }
+ function pinta(){ var v = leer(), f = it.gr ? v / it.gr : v; $("edRes").textContent = v ? miles(it.k * f) + " kcal · P " + r1(it.pr * f) + " · C " + r1(it.c * f) + " · G " + r1(it.g * f) : "Escribe la cantidad"; $("edOk").disabled = !v; }
+ $("edCant").oninput = pinta; pinta();
+ $("edCerrar").onclick = cerrarHoja;
+ $("edOk").onclick = function(){ var v = leer(); if(!v) return; var y = diaDe(diaSel), t = (y.c[m] || [])[j]; if(!t) return cerrarHoja();
+  t.x = Math.round((it.gr ? v / it.gr : v) * 1000) / 1000; setDia(diaSel, y); guardar(); cerrarHoja(); vibrar(15); renderHoy(); };
+ setTimeout(function(){ try{ $("edCant").focus(); $("edCant").select(); }catch(e){} }, 150);
+}
 function porcionTxt(it){ var m = it.x || 1, u1 = !it.gr && String(it.p || "").match(/^1 (\S+)(.*)$/);
  if(u1 && m === Math.round(m) && m > 1) return m + " " + plural(u1[1], m) + u1[2];
  return it.gr ? Math.round(it.gr * m) + (it.ml ? " ml" : " g") : (m === 1 ? it.p : (m === 0.5 ? "½" : String(m).replace(".", ",")) + " × " + it.p); }
@@ -2527,7 +2550,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101702", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101703", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
