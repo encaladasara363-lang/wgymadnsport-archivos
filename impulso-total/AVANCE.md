@@ -84,4 +84,5 @@ discos no tiene lugar en la rutina todavía.
    al espejo (`mujer/zancadas-mancuernas/fuentes/terraza-espejo-cunas.jpg`), sacando las cuñas y poniendo un
    step, con la referencia de una "sentadilla split con mancuernas" con el pie de adelante elevado (video de
    TikTok, solo guía, no se sube). Trabaja cuádriceps (la dueña): rojo chico solo en el muslo del REFLEJO del espejo, marcado a mano cada 6
-   cuadros (`musculo_kf`; "no tan marcado ni tan grandote").
+   cuadros (`musculo_kf`; "no tan marcado ni tan grandote"). Imagen a todo el ancho (`encaje` alto 1264, y −90),
+   sin franjas difuminadas a los costados (la dueña: "quisiera imagen completa").
