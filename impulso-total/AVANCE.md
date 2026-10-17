@@ -67,7 +67,8 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    tiene el uso semanal de Grok casi agotado (se renueva el jueves 22-10 a las 8:47).
 21. Sentadilla goblet con mancuerna (3 × 10-12) — ✅ video del 17-10-2026 (`mujer/sentadilla-goblet`, la dueña: "ahora sí"):
    talones sobre las cuñas, DE FRENTE AL ESPEJO de la terraza (`fuentes/cuñas-espejo.jpg`), sentadilla profunda
-   (hubo que pedir "thighs parallel to the floor or lower"). Glúteos en rojo.
+   (hubo que pedir "thighs parallel to the floor or lower"). Cuádriceps en rojo (la dueña: con talones elevados
+   trabaja cuádriceps, no glúteo); el rojo sigue los muslos cuadro a cuadro con `short_oscuro` + `muslos`.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 

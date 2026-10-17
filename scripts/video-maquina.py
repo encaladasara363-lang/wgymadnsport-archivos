@@ -29,6 +29,9 @@ config.json:
     short_oscuro (opcional): [x0, y0, x1, y1] zona (720x1280) donde está el
       short negro; en cada cuadro se busca la mancha oscura más grande y se
       pinta esa (sin 'musculo'). Sigue los glúteos aunque se muevan mucho.
+    muslos (opcional, con short_oscuro): true pinta los muslos (cuádriceps)
+      bajo el short en vez del short; los óvalos van de pie (bajo el short) a
+      sentadilla (muslo hacia la rodilla) según cuánto baja el short.
 
 Requiere: pip install imageio-ffmpeg pillow numpy scipy
 """
@@ -121,17 +124,53 @@ def musculo_rojo(fr, ovalos, off, i, solo_piel=True):
     return Image.fromarray(a.clip(0, 255).astype('uint8'))
 
 
-def short_rojo(fr, zona, i):
+def mancha_short(fr, zona):
     x0, y0, x1, y1 = zona
-    a = np.array(fr).astype(np.float32)
+    a = np.array(fr)
     reg = np.zeros((H, W), bool)
     reg[y0:y1, x0:x1] = a[y0:y1, x0:x1].max(2) < 60
     reg = ndimage.binary_opening(reg, np.ones((17, 17)))
     lab, n = ndimage.label(reg)
     if not n:
+        return None
+    return ndimage.binary_fill_holes(lab == 1 + int(np.argmax(ndimage.sum(reg, lab, range(1, n + 1)))))
+
+
+def pintar_muslos(frames, zona):
+    sh = [mancha_short(f, zona) for f in frames]
+    info = []
+    for m in sh:
+        ys, xs = np.where(m)
+        info.append((np.percentile(ys, 97), np.percentile(xs, 5), np.percentile(xs, 97)))
+    yb = ndimage.uniform_filter1d(np.array([v[0] for v in info]), 5)
+    lo, hi = np.percentile(yb, 5), np.percentile(yb, 95)
+    yy, xx = np.mgrid[0:H, 0:W]
+    out = []
+    for i, f in enumerate(frames):
+        _, xl, xr = info[i]; b = yb[i]; w = xr - xl
+        d = float(np.clip((b - lo) / max(hi - lo, 1), 0, 1))
+        L = lambda s, e: s + (e - s) * d
+        ovs = [(L(xl + 0.75 * w, xr + 55), L(b + 75, b + 5), L(28, 75), L(70, 30)),
+               (L(xl + 0.22 * w, xl + 0.3 * w), L(b + 75, b + 20), L(28, 30), L(70, 25))]
+        e = np.zeros((H, W), np.float32)
+        for cx, cy, rx, ry in ovs:
+            e = np.maximum(e, np.clip(1.3 - (((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2), 0, 1))
+        a = np.array(f).astype(np.float32); R, G, B = a[:, :, 0], a[:, :, 1], a[:, :, 2]
+        piel = (R > 90) & (B > 45) & (R - G > 10) & (R - B > 25) & ((G - B) < 60)
+        piel = ndimage.binary_closing(piel, np.ones((9, 9))) & ~ndimage.binary_dilation(sh[i], iterations=2)
+        m = ndimage.gaussian_filter(e * piel, 3)
+        k = np.clip((0.25 + 0.5 * (0.5 + 0.5 * math.sin(2 * math.pi * i / 12))) * m * 1.3, 0, 0.9)
+        for c, v in enumerate((235, 20, 30)):
+            a[:, :, c] = a[:, :, c] * (1 - k) + v * k
+        out.append(Image.fromarray(a.clip(0, 255).astype('uint8')))
+    return out
+
+
+def short_rojo(fr, zona, i):
+    a = np.array(fr).astype(np.float32)
+    m = mancha_short(fr, zona)
+    if m is None:
         return fr
-    m = lab == 1 + int(np.argmax(ndimage.sum(reg, lab, range(1, n + 1))))
-    m = ndimage.binary_fill_holes(m)
     ys = np.where(m.any(1))[0]
     m[:ys[0] + int(0.18 * (ys[-1] - ys[0]))] = False  # sin la pretina
     m = ndimage.gaussian_filter(m.astype(np.float32), 3)
@@ -166,7 +205,9 @@ def main(carpeta):
         if p.get('repetir') and n == len(cfg['partes']) - 1:
             m = len(fr) - X
             fr = [Image.blend(fr[m + i], fr[i], (i + 1) / (X + 1)) if i < X else fr[i] for i in range(m)]
-        if p.get('short_oscuro'):
+        if p.get('short_oscuro') and p.get('muslos'):
+            fr = pintar_muslos(fr, p['short_oscuro'])
+        elif p.get('short_oscuro'):
             fr = [short_rojo(f, p['short_oscuro'], i) for i, f in enumerate(fr)]
         elif p.get('musculo'):
             offs = seguir(fr, p.get('seguir'))
