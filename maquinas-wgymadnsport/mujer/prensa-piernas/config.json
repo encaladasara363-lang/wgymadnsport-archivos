@@ -3,17 +3,17 @@
   "series": "3 × 8-10",
   "partes": [
     {
-      "video": "fuentes/ejercicio-grok.mp4",
-      "desde": 0.35,
-      "hasta": 1.85,
+      "video": "fuentes/repeticion-sin-bloqueo.mp4",
+      "desde": 0,
+      "hasta": 1.5,
       "recorte": [
         0,
         200,
         816,
         904
       ],
-      "repetir": 3,
-      "nota": "Solo 0,35-1,85 s: la dueña pidió que al subir NO se estiren las rodillas por completo (bloqueo articular); Grok las estiraba al tope. Cuádriceps en rojo.",
+      "repetir": 4,
+      "nota": "Bajada 0,35-1,10 s del video de Grok + la misma bajada al revés (subida) = repetición que nunca estira las rodillas al tope (pedido de la dueña: bloqueo articular; Grok siempre las estiraba). Cuádriceps en rojo.",
       "musculo": [
         [
           448,
