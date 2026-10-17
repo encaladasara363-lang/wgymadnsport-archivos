@@ -3,7 +3,7 @@
   "series": "3 × 12-15",
   "partes": [
     {
-      "video": "fuentes/ejercicio-grok-placas-fijas.mp4",
+      "video": "fuentes/ejercicio-grok.mp4",
       "desde": 0,
       "hasta": 11,
       "encaje": {
@@ -12,7 +12,7 @@
         "y": 120
       },
       "repetir": 1,
-      "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, sentada de espaldas. Las placas de la columna izquierda se quedan quietas (parche del primer cuadro: x150-258, y318-560 de la fuente), a pedido de la dueña.",
+      "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, sentada de espaldas. Pendiente: en este video también sube la pila de placas de la DERECHA (debe quedar abajo; solo trabaja la izquierda, la de la polea roja). No se puede tapar sin borrar los brazos: falta un video nuevo de Grok.",
       "musculo": [
         [
           372,
