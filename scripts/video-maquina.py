@@ -36,7 +36,7 @@ config.json:
     espejo_muslos (opcional): [x0, y0, x1, y1] zona (720x1280) del short negro
       del REFLEJO en el espejo (persona de frente); pinta sus cuádriceps: bajo
       el short de pie y a los costados del short en sentadilla.
-    musculo_kf (opcional): [[cuadro, cx, cy, rx, ry], ...] óvalo marcado a mano
+    musculo_kf (opcional): [[cuadro, cx, cy, rx, ry, (cx2, cy2, rx2, ry2...)], ...] óvalos marcados a mano
       en algunos cuadros (720x1280) e interpolado entre ellos; pinta solo piel
       y respeta 'intensidad'. El más preciso cuando el músculo es chico.
     espejo_bajo (opcional): [x0, y0, x1, y1] igual que espejo_muslos pero solo
@@ -296,8 +296,9 @@ def main(carpeta):
         if p.get('musculo_kf'):
             kf = np.array(sorted(p['musculo_kf']), dtype=float)
             fz = p.get('intensidad', 1.0)
-            fr = [musculo_rojo(f, [[np.interp(i, kf[:, 0], kf[:, c]) for c in (1, 2, 3, 4)]], (0, 0), i,
-                               True, fz) for i, f in enumerate(fr)]
+            nov = (kf.shape[1] - 1) // 4  # varios óvalos por fila: [cuadro, cx, cy, rx, ry, cx2, cy2, ...]
+            fr = [musculo_rojo(f, [[np.interp(i, kf[:, 0], kf[:, 1 + 4 * o + c]) for c in range(4)] for o in range(nov)],
+                               (0, 0), i, True, fz) for i, f in enumerate(fr)]
         elif p.get('espejo_bajo'):
             fr = pintar_espejo_bajo(fr, p['espejo_bajo'], p.get('intensidad', 1.0))
         elif p.get('espejo_muslos'):

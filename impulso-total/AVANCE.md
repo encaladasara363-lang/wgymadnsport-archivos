@@ -87,6 +87,7 @@ discos no tiene lugar en la rutina todavía.
    cuadros (`musculo_kf`; "no tan marcado ni tan grandote"). Imagen a todo el ancho (`encaje` alto 1264, y −90),
    sin franjas difuminadas a los costados (la dueña: "quisiera imagen completa").
 
-23. Peso muerto sumo con mancuerna (3 × 10-12) — en preparación (17-10-2026): plataforma roja de sumo con dos
+23. Peso muerto sumo con mancuerna (3 × 10-12) — ✅ video del 17-10-2026 (`mujer/peso-muerto-sumo`, Grok): plataforma roja de sumo con dos
    apoyos (`mujer/peso-muerto-sumo/fuentes/plataforma-sumo.jpg`); la mujer DE FRENTE a la cámara, con UNA
    mancuerna (pedido de la dueña). El video de ejemplo que mandó es de una persona del gimnasio: no se sube.
+   Imagen completa; aductores (parte interna del muslo) en rojo chico con `musculo_kf` (dos óvalos).
