@@ -7,32 +7,32 @@
       "desde": 0,
       "hasta": 9,
       "recorte": [
-        280,
-        120,
-        518,
-        920
+        185,
+        230,
+        476,
+        846
       ],
       "repetir": 1,
-      "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, sentada de espaldas. Zoom a la modelo (recorte) para que no se vean las placas que se mueven (pedido de la dueña, 17-10-2026).",
+      "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, sentada de espaldas. Zoom (recorte) que deja a la vista la pila de la izquierda, la que trabaja con la polea roja, y la modelo tapa la columna de la derecha (pedido de la dueña, 17-10-2026).",
       "musculo": [
         [
-          185,
-          555,
-          45,
-          35
+          322,
+          440,
+          50,
+          38
         ],
         [
-          300,
-          600,
-          40,
-          30
+          455,
+          545,
+          42,
+          35
         ]
       ],
       "seguir": [
-        250,
-        330,
-        70,
-        200
+        200,
+        290,
+        140,
+        250
       ]
     }
   ]
