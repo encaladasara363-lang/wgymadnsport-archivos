@@ -1701,7 +1701,7 @@ function porcionES(t){
 }
 /* Unidades de la porción (10-10-2026, la dueña: "cuántas láminas es la porción").
    Sale del texto de la porción ("2 láminas (34 g)", "2 slices") o de lo que se anotó. */
-var UNIDADES = ["lámina","rebanada","unidad","galleta","barra","pote","sobre","scoop","cucharada","taza","tajada","trozo"];
+var UNIDADES = ["lámina","rebanada","unidad","galleta","barra","pote","sobre","scoop","cucharada","taza","tajada","trozo","cuadradito"];
 function plural(u, n){ return n <= 1 ? u : /z$/.test(u) ? u.slice(0, -1) + "ces" : /(ch|[dlnr])$/.test(u) ? u + "es" : u + "s"; }
 /* Alimentos que se cuentan (huevos, unidades, rebanadas…): se muestran de a 1 y la persona
    elige cuántos comió, 1 a 6 (10-10-2026, la dueña: "aparece medio huevo, es tonto"). */
@@ -1726,6 +1726,9 @@ var PESO_TIPICO = [
  /* Pan de molde por marca aunque el nombre no diga «pan» (13-10-2026, la dueña escaneó «Blanco Ideal»
     y no le salían las rebanadas). */
  [/^(?!.*(queque|kuchen|torta|galleta|alfajor|bizcocho|muffin|donut|pastel|brownie|barra|tortilla|wrap|hallulla|marraqueta)).*\b(ideal|bimbo|castano|casta\u00f1o|fuchs|nutrabien|nutra bien)\b/i, "rebanada", 27, 2],
+ /* Chocolate de tableta por cuadraditos (17-10-2026, la dueña escaneó un chocolate 85 % cacao y le salía en
+    gramos; en la lista ya iba por cuadraditos, ≈5 g cada uno). */
+ [/^(?!.*(leche chocolatada|bebida|batido|galleta|cereal|helado|manjar|polvo|cacao amargo|nutella|untable|crema|barra|barrita|bomb[oó]n|alfajor|queque|torta|brownie|muffin|cobertura)).*(chocolate|cacao)/i, "cuadradito", 5, 6],
  [/galleta.*arroz|tortita de arroz|arroz inflado/i, "galleta", 9, 2],
  [/galleta|cracker|soda/i, "galleta", 8, 4],
  [/tortilla|wrap|rapiditas|fajita/i, "unidad", 40, 1],
@@ -1933,7 +1936,7 @@ function detalle(a){
    '';   /* sin fila de gramos: se escribe la cantidad en «¿Cuántos gramos?» (10-10-2026, pedido de la dueña) */
   var un = unidadesPorcion(a);
   if(un){
-   h += '<p class="kick" style="margin:12px 0 6px">¿Cuántas ' + plural(un.u, 2) + ' comiste? <span style="font-weight:600;text-transform:none;letter-spacing:0">(1 ' + un.u + ' ≈ ' + r1(un.g) + ' g' + (un.est ? ', aproximado' : '') + ')</span></p><div class="mults" id="dUni">' +
+   h += '<p class="kick" style="margin:12px 0 6px">¿' + (/^(cuadradito|scoop|sobre|pote|trozo)/.test(un.u) ? 'Cuántos ' : 'Cuántas ') + plural(un.u, 2) + ' comiste? <span style="font-weight:600;text-transform:none;letter-spacing:0">(1 ' + un.u + ' ≈ ' + r1(un.g) + ' g' + (un.est ? ', aproximado' : '') + ')</span></p><div class="mults" id="dUni">' +
     [1,2,3,4,5,6].map(function(k){ return '<button type="button" class="chip" data-u="' + k + '" aria-pressed="' + (k === un.n) + '">' + k + ' ' + plural(un.u, k) + '</button>'; }).join("") + '</div>';
   }
 
@@ -2551,7 +2554,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101704", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101705", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

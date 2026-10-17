@@ -1496,7 +1496,7 @@ probado: ella se activó desde el mesón y entró a la app).
   paquete; Open Food Facts rellena el peso si lo tiene) y lo guarda para todos.
   Si la etiqueta no dice unidades, la app las **estima sola** según el tipo de
   producto (`PESO_TIPICO`: queso laminado 17 g, jamón/pavo 12 g, salame 5 g, pan
-  de molde 27 g, galleta de arroz 9 g, etc.), marcado «aproximado»; el pan de molde también se reconoce por marca aunque el nombre no diga «pan» (Ideal, Bimbo, Castaño, Fuchs, Nutra Bien; 13-10-2026, la dueña escaneó «Blanco Ideal» y no le salían las rebanadas); el envase
+  de molde 27 g, galleta de arroz 9 g, etc.), marcado «aproximado»; el pan de molde también se reconoce por marca aunque el nombre no diga «pan» (Ideal, Bimbo, Castaño, Fuchs, Nutra Bien; 13-10-2026, la dueña escaneó «Blanco Ideal» y no le salían las rebanadas); el chocolate de tableta escaneado va por **cuadraditos** de ≈5 g (17-10-2026, la dueña escaneó un chocolate 85 % cacao y le salía en gramos); el envase
   queda como «✏️ ¿No calza? Corrígelo» con la acción `porcionProducto` (solo llena la
   porción si todavía no tenía unidades). **Instalado por la dueña el
   10-10-2026 a las 15:13 como Versión 14** (las acciones de productos responden
