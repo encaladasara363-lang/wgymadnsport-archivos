@@ -1,0 +1,24 @@
+{
+  "titulo": "ZANCADAS CON MANCUERNAS",
+  "series": "3 × 10 POR PIERNA",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 9,
+      "encaje": {
+        "alto": 974,
+        "x": 0,
+        "y": 120
+      },
+      "repetir": 1,
+      "nota": "Ejercicio 22 de Impulso Total. Sentadilla split con el pie de adelante sobre un step, de espalda frente al espejo de la terraza (pedido de la dueña). Glúteos en rojo siguiendo el short.",
+      "short_oscuro": [
+        60,
+        420,
+        450,
+        820
+      ]
+    }
+  ]
+}

@@ -80,7 +80,7 @@ reemplazan a las fotos: n.º 1 → `mujer/sentadilla-smith` (Grok, 14-10-2026), 
 `mujer/curl-biceps-discos` (Curl de bíceps con discos, 3 × 15). La elevación lateral con
 discos no tiene lugar en la rutina todavía.
 
-22. Zancadas con mancuernas (3 × 10 por pierna) — en preparación (17-10-2026): la dueña eligió la terraza frente
+22. Zancadas con mancuernas (3 × 10 por pierna) — ✅ video del 17-10-2026 (`mujer/zancadas-mancuernas`, Grok): la dueña eligió la terraza frente
    al espejo (`mujer/zancadas-mancuernas/fuentes/terraza-espejo-cunas.jpg`), sacando las cuñas y poniendo un
    step, con la referencia de una "sentadilla split con mancuernas" con el pie de adelante elevado (video de
-   TikTok, solo guía, no se sube).
+   TikTok, solo guía, no se sube). Glúteos en rojo con `short_oscuro` (el reflejo sale chico y queda tapado a ratos).

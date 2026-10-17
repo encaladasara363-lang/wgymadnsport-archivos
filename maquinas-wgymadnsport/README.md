@@ -74,4 +74,5 @@ Para armar o rehacer un video:
 | Face pull en polea (polea n.º 20, cuerda) | — | ✅ `mujer/face-pull-polea` (Grok, 17-10-2026) | 3 × 12-15 |
 | Plancha frontal (colchoneta en el pasto de la terraza) | — | ✅ `mujer/plancha-frontal` (Grok, 17-10-2026) | 3 × 30-40 seg |
 | Sentadilla goblet (cuñas frente al espejo, terraza; cuádriceps) | — | ✅ `mujer/sentadilla-goblet` (Grok, 17-10-2026) | 3 × 10-12 |
+| Zancadas con mancuernas (pie adelante sobre un step, frente al espejo, terraza) | — | ✅ `mujer/zancadas-mancuernas` (Grok, 17-10-2026) | 3 × 10 por pierna |
 | Abducción de cadera en máquina (palanca roja de patada de glúteo, terraza) | — | ✅ `mujer/abduccion-cadera-maquina` (Gemini, repetido 6 veces, 17-10-2026) | 3 × 12-15 |
