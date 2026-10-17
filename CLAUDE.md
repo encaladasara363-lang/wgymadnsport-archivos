@@ -1468,7 +1468,7 @@ tarjeta) + `assets/wgymnutri-*` (logo que mandó la dueña) +
 Android se usa `BarcodeDetector`). Se entra con el QR de
 `cartel-qr-wgymnutri.html`/`.pdf`; la app no va dentro de la tarjeta (que ya
 tiene "Mis calorías del día"), pero desde el 10-10-2026 la tarjeta muestra un
-aviso `#nutriCard` (`renderNutriPromo_`, oculto si la tarjeta está bloqueada)
+aviso `#nutriCard` (`renderNutriPromo_`; desde el 17-10-2026 también con la tarjeta bloqueada)
 con el precio y «Ver WGYMNUTRI», para que todos sepan que existe (pedido de la
 dueña). Se apagó unas horas y **volvió a mostrarse el 10-10-2026** cuando la dueña
 instaló el cobro (Apps Script Versión 12, con `listarNutri`/`activarNutri`;
@@ -1818,9 +1818,10 @@ probado: ella se activó desde el mesón y entró a la app).
   comidas por momento (la once se llama «Snack» desde el 10-10-2026, la clave interna sigue siendo `once`) y frase del día. Recetas: recetario
   propio en `nutri-recetas.js` (la dueña NO quiere sus recetas de
   `comidas-saludables.html` aquí), cada una con «Agregar a mi día».
-- **Bloqueo igual a la tarjeta:** plan vencido → app bloqueada entera con
-  "Pagar mi mensualidad" (`pagar.html`). Pase diario: solo ese día. Vale la
-  fecha más nueva entre la copia del teléfono, `socios.json` y la hoja.
+- **Se vende también a los vencidos (17-10-2026, la dueña: "quiero que los vencidos igual lo vean… tendría más
+  posibilidades de vender esa app"):** la tarjeta bloqueada muestra igual el aviso `#nutriCard`, y en la app la
+  mensualidad del gimnasio ya no bloquea: con WGYMNUTRI pagada se entra aunque el plan esté vencido; sin pagarla
+  se ve la pantalla de pago de WGYMNUTRI. (Antes: plan vencido → app bloqueada con «Pagar mi mensualidad».)
 - **Datos de salud solo en el teléfono** (`wgymnutri_v1_<NOMBRE>`): nunca en
   la hoja ni en el repo.
   **Recuperar datos con otro nombre (17-10-2026, Macarena Encalada perdió sus días):** `recuperarDatos()` (lo llama
