@@ -1,0 +1,27 @@
+{
+  "titulo": "PRENSA DE PIERNAS",
+  "series": "3 × 8-10",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok-sin-bloqueo.mp4",
+      "desde": 0,
+      "hasta": 11,
+      "recorte": [
+        0,
+        200,
+        816,
+        904
+      ],
+      "repetir": 1,
+      "nota": "Video de Grok con la indicación 'NO knee lockout' (11 s): nunca estira las rodillas al tope, como pidió la dueña (bloqueo articular). Cuádriceps en rojo.",
+      "musculo": [
+        [
+          448,
+          622,
+          46,
+          72
+        ]
+      ]
+    }
+  ]
+}
