@@ -49,10 +49,9 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 13. Extensión de glúteo a una pierna en polea (3 × 12-15 por pierna) — pendiente: queda como está en la rutina;
    falta foto de la polea + video de referencia de la dueña.
 14. Abducción de cadera en máquina (reemplaza a «Aducción de cadera en polea», 3 × 12-15 por lado; la dueña,
-   17-10-2026: "es para la 14") — en curso: palanca roja de la terraza (`mujer/patada-gluteo/fuentes/maquina.jpg`),
-   de pie, manos en la cadera, la pierna se abre HACIA EL COSTADO (no hacia atrás). Foto con la modelo lista
-   (`imagen.jpg`). Grok insiste en patear hacia atrás: probar con imagen de partida que ya tenga la pierna al
-   costado. Falta: video.
+   17-10-2026: "es para la 14") — ✅ video aprobado el 17-10-2026 (`mujer/abduccion-cadera-maquina`): palanca roja de
+   la terraza, rodilla doblada, la palanca sube como bisagra. Clip de Gemini de 2 s repetido 6 veces (la dueña: "quiero
+   más repeticiones"; "dejemos ese video"); glúteo en rojo sobre el short.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 

@@ -1,0 +1,39 @@
+{
+  "titulo": "ABDUCCIÓN DE CADERA EN MÁQUINA",
+  "series": "3 × 12-15",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-gemini.mov",
+      "desde": 0,
+      "hasta": 2.2,
+      "recorte": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "encaje": {
+        "alto": 700,
+        "x": -170,
+        "y": 250
+      },
+      "repetir": 6,
+      "nota": "Reemplaza a la aducción en polea (ejercicio 14 de Impulso Total). Clip de Gemini repetido 6 veces (aprobado por la dueña el 17-10-2026). Glúteo en rojo sobre el short.",
+      "musculo": [
+        [
+          330,
+          720,
+          60,
+          45
+        ]
+      ],
+      "solo_piel": false,
+      "seguir": [
+        300,
+        420,
+        90,
+        230
+      ]
+    }
+  ]
+}
