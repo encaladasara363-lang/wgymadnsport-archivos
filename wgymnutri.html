@@ -1604,7 +1604,8 @@ function editarItem(m, j){
  $("edCerrar").onclick = cerrarHoja;
  $("edOk").onclick = function(){ var v = leer(); if(!v) return; var y = diaDe(diaSel), t = (y.c[m] || [])[j]; if(!t) return cerrarHoja();
   t.x = Math.round((it.gr ? v / it.gr : v) * 1000) / 1000; setDia(diaSel, y); guardar(); cerrarHoja(); vibrar(15); renderHoy(); };
- setTimeout(function(){ try{ $("edCant").focus(); $("edCant").select(); }catch(e){} }, 150);
+ /* Sin abrir el teclado solo: en iPhone el foco automático hacía saltar la pantalla arriba y abajo
+    (la dueña, 17-10-2026: "se volvió loca la aplicación"). El teclado aparece al tocar el cuadro. */
 }
 function porcionTxt(it){ var m = it.x || 1, u1 = !it.gr && String(it.p || "").match(/^1 (\S+)(.*)$/);
  if(u1 && m === Math.round(m) && m > 1) return m + " " + plural(u1[1], m) + u1[2];
@@ -2550,7 +2551,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101703", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101704", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
