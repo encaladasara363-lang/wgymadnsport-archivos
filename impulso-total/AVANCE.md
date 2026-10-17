@@ -69,7 +69,7 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    talones sobre las cuñas, DE FRENTE AL ESPEJO de la terraza (`fuentes/cuñas-espejo.jpg`), sentadilla profunda
    (hubo que pedir "thighs parallel to the floor or lower"). Trabaja cuádriceps (la dueña: con talones elevados
    trabaja cuádriceps, no glúteo). Primero sin rojo ("déjalo así no más"); después, a pedido de ella, cuádriceps en rojo solo en el REFLEJO del
-   espejo (`espejo_muslos`), no en la mujer.
+   espejo (`espejo_muslos`), no en la mujer. **Aprobado** ("así").
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
