@@ -3,35 +3,41 @@
   "series": "3 × 12-15",
   "partes": [
     {
-      "video": "fuentes/ejercicio-grok-sin-placas.mp4",
+      "video": "fuentes/ejercicio-grok-final.mp4",
       "desde": 0,
-      "hasta": 11,
+      "hasta": 9,
       "encaje": {
         "alto": 974,
         "x": 0,
         "y": 120
       },
       "repetir": 1,
-      "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, sentada de espaldas. Versión elegida por la dueña el 17-10-2026. Las placas de la columna DERECHA (la que no trabaja) se borran cuadro a cuadro con scripts/borrar-placas-face-pull.py (fuente → fuentes/ejercicio-grok-sin-placas.mp4).",
+      "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, cámara atrás y un poco a la izquierda; ella de frente a la polea roja (sin cuerda atravesando la cabeza) y la otra columna tapada. Aprobado por la dueña el 17-10-2026 («por fin»).",
       "musculo": [
         [
-          372,
-          615,
-          40,
-          30
+          335,
+          462,
+          45,
+          35
         ],
         [
-          465,
-          642,
+          405,
+          500,
+          28,
+          32
+        ],
+        [
+          572,
+          455,
           30,
           30
         ]
       ],
       "seguir": [
-        290,
-        340,
-        165,
-        250
+        210,
+        270,
+        160,
+        300
       ]
     }
   ]

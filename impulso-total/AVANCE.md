@@ -58,8 +58,10 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 17. Jalón al pecho (3 × 8-10) — ✅ video aprobado el 17-10-2026 (`mujer/jalon-al-pecho`): máquina n.º 24 de la terraza
    (jalón tipo Hammer con discos; `fuentes/maquina-24.jpg`), vista de espaldas como la referencia de TikTok (no se
    sube). Video de Grok, dorsales en rojo.
-18. Face pull en polea (3 × 12-15) — en curso: polea n.º 20 (`mujer/extension-triceps-polea/fuentes/maquina-20.jpg`),
-   sentada, de espaldas a la cámara, cuerda a la cara con los codos altos (referencia de TikTok, no se sube).
+18. Face pull en polea (3 × 12-15) — ✅ video aprobado el 17-10-2026 (`mujer/face-pull-polea`, la dueña: "por fin"):
+   polea n.º 20, cámara atrás y un poco a su izquierda, ella DE FRENTE a la polea roja (si la polea queda a su
+   lado, la cuerda le atraviesa la cabeza) y la columna que no trabaja tapada por su cuerpo. Lecciones: Grok mueve
+   las dos pilas aunque se le pida que no; borrar o congelar placas no le gustó a la dueña.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
