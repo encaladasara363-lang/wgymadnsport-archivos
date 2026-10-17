@@ -83,4 +83,5 @@ discos no tiene lugar en la rutina todavía.
 22. Zancadas con mancuernas (3 × 10 por pierna) — ✅ video del 17-10-2026 (`mujer/zancadas-mancuernas`, Grok): la dueña eligió la terraza frente
    al espejo (`mujer/zancadas-mancuernas/fuentes/terraza-espejo-cunas.jpg`), sacando las cuñas y poniendo un
    step, con la referencia de una "sentadilla split con mancuernas" con el pie de adelante elevado (video de
-   TikTok, solo guía, no se sube). Glúteos en rojo SUTIL (`short_oscuro` + `intensidad: 0.45`, pedido de la dueña; el reflejo sale chico y queda tapado a ratos).
+   TikTok, solo guía, no se sube). Trabaja cuádriceps (la dueña): rojo chico solo en el muslo del REFLEJO del espejo, marcado a mano cada 6
+   cuadros (`musculo_kf`; "no tan marcado ni tan grandote").

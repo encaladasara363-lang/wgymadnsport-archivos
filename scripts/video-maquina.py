@@ -36,6 +36,13 @@ config.json:
     espejo_muslos (opcional): [x0, y0, x1, y1] zona (720x1280) del short negro
       del REFLEJO en el espejo (persona de frente); pinta sus cuádriceps: bajo
       el short de pie y a los costados del short en sentadilla.
+    musculo_kf (opcional): [[cuadro, cx, cy, rx, ry], ...] óvalo marcado a mano
+      en algunos cuadros (720x1280) e interpolado entre ellos; pinta solo piel
+      y respeta 'intensidad'. El más preciso cuando el músculo es chico.
+    espejo_bajo (opcional): [x0, y0, x1, y1] igual que espejo_muslos pero solo
+      pinta una franja corta justo bajo el short del reflejo (zancadas; elige la
+      mancha oscura más baja y ancha, así no toma mancuernas) y respeta
+      'intensidad'. Si el reflejo queda tapado, ese cuadro va sin rojo.
 
 Requiere: pip install imageio-ffmpeg pillow numpy scipy
 """
@@ -107,7 +114,7 @@ def seguir(frames, zona):
     return [(dy * 2, dx * 2) for dy, dx in offs]
 
 
-def musculo_rojo(fr, ovalos, off, i, solo_piel=True):
+def musculo_rojo(fr, ovalos, off, i, solo_piel=True, fuerza=1.0):
     a = np.array(fr).astype(np.float32)
     R, G, B = a[:, :, 0], a[:, :, 1], a[:, :, 2]
     if solo_piel == 'todo':  # pinta piel y ropa por igual (espalda con peto, face pull)
@@ -123,6 +130,7 @@ def musculo_rojo(fr, ovalos, off, i, solo_piel=True):
     k = (0.25 + 0.5 * (0.5 + 0.5 * math.sin(2 * math.pi * i / 12))) * m
     if solo_piel == 'todo':  # sobre ropa negra el rojo se pierde: más fuerte
         k = np.clip(k * 1.45, 0, 0.95)
+    k = k * fuerza
     for c, v in enumerate((235, 20, 30)):
         a[:, :, c] = a[:, :, c] * (1 - k) + v * k
     return Image.fromarray(a.clip(0, 255).astype('uint8'))
@@ -202,6 +210,50 @@ def pintar_espejo(frames, zona):
     return out
 
 
+def pintar_espejo_bajo(frames, zona, fuerza=1.0):
+    """Cuádriceps del reflejo (zancadas). El top del reflejo siempre se ve, el short a veces lo tapa el
+    muslo: se ubica el top (mancha oscura ancha más alta) y el short a la distancia top-short medida en
+    los cuadros donde se ven los dos."""
+    x0, y0, x1, y1 = zona
+    tops, dist = [], []
+    for f in frames:
+        a = np.array(f)
+        reg = np.zeros((H, W), bool)
+        reg[y0:y1, x0:x1] = a[y0:y1, x0:x1].max(2) < 55
+        reg = ndimage.binary_opening(reg, np.ones((5, 5)))
+        lab, n = ndimage.label(reg)
+        anchas = []
+        for k in range(1, n + 1):
+            ys, xs = np.where(lab == k)
+            if len(ys) < 120 or xs.max() >= x1 - 2 or xs.max() - xs.min() < 30:
+                continue
+            anchas.append((ys.min(), np.percentile(ys, 95), np.percentile(xs, 5), np.percentile(xs, 95)))
+        anchas.sort()
+        tops.append(anchas[0] if anchas else None)
+        if len(anchas) >= 2 and anchas[1][0] - anchas[0][1] > 5:
+            dist.append(anchas[1][1] - anchas[0][1])
+    D = float(np.median(dist)) if dist else 60.0
+    ys0 = np.array([t[0] if t else np.nan for t in tops])
+    out = []
+    for i, f in enumerate(frames):
+        t = tops[i]
+        vec = ys0[max(0, i - 12):i + 13]
+        if t is None or abs(t[0] - np.nanmedian(vec)) > 25:  # reflejo tapado o mancha ajena
+            out.append(f); continue
+        yb = t[1] + D; xl, xr = t[2], t[3]
+        a = np.array(f).astype(np.float32)
+        R, G, B = a[:, :, 0], a[:, :, 1], a[:, :, 2]
+        piel = (R > 110) & (B > 70) & (R - G > 15) & (R - B > 35) & ((G - B) < 50)
+        z = np.zeros((H, W), bool)
+        z[int(yb - 3):int(yb + 24), int(xl + 3):int(xr - 3)] = True
+        q = ndimage.gaussian_filter((piel & z).astype(np.float32), 2)
+        k = np.clip((0.3 + 0.55 * (0.5 + 0.5 * math.sin(2 * math.pi * i / 12))) * q * fuerza, 0, 0.9)
+        for ch, v in enumerate((235, 20, 30)):
+            a[:, :, ch] = a[:, :, ch] * (1 - k) + v * k
+        out.append(Image.fromarray(a.clip(0, 255).astype('uint8')))
+    return out
+
+
 def short_rojo(fr, zona, i, fuerza=1.0):
     a = np.array(fr).astype(np.float32)
     m = mancha_short(fr, zona)
@@ -241,7 +293,14 @@ def main(carpeta):
         if p.get('repetir') and n == len(cfg['partes']) - 1:
             m = len(fr) - X
             fr = [Image.blend(fr[m + i], fr[i], (i + 1) / (X + 1)) if i < X else fr[i] for i in range(m)]
-        if p.get('espejo_muslos'):
+        if p.get('musculo_kf'):
+            kf = np.array(sorted(p['musculo_kf']), dtype=float)
+            fz = p.get('intensidad', 1.0)
+            fr = [musculo_rojo(f, [[np.interp(i, kf[:, 0], kf[:, c]) for c in (1, 2, 3, 4)]], (0, 0), i,
+                               True, fz) for i, f in enumerate(fr)]
+        elif p.get('espejo_bajo'):
+            fr = pintar_espejo_bajo(fr, p['espejo_bajo'], p.get('intensidad', 1.0))
+        elif p.get('espejo_muslos'):
             fr = pintar_espejo(fr, p['espejo_muslos'])
         elif p.get('short_oscuro') and p.get('muslos'):
             fr = pintar_muslos(fr, p['short_oscuro'])
