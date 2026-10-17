@@ -62,6 +62,9 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    polea n.º 20, cámara atrás y un poco a su izquierda, ella DE FRENTE a la polea roja (si la polea queda a su
    lado, la cuerda le atraviesa la cabeza) y la columna que no trabaja tapada por su cuerpo. Lecciones: Grok mueve
    las dos pilas aunque se le pida que no; borrar o congelar placas no le gustó a la dueña.
+20. Plancha frontal (3 × 30-40 seg) — ✅ video aprobado el 17-10-2026 (`mujer/plancha-frontal`): antebrazos sobre
+   colchoneta en el pasto de la terraza, abdomen en rojo. **Día 3 completo.** Falta el día 4 (21 a 25); la dueña
+   tiene el uso semanal de Grok casi agotado (se renueva el jueves 22-10 a las 8:47).
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
