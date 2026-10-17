@@ -65,6 +65,9 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 20. Plancha frontal (3 × 30-40 seg) — ✅ video aprobado el 17-10-2026 (`mujer/plancha-frontal`): antebrazos sobre
    colchoneta en el pasto de la terraza, abdomen en rojo. **Día 3 completo.** Falta el día 4 (21 a 25); la dueña
    tiene el uso semanal de Grok casi agotado (se renueva el jueves 22-10 a las 8:47).
+21. Sentadilla goblet con mancuerna (3 × 10-12) — ✅ video del 17-10-2026 (`mujer/sentadilla-goblet`, la dueña: "ahora sí"):
+   talones sobre las cuñas, DE FRENTE AL ESPEJO de la terraza (`fuentes/cuñas-espejo.jpg`), sentadilla profunda
+   (hubo que pedir "thighs parallel to the floor or lower"). Glúteos en rojo.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 

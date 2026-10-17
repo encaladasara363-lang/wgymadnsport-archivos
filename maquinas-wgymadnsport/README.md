@@ -73,4 +73,5 @@ Para armar o rehacer un video:
 | Jalón al pecho (máquina n.º 24, terraza) | — | ✅ `mujer/jalon-al-pecho` (Grok, 17-10-2026) | 3 × 8-10 |
 | Face pull en polea (polea n.º 20, cuerda) | — | ✅ `mujer/face-pull-polea` (Grok, 17-10-2026) | 3 × 12-15 |
 | Plancha frontal (colchoneta en el pasto de la terraza) | — | ✅ `mujer/plancha-frontal` (Grok, 17-10-2026) | 3 × 30-40 seg |
+| Sentadilla goblet (cuñas frente al espejo, terraza) | — | ✅ `mujer/sentadilla-goblet` (Grok, 17-10-2026) | 3 × 10-12 |
 | Abducción de cadera en máquina (palanca roja de patada de glúteo, terraza) | — | ✅ `mujer/abduccion-cadera-maquina` (Gemini, repetido 6 veces, 17-10-2026) | 3 × 12-15 |

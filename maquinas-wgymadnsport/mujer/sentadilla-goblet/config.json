@@ -1,0 +1,33 @@
+{
+  "titulo": "SENTADILLA GOBLET",
+  "series": "3 × 10-12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 9,
+      "encaje": {
+        "alto": 974,
+        "x": 0,
+        "y": 120
+      },
+      "repetir": 1,
+      "nota": "Ejercicio 21 de Impulso Total. Talones sobre las cuñas, de frente al espejo de la terraza (pedido de la dueña), mancuerna al pecho; sentadilla profunda.",
+      "musculo": [
+        [
+          218,
+          530,
+          48,
+          34
+        ]
+      ],
+      "solo_piel": false,
+      "seguir": [
+        230,
+        300,
+        70,
+        150
+      ]
+    }
+  ]
+}
