@@ -3,35 +3,36 @@
   "series": "3 × 12-15",
   "partes": [
     {
-      "video": "fuentes/ejercicio-grok.mp4",
+      "video": "fuentes/ejercicio-grok-2.mp4",
       "desde": 0,
-      "hasta": 11,
-      "encaje": {
-        "alto": 974,
-        "x": 0,
-        "y": 120
-      },
+      "hasta": 9,
+      "recorte": [
+        280,
+        120,
+        518,
+        920
+      ],
       "repetir": 1,
-      "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, sentada de espaldas. Pendiente: en este video también sube la pila de placas de la DERECHA (debe quedar abajo; solo trabaja la izquierda, la de la polea roja). No se puede tapar sin borrar los brazos: falta un video nuevo de Grok.",
+      "nota": "Ejercicio 18 de Impulso Total. Polea n.º 20, sentada de espaldas. Zoom a la modelo (recorte) para que no se vean las placas que se mueven (pedido de la dueña, 17-10-2026).",
       "musculo": [
         [
-          372,
-          615,
-          40,
-          30
+          185,
+          555,
+          45,
+          35
         ],
         [
-          465,
-          642,
-          30,
+          300,
+          600,
+          40,
           30
         ]
       ],
       "seguir": [
-        290,
-        340,
-        165,
-        250
+        250,
+        330,
+        70,
+        200
       ]
     }
   ]
