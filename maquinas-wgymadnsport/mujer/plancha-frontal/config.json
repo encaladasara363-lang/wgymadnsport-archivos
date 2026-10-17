@@ -1,0 +1,38 @@
+{
+  "titulo": "PLANCHA FRONTAL",
+  "series": "3 × 30-40 SEG",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 9,
+      "recorte": [
+        0,
+        0,
+        768,
+        800
+      ],
+      "encaje": {
+        "alto": 750,
+        "x": 0,
+        "y": 210
+      },
+      "repetir": 1,
+      "nota": "Ejercicio 20 de Impulso Total. Plancha en antebrazos sobre colchoneta, pasto de la terraza.",
+      "musculo": [
+        [
+          293,
+          752,
+          30,
+          26
+        ]
+      ],
+      "seguir": [
+        355,
+        400,
+        120,
+        180
+      ]
+    }
+  ]
+}
