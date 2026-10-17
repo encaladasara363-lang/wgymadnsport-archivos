@@ -100,4 +100,6 @@ discos no tiene lugar en la rutina todavía.
 
 25. Subida a banco (3 × 10 por lado) — en preparación (17-10-2026): la dueña la quiere como **step-up en polea**
    (polea doble n.º 20, `mujer/patada-gluteo-polea/fuentes/maquina-20.jpg`): step al centro, una manilla de cada
-   polea baja en cada mano, de frente a la cámara (así las dos pilas se mueven y está bien).
+   polea baja en cada mano, de frente a la cámara (así las dos pilas se mueven y está bien). Después mandó la
+   referencia (TikTok, no se sube): de lado, frente a UNA columna, manilla a la altura del pecho con las dos manos,
+   torso inclinado, pie de adelante en el step con rodilla a 90° y sube sin impulso, pierna de atrás hacia atrás.
