@@ -42,10 +42,11 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    `maquinas-wgymadnsport/mujer/prensa-piernas/fuentes/maquina.jpg` y `maquina-lado.jpg`). Foto con la modelo
    lista (vista lateral, sentada al fondo del asiento). Video de Grok recortado a 0,35-1,85 s para que nunca
    estire las rodillas al tope; al final Grok lo hizo bien con «NO knee lockout» (11 s).
-12. Sentadilla hack inversa (en lugar del peso muerto rumano; glúteos/isquios) — en curso (17-10-2026):
+12. Sentadilla hack inversa (en lugar del peso muerto rumano; glúteos/isquios) — ✅ aprobada el 17-10-2026 (3 × 10-12):
    máquina n.º 12 (hack squat rojo de la terraza), de frente al respaldo, pies ABAJO en la base y no en la
    plataforma (como el video de la dueña). Foto con la modelo lista (`mujer/hack-inversa/imagen.jpg`).
-   Video de Grok (11 s, sin bloqueo) armado con glúteos en rojo que siguen el movimiento; en revisión.
+   Video de Grok (11 s, sin bloqueo) armado con glúteos en rojo que siguen el movimiento.
+13. Extensión de glúteo a una pierna en polea — siguiente.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
