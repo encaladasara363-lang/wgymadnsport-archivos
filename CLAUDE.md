@@ -1823,6 +1823,10 @@ probado: ella se activó desde el mesón y entró a la app).
   fecha más nueva entre la copia del teléfono, `socios.json` y la hoja.
 - **Datos de salud solo en el teléfono** (`wgymnutri_v1_<NOMBRE>`): nunca en
   la hoja ni en el repo.
+  **Recuperar datos con otro nombre (17-10-2026, Macarena Encalada perdió sus días):** `recuperarDatos()` (lo llama
+  `leerDatos`): si la clave del nombre actual no tiene días, copia la clave `wgymnutri_v1_…` del teléfono con el mismo
+  primer nombre y un apellido en común que tenga más días (no borra la antigua) y avisa «Recuperamos tus datos».
+  Ojo: en iPhone el ícono de la pantalla de inicio y Safari guardan por separado; datos de otro teléfono no se recuperan.
 - **De pago: $5.000 al mes (10-10-2026, pedido de la dueña).** Precio en
   `pago-datos.js` (`nutri`). Quien no la tiene activa ve la pantalla
   «Activa WGYMNUTRI» (`#vPago`: datos de transferencia, copiar, WhatsApp a

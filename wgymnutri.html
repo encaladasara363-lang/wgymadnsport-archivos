@@ -591,7 +591,26 @@ function salir(){ lsSet(CLAVE_SOCIO, ""); socio = null; D = null; nutriConsultad
 /* ═══ 2. Datos del socio: SOLO en este teléfono ═══ */
 var D = null;
 function claveDatos(){ return "wgymnutri_v1_" + normName(socio.n + " " + socio.a); }
-function leerDatos(){ var d = lsGet(claveDatos(), null) || {}; d.dias = d.dias || {}; d.pesos = d.pesos || []; d.favs = d.favs || []; d.recientes = d.recientes || []; d.logros = d.logros || {}; d.cont = d.cont || { escaneos:0 }; d.platos = d.platos || []; d.medidas = d.medidas || []; return d; }
+/* Recuperar datos guardados con otra forma del nombre (17-10-2026, la dueña: "a Macarena Encalada se le borraron
+   todos sus datos de días anteriores"). Los datos van por nombre: si en el mesón el nombre cambió (otro apellido,
+   un espacio, una letra), la clave nueva queda vacía y la antigua sigue en el teléfono. Si la clave actual no tiene
+   días, se busca otra «wgymnutri_v1_…» con el mismo nombre y un apellido en común y se copia (no se borra la antigua). */
+function recuperarDatos(){
+ try{
+  var k0 = claveDatos(), act = lsGet(k0, null);
+  if(act && act.dias && Object.keys(act.dias).length) return;
+  var yo = normName(socio.n + " " + socio.a).split(" "), mejor = null, nMejor = 0;
+  for(var i = 0; i < localStorage.length; i++){
+   var k = localStorage.key(i); if(!k || k === k0 || k.indexOf("wgymnutri_v1_") !== 0) continue;
+   var ot = k.slice(13).split(" ");
+   if(ot[0] !== yo[0] || !ot.slice(1).some(function(w){ return w.length > 2 && yo.slice(1).indexOf(w) >= 0; })) continue;
+   var d = lsGet(k, null), n = d && d.dias ? Object.keys(d.dias).length : 0;
+   if(n > nMejor){ mejor = d; nMejor = n; }
+  }
+  if(mejor){ lsSet(k0, mejor); setTimeout(function(){ try{ toast("✅ Recuperamos tus datos anteriores (" + nMejor + " días)"); }catch(e){} }, 800); }
+ }catch(e){}
+}
+function leerDatos(){ recuperarDatos(); var d = lsGet(claveDatos(), null) || {}; d.dias = d.dias || {}; d.pesos = d.pesos || []; d.favs = d.favs || []; d.recientes = d.recientes || []; d.logros = d.logros || {}; d.cont = d.cont || { escaneos:0 }; d.platos = d.platos || []; d.medidas = d.medidas || []; return d; }
 function guardar(){ if(!lsSet(claveDatos(), D)) toast("⚠️ El teléfono no tiene espacio para guardar."); }
 function diaDe(iso){ var x = D.dias[iso]; if(!x){ x = { c:{}, agua:0 }; } return x; }
 function setDia(iso, x){ D.dias[iso] = x; }
@@ -2554,7 +2573,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101705", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101706", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
