@@ -1,0 +1,33 @@
+{
+  "titulo": "PATADA DE GLÚTEO EN POLEA",
+  "series": "3 × 12-15",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 11,
+      "encaje": {
+        "alto": 910,
+        "x": 0,
+        "y": 140
+      },
+      "repetir": 1,
+      "nota": "Ejercicio 13 de Impulso Total (extensión de glúteo a una pierna en polea, 3 × 12-15 por pierna). Polea n.º 20, de frente a la máquina, tobillera en la polea baja.",
+      "musculo": [
+        [
+          378,
+          512,
+          55,
+          45
+        ]
+      ],
+      "solo_piel": false,
+      "seguir": [
+        225,
+        295,
+        155,
+        225
+      ]
+    }
+  ]
+}
