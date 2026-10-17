@@ -33,11 +33,12 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    `maquinas-wgymadnsport/mujer/extension-triceps-polea/fuentes/maquina-20.jpg`). Referencia: video de
    TikTok (no se sube). Varios intentos de Grok movían el brazo entero; el último sirve (codos quietos),
    recortado más cerca.
-10. Crunch abdominal en polea — en curso (16-10-2026): la dueña lo quiere ACOSTADA como su video de
+10. Crunch abdominal en polea — ✅ video aprobado el 17-10-2026 (`mujer/crunch-acostado-polea`, 3 × 12-15): la dueña lo quiere ACOSTADA como su video de
    referencia (TikTok, no se sube): pies hacia la polea n.º 20, cable por encima de las piernas hasta las
    manos junto a la cara (`mujer/crunch-acostado-polea/imagen.jpg`, muchos intentos en ChatGPT). Imagen aprobada: pies contra la
    base de la columna, manos sobre la cabeza y BARRA RECTA CORTA atrapada detrás de los codos, a la altura
-   de la barbilla (como el video). Video de Grok armado (abdomen en rojo); en revisión.
+   de la barbilla (como el video). Video de Grok (abdomen en rojo). **Día 2 completo.**
+11. Prensa de piernas — siguiente (día 3).
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
