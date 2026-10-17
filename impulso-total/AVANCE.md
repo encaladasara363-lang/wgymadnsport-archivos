@@ -45,7 +45,7 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
 12. Sentadilla hack inversa (en lugar del peso muerto rumano; glúteos/isquios) — en curso (17-10-2026):
    máquina n.º 12 (hack squat rojo de la terraza), de frente al respaldo, pies ABAJO en la base y no en la
    plataforma (como el video de la dueña). Foto con la modelo lista (`mujer/hack-inversa/imagen.jpg`).
-   Falta: video con Grok.
+   Video de Grok (11 s, sin bloqueo) armado con glúteos en rojo que siguen el movimiento; en revisión.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 

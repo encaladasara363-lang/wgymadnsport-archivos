@@ -1,0 +1,34 @@
+{
+  "titulo": "SENTADILLA HACK INVERSA",
+  "series": "3 × 10-12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-grok.mp4",
+      "desde": 0,
+      "hasta": 11,
+      "recorte": [
+        100,
+        150,
+        600,
+        954
+      ],
+      "repetir": 1,
+      "nota": "Máquina n.º 12 usada al revés (pecho al respaldo, pies abajo en la base). Reemplaza al peso muerto rumano (mismas series). Glúteos en rojo sobre el short (solo_piel false).",
+      "musculo": [
+        [
+          350,
+          462,
+          62,
+          40
+        ]
+      ],
+      "solo_piel": false,
+      "seguir": [
+        205,
+        260,
+        140,
+        215
+      ]
+    }
+  ]
+}
