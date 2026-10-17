@@ -1915,7 +1915,7 @@ function detalle(a){
   var esMl = false; if(!mg){ mg = /(?:^|[\s(])(\d+(?:[.,]\d+)?)\s*ml\b/i.exec(a.p || ""); nG = mg ? Number(mg[1].replace(",", ".")) : 0; esMl = !!mg; }
   if(nG > 0){ var fG = 100 / nG; porcLoc = a.p; a = Object.assign({}, a, { k:a.k * fG, pr:a.pr * fG, c:a.c * fG, g:a.g * fG, gr:nG, vc:typeof a.vc === "number" ? a.vc * fG : a.vc, po:typeof a.po === "number" ? a.po * fG : a.po, fi:typeof a.fi === "number" ? a.fi * fG : a.fi, az:typeof a.az === "number" ? a.az * fG : a.az, na:typeof a.na === "number" ? a.na * fG : a.na }); if(esMl) a.ml = true; }
  }
- var esGr = !!a.gr, mult = 1, gramos = a.gr || 100;
+ var esGr = !!a.gr, mult = 1, gramos = a.gr || 100, porcRef = "";
  /* Líquidos (10-10-2026, la dueña escaneó una Score: "debe decir la lata"): se muestra por
     lata o botella en ml, sin el cuadro de láminas. */
  var esLiq = esGr && (a.ml || /\bml\b/i.test(a.porcTxt || "") || agr.comida === "bebidas" || a.cat === CAT_BEB);
@@ -1951,9 +1951,13 @@ function detalle(a){
   gramos = a.porcG;
   var pt = textoPorcion(a), unE = unidadesPorcion(a);
   if(unE && unE.est) pt = unE.n + " " + plural(unE.u, unE.n) + " (" + a.porcG + " g)";
-  h += '<div class="porc-rec"><span>✅ Porción recomendada</span><b>' + esc(pt) + '</b><small>' + (unE && unE.est ? 'láminas o unidades estimadas según el tipo de producto' : 'según la etiqueta del producto') + '</small></div>' +
-   '';   /* sin fila de gramos: se escribe la cantidad en «¿Cuántos gramos?» (10-10-2026, pedido de la dueña) */
   var un = unidadesPorcion(a);
+  /* Con unidades (cuadraditos, láminas…), arriba va lo que el socio va a anotar y la porción de la etiqueta
+     baja, aparte (17-10-2026, la dueña: "la porción recomendada se prestó para confusión entre mis socios"). */
+  if(un){ h += '<div class="porc-rec" id="dVas"><span>✅ Vas a anotar</span><b></b><small></small></div>';
+   porcRef = (unE && unE.est ? 'Porción sugerida: ' : 'Porción de la etiqueta: ') + pt + (unE && unE.est ? ', aproximado' : ''); }
+  else h += '<div class="porc-rec"><span>✅ Porción recomendada</span><b>' + esc(pt) + '</b><small>según la etiqueta del producto</small></div>';
+  /* sin fila de gramos: se escribe la cantidad en «¿Cuántos gramos?» (10-10-2026, pedido de la dueña) */
   if(un){
    h += '<p class="kick" style="margin:12px 0 6px">¿' + (/^(cuadradito|scoop|sobre|pote|trozo)/.test(un.u) ? 'Cuántos ' : 'Cuántas ') + plural(un.u, 2) + ' comiste? <span style="font-weight:600;text-transform:none;letter-spacing:0">(1 ' + un.u + ' ≈ ' + r1(un.g) + ' g' + (un.est ? ', aproximado' : '') + ')</span></p><div class="mults" id="dUni">' +
     [1,2,3,4,5,6].map(function(k){ return '<button type="button" class="chip" data-u="' + k + '" aria-pressed="' + (k === un.n) + '">' + k + ' ' + plural(un.u, k) + '</button>'; }).join("") + '</div>';
@@ -1972,6 +1976,7 @@ function detalle(a){
  }
  if(porcLoc) h += '<p class="kick">Porción habitual: ' + esc(porcLoc) + '</p>';
  if(esGr) h += '<div class="campo cant-box"><label for="dGr">' + (esLiq ? '¿Cuántos ml tomaste?' : '¿Cuántos gramos?') + '</label><input class="inp" id="dGr" type="text" inputmode="decimal" autocomplete="off" value="' + gramos + '"><small>escribe la cantidad y se calcula solo</small></div>' +
+  (porcRef ? '<p class="muted" style="margin:10px 0 6px;font-size:14px">📋 ' + esc(porcRef) + '</p>' : '') +
   (a.porcG || a.cat ? '' : '<p class="muted" style="margin:0;font-size:14px">' + (esLiq ? 'La etiqueta no dice cuánto trae: escribe los ml (mira el número grande de la ' + envase + ').' : 'Este producto no trae porción en su etiqueta: escribe los gramos que comiste.') + '</p>');
  else if(cuenta){ mult = cuenta.n; h += '<div class="campo cant-box"><label for="dCant">¿' + (/[aá]$|d$|z$|ón$/.test(cuenta.sing) && !/huevo|pistacho|grano/.test(cuenta.sing) ? 'Cuántas ' : 'Cuántos ') + esc(plural(cuenta.sing, 2)) + ' comiste?</label><input class="inp cant-inp" id="dCant" type="text" inputmode="decimal" autocomplete="off" value="' + cuenta.n + '"><small>1 ' + esc(cuenta.sing) + ' = ' + miles(a.k) + ' kcal · escribe la cantidad y se calcula solo</small></div>'; }
  else h += '<p class="kick">Porción: ' + esc(a.p) + '</p><div class="mults" id="dMults">' + [[0.5,"½"],[1,"1"],[1.5,"1½"],[2,"2"],[3,"3"]].map(function(m){ return '<button type="button" class="chip" data-x="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
@@ -1983,6 +1988,9 @@ function detalle(a){
  function factor(){ return esGr ? (gramos / 100) : mult; }
  function pintar(){
   var f = factor();
+  if($("dVas")){ var uV = unidadesPorcion(a), nV = Math.round(gramos / uV.g * 10) / 10;
+   $("dVas").querySelector("b").textContent = (nV > 0 && Math.abs(nV - Math.round(nV)) < 0.05 ? Math.round(nV) + " " + plural(uV.u, Math.round(nV)) + " (" + String(r1(gramos)).replace(".", ",") + " g)" : String(r1(gramos)).replace(".", ",") + " g");
+   $("dVas").querySelector("small").textContent = miles(a.k * f) + " kcal"; }
   $("dMac").innerHTML = '<div><b style="color:var(--gold2)">' + miles(a.k * f) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + r1(a.pr * f) + '</b><span>Prot. g</span></div><div><b>' + r1(a.c * f) + '</b><span>Carb. g</span></div><div><b>' + r1(a.g * f) + '</b><span>Grasa g</span></div>' +
    '<div class="vitc-det">' + MICROS.map(function(mc){ var v = a[mc[0]]; return '<div class="mic-l"><span>' + mc[1] + '</span>' + (typeof v === "number" ? '<b>' + (mc[2] === "mg" ? miles(v * f) : String(r1(v * f)).replace(".", ",")) + ' ' + mc[2] + '</b><small>' + Math.round(v * f / metaMicro(mc[0]) * 100) + (mc[3] ? '% del máximo' : '% del día') + '</small>' : '<b class="sd">sin dato</b><small></small>') + '</div>'; }).join("") + '</div>';
  }
@@ -2573,7 +2581,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101706", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101707", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
