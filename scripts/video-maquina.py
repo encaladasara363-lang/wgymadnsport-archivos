@@ -153,7 +153,7 @@ def main(carpeta):
                     '-c:v', 'libx264', '-crf', '18', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
                     os.path.join(carpeta, nombre + '.mp4')], check=True)
     g = [f.resize((360, 640), Image.LANCZOS) for f in unico[::2]]
-    pal = g[-20].quantize(colors=160, method=Image.Quantize.MEDIANCUT)
+    pal = g[-min(20, len(g))].quantize(colors=160, method=Image.Quantize.MEDIANCUT)
     q = [x.quantize(palette=pal, dither=Image.Dither.FLOYDSTEINBERG) for x in g]
     q[0].save(os.path.join(carpeta, nombre + '.gif'), save_all=True, append_images=q[1:],
               duration=int(2000 / FPS), loop=0, optimize=True)

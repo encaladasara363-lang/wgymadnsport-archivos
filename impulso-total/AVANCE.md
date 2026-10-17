@@ -40,7 +40,8 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    de la barbilla (como el video). Video de Grok (abdomen en rojo). **Día 2 completo.**
 11. Prensa de piernas — en curso (17-10-2026): prensa inclinada 45° de la terraza (carro rojo con discos;
    `maquinas-wgymadnsport/mujer/prensa-piernas/fuentes/maquina.jpg` y `maquina-lado.jpg`). Foto con la modelo
-   lista (vista lateral, sentada al fondo del asiento). Falta: video con Grok.
+   lista (vista lateral, sentada al fondo del asiento). Video de Grok recortado a 0,35-1,85 s para que nunca
+   estire las rodillas al tope (pedido de la dueña: bloqueo articular). En revisión.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
