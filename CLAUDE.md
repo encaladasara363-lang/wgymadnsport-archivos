@@ -1526,7 +1526,8 @@ probado: ella se activó desde el mesón y entró a la app).
   «¿Cuántos ml tomaste?» y sin el cuadro de láminas; en «Hoy» se ve en ml (`it.ml`).
   **Envase según el producto (17-10-2026, la dueña escaneó una leche: "no debería aparecer lata si es leche"):**
   leche, jugo, néctar, batidos y bebibles → «caja»; agua e isotónicas → «botella»; energéticas y bebidas → «lata»;
-  lo demás → «envase».
+  lo demás → «envase». Cajas grandes (≥400 ml, o leche/kéfir/bebida vegetal sin tamaño conocido) se cuentan por
+  «vaso» (la porción de la etiqueta) y dicen «la caja trae 1 litro» (la dueña mostró su Protein+ Power de 1 L).
 - **Cada comida en su propio cuadro (10-10-2026, pedido de la dueña: "así, como
   Energéticas"):** en «Hoy», desayuno, colaciones, almuerzo, snack y cena van en
   cuadros separados (`.comida-card`) con su hora, kcal, alimentos y dos botones:

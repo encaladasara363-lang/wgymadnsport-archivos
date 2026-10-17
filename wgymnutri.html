@@ -1880,6 +1880,9 @@ function detalle(a){
  var envase = /leche|milk|jugo|n[eé]ctar|batido|bebible|cultivad|chocolatad|kefir|k[eé]fir|avena|almendra|soya|protein\+|yogur/i.test(nomEnv) ? "caja"
   : /powerade|gatorade|electrolit|hydration|agua|isot[oó]nic|kombucha|t[eé] helado/i.test(nomEnv) ? "botella"
   : /monster|red ?bull|score|burn|rockstar|prime|celsius|bang|energ|cola|pepsi|sprite|fanta|bilz|pap|kem|cerveza|t[oó]nica|bebida/i.test(nomEnv) || agr.comida === "bebidas" ? "lata" : "envase";
+ /* Cajas grandes (la dueña mostró su Protein+ Power de 1 litro, 17-10-2026): la porción de la etiqueta
+    es un vaso, no la caja entera. Leche, kéfir y bebidas vegetales van por vaso salvo cajita chica. */
+ if(envase === "caja" && ((a.envaseG && a.envaseG >= 400) || (!(a.envaseG && a.envaseG < 400) && /leche|milk|kefir|k[eé]fir|avena|almendra|soya/i.test(nomEnv)))) envase = "vaso";
  /* El cuadro de láminas/envase solo para lo que viene en láminas, rebanadas o unidades
     (10-10-2026, la dueña escaneó un yogur: "no quiero ese aviso"). Yogur y postres: por pote. */
  var nomAl = normName(a.n + " " + (a.marca || "") + " " + (a.porcTxt || "")).toLowerCase();
@@ -1891,7 +1894,7 @@ function detalle(a){
   '<p class="muted" style="margin:0 0 12px">' + (agregadoWgym(a) ? '<em class="tag-wgym">⭐ Agregado por WGYM</em> ' : a.cat === CAT_PROD ? '<em class="tag-wgym">📷 Escaneado en WGYM</em> ' : '') + esc(a.marca || a.cat || "") + (a.cat === "Marcas" || a.cat === CAT_BEB ? ' · valores aproximados; para el dato exacto escanea el código de barras' : '') + '</p>';
  if(esLiq && a.porcG){
   gramos = a.porcG;
-  h += '<div class="porc-rec"><span>✅ Contenido</span><b>1 ' + envase + ' (' + a.porcG + ' ml)</b><small>información de la etiqueta del producto</small></div>' +
+  h += '<div class="porc-rec"><span>✅ ' + (envase === "vaso" ? 'Porción' : 'Contenido') + '</span><b>1 ' + envase + ' (' + a.porcG + ' ml)</b><small>' + (envase === "vaso" && a.envaseG >= 400 ? 'la caja trae ' + (a.envaseG >= 1000 ? (a.envaseG / 1000 + ' litro' + (a.envaseG > 1000 ? 's' : '')).replace('.', ',') : a.envaseG + ' ml') + '; ' : '') + 'información de la etiqueta del producto</small></div>' +
    '<div class="mults" id="dPorc">' + [[0.5,"½ " + envase],[1,"1 " + envase],[2,"2 " + envase + "s"],[0,"100 ml"]].map(function(m){ return '<button type="button" class="chip" data-p="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
  }else if(esPote && a.porcG){
   gramos = a.porcG;
@@ -2524,7 +2527,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101701", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101702", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
