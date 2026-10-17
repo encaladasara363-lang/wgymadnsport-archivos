@@ -68,4 +68,5 @@ Para armar o rehacer un video:
 | Crunch abdominal en polea (acostada, n.º 20, barra recta) | — | ✅ `mujer/crunch-acostado-polea` (Grok, 17-10-2026) | 3 × 12-15 |
 | Prensa de piernas (inclinada 45°, terraza) | — | ✅ `mujer/prensa-piernas` (Grok, 17-10-2026, sin bloqueo articular) | 3 × 8-10 |
 | Sentadilla hack inversa (máquina n.º 12 al revés, terraza) | — | ✅ `mujer/hack-inversa` (Grok, 17-10-2026) | 3 × 10-12 |
+| Patada de glúteo en polea (polea n.º 20, tobillera abajo) | — | ✅ `mujer/patada-gluteo-polea` (Grok, 17-10-2026) | 3 × 12-15 |
 | Abducción de cadera en máquina (palanca roja de patada de glúteo, terraza) | — | ✅ `mujer/abduccion-cadera-maquina` (Gemini, repetido 6 veces, 17-10-2026) | 3 × 12-15 |

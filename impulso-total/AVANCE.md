@@ -46,8 +46,9 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    máquina n.º 12 (hack squat rojo de la terraza), de frente al respaldo, pies ABAJO en la base y no en la
    plataforma (como el video de la dueña). Foto con la modelo lista (`mujer/hack-inversa/imagen.jpg`).
    Video de Grok (11 s, sin bloqueo) armado con glúteos en rojo que siguen el movimiento.
-13. Extensión de glúteo a una pierna en polea (3 × 12-15 por pierna) — pendiente: queda como está en la rutina;
-   falta foto de la polea + video de referencia de la dueña.
+13. Patada de glúteo en polea (extensión de glúteo a una pierna, 3 × 12-15 por pierna) — ✅ video aprobado el
+   17-10-2026 (`mujer/patada-gluteo-polea`): polea n.º 20, de frente a la máquina, tobillera en la polea baja
+   (la dueña: "tiene que estar mirando hacia la polea"). Video de Grok de 11 s, glúteo en rojo.
 14. Abducción de cadera en máquina (reemplaza a «Aducción de cadera en polea», 3 × 12-15 por lado; la dueña,
    17-10-2026: "es para la 14") — ✅ video aprobado el 17-10-2026 (`mujer/abduccion-cadera-maquina`): palanca roja de
    la terraza, rodilla doblada, la palanca sube como bisagra. Clip de Gemini de 2 s repetido 6 veces (la dueña: "quiero
