@@ -66,3 +66,4 @@ Para armar o rehacer un video:
 | Press militar (máquina n.º 15, terraza) | — | ✅ `mujer/press-militar` (Grok, 16-10-2026) | 3 × 8-10 |
 | Extensión de tríceps en polea (n.º 20, cuerda) | — | ✅ `mujer/extension-triceps-polea` (Grok, 16-10-2026) | 3 × 12-15 |
 | Crunch abdominal en polea (acostada, n.º 20, barra recta) | — | ✅ `mujer/crunch-acostado-polea` (Grok, 17-10-2026) | 3 × 12-15 |
+| Prensa de piernas (inclinada 45°, terraza) | — | ✅ `mujer/prensa-piernas` (Grok, 17-10-2026, sin bloqueo articular) | 3 × 8-10 |

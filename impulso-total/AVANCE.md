@@ -38,10 +38,12 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    manos junto a la cara (`mujer/crunch-acostado-polea/imagen.jpg`, muchos intentos en ChatGPT). Imagen aprobada: pies contra la
    base de la columna, manos sobre la cabeza y BARRA RECTA CORTA atrapada detrás de los codos, a la altura
    de la barbilla (como el video). Video de Grok (abdomen en rojo). **Día 2 completo.**
-11. Prensa de piernas — en curso (17-10-2026): prensa inclinada 45° de la terraza (carro rojo con discos;
+11. Prensa de piernas — ✅ video aprobado el 17-10-2026 (`mujer/prensa-piernas`, 3 × 8-10, sin bloqueo articular): prensa inclinada 45° de la terraza (carro rojo con discos;
    `maquinas-wgymadnsport/mujer/prensa-piernas/fuentes/maquina.jpg` y `maquina-lado.jpg`). Foto con la modelo
    lista (vista lateral, sentada al fondo del asiento). Video de Grok recortado a 0,35-1,85 s para que nunca
-   estire las rodillas al tope (pedido de la dueña: bloqueo articular). En revisión.
+   estire las rodillas al tope; al final Grok lo hizo bien con «NO knee lockout» (11 s).
+12. Peso muerto rumano con mancuernas — siguiente. La dueña mandó un video y la máquina n.º 12 (hack squat
+   rojo de la terraza): por confirmar a qué ejercicio corresponde.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
