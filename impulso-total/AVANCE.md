@@ -92,6 +92,7 @@ discos no tiene lugar en la rutina todavía.
    mancuerna (pedido de la dueña). El video de ejemplo que mandó es de una persona del gimnasio: no se sube.
    Imagen completa; aductores (parte interna del muslo) en rojo chico con `musculo_kf` (dos óvalos). **Aprobado.**
 
-24. Puente de glúteos en suelo (3 × 15) — en preparación (17-10-2026): colchoneta azul sobre el pasto
+24. Puente de glúteos en suelo (3 × 15) — ✅ video del 17-10-2026 (`mujer/puente-gluteos`, Grok): colchoneta azul sobre el pasto
    (`mujer/puente-gluteos/fuentes/colchoneta-azul.jpg`); referencia de TikTok (solo guía, no se sube): puente con una
-   mancuerna sobre la cadera, cámara en diagonal desde los pies.
+   mancuerna sobre la cadera, cámara en diagonal desde los pies. Grok le puso los pies sobre un disco.
+   Glúteo en rojo chico sobre el short (`musculo_kf`, `solo_piel: "todo"`, intensidad 0.6).

@@ -298,7 +298,7 @@ def main(carpeta):
             fz = p.get('intensidad', 1.0)
             nov = (kf.shape[1] - 1) // 4  # varios óvalos por fila: [cuadro, cx, cy, rx, ry, cx2, cy2, ...]
             fr = [musculo_rojo(f, [[np.interp(i, kf[:, 0], kf[:, 1 + 4 * o + c]) for c in range(4)] for o in range(nov)],
-                               (0, 0), i, True, fz) for i, f in enumerate(fr)]
+                               (0, 0), i, p.get('solo_piel', True), fz) for i, f in enumerate(fr)]
         elif p.get('espejo_bajo'):
             fr = pintar_espejo_bajo(fr, p['espejo_bajo'], p.get('intensidad', 1.0))
         elif p.get('espejo_muslos'):
