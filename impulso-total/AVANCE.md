@@ -91,3 +91,7 @@ discos no tiene lugar en la rutina todavía.
    apoyos (`mujer/peso-muerto-sumo/fuentes/plataforma-sumo.jpg`); la mujer DE FRENTE a la cámara, con UNA
    mancuerna (pedido de la dueña). El video de ejemplo que mandó es de una persona del gimnasio: no se sube.
    Imagen completa; aductores (parte interna del muslo) en rojo chico con `musculo_kf` (dos óvalos). **Aprobado.**
+
+24. Puente de glúteos en suelo (3 × 15) — en preparación (17-10-2026): colchoneta azul sobre el pasto
+   (`mujer/puente-gluteos/fuentes/colchoneta-azul.jpg`); referencia de TikTok (solo guía, no se sube): puente con una
+   mancuerna sobre la cadera, cámara en diagonal desde los pies.
