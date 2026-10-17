@@ -28,6 +28,7 @@ config.json:
 
 Requiere: pip install imageio-ffmpeg pillow numpy scipy
 """
+import shutil
 import json, math, os, subprocess, sys, tempfile, glob
 import numpy as np
 from scipy import ndimage
@@ -49,7 +50,9 @@ def leer_frames(path, desde, hasta, recorte=None):
     subprocess.run([FF, '-v', 'error', '-ss', str(desde), '-t', str(hasta - desde),
                     '-i', path, '-map', '0:v:0', '-an', '-r', str(FPS)] + vf + [
                     os.path.join(tmp, '%04d.png')], check=True)
-    return [Image.open(f).convert('RGB') for f in sorted(glob.glob(os.path.join(tmp, '*.png')))]
+    fr = [Image.open(f).convert('RGB') for f in sorted(glob.glob(os.path.join(tmp, '*.png')))]
+    shutil.rmtree(tmp, ignore_errors=True)
+    return fr
 
 
 def a_vertical(im, encoger=None, encaje=None):
@@ -157,6 +160,7 @@ def main(carpeta):
     q = [x.quantize(palette=pal, dither=Image.Dither.FLOYDSTEINBERG) for x in g]
     q[0].save(os.path.join(carpeta, nombre + '.gif'), save_all=True, append_images=q[1:],
               duration=int(2000 / FPS), loop=0, optimize=True)
+    shutil.rmtree(tmp, ignore_errors=True)  # los PNG temporales llenaban el disco
     print('Listo:', nombre + '.mp4', nombre + '.gif', len(unico + extra), 'cuadros')
 
 
