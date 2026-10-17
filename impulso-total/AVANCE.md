@@ -53,6 +53,10 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    17-10-2026: "es para la 14") — ✅ video aprobado el 17-10-2026 (`mujer/abduccion-cadera-maquina`): palanca roja de
    la terraza, rodilla doblada, la palanca sube como bisagra. Clip de Gemini de 2 s repetido 6 veces (la dueña: "quiero
    más repeticiones"; "dejemos ese video"); glúteo en rojo sobre el short.
+16. Press de pecho con mancuernas en banco — ✅ video aprobado el 17-10-2026 (`mujer/press-pecho-mancuernas`, 3 × 10-12):
+   banco plano de la terraza (`fuentes/banco-plano.jpg`), video de Grok, pecho en rojo.
+17. Jalón al pecho (3 × 8-10) — en curso: máquina n.º 24 de la terraza (jalón con discos, barra roja arriba;
+   `mujer/jalon-al-pecho/fuentes/maquina-24.jpg`).
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
