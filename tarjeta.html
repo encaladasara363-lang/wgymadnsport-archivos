@@ -2301,7 +2301,7 @@ function renderEvolucion(s){
  function tarjetaBloqueada_(s){ return !!s && estadoDe(s.vencimiento).cls === "danger"; }
  function mostrarBloqueo_(s){
   var bloq = tarjetaBloqueada_(s), box = document.getElementById("bloqueoCard");
-  ["instCard","nutriCard","calCard","coachCard","rankCard","evoCard"].forEach(function(id){ if(bloq) document.getElementById(id).hidden = true; });
+  ["instCard","calCard","coachCard","rankCard","evoCard"].forEach(function(id){ if(bloq) document.getElementById(id).hidden = true; });
   Array.prototype.forEach.call(document.querySelectorAll("#cardView .band-box"), function(b){ b.hidden = bloq; });
   box.hidden = !bloq;
   if(!bloq){ box.innerHTML = ""; return false; }
@@ -2411,6 +2411,7 @@ function renderEvolucion(s){
  if(tarjetaBloqueada_(s)){
   seguro_(function(){ renderPago(s); });
   seguro_(function(){ mostrarBloqueo_(s); });
+  seguro_(renderNutriPromo_);   /* los vencidos también ven WGYMNUTRI (17-10-2026, la dueña: "tendría más posibilidades de vender esa app") */
   return;
  }
  seguro_(function(){ mostrarBloqueo_(s); });
@@ -2438,7 +2439,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101302", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101701", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

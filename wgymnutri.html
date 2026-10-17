@@ -21,8 +21,8 @@
   tarjeta virtual, al estilo Cal AI pero gratis (sin fotos con IA): búsqueda
   por nombre (nutri-alimentos.js), código de barras (Open Food Facts) y
   comidas manuales; recetario propio en nutri-recetas.js. Se entra con el QR de cartel-qr-wgymnutri.html.
-  - Mismo bloqueo que la tarjeta: con el plan vencido se bloquea entera.
-    Pase diario: solo el día de su pase. Fecha = la más nueva entre la
+  - Se vende aparte: con la mensualidad del gimnasio vencida igual se entra si
+    WGYMNUTRI está pagada; si no, se ve la pantalla de pago (17-10-2026). Fecha = la más nueva entre la
     copia del teléfono, socios.json y la hoja (listarSocios).
   - Todo lo que el socio anota (comidas, peso, edad, estatura) es dato de
     salud: se guarda SOLO en su teléfono (localStorage), nunca en la hoja
@@ -451,8 +451,10 @@ function entrar(texto, silencioso){
  cargarJson().then(llego);
  cargarHoja().then(llego);
 }
+/* WGYMNUTRI se vende aparte (17-10-2026, la dueña: "quiero que los vencidos igual la vean"): con la mensualidad
+   del gimnasio vencida igual se entra si WGYMNUTRI está pagada, y si no, se muestra cómo pagarla (ya no «Tu
+   mensualidad está vencida»). */
 function abrir(){
- if(bloqueado(socio)){ mostrarBloqueo(); return; }
  var ns = nutriEstado();
  if(ns === "pendiente"){ vista("vCarga"); $("cargaTxt").textContent = "Revisando tu suscripción…"; revisarNutri(true); return; }
  if(ns === "no"){ mostrarPago(); return; }
@@ -510,7 +512,7 @@ function revisarNutri(esperando){
   var t2 = lsGet(CLAVE_NUTRI, {}) || {}, antes = t2[k]; t2[k] = hasta; lsSet(CLAVE_NUTRI, t2);
   var activa = hasta && hasta >= hoyISO();
   if(esperando) { abrir(); return; }
-  if(!activa && $("vPago").hidden && !bloqueado(socio)) mostrarPago();
+  if(!activa && $("vPago").hidden) mostrarPago();
   else if(activa && !$("vPago").hidden){ abrir(); toast("✅ ¡WGYMNUTRI activada! Disfrútala."); confeti(); }
   else if(activa !== (antes && antes >= hoyISO()) && tabSel === "tabPerfil" && !$("vApp").hidden) renderPerfil();
  });
@@ -561,11 +563,7 @@ $("pagoRevisar").addEventListener("click", function(){
  revisarNutri(false).then(function(){ b.disabled = false; b.textContent = "Ya pagué: revisar de nuevo"; if(!$("vPago").hidden) toast("Todavía no está activada. Si ya pagaste, avísale a Sara."); });
 });
 $("pagoOtro").addEventListener("click", salir);
-function reevaluar(){
- var v = $("vBloqueo").hidden === false;
- if(v && !bloqueado(socio)){ abrir(); toast("✅ Tu plan está al día. ¡App desbloqueada!"); }
- else if(!v && bloqueado(socio)) mostrarBloqueo();
-}
+function reevaluar(){ if($("vBloqueo").hidden === false) abrir(); }
 function mostrarBloqueo(){
  cerrarHoja();
  var f = socio && socio.fv ? serialAISO(socio.fv).split("-").reverse().join("-") : "";
@@ -2581,7 +2579,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101707", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101708", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
@@ -2604,8 +2602,8 @@ document.addEventListener("visibilitychange", function(){
  if(document.visibilityState !== "visible" || !socio) return;
  if(diaSel !== hoyISO() && tabSel === "tabHoy" && !$("vApp").hidden){ diaSel = hoyISO(); renderHoy(); }
  var cands = [[socio.n, socio.a]];
- cargarHoja().then(function(l){ var f = buscar(l, cands); if(f && aplicarFicha(f)) reevaluar(); else if(bloqueado(socio) && $("vBloqueo").hidden) mostrarBloqueo(); });
- if(!bloqueado(socio)) revisarNutri(false);
+ cargarHoja().then(function(l){ var f = buscar(l, cands); if(f) aplicarFicha(f); });
+ revisarNutri(false);
 });
 
 /* Arranque */
