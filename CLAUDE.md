@@ -745,6 +745,10 @@ mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
 `fuentes/` (videos de Gemini/Grok sin editar), `config.json` y el
 `.mp4`/`.gif` final, generados con
 `python3 scripts/video-maquina.py maquinas-wgymadnsport/<hombre|mujer>/<maquina>`.
+- **Nunca volver a pedirle una foto que ya mandó (17-10-2026, la dueña: "no me vuelvas a pedir las fotos que
+  ya te mandé"):** antes de pedir la foto de una máquina, buscarla en `maquinas-wgymadnsport/*/*/fuentes/`
+  (ej. polea doble n.º 20: `mujer/extension-triceps-polea/fuentes/maquina-20.jpg`) y en
+  `impulso-total/AVANCE.md`. Solo se pide lo que de verdad no está.
 - **Siempre el mismo modelo** (pedido de la dueña): el mismo hombre en todas
   las máquinas de `hombre/` y la misma mujer en todas las de `mujer/`;
   referencias en `maquinas-wgymadnsport/comun/modelo-hombre.jpg` y
