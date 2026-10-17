@@ -48,7 +48,8 @@ la ropa). Nada se publica hasta que la dueña apruebe la rutina completa.
    Video de Grok (11 s, sin bloqueo) armado con glúteos en rojo que siguen el movimiento.
 13. Extensión de glúteo a una pierna — en curso (17-10-2026): la dueña lo quiere en la palanca roja de patada
    de glúteo de la terraza (rodillo detrás de la rodilla; `mujer/patada-gluteo/fuentes/maquina.jpg`), como su
-   video de referencia (no se sube). Falta: foto con la modelo en ChatGPT y video con Grok.
+   video de referencia (no se sube): de pie, manos en la cadera, rodillo delante de la rodilla y la pierna
+   empuja hacia atrás. Foto con la modelo lista (`imagen.jpg`). Falta: video con Grok.
 
 Pausado el 09-10-2026 y retomado el 14-10-2026.
 
