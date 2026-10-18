@@ -103,3 +103,6 @@ discos no tiene lugar en la rutina todavía.
    polea baja en cada mano, de frente a la cámara (así las dos pilas se mueven y está bien). Después mandó la
    referencia (TikTok, no se sube): de lado, frente a UNA columna, manilla a la altura del pecho con las dos manos,
    torso inclinado, pie de adelante en el step con rodilla a 90° y sube sin impulso, pierna de atrás hacia atrás.
+   Imagen buena: de lado, banca hacia la columna, polea baja al final de la banca. Grok (`fuentes/intento-grok.mp4`)
+   arriba apoyó los dos pies y cambió de pie: la dueña quiere que el pie de atrás NO toque la banca. Se probará con
+   Gemini desde `fuentes/para-gemini.jpg` (primer cuadro de Grok, horizontal con costados difuminados).
