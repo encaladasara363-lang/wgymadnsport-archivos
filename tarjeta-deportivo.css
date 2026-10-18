@@ -176,6 +176,6 @@ footer.footer2 .name{ font-size:15px; }
 .evo-ref-plegable .rp-cuerpo{ padding:0 16px 14px; }
 
 /* Letras más grandes en botones y nombres de rutinas (18-10-2026, la dueña: "las letras son demasiado chicas") */
-.pago-btn{ font-size:23px !important; padding:17px 14px !important; line-height:1.15; }
-.coach-op{ font-size:22px !important; padding:17px 16px !important; line-height:1.2; }
-.coach-ruta span{ font-size:15px !important; }
+.pago-btn{ font-size:27px !important; padding:19px 14px !important; line-height:1.15; }
+.coach-op{ font-size:26px !important; padding:19px 16px !important; line-height:1.2; }
+.coach-ruta span{ font-size:17px !important; }
