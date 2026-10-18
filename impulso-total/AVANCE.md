@@ -115,4 +115,5 @@ discos no tiene lugar en la rutina todavía.
    Grok de ida y vuelta ("quiero este") con el pie de atrás ~70 px más cerca de la banca (`campo_grok` →
    `fuentes/tramo-ida-vuelta-pie-cerca.mp4`), pero tampoco le sirvió: quedó el video de Grok de ida y vuelta TAL CUAL,
    sin mover el pie (el mismo archivo que ella mandó). Después aclaró: "te digo que quiero que acerques el pie a la banca":
-   quedó con el pie deslizado 100 px (`campo_grok` D=100 → `fuentes/tramo-ida-vuelta-pie-cerca.mp4`).
+   con el pie deslizado 100 px la pierna y la zapatilla quedaron deformadas ("cómo se te ocurre"): se volvió al video
+   tal cual. **Nunca deformar partes del cuerpo para moverlas**: si la posición no sirve, pedir un video nuevo.

@@ -3,7 +3,7 @@
   "series": "3 × 10 POR LADO",
   "partes": [
     {
-      "video": "fuentes/tramo-ida-vuelta-pie-cerca.mp4",
+      "video": "fuentes/tramo-ida-vuelta.mp4",
       "desde": 0,
       "hasta": 2.46,
       "encaje": {
@@ -12,7 +12,7 @@
         "y": -90
       },
       "repetir": 3,
-      "nota": "Ejercicio 25 de Impulso Total. Video de Grok de ida y vuelta (la versión que eligió la dueña), con el pie de atrás deslizado 100 px hacia la banca (scripts/acercar-pie-step-up.py, campo_grok D=100): \"quiero que acerques el pie a la banca\".",
+      "nota": "Ejercicio 25 de Impulso Total. Video de Grok de ida y vuelta tal cual (la versión que eligió la dueña). Deformar el pie para acercarlo a la banca deforma la pierna y la zapatilla: NO hacerlo; para acercar el pie hay que pedir un video nuevo.",
       "musculo_kf": [
         [
           0,
