@@ -816,7 +816,8 @@ mujeres-perdida-grasa, pulso-firme). Desde 18-10-2026 también `impulso-total` (
 `visual: "video"`, con los 25 videos de máquinas de `maquinas-wgymadnsport/mujer/` comprimidos en
 `assets/impulso-total/` (540 px, sin audio); clave `wgym_impulso_total_v1_`. Con `videoAuto: true` (opción nueva del
 motor, 18-10-2026, la dueña: "que muestre el ejercicio de una sin tener que apretar play") el video parte solo,
-en bucle y sin botón play; las demás rutinas con video siguen igual. Los `entrenar-*` de clientes
+en bucle y sin botón play; las demás rutinas con video siguen igual. Publicada para las socias el 18-10-2026: está en
+`COACH_RUTINAS` de la tarjeta (primera de las de mujer, «Impulso Total · Enfocada en Glúteo»). Los `entrenar-*` de clientes
 (sara, milton, luisa, eymilee, principiante5, gluteos, hombre5) y las
 `app_*` VIP siguen con el formato antiguo.
 - Opciones del JSON (todas opcionales): `visual` (pares/imagen/video),
