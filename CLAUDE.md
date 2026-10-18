@@ -812,7 +812,9 @@ compartida) + `validar-rutina.js`. Migradas en 10/2026:
 `mujeres-en-movimiento` y los 11 `entrenar-*` de los carteles
 (full-body-principiantes, hombre6, hombres, hombres3,
 intermedio-mujeres, modo-musculo-hombres, mujeres, mujeres3, mujeres5,
-mujeres-perdida-grasa, pulso-firme). Los `entrenar-*` de clientes
+mujeres-perdida-grasa, pulso-firme). Desde 18-10-2026 también `impulso-total` (Mujeres Intermedio, 5 días):
+`visual: "video"`, con los 25 videos de máquinas de `maquinas-wgymadnsport/mujer/` comprimidos en
+`assets/impulso-total/` (540 px, sin audio); clave `wgym_impulso_total_v1_`. Los `entrenar-*` de clientes
 (sara, milton, luisa, eymilee, principiante5, gluteos, hombre5) y las
 `app_*` VIP siguen con el formato antiguo.
 - Opciones del JSON (todas opcionales): `visual` (pares/imagen/video),

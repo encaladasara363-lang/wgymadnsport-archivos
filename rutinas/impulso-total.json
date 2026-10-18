@@ -1,0 +1,284 @@
+{
+ "version": 1,
+ "id": "impulso-total",
+ "nombre": "IMPULSO TOTAL",
+ "claveProgreso": "wgym_impulso_total_v1_",
+ "visual": "video",
+ "dias": [
+  {
+   "weekday": "Lunes",
+   "title": "Pierna · cuádriceps y glúteos",
+   "focus": "Smith · hip thrust · femoral · pantorrillas",
+   "warmup": "Bicicleta de spinning suave — 6 minutos",
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva.",
+   "exercises": [
+    {
+     "name": "Sentadilla en Smith",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Ajusta la posición de pies y baja con control; mantén rodillas alineadas con los pies.",
+     "equip": "Barra guiada",
+     "muscle": "Cuádriceps · glúteos",
+     "video": "assets/impulso-total/sentadilla-smith.mp4?v=1"
+    },
+    {
+     "name": "Hip thrust",
+     "sets": "4 × 12",
+     "rest": "90 seg",
+     "tip": "Apoya la parte alta de la espalda en el respaldo y los pies firmes en la plataforma. Eleva la pelvis hasta alinear tronco y muslos apretando glúteos arriba. ⚠️ No arquees la zona lumbar ni empujes con la punta de los pies.",
+     "equip": "Máquina de hip thrust",
+     "muscle": "Glúteos",
+     "video": "assets/impulso-total/hip-thrust.mp4?v=1"
+    },
+    {
+     "name": "Curl femoral a una pierna",
+     "sets": "3 × 10-12 por pierna",
+     "rest": "60 seg",
+     "tip": "De pie, apoya el torso en el soporte y fija la pelvis. Flexiona una rodilla llevando la palanca hacia atrás sin balancear la espalda; baja con control.",
+     "equip": "Máquina",
+     "muscle": "Isquiotibiales",
+     "video": "assets/impulso-total/curl-femoral-de-pie.mp4?v=1"
+    },
+    {
+     "name": "Extensión de cuádriceps",
+     "sets": "3 × 12-15",
+     "rest": "60 seg",
+     "tip": "Alinea rodilla con el eje de la máquina; sube sin impulso y baja lentamente.",
+     "equip": "Máquina",
+     "muscle": "Cuádriceps",
+     "video": "assets/impulso-total/extension-cuadriceps.mp4?v=1"
+    },
+    {
+     "name": "Elevación de talones",
+     "sets": "3 × 12-15",
+     "rest": "45 seg",
+     "tip": "Sube y baja en todo el recorrido disponible sin rebotar.",
+     "equip": "Máquina",
+     "muscle": "Pantorrillas",
+     "video": "assets/impulso-total/elevacion-talones-de-pie.mp4?v=1"
+    }
+   ]
+  },
+  {
+   "weekday": "Martes",
+   "title": "Tren superior y abdomen",
+   "focus": "Pecho · espalda · hombros · tríceps · abdomen",
+   "warmup": "Remadora suave — 6 minutos",
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva.",
+   "exercises": [
+    {
+     "name": "Press de pecho sentado",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Mantén espalda apoyada y muñecas alineadas; empuja sin bloquear codos.",
+     "equip": "Máquina",
+     "muscle": "Pectorales · tríceps",
+     "video": "assets/impulso-total/press-pecho-sentado.mp4?v=1"
+    },
+    {
+     "name": "Remo frontal",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Lleva los agarres hacia ti con el pecho estable; junta omóplatos sin impulso.",
+     "equip": "Máquina",
+     "muscle": "Espalda media",
+     "video": "assets/impulso-total/remo-frontal.mp4?v=1"
+    },
+    {
+     "name": "Press militar",
+     "sets": "3 × 8-10",
+     "rest": "90 seg",
+     "tip": "Mantén espalda y pelvis apoyadas; sube sin encoger hombros ni bloquear codos.",
+     "equip": "Máquina",
+     "muscle": "Deltoides · tríceps",
+     "video": "assets/impulso-total/press-militar.mp4?v=1"
+    },
+    {
+     "name": "Extensión de tríceps en polea",
+     "sets": "3 × 12-15",
+     "rest": "60 seg",
+     "tip": "Mantén codos cerca del cuerpo y evita usar el tronco para mover la carga.",
+     "equip": "Polea",
+     "muscle": "Tríceps",
+     "video": "assets/impulso-total/extension-triceps-polea.mp4?v=1"
+    },
+    {
+     "name": "Crunch abdominal en polea",
+     "sets": "3 × 12-15",
+     "rest": "60 seg",
+     "tip": "Acostada con los pies hacia la polea, sujeta la barra sobre el pecho. Sube el tronco acercando las costillas a la pelvis y baja lento. ⚠️ No tires del cuello ni de la barra con los brazos: el trabajo es del abdomen.",
+     "equip": "Polea · barra recta corta · colchoneta",
+     "muscle": "Abdominales",
+     "video": "assets/impulso-total/crunch-acostado-polea.mp4?v=1"
+    }
+   ]
+  },
+  {
+   "weekday": "Miércoles",
+   "title": "Pierna · cadena posterior",
+   "focus": "Glúteos · femoral · abducción · pantorrillas",
+   "warmup": "Trotadora curva caminando — 6 minutos",
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva.",
+   "exercises": [
+    {
+     "name": "Prensa de piernas",
+     "sets": "3 × 8-10",
+     "rest": "90 seg",
+     "tip": "Baja hasta donde puedas mantener espalda y pelvis apoyadas; evita bloquear rodillas.",
+     "equip": "Prensa",
+     "muscle": "Cuádriceps · glúteos",
+     "video": "assets/impulso-total/prensa-piernas.mp4?v=1"
+    },
+    {
+     "name": "Sentadilla hack inversa",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Ponte de frente al respaldo con el pecho apoyado. Lleva la cadera atrás y baja controlando; sube empujando con los talones. ⚠️ No dejes que las rodillas se vayan hacia adentro ni redondees la espalda.",
+     "equip": "Máquina hack usada al revés",
+     "muscle": "Glúteos · isquiotibiales",
+     "video": "assets/impulso-total/hack-inversa.mp4?v=1"
+    },
+    {
+     "name": "Patada de glúteo en polea",
+     "sets": "3 × 12-15 por pierna",
+     "rest": "60 seg",
+     "tip": "De frente a la polea, sujeta la estructura y lleva una pierna hacia atrás desde la cadera, apretando el glúteo. Regresa despacio. ⚠️ No arquees la zona lumbar ni balancees el cuerpo.",
+     "equip": "Polea baja · tobillera",
+     "muscle": "Glúteo mayor",
+     "video": "assets/impulso-total/patada-gluteo-polea.mp4?v=1"
+    },
+    {
+     "name": "Abducción de cadera en máquina",
+     "sets": "3 × 12-15 por lado",
+     "rest": "60 seg",
+     "tip": "Mantén la pelvis fija y abre la pierna hacia el costado contra la resistencia; aguanta un segundo arriba y vuelve con control. ⚠️ No estires la rodilla ni gires el tronco para mover el peso.",
+     "equip": "Máquina",
+     "muscle": "Glúteo medio",
+     "video": "assets/impulso-total/abduccion-cadera-maquina.mp4?v=1"
+    },
+    {
+     "name": "Pantorrilla sentado",
+     "sets": "3 × 15",
+     "rest": "60 seg",
+     "tip": "Apoya la parte delantera de los pies en la plataforma con el rodillo sobre los muslos. Suelta el seguro y eleva los talones lo más alto posible; baja lento. ⚠️ No rebotes abajo.",
+     "equip": "Máquina de pantorrilla sentado",
+     "muscle": "Sóleo · pantorrillas",
+     "video": "assets/impulso-total/pantorrilla-sentado.mp4?v=1"
+    }
+   ]
+  },
+  {
+   "weekday": "Jueves",
+   "title": "Tren superior y abdomen",
+   "focus": "Pecho · espalda · hombros · bíceps · abdomen",
+   "warmup": "Remadora suave — 6 minutos",
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva.",
+   "exercises": [
+    {
+     "name": "Press de pecho con mancuernas en banco",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Apoya espalda y pies; baja las mancuernas con control a los lados del pecho y empuja hacia arriba.",
+     "equip": "Banco · mancuernas",
+     "muscle": "Pecho · tríceps",
+     "video": "assets/impulso-total/press-pecho-mancuernas.mp4?v=1"
+    },
+    {
+     "name": "Jalón al pecho",
+     "sets": "3 × 8-10",
+     "rest": "90 seg",
+     "tip": "Lleva los agarres hacia el pecho sin tirar con la zona lumbar; controla la subida.",
+     "equip": "Máquina",
+     "muscle": "Dorsales",
+     "video": "assets/impulso-total/jalon-al-pecho.mp4?v=1"
+    },
+    {
+     "name": "Face pull en polea",
+     "sets": "3 × 12-15",
+     "rest": "60 seg",
+     "tip": "Tira hacia la frente con codos altos sin arquear la zona lumbar.",
+     "equip": "Polea",
+     "muscle": "Deltoides posteriores",
+     "video": "assets/impulso-total/face-pull-polea.mp4?v=1"
+    },
+    {
+     "name": "Curl de bíceps con discos",
+     "sets": "3 × 15",
+     "rest": "60 seg",
+     "tip": "Toma un disco con cada mano, codos pegados al cuerpo. Sube flexionando solo los codos y baja lento. ⚠️ No balancees el tronco ni separes los codos.",
+     "equip": "Discos",
+     "muscle": "Bíceps",
+     "video": "assets/impulso-total/curl-biceps-discos.mp4?v=1"
+    },
+    {
+     "name": "Plancha frontal",
+     "sets": "3 × 30-40 seg",
+     "rest": "60 seg",
+     "tip": "Empuja el suelo con los antebrazos y mantén caderas y hombros alineados; respira normalmente.",
+     "equip": "Colchoneta",
+     "muscle": "Abdomen · estabilidad",
+     "video": "assets/impulso-total/plancha-frontal.mp4?v=1"
+    }
+   ]
+  },
+  {
+   "weekday": "Viernes",
+   "title": "Pierna · completa",
+   "focus": "Cuádriceps · glúteos · aductores",
+   "warmup": "Bicicleta de spinning suave — 6 minutos",
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva.",
+   "exercises": [
+    {
+     "name": "Sentadilla goblet con mancuerna",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Sujeta una mancuerna frente al pecho con los talones sobre las cuñas; baja entre las caderas con el pecho erguido. ⚠️ No dejes que las rodillas se vayan hacia adentro.",
+     "equip": "Mancuerna · cuñas para los talones",
+     "muscle": "Cuádriceps",
+     "video": "assets/impulso-total/sentadilla-goblet.mp4?v=1"
+    },
+    {
+     "name": "Zancadas con mancuernas",
+     "sets": "3 × 10 por pierna",
+     "rest": "60 seg",
+     "tip": "Pie de adelante sobre el step y el de atrás en el suelo; baja la rodilla de atrás con control y sube. ⚠️ Mantén la rodilla de adelante alineada con el pie, sin que se vaya hacia adentro.",
+     "equip": "Mancuernas · step",
+     "muscle": "Cuádriceps",
+     "video": "assets/impulso-total/zancadas-mancuernas.mp4?v=1"
+    },
+    {
+     "name": "Peso muerto sumo con mancuerna",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Abre los pies más que las caderas, mantén la mancuerna entre las piernas y extiende caderas y rodillas sin redondear la espalda.",
+     "equip": "Mancuerna · plataforma de sumo",
+     "muscle": "Aductores · glúteos",
+     "video": "assets/impulso-total/peso-muerto-sumo.mp4?v=1"
+    },
+    {
+     "name": "Puente de glúteos en suelo",
+     "sets": "3 × 15",
+     "rest": "60 seg",
+     "tip": "Apoya los pies al ancho de caderas con la mancuerna sobre la cadera; eleva la pelvis contrayendo glúteos. ⚠️ No arquees la zona lumbar.",
+     "equip": "Colchoneta · mancuerna",
+     "muscle": "Glúteos",
+     "video": "assets/impulso-total/puente-gluteos.mp4?v=1"
+    },
+    {
+     "name": "Step-up en polea",
+     "sets": "3 × 10 por lado",
+     "rest": "75 seg",
+     "tip": "Una mano en la columna y la otra en la manilla de la polea baja. Empuja con la pierna apoyada en la banca hasta estirarla y baja despacio. ⚠️ No te impulses con el pie del suelo ni lo apoyes en la banca.",
+     "equip": "Polea baja · banca plana",
+     "muscle": "Glúteos · cuádriceps",
+     "video": "assets/impulso-total/step-up-polea.mp4?v=1"
+    }
+   ]
+  }
+ ]
+}

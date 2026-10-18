@@ -117,3 +117,9 @@ discos no tiene lugar en la rutina todavía.
    sin mover el pie (el mismo archivo que ella mandó). Después aclaró: "te digo que quiero que acerques el pie a la banca":
    con el pie deslizado 100 px la pierna y la zapatilla quedaron deformadas ("cómo se te ocurre"): se volvió al video
    tal cual. **Nunca deformar partes del cuerpo para moverlas**: si la posición no sirve, pedir un video nuevo.
+
+
+**App armada el 18-10-2026** (pedido de la dueña: "con el formato que tiene todas mis rutinas"): `impulso-total.html`
+(copia de `mujeres-en-movimiento.html` + `.pose-video`), `rutinas/impulso-total.json` (textos del archivo original;
+tips nuevos solo en los ejercicios que se cambiaron) y `assets/impulso-total/*.mp4`. Si se cambia un video, recomprimirlo
+con el mismo comando (540 px, crf 27, sin audio) y subir el `?v=` en el JSON. Falta el cartel QR.
