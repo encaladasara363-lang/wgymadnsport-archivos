@@ -1888,19 +1888,19 @@ function renderEvolucion(s){
     recuerda qué rutina eligió (wgym_coach_rutina_v1). Si ya entrenó con alguna
     rutina en este teléfono, la reconoce por su clave de progreso. */
  var COACH_RUTINAS = [
+  ["entrenar-mujeres3","Baja de Peso Mujeres · 3 días","wgym_mujeres3_v1_","F"],
+  ["entrenar-intermedio-mujeres","Enfocada en Glúteos · 3 días","wgym_intermedio_mujeres_v1_","F"],
   ["impulso-total","Impulso Total · Enfocada en Glúteo · 5 días","wgym_impulso_total_v1_","F"],
   ["mujeres-en-movimiento","Mujeres en Movimiento · 5 días","wgym_mujeres_movimiento_v1_","F"],
   ["entrenar-mujeres","Principiante Mujeres · 5 días","wgym_entrena_mujeres_v1_","F"],
   ["entrenar-full-body-principiantes","Full Body Mujeres · 5 días","wgym_full_body_principiantes_v1_","F"],
-  ["entrenar-mujeres3","Baja de Peso Mujeres · 3 días","wgym_mujeres3_v1_","F"],
   ["entrenar-mujeres5","Mujeres Intermedio · 5 días","wgym_mujeres5_v1_","F"],
-  ["entrenar-intermedio-mujeres","Enfocada en Glúteos · 3 días","wgym_intermedio_mujeres_v1_","F"],
   ["entrenar-mujeres-perdida-grasa","Pérdida de Grasa · 6 días","wgym_perdida_grasa_v1_","F"],
   ["entrenar-hombres3","Full Body Hombres · 3 días","wgym_entrena_hombres3_v1_","M"],
+  ["entrenar-pulso-firme","A Pulso Firme · 3 días","wgym_hombres_pulso_firme_v1_","M"],
   ["entrenar-hombres","Hombres Intermedio · 5 días","wgym_entrena_hombres_v1_","M"],
-  ["entrenar-hombre6","Hombre Intermedio · 6 días","wgym_hombre6_v1_","M"],
   ["entrenar-modo-musculo-hombres","Modo Músculo Hombres · 5 días","wgym_modo_musculo_hombres_v1_","M"],
-  ["entrenar-pulso-firme","A Pulso Firme · 3 días","wgym_hombres_pulso_firme_v1_","M"]
+  ["entrenar-hombre6","Hombre Intermedio · 6 días","wgym_hombre6_v1_","M"]
  ];
  var CLAVE_COACH = "wgym_coach_rutina_v1";
  var coachVista = "cerrado", coachDatos = {}, coachSel = null;
@@ -2440,7 +2440,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101802", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101803", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
