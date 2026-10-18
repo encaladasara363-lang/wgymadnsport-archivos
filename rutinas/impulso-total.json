@@ -4,6 +4,7 @@
  "nombre": "IMPULSO TOTAL",
  "claveProgreso": "wgym_impulso_total_v1_",
  "visual": "video",
+ "videoAuto": true,
  "dias": [
   {
    "weekday": "Lunes",
