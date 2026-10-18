@@ -602,3 +602,15 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 
 /* Botón ✏️ Editar junto al basurero (17-10-2026) */
 .item .ed{background:none;border:0;font-size:22px;padding:4px 6px;cursor:pointer;line-height:1}
+/* 🏋️ Mi semana de entrenamiento y meta por tipo de día (18-10-2026) */
+.sem-ent{display:flex;flex-direction:column;gap:10px}
+.se-fila b{display:block;font-size:16px;margin-bottom:4px}
+.se-bts{display:flex;gap:6px}
+.se-bts .chip{flex:1;min-width:0;font-size:13px !important;padding:7px 2px !important;white-space:nowrap;line-height:1.2;display:flex;flex-direction:column;align-items:center}
+.se-bts .se-e{font-size:20px;font-style:normal}
+.se-res{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.se-r,.tipo-dia{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#2a0306,#0D0D0F);border:2px solid #D4AF37}
+.se-r .e,.tipo-dia .e{font-size:30px;line-height:1}
+.se-r.t-pierna,.tipo-dia.t-pierna{border-color:#E30613}
+.se-r.t-descanso,.tipo-dia.t-descanso{border-color:#5cc8ff;background:linear-gradient(135deg,#06202c,#0D0D0F)}
+.tipo-dia{margin:0 0 12px}.tipo-dia p{margin:0}

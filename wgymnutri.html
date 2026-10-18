@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=57">
+<link rel="stylesheet" href="nutri-claro.css?v=58">
 <link rel="stylesheet" href="nutri-oscuro.css?v=13">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -633,6 +633,32 @@ function calcular(d){
  var c = Math.max(0, (kcal - p * 4 - g * 9) / 4);
  return { kcal:Math.round(kcal), p:Math.round(p), c:Math.round(c), g:Math.round(g), tmb:Math.round(tmb), mant:Math.round(mant), def:Math.round(mant - kcal) };
 }
+/* Calorías según el tipo de entreno (18-10-2026, la dueña: "calcular mis calorías en los días más
+   intensos, los de tren superior y los de descanso"). D.semana = 7 tipos (lunes a domingo): pierna,
+   superior o descanso; solo en el teléfono. La semana suma lo mismo que el plan (mantención × 7, mismo
+   déficit): el día de descanso gasta como sedentario (TMB × 1,2) y el resto se reparte entre los días
+   de entreno, la pierna con más peso que el tren superior (1,725 / 1,55, factores de la base técnica).
+   Cada día resta el déficit del plan y nunca baja del TMB. Proteína y grasas no cambian: suben o bajan
+   los carbohidratos. Sin la semana completa (o sin ningún día de entreno), la meta es la misma todos los días. */
+var TIPOS_DIA = [["pierna","🦵","Pierna","Tu día más intenso"],["superior","💪","Tren superior","Día de entreno medio"],["descanso","😴","Descanso","Tu cuerpo se recupera"]];
+var PESO_TIPO = { pierna:1.725 / 1.55, superior:1 };
+var DIAS_SEM = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+function semanaActiva(){ var S = D && D.semana; return S && S.length === 7 && S.every(function(t){ return !!TIPO_INFO(t); }) && S.some(function(t){ return t !== "descanso"; }) ? S : null; }
+function TIPO_INFO(t){ return TIPOS_DIA.filter(function(x){ return x[0] === t; })[0] || null; }
+function metasSemana(){
+ var S = semanaActiva(), P = D.perfil, M = D.metas; if(!S || !P || !M) return null;
+ var m = calcular(P), def = Math.max(0, m.mant - m.kcal), desc = m.tmb * 1.2, unid = 0, nDesc = 0, out = {};
+ S.forEach(function(t){ if(t === "descanso") nDesc++; else unid += PESO_TIPO[t]; });
+ var base = Math.max(0, m.mant * 7 - nDesc * desc) / unid;
+ TIPOS_DIA.forEach(function(x){
+  var t = x[0], gasto = t === "descanso" ? desc : Math.max(desc, base * PESO_TIPO[t]), kcal = Math.round(Math.max(m.tmb, gasto - def));
+  out[t] = { kcal:kcal, c:Math.round(Math.max(0, (kcal - M.p * 4 - M.g * 9) / 4)), tipo:t };
+ });
+ return out;
+}
+function tipoDe(iso){ var S = semanaActiva(); return S ? S[(new Date(iso + "T12:00:00").getDay() + 6) % 7] : null; }
+/* Meta del día: la del tipo de entreno de ese día, o la de siempre si no armó su semana. */
+function metaDia(iso){ var t = tipoDe(iso), ms = t && metasSemana(); return ms ? Object.assign({}, D.metas, ms[t]) : D.metas; }
 /* Fecha estimada para llegar al peso meta (solo al bajar: con el déficit diario y ≈7.000 kcal por kg). */
 function fechaMeta(d, m){
  if(d.obj !== "bajar" || !(d.meta > 0) || !(d.meta < d.peso) || !(m.def > 0)) return null;
@@ -903,7 +929,7 @@ function recordatorio(){
  if(diaSel !== hoyISO()) return null;
  var oc = lsGet("wgymnutri_aviso_oculto_v1", "");
  if(oc === hoyISO()) return null;
- var h = new Date().getHours(), t = totales(diaSel), x = diaDe(diaSel), M = D.metas;
+ var h = new Date().getHours(), t = totales(diaSel), x = diaDe(diaSel), M = metaDia(diaSel);
  if(recOn("horas")){
   var ahoraM = h * 60 + new Date().getMinutes(), pend = null;
   comidasVisibles(x).forEach(function(cm){ var hm = aMin(horaDe(cm[0])); if(ahoraM >= hm + 30 && ahoraM < hm + 180 && !(x.c[cm[0]] || []).length) pend = cm; });
@@ -1267,7 +1293,7 @@ var recCompraAbierta = false;
 /* Resumen semanal para historias de Instagram (1080 × 1920). */
 function compartirSemana(){
  var M = D.metas, dias = diasAtras(7), tots = dias.map(totales), ent = diasEntreno();
- var cumpl = tots.filter(function(t){ return t.n && t.k <= M.kcal; }).length, con = tots.filter(function(t){ return t.n; });
+ var cumpl = tots.filter(function(t, i){ return t.n && t.k <= metaDia(dias[i]).kcal; }).length, con = tots.filter(function(t){ return t.n; });
  var prom = con.length ? con.reduce(function(s, t){ return s + t.k; }, 0) / con.length : 0, pp = con.length ? con.reduce(function(s, t){ return s + t.p; }, 0) / con.length : 0;
  var nEnt = dias.filter(function(d){ return ent[d]; }).length, agua = dias.reduce(function(s, d){ return s + (diaDe(d).agua || 0); }, 0) / 7 * 0.25;
  var cv = document.createElement("canvas"); cv.width = 1080; cv.height = 1920; var c = cv.getContext("2d");
@@ -1434,7 +1460,7 @@ function nivelDe(n){ var i = 0; while(i + 1 < NIVELES.length && n >= NIVELES[i +
    con lo del día y un solo consejo (proteína que faltó, si se pasó de calorías o si no anotó nada). */
 function htmlNoche(){
  if(new Date().getHours() < 21) return "";
- var t = totales(hoyISO()), M = D.metas, h = '<div class="card noche-card"><div class="cab"><h3>🌙 Resumen de tu día</h3></div>';
+ var t = totales(hoyISO()), M = metaDia(hoyISO()), h = '<div class="card noche-card"><div class="cab"><h3>🌙 Resumen de tu día</h3></div>';
  if(!t.n) return h + '<p style="color:#FFD54A;margin:8px 0 0">Hoy no anotaste comidas. Si comiste algo, anótalo ahora: mañana partimos de nuevo con todo 💪</p></div>';
  var pk = Math.round(t.k / M.kcal * 100), pp = M.p ? Math.round(t.p / M.p * 100) : 0, falta = Math.round(M.p - t.p), cons;
  if(t.k > M.kcal * 1.05) cons = '🍽 Hoy te pasaste ' + miles(t.k - M.kcal) + ' kcal. No pasa nada: mañana vuelve a tu plan, sin saltarte comidas.';
@@ -1465,14 +1491,14 @@ function revisarNivel(){
  }
 }
 function revisarFestejo(){
- var hoy = hoyISO(), t = totales(hoy), M = D.metas, x = diaDe(hoy); if(!t.n || !M) return;
+ var hoy = hoyISO(), t = totales(hoy), M = D.metas && metaDia(hoy), x = diaDe(hoy); if(!t.n || !M) return;
  x.fest = x.fest || {}; var msg = null;
  if(!x.fest.p && M.p && t.p >= M.p){ x.fest.p = 1; msg = "💪 ¡Cumpliste tu proteína de hoy!"; }
  if(!x.fest.k && M.kcal && t.k >= M.kcal * 0.9 && t.k <= M.kcal){ x.fest.k = 1; msg = msg ? "🎉 ¡Cumpliste tu proteína y tus calorías de hoy!" : "🎯 ¡Llegaste a tu meta de calorías de hoy!"; }
  if(msg){ setDia(hoy, x); guardar(); confeti(); vibrar(40); toast(msg); }
 }
 function renderHoy(){
- var M = D.metas, t = totales(diaSel), x = diaDe(diaSel), esHoy = diaSel === hoyISO();
+ var M = metaDia(diaSel), t = totales(diaSel), x = diaDe(diaSel), esHoy = diaSel === hoyISO();
  var rest = M.kcal - t.k, pct = Math.min(1, t.k / M.kcal), C = 2 * Math.PI * 62;
  var h = '<div class="dia-nav"><button type="button" id="diaAnt" aria-label="Semana anterior">‹</button><b>' + (esHoy ? "Hoy · " : "") + fechaLarga(diaSel) + '</b><button type="button" id="diaSig" aria-label="Semana siguiente"' + (sumaDias(lunesDe(diaSel), 7) > hoyISO() ? " disabled" : "") + '>›</button></div>';
  /* Franja de la semana (10-10-2026, pedido de la dueña, como Fitia): L a D con un punto en cada
@@ -1493,6 +1519,7 @@ function renderHoy(){
     y meta al lado, los 3 macros en columnas abajo y, en vez de la frase del día, un cuadro
     grande de calorías restantes. */
  function macro(cls, nombre, v, meta){ return '<div class="macro ' + cls + '"><span class="mn">' + nombre + '</span><b class="mv">' + Math.round(v) + '<small> / ' + meta + ' g</small></b><div class="barra"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }
+ if(M.tipo){ var ti = TIPO_INFO(M.tipo); h += '<div class="tipo-dia t-' + M.tipo + '"><span class="e">' + ti[1] + '</span><p><b style="color:#FFD54A">' + (esHoy ? 'Hoy: ' : '') + 'día de ' + ti[2].toLowerCase() + '</b><br><span style="color:#FFB199;font-size:15px">Tu meta de este día: ' + miles(M.kcal) + ' kcal · ' + M.c + ' g de carbohidratos</span></p></div>'; }
  h += '<div class="card res2"><div class="anillo-box"><div class="anillo' + (rest < 0 ? " pasado" : (M.p && t.p >= M.p) || (t.k >= M.kcal * 0.9) ? " meta-ok" : "") + '"><svg viewBox="0 0 150 150"><circle class="fondo" cx="75" cy="75" r="62"/><circle class="prog" id="anilloProg" cx="75" cy="75" r="62" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/></svg><div class="centro"><b>' + Math.round(t.k / M.kcal * 100) + '%</b><span>de tu meta</span></div></div>' +
   '<div class="res-datos"><div><span>🍽 Comidas</span><b>' + miles(t.k) + '<small> kcal</small></b></div><div><span>🎯 Meta</span><b>' + miles(M.kcal) + '<small> kcal</small></b></div></div></div>' +
   '<div class="macros3">' + macro("m-p", "Proteína", t.p, M.p) + macro("m-c", "Carbos", t.c, M.c) + macro("m-g", "Grasas", t.g, M.g) + '</div>' +
@@ -2312,7 +2339,7 @@ function confeti(){
 }
 function renderProg(){
  var M = D.metas, dias = diasAtras(7), tots = dias.map(totales), max = Math.max(M.kcal * 1.3, Math.max.apply(null, tots.map(function(t){ return t.k; })));
- var verdes = tots.filter(function(t){ return t.n && t.k <= M.kcal; }).length;
+ var verdes = tots.filter(function(t, i){ return t.n && t.k <= metaDia(dias[i]).kcal; }).length;
  var h = '<h2 class="disp" style="font-size:34px">Tu progreso</h2>';
  h += '<div class="card"><div class="cab"><h3>📊 Resumen semanal</h3><span>' + verdes + ' / 7 en meta</span></div><div class="semana">' +
   '<div class="meta" style="bottom:' + (22 + (M.kcal / max) * 128) + 'px"><em>Meta ' + miles(M.kcal) + '</em></div>' +
@@ -2490,6 +2517,21 @@ function guardarFotoPerfil(file){
  };
  img.src = url;
 }
+/* «🏋️ Mi semana de entrenamiento» en Mi perfil: qué entrena cada día y su meta de calorías. */
+function htmlSemanaEntreno(){
+ var S = (D.semana && D.semana.length === 7) ? D.semana : ["","","","","","",""], act = semanaActiva(), ms = act && metasSemana();
+ var h = '<div class="card"><p class="kick">🏋️ Mi semana de entrenamiento</p><p class="muted" style="margin:6px 0 10px">Marca qué entrenas cada día. Los días de pierna comes más, los de descanso menos, y en la semana comes lo mismo que tu plan.</p><div class="sem-ent">' +
+  DIAS_SEM.map(function(d, i){ return '<div class="se-fila"><b>' + d + '</b><div class="se-bts">' + TIPOS_DIA.map(function(x){ return '<button type="button" class="chip" data-sd="' + i + '" data-st="' + x[0] + '" aria-pressed="' + (S[i] === x[0]) + '"><span class="se-e">' + x[1] + '</span>' + (x[0] === "superior" ? "Superior" : x[2]) + '</button>'; }).join("") + '</div></div>'; }).join("") + '</div>';
+ if(ms){
+  h += '<div class="se-res">' + TIPOS_DIA.map(function(x){ var n = S.filter(function(t){ return t === x[0]; }).length; if(!n) return ""; var v = ms[x[0]];
+   return '<div class="se-r t-' + x[0] + '"><span class="e">' + x[1] + '</span><div><b style="color:#FFD54A">' + x[2] + ' (' + n + (n === 1 ? ' día' : ' días') + ')</b><br><span style="color:#FFB199">' + miles(v.kcal) + ' kcal · ' + D.metas.p + ' g proteína · ' + v.c + ' g carbos · ' + D.metas.g + ' g grasas</span></div></div>'; }).join("") + '</div>' +
+   '<p class="muted" style="font-size:14px;margin:8px 0 0">La proteína y las grasas son iguales todos los días; lo que cambia son los carbohidratos (la energía para entrenar). Nunca baja de tu metabolismo basal.</p>' +
+   '<button type="button" class="btn sec chico" id="semQuitar" style="margin-top:10px">Usar la misma meta todos los días</button>';
+ } else if(S.some(function(t){ return t; })){
+  h += '<p class="muted" style="margin:10px 0 0">' + (S.every(function(t){ return t; }) ? 'Marca al menos un día de entreno.' : 'Te faltan ' + S.filter(function(t){ return !t; }).length + ' día(s) por marcar. Cuando estén los 7, verás tu meta de cada día.') + '</p>';
+ }
+ return h + '</div>';
+}
 function renderPerfil(){
  var P = D.perfil, M = D.metas;
  var h = '<h2 class="disp" style="font-size:34px">Mi perfil</h2><div class="card"><div class="perfil-foto">' + (fotoPerfil() ? '<img src="' + fotoPerfil() + '" alt="Mi foto">' : '<span class="pf-vacia" aria-hidden="true">👤</span>') + '<div class="pf-bts"><label class="btn oro chico" style="display:flex;align-items:center;justify-content:center;cursor:pointer">📸 ' + (fotoPerfil() ? 'Cambiar mi foto' : 'Poner mi foto') + '<input type="file" id="fotoPerfilIn" accept="image/*" hidden></label>' + (fotoPerfil() ? '<button type="button" class="btn sec chico" id="fotoPerfilX">Quitar foto</button>' : '') + '<p class="muted" style="font-size:12px;margin:0">🔒 Solo en este teléfono.</p></div></div><p class="perfil-nombre">' + esc(socio.n + " " + socio.a) + '</p>' +
@@ -2499,6 +2541,7 @@ function renderPerfil(){
   '<div class="campo" style="margin-top:12px"><label for="aguaMeta">💧 Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta"><option value="auto"' + (M.aguaManual ? '' : ' selected') + '>Según mi peso: ' + aguaRecomendada(P) + ' vasos (' + String(r1(aguaRecomendada(P) * 0.25)).replace(".", ",") + ' L)</option>' + [6,7,8,9,10,11,12,13,14,15,16].map(function(n){ return '<option value="' + n + '"' + (M.aguaManual && n === M.agua ? " selected" : "") + '>' + n + ' vasos (' + String(r1(n * 0.25)).replace(".", ",") + ' L)</option>'; }).join("") + '</select></div>' +
   '<p class="muted" style="font-size:14px;margin:6px 0 0">Calculado con ≈35 ml por kilo de peso, más 2 vasos si entrenas. Con calor o entrenamientos largos, toma un poco más.</p>' +
   '<button type="button" class="btn sec chico" id="recalc" style="margin-top:12px">Recalcular con mis datos</button></div>' +
+  htmlSemanaEntreno() +
   '<div class="card"><p class="kick">🎨 Fondo de la app</p><div class="agua-unid" style="margin-top:10px"><button type="button" class="chip" data-tema="oscuro" aria-pressed="' + temaOscuro() + '">🌙 Oscuro</button><button type="button" class="chip" data-tema="claro" aria-pressed="' + !temaOscuro() + '">☀️ Claro</button></div></div>' +
   '<div class="card"><p class="kick">🕒 Mis horas de comida</p><p class="muted" style="margin:6px 0 10px">Escribe a qué hora haces cada comida. Así la app elige la comida correcta y te recuerda si se te pasó.</p>' +
    '<div class="horas-com">' + comidasVisibles().map(function(c){ return '<label class="hc-fila"><span>' + c[1] + ' ' + c[2] + '</span><input type="time" class="inp" data-hora="' + c[0] + '" value="' + horaDe(c[0]) + '"></label>'; }).join("") + '</div></div>' +
@@ -2517,6 +2560,11 @@ function renderPerfil(){
  $("aguaMeta").onchange = function(){
   if(this.value === "auto"){ D.metas.aguaManual = false; D.metas.agua = aguaRecomendada(P); } else { D.metas.aguaManual = true; D.metas.agua = +this.value; }
   guardar(); toast("✅ Meta de agua: " + D.metas.agua + " vasos"); };
+ document.querySelectorAll("#tabPerfil [data-sd]").forEach(function(b){ b.onclick = function(){
+  var S = D.semana = (D.semana && D.semana.length === 7) ? D.semana : ["","","","","","",""];
+  S[+b.dataset.sd] = b.dataset.st; guardar(); renderPerfil();
+  if(semanaActiva()) toast("✅ " + DIAS_SEM[+b.dataset.sd] + ": " + TIPO_INFO(b.dataset.st)[2]); }; });
+ if($("semQuitar")) $("semQuitar").onclick = function(){ if(confirm("¿Volver a la misma meta todos los días?")){ D.semana = null; guardar(); renderPerfil(); toast("Listo: misma meta todos los días"); } };
  $("recalc").onclick = function(){ onb.primera = false; onb.paso = 0; onb.slide = 0; onb.d = Object.assign({ meta:"", vel:"", comidas:"", dieta:"", evita:[] }, P, { evita:(P.evita || []).slice() }); renderOnb(); vista("vOnb"); };
  if($("instP")) $("instP").onclick = instalar;
  document.querySelectorAll("#tabPerfil [data-tema]").forEach(function(b){ b.onclick = function(){ ponerTema(b.dataset.tema); renderPerfil(); }; });
@@ -2579,7 +2627,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101708", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101801", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

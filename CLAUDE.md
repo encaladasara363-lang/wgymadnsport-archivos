@@ -1865,6 +1865,14 @@ probado: ella se activó desde el mesón y entró a la app).
   no veían los alimentos nuevos (la dueña: "a mis socios no les aparece el dulce de maicena").
   La tarjeta usa lo mismo. Los números se escriben en casilleros de texto con
   `inputmode="decimal"` (los `type="number"` del iPhone borraban la coma: 63,1 → 631).
+- **🏋️ Calorías según el tipo de entreno (18-10-2026, la dueña: "calcular mis calorías en los días más intensos,
+  los de tren superior y los de descanso"):** en «Mi perfil», cuadro «🏋️ Mi semana de entrenamiento» (`htmlSemanaEntreno`):
+  cada día de lunes a domingo se marca 🦵 Pierna / 💪 Superior / 😴 Descanso (`D.semana`, solo en el teléfono). Con los 7 días
+  marcados y al menos uno de entreno, `metaDia(iso)` da la meta de ese día (Hoy, recordatorios, resumen de la noche,
+  festejo y días «en meta»): la semana suma lo mismo que el plan (mantención × 7, mismo déficit); descanso = TMB × 1,2,
+  y el resto se reparte entre los días de entreno con la pierna ×1,725/1,55 sobre el tren superior; cada día resta el
+  déficit y nunca baja del TMB. Proteína y grasas fijas; cambian los carbohidratos. «Hoy» muestra «Hoy: día de pierna ·
+  meta X kcal». Sin la semana completa, la meta es la misma todos los días (`D.metas`, que sigue siendo el promedio).
 - **Horas de comida (10-10-2026, pedido de la dueña):** en «Mi perfil», cuadro
   «🕒 Mis horas de comida» (una hora por comida, `D.horas`, solo en el teléfono;
   por defecto `HORAS_DEF`). La hora aparece junto a cada comida en «Hoy»,
