@@ -1888,6 +1888,7 @@ function renderEvolucion(s){
     recuerda qué rutina eligió (wgym_coach_rutina_v1). Si ya entrenó con alguna
     rutina en este teléfono, la reconoce por su clave de progreso. */
  var COACH_RUTINAS = [
+  ["impulso-total","Impulso Total · Enfocada en Glúteo","wgym_impulso_total_v1_","F"],
   ["mujeres-en-movimiento","Mujeres en Movimiento","wgym_mujeres_movimiento_v1_","F"],
   ["entrenar-mujeres","Principiante Mujeres","wgym_entrena_mujeres_v1_","F"],
   ["entrenar-full-body-principiantes","Full Body Mujeres","wgym_full_body_principiantes_v1_","F"],
@@ -2439,7 +2440,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101701", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026101801", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
