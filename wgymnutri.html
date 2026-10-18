@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=58">
+<link rel="stylesheet" href="nutri-claro.css?v=59">
 <link rel="stylesheet" href="nutri-oscuro.css?v=13">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -634,24 +634,22 @@ function calcular(d){
  return { kcal:Math.round(kcal), p:Math.round(p), c:Math.round(c), g:Math.round(g), tmb:Math.round(tmb), mant:Math.round(mant), def:Math.round(mant - kcal) };
 }
 /* Calorías según el tipo de entreno (18-10-2026, la dueña: "calcular mis calorías en los días más
-   intensos, los de tren superior y los de descanso"). D.semana = 7 tipos (lunes a domingo): pierna,
-   superior o descanso; solo en el teléfono. La semana suma lo mismo que el plan (mantención × 7, mismo
-   déficit): el día de descanso gasta como sedentario (TMB × 1,2) y el resto se reparte entre los días
-   de entreno, la pierna con más peso que el tren superior (1,725 / 1,55, factores de la base técnica).
-   Cada día resta el déficit del plan y nunca baja del TMB. Proteína y grasas no cambian: suben o bajan
-   los carbohidratos. Sin la semana completa (o sin ningún día de entreno), la meta es la misma todos los días. */
-var TIPOS_DIA = [["pierna","🦵","Pierna","Tu día más intenso"],["superior","💪","Tren superior","Día de entreno medio"],["descanso","😴","Descanso","Tu cuerpo se recupera"]];
-var PESO_TIPO = { pierna:1.725 / 1.55, superior:1 };
+   intensos, los de tren superior y los de descanso"; "hay socios que entrenan dos veces al día").
+   D.semana = 7 tipos (lunes a domingo), solo en el teléfono. Cada día usa el factor de actividad de la
+   base técnica según lo que entrena: descanso ×1,2 (sedentario), tren superior ×1,55, pierna ×1,725 y
+   2 veces al día ×1,9 (doble sesión). Así quien entrena doble come más ese día sin tocar el resto.
+   Cada día resta el mismo déficit del plan y nunca baja del TMB. Proteína y grasas no cambian: suben o
+   bajan los carbohidratos. Sin los 7 días marcados, la meta es la misma todos los días (D.metas). */
+var TIPOS_DIA = [["pierna","🦵","Pierna","Tu día más intenso"],["superior","💪","Tren superior","Día de entreno medio"],["doble","🔥","2 veces al día","Entrenas dos veces ese día"],["descanso","😴","Descanso","Tu cuerpo se recupera"]];
+var FACTOR_TIPO = { descanso:1.2, superior:1.55, pierna:1.725, doble:1.9 };
 var DIAS_SEM = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
-function semanaActiva(){ var S = D && D.semana; return S && S.length === 7 && S.every(function(t){ return !!TIPO_INFO(t); }) && S.some(function(t){ return t !== "descanso"; }) ? S : null; }
+function semanaActiva(){ var S = D && D.semana; return S && S.length === 7 && S.every(function(t){ return !!TIPO_INFO(t); }) ? S : null; }
 function TIPO_INFO(t){ return TIPOS_DIA.filter(function(x){ return x[0] === t; })[0] || null; }
 function metasSemana(){
  var S = semanaActiva(), P = D.perfil, M = D.metas; if(!S || !P || !M) return null;
- var m = calcular(P), def = Math.max(0, m.mant - m.kcal), desc = m.tmb * 1.2, unid = 0, nDesc = 0, out = {};
- S.forEach(function(t){ if(t === "descanso") nDesc++; else unid += PESO_TIPO[t]; });
- var base = Math.max(0, m.mant * 7 - nDesc * desc) / unid;
+ var m = calcular(P), def = Math.max(0, m.mant - m.kcal), out = {};
  TIPOS_DIA.forEach(function(x){
-  var t = x[0], gasto = t === "descanso" ? desc : Math.max(desc, base * PESO_TIPO[t]), kcal = Math.round(Math.max(m.tmb, gasto - def));
+  var t = x[0], kcal = Math.round(Math.max(m.tmb, m.tmb * FACTOR_TIPO[t] - def));
   out[t] = { kcal:kcal, c:Math.round(Math.max(0, (kcal - M.p * 4 - M.g * 9) / 4)), tipo:t };
  });
  return out;
@@ -1519,7 +1517,7 @@ function renderHoy(){
     y meta al lado, los 3 macros en columnas abajo y, en vez de la frase del día, un cuadro
     grande de calorías restantes. */
  function macro(cls, nombre, v, meta){ return '<div class="macro ' + cls + '"><span class="mn">' + nombre + '</span><b class="mv">' + Math.round(v) + '<small> / ' + meta + ' g</small></b><div class="barra"><i style="width:' + Math.min(100, v / meta * 100) + '%"></i></div></div>'; }
- if(M.tipo){ var ti = TIPO_INFO(M.tipo); h += '<div class="tipo-dia t-' + M.tipo + '"><span class="e">' + ti[1] + '</span><p><b style="color:#FFD54A">' + (esHoy ? 'Hoy: ' : '') + 'día de ' + ti[2].toLowerCase() + '</b><br><span style="color:#FFB199;font-size:15px">Tu meta de este día: ' + miles(M.kcal) + ' kcal · ' + M.c + ' g de carbohidratos</span></p></div>'; }
+ if(M.tipo){ var ti = TIPO_INFO(M.tipo); h += '<div class="tipo-dia t-' + M.tipo + '"><span class="e">' + ti[1] + '</span><p><b style="color:#FFD54A">' + (esHoy ? 'Hoy: ' : '') + (M.tipo === 'doble' ? 'entrenas 2 veces' : 'día de ' + ti[2].toLowerCase()) + '</b><br><span style="color:#FFB199;font-size:15px">Tu meta de este día: ' + miles(M.kcal) + ' kcal · ' + M.c + ' g de carbohidratos</span></p></div>'; }
  h += '<div class="card res2"><div class="anillo-box"><div class="anillo' + (rest < 0 ? " pasado" : (M.p && t.p >= M.p) || (t.k >= M.kcal * 0.9) ? " meta-ok" : "") + '"><svg viewBox="0 0 150 150"><circle class="fondo" cx="75" cy="75" r="62"/><circle class="prog" id="anilloProg" cx="75" cy="75" r="62" stroke-dasharray="' + C + '" stroke-dashoffset="' + C + '"/></svg><div class="centro"><b>' + Math.round(t.k / M.kcal * 100) + '%</b><span>de tu meta</span></div></div>' +
   '<div class="res-datos"><div><span>🍽 Comidas</span><b>' + miles(t.k) + '<small> kcal</small></b></div><div><span>🎯 Meta</span><b>' + miles(M.kcal) + '<small> kcal</small></b></div></div></div>' +
   '<div class="macros3">' + macro("m-p", "Proteína", t.p, M.p) + macro("m-c", "Carbos", t.c, M.c) + macro("m-g", "Grasas", t.g, M.g) + '</div>' +
@@ -2520,15 +2518,15 @@ function guardarFotoPerfil(file){
 /* «🏋️ Mi semana de entrenamiento» en Mi perfil: qué entrena cada día y su meta de calorías. */
 function htmlSemanaEntreno(){
  var S = (D.semana && D.semana.length === 7) ? D.semana : ["","","","","","",""], act = semanaActiva(), ms = act && metasSemana();
- var h = '<div class="card"><p class="kick">🏋️ Mi semana de entrenamiento</p><p class="muted" style="margin:6px 0 10px">Marca qué entrenas cada día. Los días de pierna comes más, los de descanso menos, y en la semana comes lo mismo que tu plan.</p><div class="sem-ent">' +
-  DIAS_SEM.map(function(d, i){ return '<div class="se-fila"><b>' + d + '</b><div class="se-bts">' + TIPOS_DIA.map(function(x){ return '<button type="button" class="chip" data-sd="' + i + '" data-st="' + x[0] + '" aria-pressed="' + (S[i] === x[0]) + '"><span class="se-e">' + x[1] + '</span>' + (x[0] === "superior" ? "Superior" : x[2]) + '</button>'; }).join("") + '</div></div>'; }).join("") + '</div>';
+ var h = '<div class="card"><p class="kick">🏋️ Mi semana de entrenamiento</p><p class="muted" style="margin:6px 0 10px">Marca qué entrenas cada día. Los días de pierna o de 2 entrenamientos comes más; los de descanso, menos.</p><div class="sem-ent">' +
+  DIAS_SEM.map(function(d, i){ return '<div class="se-fila"><b>' + d + '</b><div class="se-bts">' + TIPOS_DIA.map(function(x){ return '<button type="button" class="chip" data-sd="' + i + '" data-st="' + x[0] + '" aria-pressed="' + (S[i] === x[0]) + '"><span class="se-e">' + x[1] + '</span>' + (x[0] === "superior" ? "Superior" : x[0] === "doble" ? "2 veces" : x[2]) + '</button>'; }).join("") + '</div></div>'; }).join("") + '</div>';
  if(ms){
   h += '<div class="se-res">' + TIPOS_DIA.map(function(x){ var n = S.filter(function(t){ return t === x[0]; }).length; if(!n) return ""; var v = ms[x[0]];
    return '<div class="se-r t-' + x[0] + '"><span class="e">' + x[1] + '</span><div><b style="color:#FFD54A">' + x[2] + ' (' + n + (n === 1 ? ' día' : ' días') + ')</b><br><span style="color:#FFB199">' + miles(v.kcal) + ' kcal · ' + D.metas.p + ' g proteína · ' + v.c + ' g carbos · ' + D.metas.g + ' g grasas</span></div></div>'; }).join("") + '</div>' +
    '<p class="muted" style="font-size:14px;margin:8px 0 0">La proteína y las grasas son iguales todos los días; lo que cambia son los carbohidratos (la energía para entrenar). Nunca baja de tu metabolismo basal.</p>' +
    '<button type="button" class="btn sec chico" id="semQuitar" style="margin-top:10px">Usar la misma meta todos los días</button>';
  } else if(S.some(function(t){ return t; })){
-  h += '<p class="muted" style="margin:10px 0 0">' + (S.every(function(t){ return t; }) ? 'Marca al menos un día de entreno.' : 'Te faltan ' + S.filter(function(t){ return !t; }).length + ' día(s) por marcar. Cuando estén los 7, verás tu meta de cada día.') + '</p>';
+  h += '<p class="muted" style="margin:10px 0 0">' + ('Te faltan ' + S.filter(function(t){ return !t; }).length + ' día(s) por marcar. Cuando estén los 7, verás tu meta de cada día.') + '</p>';
  }
  return h + '</div>';
 }
@@ -2627,7 +2625,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101801", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101802", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
