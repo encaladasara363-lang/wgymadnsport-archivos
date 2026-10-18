@@ -98,11 +98,13 @@ discos no tiene lugar en la rutina todavía.
    Glúteo en rojo chico sobre el short (`musculo_kf` cada 3 cuadros, ubicado donde el muslo se junta con el glúteo,
    porque la cámara se mueve; `solo_piel: "todo"`, intensidad 0.6). La primera versión "se movía mucho". **Aprobado.**
 
-25. Subida a banco (3 × 10 por lado) — en preparación (17-10-2026): la dueña la quiere como **step-up en polea**
+25. Step-up en polea (3 × 10 por lado) — ✅ video del 18-10-2026 (`mujer/step-up-polea`): la dueña la quiere como **step-up en polea**
    (polea doble n.º 20, `mujer/patada-gluteo-polea/fuentes/maquina-20.jpg`): step al centro, una manilla de cada
    polea baja en cada mano, de frente a la cámara (así las dos pilas se mueven y está bien). Después mandó la
    referencia (TikTok, no se sube): de lado, frente a UNA columna, manilla a la altura del pecho con las dos manos,
    torso inclinado, pie de adelante en el step con rodilla a 90° y sube sin impulso, pierna de atrás hacia atrás.
    Imagen buena: de lado, banca hacia la columna, polea baja al final de la banca. Grok (`fuentes/intento-grok.mp4`)
    arriba apoyó los dos pies y cambió de pie: la dueña quiere que el pie de atrás NO toque la banca. Se probará con
-   Gemini desde `fuentes/para-gemini.jpg` (primer cuadro de Grok, horizontal con costados difuminados).
+   Gemini desde `fuentes/para-gemini.jpg` (primer cuadro de Grok, horizontal con costados difuminados). Gemini no
+   sirvió ("puras weas"): se usó solo el primer 0,9 s de Grok (sube con la pierna de atrás en el aire), de ida y
+   vuelta (`fuentes/tramo-ida-vuelta.mp4`) y repetido 3 veces. Glúteo en rojo chico siguiendo el short.
