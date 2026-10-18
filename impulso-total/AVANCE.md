@@ -111,4 +111,6 @@ discos no tiene lugar en la rutina todavía.
    (`fuentes/ejercicio-gemini.mp4`: pie de adelante siempre en la banca, pierna de atrás sube hacia atrás sin apoyarse),
    que es el que quedó (0-8 s, recortado al centro). Glúteo en rojo chico siguiendo el short. La dueña pidió que el pie
    que baja quede casi tocando la banca: se deslizó ~30 px hacia la banca deformando solo el piso entre el pie y la pata
-   (`scripts/acercar-pie-step-up.py` → `fuentes/ejercicio-gemini-pie-cerca.mp4`).
+   (`scripts/acercar-pie-step-up.py` → `fuentes/ejercicio-gemini-pie-cerca.mp4`). Al final la dueña eligió la versión de
+   Grok de ida y vuelta ("quiero este") con el pie de atrás ~70 px más cerca de la banca (`campo_grok` →
+   `fuentes/tramo-ida-vuelta-pie-cerca.mp4`); esa es la que quedó.
