@@ -109,4 +109,6 @@ discos no tiene lugar en la rutina todavía.
    sirvió ("puras weas"): se usó solo el primer 0,9 s de Grok (sube con la pierna de atrás en el aire), de ida y
    vuelta (`fuentes/tramo-ida-vuelta.mp4`) y repetido 3 veces. Después la dueña mandó un video bueno de Gemini
    (`fuentes/ejercicio-gemini.mp4`: pie de adelante siempre en la banca, pierna de atrás sube hacia atrás sin apoyarse),
-   que es el que quedó (0-8 s, recortado al centro). Glúteo en rojo chico siguiendo el short.
+   que es el que quedó (0-8 s, recortado al centro). Glúteo en rojo chico siguiendo el short. La dueña pidió que el pie
+   que baja quede casi tocando la banca: se deslizó ~30 px hacia la banca deformando solo el piso entre el pie y la pata
+   (`scripts/acercar-pie-step-up.py` → `fuentes/ejercicio-gemini-pie-cerca.mp4`).
