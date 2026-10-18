@@ -817,7 +817,9 @@ mujeres-perdida-grasa, pulso-firme). Desde 18-10-2026 también `impulso-total` (
 `assets/impulso-total/` (540 px, sin audio); clave `wgym_impulso_total_v1_`. Con `videoAuto: true` (opción nueva del
 motor, 18-10-2026, la dueña: "que muestre el ejercicio de una sin tener que apretar play") el video parte solo,
 en bucle y sin botón play; las demás rutinas con video siguen igual. Publicada para las socias el 18-10-2026: está en
-`COACH_RUTINAS` de la tarjeta (primera de las de mujer, «Impulso Total · Enfocada en Glúteo»). Los `entrenar-*` de clientes
+`COACH_RUTINAS` de la tarjeta («Impulso Total · Enfocada en Glúteo · 5 días»). Desde el 18-10-2026 (la dueña) cada
+nombre de `COACH_RUTINAS` termina en «· N días» (según los días del JSON) y la lista va ordenada por días: 3, 5 y 6
+(mujeres primero, después hombres). Al sumar una rutina, ponerla en su lugar según sus días. Los `entrenar-*` de clientes
 (sara, milton, luisa, eymilee, principiante5, gluteos, hombre5) y las
 `app_*` VIP siguen con el formato antiguo.
 - Opciones del JSON (todas opcionales): `visual` (pares/imagen/video),
