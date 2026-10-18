@@ -77,5 +77,5 @@ Para armar o rehacer un video:
 | Zancadas con mancuernas (pie adelante sobre un step, frente al espejo, terraza) | — | ✅ `mujer/zancadas-mancuernas` (Grok, 17-10-2026) | 3 × 10 por pierna |
 | Peso muerto sumo con mancuerna (plataforma roja de sumo, de frente) | — | ✅ `mujer/peso-muerto-sumo` (Grok, 17-10-2026) | 3 × 10-12 |
 | Puente de glúteos con mancuerna (colchoneta azul sobre el pasto) | — | ✅ `mujer/puente-gluteos` (Grok, 17-10-2026) | 3 × 15 |
-| Step-up en polea (polea baja y banca, de lado) | — | ✅ `mujer/step-up-polea` (Grok, tramo de ida y vuelta, 18-10-2026) | 3 × 10 por lado |
+| Step-up en polea (polea baja y banca, de lado) | — | ✅ `mujer/step-up-polea` (Gemini, 18-10-2026) | 3 × 10 por lado |
 | Abducción de cadera en máquina (palanca roja de patada de glúteo, terraza) | — | ✅ `mujer/abduccion-cadera-maquina` (Gemini, repetido 6 veces, 17-10-2026) | 3 × 12-15 |

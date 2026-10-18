@@ -107,4 +107,6 @@ discos no tiene lugar en la rutina todavía.
    arriba apoyó los dos pies y cambió de pie: la dueña quiere que el pie de atrás NO toque la banca. Se probará con
    Gemini desde `fuentes/para-gemini.jpg` (primer cuadro de Grok, horizontal con costados difuminados). Gemini no
    sirvió ("puras weas"): se usó solo el primer 0,9 s de Grok (sube con la pierna de atrás en el aire), de ida y
-   vuelta (`fuentes/tramo-ida-vuelta.mp4`) y repetido 3 veces. Glúteo en rojo chico siguiendo el short.
+   vuelta (`fuentes/tramo-ida-vuelta.mp4`) y repetido 3 veces. Después la dueña mandó un video bueno de Gemini
+   (`fuentes/ejercicio-gemini.mp4`: pie de adelante siempre en la banca, pierna de atrás sube hacia atrás sin apoyarse),
+   que es el que quedó (0-8 s, recortado al centro). Glúteo en rojo chico siguiendo el short.
