@@ -1873,6 +1873,25 @@ probado: ella se activó desde el mesón y entró a la app).
   (`FACTOR_TIPO`: descanso 1,2 · superior 1,55 · pierna 1,725 · 2 veces al día 1,9) menos el déficit del plan, nunca bajo
   el TMB. Proteína y grasas fijas; cambian los carbohidratos. «Hoy» muestra «Hoy: día de pierna · meta X kcal». Sin los 7
   días marcados, la meta es la misma todos los días (`D.metas`).
+- **Cuatro ideas nuevas (18-10-2026, la dueña eligió las ideas 2, 3, 5, 6 y 8):**
+  - 📉 Ajuste automático (`revisarAjuste`/`htmlAjuste`, arriba de «Hoy»): con el peso semanal, si en ≥3 semanas
+    bajó menos de 0,1 kg por semana (solo «Bajar grasa») propone el siguiente déficit (velocidad tranquilo → normal →
+    intenso, 250/375/500 kcal); si baja más del 1 % del peso por semana, el anterior. Solo propone («Sí, ajustar» /
+    «Ahora no», `D.ajuste`); no vuelve a preguntar hasta 21 días y datos nuevos.
+  - 🏋️ «Comidas de tu entreno» en «Hoy» los días de entreno (`htmlEntrenoComidas`): 3 opciones antes (30 min a 4 h,
+    carbohidratos, `PRE_ENTRENO`) y 3 después (15-25 g de proteína en 2 h, `POST_ENTRENO`), rotan por día y respetan
+    dieta/lo que no come; los días «2 veces» suma «Entre los dos entrenamientos».
+  - 💧 Días «2 veces»: 2 vasos más de agua (en `metaDia`, salvo meta de agua fija).
+  - 📋 Semana desde la rutina (`NUTRI_RUTINAS`, misma lista que `COACH_RUTINAS` de la tarjeta): reconoce la rutina
+    elegida en la tarjeta (`wgym_coach_rutina_v1`) o con progreso en el teléfono y arma sola la semana una vez
+    (`semanaAuto`): días de pierna/glúteo/femoral/cuádriceps/cuerpo completo → Pierna, el resto de la rutina → Superior,
+    días sin rutina → Descanso. En Perfil, «📋 Armarla con mi rutina» la elige a mano. **Al sumar una rutina a
+    `COACH_RUTINAS`, sumarla también a `NUTRI_RUTINAS`.**
+- **🥗 Panel de ventas WGYMNUTRI en el mesón (18-10-2026, idea 8):** `control.html`, panel antes de «Socios del gimnasio»
+  (`verVentasNutri_`): activas ahora, vencen en 7 días, vencidas hace menos de 30 días (para ofrecerla de nuevo) con
+  `listarNutri`, y «Entró este mes» con `ventasNutri` (POST con clave). Cada «Activar» manda `meses` y `monto` y el
+  script los anota en la hoja «Ventas WGYMNUTRI». **Necesita la Versión 22 del Apps Script** (instrucciones en
+  `docs/apps-script-ingresos-salidas.md`); sin ella, el panel muestra lo demás y avisa.
 - **Horas de comida (10-10-2026, pedido de la dueña):** en «Mi perfil», cuadro
   «🕒 Mis horas de comida» (una hora por comida, `D.horas`, solo en el teléfono;
   por defecto `HORAS_DEF`). La hora aparece junto a cada comida en «Hoy»,

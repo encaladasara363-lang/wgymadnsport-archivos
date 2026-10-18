@@ -415,6 +415,15 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </div>
 </div>
 
+<div class="panel" id="nutriPanel">
+<h2>🥗 Ventas WGYMNUTRI <span class="der" id="nutriMes">mesón</span></h2>
+<div class="cuerpo">
+<p class="rank-ayuda">Quiénes tienen WGYMNUTRI activa, a quiénes se les vence pronto (para ofrecérsela de nuevo) y cuánto entró este mes.</p>
+<button class="btn btn-rojo" id="bVentasNutri" type="button">Ver ventas WGYMNUTRI</button>
+<div id="ventasNutri"></div>
+</div>
+</div>
+
 <div class="panel">
 <h2>Socios del gimnasio <span class="der" id="conteo">—</span></h2>
 <div class="cuerpo">
@@ -656,6 +665,40 @@ function verRankingAdmin_(){
  });
 }
 document.getElementById("bRanking").addEventListener("click", verRankingAdmin_);
+/* 🥗 Panel de ventas WGYMNUTRI (18-10-2026, la dueña eligió la idea 8): activas, vencen en 7 días,
+   vencidas en los últimos 30 (para ofrecerla de nuevo) con listarNutri, y lo que entró en el mes con
+   ventasNutri (POST con la clave; anota cada «Activar» desde la Versión 22 del Apps Script). */
+function verVentasNutri_(){
+ var box = document.getElementById("ventasNutri"), b = document.getElementById("bVentasNutri");
+ b.disabled = true; b.textContent = "Cargando…";
+ function fechaCL(f){ return f.split("-").reverse().join("-"); }
+ function sumaD(iso, n){ var p = iso.split("-"), d = new Date(+p[0], +p[1]-1, +p[2] + n); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+ function lista(arr, txt){ return arr.length ? '<table class="rank-tabla"><tbody>' + arr.map(function(x){ return '<tr><td><b>' + escRank_((x.n + " " + x.a).toUpperCase()) + '</b></td><td class="rank-dias">' + txt(x) + '</td></tr>'; }).join("") + '</tbody></table>' : '<p class="rank-ayuda">Nadie.</p>'; }
+ cargarNutri_(function(){
+  if(nutriSoporte !== true){ b.disabled = false; b.textContent = "🔄 Actualizar"; box.innerHTML = '<p class="rank-ayuda">No se pudo leer la hoja de WGYMNUTRI. Revisa el internet e intenta de nuevo.</p>'; return; }
+  var hoy = hoyISO(), en7 = sumaD(hoy, 7), hace30 = sumaD(hoy, -30), act = [], pronto = [], venc = [];
+  Object.keys(NUTRI).forEach(function(k){ var h = NUTRI[k], p = k.split("|"), x = { n:p[0], a:p[1] || "", h:h };
+   if(h >= hoy){ act.push(x); if(h <= en7) pronto.push(x); } else if(h >= hace30) venc.push(x); });
+  pronto.sort(function(x, y){ return x.h < y.h ? -1 : 1; }); venc.sort(function(x, y){ return x.h > y.h ? -1 : 1; });
+  var h = '<div class="kpis" style="margin:12px 0 4px;grid-template-columns:repeat(3,1fr)"><div class="kpi"><div class="klbl">Activas ahora</div><b class="kval">' + act.length + '</b></div><div class="kpi"><div class="klbl">Vencen en 7 días</div><b class="kval">' + pronto.length + '</b></div><div class="kpi"><div class="klbl">Entró este mes</div><b class="kval" id="vnTotal">…</b></div></div>' +
+   '<details class="rank-carpeta" open><summary class="rank-grupo">⏳ Se les vence en los próximos 7 días · ' + pronto.length + '</summary>' + lista(pronto, function(x){ return x.h === hoy ? "hoy" : fechaCL(x.h); }) + '</details>' +
+   '<details class="rank-carpeta"><summary class="rank-grupo">📣 Vencida hace menos de 30 días (ofrécesela de nuevo) · ' + venc.length + '</summary>' + lista(venc, function(x){ return "venció " + fechaCL(x.h); }) + '</details>' +
+   '<details class="rank-carpeta"><summary class="rank-grupo">✅ Activas · ' + act.length + '</summary>' + lista(act.slice().sort(function(x, y){ return x.n < y.n ? -1 : 1; }), function(x){ return "hasta " + fechaCL(x.h); }) + '</details>' +
+   '<details class="rank-carpeta" id="vnVentas"><summary class="rank-grupo">💰 Ventas de este mes</summary><p class="rank-ayuda">Cargando…</p></details>';
+  box.innerHTML = h;
+  llamarSocioApi_("ventasNutri", {}, function(ok, d){
+   b.disabled = false; b.textContent = "🔄 Actualizar";
+   var tot = document.getElementById("vnTotal"), cv = document.getElementById("vnVentas"); if(!tot || !cv) return;
+   if(!ok || !d.ventasNutri){ tot.textContent = "—"; cv.innerHTML = '<summary class="rank-grupo">💰 Ventas de este mes</summary><p class="rank-ayuda">' + (d === "sin conexión" ? "Sin conexión." : "Para ver lo que entró falta instalar la Versión 22 del sistema de Google. Desde ahí, cada «Activar» del mesón queda anotado.") + '</p>'; return; }
+   var v = d.ventas || [];
+   tot.textContent = "$" + String(d.total || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+   document.getElementById("nutriMes").textContent = d.mes + " · " + v.length + (v.length === 1 ? " venta" : " ventas");
+   cv.innerHTML = '<summary class="rank-grupo">💰 Ventas de este mes · ' + v.length + '</summary>' + (v.length ? '<table class="rank-tabla"><thead><tr><th>Fecha</th><th>Socio</th><th>Meses</th><th>Monto</th></tr></thead><tbody>' +
+    v.map(function(x){ return '<tr><td>' + fechaCL(x.f.slice(0, 10)) + '</td><td><b>' + escRank_((x.n + " " + x.a).toUpperCase()) + '</b></td><td>' + x.meses + '</td><td class="rank-dias">$' + String(x.monto).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '</td></tr>'; }).join("") + '</tbody></table>' : '<p class="rank-ayuda">Todavía no hay ventas anotadas este mes.</p>');
+  });
+ });
+}
+document.getElementById("bVentasNutri").addEventListener("click", verVentasNutri_);
 function guardarSocioApi(s, cb){
  llamarSocioApi_("guardarSocio", {
   nombre:s.n, apellido:s.a, plan:s.plan, monto:s.m,
@@ -1906,9 +1949,11 @@ function abrirFicha(s){
    if(h && h >= hoy){ nTxt.innerHTML = "🥗 WGYMNUTRI <b>activa</b> hasta el <b>" + h.split("-").reverse().join("-") + "</b>"; nAct.textContent = "Sumar 1 mes ($5.000)"; nAct3.textContent = "Sumar 3 meses ($12.000)"; nQuit.hidden = false; }
    else { nTxt.innerHTML = "🥗 WGYMNUTRI: " + (h ? "venció el " + h.split("-").reverse().join("-") : "sin activar"); nAct.textContent = "Activar 1 mes ($5.000)"; nAct3.textContent = "Activar 3 meses ($12.000)"; nQuit.hidden = true; }
   };
-  var guardarNutri = function(hasta){
+  var guardarNutri = function(hasta, meses){
    nAct.disabled = nAct3.disabled = true; nTxt.textContent = "🥗 WGYMNUTRI: guardando…";
-   llamarSocioApi_("activarNutri", { nombre:d.n, apellido:d.a, hasta:hasta }, function(ok, data){
+   /* meses y monto quedan en «Ventas WGYMNUTRI» para el panel de ventas (18-10-2026). */
+   var extra = meses ? { meses:meses, monto:meses === 3 ? 12000 : 5000 * meses } : {};
+   llamarSocioApi_("activarNutri", Object.assign({ nombre:d.n, apellido:d.a, hasta:hasta }, extra), function(ok, data){
     if(ok){ NUTRI[nutriLlave_(d.n, d.a)] = hasta; pintarNutri(); }
     else { pintarNutri(); var av = velo && velo.querySelector("#fAviso"); if(av) av.textContent = "No se pudo guardar WGYMNUTRI: " + data; }
    });
@@ -1917,7 +1962,7 @@ function abrirFicha(s){
    var h = nutriHasta_(d.n, d.a), hoy = hoyISO();
    var base = (h && h >= hoy) ? h : hoy, p = base.split("-");
    var f = sumarMeses(new Date(+p[0], +p[1]-1, +p[2]), meses);
-   guardarNutri(f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-" + String(f.getDate()).padStart(2,"0"));
+   guardarNutri(f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-" + String(f.getDate()).padStart(2,"0"), meses);
   };
   nAct.addEventListener("click", function(){ sumarNutri(1); });
   nAct3.addEventListener("click", function(){ sumarNutri(3); });
