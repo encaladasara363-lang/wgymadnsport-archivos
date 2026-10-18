@@ -1,0 +1,285 @@
+{
+ "version": 1,
+ "id": "silueta-de-acero",
+ "nombre": "SILUETA DE ACERO",
+ "claveProgreso": "wgym_silueta_acero_v1_",
+ "visual": "video",
+ "videoAuto": true,
+ "dias": [
+  {
+   "weekday": "Lunes",
+   "title": "Tren superior · espalda y bíceps",
+   "focus": "Espalda · pecho · hombros · bíceps",
+   "warmup": "Remadora suave — 6 minutos",
+   "exercises": [
+    {
+     "name": "Jalón al pecho",
+     "sets": "3 × 8-10",
+     "rest": "90 seg",
+     "tip": "Lleva los agarres hacia el pecho sin tirar con la zona lumbar; controla la subida.",
+     "equip": "Máquina",
+     "muscle": "Dorsales",
+     "video": "assets/impulso-total/jalon-al-pecho.mp4?v=1"
+    },
+    {
+     "name": "Remo frontal",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Lleva los agarres hacia ti con el pecho estable; junta omóplatos sin impulso.",
+     "equip": "Máquina",
+     "muscle": "Espalda media",
+     "video": "assets/impulso-total/remo-frontal.mp4?v=1"
+    },
+    {
+     "name": "Press de pecho con mancuernas en banco",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Apoya espalda y pies; baja las mancuernas con control a los lados del pecho y empuja hacia arriba.",
+     "equip": "Banco · mancuernas",
+     "muscle": "Pecho · tríceps",
+     "video": "assets/impulso-total/press-pecho-mancuernas.mp4?v=1"
+    },
+    {
+     "name": "Elevación lateral con discos",
+     "sets": "3 × 12",
+     "rest": "60 seg",
+     "tip": "De pie, un disco en cada mano a los costados. Sube los brazos estirados hacia los lados hasta la altura de los hombros y baja lento. ⚠️ No encojas los hombros ni subas más arriba de los hombros.",
+     "equip": "Discos",
+     "muscle": "Deltoides laterales",
+     "video": "assets/silueta-de-acero/elevacion-lateral-discos.mp4?v=1"
+    },
+    {
+     "name": "Curl de bíceps en polea baja",
+     "sets": "3 × 12",
+     "rest": "60 seg",
+     "tip": "De pie frente a la polea baja, toma la barra con las palmas hacia arriba y codos pegados al cuerpo. Sube flexionando solo los codos y baja lento. ⚠️ No balancees el tronco ni separes los codos.",
+     "equip": "Polea baja · barra recta",
+     "muscle": "Bíceps",
+     "video": "assets/silueta-de-acero/curl-biceps-polea.mp4?v=1"
+    }
+   ],
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva."
+  },
+  {
+   "weekday": "Martes",
+   "title": "Pierna · cuádriceps",
+   "focus": "Smith · prensa · búlgara · cuádriceps · pantorrillas",
+   "warmup": "Bicicleta de spinning suave — 6 minutos",
+   "exercises": [
+    {
+     "name": "Sentadilla en Smith",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Ajusta la posición de pies y baja con control; mantén rodillas alineadas con los pies.",
+     "equip": "Barra guiada",
+     "muscle": "Cuádriceps · glúteos",
+     "video": "assets/impulso-total/sentadilla-smith.mp4?v=1"
+    },
+    {
+     "name": "Prensa de piernas",
+     "sets": "3 × 8-10",
+     "rest": "90 seg",
+     "tip": "Baja hasta donde puedas mantener espalda y pelvis apoyadas; evita bloquear rodillas.",
+     "equip": "Prensa",
+     "muscle": "Cuádriceps · glúteos",
+     "video": "assets/impulso-total/prensa-piernas.mp4?v=1"
+    },
+    {
+     "name": "Sentadilla búlgara con mancuernas",
+     "sets": "3 × 10 por pierna",
+     "rest": "75 seg",
+     "tip": "Pie de atrás apoyado en el banco y el de adelante bien adelantado. Baja la rodilla de atrás hacia el suelo con el torso erguido y sube empujando con el talón de adelante. ⚠️ No dejes que la rodilla de adelante se vaya hacia adentro.",
+     "equip": "Banco · mancuernas",
+     "muscle": "Cuádriceps · glúteos",
+     "video": "assets/silueta-de-acero/sentadilla-bulgara.mp4?v=1"
+    },
+    {
+     "name": "Extensión de cuádriceps",
+     "sets": "3 × 12-15",
+     "rest": "60 seg",
+     "tip": "Alinea rodilla con el eje de la máquina; sube sin impulso y baja lentamente.",
+     "equip": "Máquina",
+     "muscle": "Cuádriceps",
+     "video": "assets/impulso-total/extension-cuadriceps.mp4?v=1"
+    },
+    {
+     "name": "Elevación de talones",
+     "sets": "3 × 12-15",
+     "rest": "45 seg",
+     "tip": "Sube y baja en todo el recorrido disponible sin rebotar.",
+     "equip": "Máquina",
+     "muscle": "Pantorrillas",
+     "video": "assets/impulso-total/elevacion-talones-de-pie.mp4?v=1"
+    }
+   ],
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva."
+  },
+  {
+   "weekday": "Miércoles",
+   "title": "Tren superior · hombros, espalda y tríceps",
+   "focus": "Hombros · espalda · tríceps",
+   "warmup": "Remadora suave — 6 minutos",
+   "exercises": [
+    {
+     "name": "Press militar",
+     "sets": "3 × 8-10",
+     "rest": "90 seg",
+     "tip": "Mantén espalda y pelvis apoyadas; sube sin encoger hombros ni bloquear codos.",
+     "equip": "Máquina",
+     "muscle": "Deltoides · tríceps",
+     "video": "assets/impulso-total/press-militar.mp4?v=1"
+    },
+    {
+     "name": "Remo con mancuerna a una mano",
+     "sets": "3 × 10-12 por lado",
+     "rest": "75 seg",
+     "tip": "Apoya una mano y una rodilla en el banco, espalda recta. Lleva la mancuerna hacia la cadera con el codo pegado al cuerpo y baja controlando. ⚠️ No redondees la espalda ni gires el tronco para subir el peso.",
+     "equip": "Banco · mancuerna",
+     "muscle": "Dorsales · espalda media",
+     "video": "assets/silueta-de-acero/remo-mancuerna.mp4?v=1"
+    },
+    {
+     "name": "Face pull en polea",
+     "sets": "3 × 12-15",
+     "rest": "60 seg",
+     "tip": "Tira hacia la frente con codos altos sin arquear la zona lumbar.",
+     "equip": "Polea",
+     "muscle": "Deltoides posteriores",
+     "video": "assets/impulso-total/face-pull-polea.mp4?v=1"
+    },
+    {
+     "name": "Pullover en polea alta",
+     "sets": "3 × 12-15",
+     "rest": "60 seg",
+     "tip": "De pie frente a la polea alta, brazos casi estirados. Baja la barra en arco hasta los muslos apretando la espalda y vuelve lento. ⚠️ No arquees la zona lumbar ni dobles los codos para tirar.",
+     "equip": "Polea alta · barra recta o cuerda",
+     "muscle": "Dorsales",
+     "video": "assets/silueta-de-acero/pullover-polea.mp4?v=1"
+    },
+    {
+     "name": "Extensión de tríceps en polea",
+     "sets": "3 × 12-15",
+     "rest": "60 seg",
+     "tip": "Mantén codos cerca del cuerpo y evita usar el tronco para mover la carga.",
+     "equip": "Polea",
+     "muscle": "Tríceps",
+     "video": "assets/impulso-total/extension-triceps-polea.mp4?v=1"
+    }
+   ],
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva."
+  },
+  {
+   "weekday": "Jueves",
+   "title": "Abdominales y oblicuos",
+   "focus": "Abdomen · oblicuos · estabilidad",
+   "warmup": "Trotadora curva caminando — 6 minutos",
+   "exercises": [
+    {
+     "name": "Crunch abdominal en polea",
+     "sets": "3 × 12-15",
+     "rest": "60 seg",
+     "tip": "Acostada con los pies hacia la polea, sujeta la barra sobre el pecho. Sube el tronco acercando las costillas a la pelvis y baja lento. ⚠️ No tires del cuello ni de la barra con los brazos: el trabajo es del abdomen.",
+     "equip": "Polea · barra recta corta · colchoneta",
+     "muscle": "Abdominales",
+     "video": "assets/impulso-total/crunch-acostado-polea.mp4?v=1"
+    },
+    {
+     "name": "Elevación de piernas acostada",
+     "sets": "3 × 12-15",
+     "rest": "45 seg",
+     "tip": "Acostada boca arriba, manos bajo los glúteos. Sube las piernas estiradas hasta 90° y bájalas lento sin tocar el suelo. ⚠️ Mantén la zona lumbar pegada a la colchoneta: si se despega, dobla un poco las rodillas.",
+     "equip": "Colchoneta",
+     "muscle": "Abdomen bajo",
+     "video": "assets/silueta-de-acero/elevacion-piernas.mp4?v=1"
+    },
+    {
+     "name": "Giro ruso con disco",
+     "sets": "3 × 20 (10 por lado)",
+     "rest": "45 seg",
+     "tip": "Sentada con el torso inclinado hacia atrás y los pies apoyados (o en el aire si puedes), gira el tronco llevando el disco de un lado al otro. ⚠️ Gira desde el tronco con la espalda recta; no redondees la espalda.",
+     "equip": "Colchoneta · disco",
+     "muscle": "Oblicuos",
+     "video": "assets/silueta-de-acero/giro-ruso.mp4?v=1"
+    },
+    {
+     "name": "Plancha lateral",
+     "sets": "3 × 30 seg por lado",
+     "rest": "45 seg",
+     "tip": "Apoyada en un antebrazo, codo bajo el hombro, cuerpo en línea recta de cabeza a pies. Aguanta respirando normal y cambia de lado. ⚠️ No dejes caer la cadera.",
+     "equip": "Colchoneta",
+     "muscle": "Oblicuos · core",
+     "video": "assets/silueta-de-acero/plancha-lateral.mp4?v=1"
+    },
+    {
+     "name": "Leñador en polea",
+     "sets": "3 × 12 por lado",
+     "rest": "45 seg",
+     "tip": "De lado a la polea alta, toma la manilla con las dos manos y llévala en diagonal hacia la cadera contraria girando el tronco, con los brazos casi estirados. ⚠️ Gira desde el tronco y no tires solo con los brazos.",
+     "equip": "Polea · manilla",
+     "muscle": "Oblicuos",
+     "video": "assets/silueta-de-acero/lenador-polea.mp4?v=1"
+    }
+   ],
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva."
+  },
+  {
+   "weekday": "Viernes",
+   "title": "Pierna · glúteos y femorales",
+   "focus": "Hip thrust · rumano · femoral · abducción",
+   "warmup": "Bicicleta de spinning suave — 6 minutos",
+   "exercises": [
+    {
+     "name": "Hip thrust",
+     "sets": "4 × 12",
+     "rest": "90 seg",
+     "tip": "Apoya la parte alta de la espalda en el respaldo y los pies firmes en la plataforma. Eleva la pelvis hasta alinear tronco y muslos apretando glúteos arriba. ⚠️ No arquees la zona lumbar ni empujes con la punta de los pies.",
+     "equip": "Máquina de hip thrust",
+     "muscle": "Glúteos",
+     "video": "assets/impulso-total/hip-thrust.mp4?v=1"
+    },
+    {
+     "name": "Peso muerto rumano con mancuernas",
+     "sets": "3 × 10-12",
+     "rest": "75 seg",
+     "tip": "Mancuernas frente a los muslos, rodillas apenas flexionadas. Lleva la cadera hacia atrás bajando las mancuernas pegadas a las piernas hasta sentir tensión atrás del muslo y sube apretando glúteos. ⚠️ No redondees la espalda.",
+     "equip": "Mancuernas",
+     "muscle": "Femorales · glúteos",
+     "video": "assets/silueta-de-acero/peso-muerto-rumano.mp4?v=1"
+    },
+    {
+     "name": "Curl femoral a una pierna",
+     "sets": "3 × 10-12 por pierna",
+     "rest": "60 seg",
+     "tip": "De pie, apoya el torso en el soporte y fija la pelvis. Flexiona una rodilla llevando la palanca hacia atrás sin balancear la espalda; baja con control.",
+     "equip": "Máquina",
+     "muscle": "Isquiotibiales",
+     "video": "assets/impulso-total/curl-femoral-de-pie.mp4?v=1"
+    },
+    {
+     "name": "Abducción de cadera en máquina",
+     "sets": "3 × 12-15 por lado",
+     "rest": "60 seg",
+     "tip": "Mantén la pelvis fija y abre la pierna hacia el costado contra la resistencia; aguanta un segundo arriba y vuelve con control. ⚠️ No estires la rodilla ni gires el tronco para mover el peso.",
+     "equip": "Máquina",
+     "muscle": "Glúteo medio",
+     "video": "assets/impulso-total/abduccion-cadera-maquina.mp4?v=1"
+    },
+    {
+     "name": "Patada de glúteo en polea",
+     "sets": "3 × 12-15 por pierna",
+     "rest": "60 seg",
+     "tip": "De frente a la polea, sujeta la estructura y lleva una pierna hacia atrás desde la cadera, apretando el glúteo. Regresa despacio. ⚠️ No arquees la zona lumbar ni balancees el cuerpo.",
+     "equip": "Polea baja · tobillera",
+     "muscle": "Glúteo mayor",
+     "video": "assets/impulso-total/patada-gluteo-polea.mp4?v=1"
+    }
+   ],
+   "cooldownTitle": "Cardio opcional",
+   "cooldown": "Si aún tienes tiempo y energía, haz 5 a 8 minutos a ritmo cómodo en la bicicleta, remadora o trotadora curva."
+  }
+ ]
+}

@@ -1,44 +1,46 @@
-# Silueta de Acero · Mujeres · 5 días — avance (sin publicar)
+# Silueta de Acero · Mujeres · 5 días — avance (SIN PUBLICAR)
 
-Pedido de la dueña (18-10-2026): rutina distinta, lunes y miércoles tren superior, martes y viernes
-pierna, jueves solo abdominales y oblicuos. Nombre elegido por Claude (no se repite con las otras).
-Ella sube los videos de a poco y cambia lo que no le guste. Mismo formato que Impulso Total
-(app con video que parte solo). Nada se publica hasta que ella apruebe la rutina completa.
-✅ = ya existe el video en `maquinas-wgymadnsport/mujer/` · 🎬 = falta hacerlo.
+Pedido de la dueña (18-10-2026): lunes y miércoles tren superior, martes y viernes pierna, jueves solo
+abdominales y oblicuos. Nombre elegido por Claude. Ella sube los videos de a poco y cambia lo que no le guste.
+**App armada solo en la rama de trabajo, NO en `main`** (pedido de ella: "sin publicar aún hasta que la tengamos lista"):
+`silueta-de-acero.html` + `rutinas/silueta-de-acero.json` + `assets/silueta-de-acero/` + `img/rutinas/silueta-de-acero/`.
+Vista previa para ella: artifact https://claude.ai/artifact/9sa1XvqXpidNtPaXgmKNSu (copia con `DEMO=true` del motor,
+sin pedir nombre; se arma desde el scratchpad). Los videos que ya existían se reusan de `assets/impulso-total/`
+y las series de la rutina se dejaron iguales a las que dicen esos videos. Los que faltan tienen un video
+provisorio «VIDEO EN PREPARACIÓN» en `assets/silueta-de-acero/<id>.mp4`: al tener el real, reemplazar ese archivo
+(540 px, crf 27, sin audio) y subir el `?v=`. Al publicar: copiar a `main` y sumarla a `COACH_RUTINAS` ("F").
 
-## Lunes · Tren superior (espalda y bíceps)
-1. Jalón al pecho — 4 × 10-12 · 75 seg · ✅ `jalon-al-pecho`
-2. Remo frontal en máquina — 3 × 10-12 · 75 seg · ✅ `remo-frontal`
-3. Press de pecho con mancuernas — 3 × 10-12 · 75 seg · ✅ `press-pecho-mancuernas`
-4. Elevación lateral con discos — 3 × 12-15 · 60 seg · ✅ `elevacion-lateral-discos`
-5. Curl de bíceps en polea baja — 3 × 12 · 60 seg · 🎬
+## Lunes · Tren superior · espalda y bíceps
+1. Jalón al pecho — 3 × 8-10 · 90 seg · ✅ video listo
+2. Remo frontal — 3 × 10-12 · 75 seg · ✅ video listo
+3. Press de pecho con mancuernas en banco — 3 × 10-12 · 75 seg · ✅ video listo
+4. Elevación lateral con discos — 3 × 12 · 60 seg · ✅ video listo
+5. Curl de bíceps en polea baja — 3 × 12 · 60 seg · 🎬 falta video
 
-## Martes · Pierna (cuádriceps)
-6. Sentadilla en Smith — 4 × 10-12 · 90 seg · ✅ `sentadilla-smith`
-7. Prensa de piernas — 3 × 10-12 · 90 seg · ✅ `prensa-piernas`
-8. Sentadilla búlgara con mancuernas — 3 × 10 por pierna · 75 seg · 🎬
-9. Extensión de cuádriceps — 3 × 12-15 · 60 seg · ✅ `extension-cuadriceps`
-10. Elevación de talones de pie — 3 × 15 · 45 seg · ✅ `elevacion-talones-de-pie`
+## Martes · Pierna · cuádriceps
+6. Sentadilla en Smith — 3 × 10-12 · 75 seg · ✅ video listo
+7. Prensa de piernas — 3 × 8-10 · 90 seg · ✅ video listo
+8. Sentadilla búlgara con mancuernas — 3 × 10 por pierna · 75 seg · 🎬 falta video
+9. Extensión de cuádriceps — 3 × 12-15 · 60 seg · ✅ video listo
+10. Elevación de talones — 3 × 12-15 · 45 seg · ✅ video listo
 
-## Miércoles · Tren superior (hombros, espalda y tríceps)
-11. Press militar en máquina — 3 × 10-12 · 75 seg · ✅ `press-militar`
-12. Remo con mancuerna a una mano — 3 × 10-12 por lado · 75 seg · 🎬
-13. Face pull en polea — 3 × 12-15 · 60 seg · ✅ `face-pull-polea`
-14. Pullover en polea alta — 3 × 12-15 · 60 seg · 🎬
-15. Extensión de tríceps en polea — 3 × 12-15 · 60 seg · ✅ `extension-triceps-polea`
+## Miércoles · Tren superior · hombros, espalda y tríceps
+11. Press militar — 3 × 8-10 · 90 seg · ✅ video listo
+12. Remo con mancuerna a una mano — 3 × 10-12 por lado · 75 seg · 🎬 falta video
+13. Face pull en polea — 3 × 12-15 · 60 seg · ✅ video listo
+14. Pullover en polea alta — 3 × 12-15 · 60 seg · 🎬 falta video
+15. Extensión de tríceps en polea — 3 × 12-15 · 60 seg · ✅ video listo
 
 ## Jueves · Abdominales y oblicuos
-16. Crunch abdominal en polea — 3 × 15 · 45 seg · ✅ `crunch-acostado-polea`
-17. Elevación de piernas acostada — 3 × 12-15 · 45 seg · 🎬
-18. Giro ruso con disco (russian twist) — 3 × 20 (10 por lado) · 45 seg · 🎬
-19. Plancha lateral — 3 × 30 seg por lado · 45 seg · 🎬
-20. Leñador en polea (woodchopper) — 3 × 12 por lado · 45 seg · 🎬
+16. Crunch abdominal en polea — 3 × 12-15 · 60 seg · ✅ video listo
+17. Elevación de piernas acostada — 3 × 12-15 · 45 seg · 🎬 falta video
+18. Giro ruso con disco — 3 × 20 (10 por lado) · 45 seg · 🎬 falta video
+19. Plancha lateral — 3 × 30 seg por lado · 45 seg · 🎬 falta video
+20. Leñador en polea — 3 × 12 por lado · 45 seg · 🎬 falta video
 
-## Viernes · Pierna (glúteos y femorales)
-21. Hip thrust en máquina — 4 × 10-12 · 90 seg · ✅ `hip-thrust`
-22. Peso muerto rumano con mancuernas — 3 × 10-12 · 75 seg · 🎬
-23. Curl femoral de pie — 3 × 12 por pierna · 60 seg · ✅ `curl-femoral-de-pie`
-24. Abducción de cadera en máquina — 3 × 15 · 60 seg · ✅ `abduccion-cadera-maquina`
-25. Patada de glúteo en polea — 3 × 12-15 por pierna · 60 seg · ✅ `patada-gluteo-polea`
-
-Videos nuevos que faltan (9): 5, 8, 12, 14, 17, 18, 19, 20, 22.
+## Viernes · Pierna · glúteos y femorales
+21. Hip thrust — 4 × 12 · 90 seg · ✅ video listo
+22. Peso muerto rumano con mancuernas — 3 × 10-12 · 75 seg · 🎬 falta video
+23. Curl femoral a una pierna — 3 × 10-12 por pierna · 60 seg · ✅ video listo
+24. Abducción de cadera en máquina — 3 × 12-15 por lado · 60 seg · ✅ video listo
+25. Patada de glúteo en polea — 3 × 12-15 por pierna · 60 seg · ✅ video listo
