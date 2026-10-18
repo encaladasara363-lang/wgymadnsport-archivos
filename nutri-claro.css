@@ -614,3 +614,7 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .se-r.t-pierna,.tipo-dia.t-pierna{border-color:#E30613}
 .se-r.t-descanso,.tipo-dia.t-descanso{border-color:#5cc8ff;background:linear-gradient(135deg,#06202c,#0D0D0F)}
 .tipo-dia{margin:0 0 12px}.tipo-dia p{margin:0}
+/* 🏋️ Comidas de tu entreno y 📉 ajuste automático (18-10-2026) */
+.ent-t{margin:12px 0 0;font-weight:800;font-size:17px}
+.ajuste-card{background:linear-gradient(135deg,#2a0306,#0D0D0F) !important;border:2px solid #D4AF37 !important}
+.ajuste-card h3{color:#fff}

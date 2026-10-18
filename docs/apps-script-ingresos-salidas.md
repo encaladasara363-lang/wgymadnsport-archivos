@@ -151,3 +151,13 @@ implementaciones → lápiz ✏️ → Nueva versión → Implementar**.
 para que la tarjeta y el mesón muestren un ranking por grupo. Se instala igual que las
 anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar →
 Administrar implementaciones → lápiz → Versión nueva → Implementar.
+
+## Versión 22 (18-10-2026): ventas de WGYMNUTRI en el mesón
+
+Cada «Activar 1 mes» / «Activar 3 meses» de la ficha del mesón queda anotado en la hoja
+nueva «Ventas WGYMNUTRI» (fecha, nombre, apellido, meses y monto; la hoja se crea sola).
+Acción nueva `ventasNutri` (POST con la clave de administración): el panel «🥗 Ventas
+WGYMNUTRI» de `control.html` muestra lo que entró en el mes. Las activaciones hechas antes
+de instalar esta versión no quedan anotadas. Se instala igual que las anteriores: pegar
+`Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar → Administrar implementaciones →
+lápiz → Versión nueva → Implementar (para volver atrás: Versión 21).

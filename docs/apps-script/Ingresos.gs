@@ -452,9 +452,42 @@ function activarNutri_(e) {
     var ahora = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm");
     if (fila) hoja.getRange(fila, 3, 1, 2).setValues([[hasta, ahora]]);
     else hoja.appendRow([nombreTxt, apellidoTxt, hasta, ahora]);
+    /* Cada activación pagada queda anotada en «Ventas WGYMNUTRI» (18-10-2026, panel de ventas del mesón). */
+    var meses = Number(p.meses) || 0, monto = Number(p.monto) || 0;
+    if (hasta && meses > 0) hojaVentasNutri_().appendRow([ahora, nombreTxt, apellidoTxt, meses, monto]);
     try { CacheService.getScriptCache().remove("nutri_lista"); } catch (err) {}
     return respond_(e, { ok: true, nutri: true, hasta: hasta });
   } finally { lock.releaseLock(); }
+}
+
+/* ── Ventas de WGYMNUTRI (18-10-2026, la dueña eligió el panel de ventas en el mesón) ──
+   Hoja «Ventas WGYMNUTRI»: Fecha · Nombre · Apellido · Meses · Monto. Solo la escribe
+   activarNutri (con clave); ventasNutri (POST con la clave) entrega las del mes pedido. */
+var HOJA_VENTAS_NUTRI_ = "Ventas WGYMNUTRI";
+function hojaVentasNutri_() {
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var hoja = ss.getSheetByName(HOJA_VENTAS_NUTRI_);
+  if (!hoja) {
+    hoja = ss.insertSheet(HOJA_VENTAS_NUTRI_);
+    hoja.appendRow(["Fecha", "Nombre", "Apellido", "Meses", "Monto"]);
+    hoja.getRange("A:A").setNumberFormat("@");
+  }
+  return hoja;
+}
+function ventasNutri_(e) {
+  if (!claveValida_(e.parameter)) return respond_(e, { ok: false, error: "clave incorrecta" });
+  try {
+    var mes = String(e.parameter.mes || "").trim();
+    if (!/^\d{4}-\d{2}$/.test(mes)) mes = diaCL_(Date.now()).slice(0, 7);
+    var datos = hojaVentasNutri_().getDataRange().getValues(), ventas = [], total = 0;
+    for (var i = 1; i < datos.length; i++) {
+      var f = datos[i][0] instanceof Date ? Utilities.formatDate(datos[i][0], TZ_INGRESOS_, "yyyy-MM-dd HH:mm") : String(datos[i][0] || "");
+      if (f.slice(0, 7) !== mes) continue;
+      var monto = Number(datos[i][4]) || 0; total += monto;
+      ventas.push({ f: f, n: String(datos[i][1] || ""), a: String(datos[i][2] || ""), meses: Number(datos[i][3]) || 0, monto: monto });
+    }
+    return respond_(e, { ok: true, ventasNutri: true, mes: mes, ventas: ventas, total: total });
+  } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
 
 /* ── Productos escaneados de WGYMNUTRI (10-10-2026, la dueña: "escanear una
@@ -671,6 +704,7 @@ function accionIngresosPost_(e) {
     case "quitarSalida": return quitarSalida_(e);
     case "activarNutri": return activarNutri_(e);
     case "rankingAdmin": return rankingAdmin_(e);
+    case "ventasNutri": return ventasNutri_(e);
   }
   return null;
 }
