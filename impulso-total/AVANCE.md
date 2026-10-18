@@ -113,4 +113,5 @@ discos no tiene lugar en la rutina todavía.
    que baja quede casi tocando la banca: se deslizó ~30 px hacia la banca deformando solo el piso entre el pie y la pata
    (`scripts/acercar-pie-step-up.py` → `fuentes/ejercicio-gemini-pie-cerca.mp4`). Al final la dueña eligió la versión de
    Grok de ida y vuelta ("quiero este") con el pie de atrás ~70 px más cerca de la banca (`campo_grok` →
-   `fuentes/tramo-ida-vuelta-pie-cerca.mp4`); esa es la que quedó.
+   `fuentes/tramo-ida-vuelta-pie-cerca.mp4`), pero tampoco le sirvió: quedó el video de Grok de ida y vuelta TAL CUAL,
+   sin mover el pie (el mismo archivo que ella mandó). No volver a deformar el pie.

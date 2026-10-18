@@ -3,7 +3,7 @@
   "series": "3 × 10 POR LADO",
   "partes": [
     {
-      "video": "fuentes/tramo-ida-vuelta-pie-cerca.mp4",
+      "video": "fuentes/tramo-ida-vuelta.mp4",
       "desde": 0,
       "hasta": 2.46,
       "encaje": {
@@ -12,7 +12,7 @@
         "y": -90
       },
       "repetir": 3,
-      "nota": "Ejercicio 25 de Impulso Total. Versión elegida por la dueña: primer 0,9 s del video de Grok (sube con la pierna de atrás en el aire) de ida y vuelta, con el pie de atrás deslizado ~70 px hacia la banca (scripts/acercar-pie-step-up.py, campo_grok).",
+      "nota": "Ejercicio 25 de Impulso Total. Versión que eligió la dueña (\"quiero este\"): primer 0,9 s del video de Grok (sube con la pierna de atrás en el aire), de ida y vuelta, SIN mover el pie (el pie acercado no le sirvió).",
       "musculo_kf": [
         [
           0,
