@@ -1,0 +1,14 @@
+{
+  "titulo": "REMO INCLINADO CON MANCUERNAS",
+  "series": "3 × 10-12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-gemini.mp4",
+      "desde": 0,
+      "hasta": 10,
+      "recorte": [420, 0, 405, 720],
+      "repetir": 1,
+      "nota": "Silueta de Acero. Mancuernas de discos, vista de lado. Imagen de ChatGPT desde el video de referencia IMG_9508 (no se sube); video de Gemini."
+    }
+  ]
+}
