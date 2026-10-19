@@ -749,6 +749,11 @@ mismo diseño, para usarlos en sus rutinas con QR. Todo vive en
   ya te mandé"):** antes de pedir la foto de una máquina, buscarla en `maquinas-wgymadnsport/*/*/fuentes/`
   (ej. polea doble n.º 20: `mujer/extension-triceps-polea/fuentes/maquina-20.jpg`) y en
   `impulso-total/AVANCE.md`. Solo se pide lo que de verdad no está.
+- **Video de referencia de la dueña → imagen para Gemini (19-10-2026, regla de ella):** cuando manda un video
+  suyo de un ejercicio, sacar el cuadro en máxima calidad y darle el texto para ChatGPT con la modelo de siempre, pidiendo
+  SIEMPRE: mejorar la calidad del fondo, arreglar la luz y dejar las máquinas como nuevas, sin mover ni cambiar nada más.
+  Mirar bien el equipo del video (barra, mancuernas, máquina) y ponerle al ejercicio el nombre que corresponde
+  (ella: "fíjate bien… ponerle el nombre correspondiente"; se puso «mancuernas» a un remo con barra).
 - **Siempre el mismo modelo** (pedido de la dueña): el mismo hombre en todas
   las máquinas de `hombre/` y la misma mujer en todas las de `mujer/`;
   referencias en `maquinas-wgymadnsport/comun/modelo-hombre.jpg` y
