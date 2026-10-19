@@ -342,7 +342,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=25"></script>
+<script src="nutri-alimentos.js?v=26"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -1577,6 +1577,57 @@ function leerEtiqueta(file, alListo){
    tx(n ? "✅ Leí " + n + " de 4 valores. Revisa que coincidan con la etiqueta." : "No pude leer los números. Prueba con más luz y la tabla derecha, o escríbelos."); alListo(d); })
   ["catch"](function(){ tx("No se pudo usar el lector en este teléfono. Escribe los números a mano."); });
 }
+/* 📋 Escanear menú (19-10-2026, la dueña vio en otra app «Escanear menú» y eligió la versión gratis): foto de la
+   carta del restaurante → el mismo lector Tesseract de las etiquetas lee el texto → cada línea se busca en la
+   lista de alimentos (comida chilena, rápida…) y se muestran los platos encontrados con sus calorías
+   aproximadas. Sin IA pagada: solo reconoce platos que estén en la lista. */
+var MENU_STOP = ["DE","DEL","LA","EL","LOS","LAS","CON","SIN","Y","O","A","AL","EN","POR","PARA","SU","SUS","UN","UNA","MAS","TU"];
+function palabrasMenu(t){ return normName(t).replace(/[^A-Z ]/g, " ").split(" ").filter(function(w){ return w.length > 2 && MENU_STOP.indexOf(w) < 0; }); }
+function igualPal(a, b){ return a === b || (a.length > 3 && b.length > 3 && (a.replace(/E?S$/, "") === b.replace(/E?S$/, ""))); }
+function platoDeLinea(linea){
+ var ws = palabrasMenu(linea); if(!ws.length) return null;
+ var mejor = null, mp = 0;
+ ALIM.forEach(function(a){
+  if(a.cat === CAT_PROD) return;
+  var aw = a.mw || (a.mw = palabrasMenu(a.n.replace(/\(.*?\)/g, " "))); if(!aw.length) return;
+  var cubre = aw.filter(function(w){ return ws.some(function(v){ return igualPal(w, v); }); }).length;
+  if(cubre / aw.length < 0.6 || (aw.length === 1 && aw[0].length < 4)) return;
+  var usa = ws.filter(function(v){ return aw.some(function(w){ return igualPal(w, v); }); }).length;
+  var p = cubre / aw.length + usa / ws.length + (/chilena|rápida/i.test(a.cat) ? 0.15 : 0) + Math.min(aw.length, 4) * 0.05;
+  if(p > mp){ mp = p; mejor = a; }
+ });
+ return mejor;
+}
+function fotoMenu(file){
+ return new Promise(function(ok, mal){ var u = URL.createObjectURL(file), im = new Image();
+  im.onload = function(){ var s = Math.min(1, 1800 / Math.max(im.naturalWidth, im.naturalHeight)), cv = document.createElement("canvas"); cv.width = Math.round(im.naturalWidth * s); cv.height = Math.round(im.naturalHeight * s);
+   var cx = cv.getContext("2d"); cx.filter = "grayscale(1) contrast(1.4)"; cx.drawImage(im, 0, 0, cv.width, cv.height); URL.revokeObjectURL(u); cv.toBlob(function(b){ b ? ok(b) : mal(); }, "image/jpeg", 0.9); };
+  im.onerror = function(){ URL.revokeObjectURL(u); mal(); }; im.src = u; });
+}
+function modoMenu(){
+ var c = $("agrCuerpo");
+ c.innerHTML = '<label class="btn rojo" style="display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer">📋 Sacar foto a la carta<input type="file" id="menuFoto" accept="image/*" capture="environment" hidden></label>' +
+  '<p class="muted" id="menuTx" style="font-size:14px;margin:8px 0 0">Saca la foto derecha, con buena luz y que se lean los nombres de los platos. La app busca cada plato y te muestra sus calorías aproximadas.</p><div id="menuRes"></div>';
+ $("menuFoto").onchange = function(){
+  var file = this.files && this.files[0]; if(!file) return;
+  var tx = function(m){ if($("menuTx")) $("menuTx").textContent = m; };
+  $("menuRes").innerHTML = ""; tx("⏳ Preparando el lector (la primera vez demora un poco)…");
+  cargarTesseract().then(function(w){ tx("🔎 Leyendo la carta…"); return fotoMenu(file).then(function(b){ return w.recognize(b); }); })
+   .then(function(r){
+    if(!$("menuRes")) return;
+    var lineas = String(r && r.data && r.data.text || "").split(/\n+/).map(function(l){ return l.replace(/\$?\s*\d[\d.,]*/g, " ").replace(/[.·…_-]{2,}/g, " ").replace(/\s+/g, " ").trim(); }).filter(function(l){ return /[a-záéíóúñ]{3,}/i.test(l); });
+    var vistos = {}, hall = [], sin = [];
+    lineas.forEach(function(l){ var a = platoDeLinea(l); if(a){ if(!vistos[a.n]){ vistos[a.n] = 1; hall.push({ l:l, a:a }); } } else if(l.length >= 4 && l.length <= 40) sin.push(l); });
+    if(!hall.length){ tx(lineas.length ? "No encontré platos de la carta en nuestra lista. Prueba otra foto más cerca, o busca el plato en 🔎 Buscar." : "No pude leer la carta. Prueba con más luz y la foto derecha."); }
+    else tx("✅ Encontré " + hall.length + (hall.length === 1 ? " plato" : " platos") + ". Toca el que pediste para agregarlo (las calorías son aproximadas).");
+    $("menuRes").innerHTML = (hall.length ? '<div class="res" style="margin-top:10px">' + hall.map(function(x, i){
+      return '<button type="button" data-mn="' + i + '"><div class="tx"><b>' + iconoAlim(x.a) + ' ' + esc(x.a.n) + '</b><span>En la carta: «' + esc(x.l.slice(0, 50)) + '» · ' + esc(x.a.p) + '</span></div><span class="k">' + miles(x.a.k) + '</span></button>'; }).join("") + '</div>' : '') +
+     (sin.length ? '<details class="menu-sin" style="margin-top:10px"><summary>¿No salió tu plato? Toca uno para buscarlo (' + sin.length + ')</summary><div class="chips-wrap" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">' + sin.slice(0, 30).map(function(l, i){ return '<button type="button" class="chip" data-ms="' + i + '">' + esc(l) + '</button>'; }).join("") + '</div></details>' : '');
+    document.querySelectorAll("[data-mn]").forEach(function(b){ b.onclick = function(){ detalle(hall[+b.dataset.mn].a); }; });
+    document.querySelectorAll("[data-ms]").forEach(function(b){ b.onclick = function(){ agr.q = sin[+b.dataset.ms]; agr.modo = "buscar"; renderAgregar(); }; });
+   })["catch"](function(){ tx("No se pudo usar el lector en este teléfono. Busca el plato en 🔎 Buscar."); });
+ };
+}
 var aguaPctPrev = 0;
 /* Vitamina C recomendada al día (10-10-2026, pedido de la dueña): 75 mg mujeres, 90 mg hombres
    (recomendación diaria de adultos del Instituto de Medicina de EE. UU.). */
@@ -1921,7 +1972,7 @@ document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !$("v
 function abrirAgregar(comida, modo){ agr.comida = comida; if(modo) agr.modo = modo; renderAgregar(); }
 function renderAgregar(){
  pararCamara();
- var modos = [["buscar","🔎 Buscar"],["voz","🎤 Voz"],["escanear","▮▯▮ Escanear"],["platos","🍽 Mis platos"],["recientes","🕘 Recientes"],["favs","★ Favoritas"],["manual","✍️ Manual"]];
+ var modos = [["buscar","🔎 Buscar"],["voz","🎤 Voz"],["escanear","▮▯▮ Escanear"],["menu","📋 Escanear menú"],["platos","🍽 Mis platos"],["recientes","🕘 Recientes"],["favs","★ Favoritas"],["manual","✍️ Manual"]];
  var h = '<div class="cab" style="margin-bottom:10px"><h3>Agregar comida</h3><button type="button" class="chip" id="hX">Cerrar</button></div>' +
   '<div class="campo" style="margin-bottom:10px"><label for="agrComida">¿A qué comida?</label><select class="inp" id="agrComida">' + COMIDAS.filter(function(c){ return c[0] === "bebidas" || c[0] === agr.comida || comidasVisibles().some(function(v){ return v[0] === c[0]; }); }).map(function(c){ return '<option value="' + c[0] + '"' + (c[0] === agr.comida ? " selected" : "") + '>' + c[1] + ' ' + c[2] + '</option>'; }).join("") + '</select></div>' +
   '<div class="tabs">' + modos.map(function(m){ return '<button type="button" class="chip" data-modo="' + m[0] + '" aria-pressed="' + (agr.modo === m[0]) + '">' + m[1] + '</button>'; }).join("") + '</div><div id="agrCuerpo"></div>';
@@ -1929,7 +1980,7 @@ function renderAgregar(){
  $("hX").onclick = cerrarHoja;
  $("agrComida").onchange = function(){ agr.comida = this.value; };
  document.querySelectorAll("[data-modo]").forEach(function(b){ b.onclick = function(){ agr.modo = b.dataset.modo; renderAgregar(); }; });
- ({ buscar:modoBuscar, voz:modoVoz, escanear:modoEscanear, platos:modoPlatos, recientes:modoLista.bind(null, "recientes"), favs:modoLista.bind(null, "favs"), manual:modoManual })[agr.modo]();
+ ({ buscar:modoBuscar, voz:modoVoz, escanear:modoEscanear, menu:modoMenu, platos:modoPlatos, recientes:modoLista.bind(null, "recientes"), favs:modoLista.bind(null, "favs"), manual:modoManual })[agr.modo]();
 }
 function porcionES(t){
  return String(t || "").replace(/\bportions?\b/gi, function(m){ return /s$/i.test(m) ? "porciones" : "porción"; }).replace(/\bservings?\b/gi, "porción")
@@ -2824,7 +2875,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101908", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101909", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
