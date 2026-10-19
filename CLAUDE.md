@@ -1904,6 +1904,11 @@ probado: ella se activó desde el mesón y entró a la app).
     (`semanaAuto`): días de pierna/glúteo/femoral/cuádriceps/cuerpo completo → Pierna, el resto de la rutina → Superior,
     días sin rutina → Descanso. En Perfil, «📋 Armarla con mi rutina» la elige a mano. **Al sumar una rutina a
     `COACH_RUTINAS`, sumarla también a `NUTRI_RUTINAS`.**
+- **⏳ Aviso de vencimiento (19-10-2026, la dueña eligió la idea 16):** desde 3 días antes de que venza WGYMNUTRI,
+  «Hoy» muestra arriba «⏳ Tu WGYMNUTRI vence hoy/mañana/el <día>» (`htmlVence`) con «💳 Renovar ahora», que abre la
+  pantalla de pago en modo renovación (`renovando`: «← Volver a la app» en vez de «No soy yo», texto «vence el…»). Con
+  «Ya pagué» solo vuelve a la app cuando la hoja trae una fecha nueva («✅ ¡WGYMNUTRI renovada hasta…!»). El «Activar»
+  del mesón ya suma el mes desde la fecha vigente, así que no se pierden días.
 - **🥗 Panel de ventas WGYMNUTRI en el mesón (18-10-2026, idea 8):** `control.html`, panel antes de «Socios del gimnasio»
   (`verVentasNutri_`): activas ahora, vencen en 7 días, vencidas hace menos de 30 días (para ofrecerla de nuevo) con
   `listarNutri`, y «Entró este mes» con `ventasNutri` (POST con clave). Cada «Activar» manda `meses` y `monto` y el

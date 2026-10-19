@@ -628,3 +628,7 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .cal-d.con{border-color:#2ecc71;background:rgba(46,204,113,.14)}
 .cal-d.hoy{outline:2px solid #D4AF37}.cal-d.sel{background:#E30613;border-color:#E30613}
 .cal-d:disabled{opacity:.3}
+/* ⏳ Aviso de vencimiento de WGYMNUTRI (19-10-2026) */
+.vence-card{background:linear-gradient(135deg,#3a0207,#0D0D0F) !important;border:2px solid #E30613 !important;animation:venceLate 2.4s ease-in-out infinite}
+@keyframes venceLate{50%{box-shadow:0 0 0 4px rgba(227,6,19,.25)}}
+@media (prefers-reduced-motion:reduce){.vence-card{animation:none}}
