@@ -1561,7 +1561,9 @@ probado: ella se activó desde el mesón y entró a la app).
   (sin superávit inventado). Todo se guarda solo en el teléfono (`D.perfil`).
 - **Franja de la semana en «Hoy» (10-10-2026, como Fitia):** L a D de la semana con
   punto verde en los días con comidas registradas; tocar un día lo muestra; ‹ › cambian
-  de semana.
+  de semana. **Desde el 19-10-2026 (la dueña, un lunes: "se me bloqueó, se me perdió todo
+  mi registro")** la franja muestra los **últimos 7 días hasta hoy** (con la letra real de cada día); con ‹ se ve
+  la semana anterior de lunes a domingo y › vuelve hasta hoy. Antes, el lunes solo se veía hoy y el resto bloqueado.
 - **Escáner confirma el código (10-10-2026, la dueña: "no me escanean"; en realidad leyó
   80725848 y ese producto no estaba en ninguna lista):** un código se acepta solo si se
   lee igual 2 veces seguidas (3 si tiene 8 dígitos), para que no se cuele una lectura a

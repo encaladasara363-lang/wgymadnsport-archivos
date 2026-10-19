@@ -1609,14 +1609,18 @@ function revisarFestejo(){
 function renderHoy(){
  var M = metaDia(diaSel), t = totales(diaSel), x = diaDe(diaSel), esHoy = diaSel === hoyISO();
  var rest = M.kcal - t.k, pct = Math.min(1, t.k / M.kcal), C = 2 * Math.PI * 62;
- var h = '<div class="dia-nav"><button type="button" id="diaAnt" aria-label="Semana anterior">‹</button><b>' + (esHoy ? "Hoy · " : "") + fechaLarga(diaSel) + '</b><button type="button" id="diaSig" aria-label="Semana siguiente"' + (sumaDias(lunesDe(diaSel), 7) > hoyISO() ? " disabled" : "") + '>›</button></div>';
+ var desde7 = sumaDias(hoyISO(), -6), lun = diaSel >= desde7 ? desde7 : lunesDe(diaSel);
+ var h = '<div class="dia-nav"><button type="button" id="diaAnt" aria-label="Semana anterior">‹</button><b>' + (esHoy ? "Hoy · " : "") + fechaLarga(diaSel) + '</b><button type="button" id="diaSig" aria-label="Semana siguiente"' + (lun === desde7 ? " disabled" : "") + '>›</button></div>';
  /* Franja de la semana (10-10-2026, pedido de la dueña, como Fitia): L a D con un punto en cada
     día que tiene comidas registradas; se toca un día para verlo. */
- var lun = lunesDe(diaSel), ent = diasEntreno(); cargarEntreno();
+ /* 19-10-2026 (la dueña, un lunes: "se me bloqueó, se me perdió todo mi registro"): con la semana de lunes a domingo,
+    el lunes solo se veía hoy y el resto bloqueado. Ahora la franja muestra los últimos 7 días hasta hoy; con ‹ se ve
+    la semana anterior (de lunes a domingo). */
+ var ent = diasEntreno(); cargarEntreno();
  /* 💪 Cabecera roja los días que entrenó (11-10-2026, la dueña eligió la idea 2): si hoy tiene
     ingreso al gimnasio, la parte de arriba se pone roja intensa con «Hoy entrenaste en WGYM». */
  var hoyEnt = !!ent[hoyISO()], topEl = document.querySelector("header.top"); if(topEl) topEl.classList.toggle("entreno", hoyEnt); if($("entTag")) $("entTag").hidden = !hoyEnt;
- h += '<div class="semana-tira">' + ["L","M","M","J","V","S","D"].map(function(l, i){
+ h += '<div class="semana-tira">' + [0,1,2,3,4,5,6].map(function(i){ var l = "DLMMJVS".charAt(fechaDeISO(sumaDias(lun, i)).getDay());
   var f = sumaDias(lun, i), xd = D.dias[f], con = xd && Object.keys(xd.c || {}).some(function(k){ return (xd.c[k] || []).length; });
   return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + (ent[f] ? " ent" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i>' + (ent[f] ? '<em class="st-ent" aria-label="Entrenaste">💪</em>' : '') + '</button>'; }).join("") + '</div>';
  if(esHoy) h += htmlNoche();
@@ -1689,7 +1693,7 @@ function renderHoy(){
  if(!estaInstalada() && !DENTRO_TARJETA && !lsGet(CLAVE_INST, false)) h += '<div class="aviso" style="background:#160c0d;border-color:#5a1a1f"><span class="e">📲</span><p><b>Pon WGYMNUTRI en tu pantalla de inicio</b><br><span class="muted" style="font-size:14px">Ábrela con un toque, como cualquier app.</span></p><button type="button" id="instIr" class="btn rojo chico" style="width:auto">Instalar</button></div>';
  var box = $("tabHoy"); box.innerHTML = h;
  requestAnimationFrame(function(){ requestAnimationFrame(function(){ var p = $("anilloProg"); if(p) p.style.strokeDashoffset = C * (1 - pct); }); });
- $("diaAnt").onclick = function(){ diaSel = sumaDias(diaSel, -7); renderHoy(); };
+ $("diaAnt").onclick = function(){ diaSel = sumaDias(lun, -1); renderHoy(); };
  $("diaSig").onclick = function(){ var n = sumaDias(diaSel, 7); diaSel = n > hoyISO() ? hoyISO() : n; renderHoy(); };
  box.querySelectorAll(".st-dia").forEach(function(b){ b.onclick = function(){ if(b.dataset.f <= hoyISO()){ diaSel = b.dataset.f; renderHoy(); } }; });
  if($("avisoX")) $("avisoX").onclick = function(){ lsSet("wgymnutri_aviso_oculto_v1", hoyISO()); renderHoy(); };
@@ -2743,7 +2747,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101803", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101901", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
