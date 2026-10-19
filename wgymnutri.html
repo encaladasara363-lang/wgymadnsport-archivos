@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=60">
+<link rel="stylesheet" href="nutri-claro.css?v=61">
 <link rel="stylesheet" href="nutri-oscuro.css?v=13">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -1623,6 +1623,7 @@ function renderHoy(){
  h += '<div class="semana-tira">' + [0,1,2,3,4,5,6].map(function(i){ var l = "DLMMJVS".charAt(fechaDeISO(sumaDias(lun, i)).getDay());
   var f = sumaDias(lun, i), xd = D.dias[f], con = xd && Object.keys(xd.c || {}).some(function(k){ return (xd.c[k] || []).length; });
   return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + (ent[f] ? " ent" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i>' + (ent[f] ? '<em class="st-ent" aria-label="Entrenaste">💪</em>' : '') + '</button>'; }).join("") + '</div>';
+ h += '<button type="button" class="btn sec chico cal-btn" id="verCal">📅 Ver todos mis días</button>';
  if(esHoy) h += htmlNoche();
  if(esHoy) h += htmlRacha();
  if(esHoy) h += htmlAjuste();
@@ -1693,6 +1694,7 @@ function renderHoy(){
  if(!estaInstalada() && !DENTRO_TARJETA && !lsGet(CLAVE_INST, false)) h += '<div class="aviso" style="background:#160c0d;border-color:#5a1a1f"><span class="e">📲</span><p><b>Pon WGYMNUTRI en tu pantalla de inicio</b><br><span class="muted" style="font-size:14px">Ábrela con un toque, como cualquier app.</span></p><button type="button" id="instIr" class="btn rojo chico" style="width:auto">Instalar</button></div>';
  var box = $("tabHoy"); box.innerHTML = h;
  requestAnimationFrame(function(){ requestAnimationFrame(function(){ var p = $("anilloProg"); if(p) p.style.strokeDashoffset = C * (1 - pct); }); });
+ $("verCal").onclick = function(){ abrirCalendario(diaSel.slice(0, 7)); };
  $("diaAnt").onclick = function(){ diaSel = sumaDias(lun, -1); renderHoy(); };
  $("diaSig").onclick = function(){ var n = sumaDias(diaSel, 7); diaSel = n > hoyISO() ? hoyISO() : n; renderHoy(); };
  box.querySelectorAll(".st-dia").forEach(function(b){ b.onclick = function(){ if(b.dataset.f <= hoyISO()){ diaSel = b.dataset.f; renderHoy(); } }; });
@@ -1831,6 +1833,30 @@ function guardarPorcionCompartida(a, txt){
  if(!window.WGYMNUTRI_DEMO) pedirScript({ action:"porcionProducto", codigo:a.code || "", nombre:a.n, marca:a.marca || "", porcTxt:txt, porcG:a.porcG || 0 });
 }
 integrarProductos(lsGet(CLAVE_PROD, null) || []);
+/* 📅 Todos mis días (19-10-2026, la dueña: "quiero que muestre todos los días, que no se borre nada"): calendario
+   por mes con todos los días anotados (punto verde y kcal, 💪 si entrenó). Nada se borra: los días quedan en el
+   teléfono. Se puede ir hacia atrás hasta el primer mes con comidas. */
+function abrirCalendario(ym){
+ var hoy = hoyISO(), con = Object.keys(D.dias).filter(function(k){ return totales(k).n; }).sort(), ent = diasEntreno();
+ var primero = (con[0] || hoy).slice(0, 7), y = +ym.slice(0, 4), m = +ym.slice(5, 7);
+ var ini = ym + "-01", nd = new Date(y, m, 0).getDate(), off = (fechaDeISO(ini).getDay() + 6) % 7, delMes = 0;
+ var h = '<div class="cab"><h3>📅 Todos mis días</h3><button type="button" class="chip" id="calCerrar">Cerrar</button></div>' +
+  '<p class="muted" style="margin:4px 0 10px">' + con.length + (con.length === 1 ? ' día anotado' : ' días anotados') + ' en total. Toca un día para verlo.</p>' +
+  '<div class="dia-nav"><button type="button" id="calAnt"' + (ym <= primero ? ' disabled' : '') + '>‹</button><b>' + esc(mesTxt(ym)) + '</b><button type="button" id="calSig"' + (ym >= hoy.slice(0, 7) ? ' disabled' : '') + '>›</button></div>' +
+  '<div class="cal-grid">' + ["L","M","M","J","V","S","D"].map(function(l){ return '<span class="cal-l">' + l + '</span>'; }).join("");
+ for(var i = 0; i < off; i++) h += '<span></span>';
+ for(var d = 1; d <= nd; d++){
+  var f = ym + "-" + (d < 10 ? "0" : "") + d, t = totales(f), fut = f > hoy; if(t.n) delMes++;
+  h += '<button type="button" class="cal-d' + (t.n ? ' con' : '') + (f === hoy ? ' hoy' : '') + (f === diaSel ? ' sel' : '') + '" data-cf="' + f + '"' + (fut ? ' disabled' : '') + '><b>' + d + '</b>' +
+   (t.n ? '<small style="color:#7CFC9A">' + miles(t.k) + '</small>' : '<small>&nbsp;</small>') + (ent[f] ? '<em>💪</em>' : '') + '</button>';
+ }
+ h += '</div><p class="muted center" style="margin:10px 0 0">' + delMes + ' de ' + nd + ' días anotados en ' + esc(MESES[m - 1]) + '</p>';
+ abrirHoja(h);
+ $("calCerrar").onclick = cerrarHoja;
+ function mover(n){ var d2 = new Date(y, m - 1 + n, 1); abrirCalendario(d2.getFullYear() + "-" + (d2.getMonth() < 9 ? "0" : "") + (d2.getMonth() + 1)); }
+ $("calAnt").onclick = function(){ mover(-1); }; $("calSig").onclick = function(){ mover(1); };
+ document.querySelectorAll("#hoja [data-cf]").forEach(function(b){ b.onclick = function(){ diaSel = b.dataset.cf; cerrarHoja(); renderHoy(); window.scrollTo(0, 0); }; });
+}
 function abrirHoja(html){ $("hoja").innerHTML = '<div class="asa"></div>' + html; $("velo").hidden = false; document.body.style.overflow = "hidden"; ajustarAlTeclado(); }
 function cerrarHoja(){ pararCamara(); $("velo").hidden = true; document.body.style.overflow = ""; }
 /* Con el teclado abierto (iPhone), la hoja se ajusta al espacio visible para que la
@@ -2747,7 +2773,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101901", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101902", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
