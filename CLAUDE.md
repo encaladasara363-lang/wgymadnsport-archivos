@@ -1890,8 +1890,9 @@ probado: ella se activó desde el mesón y entró a la app).
 - **🥗 Panel de ventas WGYMNUTRI en el mesón (18-10-2026, idea 8):** `control.html`, panel antes de «Socios del gimnasio»
   (`verVentasNutri_`): activas ahora, vencen en 7 días, vencidas hace menos de 30 días (para ofrecerla de nuevo) con
   `listarNutri`, y «Entró este mes» con `ventasNutri` (POST con clave). Cada «Activar» manda `meses` y `monto` y el
-  script los anota en la hoja «Ventas WGYMNUTRI». **Necesita la Versión 22 del Apps Script** (instrucciones en
-  `docs/apps-script-ingresos-salidas.md`); sin ella, el panel muestra lo demás y avisa.
+  script los anota en la hoja «Ventas WGYMNUTRI». **Versión 22 del Apps Script instalada por la dueña el 19-10-2026 cerca de las 9:30,
+  verificada idéntica al repo vía Drive** (instrucciones en `docs/apps-script-ingresos-salidas.md`; volver atrás: lápiz →
+  Versión 21). Las activaciones anteriores a esa fecha no quedan en «Ventas WGYMNUTRI».
 - **Horas de comida (10-10-2026, pedido de la dueña):** en «Mi perfil», cuadro
   «🕒 Mis horas de comida» (una hora por comida, `D.horas`, solo en el teléfono;
   por defecto `HORAS_DEF`). La hora aparece junto a cada comida en «Hoy»,
