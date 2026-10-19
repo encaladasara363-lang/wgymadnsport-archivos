@@ -1909,6 +1909,11 @@ probado: ella se activó desde el mesón y entró a la app).
   pantalla de pago en modo renovación (`renovando`: «← Volver a la app» en vez de «No soy yo», texto «vence el…»). Con
   «Ya pagué» solo vuelve a la app cuando la hoja trae una fecha nueva («✅ ¡WGYMNUTRI renovada hasta…!»). El «Activar»
   del mesón ya suma el mes desde la fecha vigente, así que no se pierden días.
+- **⭐ Lo de siempre y 💧 agua por horas (19-10-2026, la dueña eligió las ideas 18 y 24):** en cada comida de «Hoy»,
+  «⭐ Lo de siempre: …» (`favComida`) agrega de un toque el alimento que el socio anotó más veces en esa comida en los
+  últimos 30 días (mínimo 3), con la cantidad de la última vez; no aparece si ya está anotado. En «💧 Agua», línea
+  `.agua-hora` con lo que debería llevar a esta hora (`aguaEsperada`: la meta repartida de 8:00 a 22:00): «⏰ Vas
+  atrasado…» (rojo, si le faltan 2 vasos o más) o «✅ Vas al día…»; el recordatorio de agua usa la misma cuenta.
 - **🥗 Panel de ventas WGYMNUTRI en el mesón (18-10-2026, idea 8):** `control.html`, panel antes de «Socios del gimnasio»
   (`verVentasNutri_`): activas ahora, vencen en 7 días, vencidas hace menos de 30 días (para ofrecerla de nuevo) con
   `listarNutri`, y «Entró este mes» con `ventasNutri` (POST con clave). Cada «Activar» manda `meses` y `monto` y el

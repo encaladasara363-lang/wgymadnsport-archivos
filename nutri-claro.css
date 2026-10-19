@@ -632,3 +632,8 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .vence-card{background:linear-gradient(135deg,#3a0207,#0D0D0F) !important;border:2px solid #E30613 !important;animation:venceLate 2.4s ease-in-out infinite}
 @keyframes venceLate{50%{box-shadow:0 0 0 4px rgba(227,6,19,.25)}}
 @media (prefers-reduced-motion:reduce){.vence-card{animation:none}}
+/* ⭐ Lo de siempre y 💧 agua por horas (19-10-2026) */
+.fav-c{background:#FFF7D6 !important;border:2px solid #D4AF37 !important;color:#3A2A00 !important}
+.agua-hora{margin:10px 0 0;padding:8px 12px;border-radius:12px;font-size:15px;font-weight:800}
+.agua-hora.atras{background:#FFE3E5;color:#A3000C;border:2px solid #E30613}
+.agua-hora.aldia{background:#E3F7E8;color:#0B6B2B;border:2px solid #2DBE60}
