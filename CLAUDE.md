@@ -1927,6 +1927,10 @@ probado: ella se activó desde el mesón y entró a la app).
   Cálculo: 60 puntos nutricionales (−12 por sello «ALTO EN», −6 si el azúcar duplica el límite, +6 proteína, +6 fibra) +
   40 de aditivos (−15 moderado, −5 limitado; uno alto deja 0 y la nota en máx. 49). Los aditivos vienen de Open Food
   Facts (`additives_tags`, campo `ad`); sin ese dato la nota sale solo de lo nutricional y lo dice.
+  **Sin asustar (19-10-2026, la dueña: "para que gente como yo no nos asustemos"):** con aditivos, bajo la nota va un
+  cuadro verde `.nt-calma`: los autorizados en Chile se usan bajo el máximo diario seguro (IDA); con la porción de la
+  etiqueta no es peligroso, el cuidado es no comer mucho todos los días. Etiquetas suavizadas: Sin riesgo · Riesgo bajo ·
+  Moderar el consumo · Evitar el exceso, y la fila dice «N para moderar».
   **Sin octógonos dibujados (19-10-2026, la dueña escaneó su cereal «En Línea Cereal Balls» sin azúcar añadida: "la caja
   no trae etiqueta"):** `htmlSellos` ya no dibuja el sello negro como si estuviera en el envase; muestra en texto
   `.aviso-limite` «Según su tabla nutricional, pasa el límite de: calorías (más de 275 kcal por 100 g)…» y explica que la

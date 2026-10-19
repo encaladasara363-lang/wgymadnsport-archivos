@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=67">
+<link rel="stylesheet" href="nutri-claro.css?v=68">
 <link rel="stylesheet" href="nutri-oscuro.css?v=14">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -1309,7 +1309,7 @@ var ADITIVOS = {
  E953:["Isomalt",1],E954:["Sacarina",2],E955:["Sucralosa",2],E960:["Glucósidos de esteviol (estevia)",0],E965:["Maltitol",1],E967:["Xilitol",0],E968:["Eritritol",0],
  E1422:["Almidón modificado",1],E1442:["Almidón modificado",1],E1450:["Almidón modificado",1]
 };
-var RIESGO = [["Sin riesgo","#2DBE60"],["Riesgo limitado","#F5D547"],["Riesgo moderado","#F39C12"],["Riesgo alto","#E30613"]];
+var RIESGO = [["Sin riesgo","#2DBE60"],["Riesgo bajo","#F5D547"],["Moderar el consumo","#F39C12"],["Evitar el exceso","#E30613"]];
 function aditivoInfo(c){
  var k = String(c).toUpperCase(), b = (k.match(/^E\d+[A-H]?/) || [k])[0], d = (k.match(/^E\d+/) || [k])[0];
  return ADITIVOS[k] ? [k].concat(ADITIVOS[k]) : ADITIVOS[b] ? [k].concat(ADITIVOS[b]) : ADITIVOS[d] ? [k].concat(ADITIVOS[d]) : [k, "Sin clasificar", -1];
@@ -1333,7 +1333,7 @@ function pintarNota(a, liq){
  var u = liq ? "100 ml" : "100 g", L = liq ? { k:70, az:5, na:100, sat:3 } : { k:275, az:10, na:400, sat:4 };
  function fila(ic, t, sub, v, malo){ return '<div class="nt-f"><span class="nt-i">' + ic + '</span><span class="nt-t"><b>' + t + '</b><small>' + sub + '</small></span><span class="nt-v">' + v + '</span><i class="nt-d" style="background:' + (malo ? '#E30613' : '#2DBE60') + '"></i></div>'; }
  var neg = [], pos = [];
- if(!n.sinAd){ var malos = n.ads.filter(function(x){ return x[2] >= 2; }).length; (malos ? neg : pos).push(fila("🧪", "Aditivos", n.ads.length ? (malos ? malos + " de riesgo · toca para ver" : "Sin aditivos de riesgo") : "Sin aditivos", n.ads.length, malos)); }
+ if(!n.sinAd){ var malos = n.ads.filter(function(x){ return x[2] >= 2; }).length; (malos ? neg : pos).push(fila("🧪", "Aditivos", n.ads.length ? (malos ? malos + " para moderar · toca para ver" : "Sin aditivos de riesgo") : "Sin aditivos", n.ads.length, malos)); }
  [["k","🔥","Calorías","kcal",0],["az","🍬","Azúcares","g",1],["sat","🧈","Grasas saturadas","g",1],["na","🧂","Sodio","mg",0]].forEach(function(c){
   var v = c[0] === "k" ? a.k : a[c[0]], alto = v >= L[c[0]];
   (alto ? neg : pos).push(fila(c[1], c[2], alto ? "Sobre el límite (" + miles(L[c[0]]) + " " + c[3] + ")" : "Bajo o moderado", (c[4] ? String(r1(v)).replace(".", ",") : miles(v)) + " " + c[3], alto)); });
@@ -1341,7 +1341,8 @@ function pintarNota(a, liq){
  if(typeof a.fi === "number" && a.fi >= 3) pos.push(fila("🌾", "Fibra", "Buena fuente", String(r1(a.fi)).replace(".", ",") + " g", 0));
  box.innerHTML = '<div class="nota-card"><div class="nt-top"><div class="nt-circ" style="border-color:' + n.cal[1] + '"><b style="color:' + n.cal[1] + '">' + n.nota + '</b><small style="color:#BBB">/100</small></div><div><p class="nt-cal" style="color:' + n.cal[1] + '">' + n.cal[0] + '</p><p class="nt-sub" style="color:#BBB">Nota WGYM del producto' + (n.sinAd ? ' (sin datos de aditivos)' : '') + '</p></div></div>' +
   (neg.length ? '<p class="nt-h" style="color:#FF6B6B">Negativo · por ' + u + '</p>' + neg.join("") : '') + (pos.length ? '<p class="nt-h" style="color:#7CE39A">Positivo · por ' + u + '</p>' + pos.join("") : '') +
-  (n.ads.length ? '<details class="nt-ads"><summary style="color:#FFD54A">🧪 Ver aditivos (' + n.ads.length + ')</summary>' + n.ads.map(function(x){ var r = x[2] < 0 ? ["Sin clasificar","#888"] : RIESGO[x[2]]; return '<div class="nt-ad"><span><b>' + esc(x[0]) + '</b><small>' + esc(x[1]) + '</small></span><em style="color:' + r[1] + '">● ' + r[0] + '</em></div>'; }).join("") + '<p class="muted" style="font-size:12px;margin:6px 0 0">Riesgo orientativo según estudios científicos (EFSA, IARC). No reemplaza la opinión de un profesional.</p></details>' : '') + '</div>';
+  (n.ads.length ? '<div class="nt-calma" style="color:#BFF5CF"><b style="color:#7CE39A">🙂 Tranquila, tranquilo:</b> los aditivos autorizados en Chile se usan en cantidades muy pequeñas, por debajo del máximo diario seguro (IDA). <b style="color:#7CE39A">Si comes la porción de la etiqueta, no es peligroso.</b> El cuidado es no comer mucho de esto todos los días.</div>' : '') +
+  (n.ads.length ? '<details class="nt-ads"><summary style="color:#FFD54A">🧪 Ver aditivos (' + n.ads.length + ')</summary>' + n.ads.map(function(x){ var r = x[2] < 0 ? ["Sin clasificar","#888"] : RIESGO[x[2]]; return '<div class="nt-ad"><span><b>' + esc(x[0]) + '</b><small>' + esc(x[1]) + '</small></span><em style="color:' + r[1] + '">● ' + r[0] + '</em></div>'; }).join("") + '<p class="muted" style="font-size:12px;margin:6px 0 0">El color indica qué tan seguido conviene comerlo según estudios científicos (EFSA, IARC), pensando en consumo alto y diario, no en una porción. No reemplaza la opinión de un profesional.</p></details>' : '') + '</div>';
  var adFila = box.querySelector(".nt-f"); if(adFila && n.ads.length) adFila.onclick = function(){ var d = box.querySelector(".nt-ads"); if(d){ d.open = true; d.scrollIntoView({ block:"nearest", behavior:"smooth" }); } };
 }
 /* 📏 Mis medidas (11-10-2026, pedido de la dueña): cintura, abdomen, cadera, muslo, brazo y % de grasa, solo en el teléfono.
@@ -2939,7 +2940,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101912", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101913", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
