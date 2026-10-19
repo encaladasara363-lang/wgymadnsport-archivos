@@ -10,6 +10,11 @@ y las series de la rutina se dejaron iguales a las que dicen esos videos. Los qu
 provisorio «VIDEO EN PREPARACIÓN» en `assets/silueta-de-acero/<id>.mp4`: al tener el real, reemplazar ese archivo
 (540 px, crf 27, sin audio) y subir el `?v=`. Al publicar: copiar a `main` y sumarla a `COACH_RUTINAS` ("F").
 
+**19-10-2026:** la dueña rehace los ejercicios de a uno con máquinas nuevas. Cada uno aprobado va **solo a la prueba**
+(el artifact de arriba), nunca a `main`, hasta que ella diga ("en la de prueba, no en el sitio aún"; se publicó por
+error y se sacó el mismo día). Lunes 1 = «Jalón agarre cerrado» ✅ (máquina 21, video `lento: 1.5`). Siguiente:
+remo inclinado con mancuernas de discos (video de referencia IMG_9508, no subirlo al repo).
+
 ## Lunes · Tren superior · espalda y bíceps
 1. Jalón al pecho — 3 × 8-10 · 90 seg · ✅ video listo
 2. Remo frontal — 3 × 10-12 · 75 seg · ✅ video listo
