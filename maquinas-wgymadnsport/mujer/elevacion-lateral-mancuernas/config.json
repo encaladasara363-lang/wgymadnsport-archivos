@@ -1,0 +1,18 @@
+{
+  "titulo": "ELEVACIÓN LATERAL CON MANCUERNAS",
+  "series": "3 × 12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-gemini.mp4",
+      "desde": 0,
+      "hasta": 10,
+      "recorte": [280, 0, 720, 720],
+      "encaje": {"alto": 800, "x": -40, "y": 180},
+      "repetir": 1,
+      "nota": "Silueta de Acero. De pie frente al banco plano, mancuernas. Imagen de ChatGPT con la foto del banco (fuentes/banco-plano.png); video de Gemini. El video de referencia de TikTok no se sube.",
+      "solo_piel": "todo",
+      "intensidad": 0.8,
+      "musculo_kf": [[0, 272, 352, 24, 28, 418, 352, 24, 28], [240, 272, 352, 24, 28, 418, 352, 24, 28]]
+    }
+  ]
+}
