@@ -13,13 +13,13 @@
    "warmup": "Remadora suave — 6 minutos",
    "exercises": [
     {
-     "name": "Jalón al pecho",
-     "sets": "3 × 8-10",
+     "name": "Jalón agarre cerrado",
+     "sets": "3 × 10-12",
      "rest": "90 seg",
-     "tip": "Lleva los agarres hacia el pecho sin tirar con la zona lumbar; controla la subida.",
-     "equip": "Máquina",
-     "muscle": "Dorsales",
-     "video": "assets/impulso-total/jalon-al-pecho.mp4?v=1"
+     "tip": "Agarra la manilla cerrada con las palmas enfrentadas y llévala al pecho bajando los codos pegados al cuerpo; no tires con la zona lumbar ni te balancees, y sube controlando.",
+     "equip": "Polea alta · manilla cerrada (máquina 21)",
+     "muscle": "Dorsales · redondo mayor · bíceps",
+     "video": "assets/silueta-de-acero/jalon-agarre-cerrado.mp4?v=1"
     },
     {
      "name": "Remo frontal",
