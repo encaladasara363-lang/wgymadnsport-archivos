@@ -1932,7 +1932,9 @@ probado: ella se activó desde el mesón y entró a la app).
   Tesseract (el mismo de las etiquetas) → cada línea sin precios se busca en la lista (`platoDeLinea`: el nombre del
   alimento debe calzar en ≥60 % con la línea; prefiere comida chilena/rápida) → lista de platos encontrados con kcal;
   tocar uno abre el detalle normal. Las líneas sin plato van en «¿No salió tu plato?» y abren 🔎 Buscar con ese texto.
-  Sin IA pagada: solo reconoce platos de la lista. Probado con una carta de prueba: 8 de 10 platos. Ese día se
+  Sin IA pagada: solo reconoce platos de la lista. Probado con una carta de prueba: 8 de 10 platos. Los botones de «Agregar
+  comida» van en una grilla de 4 × 2 con ícono arriba (`.tabs-agr`), todos a la vista sin deslizar (la dueña no encontraba
+  «Escanear menú»; eligió la opción de dos líneas). Ese día se
   sumaron Ensalada César, Churrasco palta/solo, Lomito palta, As italiano, Ceviche, Milanesa de pollo y Fajitas de
   pollo. Si la dueña manda cartas de locales de Tocopilla, sumar sus platos a la lista.
 - **🥗 Panel de ventas WGYMNUTRI en el mesón (18-10-2026, idea 8):** `control.html`, panel antes de «Socios del gimnasio»

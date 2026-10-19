@@ -664,3 +664,8 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .nt-ad b{color:#fff}
 .nt-ad small{color:#AAA;font-size:12px}
 .nt-ad em{font-style:normal;font-size:12px;font-weight:800;white-space:nowrap}
+/* Botones de «Agregar comida» en varias líneas, sin deslizar (19-10-2026, la dueña no encontraba «Escanear menú») */
+.tabs.tabs-agr{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;overflow:visible}
+.tabs.tabs-agr .chip{display:flex !important;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 3px !important;min-height:56px;white-space:normal !important;text-align:center;line-height:1.05;border-radius:14px !important}
+.tabs.tabs-agr .chip .ti{font-size:18px;line-height:1}
+.tabs.tabs-agr .chip .tt{font-size:11px !important;letter-spacing:0}
