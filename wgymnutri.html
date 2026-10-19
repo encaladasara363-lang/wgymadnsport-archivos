@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=63">
+<link rel="stylesheet" href="nutri-claro.css?v=64">
 <link rel="stylesheet" href="nutri-oscuro.css?v=14">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -1592,7 +1592,7 @@ function metaMicro(k){ var h = D.perfil && D.perfil.sexo === "M"; if(k === "az")
 /* 🔥 Racha con fueguito (idea 1), 🥇 niveles por constancia (idea 3) y 🎉 festejo al cumplir la
    meta (idea 2) — 11-10-2026, la dueña eligió "1, 4, 3 y 2". */
 var NIVELES = [[0,"Novato","🌱"],[7,"Bronce","🥉"],[15,"Plata","🥈"],[30,"Oro","🥇"],[60,"Diamante","💎"]];
-function diasUsados(){ return Object.keys(D.dias).filter(function(k){ return totales(k).n; }).length; }
+function diasUsados(){ var hoy = hoyISO(); return Object.keys(D.dias).filter(function(k){ return k <= hoy && totales(k).n; }).length; }
 function nivelDe(n){ var i = 0; while(i + 1 < NIVELES.length && n >= NIVELES[i + 1][0]) i++; return i; }
 /* 🌙 Resumen de la noche (11-10-2026, la dueña eligió la idea 6): desde las 21:00, un cuadro corto
    con lo del día y un solo consejo (proteína que faltó, si se pasó de calorías o si no anotó nada). */
@@ -1638,8 +1638,12 @@ function revisarFestejo(){
 function renderHoy(){
  var M = metaDia(diaSel), t = totales(diaSel), x = diaDe(diaSel), esHoy = diaSel === hoyISO();
  var rest = M.kcal - t.k, pct = Math.min(1, t.k / M.kcal), C = 2 * Math.PI * 62;
- var desde7 = sumaDias(hoyISO(), -6), lun = diaSel >= desde7 ? desde7 : lunesDe(diaSel);
- var h = '<div class="dia-nav"><button type="button" id="diaAnt" aria-label="Semana anterior">‹</button><b>' + (esHoy ? "Hoy · " : "") + fechaLarga(diaSel) + '</b><button type="button" id="diaSig" aria-label="Semana siguiente"' + (lun === desde7 ? " disabled" : "") + '>›</button></div>';
+ /* 19-10-2026 (la dueña: "que uno pueda pasar al día de mañana, a la otra semana, que sigan corriendo los días"):
+    la franja corre de 7 en 7 hacia atrás y hacia adelante (también deslizando con el dedo); hoy queda al final de
+    su franja y los días que vienen se pueden abrir para ver o planificar. */
+ var desde7 = sumaDias(hoyISO(), -6), difD = Math.round((fechaDeISO(diaSel) - fechaDeISO(desde7)) / 864e5), lun = sumaDias(desde7, 7 * Math.floor(difD / 7));
+ var manana = diaSel === sumaDias(hoyISO(), 1), ayer = diaSel === sumaDias(hoyISO(), -1);
+ var h = '<div class="dia-nav"><button type="button" id="diaAnt" aria-label="Semana anterior">‹</button><b>' + (esHoy ? "Hoy · " : manana ? "Mañana · " : ayer ? "Ayer · " : "") + fechaLarga(diaSel) + '</b><button type="button" id="diaSig" aria-label="Semana siguiente">›</button></div>';
  /* Franja de la semana (10-10-2026, pedido de la dueña, como Fitia): L a D con un punto en cada
     día que tiene comidas registradas; se toca un día para verlo. */
  /* 19-10-2026 (la dueña, un lunes: "se me bloqueó, se me perdió todo mi registro"): con la semana de lunes a domingo,
@@ -1651,8 +1655,8 @@ function renderHoy(){
  var hoyEnt = !!ent[hoyISO()], topEl = document.querySelector("header.top"); if(topEl) topEl.classList.toggle("entreno", hoyEnt); if($("entTag")) $("entTag").hidden = !hoyEnt;
  h += '<div class="semana-tira">' + [0,1,2,3,4,5,6].map(function(i){ var l = "DLMMJVS".charAt(fechaDeISO(sumaDias(lun, i)).getDay());
   var f = sumaDias(lun, i), xd = D.dias[f], con = xd && Object.keys(xd.c || {}).some(function(k){ return (xd.c[k] || []).length; });
-  return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + (ent[f] ? " ent" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i>' + (ent[f] ? '<em class="st-ent" aria-label="Entrenaste">💪</em>' : '') + '</button>'; }).join("") + '</div>';
- h += '<button type="button" class="btn sec chico cal-btn" id="verCal">📅 Ver todos mis días</button>';
+  return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + (ent[f] ? " ent" : "") + (f > hoyISO() ? " fut" : "") + '" data-f="' + f + '"><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i>' + (ent[f] ? '<em class="st-ent" aria-label="Entrenaste">💪</em>' : '') + '</button>'; }).join("") + '</div>';
+ h += (esHoy ? '' : '<button type="button" class="btn sec chico hoy-btn" id="volverHoy">↩ Volver a hoy</button>') + '<button type="button" class="btn sec chico cal-btn" id="verCal">📅 Ver todos mis días</button>';
  if(esHoy) h += htmlNoche();
  if(esHoy) h += htmlVence();
  if(esHoy) h += htmlRacha();
@@ -1730,9 +1734,14 @@ function renderHoy(){
  requestAnimationFrame(function(){ requestAnimationFrame(function(){ var p = $("anilloProg"); if(p) p.style.strokeDashoffset = C * (1 - pct); }); });
  $("verCal").onclick = function(){ abrirCalendario(diaSel.slice(0, 7)); };
  if($("venceRenovar")) $("venceRenovar").onclick = function(){ renovando = nutriGuardado() || ""; mostrarPago(); };
- $("diaAnt").onclick = function(){ diaSel = sumaDias(lun, -1); renderHoy(); };
- $("diaSig").onclick = function(){ var n = sumaDias(diaSel, 7); diaSel = n > hoyISO() ? hoyISO() : n; renderHoy(); };
- box.querySelectorAll(".st-dia").forEach(function(b){ b.onclick = function(){ if(b.dataset.f <= hoyISO()){ diaSel = b.dataset.f; renderHoy(); } }; });
+ $("diaAnt").onclick = function(){ diaSel = sumaDias(diaSel, -7); renderHoy(); };
+ $("diaSig").onclick = function(){ diaSel = sumaDias(diaSel, 7); renderHoy(); };
+ if($("volverHoy")) $("volverHoy").onclick = function(){ diaSel = hoyISO(); renderHoy(); };
+ var tira = box.querySelector(".semana-tira"), tx0 = null, ty0 = 0;
+ if(tira){ tira.addEventListener("touchstart", function(e){ tx0 = e.touches[0].clientX; ty0 = e.touches[0].clientY; }, { passive:true });
+  tira.addEventListener("touchend", function(e){ if(tx0 === null) return; var dx = e.changedTouches[0].clientX - tx0, dy = e.changedTouches[0].clientY - ty0; tx0 = null;
+   if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){ diaSel = sumaDias(diaSel, dx < 0 ? 7 : -7); vibrar(10); renderHoy(); } }); }
+ box.querySelectorAll(".st-dia").forEach(function(b){ b.onclick = function(){ diaSel = b.dataset.f; renderHoy(); }; });
  if($("avisoX")) $("avisoX").onclick = function(){ lsSet("wgymnutri_aviso_oculto_v1", hoyISO()); renderHoy(); };
  if($("instIr")) $("instIr").onclick = instalar;
  if($("aguaLiq")){ var aNew = Math.min(1, M.agua ? x.agua / M.agua : 0); requestAnimationFrame(function(){ requestAnimationFrame(function(){ if($("aguaLiq")) $("aguaLiq").style.height = Math.round(aNew * 100) + "%"; }); }); aguaPctPrev = aNew; }
@@ -2814,7 +2823,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101906", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101907", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

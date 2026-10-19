@@ -1569,6 +1569,10 @@ probado: ella se activó desde el mesón y entró a la app).
   de semana. **Desde el 19-10-2026 (la dueña, un lunes: "se me bloqueó, se me perdió todo
   mi registro")** la franja muestra los **últimos 7 días hasta hoy** (con la letra real de cada día); con ‹ se ve
   la semana anterior de lunes a domingo y › vuelve hasta hoy. Antes, el lunes solo se veía hoy y el resto bloqueado.
+  **Los días siguen corriendo (19-10-2026, la dueña: "que uno pueda pasar al día de mañana, a la otra semana"):** ‹ ›
+  y deslizar el dedo sobre la franja mueven 7 días hacia atrás o adelante (bloques alineados a hoy); los días que vienen
+  se ven más suaves (`.fut`) pero se abren para ver o planificar, la fecha dice «Mañana ·»/«Ayer ·» y aparece «↩ Volver
+  a hoy». Lo anotado en días futuros no cuenta para los niveles (`diasUsados` solo hasta hoy).
   **«📅 Ver todos mis días» (19-10-2026, la dueña: "quiero que muestre todos los días, que no se borre nada"):** botón
   bajo la franja que abre un calendario por mes (`abrirCalendario`): días anotados en verde con sus kcal, 💪 si entrenó,
   total de días anotados; ‹ › cambian de mes hasta el primer mes con comidas; tocar un día lo abre en «Hoy».
