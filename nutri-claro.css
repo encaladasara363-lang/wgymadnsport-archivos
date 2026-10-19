@@ -637,3 +637,7 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .agua-hora{margin:10px 0 0;padding:8px 12px;border-radius:12px;font-size:15px;font-weight:800}
 .agua-hora.atras{background:#FFE3E5;color:#A3000C;border:2px solid #E30613}
 .agua-hora.aldia{background:#E3F7E8;color:#0B6B2B;border:2px solid #2DBE60}
+/* Días que vienen en la franja (19-10-2026): se pueden abrir, se ven un poco más suaves */
+.st-dia.fut{opacity:.6}
+.st-dia.fut.sel{opacity:1}
+.hoy-btn{width:100%;margin:8px 0 0}
