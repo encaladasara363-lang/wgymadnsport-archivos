@@ -1927,6 +1927,10 @@ probado: ella se activó desde el mesón y entró a la app).
   Cálculo: 60 puntos nutricionales (−12 por sello «ALTO EN», −6 si el azúcar duplica el límite, +6 proteína, +6 fibra) +
   40 de aditivos (−15 moderado, −5 limitado; uno alto deja 0 y la nota en máx. 49). Los aditivos vienen de Open Food
   Facts (`additives_tags`, campo `ad`); sin ese dato la nota sale solo de lo nutricional y lo dice.
+  **Sin octógonos dibujados (19-10-2026, la dueña escaneó su cereal «En Línea Cereal Balls» sin azúcar añadida: "la caja
+  no trae etiqueta"):** `htmlSellos` ya no dibuja el sello negro como si estuviera en el envase; muestra en texto
+  `.aviso-limite` «Según su tabla nutricional, pasa el límite de: calorías (más de 275 kcal por 100 g)…» y explica que la
+  ley chilena solo exige el sello si al producto le agregan azúcar, grasa o sal. En la nota dice «Sobre el límite (…)».
 - **📋 Escanear menú (19-10-2026, la dueña vio «Escanear menú» en otra app y eligió la versión gratis):** pestaña
   «📋 Escanear menú» en «Agregar comida» (`modoMenu`): foto de la carta (`fotoMenu`: 1.800 px, gris y más contraste) →
   Tesseract (el mismo de las etiquetas) → cada línea sin precios se busca en la lista (`platoDeLinea`: el nombre del
