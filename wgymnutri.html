@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=65">
+<link rel="stylesheet" href="nutri-claro.css?v=66">
 <link rel="stylesheet" href="nutri-oscuro.css?v=14">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -2033,7 +2033,7 @@ function renderAgregar(){
  var modos = [["buscar","🔎 Buscar"],["voz","🎤 Voz"],["escanear","▮▯▮ Escanear"],["menu","📋 Escanear menú"],["platos","🍽 Mis platos"],["recientes","🕘 Recientes"],["favs","★ Favoritas"],["manual","✍️ Manual"]];
  var h = '<div class="cab" style="margin-bottom:10px"><h3>Agregar comida</h3><button type="button" class="chip" id="hX">Cerrar</button></div>' +
   '<div class="campo" style="margin-bottom:10px"><label for="agrComida">¿A qué comida?</label><select class="inp" id="agrComida">' + COMIDAS.filter(function(c){ return c[0] === "bebidas" || c[0] === agr.comida || comidasVisibles().some(function(v){ return v[0] === c[0]; }); }).map(function(c){ return '<option value="' + c[0] + '"' + (c[0] === agr.comida ? " selected" : "") + '>' + c[1] + ' ' + c[2] + '</option>'; }).join("") + '</select></div>' +
-  '<div class="tabs">' + modos.map(function(m){ return '<button type="button" class="chip" data-modo="' + m[0] + '" aria-pressed="' + (agr.modo === m[0]) + '">' + m[1] + '</button>'; }).join("") + '</div><div id="agrCuerpo"></div>';
+  '<div class="tabs tabs-agr">' + modos.map(function(m){ return '<button type="button" class="chip" data-modo="' + m[0] + '" aria-pressed="' + (agr.modo === m[0]) + '"><span class="ti">' + m[1].split(" ")[0] + '</span><span class="tt">' + m[1].split(" ").slice(1).join(" ") + '</span></button>'; }).join("") + '</div><div id="agrCuerpo"></div>';
  abrirHoja(h);
  $("hX").onclick = cerrarHoja;
  $("agrComida").onchange = function(){ agr.comida = this.value; };
@@ -2934,7 +2934,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101910", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101911", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
