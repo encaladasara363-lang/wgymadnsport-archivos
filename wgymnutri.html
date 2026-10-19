@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=66">
+<link rel="stylesheet" href="nutri-claro.css?v=67">
 <link rel="stylesheet" href="nutri-oscuro.css?v=14">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -1271,8 +1271,13 @@ function sellosDe(a, liq){
 }
 function htmlSellos(a, liq){
  var s = sellosDe(a, liq), completos = ["az","sat","na"].every(function(k){ return typeof a[k] === "number"; });
- if(s.length) return '<div class="sellos">' + s.map(function(x){ return '<div class="sello"><div><span>ALTO EN</span><b>' + x + '</b></div></div>'; }).join("") + '</div><p class="muted" style="font-size:13px;margin:4px 0 0">Sellos calculados con la tabla de la etiqueta (ley chilena de etiquetado). Aproximado.</p>';
- return completos ? '<p class="sin-sellos">✅ Sin sellos «ALTO EN» según su etiqueta</p>' : '';
+ /* 19-10-2026 (la dueña: "la caja no trae etiqueta"; su cereal sin azúcar añadida tenía 329 kcal y la app dibujaba el
+    sello negro): ya no se dibuja el octógono como si estuviera en la caja. Se avisa en texto que, según la tabla,
+    pasaría el límite, y que la ley solo exige el sello si al producto le agregan azúcar, grasa o sal. */
+ var L = liq ? { k:"70 kcal", az:"5 g", sat:"3 g", na:"100 mg" } : { k:"275 kcal", az:"10 g", sat:"4 g", na:"400 mg" }, u = liq ? "100 ml" : "100 g";
+ var lim = { "CALORÍAS":L.k, "AZÚCARES":L.az, "GRASAS SATURADAS":L.sat, "SODIO":L.na };
+ if(s.length) return '<div class="aviso-limite"><p style="margin:0 0 4px;color:#FFD54A"><b>⚠️ Según su tabla nutricional, pasa el límite de:</b></p><p style="margin:0 0 6px;color:#FF8A8F">' + s.map(function(x){ return x.toLowerCase() + ' (más de ' + lim[x] + ' por ' + u + ')'; }).join(" · ") + '</p><p style="margin:0;font-size:13px;color:#BBB">Si la caja no trae el sello negro «ALTO EN», es porque la ley chilena solo lo exige cuando al producto le agregan azúcar, grasa o sal. Igual conviene cuidar la cantidad.</p></div>';
+ return completos ? '<p class="sin-sellos">✅ Bajo los límites de la ley chilena según su tabla nutricional</p>' : '';
 }
 function pintarSellos(a, liq){
  var box = $("dSellos"); if(!box) return;
@@ -1331,7 +1336,7 @@ function pintarNota(a, liq){
  if(!n.sinAd){ var malos = n.ads.filter(function(x){ return x[2] >= 2; }).length; (malos ? neg : pos).push(fila("🧪", "Aditivos", n.ads.length ? (malos ? malos + " de riesgo · toca para ver" : "Sin aditivos de riesgo") : "Sin aditivos", n.ads.length, malos)); }
  [["k","🔥","Calorías","kcal",0],["az","🍬","Azúcares","g",1],["sat","🧈","Grasas saturadas","g",1],["na","🧂","Sodio","mg",0]].forEach(function(c){
   var v = c[0] === "k" ? a.k : a[c[0]], alto = v >= L[c[0]];
-  (alto ? neg : pos).push(fila(c[1], c[2], alto ? "Alto en " + c[2].toLowerCase() : "Bajo o moderado", (c[4] ? String(r1(v)).replace(".", ",") : miles(v)) + " " + c[3], alto)); });
+  (alto ? neg : pos).push(fila(c[1], c[2], alto ? "Sobre el límite (" + miles(L[c[0]]) + " " + c[3] + ")" : "Bajo o moderado", (c[4] ? String(r1(v)).replace(".", ",") : miles(v)) + " " + c[3], alto)); });
  if(a.pr >= 8) pos.push(fila("💪", "Proteínas", "Buena fuente", String(r1(a.pr)).replace(".", ",") + " g", 0));
  if(typeof a.fi === "number" && a.fi >= 3) pos.push(fila("🌾", "Fibra", "Buena fuente", String(r1(a.fi)).replace(".", ",") + " g", 0));
  box.innerHTML = '<div class="nota-card"><div class="nt-top"><div class="nt-circ" style="border-color:' + n.cal[1] + '"><b style="color:' + n.cal[1] + '">' + n.nota + '</b><small style="color:#BBB">/100</small></div><div><p class="nt-cal" style="color:' + n.cal[1] + '">' + n.cal[0] + '</p><p class="nt-sub" style="color:#BBB">Nota WGYM del producto' + (n.sinAd ? ' (sin datos de aditivos)' : '') + '</p></div></div>' +
@@ -2934,7 +2939,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101911", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101912", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

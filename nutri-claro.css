@@ -669,3 +669,5 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .tabs.tabs-agr .chip{display:flex !important;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 3px !important;min-height:56px;white-space:normal !important;text-align:center;line-height:1.05;border-radius:14px !important}
 .tabs.tabs-agr .chip .ti{font-size:18px;line-height:1}
 .tabs.tabs-agr .chip .tt{font-size:11px !important;letter-spacing:0}
+/* Aviso de límites en texto, sin dibujar el sello (19-10-2026) */
+.aviso-limite{background:#1A1206;border:2px solid #F39C12;border-radius:14px;padding:10px 12px;margin:10px 0}
