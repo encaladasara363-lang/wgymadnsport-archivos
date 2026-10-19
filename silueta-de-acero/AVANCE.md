@@ -13,7 +13,7 @@ provisorio «VIDEO EN PREPARACIÓN» en `assets/silueta-de-acero/<id>.mp4`: al t
 **19-10-2026:** la dueña rehace los ejercicios de a uno con máquinas nuevas. Cada uno aprobado va **solo a la prueba**
 (el artifact de arriba), nunca a `main`, hasta que ella diga ("en la de prueba, no en el sitio aún"; se publicó por
 error y se sacó el mismo día). Lunes 1 = «Jalón agarre cerrado» ✅ (máquina 21, video `lento: 1.5`). Lunes 2 =
-«Remo inclinado con mancuernas» ✅ (imagen de ChatGPT desde el video de referencia IMG_9508, que no se sube; rojo donde ella lo marcó).
+«Remo inclinado con barra» ✅ (barra con discos, no mancuernas) (imagen de ChatGPT desde el video de referencia IMG_9508, que no se sube; rojo donde ella lo marcó).
 
 ## Lunes · Tren superior · espalda y bíceps
 1. Jalón al pecho — 3 × 8-10 · 90 seg · ✅ video listo
