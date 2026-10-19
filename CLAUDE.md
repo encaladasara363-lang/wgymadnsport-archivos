@@ -495,6 +495,10 @@ ver cuándo el gym está más vacío.
   aviso abajo a la derecha "⏳ Guardando…" / "✅ Guardado en el sitio" /
   "⚠️ … Reintentar"). Al recargar, lo pendiente se vuelve a aplicar sobre
   la lista del sitio y se reenvía: ningún cambio se pierde.
+  **Una ficha incompleta ya no tranca la cola (19-10-2026, la dueña no podía guardar a NOCLE CHANDRA: «4 cambios…
+  (faltan datos)»):** la cola reintentaba siempre la primera ficha y la hoja la rechazaba por falta de apellido, así que
+  las de atrás nunca llegaban. Ahora `enviarPendientes` saca de la cola toda ficha sin nombre o sin apellido (y la que
+  la hoja responda «faltan datos»), sigue con las demás y avisa al final cuál hay que abrir con el lápiz y completar.
   **Nombres siempre en MAYÚSCULAS (12-10-2026, la dueña: "lo edito pero no cambia a
   mayúscula"):** si al editar una ficha el nombre es el mismo pero estaba en minúsculas, se
   guarda en mayúsculas; el pendiente lleva `renAnt` y `enviarPendientes` primero borra en la

@@ -711,7 +711,11 @@ function guardarSocioApi(s, cb){
    un aviso abajo a la derecha. Lo pendiente se recuerda en el equipo:
    si se recarga la página antes de que llegue, se vuelve a aplicar y a
    enviar, así que nunca se pierde un cambio. */
-var CLAVE_PEND = "wgym_pendientes_guardar_v1", enviandoPend = false, relojPend = null;
+var CLAVE_PEND = "wgym_pendientes_guardar_v1", enviandoPend = false, relojPend = null, pendRechazos = [];
+function avisoRechazos_(){
+ avisoPend_("⚠️ No se pudo guardar en el sitio: " + pendRechazos.join(", ") + " (faltan datos). Ábrela con el lápiz, revisa que tenga nombre, apellido y fecha de vencimiento, y guarda de nuevo. Lo demás ya quedó guardado.", "error");
+ pendRechazos = [];
+}
 function leerPend_(){ try{ var l = JSON.parse(localStorage.getItem(CLAVE_PEND) || "[]"); return Array.isArray(l) ? l : []; }catch(e){ return []; } }
 function escribirPend_(l){ try{ localStorage.setItem(CLAVE_PEND, JSON.stringify(l)); }catch(e){} }
 function llavePend_(d){ return String(d.n || "").toUpperCase().trim() + "|" + String(d.a || "").toUpperCase().trim(); }
@@ -737,6 +741,15 @@ function avisoPend_(txt, tipo, reintentar){
 }
 function enviarPendientes(){
  var l = leerPend_();
+ /* Una ficha sin nombre o sin apellido la hoja nunca la acepta ("faltan
+    datos") y trancaba a todas las de atrás (19-10-2026, caso NOCLE CHANDRA):
+    se saca de la cola y se avisa para completarla en su ficha. */
+ var incompletas = l.filter(function(x){ return !String(x.n || "").trim() || !String(x.a || "").trim(); });
+ if(incompletas.length){
+  l = l.filter(function(x){ return incompletas.indexOf(x) < 0; }); escribirPend_(l);
+  incompletas.forEach(function(x){ pendRechazos.push((String(x.n || "").trim() + " " + String(x.a || "").trim()).trim() || "(sin nombre)"); });
+  if(!l.length){ avisoRechazos_(); return; }
+ }
  if(!l.length || enviandoPend) return;
  enviandoPend = true; clearTimeout(relojPend);
  avisoPend_("⏳ Guardando " + (l.length === 1 ? "1 cambio" : l.length + " cambios") + " en el sitio…", "info");
@@ -750,9 +763,17 @@ function enviarPendientes(){
  }
  guardarSocioApi(d, function(ok, info){
   enviandoPend = false;
+  if(!ok && info === "faltan datos"){
+   escribirPend_(leerPend_().filter(function(x){ return llavePend_(x) !== llavePend_(d); }));
+   pendRechazos.push((d.n + " " + d.a).trim());
+   if(leerPend_().length){ enviarPendientes(); return; }
+   avisoRechazos_();
+   return;
+  }
   if(ok){
    escribirPend_(leerPend_().filter(function(x){ return llavePend_(x) !== llavePend_(d) || x.v !== d.v || x.plan !== d.plan || x.m !== d.m; }));
    if(leerPend_().length){ enviarPendientes(); return; }
+   if(pendRechazos.length){ avisoRechazos_(); return; }
    avisoPend_("✅ Guardado en el sitio", "ok");
    return;
   }
