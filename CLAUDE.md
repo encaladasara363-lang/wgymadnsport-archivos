@@ -1919,6 +1919,14 @@ probado: ella se activó desde el mesón y entró a la app).
   últimos 30 días (mínimo 3), con la cantidad de la última vez; no aparece si ya está anotado. En «💧 Agua», línea
   `.agua-hora` con lo que debería llevar a esta hora (`aguaEsperada`: la meta repartida de 8:00 a 22:00): «⏰ Vas
   atrasado…» (rojo, si le faltan 2 vasos o más) o «✅ Vas al día…»; el recordatorio de agua usa la misma cuenta.
+- **🟢 Nota WGYM del producto (19-10-2026, la dueña mandó un video de una app tipo Yuka):** en el detalle de los
+  productos envasados (escaneados / Open Food Facts), arriba de los sellos, cuadro `.nota-card` (`notaProducto`/`pintarNota`)
+  con nota 0-100 y calificación (Excelente ≥75 · Bueno ≥50 · Mediocre ≥25 · Malo), «Negativo»/«Positivo» por 100 g/ml
+  (aditivos, calorías, azúcares, grasas saturadas, sodio, proteína ≥8 g, fibra ≥3 g) y «🧪 Ver aditivos» con el riesgo de
+  cada uno (`ADITIVOS`: E-números con riesgo 0-3 según EFSA/IARC, orientativo; los que no están salen «Sin clasificar»).
+  Cálculo: 60 puntos nutricionales (−12 por sello «ALTO EN», −6 si el azúcar duplica el límite, +6 proteína, +6 fibra) +
+  40 de aditivos (−15 moderado, −5 limitado; uno alto deja 0 y la nota en máx. 49). Los aditivos vienen de Open Food
+  Facts (`additives_tags`, campo `ad`); sin ese dato la nota sale solo de lo nutricional y lo dice.
 - **📋 Escanear menú (19-10-2026, la dueña vio «Escanear menú» en otra app y eligió la versión gratis):** pestaña
   «📋 Escanear menú» en «Agregar comida» (`modoMenu`): foto de la carta (`fotoMenu`: 1.800 px, gris y más contraste) →
   Tesseract (el mismo de las etiquetas) → cada línea sin precios se busca en la lista (`platoDeLinea`: el nombre del

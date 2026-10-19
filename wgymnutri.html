@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=64">
+<link rel="stylesheet" href="nutri-claro.css?v=65">
 <link rel="stylesheet" href="nutri-oscuro.css?v=14">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -1276,10 +1276,68 @@ function htmlSellos(a, liq){
 }
 function pintarSellos(a, liq){
  var box = $("dSellos"); if(!box) return;
- box.innerHTML = htmlSellos(a, liq);
- var falta = ["az","sat","na"].some(function(k){ return typeof a[k] !== "number"; });
+ box.innerHTML = htmlSellos(a, liq); pintarNota(a, liq);
+ var falta = ["az","sat","na"].some(function(k){ return typeof a[k] !== "number"; }) || a.ad === undefined;
  if(falta && a.code && !a.sellosPedidos){ a.sellosPedidos = true;
-  productoOFF(a.code).then(function(o){ if(!o) return; ["az","sat","na"].forEach(function(k){ if(typeof a[k] !== "number" && typeof o[k] === "number") a[k] = o[k]; }); if($("dSellos") === box) box.innerHTML = htmlSellos(a, liq); }); }
+  productoOFF(a.code).then(function(o){ if(!o) return; ["az","sat","na","fi","ad"].forEach(function(k){ if(a[k] === undefined && o[k] !== undefined) a[k] = o[k]; }); if($("dSellos") === box){ box.innerHTML = htmlSellos(a, liq); pintarNota(a, liq); } }); }
+}
+/* 🟢 Nota WGYM del producto (19-10-2026, la dueña mandó un video de una app que pone nota 0-100 a lo escaneado):
+   60 puntos por lo nutricional (se restan 12 por cada sello «ALTO EN» y 6 más si el azúcar duplica el límite;
+   se suman 6 si trae ≥8 g de proteína y 6 si trae ≥3 g de fibra por 100 g/ml) y 40 por los aditivos (se restan
+   15 por cada uno de riesgo moderado y 5 por cada uno limitado; uno de riesgo alto deja esa parte en 0 y la nota
+   en máximo 49). Riesgos según evaluaciones de la EFSA y la IARC citadas habitualmente; orientativo. */
+var ADITIVOS = {
+ E100:["Curcumina",1],E102:["Tartrazina",3],E104:["Amarillo de quinoleína",3],E110:["Amarillo ocaso",3],E120:["Carmín",2],E122:["Azorrubina",3],E124:["Rojo Ponceau 4R",3],E129:["Rojo allura",3],
+ E131:["Azul patente",2],E132:["Indigotina",2],E133:["Azul brillante",2],E141:["Clorofilas cúpricas",1],E142:["Verde S",2],E150A:["Caramelo natural",0],E150B:["Caramelo de sulfito cáustico",1],
+ E150C:["Caramelo amónico",2],E150D:["Caramelo de sulfito amónico",2],E151:["Negro brillante",2],E155:["Marrón HT",2],E160A:["Betacaroteno",0],E160C:["Extracto de pimentón",0],E170:["Carbonato de calcio",0],
+ E171:["Dióxido de titanio",3],E173:["Aluminio",3],E200:["Ácido sórbico",1],E202:["Sorbato de potasio",1],E210:["Ácido benzoico",2],E211:["Benzoato de sodio",2],E212:["Benzoato de potasio",2],
+ E220:["Dióxido de azufre",2],E221:["Sulfito de sodio",2],E223:["Metabisulfito de sodio",2],E224:["Metabisulfito de potasio",2],E249:["Nitrito de potasio",3],E250:["Nitrito de sodio",3],
+ E251:["Nitrato de sodio",3],E252:["Nitrato de potasio",3],E260:["Ácido acético",0],E262:["Acetatos de sodio",0],E270:["Ácido láctico",0],E290:["Dióxido de carbono",0],E296:["Ácido málico",0],
+ E300:["Ácido ascórbico (vitamina C)",0],E301:["Ascorbato de sodio",0],E306:["Tocoferoles (vitamina E)",0],E307:["Alfa-tocoferol",0],E319:["TBHQ",3],E320:["BHA",3],E321:["BHT",2],E322:["Lecitinas",0],
+ E325:["Lactato de sodio",0],E327:["Lactato de calcio",0],E330:["Ácido cítrico",0],E331:["Citratos de sodio",0],E332:["Citratos de potasio",0],E333:["Citratos de calcio",0],E334:["Ácido tartárico",0],
+ E338:["Ácido fosfórico",2],E339:["Fosfatos de sodio",2],E340:["Fosfatos de potasio",2],E341:["Fosfatos de calcio",2],E385:["EDTA",2],E401:["Alginato de sodio",0],E407:["Carragenina",2],
+ E410:["Goma garrofín",0],E412:["Goma guar",0],E414:["Goma arábiga",0],E415:["Goma xantana",0],E420:["Sorbitol",1],E421:["Manitol",1],E433:["Polisorbato 80",2],E440:["Pectinas",0],
+ E450:["Difosfatos",2],E451:["Trifosfatos",2],E452:["Polifosfatos",2],E460:["Celulosa",0],E466:["Carboximetilcelulosa",2],E471:["Mono y diglicéridos",1],E472E:["Ésteres de mono y diglicéridos",1],
+ E476:["Polirricinoleato de poliglicerol",2],E481:["Estearoil lactilato de sodio",1],E500:["Carbonatos de sodio",0],E501:["Carbonatos de potasio",0],E503:["Carbonatos de amonio",0],E509:["Cloruro de calcio",0],
+ E535:["Ferrocianuro de sodio",1],E536:["Ferrocianuro de potasio",1],E541:["Fosfato de aluminio sódico",3],E551:["Dióxido de silicio",1],E554:["Silicato de aluminio sódico",2],
+ E621:["Glutamato monosódico",2],E627:["Guanilato disódico",1],E631:["Inosinato disódico",1],E635:["Ribonucleótidos disódicos",1],E950:["Acesulfamo K",2],E951:["Aspartamo",3],E952:["Ciclamato",2],
+ E953:["Isomalt",1],E954:["Sacarina",2],E955:["Sucralosa",2],E960:["Glucósidos de esteviol (estevia)",0],E965:["Maltitol",1],E967:["Xilitol",0],E968:["Eritritol",0],
+ E1422:["Almidón modificado",1],E1442:["Almidón modificado",1],E1450:["Almidón modificado",1]
+};
+var RIESGO = [["Sin riesgo","#2DBE60"],["Riesgo limitado","#F5D547"],["Riesgo moderado","#F39C12"],["Riesgo alto","#E30613"]];
+function aditivoInfo(c){
+ var k = String(c).toUpperCase(), b = (k.match(/^E\d+[A-H]?/) || [k])[0], d = (k.match(/^E\d+/) || [k])[0];
+ return ADITIVOS[k] ? [k].concat(ADITIVOS[k]) : ADITIVOS[b] ? [k].concat(ADITIVOS[b]) : ADITIVOS[d] ? [k].concat(ADITIVOS[d]) : [k, "Sin clasificar", -1];
+}
+function notaProducto(a, liq){
+ if(!["az","sat","na"].every(function(k){ return typeof a[k] === "number"; })) return null;
+ var L = liq ? { az:5 } : { az:10 }, sel = sellosDe(a, liq), nut = 60 - sel.length * 12;
+ if(a.az >= L.az * 2) nut -= 6;
+ if(a.pr >= 8) nut += 6;
+ if(typeof a.fi === "number" && a.fi >= 3) nut += 6;
+ nut = Math.max(0, Math.min(60, nut));
+ var ads = (a.ad || []).map(aditivoInfo), alto = ads.some(function(x){ return x[2] === 3; }), nota;
+ if(a.ad === undefined) nota = Math.round(nut / 60 * 100);
+ else { var adp = alto ? 0 : Math.max(0, 40 - ads.reduce(function(s, x){ return s + (x[2] === 2 ? 15 : x[2] === 1 ? 5 : 0); }, 0)); nota = nut + adp; if(alto) nota = Math.min(49, nota); }
+ var cal = nota >= 75 ? ["Excelente","#1E9E4A"] : nota >= 50 ? ["Bueno","#7BC043"] : nota >= 25 ? ["Mediocre","#F39C12"] : ["Malo","#E30613"];
+ return { nota:nota, cal:cal, ads:ads, sel:sel, sinAd:a.ad === undefined };
+}
+function pintarNota(a, liq){
+ var box = $("dNota"); if(!box) return;
+ var n = notaProducto(a, liq); if(!n){ box.innerHTML = ""; return; }
+ var u = liq ? "100 ml" : "100 g", L = liq ? { k:70, az:5, na:100, sat:3 } : { k:275, az:10, na:400, sat:4 };
+ function fila(ic, t, sub, v, malo){ return '<div class="nt-f"><span class="nt-i">' + ic + '</span><span class="nt-t"><b>' + t + '</b><small>' + sub + '</small></span><span class="nt-v">' + v + '</span><i class="nt-d" style="background:' + (malo ? '#E30613' : '#2DBE60') + '"></i></div>'; }
+ var neg = [], pos = [];
+ if(!n.sinAd){ var malos = n.ads.filter(function(x){ return x[2] >= 2; }).length; (malos ? neg : pos).push(fila("🧪", "Aditivos", n.ads.length ? (malos ? malos + " de riesgo · toca para ver" : "Sin aditivos de riesgo") : "Sin aditivos", n.ads.length, malos)); }
+ [["k","🔥","Calorías","kcal",0],["az","🍬","Azúcares","g",1],["sat","🧈","Grasas saturadas","g",1],["na","🧂","Sodio","mg",0]].forEach(function(c){
+  var v = c[0] === "k" ? a.k : a[c[0]], alto = v >= L[c[0]];
+  (alto ? neg : pos).push(fila(c[1], c[2], alto ? "Alto en " + c[2].toLowerCase() : "Bajo o moderado", (c[4] ? String(r1(v)).replace(".", ",") : miles(v)) + " " + c[3], alto)); });
+ if(a.pr >= 8) pos.push(fila("💪", "Proteínas", "Buena fuente", String(r1(a.pr)).replace(".", ",") + " g", 0));
+ if(typeof a.fi === "number" && a.fi >= 3) pos.push(fila("🌾", "Fibra", "Buena fuente", String(r1(a.fi)).replace(".", ",") + " g", 0));
+ box.innerHTML = '<div class="nota-card"><div class="nt-top"><div class="nt-circ" style="border-color:' + n.cal[1] + '"><b style="color:' + n.cal[1] + '">' + n.nota + '</b><small style="color:#BBB">/100</small></div><div><p class="nt-cal" style="color:' + n.cal[1] + '">' + n.cal[0] + '</p><p class="nt-sub" style="color:#BBB">Nota WGYM del producto' + (n.sinAd ? ' (sin datos de aditivos)' : '') + '</p></div></div>' +
+  (neg.length ? '<p class="nt-h" style="color:#FF6B6B">Negativo · por ' + u + '</p>' + neg.join("") : '') + (pos.length ? '<p class="nt-h" style="color:#7CE39A">Positivo · por ' + u + '</p>' + pos.join("") : '') +
+  (n.ads.length ? '<details class="nt-ads"><summary style="color:#FFD54A">🧪 Ver aditivos (' + n.ads.length + ')</summary>' + n.ads.map(function(x){ var r = x[2] < 0 ? ["Sin clasificar","#888"] : RIESGO[x[2]]; return '<div class="nt-ad"><span><b>' + esc(x[0]) + '</b><small>' + esc(x[1]) + '</small></span><em style="color:' + r[1] + '">● ' + r[0] + '</em></div>'; }).join("") + '<p class="muted" style="font-size:12px;margin:6px 0 0">Riesgo orientativo según estudios científicos (EFSA, IARC). No reemplaza la opinión de un profesional.</p></details>' : '') + '</div>';
+ var adFila = box.querySelector(".nt-f"); if(adFila && n.ads.length) adFila.onclick = function(){ var d = box.querySelector(".nt-ads"); if(d){ d.open = true; d.scrollIntoView({ block:"nearest", behavior:"smooth" }); } };
 }
 /* 📏 Mis medidas (11-10-2026, pedido de la dueña): cintura, abdomen, cadera, muslo, brazo y % de grasa, solo en el teléfono.
    La cintura se ubica en los percentiles del estudio chileno CHIREF (personas activas de
@@ -2250,7 +2308,7 @@ function detalle(a){
  else if(cuenta){ mult = cuenta.n; h += '<div class="campo cant-box"><label for="dCant">¿' + (/[aá]$|d$|z$|ón$/.test(cuenta.sing) && !/huevo|pistacho|grano/.test(cuenta.sing) ? 'Cuántas ' : 'Cuántos ') + esc(plural(cuenta.sing, 2)) + ' comiste?</label><input class="inp cant-inp" id="dCant" type="text" inputmode="decimal" autocomplete="off" value="' + cuenta.n + '"><small>1 ' + esc(cuenta.sing) + ' = ' + miles(a.k) + ' kcal · escribe la cantidad y se calcula solo</small></div>'; }
  else h += '<p class="kick">Porción: ' + esc(a.p) + '</p><div class="mults" id="dMults">' + [[0.5,"½"],[1,"1"],[1.5,"1½"],[2,"2"],[3,"3"]].map(function(m){ return '<button type="button" class="chip" data-x="' + m[0] + '" aria-pressed="' + (m[0] === 1) + '">' + m[1] + '</button>'; }).join("") + '</div>';
  var conSellos = esGr && (a.code || a.off || a.cat === CAT_PROD);
- if(conSellos) h += '<div id="dSellos"></div>';
+ if(conSellos) h += '<div id="dNota"></div><div id="dSellos"></div>';
  h += '<div class="det-macros" id="dMac" style="margin:14px 0"></div>' +
   '<div class="fila2"><button type="button" class="btn sec" id="dFav">' + (esFav(a) ? "★ En favoritas" : "☆ Favorita") + '</button><button type="button" class="btn rojo" id="dOk">Agregar</button></div>';
  $("agrCuerpo").innerHTML = h;
@@ -2321,9 +2379,10 @@ function offAAlim(p){
   k:Math.round(k), pr:r1(nu.proteins_100g || 0), c:r1(nu.carbohydrates_100g || 0), g:r1(nu.fat_100g || 0), vc:nu["vitamin-c_100g"] != null && !isNaN(nu["vitamin-c_100g"]) ? r1(nu["vitamin-c_100g"] * 1000) : undefined,
   po:nu.potassium_100g != null && !isNaN(nu.potassium_100g) ? Math.round(nu.potassium_100g * 1000) : undefined, fi:nu.fiber_100g != null && !isNaN(nu.fiber_100g) ? r1(nu.fiber_100g) : undefined,
   az:nu.sugars_100g != null && !isNaN(nu.sugars_100g) ? r1(nu.sugars_100g) : undefined, sat:nu["saturated-fat_100g"] != null && !isNaN(nu["saturated-fat_100g"]) ? r1(nu["saturated-fat_100g"]) : undefined,
-  na:nu.sodium_100g != null && !isNaN(nu.sodium_100g) ? Math.round(nu.sodium_100g * 1000) : undefined };
+  na:nu.sodium_100g != null && !isNaN(nu.sodium_100g) ? Math.round(nu.sodium_100g * 1000) : undefined,
+  ad:Array.isArray(p.additives_tags) ? p.additives_tags.map(function(t){ return String(t).replace(/^[a-z]+:/, "").toUpperCase(); }) : undefined };
 }
-var OFF_CAMPOS = "code,product_name,product_name_es,brands,nutriments,serving_quantity,serving_size,product_quantity";
+var OFF_CAMPOS = "code,product_name,product_name_es,brands,nutriments,serving_quantity,serving_size,product_quantity,additives_tags";
 function buscarOFF(q){
  if(window.WGYMNUTRI_DEMO) return Promise.resolve(null);
  /* Primero productos vendidos en Chile; si salen pocos, se completa con el resto del mundo.
@@ -2875,7 +2934,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101909", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101910", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
