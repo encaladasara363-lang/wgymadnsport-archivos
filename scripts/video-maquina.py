@@ -36,6 +36,8 @@ config.json:
     espejo_muslos (opcional): [x0, y0, x1, y1] zona (720x1280) del short negro
       del REFLEJO en el espejo (persona de frente); pinta sus cuádriceps: bajo
       el short de pie y a los costados del short en sentadilla.
+    lento (opcional, ej. 1.5): repeticiones más lentas (1.5 = una vez y media más
+      lento), con cuadros intermedios; los cuadros de musculo_kf se ajustan solos.
     musculo_kf (opcional): [[cuadro, cx, cy, rx, ry, (cx2, cy2, rx2, ry2...)], ...] óvalos marcados a mano
       en algunos cuadros (720x1280) e interpolado entre ellos; pinta solo piel
       y respeta 'intensidad'. El más preciso cuando el músculo es chico.
@@ -62,9 +64,12 @@ rubik = lambda s: font('assets/font-rubik-distressed.ttf', s)
 anton = lambda s: font('contenido/fuentes/Anton.ttf', s)
 
 
-def leer_frames(path, desde, hasta, recorte=None):
+def leer_frames(path, desde, hasta, recorte=None, lento=None):
     tmp = tempfile.mkdtemp()
-    vf = ['-vf', 'crop=%d:%d:%d:%d' % (recorte[2], recorte[3], recorte[0], recorte[1])] if recorte else []
+    f = ['crop=%d:%d:%d:%d' % (recorte[2], recorte[3], recorte[0], recorte[1])] if recorte else []
+    if lento:  # cámara lenta con cuadros intermedios calculados (no se ve a saltos)
+        f += ['setpts=%s*PTS' % lento, 'minterpolate=fps=%d:mi_mode=mci:mc_mode=aobmc:vsbmc=1' % FPS]
+    vf = ['-vf', ','.join(f)] if f else []
     subprocess.run([FF, '-v', 'error', '-ss', str(desde), '-t', str(hasta - desde),
                     '-i', path, '-map', '0:v:0', '-an', '-r', str(FPS)] + vf + [
                     os.path.join(tmp, '%04d.png')], check=True)
@@ -289,12 +294,13 @@ def main(carpeta):
     X = 8  # cuadros de fundido entre partes
     secuencia, extra = [], []
     for n, p in enumerate(cfg['partes']):
-        fr = [a_vertical(f, p.get('encoger'), p.get('encaje')) for f in leer_frames(os.path.join(carpeta, p['video']), p['desde'], p['hasta'], p.get('recorte'))]
+        fr = [a_vertical(f, p.get('encoger'), p.get('encaje')) for f in leer_frames(os.path.join(carpeta, p['video']), p['desde'], p['hasta'], p.get('recorte'), p.get('lento'))]
         if p.get('repetir') and n == len(cfg['partes']) - 1:
             m = len(fr) - X
             fr = [Image.blend(fr[m + i], fr[i], (i + 1) / (X + 1)) if i < X else fr[i] for i in range(m)]
         if p.get('musculo_kf'):
             kf = np.array(sorted(p['musculo_kf']), dtype=float)
+            kf[:, 0] *= p.get('lento', 1)  # los cuadros marcados se corren con la cámara lenta
             fz = p.get('intensidad', 1.0)
             nov = (kf.shape[1] - 1) // 4  # varios óvalos por fila: [cuadro, cx, cy, rx, ry, cx2, cy2, ...]
             fr = [musculo_rojo(f, [[np.interp(i, kf[:, 0], kf[:, 1 + 4 * o + c]) for c in range(4)] for o in range(nov)],
