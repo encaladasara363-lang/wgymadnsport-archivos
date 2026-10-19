@@ -6,12 +6,37 @@
       "video": "fuentes/ejercicio-gemini.mp4",
       "desde": 0,
       "hasta": 10,
-      "recorte": [430, 0, 405, 720],
+      "recorte": [
+        355,
+        0,
+        560,
+        720
+      ],
       "repetir": 1,
       "nota": "Silueta de Acero. Pec deck (máquina 13), vista de lado. Imagen de ChatGPT desde el video de referencia IMG_9523 (no se sube); video de Gemini.",
       "solo_piel": "todo",
       "intensidad": 0.8,
-      "musculo_kf": [[0, 305, 425, 38, 30], [240, 305, 425, 38, 30]]
+      "musculo_kf": [
+        [
+          0,
+          316.25,
+          460.0,
+          30,
+          24
+        ],
+        [
+          240,
+          316.25,
+          460.0,
+          30,
+          24
+        ]
+      ],
+      "encaje": {
+        "alto": 900,
+        "x": 10,
+        "y": 160
+      }
     }
   ]
 }
