@@ -31,13 +31,13 @@
      "video": "assets/silueta-de-acero/remo-inclinado-barra.mp4?v=1"
     },
     {
-     "name": "Press de pecho con mancuernas en banco",
+     "name": "Aperturas en máquina",
      "sets": "3 × 10-12",
      "rest": "75 seg",
-     "tip": "Apoya espalda y pies; baja las mancuernas con control a los lados del pecho y empuja hacia arriba.",
-     "equip": "Banco · mancuernas",
-     "muscle": "Pecho · tríceps",
-     "video": "assets/impulso-total/press-pecho-mancuernas.mp4?v=1"
+     "tip": "Sentada con la espalda y la cabeza apoyadas en el respaldo, codos a la altura de los hombros y un poco flexionados. Junta las manillas frente al pecho apretando el pecho un segundo y abre lento hasta sentir estiramiento. ⚠️ No dejes que los codos pasen detrás del cuerpo al abrir ni despegues la espalda del respaldo.",
+     "equip": "Máquina de aperturas (máquina 13)",
+     "muscle": "Pecho · deltoides anterior",
+     "video": "assets/silueta-de-acero/aperturas-maquina.mp4?v=1"
     },
     {
      "name": "Elevación lateral con discos",
