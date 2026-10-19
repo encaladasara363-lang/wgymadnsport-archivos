@@ -618,3 +618,13 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .ent-t{margin:12px 0 0;font-weight:800;font-size:17px}
 .ajuste-card{background:linear-gradient(135deg,#2a0306,#0D0D0F) !important;border:2px solid #D4AF37 !important}
 .ajuste-card h3{color:#fff}
+/* 📅 Todos mis días (19-10-2026) */
+.cal-btn{width:100%;margin:8px 0 4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:8px}
+.cal-l{text-align:center;font-size:13px;opacity:.7}
+.cal-d{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:54px;padding:3px 0;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);position:relative;color:inherit}
+.cal-d b{font-size:17px}.cal-d small{font-size:10px;font-style:normal}
+.cal-d em{position:absolute;top:1px;right:2px;font-size:10px;font-style:normal}
+.cal-d.con{border-color:#2ecc71;background:rgba(46,204,113,.14)}
+.cal-d.hoy{outline:2px solid #D4AF37}.cal-d.sel{background:#E30613;border-color:#E30613}
+.cal-d:disabled{opacity:.3}
