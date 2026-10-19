@@ -70,3 +70,7 @@ html.oscuro body .vitc-hoy .mic-h small.tope-aviso{color:#FF5252 !important}
 html.oscuro body .plan-chips.plan-chips span, html.oscuro body .plan-chips.plan-chips span *{color:#111 !important}
 html.oscuro body .plan-chips.plan-chips span{background:#F5D547 !important;border:1px solid #D4AF37 !important}
 html.oscuro body .vitc-hoy .mic-h small.tope-medio{color:#FFB547 !important}
+/* ⭐ Lo de siempre y 💧 agua por horas (19-10-2026) */
+html.oscuro .rep-ay.fav-c{background:#2A2208 !important;border:2px solid #D4AF37 !important;color:#FFD54A !important}
+html.oscuro .agua-hora.agua-hora.atras{background:#3A0207 !important;color:#FF8A8F !important}
+html.oscuro .agua-hora.agua-hora.aldia{background:#0B2A14 !important;color:#7CE39A !important}

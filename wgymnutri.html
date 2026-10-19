@@ -232,8 +232,8 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=62">
-<link rel="stylesheet" href="nutri-oscuro.css?v=13">
+<link rel="stylesheet" href="nutri-claro.css?v=63">
+<link rel="stylesheet" href="nutri-oscuro.css?v=14">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
 </head>
@@ -1047,9 +1047,21 @@ $("navMas").addEventListener("click", function(){ abrirAgregar(comidaPorHora());
    en su perfil cuáles quiere ver. Se guardan solo en su teléfono. */
 var RECORDATORIOS = [["horas","🕒","Mis horas de comida","Si pasó la hora de una comida y no la anotaste."],
  ["desayuno","🍳","Registrar el desayuno","Desde las 11:00 si aún no anotas nada."],
- ["agua","💧","Tomar agua","A mediodía y en la noche si vas atrasado con los vasos."],
+ ["agua","💧","Tomar agua","Durante el día, si vas atrasado con el agua según la hora."],
  ["proteina","💪","Completar la proteína","En la tarde, si te falta bastante para tu meta."],
  ["meta","⚠️","Aviso al pasar mi meta","Cuando comes más calorías que tu meta del día."]];
+/* 💧 Agua por horas (19-10-2026, la dueña eligió la idea 24): lo que debería llevar a esta hora,
+   repartiendo la meta del día entre las 8:00 y las 22:00 (en vasos de 250 ml). */
+/* ⭐ Lo de siempre (19-10-2026, la dueña eligió la idea 18): el alimento que el socio anota más
+   seguido en esa comida en los últimos 30 días (al menos 3 veces), con la cantidad de la última vez. */
+function favComida(m){
+ var cuenta = {}, ult = {};
+ for(var i = 30; i >= 1; i--){ (diaDe(sumaDias(diaSel, -i)).c[m] || []).forEach(function(it){ cuenta[it.n] = (cuenta[it.n] || 0) + 1; ult[it.n] = it; }); }
+ var mejor = null; Object.keys(cuenta).forEach(function(n){ if(cuenta[n] >= 3 && (!mejor || cuenta[n] > cuenta[mejor])) mejor = n; });
+ if(!mejor) return null; var c = Object.assign({}, ult[mejor]); delete c.t; return c;
+}
+function aguaEsperada(M){ var d = new Date(), m = d.getHours() * 60 + d.getMinutes(); return Math.round(M.agua * Math.max(0, Math.min(1, (m - 480) / 840))); }
+function litrosTxt(v){ return String(r1(v * 0.25)).replace(".", ","); }
 function recOn(k){ var r = (D && D.recordar) || {}; return r[k] !== false; }
 function recordatorio(){
  if(diaSel !== hoyISO()) return null;
@@ -1062,10 +1074,10 @@ function recordatorio(){
   if(pend) return ["🕒", "Tu " + pend[2].toLowerCase() + " era a las " + horaDe(pend[0]) + ". ¿Ya comiste? Regístralo con el botón +."];
  }
  if(recOn("desayuno") && h >= 11 && !(x.c.desayuno || []).length && !t.n) return ["🍳", "¿Ya tomaste desayuno? Regístralo para empezar tu día y no cortar tu racha 🔥."];
- if(recOn("agua") && h >= 13 && x.agua < M.agua / 2) return ["💧", "¿Ya tomaste agua? Llevas " + x.agua + " de " + M.agua + " vasos. ¡Toca un vaso cada vez que tomes uno!"];
+ var esp = aguaEsperada(M);
+ if(recOn("agua") && h >= 10 && x.agua <= esp - 2) return ["💧", "Vas atrasado con el agua 💧 A esta hora deberías llevar unos " + litrosTxt(esp) + " L y llevas " + litrosTxt(x.agua) + " L. ¡Tómate una botella ahora!"];
  if(recOn("proteina") && h >= 17 && t.n && M.p - t.p > 25) return ["💪", "Te faltan " + Math.round(M.p - t.p) + " g de proteína para tu meta de hoy. Pollo, huevo, atún o yogur proteico te ayudan."];
  if(recOn("meta") && t.n && t.k > M.kcal) return ["⚠️", "Hoy pasaste tu meta por " + miles(t.k - M.kcal) + " kcal. Mañana es otra oportunidad: prioriza verduras y proteína."];
- if(recOn("agua") && h >= 20 && x.agua < M.agua) return ["💧", "Te faltan " + (M.agua - x.agua) + " vasos de agua para tu meta de hoy."];
  return null;
 }
 /* ═══ Ideas nuevas (10-10-2026, la dueña: «quiero todas») ═══ */
@@ -1675,6 +1687,9 @@ function renderHoy(){
   '<svg class="ola o1" viewBox="0 0 200 40" preserveAspectRatio="none"><path d="' + olaP + '"/></svg><svg class="ola o2" viewBox="0 0 200 40" preserveAspectRatio="none"><path d="' + olaP + '"/></svg>' +
   '<i class="burb b1"></i><i class="burb b2"></i><i class="burb b3"></i><i class="burb b4"></i></div>' +
   '<div class="tq-txt"><b>' + litros(x.agua) + ' L</b><span>de ' + litros(M.agua) + ' L</span>' + (aPct >= 1 ? '<em>¡Meta cumplida! 💪</em>' : '<em>' + Math.round(aPct * 100) + '%</em>') + '</div></div>';
+ if(esHoy && x.agua < M.agua){ var aEsp = aguaEsperada(M);
+  if(aEsp > 0) h += x.agua <= aEsp - 2 ? '<p class="agua-hora atras">⏰ Vas atrasado: a esta hora deberías llevar unos ' + litrosTxt(aEsp) + ' L y llevas ' + litrosTxt(x.agua) + ' L</p>'
+   : '<p class="agua-hora aldia">✅ Vas al día con el agua (a esta hora, unos ' + litrosTxt(aEsp) + ' L)</p>'; }
  if(enBot){
   var nb = Math.ceil(Math.max(M.agua, x.agua) / 2);
   h += '<div class="agua-botellas">';
@@ -1698,7 +1713,8 @@ function renderHoy(){
   var its = x.c[cm[0]] || [], kc = its.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
   h += '<div class="card comida-card"><div class="cab"><h3>' + cm[1] + ' ' + cm[2] + ' <span class="hora-com">' + horaDe(cm[0]) + '</span></h3><small>' + (its.length ? miles(kc) + " kcal" : "") + '</small></div>';
   its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="ed" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Editar ' + esc(it.n) + '">✏️</button><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
-  var ay = diaDe(sumaDias(diaSel, -1)).c[cm[0]] || [];
+  var ay = diaDe(sumaDias(diaSel, -1)).c[cm[0]] || [], fv = favComida(cm[0]);
+  if(fv && !its.some(function(it){ return it.n === fv.n; })) h += '<button type="button" class="rep-ay fav-c" data-fav="' + cm[0] + '">⭐ Lo de siempre: ' + iconoAlim(fv) + ' ' + esc(fv.n) + ' · ' + esc(porcionTxt(fv)) + ' · ' + miles(fv.k * (fv.x || 1)) + ' kcal</button>';
   if(!its.length && ay.length) h += '<button type="button" class="rep-ay" data-rep="' + cm[0] + '">🔁 Repetir lo de ayer · ' + ay.length + (ay.length === 1 ? ' alimento' : ' alimentos') + ' · ' + miles(ay.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0)) + ' kcal</button>';
   /* «Guardar como plato» y «Copiar a otro día» (11-10-2026, pedido de la dueña). */
   if(its.length) h += '<div class="cc-mini"><button type="button" class="chip" data-plato="' + cm[0] + '">⭐ Guardar como plato</button><button type="button" class="chip" data-copiar="' + cm[0] + '">📋 Copiar a otro día</button></div>';
@@ -1742,6 +1758,10 @@ function renderHoy(){
  box.querySelectorAll("[data-mv]").forEach(function(b){ b.onclick = function(){ agr.q = ""; abrirAgregar(b.dataset.mv, "voz"); if($("vozMic")) $("vozMic").click(); }; });
  box.querySelectorAll("[data-plato]").forEach(function(b){ b.onclick = function(){ guardarPlato(b.dataset.plato); }; });
  box.querySelectorAll("[data-copiar]").forEach(function(b){ b.onclick = function(){ copiarComida(b.dataset.copiar); }; });
+ box.querySelectorAll("[data-fav]").forEach(function(b){ b.onclick = function(){
+  var m = b.dataset.fav, fv = favComida(m), xx = diaDe(diaSel); if(!fv) return;
+  (xx.c[m] = xx.c[m] || []).push(Object.assign({}, fv, { t:Date.now() })); setDia(diaSel, xx); D.cont.comidas = (D.cont.comidas || 0) + 1; guardar();
+  vibrar(20); toast("✅ Agregado: " + fv.n); renderHoy(); $("rachaNum").textContent = racha(); revisarLogros(); }; });
  box.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){
   var m = b.dataset.rep, xx = diaDe(diaSel), ay = diaDe(sumaDias(diaSel, -1)).c[m] || [];
   xx.c[m] = (xx.c[m] || []).concat(ay.map(function(it, i){ return Object.assign({}, it, { t:Date.now() + i }); })); setDia(diaSel, xx); guardar();
@@ -2794,7 +2814,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101905", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101906", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
