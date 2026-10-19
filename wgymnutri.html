@@ -341,7 +341,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=3"></script>
-<script src="nutri-alimentos.js?v=24"></script>
+<script src="nutri-alimentos.js?v=25"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
 (function(){
@@ -982,7 +982,7 @@ function completarMicros(a){ var b = null; ["vc","po","fi","az","na"].forEach(fu
 /* Suplementos marcados que suman al día (12-10-2026, la dueña marcó «Vitamina C» y el cuadro de
    vitamina C seguía en 0): cada suplemento se busca en la lista de alimentos por su nombre (1 unidad
    o 1 porción) y lo que trae se suma a calorías, macros y vitamina C/potasio/fibra. */
-var SUPL_ALIM = [[/x.?gear/,"Creatina X-Gear con vitamina C (frutilla arándanos)"],[/vitamina\s*c|crevet/,"Crevet Light Vitamina C 500 mg"],[/prote[ií]na|whey/,"Proteína whey"],[/creatina/,"Creatina monohidrato"],[/omega/,"Omega 3"],[/col[aá]geno/,"Colágeno hidrolizado"],[/multivitam/,"Multivitamínico"],[/glutamina/,"Glutamina"],[/bcaa/,"BCAA en polvo"],[/cafe[ií]na/,"Cafeína en cápsula"],[/electrolit/,"Electrolitos en polvo sin azúcar"],[/pre.?entreno/,"Pre-entreno"]];
+var SUPL_ALIM = [[/beta.?alanina/,"Beta alanina X-Gear 100 % pura"],[/x.?gear/,"Creatina X-Gear con vitamina C (frutilla arándanos)"],[/vitamina\s*c|crevet/,"Crevet Light Vitamina C 500 mg"],[/prote[ií]na|whey/,"Proteína whey"],[/creatina/,"Creatina monohidrato"],[/omega/,"Omega 3"],[/col[aá]geno/,"Colágeno hidrolizado"],[/multivitam/,"Multivitamínico"],[/glutamina/,"Glutamina"],[/bcaa/,"BCAA en polvo"],[/cafe[ií]na/,"Cafeína en cápsula"],[/electrolit/,"Electrolitos en polvo sin azúcar"],[/pre.?entreno/,"Pre-entreno"]];
 function suplAlim(nombre){
  var nn = normName(nombre || ""), bajo = nn.toLowerCase(), i, buscado = null;
  for(i = 0; i < ALIM.length; i++) if(ALIM[i].nn === nn) return ALIM[i];
@@ -2775,7 +2775,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101903", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101904", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
