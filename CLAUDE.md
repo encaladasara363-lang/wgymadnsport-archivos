@@ -1630,6 +1630,11 @@ probado: ella se activó desde el mesón y entró a la app).
   barrita y bolitas de avena con manjar sin azúcar (valores aproximados caseros).
   Crevet Light Vitamina C 500 mg (12-10-2026, la dueña mandó la etiqueta): categoría Suplementos, por unidad («1 unidad»,
   pedido de la dueña), 3,7 kcal, 1,2 g de carbohidratos, 500 mg de vitamina C; `CONTABLES` acepta «comprimidos/cápsulas».
+  Creatina X-Gear con vitamina C, sabor frutilla arándanos (19-10-2026, la dueña mandó la etiqueta): Suplementos,
+  «1 porción (5,5 g)»: 0 kcal, 5 g de creatina, 150 mg de vitamina C. Código 0798190281032 en `window.NUTRI_CODIGOS`
+  (al final de `nutri-alimentos.js`, código sin ceros a la izquierda → nombre exacto; `leido` lo busca antes que la hoja
+  y Open Food Facts) y `SUPL_ALIM` reconoce «x-gear» en «Mis suplementos». **Para dejar un producto con su código
+  para todos, sumarlo a `NUTRI_CODIGOS`.**
   Chocolate blanco (12-10-2026, la dueña mandó foto de sus botones): «Chocolate blanco (botones)» por **discos** («10 discos (20 g)», ≈11 kcal cada uno) y «Chocolate blanco» por cuadraditos; `CONTABLES` acepta «discos».
   Esencia de vainilla (12-10-2026, pedido de la dueña): «1 cucharadita» (12 kcal), se cuenta por cucharaditas; `CONTABLES` acepta «cucharaditas» solo si no traen gramos/ml entre paréntesis (azúcar, aceite, etc. siguen en gramos).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
