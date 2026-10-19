@@ -1919,6 +1919,14 @@ probado: ella se activó desde el mesón y entró a la app).
   últimos 30 días (mínimo 3), con la cantidad de la última vez; no aparece si ya está anotado. En «💧 Agua», línea
   `.agua-hora` con lo que debería llevar a esta hora (`aguaEsperada`: la meta repartida de 8:00 a 22:00): «⏰ Vas
   atrasado…» (rojo, si le faltan 2 vasos o más) o «✅ Vas al día…»; el recordatorio de agua usa la misma cuenta.
+- **📋 Escanear menú (19-10-2026, la dueña vio «Escanear menú» en otra app y eligió la versión gratis):** pestaña
+  «📋 Escanear menú» en «Agregar comida» (`modoMenu`): foto de la carta (`fotoMenu`: 1.800 px, gris y más contraste) →
+  Tesseract (el mismo de las etiquetas) → cada línea sin precios se busca en la lista (`platoDeLinea`: el nombre del
+  alimento debe calzar en ≥60 % con la línea; prefiere comida chilena/rápida) → lista de platos encontrados con kcal;
+  tocar uno abre el detalle normal. Las líneas sin plato van en «¿No salió tu plato?» y abren 🔎 Buscar con ese texto.
+  Sin IA pagada: solo reconoce platos de la lista. Probado con una carta de prueba: 8 de 10 platos. Ese día se
+  sumaron Ensalada César, Churrasco palta/solo, Lomito palta, As italiano, Ceviche, Milanesa de pollo y Fajitas de
+  pollo. Si la dueña manda cartas de locales de Tocopilla, sumar sus platos a la lista.
 - **🥗 Panel de ventas WGYMNUTRI en el mesón (18-10-2026, idea 8):** `control.html`, panel antes de «Socios del gimnasio»
   (`verVentasNutri_`): activas ahora, vencen en 7 días, vencidas hace menos de 30 días (para ofrecerla de nuevo) con
   `listarNutri`, y «Entró este mes» con `ventasNutri` (POST con clave). Cada «Activar» manda `meses` y `monto` y el
