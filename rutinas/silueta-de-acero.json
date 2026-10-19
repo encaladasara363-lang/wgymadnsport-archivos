@@ -22,13 +22,13 @@
      "video": "assets/silueta-de-acero/jalon-agarre-cerrado.mp4?v=1"
     },
     {
-     "name": "Remo frontal",
+     "name": "Remo inclinado con mancuernas",
      "sets": "3 × 10-12",
      "rest": "75 seg",
-     "tip": "Lleva los agarres hacia ti con el pecho estable; junta omóplatos sin impulso.",
-     "equip": "Máquina",
-     "muscle": "Espalda media",
-     "video": "assets/impulso-total/remo-frontal.mp4?v=1"
+     "tip": "De pie, rodillas un poco flexionadas y tronco inclinado hacia adelante con la espalda recta. Lleva las mancuernas hacia la cadera con los codos pegados al cuerpo, junta los omóplatos un segundo y baja lento. ⚠️ No redondees la espalda ni tires con impulso del tronco.",
+     "equip": "Mancuernas de discos",
+     "muscle": "Espalda alta · dorsales",
+     "video": "assets/silueta-de-acero/remo-inclinado-mancuernas.mp4?v=1"
     },
     {
      "name": "Press de pecho con mancuernas en banco",
