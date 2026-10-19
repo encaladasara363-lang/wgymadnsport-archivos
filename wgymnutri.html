@@ -232,7 +232,7 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=61">
+<link rel="stylesheet" href="nutri-claro.css?v=62">
 <link rel="stylesheet" href="nutri-oscuro.css?v=13">
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
@@ -306,6 +306,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
    <p class="muted" style="margin:0;font-size:14px">Cuando Sara reciba tu pago, activa tu app desde recepción. WhatsApp de Sara: <b>+56 9 7519 6394</b></p>
    <button class="btn sec chico" type="button" id="pagoRevisar">Ya pagué: revisar de nuevo</button>
    <button class="btn sec chico" type="button" id="pagoOtro">No soy yo · cambiar nombre</button>
+   <button class="btn sec chico" type="button" id="pagoVolver" hidden>← Volver a la app</button>
   </div>
  </section>
 
@@ -470,7 +471,7 @@ function abrir(){
    fecha vista para abrir al instante; la hoja la confirma por detrás. Si el
    script todavía no tiene la acción, nadie la tiene activa: la dueña no la
    quiere gratis (10-10-2026). */
-var CLAVE_NUTRI = "wgymnutri_activa_v1", nutriConsultado = "", nutriLibre = false;
+var CLAVE_NUTRI = "wgymnutri_activa_v1", nutriConsultado = "", nutriLibre = false, renovando = "";
 function claveNutri(){ return normName(socio.n + " " + socio.a); }
 function nutriGuardado(){ var t = lsGet(CLAVE_NUTRI, {}) || {}; return t[claveNutri()]; }
 function nutriEstado(){
@@ -512,6 +513,8 @@ function revisarNutri(esperando){
   var t2 = lsGet(CLAVE_NUTRI, {}) || {}, antes = t2[k]; t2[k] = hasta; lsSet(CLAVE_NUTRI, t2);
   var activa = hasta && hasta >= hoyISO();
   if(esperando) { abrir(); return; }
+  /* Renovando antes de vencer (19-10-2026): solo se vuelve a la app cuando llega la fecha nueva. */
+  if(renovando && !$("vPago").hidden){ if(activa && hasta > renovando){ renovando = ""; abrir(); toast("✅ ¡WGYMNUTRI renovada hasta el " + hasta.split("-").reverse().join("-") + "!"); confeti(); } return; }
   if(!activa && $("vPago").hidden) mostrarPago();
   else if(activa && !$("vPago").hidden){ abrir(); toast("✅ ¡WGYMNUTRI activada! Disfrútala."); confeti(); }
   else if(activa !== (antes && antes >= hoyISO()) && tabSel === "tabPerfil" && !$("vApp").hidden) renderPerfil();
@@ -530,6 +533,7 @@ function datosPago(){
 }
 function mostrarPago(){
  cerrarHoja();
+ if(nutriEstado() !== "si") renovando = "";
  var dp = datosPago(), h = nutriGuardado(), L = ofertasNutri();
  $("pagoPrecio").textContent = "$" + miles(dp.n.precio);
  $("pagoDetalle").textContent = dp.n.detalle || "al mes";
@@ -539,7 +543,8 @@ function mostrarPago(){
  $("pagoOfertas").querySelectorAll("[data-oferta]").forEach(function(b){ b.onclick = function(){ ofertaSel = b.dataset.oferta; var y = window.scrollY; mostrarPago(); window.scrollTo(0, y); }; });
  $("pagoDatos").innerHTML = '<p class="kick" style="margin-bottom:8px">Transfiere a</p>' + dp.filas.filter(function(f){ return f[1]; }).map(function(f){ return '<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)"><span class="muted">' + esc(f[0]) + '</span><b style="text-align:right;overflow-wrap:anywhere">' + esc(f[1]) + '</b></div>'; }).join("");
  $("pagoWsp").href = "https://wa.me/" + (dp.c.whatsapp || "56975196394") + "?text=" + encodeURIComponent("Hola Sara, soy " + socio.n + " " + socio.a + ". Pagué " + dp.n.nombre + " ($" + miles(dp.n.precio) + ") por transferencia. Te envío el comprobante.");
- var m = $("pagoMsg"); m.hidden = !h; if(h) m.textContent = "Tu WGYMNUTRI venció el " + h.split("-").reverse().join("-") + ". Renueva para seguir usándola.";
+ var m = $("pagoMsg"); m.hidden = !h; if(h) m.textContent = renovando ? "Tu WGYMNUTRI vence el " + h.split("-").reverse().join("-") + ". Renueva ahora y no pierdes ningún día: el mes nuevo se suma desde esa fecha." : "Tu WGYMNUTRI venció el " + h.split("-").reverse().join("-") + ". Renueva para seguir usándola.";
+ $("pagoVolver").hidden = !renovando; $("pagoOtro").hidden = !!renovando;
  vista("vPago");
 }
 function copiarTexto(txt){
@@ -560,9 +565,21 @@ $("pagoCopiar").addEventListener("click", function(){
 });
 $("pagoRevisar").addEventListener("click", function(){
  var b = this; b.disabled = true; b.textContent = "Revisando…";
- revisarNutri(false).then(function(){ b.disabled = false; b.textContent = "Ya pagué: revisar de nuevo"; if(!$("vPago").hidden) toast("Todavía no está activada. Si ya pagaste, avísale a Sara."); });
+ revisarNutri(false).then(function(){ b.disabled = false; b.textContent = "Ya pagué: revisar de nuevo"; if(!$("vPago").hidden) toast(renovando ? "Todavía no está renovada. Si ya pagaste, avísale a Sara." : "Todavía no está activada. Si ya pagaste, avísale a Sara."); });
 });
 $("pagoOtro").addEventListener("click", salir);
+$("pagoVolver").addEventListener("click", function(){ renovando = ""; abrir(); });
+/* ⏳ Aviso de vencimiento (19-10-2026, la dueña eligió la idea 16): desde 3 días antes, «Hoy»
+   avisa cuándo vence WGYMNUTRI con un botón para renovar, así el socio paga sin que Sara le recuerde. */
+function htmlVence(){
+ if(nutriLibre) return "";
+ var h = nutriGuardado(); if(!h || h < hoyISO()) return "";
+ var n = Math.round((fechaDeISO(h) - fechaDeISO(hoyISO())) / 864e5); if(n > 3) return "";
+ var cuando = n === 0 ? "vence HOY" : n === 1 ? "vence mañana" : "vence el " + DIAS[fechaDeISO(h).getDay()] + " " + (+h.slice(8));
+ return '<div class="card vence-card"><p style="margin:0 0 4px;font-size:20px"><b style="color:#FFD54A">⏳ Tu WGYMNUTRI ' + cuando + '</b></p>' +
+  '<p style="margin:0 0 12px;color:#FFB199;font-size:15px">Renueva antes y sigues sin cortes: el mes nuevo se suma desde tu fecha de vencimiento.</p>' +
+  '<button type="button" class="btn rojo" id="venceRenovar">💳 Renovar ahora</button></div>';
+}
 function reevaluar(){ if($("vBloqueo").hidden === false) abrir(); }
 function mostrarBloqueo(){
  cerrarHoja();
@@ -1625,6 +1642,7 @@ function renderHoy(){
   return '<button type="button" class="st-dia' + (f === diaSel ? " sel" : "") + (f === hoyISO() ? " hoy" : "") + (con ? " con" : "") + (ent[f] ? " ent" : "") + '" data-f="' + f + '"' + (f > hoyISO() ? " disabled" : "") + '><span class="st-l">' + l + '</span><b>' + (+f.slice(8)) + '</b><i></i>' + (ent[f] ? '<em class="st-ent" aria-label="Entrenaste">💪</em>' : '') + '</button>'; }).join("") + '</div>';
  h += '<button type="button" class="btn sec chico cal-btn" id="verCal">📅 Ver todos mis días</button>';
  if(esHoy) h += htmlNoche();
+ if(esHoy) h += htmlVence();
  if(esHoy) h += htmlRacha();
  if(esHoy) h += htmlAjuste();
  if(ent[diaSel]) h += '<div class="aviso entreno-av"><span class="e">💪</span><p><b>' + (esHoy ? 'Después de entrenar' : 'Este día entrenaste en WGYM') + '</b><br><span class="muted" style="font-size:15px">Después de entrenar, suma 15 a 25 g de proteína dentro de las 2 horas siguientes.</span></p></div>';
@@ -1695,6 +1713,7 @@ function renderHoy(){
  var box = $("tabHoy"); box.innerHTML = h;
  requestAnimationFrame(function(){ requestAnimationFrame(function(){ var p = $("anilloProg"); if(p) p.style.strokeDashoffset = C * (1 - pct); }); });
  $("verCal").onclick = function(){ abrirCalendario(diaSel.slice(0, 7)); };
+ if($("venceRenovar")) $("venceRenovar").onclick = function(){ renovando = nutriGuardado() || ""; mostrarPago(); };
  $("diaAnt").onclick = function(){ diaSel = sumaDias(lun, -1); renderHoy(); };
  $("diaSig").onclick = function(){ var n = sumaDias(diaSel, 7); diaSel = n > hoyISO() ? hoyISO() : n; renderHoy(); };
  box.querySelectorAll(".st-dia").forEach(function(b){ b.onclick = function(){ if(b.dataset.f <= hoyISO()){ diaSel = b.dataset.f; renderHoy(); } }; });
@@ -2775,7 +2794,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101904", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101905", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
