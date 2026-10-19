@@ -1913,7 +1913,8 @@ probado: ella se activó desde el mesón y entró a la app).
   pantalla de pago en modo renovación (`renovando`: «← Volver a la app» en vez de «No soy yo», texto «vence el…»). Con
   «Ya pagué» solo vuelve a la app cuando la hoja trae una fecha nueva («✅ ¡WGYMNUTRI renovada hasta…!»). El «Activar»
   del mesón ya suma el mes desde la fecha vigente, así que no se pierden días.
-- **⭐ Lo de siempre y 💧 agua por horas (19-10-2026, la dueña eligió las ideas 18 y 24):** en cada comida de «Hoy»,
+- **⭐ Lo de siempre y 💧 agua por horas (19-10-2026, la dueña eligió las ideas 18 y 24):** «⭐ Lo de siempre» se
+  **SACÓ el mismo día** (la dueña: "sácamelo, no me gustó"; no volver a mostrarlo). Era, en cada comida de «Hoy»,
   «⭐ Lo de siempre: …» (`favComida`) agrega de un toque el alimento que el socio anotó más veces en esa comida en los
   últimos 30 días (mínimo 3), con la cantidad de la última vez; no aparece si ya está anotado. En «💧 Agua», línea
   `.agua-hora` con lo que debería llevar a esta hora (`aguaEsperada`: la meta repartida de 8:00 a 22:00): «⏰ Vas

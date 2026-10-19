@@ -1717,8 +1717,9 @@ function renderHoy(){
   var its = x.c[cm[0]] || [], kc = its.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0);
   h += '<div class="card comida-card"><div class="cab"><h3>' + cm[1] + ' ' + cm[2] + ' <span class="hora-com">' + horaDe(cm[0]) + '</span></h3><small>' + (its.length ? miles(kc) + " kcal" : "") + '</small></div>';
   its.forEach(function(it, j){ h += '<div class="item"><div class="tx"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b>' + tagWgym(it) + '<span>' + esc(porcionTxt(it)) + ' · P ' + r1(it.pr * (it.x || 1)) + ' · C ' + r1(it.c * (it.x || 1)) + ' · G ' + r1(it.g * (it.x || 1)) + '</span></div><span class="k">' + miles(it.k * (it.x || 1)) + '</span><button type="button" class="ed" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Editar ' + esc(it.n) + '">✏️</button><button type="button" class="x" data-m="' + cm[0] + '" data-j="' + j + '" aria-label="Quitar ' + esc(it.n) + '">🗑</button></div>'; });
-  var ay = diaDe(sumaDias(diaSel, -1)).c[cm[0]] || [], fv = favComida(cm[0]);
-  if(fv && !its.some(function(it){ return it.n === fv.n; })) h += '<button type="button" class="rep-ay fav-c" data-fav="' + cm[0] + '">⭐ Lo de siempre: ' + iconoAlim(fv) + ' ' + esc(fv.n) + ' · ' + esc(porcionTxt(fv)) + ' · ' + miles(fv.k * (fv.x || 1)) + ' kcal</button>';
+  var ay = diaDe(sumaDias(diaSel, -1)).c[cm[0]] || [], fv = null;
+  /* ⭐ «Lo de siempre» SACADO el 19-10-2026 (la dueña: "sácamelo, no me gustó"); no volver a mostrarlo. */
+  if(false && fv && !its.some(function(it){ return it.n === fv.n; })) h += '<button type="button" class="rep-ay fav-c" data-fav="' + cm[0] + '">⭐ Lo de siempre: ' + iconoAlim(fv) + ' ' + esc(fv.n) + ' · ' + esc(porcionTxt(fv)) + ' · ' + miles(fv.k * (fv.x || 1)) + ' kcal</button>';
   if(!its.length && ay.length) h += '<button type="button" class="rep-ay" data-rep="' + cm[0] + '">🔁 Repetir lo de ayer · ' + ay.length + (ay.length === 1 ? ' alimento' : ' alimentos') + ' · ' + miles(ay.reduce(function(s, it){ return s + it.k * (it.x || 1); }, 0)) + ' kcal</button>';
   /* «Guardar como plato» y «Copiar a otro día» (11-10-2026, pedido de la dueña). */
   if(its.length) h += '<div class="cc-mini"><button type="button" class="chip" data-plato="' + cm[0] + '">⭐ Guardar como plato</button><button type="button" class="chip" data-copiar="' + cm[0] + '">📋 Copiar a otro día</button></div>';
@@ -2823,7 +2824,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101907", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101908", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
