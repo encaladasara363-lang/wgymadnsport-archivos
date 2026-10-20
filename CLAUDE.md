@@ -1586,6 +1586,9 @@ probado: ella se activó desde el mesón y entró a la app).
   medias. Si no está en ninguna lista, se oculta la cámara y se muestra el número leído
   en grande para compararlo con el del envase: «Sí coincide: crear este producto» o
   «No coincide: escanear de nuevo».
+  **Códigos de 12 dígitos (20-10-2026, la dueña escaneó 842814009424 y no aparecía):** un UPC de EE. UU. se guarda en
+  Open Food Facts con un 0 adelante; `variantesCodigo` prueba el código tal cual, sin ceros y con uno o dos ceros
+  adelante, tanto en la hoja «Productos» (`porCodigoLocal`) como en Open Food Facts (`productoOFF` → `productoOFF1`).
 - **Foto del código (10-10-2026, la dueña: "pucha no me reconoce"; en iPhone el video en
   vivo sale borroso de cerca):** bajo la cámara, «📸 ¿No lo lee? Saca una foto del código»
   (`<input capture>`: la cámara del teléfono enfoca sola) y `leerFotoCodigo` lee la foto
