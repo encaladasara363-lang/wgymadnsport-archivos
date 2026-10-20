@@ -1951,7 +1951,10 @@ function integrarProductos(lista){
  if(!Array.isArray(lista)) return;
  ALIM = ALIM.filter(function(a){ return a.cat !== CAT_PROD; }).concat(lista.map(aAlimProd));
 }
-function porCodigoLocal(code){ return code ? ALIM.filter(function(a){ return a.cat === CAT_PROD && a.code === code; })[0] || null : null; }
+/* Un código de 12 dígitos (UPC de EE. UU.) se guarda en otras listas con un 0 adelante: se prueban las dos
+   formas (19-10-2026, la dueña escaneó 842814009424 y no aparecía). */
+function variantesCodigo(code){ code = String(code || ""); var b = code.replace(/^0+/, ""), v = [code]; [b, "0" + b, "00" + b].forEach(function(x){ if(x.length >= 8 && x.length <= 14 && v.indexOf(x) < 0) v.push(x); }); return v; }
+function porCodigoLocal(code){ if(!code) return null; var v = variantesCodigo(code); return ALIM.filter(function(a){ return a.cat === CAT_PROD && v.indexOf(String(a.code)) >= 0; })[0] || null; }
 function pedirScript(params, espera){
  return new Promise(function(ok){
   var cb = "wgymNutriP_" + Date.now() + "_" + Math.floor(Math.random() * 1e6), listo = false, sc = document.createElement("script");
@@ -2408,6 +2411,15 @@ function buscarOFF(q){
  })["catch"](function(){ return null; });
 }
 function productoOFF(code){
+ var vs = variantesCodigo(code).filter(function(x){ return x.length >= 12; }), i = 0, fallo = false;
+ if(!vs.length) vs = [String(code)];
+ function sig(){
+  if(i >= vs.length) return Promise.resolve(fallo ? undefined : null);
+  return productoOFF1(vs[i++]).then(function(a){ if(a) return a; if(a === undefined) fallo = true; return sig(); });
+ }
+ return sig();
+}
+function productoOFF1(code){
  return fetch("https://world.openfoodfacts.org/api/v2/product/" + encodeURIComponent(code) + ".json?fields=" + OFF_CAMPOS)
   .then(function(r){ return r.json(); }).then(function(d){ return d && d.status === 1 && d.product ? offAAlim(d.product) : null; })["catch"](function(){ return undefined; });
 }
@@ -2940,7 +2952,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026101913", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026101914", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
