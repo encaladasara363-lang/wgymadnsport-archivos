@@ -1653,6 +1653,9 @@ probado: ella se activó desde el mesón y entró a la app).
   para todos, sumarlo a `NUTRI_CODIGOS`.**
   Beta alanina X-Gear 100 % pura (19-10-2026, misma dueña): «1 medida (2 g)», 0 kcal, código 7500010100019;
   `SUPL_ALIM` reconoce «beta alanina» antes que «x-gear» (que queda para la creatina).
+  Yogur Protein natural endulzado Loncoleche (20-10-2026, la dueña mandó la etiqueta del pote de 800 g): Marcas,
+  «1 taza (200 g)»: 130 kcal, 17,6 g de proteína, 11,8 g de carbohidratos, 1,4 g de grasa, 130 mg de sodio, azúcar
+  añadida 0 (sin sacarosa). Sin código en `NUTRI_CODIGOS` (no se veía completo en la foto).
   Chocolate blanco (12-10-2026, la dueña mandó foto de sus botones): «Chocolate blanco (botones)» por **discos** («10 discos (20 g)», ≈11 kcal cada uno) y «Chocolate blanco» por cuadraditos; `CONTABLES` acepta «discos».
   Esencia de vainilla (12-10-2026, pedido de la dueña): «1 cucharadita» (12 kcal), se cuenta por cucharaditas; `CONTABLES` acepta «cucharaditas» solo si no traen gramos/ml entre paréntesis (azúcar, aceite, etc. siguen en gramos).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
