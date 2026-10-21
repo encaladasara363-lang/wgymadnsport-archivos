@@ -1,0 +1,175 @@
+{
+ "titulo": "SENTADILLA EN POLEA CON TALONES ELEVADOS",
+ "series": "3 × 10-12",
+ "partes": [
+  {
+   "video": "fuentes/ejercicio-profunda-gemini.mp4",
+   "desde": 0,
+   "hasta": 10,
+   "recorte": [
+    400,
+    0,
+    720,
+    720
+   ],
+   "encaje": {
+    "alto": 800,
+    "x": -40,
+    "y": 180
+   },
+   "repetir": 1,
+   "nota": "Silueta de Acero, martes 1. Polea baja roja, manilla doble, cuña de madera. Imagen de ChatGPT (de pie y abajo) desde el video de referencia IMG_9576 de la dueña (no se sube); video de Gemini que parte desde abajo (el primero, ejercicio-gemini.mp4, bajaba solo a la mitad).",
+   "solo_piel": "todo",
+   "intensidad": 0.8,
+   "musculo_kf": [
+    [
+     0,
+     432,
+     686,
+     50,
+     22
+    ],
+    [
+     12,
+     432,
+     686,
+     50,
+     22
+    ],
+    [
+     24,
+     432,
+     647,
+     22,
+     50
+    ],
+    [
+     36,
+     432,
+     647,
+     22,
+     50
+    ],
+    [
+     48,
+     404,
+     663,
+     38,
+     33
+    ],
+    [
+     60,
+     432,
+     686,
+     50,
+     22
+    ],
+    [
+     72,
+     432,
+     686,
+     50,
+     22
+    ],
+    [
+     84,
+     432,
+     647,
+     22,
+     50
+    ],
+    [
+     96,
+     432,
+     647,
+     22,
+     50
+    ],
+    [
+     108,
+     404,
+     663,
+     38,
+     33
+    ],
+    [
+     120,
+     432,
+     686,
+     50,
+     22
+    ],
+    [
+     132,
+     404,
+     663,
+     38,
+     33
+    ],
+    [
+     144,
+     432,
+     647,
+     22,
+     50
+    ],
+    [
+     156,
+     404,
+     663,
+     38,
+     33
+    ],
+    [
+     168,
+     432,
+     686,
+     50,
+     22
+    ],
+    [
+     180,
+     432,
+     686,
+     50,
+     22
+    ],
+    [
+     192,
+     404,
+     663,
+     38,
+     33
+    ],
+    [
+     204,
+     432,
+     647,
+     22,
+     50
+    ],
+    [
+     216,
+     404,
+     663,
+     38,
+     33
+    ],
+    [
+     228,
+     432,
+     686,
+     50,
+     22
+    ],
+    [
+     240,
+     432,
+     686,
+     50,
+     22
+    ]
+   ]
+  }
+ ]
+}
