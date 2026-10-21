@@ -1,0 +1,141 @@
+{
+ "titulo": "SENTADILLA PÉNDULO EN MÁQUINA",
+ "series": "3 × 8-10",
+ "partes": [
+  {
+   "video": "fuentes/ejercicio-gemini.mp4",
+   "desde": 0,
+   "hasta": 10,
+   "recorte": [
+    500,
+    0,
+    720,
+    720
+   ],
+   "encaje": {
+    "alto": 800,
+    "x": -40,
+    "y": 180
+   },
+   "lento": 1.5,
+   "repetir": 1,
+   "nota": "Silueta de Acero, martes 2 (reemplaza a la prensa). Máquina Lady Reysan de la terraza, sin el nombre. Imagen de ChatGPT en posición baja desde el video de referencia IMG_9584 de la dueña (no se sube); video de Gemini. La cámara se mueve: el rojo sigue el muslo cuadro a cuadro.",
+   "solo_piel": "todo",
+   "intensidad": 0.8,
+   "musculo_kf": [
+    [
+     0,
+     333,
+     647,
+     45,
+     22
+    ],
+    [
+     16,
+     347,
+     639,
+     38,
+     30
+    ],
+    [
+     32,
+     360,
+     620,
+     22,
+     45
+    ],
+    [
+     48,
+     328,
+     633,
+     22,
+     45
+    ],
+    [
+     64,
+     360,
+     652,
+     45,
+     22
+    ],
+    [
+     80,
+     347,
+     660,
+     45,
+     22
+    ],
+    [
+     96,
+     347,
+     633,
+     38,
+     30
+    ],
+    [
+     112,
+     360,
+     655,
+     45,
+     22
+    ],
+    [
+     128,
+     333,
+     660,
+     45,
+     22
+    ],
+    [
+     144,
+     347,
+     620,
+     22,
+     45
+    ],
+    [
+     160,
+     333,
+     660,
+     45,
+     22
+    ],
+    [
+     176,
+     347,
+     660,
+     45,
+     22
+    ],
+    [
+     192,
+     355,
+     633,
+     22,
+     45
+    ],
+    [
+     208,
+     333,
+     655,
+     38,
+     30
+    ],
+    [
+     224,
+     360,
+     660,
+     45,
+     22
+    ],
+    [
+     240,
+     360,
+     660,
+     45,
+     22
+    ]
+   ]
+  }
+ ]
+}
