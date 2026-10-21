@@ -64,17 +64,17 @@
   {
    "weekday": "Martes",
    "title": "Pierna · cuádriceps",
-   "focus": "Smith · prensa · búlgara · cuádriceps · pantorrillas",
+   "focus": "polea · prensa · búlgara · cuádriceps · pantorrillas",
    "warmup": "Bicicleta de spinning suave — 6 minutos",
    "exercises": [
     {
-     "name": "Sentadilla en Smith",
+     "name": "Sentadilla en polea con talones elevados",
      "sets": "3 × 10-12",
      "rest": "75 seg",
-     "tip": "Ajusta la posición de pies y baja con control; mantén rodillas alineadas con los pies.",
-     "equip": "Barra guiada",
+     "tip": "De frente a la polea baja, con los pies sobre la cuña y la manilla doble en las manos con los brazos estirados. Baja lento hasta abajo con el torso derecho y las rodillas hacia adelante, y sube empujando con todo el pie. ⚠️ No despegues los pies de la cuña ni dejes que las rodillas se vayan hacia adentro.",
+     "equip": "Polea baja · manilla doble · cuña",
      "muscle": "Cuádriceps · glúteos",
-     "video": "assets/impulso-total/sentadilla-smith.mp4?v=1"
+     "video": "assets/silueta-de-acero/sentadilla-polea-talones-elevados.mp4?v=1"
     },
     {
      "name": "Prensa de piernas",
