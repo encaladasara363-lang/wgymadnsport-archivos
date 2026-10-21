@@ -1,0 +1,18 @@
+{
+  "titulo": "CURL DE BÍCEPS EN POLEA BAJA",
+  "series": "3 × 12",
+  "partes": [
+    {
+      "video": "fuentes/ejercicio-gemini.mp4",
+      "desde": 0,
+      "hasta": 10,
+      "recorte": [376, 0, 720, 720],
+      "encaje": {"alto": 800, "x": -40, "y": 180},
+      "repetir": 1,
+      "nota": "Silueta de Acero. Polea baja roja junto a la máquina 13, barra corta. Imagen de ChatGPT desde el video de referencia IMG_9572 de la dueña (no se sube); video de Gemini.",
+      "solo_piel": "todo",
+      "intensidad": 0.8,
+      "musculo_kf": [[0, 382, 513, 18, 30], [240, 382, 513, 18, 30]]
+    }
+  ]
+}
