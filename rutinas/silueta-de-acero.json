@@ -52,10 +52,10 @@
      "name": "Curl de bíceps en polea baja",
      "sets": "3 × 12",
      "rest": "60 seg",
-     "tip": "De pie frente a la polea baja, toma la barra con las palmas hacia arriba y codos pegados al cuerpo. Sube flexionando solo los codos y baja lento. ⚠️ No balancees el tronco ni separes los codos.",
-     "equip": "Polea baja · barra recta",
+     "tip": "De pie junto a la polea baja, toma la barra corta con las palmas hacia arriba y los codos pegados al cuerpo. Sube la barra hasta el pecho doblando solo los codos, aprieta un segundo y baja lento hasta estirar los brazos. ⚠️ No balancees el tronco ni separes los codos del cuerpo.",
+     "equip": "Polea baja · barra corta",
      "muscle": "Bíceps",
-     "video": "assets/silueta-de-acero/curl-biceps-polea.mp4?v=1"
+     "video": "assets/silueta-de-acero/curl-biceps-polea-baja.mp4?v=1"
     }
    ],
    "cooldownTitle": "Cardio opcional",
