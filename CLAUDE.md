@@ -611,6 +611,9 @@ repositorio: los cambios los aplica la dueña.
   abre al socio con todo escrito (`restaurarDesdeEnlace_`, se borra de la dirección al cargar); la dueña solo toca
   Guardar. Los datos van solo en el enlace que se le manda por el chat, nunca en el archivo. Las mediciones antiguas
   se sacan del historial de git de `mediciones.json` (antes del commit 055e044) buscando el `medId` del socio.
+  El servicio sigue listando la fecha recuperada en `fechasEliminadas`; por eso `leerMediciones_` ignora las fechas
+  borradas que el servicio sí trae en sus registros y agrega al historial del equipo las que le falten (caso Danae:
+  la tarjeta mostraba el 24-09 y Control Físico lo escondía).
 - **`mediciones.json` (público) quedó vacío el 02-10-2026**: la dueña
   subió las 32 mediciones antiguas al servicio (confirmadas) y se
   vació el archivo. No volver a escribir mediciones ahí; el historial
