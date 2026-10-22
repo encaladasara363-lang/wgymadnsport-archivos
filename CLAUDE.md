@@ -1889,6 +1889,9 @@ probado: ella se activó desde el mesón y entró a la app).
   comentario y el WhatsApp a Sara). En el mesón la caja «🥗 WGYMNUTRI» trae
   «Activar 1 mes» y «Activar 3 meses»; el pack se registra renovando el Full
   Mensual en la ficha como siempre + «Activar 1 mes».
+  **Si la respuesta falla (22-10-2026, Matías Abello: salió «no se pudo guardar» tres veces y las tres
+  quedaron en la hoja):** antes de avisar el error, `guardarNutri` vuelve a leer `listarNutri`; si ya
+  trae la fecha nueva, lo da por guardado y borra el aviso.
 - **Actualización automática (10-10-2026):** `wgymnutri.html` trae `NUTRI_VERSION`
   y compara con `nutri-version.txt`; si el archivo es mayor, se recarga sola.
   **Cada vez que se cambie `wgymnutri.html`, subir los dos números juntos
