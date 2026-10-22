@@ -123,13 +123,13 @@
    "warmup": "Remadora suave — 6 minutos",
    "exercises": [
     {
-     "name": "Press militar",
+     "name": "Press militar en Smith",
      "sets": "3 × 8-10",
      "rest": "90 seg",
-     "tip": "Mantén espalda y pelvis apoyadas; sube sin encoger hombros ni bloquear codos.",
-     "equip": "Máquina",
+     "tip": "De pie, pies a lo ancho de la cadera y abdomen firme. La barra parte adelante, a la altura del mentón; empuja hacia arriba hasta estirar los brazos y baja lento. ⚠️ No arquees la zona lumbar ni lleves la barra detrás de la nuca.",
+     "equip": "Máquina Smith",
      "muscle": "Deltoides · tríceps",
-     "video": "assets/impulso-total/press-militar.mp4?v=1"
+     "video": "assets/silueta-de-acero/press-militar-smith.mp4?v=1"
     },
     {
      "name": "Remo con mancuerna a una mano",
