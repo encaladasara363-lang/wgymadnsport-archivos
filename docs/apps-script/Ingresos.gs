@@ -450,11 +450,14 @@ function activarNutri_(e) {
       if (normNombre_(datos[i][0]) === nombre && normNombre_(datos[i][1]) === apellido) { fila = i + 1; break; }
     }
     var ahora = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm");
+    /* Si la fecha ya estaba guardada, es el mismo «Activar» tocado de nuevo (22-10-2026: Matías y José
+       quedaron con 3 y 4 ventas iguales porque al mesón no le llegaba la respuesta): no se anota otra venta. */
+    var repetida = fila && hasta && fechaNutri_(datos[fila - 1][2]) === hasta;
     if (fila) hoja.getRange(fila, 3, 1, 2).setValues([[hasta, ahora]]);
     else hoja.appendRow([nombreTxt, apellidoTxt, hasta, ahora]);
     /* Cada activación pagada queda anotada en «Ventas WGYMNUTRI» (18-10-2026, panel de ventas del mesón). */
     var meses = Number(p.meses) || 0, monto = Number(p.monto) || 0;
-    if (hasta && meses > 0) hojaVentasNutri_().appendRow([ahora, nombreTxt, apellidoTxt, meses, monto]);
+    if (hasta && meses > 0 && !repetida) hojaVentasNutri_().appendRow([ahora, nombreTxt, apellidoTxt, meses, monto]);
     try { CacheService.getScriptCache().remove("nutri_lista"); } catch (err) {}
     return respond_(e, { ok: true, nutri: true, hasta: hasta });
   } finally { lock.releaseLock(); }
@@ -484,10 +487,30 @@ function ventasNutri_(e) {
       var f = datos[i][0] instanceof Date ? Utilities.formatDate(datos[i][0], TZ_INGRESOS_, "yyyy-MM-dd HH:mm") : String(datos[i][0] || "");
       if (f.slice(0, 7) !== mes) continue;
       var monto = Number(datos[i][4]) || 0; total += monto;
-      ventas.push({ f: f, n: String(datos[i][1] || ""), a: String(datos[i][2] || ""), meses: Number(datos[i][3]) || 0, monto: monto });
+      ventas.push({ fila: i + 1, f: f, n: String(datos[i][1] || ""), a: String(datos[i][2] || ""), meses: Number(datos[i][3]) || 0, monto: monto });
     }
-    return respond_(e, { ok: true, ventasNutri: true, mes: mes, ventas: ventas, total: total });
+    return respond_(e, { ok: true, ventasNutri: true, borrar: true, mes: mes, ventas: ventas, total: total });
   } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
+}
+/* 🗑 Borrar una venta desde el mesón (22-10-2026, la dueña: ventas repetidas). POST con la clave: fila +
+   nombre, apellido y fecha de esa fila, para no borrar otra si la hoja cambió entre medio. */
+function borrarVentaNutri_(e) {
+  var p = e.parameter;
+  if (!claveValida_(p)) return respond_(e, { ok: false, error: "clave incorrecta" });
+  var fila = Number(p.fila) || 0;
+  if (fila < 2) return respond_(e, { ok: false, error: "faltan datos" });
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) return respond_(e, { ok: false, error: "ocupado, intenta de nuevo" });
+  try {
+    var hoja = hojaVentasNutri_();
+    if (fila > hoja.getLastRow()) return respond_(e, { ok: false, error: "ya no está" });
+    var r = hoja.getRange(fila, 1, 1, 3).getValues()[0];
+    var f = r[0] instanceof Date ? Utilities.formatDate(r[0], TZ_INGRESOS_, "yyyy-MM-dd HH:mm") : String(r[0] || "");
+    if (f !== String(p.f || "") || normNombre_(r[1]) !== normNombre_(p.nombre) || normNombre_(r[2]) !== normNombre_(p.apellido))
+      return respond_(e, { ok: false, error: "la hoja cambió, actualiza e intenta de nuevo" });
+    hoja.deleteRow(fila);
+    return respond_(e, { ok: true });
+  } finally { lock.releaseLock(); }
 }
 
 /* ── Productos escaneados de WGYMNUTRI (10-10-2026, la dueña: "escanear una
@@ -705,6 +728,7 @@ function accionIngresosPost_(e) {
     case "activarNutri": return activarNutri_(e);
     case "rankingAdmin": return rankingAdmin_(e);
     case "ventasNutri": return ventasNutri_(e);
+    case "borrarVentaNutri": return borrarVentaNutri_(e);
   }
   return null;
 }

@@ -693,8 +693,20 @@ function verVentasNutri_(){
    var v = d.ventas || [];
    tot.textContent = "$" + String(d.total || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
    document.getElementById("nutriMes").textContent = d.mes + " · " + v.length + (v.length === 1 ? " venta" : " ventas");
-   cv.innerHTML = '<summary class="rank-grupo">💰 Ventas de este mes · ' + v.length + '</summary>' + (v.length ? '<table class="rank-tabla"><thead><tr><th>Fecha</th><th>Socio</th><th>Meses</th><th>Monto</th></tr></thead><tbody>' +
-    v.map(function(x){ return '<tr><td>' + fechaCL(x.f.slice(0, 10)) + '</td><td><b>' + escRank_((x.n + " " + x.a).toUpperCase()) + '</b></td><td>' + x.meses + '</td><td class="rank-dias">$' + String(x.monto).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '</td></tr>'; }).join("") + '</tbody></table>' : '<p class="rank-ayuda">Todavía no hay ventas anotadas este mes.</p>');
+   /* 🗑 por venta (22-10-2026, la dueña: ventas repetidas; Versión 23 del Apps Script, que manda «borrar»). */
+   var tacho = !!d.borrar;
+   cv.innerHTML = '<summary class="rank-grupo">💰 Ventas de este mes · ' + v.length + '</summary>' + (v.length ? '<table class="rank-tabla"><thead><tr><th>Fecha</th><th>Socio</th><th>Meses</th><th>Monto</th>' + (tacho ? '<th></th>' : '') + '</tr></thead><tbody>' +
+    v.map(function(x, i){ return '<tr><td>' + fechaCL(x.f.slice(0, 10)) + ' ' + escRank_(x.f.slice(11, 16)) + '</td><td><b>' + escRank_((x.n + " " + x.a).toUpperCase()) + '</b></td><td>' + x.meses + '</td><td class="rank-dias">$' + String(x.monto).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '</td>' + (tacho ? '<td><button type="button" class="vn-borrar" data-i="' + i + '" title="Borrar esta venta" style="background:none;border:0;font-size:20px;cursor:pointer">🗑</button></td>' : '') + '</tr>'; }).join("") + '</tbody></table>' : '<p class="rank-ayuda">Todavía no hay ventas anotadas este mes.</p>');
+   cv.open = true;
+   cv.querySelectorAll(".vn-borrar").forEach(function(bt){ bt.addEventListener("click", function(){
+    var x = v[+bt.dataset.i];
+    if(!confirm("¿Borrar esta venta?\n\n" + (x.n + " " + x.a).toUpperCase() + " · " + fechaCL(x.f.slice(0, 10)) + " " + x.f.slice(11, 16) + " · $" + String(x.monto).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "\n\nSolo se borra de las ventas: la fecha de WGYMNUTRI del socio no cambia.")) return;
+    bt.disabled = true; bt.textContent = "⏳";
+    llamarSocioApi_("borrarVentaNutri", { fila:x.fila, nombre:x.n, apellido:x.a, f:x.f }, function(ok, r){
+     if(ok){ verVentasNutri_(); return; }
+     bt.disabled = false; bt.textContent = "🗑"; alert("No se pudo borrar: " + r);
+    });
+   }); });
   });
  });
 }

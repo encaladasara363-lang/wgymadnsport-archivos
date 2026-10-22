@@ -161,3 +161,15 @@ WGYMNUTRI» de `control.html` muestra lo que entró en el mes. Las activaciones 
 de instalar esta versión no quedan anotadas. Se instala igual que las anteriores: pegar
 `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar → Administrar implementaciones →
 lápiz → Versión nueva → Implementar (para volver atrás: Versión 21).
+
+## Versión 23 (22-10-2026): borrar ventas de WGYMNUTRI y sin ventas repetidas
+
+- Acción nueva `borrarVentaNutri` (POST con la clave de administración): cada venta del panel
+  «💰 Ventas de este mes» del mesón trae un 🗑 para borrarla. Solo borra la fila de «Ventas
+  WGYMNUTRI»; la fecha de WGYMNUTRI del socio no cambia.
+- `activarNutri` ya no anota otra venta si la fecha guardada del socio era la misma (el mismo
+  «Activar» tocado de nuevo cuando al mesón no le llegaba la respuesta).
+
+Se instala igual que las anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar,
+Implementar → Administrar implementaciones → lápiz → Versión nueva → Implementar (para volver
+atrás: Versión 22).
