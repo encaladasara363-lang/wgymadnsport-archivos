@@ -603,6 +603,10 @@ repositorio: los cambios los aplica la dueña.
   peso 20-300, grasa 3-70, IMC 10-80, estatura 100-230 cm): si falta la coma y dividiendo por 10 calza,
   la corrige sola en pantalla (454 → 45,4); la estatura en metros pasa a cm (1,59 → 159); si no calza,
   dice qué casillero revisar en vez de mandar datos que el servicio rechaza.
+- **Fecha de la medición y ↩ Deshacer (22-10-2026, la dueña borró sin querer la medición del 24-09 de Danae
+  Neculpan):** `control-fisico.html` trae el casillero `#inFecha` (por defecto hoy, no acepta fechas futuras) para volver
+  a cargar una medición antigua con su fecha; al guardar una fecha que estaba borrada, sale de la lista de borradas del
+  equipo. Al borrar una medición aparece «↩ Deshacer», que devuelve sus datos al formulario para guardarla de nuevo.
 - **`mediciones.json` (público) quedó vacío el 02-10-2026**: la dueña
   subió las 32 mediciones antiguas al servicio (confirmadas) y se
   vació el archivo. No volver a escribir mediciones ahí; el historial

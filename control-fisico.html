@@ -320,6 +320,10 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
    <div class="campo"><label>IMC</label><input type="text" inputmode="decimal" autocomplete="off" id="inImc" placeholder="—"></div>
   </div>
 
+  <!-- Fecha de la medición (22-10-2026, la dueña borró sin querer la del 24-09 de una socia): por defecto
+       hoy; se cambia solo para volver a cargar una medición antigua. -->
+  <div class="campo" style="margin-top:10px"><label>Fecha de la medición (cámbiala solo si es una medición antigua)</label><input type="date" id="inFecha"></div>
+
   <div class="chip-row">
    <span class="chip mudo" id="chipGrasa"><span class="dot"></span>% Grasa —</span>
    <span class="chip mudo" id="chipImc"><span class="dot"></span>IMC —</span>
@@ -673,7 +677,9 @@ document.getElementById("btnGuardar").addEventListener("click", async function()
  try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
  if(!clave) clave=await pedirClaveMed_();
  if(!clave){msg.hidden=false;msg.textContent="No se envió: tocaste Cancelar sin escribir la clave. Toca Guardar registro de nuevo y escríbela.";return;}
- var registro={fecha:hoyISO(),edad:nEdad.v,
+ var inFecha=document.getElementById("inFecha"), fechaMed=(inFecha&&inFecha.value)||hoyISO();
+ if(fechaMed>hoyISO()){ msg.hidden=false; msg.textContent="La fecha de la medición no puede ser futura."; return; }
+ var registro={fecha:fechaMed,edad:nEdad.v,
   peso:nPeso.v,
   grasa:nGrasa.v,
   imc:nImc.v};
@@ -695,6 +701,8 @@ document.getElementById("btnGuardar").addEventListener("click", async function()
   if(!confirmado) throw Error("no se pudo confirmar el guardado");
   try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
   s.medId=idPropuesto;
+  /* Si se vuelve a cargar una fecha que se había borrado, deja de estar en la lista de borradas del equipo. */
+  var borr=fechasBorradas(idPropuesto); if(borr.indexOf(registro.fecha)>=0) guardarBorradas(idPropuesto, borr.filter(function(f){return f!==registro.fecha;}));
   var local=socioGuardado(s.n,s.a);
   if(!local){local={n:s.n,a:s.a,sexo:sexoActual,registros:[]};datos.socios.push(local);}
   local.sexo=sexoActual;local.estatura=est;
@@ -702,8 +710,8 @@ document.getElementById("btnGuardar").addEventListener("click", async function()
   if(indice<0)local.registros.push(registro);else local.registros[indice]=registro;
   local.registros.sort(function(a,b){return a.fecha.localeCompare(b.fecha);});
   guardarLocal();pintarHistorial(local);
-  msg.textContent="Medición guardada. Ya está disponible en la tarjeta QR.";
-  inPeso.value="";inGrasa.value="";inImc.value="";
+  msg.textContent="Medición "+(registro.fecha===hoyISO()?"":"del "+fechaLegible(registro.fecha)+" ")+"guardada. Ya está disponible en la tarjeta QR.";
+  inPeso.value="";inGrasa.value="";inImc.value="";if(inFecha)inFecha.value=hoyISO();
  })
  .catch(function(err){
   if(err.message==="clave incorrecta") {claveRechazada_=true;try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(e){}}
@@ -781,7 +789,7 @@ leerMediciones_=function(medid){return leerMedicionesOriginal(medid).then(functi
  return res;
 });};
 var elegirOriginal=elegir;
-elegir=function(s){elegirOriginal(s);leerMediciones_(medIdDe(s.n,s.a));};
+elegir=function(s){elegirOriginal(s);var f=document.getElementById("inFecha");if(f){f.value=hoyISO();f.max=hoyISO();}leerMediciones_(medIdDe(s.n,s.a));};
 document.getElementById("histBody").addEventListener("click",async function(ev){
  var b=ev.target.closest("button[data-fecha]"),s=socioActual;if(!b||!s||b.disabled)return;
  var fecha=b.dataset.fecha,medid=medIdDe(s.n,s.a),msg=document.getElementById("guardadoMsg");
@@ -789,6 +797,8 @@ document.getElementById("histBody").addEventListener("click",async function(ev){
  var clave="";try{clave=localStorage.getItem("wgym_clave_mediciones_v1")||"";}catch(e){}
  if(!clave)clave=await pedirClaveMed_();
  if(!clave)return;
+ var locB=socioGuardado(s.n,s.a), copia=locB&&locB.registros.filter(function(r){return r.fecha===fecha;})[0];
+ copia=copia?JSON.parse(JSON.stringify(copia)):null;
  b.disabled=true;msg.hidden=false;msg.textContent="Borrando medición...";
  try{
   var respuesta=await fetch(MEDICIONES_URL,{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({clave:clave,medid:medid,fecha:fecha})});
@@ -797,6 +807,18 @@ document.getElementById("histBody").addEventListener("click",async function(ev){
   if(!comprobacion||!comprobacion.ok||comprobacion.fechasEliminadas.indexOf(fecha)<0)throw Error("no se pudo confirmar el borrado");
   try{localStorage.setItem("wgym_clave_mediciones_v1",clave);}catch(e){}
   msg.textContent="Medición del "+fechaLegible(fecha)+" borrada de la tarjeta QR.";
+  /* ↩ Deshacer (22-10-2026): vuelve a poner los datos borrados en el formulario con su fecha; basta tocar Guardar registro. */
+  if(copia){
+   var bd=document.createElement("button");bd.type="button";bd.textContent="↩ Deshacer";
+   bd.style.cssText="margin-left:10px;border:1px solid #d4af37;border-radius:6px;background:transparent;color:#d4af37;font-family:inherit;font-size:13px;font-weight:800;padding:4px 9px;cursor:pointer";
+   bd.addEventListener("click",function(){
+    var fmt=function(v){return v==null||v===""?"":String(v).replace(".",",");};
+    document.getElementById("inFecha").value=copia.fecha;inEdad.value=fmt(copia.edad);
+    inPeso.value=fmt(copia.peso);inGrasa.value=fmt(copia.grasa);inImc.value=fmt(copia.imc);
+    actualizarChips();msg.textContent="Datos del "+fechaLegible(copia.fecha)+" de vuelta en el formulario. Toca Guardar registro para recuperarla.";
+   });
+   msg.appendChild(bd);
+  }
  }catch(e){if(e.message==="clave incorrecta"){claveRechazada_=true;try{localStorage.removeItem("wgym_clave_mediciones_v1");}catch(x){}}msg.textContent="No se borró: "+e.message;b.disabled=false;}
 });
 async function claveMed_(){
