@@ -1975,8 +1975,16 @@ function abrirFicha(s){
    /* meses y monto quedan en «Ventas WGYMNUTRI» para el panel de ventas (18-10-2026). */
    var extra = meses ? { meses:meses, monto:meses === 3 ? 8000 : 3000 * meses } : {};
    llamarSocioApi_("activarNutri", Object.assign({ nombre:d.n, apellido:d.a, hasta:hasta }, extra), function(ok, data){
-    if(ok){ NUTRI[nutriLlave_(d.n, d.a)] = hasta; pintarNutri(); }
-    else { pintarNutri(); var av = velo && velo.querySelector("#fAviso"); if(av) av.textContent = "No se pudo guardar WGYMNUTRI: " + data; }
+    var av = velo && velo.querySelector("#fAviso");
+    if(ok){ NUTRI[nutriLlave_(d.n, d.a)] = hasta; if(av) av.textContent = ""; pintarNutri(); return; }
+    /* A veces la hoja sí guarda pero la respuesta no llega bien (22-10-2026, Matías Abello: tres
+       «no se pudo guardar» y las tres activaciones quedaron en la hoja). Antes de avisar el error,
+       se vuelve a leer la lista: si ya trae la fecha nueva, se da por guardado. */
+    nTxt.textContent = "🥗 WGYMNUTRI: revisando…";
+    cargarNutri_(function(){
+     if(nutriHasta_(d.n, d.a) === hasta){ if(av) av.textContent = ""; pintarNutri(); return; }
+     pintarNutri(); if(av) av.textContent = "No se pudo guardar WGYMNUTRI (" + data + "). Revisa la fecha antes de tocar de nuevo.";
+    });
    });
   };
   var sumarNutri = function(meses){
