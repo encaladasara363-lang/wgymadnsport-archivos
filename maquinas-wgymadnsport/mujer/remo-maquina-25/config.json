@@ -1,0 +1,118 @@
+{
+ "titulo": "REMO EN T CON APOYO DE PECHO",
+ "series": "3 × 10-12",
+ "partes": [
+  {
+   "video": "fuentes/ejercicio-grok-1.mp4",
+   "desde": 0,
+   "hasta": 7,
+   "recorte": [
+    250,
+    0,
+    800,
+    720
+   ],
+   "encaje": {
+    "alto": 648,
+    "x": 0,
+    "y": 230
+   },
+   "nota": "Silueta de Acero, miércoles 2 (reemplaza al remo con mancuerna; máquina n.º 25 Lady Reysan, 22-10-2026). Referencia: video de TikTok que mandó la dueña (no se sube). Imagen de ChatGPT con el pecho en el cojín (imagen-abajo.png); video de Grok: la cámara se mueve, la dueña lo aprobó así. Rojo en dorsales.",
+   "solo_piel": "todo",
+   "intensidad": 0.8,
+   "musculo_kf": [
+    [
+     0,
+     333,
+     396,
+     40,
+     26
+    ],
+    [
+     12,
+     318,
+     403,
+     40,
+     26
+    ],
+    [
+     24,
+     318,
+     388,
+     40,
+     26
+    ],
+    [
+     36,
+     318,
+     388,
+     40,
+     26
+    ],
+    [
+     48,
+     318,
+     396,
+     40,
+     26
+    ],
+    [
+     60,
+     326,
+     403,
+     40,
+     26
+    ],
+    [
+     72,
+     326,
+     388,
+     40,
+     26
+    ],
+    [
+     84,
+     326,
+     388,
+     40,
+     26
+    ],
+    [
+     96,
+     333,
+     380,
+     40,
+     26
+    ],
+    [
+     108,
+     318,
+     373,
+     40,
+     26
+    ],
+    [
+     120,
+     318,
+     380,
+     40,
+     26
+    ],
+    [
+     132,
+     333,
+     403,
+     40,
+     26
+    ],
+    [
+     144,
+     326,
+     388,
+     40,
+     26
+    ]
+   ]
+  }
+ ]
+}
