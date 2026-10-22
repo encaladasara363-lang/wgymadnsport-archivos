@@ -1892,6 +1892,9 @@ probado: ella se activó desde el mesón y entró a la app).
   **Si la respuesta falla (22-10-2026, Matías Abello: salió «no se pudo guardar» tres veces y las tres
   quedaron en la hoja):** antes de avisar el error, `guardarNutri` vuelve a leer `listarNutri`; si ya
   trae la fecha nueva, lo da por guardado y borra el aviso.
+  **🗑 Borrar ventas y sin repetidas (22-10-2026, Versión 23 del Apps Script, falta que la dueña la instale):**
+  cada venta de «💰 Ventas de este mes» trae 🗑 (`borrarVentaNutri`, POST con clave; verifica fila + nombre + fecha
+  y solo borra la venta, no la fecha del socio), y `activarNutri` no anota otra venta si la fecha del socio ya era esa.
 - **Actualización automática (10-10-2026):** `wgymnutri.html` trae `NUTRI_VERSION`
   y compara con `nutri-version.txt`; si el archivo es mayor, se recarga sola.
   **Cada vez que se cambie `wgymnutri.html`, subir los dos números juntos
