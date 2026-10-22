@@ -607,6 +607,10 @@ repositorio: los cambios los aplica la dueña.
   Neculpan):** `control-fisico.html` trae el casillero `#inFecha` (por defecto hoy, no acepta fechas futuras) para volver
   a cargar una medición antigua con su fecha; al guardar una fecha que estaba borrada, sale de la lista de borradas del
   equipo. Al borrar una medición aparece «↩ Deshacer», que devuelve sus datos al formulario para guardarla de nuevo.
+  **Enlace de recuperación:** `control-fisico.html?restaurar=1&socio=…&fecha=…&sexo=…&edad=…&est=…&peso=…&grasa=…&imc=…`
+  abre al socio con todo escrito (`restaurarDesdeEnlace_`, se borra de la dirección al cargar); la dueña solo toca
+  Guardar. Los datos van solo en el enlace que se le manda por el chat, nunca en el archivo. Las mediciones antiguas
+  se sacan del historial de git de `mediciones.json` (antes del commit 055e044) buscando el `medId` del socio.
 - **`mediciones.json` (público) quedó vacío el 02-10-2026**: la dueña
   subió las 32 mediciones antiguas al servicio (confirmadas) y se
   vació el archivo. No volver a escribir mediciones ahí; el historial

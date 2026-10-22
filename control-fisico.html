@@ -502,7 +502,25 @@ Promise.all([
  }):antigua;
  return fetch("mediciones.json?v="+Date.now(),{cache:"no-store"})
   .then(function(r){return r.ok?r.json():null;}).then(incorporarPublicadas);
-}).catch(function(){});
+}).catch(function(){}).then(restaurarDesdeEnlace_);
+
+/* Enlace para recuperar una medición borrada (22-10-2026): ?restaurar=1&socio=NOMBRE APELLIDO&fecha=AAAA-MM-DD
+   &sexo=F&edad=&est=&peso=&grasa=&imc= abre a ese socio con los datos ya escritos; la dueña revisa y toca
+   Guardar registro. Los datos van solo en el enlace (nunca en este archivo) y se borran de la dirección al cargar. */
+function restaurarDesdeEnlace_(){
+ var q=new URLSearchParams(location.search); if(!q.get("restaurar")) return;
+ try{history.replaceState(null,"",location.pathname);}catch(e){}
+ var s=calzan(q.get("socio")||"")[0]; if(!s) return;
+ elegir(s);
+ var fmt=function(k){return String(q.get(k)||"").replace(".",",");};
+ if(q.get("sexo")){ sexoActual=q.get("sexo"); Array.prototype.forEach.call(document.querySelectorAll(".sexo-btn"),function(b){b.setAttribute("data-active",b.getAttribute("data-sexo")===sexoActual?"1":"0");}); }
+ if(q.get("fecha")) document.getElementById("inFecha").value=q.get("fecha");
+ if(q.get("edad")) inEdad.value=fmt("edad"); if(q.get("est")) inEstatura.value=fmt("est");
+ inPeso.value=fmt("peso"); inGrasa.value=fmt("grasa"); inImc.value=fmt("imc");
+ actualizarChips();
+ var msg=document.getElementById("guardadoMsg"); msg.hidden=false;
+ msg.textContent="Medición del "+fechaLegible(q.get("fecha")||hoyISO())+" lista para recuperar. Revisa los datos y toca Guardar registro.";
+}
 
 function calzan(q){
  q = normName(q);
