@@ -1870,12 +1870,12 @@ probado: ella se activó desde el mesón y entró a la app).
   `leerDatos`): si la clave del nombre actual no tiene días, copia la clave `wgymnutri_v1_…` del teléfono con el mismo
   primer nombre y un apellido en común que tenga más días (no borra la antigua) y avisa «Recuperamos tus datos».
   Ojo: en iPhone el ícono de la pantalla de inicio y Safari guardan por separado; datos de otro teléfono no se recuperan.
-- **De pago: $5.000 al mes (10-10-2026, pedido de la dueña).** Precio en
+- **De pago: $3.000 al mes (desde el 22-10-2026, pedido de la dueña; antes $5.000).** Precio en
   `pago-datos.js` (`nutri`). Quien no la tiene activa ve la pantalla
   «Activa WGYMNUTRI» (`#vPago`: datos de transferencia, copiar, WhatsApp a
   Sara, «Ya pagué: revisar de nuevo»). La dueña la activa desde la **ficha
   del socio en el mesón** (`control.html`, caja «🥗 WGYMNUTRI»: «Activar 1
-  mes ($5.000)» suma un mes desde hoy o desde la fecha vigente; «Quitar» la
+  mes ($3.000)» suma un mes desde hoy o desde la fecha vigente; «Quitar» la
   borra), que guarda en la hoja «WGYMNUTRI» con `activarNutri` (POST con la
   clave de administración); la app lee `listarNutri`. Ambas acciones viven en
   `docs/apps-script/Ingresos.gs` (instrucciones en
@@ -1883,8 +1883,9 @@ probado: ella se activó desde el mesón y entró a la app).
   tiene `listarNutri`, nadie la tiene activa y todos ven la pantalla de pago. El teléfono
   guarda la última fecha vista (`wgymnutri_activa_v1`) para abrir al instante.
 - **Ofertas (10-10-2026, pedido de la dueña):** en `pago-datos.js`
-  (`nutriOfertas`): 1 mes $5.000 · 3 meses $12.000 · pack «Full Mensual +
-  WGYMNUTRI» $36.000. La pantalla de pago deja elegir la opción (cambia monto,
+  (`nutriOfertas`): 1 mes $3.000 · 3 meses $8.000 · pack «Full Mensual +
+  WGYMNUTRI» $35.000 (desde el 22-10-2026; antes $5.000 · $12.000 · $36.000). Al cambiar un
+  precio, editar `pago-datos.js` y los textos/montos de la caja WGYMNUTRI en `control.html`. La pantalla de pago deja elegir la opción (cambia monto,
   comentario y el WhatsApp a Sara). En el mesón la caja «🥗 WGYMNUTRI» trae
   «Activar 1 mes» y «Activar 3 meses»; el pack se registra renovando el Full
   Mensual en la ficha como siempre + «Activar 1 mes».

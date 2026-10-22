@@ -508,7 +508,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
 
 </div>
 
-<script src="pago-datos.js?v=2"></script>
+<script src="pago-datos.js?v=3"></script>
 <script>  
 const LOGO_B64 = "assets/logo-oficial.webp";
 /* Se completa con el link de "Implementar como app web" de Google Apps Script. */
@@ -2327,13 +2327,14 @@ function renderEvolucion(s){
     cómo pagarla y la dueña la activa desde el mesón. */
  function renderNutriPromo_(){
   var box = document.getElementById("nutriCard"); if(!box) return;
-  var precio = (window.WGYM_PAGO && WGYM_PAGO.nutri && WGYM_PAGO.nutri.precio) || 5000;
+  var precio = (window.WGYM_PAGO && WGYM_PAGO.nutri && WGYM_PAGO.nutri.precio) || 3000;
+  var tri = ((window.WGYM_PAGO && WGYM_PAGO.nutriOfertas) || []).filter(function(o){ return o.id === "tri"; })[0];
   box.innerHTML = '<img src="assets/wgymnutri-logo.webp" alt="WGYMNUTRI">' +
    '<div class="np-tx"><p class="pago-kicker">🥗 Nuevo · WGYMNUTRI</p>' +
    '<p>Tu contador de calorías y proteínas:</p>' +
    '<ul class="np-lista"><li>📷 <b>Escanea el código de barras</b> de tus productos y ve sus calorías al instante</li>' +
    '<li>🥗 Más de 400 recetas saludables</li><li>🔥 Tu meta diaria, agua, racha y medallas</li></ul>' +
-   '<p><b>' + clp(precio) + ' al mes</b> o <b>3 meses por $12.000</b>. Pídela en recepción.</p>' +
+   '<p><b>' + clp(precio) + ' al mes</b> o <b>3 meses por ' + clp(tri ? tri.precio : 8000) + '</b>. Pídela en recepción.</p>' +
    '<a class="pago-btn principal" href="wgymnutri.html?desde=tarjeta">Ver WGYMNUTRI</a></div>';
   box.hidden = false;
  }
@@ -2440,7 +2441,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026101805", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102201", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

@@ -282,13 +282,13 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
   </div>
  </section>
 
- <!-- Pago de WGYMNUTRI ($5.000 al mes, 10-10-2026) -->
+ <!-- Pago de WGYMNUTRI ($3.000 al mes desde el 22-10-2026) -->
  <section id="vPago" class="gate" hidden>
   <img class="logo" src="assets/wgymnutri-logo.webp" alt="Logo WGYMNUTRI" style="width:min(48vw,180px)">
   <div>
    <p class="kick">Contador de calorías de WGYMADNSPORT</p>
    <h2 class="disp" style="font-size:40px">Activa <span style="color:var(--gold)">WGYMNUTRI</span></h2>
-   <p style="font-family:var(--num);font-size:46px;margin:6px 0 0;background:linear-gradient(90deg,#FF2D3A,#F2D16B);-webkit-background-clip:text;background-clip:text;color:transparent" id="pagoPrecio">$5.000</p>
+   <p style="font-family:var(--num);font-size:46px;margin:6px 0 0;background:linear-gradient(90deg,#FF2D3A,#F2D16B);-webkit-background-clip:text;background-clip:text;color:transparent" id="pagoPrecio">$3.000</p>
    <p class="muted" style="margin:0" id="pagoDetalle">al mes</p>
   </div>
   <div class="stack" id="pagoOfertas" style="text-align:left"></div>
@@ -341,7 +341,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 <div id="velo" class="velo" hidden><div class="hoja" id="hoja" role="dialog" aria-modal="true"></div></div>
 <canvas id="confeti" hidden></canvas>
 
-<script src="pago-datos.js?v=3"></script>
+<script src="pago-datos.js?v=4"></script>
 <script src="nutri-alimentos.js?v=27"></script>
 <script src="nutri-recetas.js?v=9"></script>
 <script>
@@ -465,7 +465,7 @@ function abrir(){
  enviarOrigen();
  iniciarApp();
 }
-/* ── WGYMNUTRI de pago ($5.000 al mes) ──
+/* ── WGYMNUTRI de pago ($3.000 al mes) ──
    La dueña la activa desde la ficha del socio en el mesón (hoja "WGYMNUTRI",
    acción listarNutri del Apps Script). Se guarda en el teléfono la última
    fecha vista para abrir al instante; la hoja la confirma por detrás. Si el
@@ -524,7 +524,7 @@ function revisarNutri(esperando){
 var ofertaSel = "mes";
 function ofertasNutri(){
  var P = window.WGYM_PAGO || {};
- return P.nutriOfertas || [{ id:"mes", nombre:(P.nutri || {}).nombre || "WGYMNUTRI mensual", precio:(P.nutri || {}).precio || 5000, meses:1, detalle:"1 mes de app" }];
+ return P.nutriOfertas || [{ id:"mes", nombre:(P.nutri || {}).nombre || "WGYMNUTRI mensual", precio:(P.nutri || {}).precio || 3000, meses:1, detalle:"1 mes de app" }];
 }
 function datosPago(){
  var P = window.WGYM_PAGO || {}, c = P.cuenta || {}, L = ofertasNutri();
@@ -2952,7 +2952,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102001", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102201", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
