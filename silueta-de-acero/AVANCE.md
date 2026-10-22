@@ -19,6 +19,7 @@ Martes 1 = «Sentadilla en polea con talones elevados» ✅ (reemplaza a la Smit
 Martes 2 = «Sentadilla péndulo en máquina» ✅ (reemplaza a la prensa; máquina de la terraza sin el nombre; referencia IMG_9584, no se sube; tres intentos de Gemini: el bueno parte desde abajo con los pies al centro, `imagen-abajo-pies-centro.png`; `lento: 1.5`).
 Martes 3 = «Sentadilla búlgara en polea baja» ✅ (reemplaza a la de mancuernas; montaje de la dueña: polea baja roja, cuña doble, soporte con rodillo rosado; referencia IMG_9083, no se sube; ahora con Grok: el 4.º intento quedó bien (1 repetición) y se armó ida-vuelta-ida para 3 repeticiones). Martes 4 y 5 (extensión de cuádriceps y elevación de talones) se quedan con sus videos actuales: **martes completo** (la dueña, 22-10-2026: "los 5").
 Miércoles 1 = «Press militar en Smith» ✅ (22-10-2026; de pie, imagen de ChatGPT desde la de la sentadilla en Smith, video de Grok de 2 repeticiones armado ida y vuelta; rojo en hombros).
+Miércoles 2 = «Remo en T con apoyo de pecho» ✅ (22-10-2026; máquina n.º 25, reemplaza al remo con mancuerna; referencia de TikTok, no se sube; video de Grok con cámara que se mueve, aprobado así por la dueña; rojo en dorsales).
 
 ## Lunes · Tren superior · espalda y bíceps
 1. Jalón al pecho — 3 × 8-10 · 90 seg · ✅ video listo
@@ -36,7 +37,7 @@ Miércoles 1 = «Press militar en Smith» ✅ (22-10-2026; de pie, imagen de Cha
 
 ## Miércoles · Tren superior · hombros, espalda y tríceps
 11. Press militar en Smith — 3 × 8-10 · 90 seg · ✅ video listo
-12. Remo con mancuerna a una mano — 3 × 10-12 por lado · 75 seg · 🎬 falta video
+12. Remo en T con apoyo de pecho — 3 × 10-12 · 75 seg · ✅ video listo
 13. Face pull en polea — 3 × 12-15 · 60 seg · ✅ video listo
 14. Pullover en polea alta — 3 × 12-15 · 60 seg · 🎬 falta video
 15. Extensión de tríceps en polea — 3 × 12-15 · 60 seg · ✅ video listo

@@ -132,13 +132,13 @@
      "video": "assets/silueta-de-acero/press-militar-smith.mp4?v=1"
     },
     {
-     "name": "Remo con mancuerna a una mano",
-     "sets": "3 × 10-12 por lado",
+     "name": "Remo en T con apoyo de pecho",
+     "sets": "3 × 10-12",
      "rest": "75 seg",
-     "tip": "Apoya una mano y una rodilla en el banco, espalda recta. Lleva la mancuerna hacia la cadera con el codo pegado al cuerpo y baja controlando. ⚠️ No redondees la espalda ni gires el tronco para subir el peso.",
-     "equip": "Banco · mancuerna",
-     "muscle": "Dorsales · espalda media",
-     "video": "assets/silueta-de-acero/remo-mancuerna.mp4?v=1"
+     "tip": "Pecho apoyado en el cojín y pies en las plataformas. Tira de las manillas hacia el abdomen con los codos pegados al cuerpo, junta las escápulas y baja lento hasta estirar los brazos. ⚠️ No despegues el pecho del cojín ni des tirones con la espalda baja.",
+     "equip": "Máquina n.º 25",
+     "muscle": "Dorsales · espalda alta · bíceps",
+     "video": "assets/silueta-de-acero/remo-t-apoyo-pecho.mp4?v=1"
     },
     {
      "name": "Face pull en polea",
