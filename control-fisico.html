@@ -803,7 +803,22 @@ pintarHistorial=function(previo){
 };
 var leerMedicionesOriginal=leerMediciones_;
 leerMediciones_=function(medid){return leerMedicionesOriginal(medid).then(function(res){
- if(res&&res.ok&&Array.isArray(res.fechasEliminadas))guardarBorradas(medid,res.fechasEliminadas);
+ /* Una fecha que el servicio todavía lista como borrada pero que SÍ trae en sus registros fue recuperada
+    (22-10-2026, Danae Neculpan: la tarjeta mostraba el 24-09 y este equipo lo escondía). Esa fecha se
+    muestra y, si falta en el historial del equipo, se agrega desde el servicio. */
+ var regsSrv=res&&res.ok&&res.socio&&Array.isArray(res.socio.registros)?res.socio.registros:[];
+ var fechasSrv=regsSrv.map(function(r){return r.fecha;});
+ if(res&&res.ok&&Array.isArray(res.fechasEliminadas))guardarBorradas(medid,res.fechasEliminadas.filter(function(f){return fechasSrv.indexOf(f)<0;}));
+ var s=socioActual;
+ if(s&&medIdDe(s.n,s.a)===medid&&regsSrv.length){
+  var local=socioGuardado(s.n,s.a),cambio=false;
+  if(!local){local={n:s.n,a:s.a,sexo:res.socio.sexo,estatura:res.socio.estatura,registros:[]};datos.socios.push(local);}
+  regsSrv.forEach(function(r){
+   if(!r||!r.fecha||local.registros.some(function(x){return x.fecha===r.fecha;}))return;
+   local.registros.push({fecha:r.fecha,edad:r.edad,peso:r.peso==null||r.peso===""?null:Number(r.peso),grasa:r.grasa==null||r.grasa===""?null:Number(r.grasa),imc:r.imc==null||r.imc===""?null:Number(r.imc)});cambio=true;
+  });
+  if(cambio){local.registros.sort(function(a,b){return a.fecha.localeCompare(b.fecha);});guardarLocal();pintarHistorial(local);}
+ }
  return res;
 });};
 var elegirOriginal=elegir;
