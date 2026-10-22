@@ -482,14 +482,15 @@ function ventasNutri_(e) {
   try {
     var mes = String(e.parameter.mes || "").trim();
     if (!/^\d{4}-\d{2}$/.test(mes)) mes = diaCL_(Date.now()).slice(0, 7);
-    var datos = hojaVentasNutri_().getDataRange().getValues(), ventas = [], total = 0;
+    var datos = hojaVentasNutri_().getDataRange().getValues(), ventas = [], total = 0, totalTodo = 0;
     for (var i = 1; i < datos.length; i++) {
       var f = datos[i][0] instanceof Date ? Utilities.formatDate(datos[i][0], TZ_INGRESOS_, "yyyy-MM-dd HH:mm") : String(datos[i][0] || "");
+      totalTodo += Number(datos[i][4]) || 0;   /* todo lo vendido desde que se anotan las ventas (22-10-2026) */
       if (f.slice(0, 7) !== mes) continue;
       var monto = Number(datos[i][4]) || 0; total += monto;
       ventas.push({ fila: i + 1, f: f, n: String(datos[i][1] || ""), a: String(datos[i][2] || ""), meses: Number(datos[i][3]) || 0, monto: monto });
     }
-    return respond_(e, { ok: true, ventasNutri: true, borrar: true, mes: mes, ventas: ventas, total: total });
+    return respond_(e, { ok: true, ventasNutri: true, borrar: true, mes: mes, ventas: ventas, total: total, totalTodo: totalTodo });
   } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
 /* 🗑 Borrar una venta desde el mesón (22-10-2026, la dueña: ventas repetidas). POST con la clave: fila +

@@ -1895,6 +1895,8 @@ probado: ella se activó desde el mesón y entró a la app).
   **🗑 Borrar ventas y sin repetidas (22-10-2026, Versión 23 del Apps Script, falta que la dueña la instale):**
   cada venta de «💰 Ventas de este mes» trae 🗑 (`borrarVentaNutri`, POST con clave; verifica fila + nombre + fecha
   y solo borra la venta, no la fecha del socio), y `activarNutri` no anota otra venta si la fecha del socio ya era esa.
+  Las ventas se van sumando (22-10-2026, la dueña): columna «Suma» con el acumulado del mes, fila «TOTAL DEL MES» y
+  «Total vendido desde el comienzo» (`totalTodo` de `ventasNutri`, también de la Versión 23).
 - **Actualización automática (10-10-2026):** `wgymnutri.html` trae `NUTRI_VERSION`
   y compara con `nutri-version.txt`; si el archivo es mayor, se recarga sola.
   **Cada vez que se cambie `wgymnutri.html`, subir los dos números juntos
