@@ -694,9 +694,12 @@ function verVentasNutri_(){
    tot.textContent = "$" + String(d.total || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
    document.getElementById("nutriMes").textContent = d.mes + " · " + v.length + (v.length === 1 ? " venta" : " ventas");
    /* 🗑 por venta (22-10-2026, la dueña: ventas repetidas; Versión 23 del Apps Script, que manda «borrar»). */
-   var tacho = !!d.borrar;
-   cv.innerHTML = '<summary class="rank-grupo">💰 Ventas de este mes · ' + v.length + '</summary>' + (v.length ? '<table class="rank-tabla"><thead><tr><th>Fecha</th><th>Socio</th><th>Meses</th><th>Monto</th>' + (tacho ? '<th></th>' : '') + '</tr></thead><tbody>' +
-    v.map(function(x, i){ return '<tr><td>' + fechaCL(x.f.slice(0, 10)) + ' ' + escRank_(x.f.slice(11, 16)) + '</td><td><b>' + escRank_((x.n + " " + x.a).toUpperCase()) + '</b></td><td>' + x.meses + '</td><td class="rank-dias">$' + String(x.monto).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '</td>' + (tacho ? '<td><button type="button" class="vn-borrar" data-i="' + i + '" title="Borrar esta venta" style="background:none;border:0;font-size:20px;cursor:pointer">🗑</button></td>' : '') + '</tr>'; }).join("") + '</tbody></table>' : '<p class="rank-ayuda">Todavía no hay ventas anotadas este mes.</p>');
+   var tacho = !!d.borrar, plata = function(n){ return "$" + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }, acum = 0;
+   /* Las ventas se van sumando (22-10-2026, la dueña): columna «Suma» con el acumulado del mes, fila TOTAL
+      al final y, con la Versión 23, lo vendido desde el comienzo. */
+   cv.innerHTML = '<summary class="rank-grupo">💰 Ventas de este mes · ' + v.length + '</summary>' + (v.length ? '<table class="rank-tabla"><thead><tr><th>Fecha</th><th>Socio</th><th>Meses</th><th>Monto</th><th>Suma</th>' + (tacho ? '<th></th>' : '') + '</tr></thead><tbody>' +
+    v.map(function(x, i){ return '<tr><td>' + fechaCL(x.f.slice(0, 10)) + ' ' + escRank_(x.f.slice(11, 16)) + '</td><td><b>' + escRank_((x.n + " " + x.a).toUpperCase()) + '</b></td><td>' + x.meses + '</td><td class="rank-dias">$' + String(x.monto).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '</td><td><b>' + plata(acum += x.monto) + '</b></td>' + (tacho ? '<td><button type="button" class="vn-borrar" data-i="' + i + '" title="Borrar esta venta" style="background:none;border:0;font-size:20px;cursor:pointer">🗑</button></td>' : '') + '</tr>'; }).join("") + '<tr><td colspan="4"><b>TOTAL DEL MES</b></td><td class="rank-dias"><b>' + plata(d.total || 0) + '</b></td>' + (tacho ? '<td></td>' : '') + '</tr></tbody></table>' : '<p class="rank-ayuda">Todavía no hay ventas anotadas este mes.</p>') +
+    (d.totalTodo != null ? '<p class="rank-ayuda" style="font-size:16px">💰 Total vendido desde el comienzo: <b>' + plata(d.totalTodo) + '</b></p>' : '');
    cv.open = true;
    cv.querySelectorAll(".vn-borrar").forEach(function(bt){ bt.addEventListener("click", function(){
     var x = v[+bt.dataset.i];
