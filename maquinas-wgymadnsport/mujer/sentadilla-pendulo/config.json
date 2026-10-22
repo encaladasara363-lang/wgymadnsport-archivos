@@ -3,7 +3,7 @@
  "series": "3 × 8-10",
  "partes": [
   {
-   "video": "fuentes/ejercicio-completo-gemini.mp4",
+   "video": "fuentes/ejercicio-pies-centro-gemini.mp4",
    "desde": 0,
    "hasta": 10,
    "recorte": [
@@ -19,119 +19,119 @@
    },
    "lento": 1.5,
    "repetir": 1,
-   "nota": "Silueta de Acero, martes 2 (reemplaza a la prensa). Máquina Lady Reysan de la terraza, sin el nombre. Imagen de ChatGPT en posición baja desde el video de referencia IMG_9584 de la dueña (no se sube); video de Gemini. La cámara se mueve: el rojo sigue el muslo cuadro a cuadro. Desde el 22-10 usa ejercicio-completo-gemini.mp4 (sube completa; el primero subía solo a la mitad).",
+   "nota": "Silueta de Acero, martes 2 (reemplaza a la prensa). Máquina Lady Reysan de la terraza, sin el nombre. Imagen de ChatGPT en posición baja desde el video de referencia IMG_9584 de la dueña (no se sube); video de Gemini. La cámara se mueve: el rojo sigue el muslo cuadro a cuadro. Desde el 22-10 usa ejercicio-pies-centro-gemini.mp4 (recorrido completo y pies al centro de la plataforma; imagen imagen-abajo-pies-centro.png).",
    "solo_piel": "todo",
    "intensidad": 0.8,
    "musculo_kf": [
     [
      0,
-     330,
-     626,
-     38,
-     30
+     280,
+     647,
+     45,
+     22
     ],
     [
      16,
-     330,
-     630,
+     293,
+     647,
      38,
      30
     ],
     [
      32,
-     316,
-     616,
+     253,
+     687,
      22,
      45
     ],
     [
      48,
-     302,
-     606,
+     267,
+     687,
      22,
      45
     ],
     [
      64,
-     320,
-     674,
-     45,
-     22
+     293,
+     660,
+     38,
+     30
     ],
     [
      80,
-     302,
-     596,
-     22,
-     45
+     293,
+     660,
+     38,
+     30
     ],
     [
      96,
-     288,
-     596,
+     293,
+     673,
      22,
      45
     ],
     [
      112,
-     320,
-     680,
+     293,
+     700,
      45,
      22
     ],
     [
      128,
-     320,
-     646,
-     45,
-     22
+     267,
+     673,
+     22,
+     45
     ],
     [
      144,
-     302,
-     606,
+     253,
+     673,
      22,
      45
     ],
     [
      160,
-     296,
-     596,
-     22,
-     45
+     285,
+     655,
+     45,
+     22
     ],
     [
      176,
-     340,
-     650,
+     293,
+     687,
      45,
      22
     ],
     [
      192,
-     310,
-     690,
+     293,
+     700,
      45,
      22
     ],
     [
      208,
-     320,
-     654,
+     285,
+     687,
      45,
      22
     ],
     [
      224,
-     310,
-     640,
+     301,
+     647,
      38,
      30
     ],
     [
      240,
-     310,
-     640,
+     301,
+     647,
      38,
      30
     ]
