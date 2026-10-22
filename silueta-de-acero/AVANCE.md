@@ -17,6 +17,7 @@ error y se sacó el mismo día). Lunes 1 = «Jalón agarre cerrado» ✅ (máqui
 Lunes 4 = «Elevación lateral con mancuernas» ✅ (frente al banco plano; reemplaza a la de discos; último video de Gemini). Desde el 19-10 todos van con `encaje` (menos zoom, más nítido). Lunes 5 = «Curl de bíceps en polea baja» ✅ (barra corta, polea baja roja junto a la máquina 13; video de referencia IMG_9572, no se sube). **Lunes completo.**
 Martes 1 = «Sentadilla en polea con talones elevados» ✅ (reemplaza a la Smith; polea baja roja, manilla doble, cuña; video de referencia IMG_9576, no se sube; Gemini bajaba solo a la mitad, se rehízo partiendo de una imagen ya abajo (`imagen-abajo.png`); `lento: 1.5`).
 Martes 2 = «Sentadilla péndulo en máquina» ✅ (reemplaza a la prensa; máquina de la terraza sin el nombre; referencia IMG_9584, no se sube; tres intentos de Gemini: el bueno parte desde abajo con los pies al centro, `imagen-abajo-pies-centro.png`; `lento: 1.5`).
+Martes 3 = «Sentadilla búlgara en polea baja» ✅ (reemplaza a la de mancuernas; montaje de la dueña: polea baja roja, cuña doble, soporte con rodillo rosado; referencia IMG_9083, no se sube; ahora con Grok: el 4.º intento quedó bien (1 repetición) y se armó ida-vuelta-ida para 3 repeticiones).
 
 ## Lunes · Tren superior · espalda y bíceps
 1. Jalón al pecho — 3 × 8-10 · 90 seg · ✅ video listo
@@ -28,7 +29,7 @@ Martes 2 = «Sentadilla péndulo en máquina» ✅ (reemplaza a la prensa; máqu
 ## Martes · Pierna · cuádriceps
 6. Sentadilla en Smith — 3 × 10-12 · 75 seg · ✅ video listo
 7. Prensa de piernas — 3 × 8-10 · 90 seg · ✅ video listo
-8. Sentadilla búlgara con mancuernas — 3 × 10 por pierna · 75 seg · 🎬 falta video
+8. Sentadilla búlgara en polea baja — 3 × 10 por pierna · 75 seg · ✅ video listo
 9. Extensión de cuádriceps — 3 × 12-15 · 60 seg · ✅ video listo
 10. Elevación de talones — 3 × 12-15 · 45 seg · ✅ video listo
 
