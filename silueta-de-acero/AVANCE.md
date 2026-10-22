@@ -16,6 +16,7 @@ error y se sacó el mismo día). Lunes 1 = «Jalón agarre cerrado» ✅ (máqui
 «Remo inclinado con barra» ✅ (barra con discos, no mancuernas) (imagen de ChatGPT desde el video de referencia IMG_9508, que no se sube; rojo donde ella lo marcó). Lunes 3 = «Aperturas en máquina» ✅ (máquina 13, reemplaza al press de pecho; video con `encaje` y menos zoom para que se vea nítido).
 Lunes 4 = «Elevación lateral con mancuernas» ✅ (frente al banco plano; reemplaza a la de discos; último video de Gemini). Desde el 19-10 todos van con `encaje` (menos zoom, más nítido). Lunes 5 = «Curl de bíceps en polea baja» ✅ (barra corta, polea baja roja junto a la máquina 13; video de referencia IMG_9572, no se sube). **Lunes completo.**
 Martes 1 = «Sentadilla en polea con talones elevados» ✅ (reemplaza a la Smith; polea baja roja, manilla doble, cuña; video de referencia IMG_9576, no se sube; Gemini bajaba solo a la mitad, se rehízo partiendo de una imagen ya abajo (`imagen-abajo.png`); `lento: 1.5`).
+Martes 2 = «Sentadilla péndulo en máquina» ✅ (reemplaza a la prensa; máquina de la terraza sin el nombre; referencia IMG_9584, no se sube; tres intentos de Gemini: el bueno parte desde abajo con los pies al centro, `imagen-abajo-pies-centro.png`; `lento: 1.5`).
 
 ## Lunes · Tren superior · espalda y bíceps
 1. Jalón al pecho — 3 × 8-10 · 90 seg · ✅ video listo

@@ -64,7 +64,7 @@
   {
    "weekday": "Martes",
    "title": "Pierna · cuádriceps",
-   "focus": "polea · prensa · búlgara · cuádriceps · pantorrillas",
+   "focus": "polea · péndulo · búlgara · cuádriceps · pantorrillas",
    "warmup": "Bicicleta de spinning suave — 6 minutos",
    "exercises": [
     {
@@ -77,13 +77,13 @@
      "video": "assets/silueta-de-acero/sentadilla-polea-talones-elevados.mp4?v=1"
     },
     {
-     "name": "Prensa de piernas",
+     "name": "Sentadilla péndulo en máquina",
      "sets": "3 × 8-10",
      "rest": "90 seg",
-     "tip": "Baja hasta donde puedas mantener espalda y pelvis apoyadas; evita bloquear rodillas.",
-     "equip": "Prensa",
+     "tip": "Apoya las almohadillas sobre los hombros, toma las manillas y deja los pies al centro de la plataforma. Baja lento hasta abajo con el torso firme y sube hasta estirar por completo las piernas. ⚠️ No despegues los talones ni dejes que las rodillas se vayan hacia adentro.",
+     "equip": "Máquina péndulo · plataforma inclinada",
      "muscle": "Cuádriceps · glúteos",
-     "video": "assets/impulso-total/prensa-piernas.mp4?v=1"
+     "video": "assets/silueta-de-acero/sentadilla-pendulo.mp4?v=1"
     },
     {
      "name": "Sentadilla búlgara con mancuernas",
