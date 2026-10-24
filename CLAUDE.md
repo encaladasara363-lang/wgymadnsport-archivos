@@ -1522,6 +1522,8 @@ Versión 23). Celular y compu ven el mismo inventario.
   minuto (y al volver a la pestaña) se revisa `tienda-version.txt`: si es mayor que `TIENDA_VERSION`, la página se
   recarga sola (no con una ficha abierta ni con productos en la venta actual). **Cada vez que se cambie `tienda.html`,
   subir `TIENDA_VERSION` y `tienda-version.txt` juntos (AAAAMMDDNN).**
+  El botón «💾 Guardar» de las fichas queda pegado abajo (sticky), siempre a la vista: la dueña cambió el precio del agua
+  y no vio el Guardar, que estaba más abajo, y el cambio no se guardó.
   Foto del agua cambiada el 24-10-2026 por la que mandó la dueña (botella WOL con logo); al reemplazar una foto en
   `img/tienda/` con el mismo nombre, subir `FOTO_V` en `tienda.html` (las fotos se piden con `?v=`). La foto del inventario se ve entera
   (`object-fit:contain`, cuadro de 78 × 104 px con fondo blanco), pedido de la dueña. Tarjeta del inventario: foto, nombre, detalle y
