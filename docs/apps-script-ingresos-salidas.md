@@ -175,3 +175,21 @@ lápiz → Versión nueva → Implementar (para volver atrás: Versión 21).
 Se instala igual que las anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar,
 Implementar → Administrar implementaciones → lápiz → Versión nueva → Implementar (para volver
 atrás: Versión 22).
+
+## Versión 24 (24-10-2026): 🛒 Tienda WGYM (ventas e inventario)
+
+Para la página nueva `tienda.html` (ventas, inventario, resumen, fiados y códigos de barra de los productos
+que vende el gimnasio). Seis acciones nuevas, **todas solo con la clave de administración** (POST), porque
+traen costos y ganancias:
+
+- `tiendaListar`: productos + movimientos de los últimos 120 días + fiados pendientes + totales.
+- `tiendaProducto`: crea o edita un producto (el stock inicial de un producto nuevo queda como «entrada»).
+- `tiendaVenta`: anota una venta y descuenta el stock. Cada venta trae un id: si llega dos veces, no se
+  descuenta dos veces.
+- `tiendaEntrada`: llegó mercadería (suma stock y actualiza el costo) o ajuste de inventario.
+- `tiendaAnular`: anula una venta y devuelve el stock.
+- `tiendaFiadoPagado`: marca un fiado como pagado.
+
+Las hojas «Tienda productos» y «Tienda movimientos» se crean solas la primera vez. Se instala igual que las
+anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar → Administrar implementaciones →
+lápiz → Versión nueva → Implementar (para volver atrás: Versión 23).

@@ -730,6 +730,151 @@ function accionIngresosPost_(e) {
     case "rankingAdmin": return rankingAdmin_(e);
     case "ventasNutri": return ventasNutri_(e);
     case "borrarVentaNutri": return borrarVentaNutri_(e);
+    case "tiendaListar": return tiendaListar_(e);
+    case "tiendaProducto": return tiendaProducto_(e);
+    case "tiendaVenta": return tiendaVenta_(e);
+    case "tiendaEntrada": return tiendaEntrada_(e);
+    case "tiendaAnular": return tiendaAnular_(e);
+    case "tiendaFiadoPagado": return tiendaFiadoPagado_(e);
   }
   return null;
 }
+
+/* ── 🛒 Tienda WGYM (24-10-2026, la dueña: "empezar a vender otros productos… una app que se vea cuánto vendí,
+   cuánta plata le saco, el inventario, que se descuente cada vez que venda y escanear con el celular") ──
+   Todo es solo de administración (POST con la clave): los costos y las ganancias nunca salen por una acción
+   pública. Dos hojas que se crean solas:
+     «Tienda productos»: Id · Código · Nombre · Categoría · Detalle · Costo · Precio · Stock · Mínimo · Foto ·
+                         Activo · Actualizado
+     «Tienda movimientos»: Fecha · Tipo (venta / entrada / ajuste) · Venta · Id producto · Producto · Cantidad ·
+                         Precio unit. · Costo unit. · Total · Pago · Cliente · Nota · Estado
+   Estado: "" normal · "fiado" (debe) · "pagado …" (fiado ya pagado) · "anulada". Cada venta trae un id que
+   inventa el teléfono (vid): si llega dos veces (sin señal, reintento) no se descuenta dos veces. */
+var HOJA_TIENDA_P_ = "Tienda productos", HOJA_TIENDA_M_ = "Tienda movimientos";
+function hojaTienda_(nombre, cab) {
+  var ss = SpreadsheetApp.openById(SHEET_ID), h = ss.getSheetByName(nombre);
+  if (!h) { h = ss.insertSheet(nombre); h.appendRow(cab); h.getRange("A:B").setNumberFormat("@"); h.setFrozenRows(1); }
+  return h;
+}
+function hojaTiendaP_() { return hojaTienda_(HOJA_TIENDA_P_, ["Id", "Código", "Nombre", "Categoría", "Detalle", "Costo", "Precio", "Stock", "Mínimo", "Foto", "Activo", "Actualizado"]); }
+function hojaTiendaM_() { return hojaTienda_(HOJA_TIENDA_M_, ["Fecha", "Tipo", "Venta", "Id producto", "Producto", "Cantidad", "Precio unit.", "Costo unit.", "Total", "Pago", "Cliente", "Nota", "Estado"]); }
+function ahoraTienda_() { return Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm"); }
+function txtFecha_(v) { return v instanceof Date ? Utilities.formatDate(v, TZ_INGRESOS_, "yyyy-MM-dd HH:mm") : String(v || ""); }
+function datosTienda_(p) { try { return JSON.parse(String(p.datos || "{}")); } catch (err) { return null; } }
+function conClaveTienda_(e, escribe, fn) {
+  if (!claveValida_(e.parameter)) return respond_(e, { ok: false, error: "clave incorrecta" });
+  if (!escribe) { try { return fn(); } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); } }
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(15000)) return respond_(e, { ok: false, error: "ocupado, intenta de nuevo" });
+  try { return fn(); } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
+  finally { lock.releaseLock(); }
+}
+function filaProducto_(r, i) {
+  return { fila: i + 1, id: String(r[0]), cod: String(r[1] || ""), n: String(r[2] || ""), cat: String(r[3] || ""), det: String(r[4] || ""),
+    costo: Number(r[5]) || 0, precio: Number(r[6]) || 0, stock: Number(r[7]) || 0, min: Number(r[8]) || 0, foto: String(r[9] || ""),
+    activo: String(r[10]) !== "no", act: txtFecha_(r[11]) };
+}
+function productosTienda_() {
+  var d = hojaTiendaP_().getDataRange().getValues(), l = [];
+  for (var i = 1; i < d.length; i++) if (d[i][0]) l.push(filaProducto_(d[i], i));
+  return l;
+}
+/* Productos + movimientos desde «desde» (AAAA-MM-DD; por defecto 120 días) + todos los fiados pendientes. */
+function tiendaListar_(e) {
+  return conClaveTienda_(e, false, function () {
+    var desde = String(e.parameter.desde || "");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(desde)) desde = Utilities.formatDate(new Date(Date.now() - 120 * 86400000), TZ_INGRESOS_, "yyyy-MM-dd");
+    var d = hojaTiendaM_().getDataRange().getValues(), movs = [], total = { ventas: 0, ganancia: 0, invertido: 0 };
+    for (var i = 1; i < d.length; i++) {
+      var f = txtFecha_(d[i][0]), tipo = String(d[i][1] || ""), est = String(d[i][12] || ""), cant = Number(d[i][5]) || 0;
+      if (est !== "anulada") {
+        if (tipo === "venta") { total.ventas += Number(d[i][8]) || 0; total.ganancia += (Number(d[i][8]) || 0) - cant * (Number(d[i][7]) || 0); }
+        if (tipo === "entrada") total.invertido += cant * (Number(d[i][7]) || 0);
+      }
+      if (f.slice(0, 10) < desde && est !== "fiado") continue;
+      movs.push({ fila: i + 1, f: f, tipo: tipo, vid: String(d[i][2] || ""), id: String(d[i][3] || ""), n: String(d[i][4] || ""), cant: cant,
+        precio: Number(d[i][6]) || 0, costo: Number(d[i][7]) || 0, total: Number(d[i][8]) || 0, pago: String(d[i][9] || ""),
+        cliente: String(d[i][10] || ""), nota: String(d[i][11] || ""), est: est });
+    }
+    return respond_(e, { ok: true, tienda: true, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total });
+  });
+}
+/* Crear o editar un producto. Si es nuevo y trae stock, ese stock queda como «entrada» (compra) con su costo. */
+function tiendaProducto_(e) {
+  return conClaveTienda_(e, true, function () {
+    var x = datosTienda_(e.parameter); if (!x || !String(x.n || "").trim()) return respond_(e, { ok: false, error: "faltan datos" });
+    var h = hojaTiendaP_(), lista = productosTienda_(), ahora = ahoraTienda_(), cod = String(x.cod || "").replace(/\s/g, "");
+    var p = x.id ? lista.filter(function (q) { return q.id === String(x.id); })[0] : null;
+    if (cod && lista.some(function (q) { return q.activo && q.cod === cod && (!p || q.id !== p.id); })) return respond_(e, { ok: false, error: "ese código ya es de otro producto" });
+    var fila = [p ? p.id : "P" + Date.now().toString(36).toUpperCase(), cod, String(x.n).trim(), String(x.cat || ""), String(x.det || ""),
+      Number(x.costo) || 0, Number(x.precio) || 0, p ? p.stock : (Number(x.stock) || 0), Number(x.min) || 0, String(x.foto || ""),
+      x.activo === false ? "no" : "sí", ahora];
+    if (p) h.getRange(p.fila, 1, 1, 12).setValues([fila]);
+    else {
+      h.appendRow(fila);
+      if (fila[7] > 0) hojaTiendaM_().appendRow([ahora, "entrada", "", fila[0], fila[2], fila[7], "", fila[5], fila[7] * fila[5], "", "", "stock inicial", ""]);
+    }
+    return respond_(e, { ok: true, tienda: true, id: fila[0], productos: productosTienda_() });
+  });
+}
+/* Venta: { vid, items:[{id, cant, precio}], pago, cliente, nota }. Descuenta el stock de cada producto. */
+function tiendaVenta_(e) {
+  return conClaveTienda_(e, true, function () {
+    var x = datosTienda_(e.parameter); if (!x || !x.vid || !x.items || !x.items.length) return respond_(e, { ok: false, error: "faltan datos" });
+    var hm = hojaTiendaM_(), vids = hm.getRange(1, 3, hm.getLastRow(), 1).getValues();
+    for (var j = 0; j < vids.length; j++) if (String(vids[j][0]) === String(x.vid)) return respond_(e, { ok: true, tienda: true, repetida: true, productos: productosTienda_() });
+    var h = hojaTiendaP_(), lista = productosTienda_(), ahora = ahoraTienda_(), pago = String(x.pago || "efectivo"), filas = [];
+    x.items.forEach(function (it) {
+      var p = lista.filter(function (q) { return q.id === String(it.id); })[0]; if (!p) return;
+      var cant = Number(it.cant) || 0, precio = Number(it.precio); if (!(cant > 0)) return; if (isNaN(precio)) precio = p.precio;
+      p.stock -= cant; h.getRange(p.fila, 8).setValue(p.stock); h.getRange(p.fila, 12).setValue(ahora);
+      filas.push([ahora, "venta", String(x.vid), p.id, p.n, cant, precio, p.costo, cant * precio, pago, String(x.cliente || ""), String(x.nota || ""), pago === "fiado" ? "fiado" : ""]);
+    });
+    if (!filas.length) return respond_(e, { ok: false, error: "productos no encontrados" });
+    hm.getRange(hm.getLastRow() + 1, 1, filas.length, 13).setValues(filas);
+    return respond_(e, { ok: true, tienda: true, productos: productosTienda_() });
+  });
+}
+/* Entrada de mercadería (compra) o ajuste de inventario: { id, cant, costo, tipo:"entrada"|"ajuste", nota }.
+   En un ajuste, cant puede ser negativa (se rompió, se perdió, se regaló). */
+function tiendaEntrada_(e) {
+  return conClaveTienda_(e, true, function () {
+    var x = datosTienda_(e.parameter); if (!x || !x.id) return respond_(e, { ok: false, error: "faltan datos" });
+    var h = hojaTiendaP_(), p = productosTienda_().filter(function (q) { return q.id === String(x.id); })[0];
+    if (!p) return respond_(e, { ok: false, error: "producto no encontrado" });
+    var tipo = x.tipo === "ajuste" ? "ajuste" : "entrada", cant = Number(x.cant) || 0, costo = Number(x.costo);
+    if (!cant || (tipo === "entrada" && cant < 0)) return respond_(e, { ok: false, error: "cantidad inválida" });
+    if (isNaN(costo) || costo <= 0) costo = p.costo;
+    var ahora = ahoraTienda_(); p.stock += cant;
+    h.getRange(p.fila, 8).setValue(p.stock); h.getRange(p.fila, 12).setValue(ahora);
+    if (tipo === "entrada") h.getRange(p.fila, 6).setValue(costo);
+    hojaTiendaM_().appendRow([ahora, tipo, "", p.id, p.n, cant, "", costo, tipo === "entrada" ? cant * costo : 0, "", "", String(x.nota || ""), ""]);
+    return respond_(e, { ok: true, tienda: true, productos: productosTienda_() });
+  });
+}
+/* Anular una venta completa (se equivocó): marca sus filas «anulada» y devuelve el stock. */
+function tiendaAnular_(e) {
+  return conClaveTienda_(e, true, function () {
+    var vid = String(e.parameter.vid || ""); if (!vid) return respond_(e, { ok: false, error: "faltan datos" });
+    var hm = hojaTiendaM_(), d = hm.getDataRange().getValues(), h = hojaTiendaP_(), lista = productosTienda_(), n = 0;
+    for (var i = 1; i < d.length; i++) {
+      if (String(d[i][2]) !== vid || String(d[i][1]) !== "venta" || String(d[i][12]) === "anulada") continue;
+      var p = lista.filter(function (q) { return q.id === String(d[i][3]); })[0];
+      if (p) { p.stock += Number(d[i][5]) || 0; h.getRange(p.fila, 8).setValue(p.stock); }
+      hm.getRange(i + 1, 13).setValue("anulada"); n++;
+    }
+    if (!n) return respond_(e, { ok: false, error: "venta no encontrada" });
+    return respond_(e, { ok: true, tienda: true, productos: productosTienda_() });
+  });
+}
+/* Un fiado pagado: { vid, pago } → Estado «pagado <medio> <fecha>». */
+function tiendaFiadoPagado_(e) {
+  return conClaveTienda_(e, true, function () {
+    var vid = String(e.parameter.vid || ""), pago = String(e.parameter.pago || "efectivo"); if (!vid) return respond_(e, { ok: false, error: "faltan datos" });
+    var hm = hojaTiendaM_(), d = hm.getDataRange().getValues(), n = 0;
+    for (var i = 1; i < d.length; i++) if (String(d[i][2]) === vid && String(d[i][12]) === "fiado") { hm.getRange(i + 1, 13).setValue("pagado " + pago + " " + ahoraTienda_()); n++; }
+    if (!n) return respond_(e, { ok: false, error: "fiado no encontrado" });
+    return respond_(e, { ok: true, tienda: true });
+  });
+}
+
