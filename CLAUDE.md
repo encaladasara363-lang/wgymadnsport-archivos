@@ -1895,6 +1895,10 @@ probado: ella se activó desde el mesón y entró a la app).
   «· ajustada hoy») y «↩ Volver a la receta original». Lo anotado antes sin `it.ing` toma los ingredientes de la receta
   por nombre. Al agregar otra receta de la dueña, ponerle `ingr` con valores que sumen sus totales. Waffles quedó en
   300 kcal, 15 g P, 24 g C y 16 g G por porción (suma exacta de sus ingredientes). El pan del Desayuno fit A va por láminas (2 láminas = 61 g), pedido de la dueña.
+  **Fibra, potasio, azúcar, sodio y vitamina C de las recetas (24-10-2026, la dueña: "los waffles tienen fibra y no
+  marca"):** 8.º campo de cada `ingr` = objeto `{fi, po, az, na, vc}` de esa cantidad (valores de las tablas NUTRI_*);
+  `microReceta` los suma según lo comido (`microDe` lo usa para `cat:"Receta"`). Por porción: Waffles fibra 5,8 g ·
+  Desayuno fit A 3,7 g · Postre fit A 7,4 g (Cereal Balls sin dato de fibra).
 - **Se vende también a los vencidos (17-10-2026, la dueña: "quiero que los vencidos igual lo vean… tendría más
   posibilidades de vender esa app"):** la tarjeta bloqueada muestra igual el aviso `#nutriCard`, y en la app la
   mensualidad del gimnasio ya no bloquea: con WGYMNUTRI pagada se entra aunque el plan esté vencido; sin pagarla
