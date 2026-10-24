@@ -292,7 +292,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102403";
+var TIENDA_VERSION = "2026102404";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -331,7 +331,7 @@ document.querySelectorAll("#nav button").forEach(function(b){ b.onclick = functi
 
 function render(){
  var t = { vender:renderVender, inv:renderInv, res:renderRes, fiados:renderFiados, cod:renderCod }[tab];
- $("subTit").textContent = { vender:"Vender", inv:"Inventario", res:"Resumen de ventas", fiados:"Fiados", cod:"Códigos de barra" }[tab];
+ $("subTit").textContent = { vender:"Vender", inv:"Inventario", res:"Resumen de ventas", fiados:"Fiados", cod:"Códigos de barra" }[tab] + " · v" + TIENDA_VERSION.slice(-2);
  t();
 }
 
