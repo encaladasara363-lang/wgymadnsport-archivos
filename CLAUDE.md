@@ -1894,7 +1894,7 @@ probado: ella se activó desde el mesón y entró a la app).
   `editarReceta`: un casillero por ingrediente, total al instante, «Guardar cambio» (solo ese día, la porción dice
   «· ajustada hoy») y «↩ Volver a la receta original». Lo anotado antes sin `it.ing` toma los ingredientes de la receta
   por nombre. Al agregar otra receta de la dueña, ponerle `ingr` con valores que sumen sus totales. Waffles quedó en
-  300 kcal, 15 g P, 24 g C y 16 g G por porción (suma exacta de sus ingredientes).
+  300 kcal, 15 g P, 24 g C y 16 g G por porción (suma exacta de sus ingredientes). El pan del Desayuno fit A va por láminas (2 láminas = 61 g), pedido de la dueña.
 - **Se vende también a los vencidos (17-10-2026, la dueña: "quiero que los vencidos igual lo vean… tendría más
   posibilidades de vender esa app"):** la tarjeta bloqueada muestra igual el aviso `#nutriCard`, y en la app la
   mensualidad del gimnasio ya no bloquea: con WGYMNUTRI pagada se entra aunque el plan esté vencido; sin pagarla

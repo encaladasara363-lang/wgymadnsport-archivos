@@ -343,7 +343,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 
 <script src="pago-datos.js?v=4"></script>
 <script src="nutri-alimentos.js?v=30"></script>
-<script src="nutri-recetas.js?v=16"></script>
+<script src="nutri-recetas.js?v=17"></script>
 <script>
 (function(){
 "use strict";
@@ -1933,7 +1933,7 @@ function editarReceta(m, j, it){
   ing.map(function(x, i){ return '<div class="ing-ed" style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.12)">' +
    '<span style="flex:1;min-width:0;font-size:15px">' + esc(x.n) + '<small class="muted" id="ingK' + i + '" style="display:block;font-size:12px"></small></span>' +
    '<input class="inp" data-ing="' + i + '" type="text" inputmode="decimal" autocomplete="off" value="' + cantTxt(x.q) + '" style="width:76px;text-align:center;font-size:18px;padding:8px 4px">' +
-   '<span style="width:78px;font-size:13px">' + esc(x.u) + '</span></div>'; }).join("") +
+   '<span id="ingU' + i + '" style="width:78px;font-size:13px">' + esc(x.u) + '</span></div>'; }).join("") +
   '<p class="center" id="edRes" style="font-size:18px;margin:12px 0"></p>' +
   '<button type="button" class="btn rojo" id="edOk">✅ Guardar cambio</button>' +
   (orig ? '<button type="button" class="btn sec" id="edOrig" style="margin-top:8px">↩ Volver a la receta original</button>' : ''));
@@ -1944,7 +1944,7 @@ function editarReceta(m, j, it){
  }
  document.querySelectorAll("[data-ing]").forEach(function(inp){ inp.oninput = pinta; }); pinta();
  $("edCerrar").onclick = cerrarHoja;
- if($("edOrig")) $("edOrig").onclick = function(){ orig.forEach(function(x, i){ ing[i].q = x.q0; var inp = document.querySelector('[data-ing="' + i + '"]'); if(inp) inp.value = cantTxt(x.q0); }); pinta(); };
+ if($("edOrig")) $("edOrig").onclick = function(){ orig.forEach(function(x, i){ if(!ing[i]) return; ing[i] = x; if($("ingU" + i)) $("ingU" + i).textContent = x.u; var inp = document.querySelector('[data-ing="' + i + '"]'); if(inp) inp.value = cantTxt(x.q0); }); pinta(); };
  $("edOk").onclick = function(){ var y = diaDe(diaSel), t = (y.c[m] || [])[j]; if(!t) return cerrarHoja();
   var s = sumaIng(ing), igual = ing.every(function(x){ return Math.abs(x.q - x.q0) < 1e-9; });
   t.ing = ing; t.x = 1; t.k = Math.round(s.k); t.pr = r1(s.p); t.c = r1(s.c); t.g = r1(s.g);
@@ -3003,7 +3003,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102412", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102413", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

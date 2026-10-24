@@ -6,8 +6,8 @@
 window.NUTRI_RECETAS = [
  /* Desayuno */
  { n:"Desayuno fit A", cat:"Desayuno", e:"🥪", min:15, porc:"1 sándwich + 1 cuadradito de chocolate", k:455, p:26, c:34, g:23,
-   ingr:[["Pan artesano de masa madre",61,"g",151,6.1,27.6,1.8],["Huevo duro",2,"huevos",156,12.6,1.2,10.6],["Palta",30,"g",48,0.6,2.4,4.4],["Queso gouda sin lactosa",1,"lámina",58,4.1,0,4.4],["Jamón de pechuga de pavo",1,"lámina",15,2.6,0.2,0.4],["Chocolate",1,"cuadradito",27,0.3,2.8,1.5]],
-   ing:["61 g de pan artesano de masa madre (2 rebanadas)", "2 huevos duros", "30 g de palta", "1 lámina de queso gouda sin lactosa (17 g)", "1 lámina de jamón de pechuga de pavo acaramelada (22 g)", "1 cuadradito de chocolate (5 g)"],
+   ingr:[["Pan artesano de masa madre",2,"láminas",151,6.1,27.6,1.8],["Huevo duro",2,"huevos",156,12.6,1.2,10.6],["Palta",30,"g",48,0.6,2.4,4.4],["Queso gouda sin lactosa",1,"lámina",58,4.1,0,4.4],["Jamón de pechuga de pavo",1,"lámina",15,2.6,0.2,0.4],["Chocolate",1,"cuadradito",27,0.3,2.8,1.5]],
+   ing:["2 láminas de pan artesano de masa madre (61 g)", "2 huevos duros", "30 g de palta", "1 lámina de queso gouda sin lactosa (17 g)", "1 lámina de jamón de pechuga de pavo acaramelada (22 g)", "1 cuadradito de chocolate (5 g)"],
    pasos:["Cuece los huevos 10 minutos desde que el agua hierve, pásalos a agua fría y pélalos.", "Tuesta las rebanadas de pan.", "Muele la palta con un tenedor y úntala sobre una rebanada.", "Pon encima la lámina de queso, la lámina de jamón y los huevos en rodajas.", "Tapa con la otra rebanada y acompaña con el cuadradito de chocolate."] },
  { n:"Waffles alto en fibra", cat:"Desayuno", e:"🧇", min:15, porc:"1 porción (la mitad de la receta)", k:300, p:15, c:24, g:16,
    ingr:[["Huevo",1,"huevo",72,6.3,0.4,4.8],["Leche",30,"ml",14,1,1.5,0.5],["Avena",20,"g",78,3.4,13.3,1.4],["Harina de almendras",10,"g",58,2.1,1,5],["Simi Fibra con Cacao",5,"g",20,0.7,3.7,0.3],["Mantequilla de maní",5,"g",30,1.3,1,2.5],["Canela",0.5,"cdta",3,0,0.9,0],["Esencia de vainilla",0.5,"cdta",6,0,0.3,0],["Botones de chocolate blanco",10,"botones",19,0.2,2,1.2]],
