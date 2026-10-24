@@ -343,7 +343,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 
 <script src="pago-datos.js?v=4"></script>
 <script src="nutri-alimentos.js?v=30"></script>
-<script src="nutri-recetas.js?v=10"></script>
+<script src="nutri-recetas.js?v=11"></script>
 <script>
 (function(){
 "use strict";
@@ -952,7 +952,7 @@ var EVITA_PALABRAS = {
  cerdo:/\b(cerdo|chuleta|tocino|costilla|pernil|jamon|lomo de cerdo)/,
  carnes:/\b(vacuno|carne molida|posta|lomo liso|filete de res|bistec|asado|cordero|osobuco|carne de res|carne)/,
  huevo:/\b(huevo|clara)/,
- gluten:/\b(pan|harina|fideo|pasta|tortilla|cuscus|trigo|galleta|marraqueta|pita|wrap|semola|cebada|centeno|tallarin|lasana|wantan)/
+ gluten:/\b(pan|harina(?! de (almendra|coco|arroz|maiz|garbanzo|linaza))|fideo|pasta|tortilla|cuscus|trigo|galleta|marraqueta|pita|wrap|semola|cebada|centeno|tallarin|lasana|wantan)/
 };
 var NO_VEGETARIANO = /\b(pollo|pechuga|pavo|carne|vacuno|cerdo|posta|atun|salmon|reineta|merluza|pescad|camaron|marisc|jamon|tocino|chorizo|longaniza|filete|cordero|chorito|surimi|pulpo|jibia|congrio|jurel|sardina|tilapia|corvina|lomo|bistec|asado)/;
 function recetaPermitida(r){
@@ -2964,7 +2964,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102405", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102406", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

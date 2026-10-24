@@ -6,7 +6,7 @@
 window.NUTRI_RECETAS = [
  /* Desayuno */
  { n:"Waffles alto en fibra", cat:"Desayuno", e:"🧇", min:15, porc:"1 porción (la mitad de la receta)", k:303, p:14, c:26, g:16,
-   ing:["Rinde 2 porciones:", "2 huevos", "60 g de leche", "40 g de avena", "20 g de harina de almendras", "10 g de Simi Fibra con Cacao", "10 g de mantequilla de maní", "1 cucharadita de polvo de hornear", "1 cucharadita de canela", "1 cucharadita de esencia de vainilla", "15 gotas de estevia", "20 botones de chocolate blanco (7 g)"],
+   ing:["Rinde 2 porciones:", "2 huevos", "60 g de leche", "40 g de avena", "20 g de harina de almendras", "10 g de Simi Fibra con Cacao (trae salvado de trigo)", "10 g de mantequilla de maní", "1 cucharadita de polvo de hornear", "1 cucharadita de canela", "1 cucharadita de esencia de vainilla", "15 gotas de estevia", "20 botones de chocolate blanco (7 g)"],
    pasos:["Bate los huevos con la leche, la mantequilla de maní, la vainilla y la estevia.", "Agrega la avena, la harina de almendras, la fibra, el polvo de hornear y la canela, y mezcla hasta que no queden grumos.", "Deja reposar la mezcla 5 minutos para que la avena y la fibra se hidraten.", "Calienta la waflera, píntala con muy poco aceite y cocina la mezcla 4 a 5 minutos, hasta que esté dorada.", "Sirve con los botones de chocolate blanco encima y divide en 2 porciones."] },
  { n:"Avena proteica con plátano", cat:"Desayuno", e:"🥣", min:5, porc:"1 bowl", k:332, p:25, c:52, g:4,
    ing:["40 g de avena (1/2 taza)", "200 ml de leche descremada", "1/2 plátano en rodajas", "1/2 scoop de proteína whey (15 g)", "Canela a gusto"],
