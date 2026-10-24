@@ -1886,7 +1886,10 @@ probado: ella se activó desde el mesón y entró a la app).
   queso y 1 de jamón de pavo, sin sal, pimienta ni orégano (no agregar extras a sus recetas).
   «Postre fit A» (24-10-2026, armado con la colación que anotó la dueña; primera de Postre): bowl de yogur proteico con
   batido whey, avena, chía, manzana verde, Cereal Balls, avellanas y botones de chocolate blanco (7 g): ≈453 kcal,
-  29 g de proteína, 59 g de carbohidratos y 13 g de grasa.
+  29 g de proteína, 59 g de carbohidratos y 13 g de grasa. Con «Agregar a mi día» va al «Snack de la mañana» (campo `comida:"colacion1"` de la receta, pedido de la
+  dueña; sin ese campo se usa `RECETA_COMIDA` según la categoría).
+  **Nombres de comidas (24-10-2026, pedido de la dueña):** «Colación de la mañana» se llama «Snack de la mañana» y «Snack»
+  se llama «Snack de la tarde» (claves internas `colacion1` y `once` sin cambio). «Colación de la noche» sigue igual.
   **✏️ Editar cada ingrediente de una receta anotada (24-10-2026, la dueña: "a veces consumo menos gramos, sin que se
   cambie la receta, solo en este lado cada día"):** las recetas con `ingr` en `nutri-recetas.js` (por ahora sus 3:
   Waffles alto en fibra, Desayuno fit A y Postre fit A; formato `[nombre, cantidad, unidad, kcal, P, C, G]` por porción)
