@@ -1667,6 +1667,9 @@ probado: ella se activó desde el mesón y entró a la app).
   Yogur Protein natural endulzado Loncoleche (20-10-2026, la dueña mandó la etiqueta del pote de 800 g): Marcas,
   «1 taza (200 g)»: 130 kcal, 17,6 g de proteína, 11,8 g de carbohidratos, 1,4 g de grasa, 130 mg de sodio, azúcar
   añadida 0 (sin sacarosa). Sin código en `NUTRI_CODIGOS` (no se veía completo en la foto).
+  Mi Fibra con Cacao (Similares) (24-10-2026, la dueña mandó la etiqueta del frasco de 300 g): Marcas, «1 cucharada
+  (15 g)»: 61 kcal, 2,0 g de proteína, 11,0 g de carbohidratos, 1,0 g de grasa, 5,1 g de fibra, 5,0 g de azúcar (agave,
+  cuenta como añadida), 27 mg de sodio. Sin código en `NUTRI_CODIGOS` (no se confirmó el número).
   Chocolate blanco (12-10-2026, la dueña mandó foto de sus botones): «Chocolate blanco (botones)» por **discos** («20 discos (7 g)», ≈1,9 kcal cada uno; corregido el 24-10-2026: la dueña pesó sus 20 botones en 7 g, antes decía «10 discos (20 g)») y «Chocolate blanco» por cuadraditos; `CONTABLES` acepta «discos».
   Esencia de vainilla (12-10-2026, pedido de la dueña): «1 cucharadita» (12 kcal), se cuenta por cucharaditas; `CONTABLES` acepta «cucharaditas» solo si no traen gramos/ml entre paréntesis (azúcar, aceite, etc. siguen en gramos).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
