@@ -154,8 +154,9 @@ body{ zoom:1.22; }
  #hojaEtiquetas{ display:grid !important; grid-template-columns:repeat(3, 1fr); gap:0; width:190mm; margin:0 auto; }
  .etq{ border:1px dashed #bbb; height:34mm; padding:2mm 3mm; color:#000; font-family:Arial, sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; page-break-inside:avoid; }
  .etq b{ font-size:9pt; text-transform:uppercase; text-align:center; line-height:1.1; max-height:2.3em; overflow:hidden; }
+ .etq .det{ font-size:10.5pt; font-weight:900; text-transform:uppercase; text-align:center; line-height:1.1; background:#000; color:#fff; padding:0 2mm; border-radius:1mm; margin:.5mm 0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
  .etq .pr{ font-size:12pt; font-weight:900; }
- .etq svg{ width:44mm; height:16mm; }
+ .etq svg{ width:44mm; height:13mm; }
  @page{ size:A4; margin:10mm; }
 }
 </style>
@@ -292,7 +293,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102409";
+var TIENDA_VERSION = "2026102410";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -648,7 +649,7 @@ function renderCod(){
   '<button class="btn oro" id="crearTodos" style="margin-top:10px">Crear código a todos</button></div>';
  if(con.length){
   h += '<div class="card"><b style="text-transform:uppercase">🖨 Imprimir etiquetas</b><p class="muted" style="font-size:15px;margin:4px 0 8px">Elige cuántas etiquetas de cada uno (hoja A4, 24 etiquetas por hoja). Sirve para imprimir también las de productos que ya traen código, con su precio.</p>' +
-   con.map(function(p){ return '<div class="etq-sel"><span class="n">' + esc(p.n) + '<br><span class="muted" style="font-size:13px">' + esc(p.cod) + ' · ' + plata(p.precio) + '</span></span><input class="inp" type="number" min="0" max="99" data-etq="' + esc(p.id) + '" value="' + (etqCant[p.id] || 0) + '" style="width:76px;text-align:center"></div>'; }).join("") +
+   con.map(function(p){ return '<div class="etq-sel"><span class="n">' + esc(p.n) + (p.det ? '<br><b style="color:var(--yel)">' + esc(p.det) + '</b>' : '') + '<br><span class="muted" style="font-size:13px">' + esc(p.cod) + ' · ' + plata(p.precio) + '</span></span><input class="inp" type="number" min="0" max="99" data-etq="' + esc(p.id) + '" value="' + (etqCant[p.id] || 0) + '" style="width:76px;text-align:center"></div>'; }).join("") +
    '<button class="btn rojo" id="imprimir" style="margin-top:12px">🖨 Imprimir etiquetas</button><p class="muted" style="font-size:14px;margin:6px 0 0">Desde el celular: Imprimir → Guardar como PDF, y lo imprimes en cualquier lado. Mejor en hoja de etiquetas adhesivas A4 de 3 × 8.</p></div>';
  }
  v.innerHTML = h;
@@ -669,7 +670,7 @@ function crearCodigos(lista){
 }
 function imprimirEtiquetas(){
  var h = "";
- activos().forEach(function(p){ var n = etqCant[p.id] || 0; for(var i = 0; i < n; i++) h += '<div class="etq"><b>' + esc(p.n) + (p.det ? ' · ' + esc(p.det) : '') + '</b><span class="pr">' + plata(p.precio) + '</span>' + svgEAN(p.cod) + '</div>'; });
+ activos().forEach(function(p){ var n = etqCant[p.id] || 0; for(var i = 0; i < n; i++) h += '<div class="etq"><b>' + esc(p.n) + '</b>' + (p.det ? '<span class="det">' + esc(p.det) + '</span>' : '') + '<span class="pr">' + plata(p.precio) + '</span>' + svgEAN(p.cod) + '</div>'; });
  if(!h){ toast("Elige cuántas etiquetas quieres imprimir."); return; }
  $("hojaEtiquetas").innerHTML = h;
  setTimeout(function(){ window.print(); }, 150);
