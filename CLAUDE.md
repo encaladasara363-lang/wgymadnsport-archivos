@@ -1493,8 +1493,9 @@ carga `estilo-deportivo.css`: al cambiar el `?v=`, cambiarlo en los TRES archivo
 La dueña volvió a vender productos en el gimnasio (bebidas, suplementos, accesorios, snacks y ropa deportiva;
 empezó con $100.000 de inversión y quiere duplicarla). `tienda.html` es solo para ella: pide la clave de
 administración (la misma del mesón, `wgym_clave_admin_v1`). Todo se guarda en la planilla (hojas «Tienda
-productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/Ingresos.gs`, **Versión 24**; mientras
-no esté instalada, la página avisa «Falta instalar la Versión 24»). Celular y compu ven el mismo inventario.
+productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/Ingresos.gs`, **Versión 24, instalada por la
+dueña el 24-10-2026 cerca de las 13:15, INGRESOS.gs verificado idéntico al repo vía Drive**; volver atrás: lápiz →
+Versión 23). Celular y compu ven el mismo inventario.
 - **🛒 Vender:** escanear (queda abierto y suma cada producto; 2 s entre el mismo código), buscar por nombre,
   cantidades, cambiar precio de una línea (descuento), medio de pago (efectivo, transferencia, tarjeta, fiado con
   nombre) y «Cobrar». La venta se descuenta al tiro en el teléfono y se envía a la planilla; sin señal queda en
