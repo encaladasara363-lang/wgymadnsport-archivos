@@ -1521,7 +1521,8 @@ Versión 23). Celular y compu ven el mismo inventario.
   Powerade Frozen Blast 1,1 L (24-10-2026, pack de 6 a $8.501 → costo $1.417 c/u; venta sugerida $2.000; foto
   `img/tienda/powerade-frozen-blast-1l.jpg`; trae código de barras propio: se escanea en la ficha).
   Trident Infinit Spearmint 14 unidades (24-10-2026, Snacks: costo $1.000, venta $1.500, 6 unidades, código 7622201677756,
-  foto `img/tienda/trident-infinit-spearmint.jpg`). Bebestibles en pausa hasta que llegue más mercadería.
+  foto `img/tienda/trident-infinit-spearmint.jpg`). Trident Infinit Peppermint (mismo costo/precio, código 7622201678036, foto `img/tienda/trident-infinit-peppermint.jpg`).
+  Bebestibles en pausa hasta que llegue más mercadería. Un enlace `?nuevo=1` con un código que ya existe abre ese producto (aunque cambie el nombre).
   **Todo se actualiza solo (24-10-2026, la dueña: "si hago una modificación en el celular, que se cambie igual en el
   computador"):** los datos se piden a la planilla cada 30 s si la página está a la vista y sin ficha abierta, y cada
   minuto (y al volver a la pestaña) se revisa `tienda-version.txt`: si es mayor que `TIENDA_VERSION`, la página se
