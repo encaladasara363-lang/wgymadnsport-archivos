@@ -285,9 +285,21 @@ function enviarPendientes(){
  });
 }
 setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
-/* Se actualiza sola cada minuto mientras está a la vista (24-10-2026: la dueña guardó un producto en el celular y el
-   computador, que tenía la página abierta desde antes, no lo mostraba). No recarga con una ficha abierta. */
-setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 60000);
+/* Todo se actualiza solo (24-10-2026, la dueña: "la idea es que si hago una modificación en el celular se cambie igual en
+   el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
+   abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
+   Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
+var TIENDA_VERSION = "2026102401";
+setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
+function revisarVersion(){
+ fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
+  v = String(v || "").trim();
+  if(/^\d{10}$/.test(v) && v > TIENDA_VERSION && $("velo").hidden && !carro.length){ location.replace(location.pathname + "?tv=" + v); }
+ })["catch"](function(){});
+}
+setInterval(function(){ if(!document.hidden) revisarVersion(); }, 60000);
+document.addEventListener("visibilitychange", function(){ if(!document.hidden) revisarVersion(); });
+try{ if(/[?&]tv=/.test(location.search)) history.replaceState(null, "", location.pathname); }catch(e){}
 window.addEventListener("online", function(){ enviarPendientes(); });
 document.addEventListener("visibilitychange", function(){ if(!document.hidden && clave){ enviarPendientes().then(function(){ cargar(true); }); } });
 
