@@ -1518,6 +1518,8 @@ Versión 23). Celular y compu ven el mismo inventario.
   `cod=auto` crea el código propio 200… si no trae código; si trae, poner el número en `cod`. Si ya existe ese nombre
   + detalle, abre ese producto para editar (no duplica). La foto se guarda achicada (≤500 px de alto) en `img/tienda/`.
   Productos cargados: Agua purificada WOL 500 ml (costo $750, venta $1.000; 22 unidades; código 2000000000015).
+  Powerade Frozen Blast 1,1 L (24-10-2026, pack de 6 a $8.501 → costo $1.417 c/u; venta sugerida $2.000; foto
+  `img/tienda/powerade-frozen-blast-1l.jpg`; trae código de barras propio: se escanea en la ficha).
   **Todo se actualiza solo (24-10-2026, la dueña: "si hago una modificación en el celular, que se cambie igual en el
   computador"):** los datos se piden a la planilla cada 30 s si la página está a la vista y sin ficha abierta, y cada
   minuto (y al volver a la pestaña) se revisa `tienda-version.txt`: si es mayor que `TIENDA_VERSION`, la página se
