@@ -343,7 +343,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 
 <script src="pago-datos.js?v=4"></script>
 <script src="nutri-alimentos.js?v=31"></script>
-<script src="nutri-recetas.js?v=19"></script>
+<script src="nutri-recetas.js?v=20"></script>
 <script>
 (function(){
 "use strict";
@@ -809,7 +809,7 @@ var onb = { paso:0, d:{}, primera:true, slide:0 };
 var ACTS = [[1.2,"🛋️","Sedentaria","Casi sin ejercicio"],[1.375,"🚶","Ligera","1 a 3 días por semana"],[1.55,"🏋️","Moderada","3 a 5 días por semana"],[1.725,"🔥","Intensa","6 a 7 días por semana"],[1.9,"⚡","Muy intensa","2 veces al día o trabajo físico"]];
 var OBJS = [["bajar","📉","Bajar grasa","Déficit moderado, cuidando tu músculo"],["recomp","🔄","Bajar grasa y ganar músculo","Las dos cosas a la vez, con mucha proteína"],["mantener","⚖️","Mantenerme","Comer lo justo para tu gasto"],["ganar","💪","Ganar músculo","Comer tu mantención con más proteína"]];
 var VELS = [["tranquilo","🐢","Tranquilo","Más fácil de mantener"],["normal","🚶","Normal","El equilibrio recomendado"],["intenso","🔥","Intenso","Más rápido, siempre saludable"]];
-var NCOMIDAS = [[3,"3️⃣","3 comidas","Desayuno, almuerzo y cena"],[4,"4️⃣","4 comidas","+ snack"],[5,"5️⃣","5 comidas","+ colación de la mañana"],[6,"6️⃣","6 comidas","+ colación de la noche"]];
+var NCOMIDAS = [[3,"3️⃣","3 comidas","Desayuno, almuerzo y cena"],[4,"4️⃣","4 comidas","+ snack de la tarde"],[5,"5️⃣","5 comidas","+ snack de la mañana"],[6,"6️⃣","6 comidas","+ colación de la noche"]];
 var DIETAS = [["normal","🍽️","Normal","De todo un poco"],["proteina","💪","Alta en proteína","Más proteína para tu músculo"],["bajacarb","🥑","Baja en carbohidratos","Menos pan, arroz y fideos"],["vegetariana","🥦","Vegetariana","Sin carnes ni pescados"]];
 var EVITAS = [["pescado","🐟","Pescados y mariscos"],["lacteos","🥛","Lácteos"],["cerdo","🐖","Cerdo"],["carnes","🥩","Carnes rojas"],["huevo","🥚","Huevo"],["gluten","🌾","Gluten (trigo)"]];
 var CONOCE = [["gimnasio","🏋️","En el gimnasio","Un cartel o el profe"],["tarjeta","💳","Mi tarjeta virtual","El aviso de WGYMNUTRI"],["amigo","👥","Un amigo o familiar",""],["instagram","📸","Instagram",""],["facebook","👍","Facebook",""],["tiktok","🎵","TikTok",""],["otro","✨","Otro",""]];
@@ -963,7 +963,7 @@ function recetaPermitida(r){
 }
 
 /* ═══ 4. Pantalla principal ═══ */
-var COMIDAS = [["desayuno","☕","Desayuno"],["colacion1","🍎","Colación de la mañana"],["almuerzo","🍲","Almuerzo"],["once","🍿","Snack"],["cena","🌙","Cena"],["colacion2","🥛","Colación de la noche"],["bebidas","⚡","Energéticas"]];
+var COMIDAS = [["desayuno","☕","Desayuno"],["colacion1","🍎","Snack de la mañana"],["almuerzo","🍲","Almuerzo"],["once","🍿","Snack de la tarde"],["cena","🌙","Cena"],["colacion2","🥛","Colación de la noche"],["bebidas","⚡","Energéticas"]];
 /* Bebidas energéticas e isotónicas (10-10-2026, la dueña: "ponme para escanear bebidas
    energéticas o Powerade"): cuadro aparte en «Hoy», sin hora de comida. */
 var COMIDAS_HORA = COMIDAS.filter(function(c){ return c[0] !== "bebidas"; }), CAT_BEB = "⚡ Energéticas";
@@ -2828,7 +2828,7 @@ function renderRec(){
   $("recVolver").onclick = $("recVolver2").onclick = cerrarReceta;
   $("recCompra").onclick = function(){ var antes = recetaEnLista(r); alternarRecetaLista(r); toast(antes ? "Quitada de tu lista de compras" : "🛒 Ingredientes agregados a tu lista"); renderRec(); };
   $("recAgregar").onclick = function(){
-   agr.comida = RECETA_COMIDA[r.cat] || comidaPorHora(); diaSel = hoyISO();
+   agr.comida = r.comida || RECETA_COMIDA[r.cat] || comidaPorHora(); diaSel = hoyISO();
    agregar({ n:r.n, p:r.porc, k:r.k, pr:r.p, c:r.c, g:r.g, cat:"Receta", ing:ingDeReceta(r) }, 1, false);
   };
   return;
@@ -3012,7 +3012,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102415", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102416", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
