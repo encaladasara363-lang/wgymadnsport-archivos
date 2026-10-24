@@ -343,7 +343,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 
 <script src="pago-datos.js?v=4"></script>
 <script src="nutri-alimentos.js?v=30"></script>
-<script src="nutri-recetas.js?v=17"></script>
+<script src="nutri-recetas.js?v=18"></script>
 <script>
 (function(){
 "use strict";
@@ -987,6 +987,7 @@ function fraseDelDia(){ var d = new Date(), ini = new Date(d.getFullYear(), 0, 0
    gimnasio por nombre, ajustando a la porción guardada (por 100 g o por unidad). */
 function microDe(it, key){
  if(typeof it[key] === "number") return it[key];
+ if(it.cat === "Receta"){ var mr = microReceta(it, key); if(typeof mr === "number") return mr; }
  if(it.marca || it.code) return undefined;
  var nn = normName(it.n), al = null;
  for(var i = 0; i < ALIM.length; i++) if(ALIM[i].nn === nn){ al = ALIM[i]; break; }
@@ -1919,7 +1920,15 @@ function seguroN_(f){ try{ f(); }catch(e){} }
    consumo menos gramos, sin que se cambie la receta, solo en este lado cada día"). Las recetas con `ingr` (sus
    recetas) guardan en el alimento anotado cada ingrediente con su cantidad base (q0) y lo que comió hoy (q); al
    editar se cambia solo ese día: la receta del recetario no se toca. */
-function ingDeReceta(r){ return r && r.ingr ? r.ingr.map(function(x){ return { n:x[0], q0:x[1], u:x[2], k:x[3], p:x[4], c:x[5], g:x[6], q:x[1] }; }) : null; }
+function ingDeReceta(r){ return r && r.ingr ? r.ingr.map(function(x){ return { n:x[0], q0:x[1], u:x[2], k:x[3], p:x[4], c:x[5], g:x[6], m:x[7] || {}, q:x[1] }; }) : null; }
+/* Fibra, potasio, azúcar, sodio y vitamina C de una receta = suma de sus ingredientes (24-10-2026, la dueña: los
+   waffles tienen fibra y no marcaba). Lo anotado antes sin `m` lo toma de la receta por nombre del ingrediente. */
+function microReceta(it, key){
+ var r = recetaDeItem(it), ing = it.ing || ingDeReceta(r); if(!ing) return undefined;
+ var base = {}; ((r && r.ingr) || []).forEach(function(x){ base[x[0]] = x[7] || {}; });
+ var hay = false, t = ing.reduce(function(s, x){ var m = x.m || base[x.n] || {}; if(typeof m[key] === "number"){ hay = true; s += m[key] * (x.q0 ? x.q / x.q0 : 0); } return s; }, 0);
+ return hay ? Math.round(t * 10) / 10 : 0;
+}
 function recetaDeItem(it){ if(it.cat !== "Receta") return null; var i = recetaPorNombre(it.n); return i >= 0 ? RECETAS[i] : null; }
 function sumaIng(ing){ return ing.reduce(function(t, x){ var f = x.q0 ? x.q / x.q0 : 0; t.k += x.k * f; t.p += x.p * f; t.c += x.c * f; t.g += x.g * f; return t; }, { k:0, p:0, c:0, g:0 }); }
 function cantTxt(v){ return String(Math.round(v * 100) / 100).replace(".", ","); }
@@ -3003,7 +3012,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102413", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102414", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
