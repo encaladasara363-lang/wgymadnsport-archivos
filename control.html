@@ -424,6 +424,25 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </div>
 </div>
 
+<!-- 🛒 Tienda WGYM dentro del mesón (24-10-2026, la dueña: "también hazlo en el mesón"): la misma tienda.html en un
+     cuadro, con la clave del mesón ya guardada en este equipo. Se carga solo al tocar el botón. -->
+<div class="panel" id="tiendaPanel">
+<h2>🛒 Tienda WGYM <span class="der">ventas e inventario</span></h2>
+<div class="cuerpo">
+<p class="rank-ayuda">Vende, revisa el inventario, lo que ganaste, los fiados y las etiquetas de los productos, sin salir del mesón. Es la misma tienda del celular: lo que hagas en uno aparece en el otro.</p>
+<button class="btn btn-rojo" id="bTienda" type="button">Abrir la tienda aquí</button>
+<a class="btn" href="tienda.html" target="_blank" rel="noopener" style="margin-left:8px">Abrir en otra pestaña</a>
+<iframe id="tiendaFrame" title="Tienda WGYM" hidden style="width:100%;height:1150px;border:2px solid #D4AF37;border-radius:14px;margin-top:12px;background:#0A0A0B"></iframe>
+</div>
+</div>
+<script>
+document.getElementById("bTienda").onclick = function(){
+ var f = document.getElementById("tiendaFrame");
+ if(f.hidden){ if(!f.src) f.src = "tienda.html"; f.hidden = false; this.textContent = "Cerrar la tienda"; }
+ else { f.hidden = true; this.textContent = "Abrir la tienda aquí"; }
+};
+</script>
+
 <div class="panel">
 <h2>Socios del gimnasio <span class="der" id="conteo">—</span></h2>
 <div class="cuerpo">
