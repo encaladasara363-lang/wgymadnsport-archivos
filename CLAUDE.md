@@ -1531,7 +1531,7 @@ Versión 23). Celular y compu ven el mismo inventario.
   son para la dueña → costo $1.000 c/u, venta $2.000) y Creatina Ostrovit 500 g por tarro (2 por $22.220 → $11.110 c/u).
   Ropa deportiva de mujer (24-10-2026): cada talla y color es un producto aparte con su código 200… (la ropa no trae
   código). Conjunto Gym Work 3 piezas blanco/negro M ($13.609 → $22.000), Short scrunch M.Minute negro S y azul oscuro S
-  (pack de 2 por $7.512 → $3.756 c/u, venta $9.000), Conjunto Easithlete negro M ($8.568). Suplementos en pausa.
+  (pack de 2 por $7.512 → $3.756 c/u, venta $9.000), Conjunto Easithlete negro M ($8.568), Leggings Yefecy negro M ($11.001); short negro a $10.000. Suplementos en pausa.
   Bebestibles en pausa hasta que llegue más mercadería. Un enlace `?nuevo=1` con un código que ya existe abre ese producto (aunque cambie el nombre).
   **Todo se actualiza solo (24-10-2026, la dueña: "si hago una modificación en el celular, que se cambie igual en el
   computador"):** los datos se piden a la planilla cada 30 s si la página está a la vista y sin ficha abierta, y cada
