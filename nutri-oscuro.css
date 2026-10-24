@@ -74,3 +74,5 @@ html.oscuro body .vitc-hoy .mic-h small.tope-medio{color:#FFB547 !important}
 html.oscuro .rep-ay.fav-c{background:#2A2208 !important;border:2px solid #D4AF37 !important;color:#FFD54A !important}
 html.oscuro .agua-hora.agua-hora.atras{background:#3A0207 !important;color:#FF8A8F !important}
 html.oscuro .agua-hora.agua-hora.aldia{background:#0B2A14 !important;color:#7CE39A !important}
+/* Hora de cada comida en amarillo (24-10-2026, pedido de la dueña) */
+html.oscuro .hora-com.hora-com, html.oscuro .comida-card .cab h3 .hora-com{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #D4AF37 !important; }

@@ -672,3 +672,5 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .tabs.tabs-agr .chip .tt{font-size:11px !important;letter-spacing:0}
 /* Aviso de límites en texto, sin dibujar el sello (19-10-2026) */
 .aviso-limite{background:#1A1206;border:2px solid #F39C12;border-radius:14px;padding:10px 12px;margin:10px 0}
+/* Hora de cada comida en amarillo (24-10-2026, pedido de la dueña) */
+body .hora-com.hora-com, body .comida-card .cab h3 .hora-com{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #D4AF37 !important; }
