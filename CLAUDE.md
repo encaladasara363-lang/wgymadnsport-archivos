@@ -1889,7 +1889,8 @@ probado: ella se activó desde el mesón y entró a la app).
   29 g de proteína, 59 g de carbohidratos y 13 g de grasa. Con «Agregar a mi día» va al «Snack de la mañana» (campo `comida:"colacion1"` de la receta, pedido de la
   dueña; sin ese campo se usa `RECETA_COMIDA` según la categoría).
   **Nombres de comidas (24-10-2026, pedido de la dueña):** «Colación de la mañana» se llama «Snack de la mañana» y «Snack»
-  se llama «Snack de la tarde» (claves internas `colacion1` y `once` sin cambio). «Colación de la noche» sigue igual.
+  se llama «Snack de la tarde» (claves internas `colacion1` y `once` sin cambio). «Colación de la noche» sigue igual. La hora de cada comida (`.hora-com`) va en
+  amarillo con letra negra en los dos temas (pedido de la dueña, al final de `nutri-claro.css` y `nutri-oscuro.css`).
   **✏️ Editar cada ingrediente de una receta anotada (24-10-2026, la dueña: "a veces consumo menos gramos, sin que se
   cambie la receta, solo en este lado cada día"):** las recetas con `ingr` en `nutri-recetas.js` (por ahora sus 3:
   Waffles alto en fibra, Desayuno fit A y Postre fit A; formato `[nombre, cantidad, unidad, kcal, P, C, G]` por porción)
