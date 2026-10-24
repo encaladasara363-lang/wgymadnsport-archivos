@@ -343,7 +343,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 
 <script src="pago-datos.js?v=4"></script>
 <script src="nutri-alimentos.js?v=30"></script>
-<script src="nutri-recetas.js?v=12"></script>
+<script src="nutri-recetas.js?v=13"></script>
 <script>
 (function(){
 "use strict";
@@ -2964,7 +2964,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102407", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102408", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
