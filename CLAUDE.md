@@ -1509,6 +1509,14 @@ Versión 23). Celular y compu ven el mismo inventario.
 - **📒 Fiados:** quién debe y cuánto; «Pagó» con el medio de pago.
 - **🏷 Códigos:** a lo que no trae código le crea un EAN-13 propio que empieza con 200 (rango de uso interno) e
   imprime etiquetas A4 de 3 × 8 con nombre, precio y código (`svgEAN`; probado: ZXing las lee).
+- **Cargar productos que manda la dueña (24-10-2026, ella: "quiero que todos los productos que te empiece a mandar tengan
+  su inventario solito… yo soy un desastre para administración"):** Claude NO puede escribir en la planilla (el script
+  está bloqueado desde la sesión); por cada producto le manda un enlace
+  `tienda.html?nuevo=1&n=…&cat=…&det=…&costo=…&precio=…&min=…&foto=img/tienda/<archivo>.jpg&cod=auto` (y `stock=` si
+  dijo cuántos tiene) que abre «Producto nuevo» con todo escrito (`usarEnlace`); ella pone la cantidad y toca Guardar.
+  `cod=auto` crea el código propio 200… si no trae código; si trae, poner el número en `cod`. Si ya existe ese nombre
+  + detalle, abre ese producto para editar (no duplica). La foto se guarda achicada (≤500 px de alto) en `img/tienda/`.
+  Productos cargados: Agua purificada WOL 500 ml (costo $750, venta $1.000, sin código → cod=auto).
 - Fotos de productos: campo `foto` (ruta dentro del repo, ej. `img/tienda/…`); se ponen cuando la dueña las mande.
   Nunca escribir costos ni ventas en archivos del repo: viven solo en la planilla.
 
