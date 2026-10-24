@@ -1527,6 +1527,8 @@ Versión 23). Celular y compu ven el mismo inventario.
   Suplementos por porción (24-10-2026): cada porción es 1 unidad del stock; costo = precio del tarro ÷ porciones; el
   tarro lleva una etiqueta 200… propia (cada escaneo vende 1 porción). Pre entreno Mr Hyde Signature Fruit Punch
   (tarro $21.400, 30 porciones → $713; venta $2.000; foto `img/tienda/pre-entreno-mr-hyde-signature.jpg`).
+  Llegan el lunes 26-10-2026 (cargar ese día): Creatina Xtreme Boost en sachet (pack $19.990 con tabletas de pre entreno que
+  son para la dueña → costo $1.000 c/u, venta $2.000) y Creatina Ostrovit 500 g por tarro (2 por $22.220 → $11.110 c/u).
   Bebestibles en pausa hasta que llegue más mercadería. Un enlace `?nuevo=1` con un código que ya existe abre ese producto (aunque cambie el nombre).
   **Todo se actualiza solo (24-10-2026, la dueña: "si hago una modificación en el celular, que se cambie igual en el
   computador"):** los datos se piden a la planilla cada 30 s si la página está a la vista y sin ficha abierta, y cada
