@@ -1667,7 +1667,7 @@ probado: ella se activó desde el mesón y entró a la app).
   Yogur Protein natural endulzado Loncoleche (20-10-2026, la dueña mandó la etiqueta del pote de 800 g): Marcas,
   «1 taza (200 g)»: 130 kcal, 17,6 g de proteína, 11,8 g de carbohidratos, 1,4 g de grasa, 130 mg de sodio, azúcar
   añadida 0 (sin sacarosa). Sin código en `NUTRI_CODIGOS` (no se veía completo en la foto).
-  Chocolate blanco (12-10-2026, la dueña mandó foto de sus botones): «Chocolate blanco (botones)» por **discos** («10 discos (20 g)», ≈11 kcal cada uno) y «Chocolate blanco» por cuadraditos; `CONTABLES` acepta «discos».
+  Chocolate blanco (12-10-2026, la dueña mandó foto de sus botones): «Chocolate blanco (botones)» por **discos** («20 discos (7 g)», ≈1,9 kcal cada uno; corregido el 24-10-2026: la dueña pesó sus 20 botones en 7 g, antes decía «10 discos (20 g)») y «Chocolate blanco» por cuadraditos; `CONTABLES` acepta «discos».
   Esencia de vainilla (12-10-2026, pedido de la dueña): «1 cucharadita» (12 kcal), se cuenta por cucharaditas; `CONTABLES` acepta «cucharaditas» solo si no traen gramos/ml entre paréntesis (azúcar, aceite, etc. siguen en gramos).
 - **Botones sin la palabra «porción» (10-10-2026, pedido de la dueña):** en productos
   escaneados los botones muestran gramos (ej. 17 g · 34 g · 68 g · 100 g) en vez de
