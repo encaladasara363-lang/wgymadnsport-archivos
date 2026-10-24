@@ -130,7 +130,13 @@ table.top td.r{ text-align:right; font-family:var(--num); font-weight:400; color
    más grande que puedas de todas las letras"). Las pastillas de color van con letra negra o clara bien marcada. */
 html{ -webkit-text-size-adjust:100%; }
 body{ zoom:1.22; }
-.prod .tx span.pill{ display:inline-block; font-size:15px; font-weight:800; color:var(--txt); }
+.prod .tx span.pill{ display:inline-block; font-size:20px; font-weight:800; padding:5px 12px; margin:6px 6px 0 0; color:var(--txt); }
+.pills{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.pills .pill{ font-size:20px; font-weight:800; padding:6px 14px; margin:0; white-space:nowrap; color:var(--txt); }
+.pills .pill.oro{ background:var(--yel); color:#000; border-color:var(--gold); }
+.pills .pill.ok{ background:#2ECC71; color:#000; border-color:#1fa856; }
+.pills .pill.bajo{ background:#FF3B47; color:#000; border-color:var(--red); }
+.prod .tx .precio{ color:var(--yel); font-size:26px; }
 .prod .tx span.pill.oro{ background:var(--yel); color:#000; border-color:var(--gold); }
 .prod .tx span.pill.ok{ background:#2ECC71; color:#000; border-color:#1fa856; }
 .prod .tx span.pill.bajo{ background:#FF3B47; color:#000; border-color:var(--red); }
@@ -405,8 +411,8 @@ function htmlListaInv(){
  return activos().filter(function(p){ return (invFiltro === "Todos" || p.cat === invFiltro) && (!q || normTxt(p.n + " " + p.det + " " + p.cod).indexOf(q) >= 0); })
   .sort(function(a, b){ return a.n.localeCompare(b.n); }).map(function(p){
    var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0;
-   return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span>' +
-    '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span><span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + '</div><span class="precio">' + plata(p.precio) + '</span></div>' +
+   return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
+    '<div class="pills"><span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span><span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + '</div>' +
     '<div class="grid2" style="margin-top:10px"><button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button><button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div></div>';
   }).join("");
 }
@@ -693,9 +699,11 @@ function usarEnlace(){
  if(!ENLACE) return; var b = ENLACE; ENLACE = null;
  var ya = activos().filter(function(p){ return normTxt(p.n) === normTxt(b.n) && normTxt(p.det) === normTxt(b.det || ""); })[0];
  tab = "inv"; document.querySelectorAll("#nav button").forEach(function(x){ x.setAttribute("aria-pressed", x.dataset.tab === "inv"); }); render();
- if(ya){ toast("«" + ya.n + "» ya está en tu inventario: revisa y guarda si cambió algo.", 5000); formProducto(ya); return; }
- if(b.cod === "auto") b.cod = nuevoCodigo();
  ["costo","precio","stock","min"].forEach(function(k){ if(b[k] !== undefined) b[k] = num(b[k]); });
+ /* Si ya existe, abre su ficha con los datos nuevos del enlace (ej. otro precio): ella revisa y toca Guardar. */
+ if(ya){ var cambio = Object.assign({}, ya); ["n","cat","det","costo","precio","min","foto"].forEach(function(k){ if(b[k] !== undefined && b[k] !== "") cambio[k] = b[k]; });
+  toast("«" + ya.n + "» ya está en tu inventario: revisa el cambio y toca Guardar.", 5000); formProducto(cambio); return; }
+ if(b.cod === "auto") b.cod = nuevoCodigo();
  formProducto(null, "", b);
  setTimeout(function(){ var i = $("fStock"); if(i && !i.value){ i.focus(); } }, 300);
 }

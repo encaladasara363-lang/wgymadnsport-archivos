@@ -1516,11 +1516,14 @@ Versión 23). Celular y compu ven el mismo inventario.
   dijo cuántos tiene) que abre «Producto nuevo» con todo escrito (`usarEnlace`); ella pone la cantidad y toca Guardar.
   `cod=auto` crea el código propio 200… si no trae código; si trae, poner el número en `cod`. Si ya existe ese nombre
   + detalle, abre ese producto para editar (no duplica). La foto se guarda achicada (≤500 px de alto) en `img/tienda/`.
-  Productos cargados: Agua purificada WOL 500 ml (costo $750; la dueña la dejó a $1.200; 22 unidades; código 2000000000015).
+  Productos cargados: Agua purificada WOL 500 ml (costo $750, venta $1.000; 22 unidades; código 2000000000015).
   La página se actualiza sola cada 60 s si está a la vista y sin ficha abierta (celular y compu ven lo mismo).
   Foto del agua cambiada el 24-10-2026 por la que mandó la dueña (botella WOL con logo); al reemplazar una foto en
   `img/tienda/` con el mismo nombre, subir `FOTO_V` en `tienda.html` (las fotos se piden con `?v=`). La foto del inventario se ve entera
-  (`object-fit:contain`, cuadro de 78 × 104 px con fondo blanco), pedido de la dueña.
+  (`object-fit:contain`, cuadro de 78 × 104 px con fondo blanco), pedido de la dueña. Tarjeta del inventario: foto, nombre, detalle y
+  precio arriba; debajo, fila `.pills` con Quedan / Costo / Ganas en letra de 20 px (la dueña: "un poco más grande").
+  Si el enlace `?nuevo=1…` trae un producto que ya existe, abre su ficha con los datos nuevos del enlace (ej. otro
+  precio) para que ella toque Guardar. La dueña vende el agua WOL a $1.000 (no a $1.200).
   Letras grandes (24-10-2026, la dueña: "haz el zoom más grande que puedas"): `body{zoom:1.22}` (sin zoom al imprimir) y
   pastillas del inventario con letra negra sobre color (Ganas = amarillo, Quedan = verde, poco stock = rojo).
   La categoría «Bebidas» se llama «Bebestibles» (24-10-2026, pedido de la dueña; lo guardado como «Bebidas» se muestra
