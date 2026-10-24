@@ -261,6 +261,9 @@ function enviarPendientes(){
  });
 }
 setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
+/* Se actualiza sola cada minuto mientras está a la vista (24-10-2026: la dueña guardó un producto en el celular y el
+   computador, que tenía la página abierta desde antes, no lo mostraba). No recarga con una ficha abierta. */
+setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 60000);
 window.addEventListener("online", function(){ enviarPendientes(); });
 document.addEventListener("visibilitychange", function(){ if(!document.hidden && clave){ enviarPendientes().then(function(){ cargar(true); }); } });
 

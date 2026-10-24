@@ -1516,7 +1516,8 @@ Versión 23). Celular y compu ven el mismo inventario.
   dijo cuántos tiene) que abre «Producto nuevo» con todo escrito (`usarEnlace`); ella pone la cantidad y toca Guardar.
   `cod=auto` crea el código propio 200… si no trae código; si trae, poner el número en `cod`. Si ya existe ese nombre
   + detalle, abre ese producto para editar (no duplica). La foto se guarda achicada (≤500 px de alto) en `img/tienda/`.
-  Productos cargados: Agua purificada WOL 500 ml (costo $750, venta $1.000, sin código → cod=auto).
+  Productos cargados: Agua purificada WOL 500 ml (costo $750; la dueña la dejó a $1.200; 22 unidades; código 2000000000015).
+  La página se actualiza sola cada 60 s si está a la vista y sin ficha abierta (celular y compu ven lo mismo).
 - Fotos de productos: campo `foto` (ruta dentro del repo, ej. `img/tienda/…`); se ponen cuando la dueña las mande.
   Nunca escribir costos ni ventas en archivos del repo: viven solo en la planilla.
 
