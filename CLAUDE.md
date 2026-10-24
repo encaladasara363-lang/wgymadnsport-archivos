@@ -1517,7 +1517,11 @@ Versión 23). Celular y compu ven el mismo inventario.
   `cod=auto` crea el código propio 200… si no trae código; si trae, poner el número en `cod`. Si ya existe ese nombre
   + detalle, abre ese producto para editar (no duplica). La foto se guarda achicada (≤500 px de alto) en `img/tienda/`.
   Productos cargados: Agua purificada WOL 500 ml (costo $750, venta $1.000; 22 unidades; código 2000000000015).
-  La página se actualiza sola cada 60 s si está a la vista y sin ficha abierta (celular y compu ven lo mismo).
+  **Todo se actualiza solo (24-10-2026, la dueña: "si hago una modificación en el celular, que se cambie igual en el
+  computador"):** los datos se piden a la planilla cada 30 s si la página está a la vista y sin ficha abierta, y cada
+  minuto (y al volver a la pestaña) se revisa `tienda-version.txt`: si es mayor que `TIENDA_VERSION`, la página se
+  recarga sola (no con una ficha abierta ni con productos en la venta actual). **Cada vez que se cambie `tienda.html`,
+  subir `TIENDA_VERSION` y `tienda-version.txt` juntos (AAAAMMDDNN).**
   Foto del agua cambiada el 24-10-2026 por la que mandó la dueña (botella WOL con logo); al reemplazar una foto en
   `img/tienda/` con el mismo nombre, subir `FOTO_V` en `tienda.html` (las fotos se piden con `?v=`). La foto del inventario se ve entera
   (`object-fit:contain`, cuadro de 78 × 104 px con fondo blanco), pedido de la dueña. Tarjeta del inventario: foto, nombre, detalle y
