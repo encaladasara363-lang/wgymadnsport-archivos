@@ -135,6 +135,9 @@ body{ zoom:1.22; }
 .prod .tx span.pill.ok{ background:#2ECC71; color:#000; border-color:#1fa856; }
 .prod .tx span.pill.bajo{ background:#FF3B47; color:#000; border-color:var(--red); }
 .muted, .prod .tx span{ color:#CFCFD6; }
+/* La foto del producto se ve entera, sin recortar (24-10-2026, la dueña: "que se vea entera"). */
+.prod .ph{ width:78px; height:104px; background:#fff; }
+.prod .ph img{ object-fit:contain; }
 @media print{ body{ zoom:1; } }
 @media print{
  body{ background:#fff !important; padding:0; }
