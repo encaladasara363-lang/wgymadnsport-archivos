@@ -292,7 +292,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102406";
+var TIENDA_VERSION = "2026102407";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -502,7 +502,9 @@ function formEntrada(p, ajuste){
 }
 
 /* ═══ 📊 RESUMEN ═══ */
-var resPer = "hoy";
+var resPer = "hoy", resCat = "";
+/* Cada categoría es una caja aparte (24-10-2026, la dueña: "los snack son una recaudación aparte para seguir comprando más snack"). */
+function catDeMov(m){ var p = S.productos.filter(function(x){ return x.id === m.id; })[0]; var c = p ? p.cat : (m.cat || "Otro"); return c === "Bebidas" ? "Bebestibles" : c; }
 function rangoPer(){
  var hoy = S.hoy || hoyISO(), d = new Date(hoy + "T12:00:00");
  if(resPer === "hoy") return [hoy, hoy];
@@ -511,24 +513,31 @@ function rangoPer(){
  return ["0000-00-00", hoy];
 }
 function renderRes(){
- var v = $("vista"), r = rangoPer(), ms = todosMovs().filter(function(m){ var f = m.f.slice(0, 10); return f >= r[0] && f <= r[1]; });
+ var v = $("vista"), r = rangoPer(), deCat = todosMovs().filter(function(m){ return !resCat || catDeMov(m) === resCat; }), ms = deCat.filter(function(m){ var f = m.f.slice(0, 10); return f >= r[0] && f <= r[1]; });
  var ventas = ms.filter(function(m){ return m.tipo === "venta" && m.est !== "anulada"; });
  var tot = ventas.reduce(function(s, m){ return s + m.total; }, 0), gan = ventas.reduce(function(s, m){ return s + m.total - m.cant * m.costo; }, 0), uds = ventas.reduce(function(s, m){ return s + m.cant; }, 0);
  var porPago = {}; ventas.forEach(function(m){ porPago[m.pago] = (porPago[m.pago] || 0) + m.total; });
  var porProd = {}; ventas.forEach(function(m){ var k = m.n; porProd[k] = porProd[k] || { n:k, cant:0, total:0, gan:0 }; porProd[k].cant += m.cant; porProd[k].total += m.total; porProd[k].gan += m.total - m.cant * m.costo; });
  var top = Object.keys(porProd).map(function(k){ return porProd[k]; }).sort(function(a, b){ return b.total - a.total; });
  var T = S.total || {}, inv = T.invertido || 0, vend = T.ventas || 0, ganT = T.ganancia || 0;
- var h = '<h2>Resumen</h2><div class="chips">' + [["hoy","Hoy"],["semana","Esta semana"],["mes","Este mes"],["todo","Todo"]].map(function(x){ return '<button class="chip" data-per="' + x[0] + '" aria-pressed="' + (resPer === x[0]) + '">' + x[1] + '</button>'; }).join("") + '</div>';
+ if(resCat){ /* caja de una categoría: se suma desde los movimientos (los de los últimos 120 días) */
+  var vt = deCat.filter(function(m){ return m.tipo === "venta" && m.est !== "anulada"; });
+  vend = vt.reduce(function(s, m){ return s + m.total; }, 0); ganT = vt.reduce(function(s, m){ return s + m.total - m.cant * m.costo; }, 0);
+  inv = deCat.filter(function(m){ return m.tipo === "entrada"; }).reduce(function(s, m){ return s + (m.total || 0); }, 0);
+ }
+ var catsUsadas = CATS.filter(function(c){ return S.productos.some(function(p){ return p.cat === c[0] || (c[0] === "Bebestibles" && p.cat === "Bebidas"); }); });
+ var h = '<h2>Resumen</h2><div class="chips">' + [["hoy","Hoy"],["semana","Esta semana"],["mes","Este mes"],["todo","Todo"]].map(function(x){ return '<button class="chip" data-per="' + x[0] + '" aria-pressed="' + (resPer === x[0]) + '">' + x[1] + '</button>'; }).join("") + '</div>' +
+  (catsUsadas.length ? '<div class="chips"><button class="chip" data-rcat="" aria-pressed="' + !resCat + '">📦 Toda la tienda</button>' + catsUsadas.map(function(c){ return '<button class="chip" data-rcat="' + c[0] + '" aria-pressed="' + (resCat === c[0]) + '">' + c[1] + ' ' + c[0] + '</button>'; }).join("") + '</div>' : '');
  if(resPer === "todo" && S.desde) h += '<p class="muted" style="font-size:14px;margin:0 0 6px">La lista de ventas muestra desde el ' + esc(S.desde) + '; los totales de arriba cuentan todo.</p>';
  h += '<div class="kpis"><div class="kpi"><small>Vendido</small><b>' + plata(resPer === "todo" ? vend : tot) + '</b></div><div class="kpi verde"><small>Ganancia</small><b>' + plata(resPer === "todo" ? ganT : gan) + '</b></div>' +
   '<div class="kpi"><small>Productos vendidos</small><b>' + uds + '</b></div><div class="kpi"><small>Ventas</small><b>' + Object.keys(ventas.reduce(function(o, m){ o[m.vid] = 1; return o; }, {})).length + '</b></div></div>';
  /* Reparto de la plata (24-10-2026, la dueña: "la ganancia que me queda para mí y la que se debería invertir"):
     de cada venta, el costo vuelve a la caja para reponer y la ganancia se parte entre ella y lo que se reinvierte para crecer. */
- var vendP = resPer === "todo" ? vend : tot, ganP = resPer === "todo" ? ganT : gan, costoP = vendP - ganP, pctYo = lsGet("wgym_tienda_reparto_v1", 50);
+ var vendP = resPer === "todo" ? vend : tot, ganP = resPer === "todo" ? ganT : gan, costoP = vendP - ganP, repartos = lsGet("wgym_tienda_reparto_v1", 50), pctYo = typeof repartos === "number" ? repartos : (repartos[resCat || "todo"] != null ? repartos[resCat || "todo"] : 50);
  var yo = Math.round(ganP * pctYo / 100), crecer = ganP - yo;
- var ej = activos().filter(function(p){ return p.costo > 0 && p.precio > p.costo; })[0];
+ var ej = activos().filter(function(p){ return (!resCat || p.cat === resCat) && p.costo > 0 && p.precio > p.costo; })[0];
  h += '<div class="card oro"><b style="text-transform:uppercase">🧮 ¿Cómo repartir la plata?</b>' +
-  '<p class="muted" style="margin:6px 0 4px;font-size:15px">De la ganancia, ¿qué porcentaje es para ti?</p><div class="chips">' + [30, 50, 70].map(function(x){ return '<button class="chip" data-rep="' + x + '" aria-pressed="' + (pctYo === x) + '">' + x + ' %</button>'; }).join("") + '</div>' +
+  '<p class="muted" style="margin:6px 0 4px;font-size:15px">De la ganancia, ¿qué porcentaje es para ti?</p><div class="chips">' + [0, 30, 50, 70].map(function(x){ return '<button class="chip" data-rep="' + x + '" aria-pressed="' + (pctYo === x) + '">' + x + ' %</button>'; }).join("") + '</div>' +
   (vendP > 0 ?
    '<table class="top"><tr><td>🔄 Para reponer mercadería<br><span class="muted" style="font-size:13px">Lo que te costaron los productos: no se gasta</span></td><td class="r">' + plata(costoP) + '</td></tr>' +
    '<tr><td>💵 Para ti (' + pctYo + ' % de la ganancia)</td><td class="r" style="color:#7CE39A">' + plata(yo) + '</td></tr>' +
@@ -540,8 +549,9 @@ function renderRes(){
  /* Meta de la dueña: que su plata se duplique (lo que ganó llega a lo que invirtió). */
  if(inv > 0){
   var pct = Math.min(100, Math.round(ganT / inv * 100));
-  h += '<div class="card oro"><b style="text-transform:uppercase">💰 Tu inversión</b><p class="muted" style="margin:6px 0">Invertiste <b style="color:var(--txt)">' + plata(inv) + '</b> en mercadería · vendiste <b style="color:var(--txt)">' + plata(vend) + '</b> · ganaste <b style="color:#7CE39A">' + plata(ganT) + '</b></p>' +
-   '<div class="barra"><i style="width:' + pct + '%"></i></div><p style="margin:4px 0 0;font-size:16px">' + (ganT >= inv ? '🎉 ¡Ya duplicaste tu plata!' : 'Para duplicar tu plata te falta ganar ' + plata(inv - ganT) + ' (' + pct + ' % logrado).') + '</p></div>';
+  h += '<div class="card oro"><b style="text-transform:uppercase">' + (resCat ? '💼 Caja aparte de ' + esc(resCat) : '💰 Tu inversión') + '</b><p class="muted" style="margin:6px 0">Invertiste <b style="color:var(--txt)">' + plata(inv) + '</b> en mercadería · vendiste <b style="color:var(--txt)">' + plata(vend) + '</b> · ganaste <b style="color:#7CE39A">' + plata(ganT) + '</b></p>' +
+   '<div class="barra"><i style="width:' + pct + '%"></i></div><p style="margin:4px 0 0;font-size:16px">' + (ganT >= inv ? '🎉 ¡Ya duplicaste tu plata!' : 'Para duplicar tu plata te falta ganar ' + plata(inv - ganT) + ' (' + pct + ' % logrado).') + '</p>' +
+   (resCat ? '<p style="margin:8px 0 0;font-size:16px">' + (vend >= inv ? '✅ Ya recuperaste lo que gastaste en ' + esc(resCat.toLowerCase()) + ': tienes ' + plata(vend - inv) + ' de más para comprar más.' : '🔄 Juntaste ' + plata(vend) + ' con las ventas de ' + esc(resCat.toLowerCase()) + '. Te falta ' + plata(inv - vend) + ' para recuperar lo que gastaste.') + '</p>' : '') + '</div>';
  }
  if(Object.keys(porPago).length) h += '<div class="card"><b style="text-transform:uppercase">Por medio de pago</b><table class="top">' + PAGOS.filter(function(p){ return porPago[p[0]]; }).map(function(p){ return '<tr><td>' + p[1] + '</td><td class="r">' + plata(porPago[p[0]]) + '</td></tr>'; }).join("") + '</table></div>';
  if(top.length) h += '<div class="card"><b style="text-transform:uppercase">🏆 Lo que más se vende</b><table class="top">' + top.slice(0, 10).map(function(t){ return '<tr><td>' + esc(t.n) + '<br><span class="muted" style="font-size:13px">' + t.cant + ' vendidos · ganaste ' + plata(t.gan) + '</span></td><td class="r">' + plata(t.total) + '</td></tr>'; }).join("") + '</table></div>';
@@ -556,7 +566,8 @@ function renderRes(){
  if(compras.length) h += '<div class="card"><b style="text-transform:uppercase">📥 Mercadería y ajustes</b>' + compras.slice().reverse().map(function(m){ return '<div class="mov"><div class="d">' + (m.cant > 0 ? '+' : '') + m.cant + ' × ' + esc(m.n) + '<small>' + esc(m.f.slice(5, 16).replace("-", "/")) + ' · ' + (m.tipo === "entrada" ? 'llegó mercadería' : 'ajuste' + (m.nota ? ': ' + esc(m.nota) : '')) + '</small></div>' + (m.tipo === "entrada" ? '<b class="precio" style="font-size:18px;color:#FF8A8F">−' + plata(m.total) + '</b>' : '') + '</div>'; }).join("") + '</div>';
  v.innerHTML = h;
  v.querySelectorAll("[data-per]").forEach(function(b){ b.onclick = function(){ resPer = b.dataset.per; renderRes(); }; });
- v.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){ lsSet("wgym_tienda_reparto_v1", Number(b.dataset.rep)); renderRes(); }; });
+ v.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){ var o = lsGet("wgym_tienda_reparto_v1", {}); if(typeof o !== "object" || !o) o = { todo:o }; o[resCat || "todo"] = Number(b.dataset.rep); lsSet("wgym_tienda_reparto_v1", o); renderRes(); }; });
+ v.querySelectorAll("[data-rcat]").forEach(function(b){ b.onclick = function(){ resCat = b.dataset.rcat; renderRes(); }; });
  v.querySelectorAll("[data-anular]").forEach(function(b){ b.onclick = function(){
   if(!confirm("¿Anular esta venta? El stock vuelve al inventario.")) return;
   b.disabled = true;
