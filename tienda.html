@@ -126,6 +126,16 @@ table.top td.r{ text-align:right; font-family:var(--num); font-weight:400; color
 .etq-sel .n{ flex:1; min-width:0; }
 .etq-sel input[type=number]{ width:70px; }
 #hojaEtiquetas{ display:none; }
+/* Letras más grandes y pastillas legibles (24-10-2026, la dueña: "eso no se nota nada, pon letras negras y haz el zoom
+   más grande que puedas de todas las letras"). Las pastillas de color van con letra negra o clara bien marcada. */
+html{ -webkit-text-size-adjust:100%; }
+body{ zoom:1.22; }
+.prod .tx span.pill{ display:inline-block; font-size:15px; font-weight:800; color:var(--txt); }
+.prod .tx span.pill.oro{ background:var(--yel); color:#000; border-color:var(--gold); }
+.prod .tx span.pill.ok{ background:#2ECC71; color:#000; border-color:#1fa856; }
+.prod .tx span.pill.bajo{ background:#FF3B47; color:#000; border-color:var(--red); }
+.muted, .prod .tx span{ color:#CFCFD6; }
+@media print{ body{ zoom:1; } }
 @media print{
  body{ background:#fff !important; padding:0; }
  body > *:not(#hojaEtiquetas){ display:none !important; }
