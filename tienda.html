@@ -292,7 +292,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102407";
+var TIENDA_VERSION = "2026102408";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -503,6 +503,10 @@ function formEntrada(p, ajuste){
 
 /* ═══ 📊 RESUMEN ═══ */
 var resPer = "hoy", resCat = "";
+/* Porcentaje de la ganancia para la dueña: 30 % (24-10-2026, ella: "yo quiero el 30 por ciento"); cada categoría puede tener el suyo
+   (ej. Snacks en 0 % para que todo vuelva a comprar snacks). El número antiguo (un solo valor) se descarta. */
+function repartos(){ var o = lsGet("wgym_tienda_reparto_v1", {}); return (o && typeof o === "object") ? o : {}; }
+function pctDe(cat){ var o = repartos(); return o[cat || "todo"] != null ? o[cat || "todo"] : (o.todo != null ? o.todo : 30); }
 /* Cada categoría es una caja aparte (24-10-2026, la dueña: "los snack son una recaudación aparte para seguir comprando más snack"). */
 function catDeMov(m){ var p = S.productos.filter(function(x){ return x.id === m.id; })[0]; var c = p ? p.cat : (m.cat || "Otro"); return c === "Bebidas" ? "Bebestibles" : c; }
 function rangoPer(){
@@ -533,19 +537,36 @@ function renderRes(){
   '<div class="kpi"><small>Productos vendidos</small><b>' + uds + '</b></div><div class="kpi"><small>Ventas</small><b>' + Object.keys(ventas.reduce(function(o, m){ o[m.vid] = 1; return o; }, {})).length + '</b></div></div>';
  /* Reparto de la plata (24-10-2026, la dueña: "la ganancia que me queda para mí y la que se debería invertir"):
     de cada venta, el costo vuelve a la caja para reponer y la ganancia se parte entre ella y lo que se reinvierte para crecer. */
- var vendP = resPer === "todo" ? vend : tot, ganP = resPer === "todo" ? ganT : gan, costoP = vendP - ganP, repartos = lsGet("wgym_tienda_reparto_v1", 50), pctYo = typeof repartos === "number" ? repartos : (repartos[resCat || "todo"] != null ? repartos[resCat || "todo"] : 50);
- var yo = Math.round(ganP * pctYo / 100), crecer = ganP - yo;
+ var vendP = resPer === "todo" ? vend : tot, ganP = resPer === "todo" ? ganT : gan, costoP = vendP - ganP, pctYo = pctDe(resCat);
+ var yo = Math.round(ganP * pctYo / 100);
+ if(!resCat){ /* toda la tienda: cada categoría con su propio % (Snacks puede ir en 0 %) */
+  var vs = (resPer === "todo" ? deCat : ms).filter(function(m){ return m.tipo === "venta" && m.est !== "anulada"; }), gs = 0, ys = 0;
+  vs.forEach(function(m){ var g = m.total - m.cant * m.costo; gs += g; ys += g * pctDe(catDeMov(m)) / 100; });
+  if(gs > 0) yo = Math.round(ganP * ys / gs);
+ }
+ var crecer = ganP - yo, pctReal = ganP > 0 ? Math.round(yo / ganP * 100) : pctYo;
  var ej = activos().filter(function(p){ return (!resCat || p.cat === resCat) && p.costo > 0 && p.precio > p.costo; })[0];
  h += '<div class="card oro"><b style="text-transform:uppercase">🧮 ¿Cómo repartir la plata?</b>' +
   '<p class="muted" style="margin:6px 0 4px;font-size:15px">De la ganancia, ¿qué porcentaje es para ti?</p><div class="chips">' + [0, 30, 50, 70].map(function(x){ return '<button class="chip" data-rep="' + x + '" aria-pressed="' + (pctYo === x) + '">' + x + ' %</button>'; }).join("") + '</div>' +
   (vendP > 0 ?
    '<table class="top"><tr><td>🔄 Para reponer mercadería<br><span class="muted" style="font-size:13px">Lo que te costaron los productos: no se gasta</span></td><td class="r">' + plata(costoP) + '</td></tr>' +
-   '<tr><td>💵 Para ti (' + pctYo + ' % de la ganancia)</td><td class="r" style="color:#7CE39A">' + plata(yo) + '</td></tr>' +
-   '<tr><td>📈 Para invertir en más productos (' + (100 - pctYo) + ' %)</td><td class="r" style="color:var(--yel)">' + plata(crecer) + '</td></tr></table>' +
+   '<tr><td>💵 Para ti (' + pctReal + ' % de la ganancia)</td><td class="r" style="color:#7CE39A">' + plata(yo) + '</td></tr>' +
+   '<tr><td>📈 Para invertir en más productos (' + (100 - pctReal) + ' %)</td><td class="r" style="color:var(--yel)">' + plata(crecer) + '</td></tr></table>' +
    '<p class="muted" style="margin:6px 0 0;font-size:14px">Para reponer + para invertir = ' + plata(costoP + crecer) + ' que vuelven a la tienda.</p>'
   : '<p class="muted" style="margin:8px 0 0">Todavía no hay ventas en este período.</p>') +
   (ej ? '<p style="margin:10px 0 0;font-size:15px">📌 Ejemplo: vendes 1 ' + esc(ej.n) + ' a ' + plata(ej.precio) + ' → ' + plata(ej.costo) + ' para reponer, ' + plata(Math.round((ej.precio - ej.costo) * pctYo / 100)) + ' para ti y ' + plata((ej.precio - ej.costo) - Math.round((ej.precio - ej.costo) * pctYo / 100)) + ' para invertir.</p>' : '') +
   '</div>';
+ /* Tu parte mes a mes (24-10-2026, la dueña: "que la ganancia se junte una vez al mes para sacar lo que me corresponde"):
+    la ganancia de cada mes × el % de cada categoría; el 1 del mes siguiente saca su parte. */
+ var meses = {}; deCat.filter(function(m){ return m.tipo === "venta" && m.est !== "anulada"; }).forEach(function(m){
+  var k = m.f.slice(0, 7), g = m.total - m.cant * m.costo, c = catDeMov(m); meses[k] = meses[k] || { gan:0, yo:0 }; meses[k].gan += g; meses[k].yo += g * pctDe(c) / 100; });
+ var mesAct = (S.hoy || hoyISO()).slice(0, 7), NOMM = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+ function nomMes(k){ return NOMM[Number(k.slice(5, 7)) - 1] + " " + k.slice(0, 4); }
+ var ks = Object.keys(meses).sort().reverse(); if(ks.indexOf(mesAct) < 0) ks.unshift(mesAct);
+ h += '<div class="card oro"><b style="text-transform:uppercase">📅 Tu parte, mes a mes</b><p class="muted" style="margin:6px 0;font-size:15px">La ganancia se junta todo el mes. El día 1 sacas tu parte del mes anterior; el resto se queda para invertir.</p><table class="top">' +
+  ks.map(function(k){ var x = meses[k] || { gan:0, yo:0 }, yo = Math.round(x.yo);
+   return '<tr><td>' + (k === mesAct ? '⏳ ' : '✅ ') + nomMes(k) + '<br><span class="muted" style="font-size:13px">' + (k === mesAct ? 'En curso · ' : 'Listo para sacar · ') + 'ganancia ' + plata(x.gan) + ' · invertir ' + plata(x.gan - yo) + '</span></td><td class="r" style="color:#7CE39A">' + plata(yo) + '</td></tr>'; }).join("") +
+  '</table></div>';
  /* Meta de la dueña: que su plata se duplique (lo que ganó llega a lo que invirtió). */
  if(inv > 0){
   var pct = Math.min(100, Math.round(ganT / inv * 100));
@@ -566,7 +587,7 @@ function renderRes(){
  if(compras.length) h += '<div class="card"><b style="text-transform:uppercase">📥 Mercadería y ajustes</b>' + compras.slice().reverse().map(function(m){ return '<div class="mov"><div class="d">' + (m.cant > 0 ? '+' : '') + m.cant + ' × ' + esc(m.n) + '<small>' + esc(m.f.slice(5, 16).replace("-", "/")) + ' · ' + (m.tipo === "entrada" ? 'llegó mercadería' : 'ajuste' + (m.nota ? ': ' + esc(m.nota) : '')) + '</small></div>' + (m.tipo === "entrada" ? '<b class="precio" style="font-size:18px;color:#FF8A8F">−' + plata(m.total) + '</b>' : '') + '</div>'; }).join("") + '</div>';
  v.innerHTML = h;
  v.querySelectorAll("[data-per]").forEach(function(b){ b.onclick = function(){ resPer = b.dataset.per; renderRes(); }; });
- v.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){ var o = lsGet("wgym_tienda_reparto_v1", {}); if(typeof o !== "object" || !o) o = { todo:o }; o[resCat || "todo"] = Number(b.dataset.rep); lsSet("wgym_tienda_reparto_v1", o); renderRes(); }; });
+ v.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){ var o = repartos(); o[resCat || "todo"] = Number(b.dataset.rep); lsSet("wgym_tienda_reparto_v1", o); renderRes(); }; });
  v.querySelectorAll("[data-rcat]").forEach(function(b){ b.onclick = function(){ resCat = b.dataset.rcat; renderRes(); }; });
  v.querySelectorAll("[data-anular]").forEach(function(b){ b.onclick = function(){
   if(!confirm("¿Anular esta venta? El stock vuelve al inventario.")) return;
