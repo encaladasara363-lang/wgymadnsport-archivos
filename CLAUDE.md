@@ -1880,7 +1880,8 @@ probado: ella se activó desde el mesón y entró a la app).
   «Waffles alto en fibra» (24-10-2026, receta de la dueña, primera de Desayuno): 2 porciones, cada una ≈303 kcal,
   14 g de proteína, 26 g de carbohidratos y 16 g de grasa (calculado con sus ingredientes y la etiqueta de Simi Fibra).
   «Desayuno fit A» (sándwich masa madre con huevo, palta y pavo; 24-10-2026, nombre elegido por la dueña, armada con el desayuno que la dueña anotó en la app):
-  1 porción ≈455 kcal, 26 g de proteína, 34 g de carbohidratos y 23 g de grasa.
+  1 porción ≈455 kcal, 26 g de proteína, 34 g de carbohidratos y 23 g de grasa. Tal como lo come ella: 1 lámina de
+  queso y 1 de jamón de pavo, sin sal, pimienta ni orégano (no agregar extras a sus recetas).
   «Postre fit A» (24-10-2026, armado con la colación que anotó la dueña; primera de Postre): bowl de yogur proteico con
   batido whey, avena, chía, manzana verde, Cereal Balls, avellanas y botones de chocolate blanco (7 g): ≈453 kcal,
   29 g de proteína, 59 g de carbohidratos y 13 g de grasa.
