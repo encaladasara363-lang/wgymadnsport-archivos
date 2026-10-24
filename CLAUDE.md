@@ -1529,6 +1529,8 @@ Versión 23). Celular y compu ven el mismo inventario.
   (tarro $21.400, 30 porciones → $713; venta $2.000; foto `img/tienda/pre-entreno-mr-hyde-signature.jpg`).
   Llegan el lunes 26-10-2026 (cargar ese día): Creatina Xtreme Boost en sachet (pack $19.990 con tabletas de pre entreno que
   son para la dueña → costo $1.000 c/u, venta $2.000) y Creatina Ostrovit 500 g por tarro (2 por $22.220 → $11.110 c/u).
+  Categorías de ropa (24-10-2026, la dueña: "esta es ropa de hombre"): «Ropa mujer» 👚 y «Ropa hombre» 👕 (`catNueva`: lo
+  guardado como «Ropa deportiva» se muestra como «Ropa mujer»; en los enlaces usar `cat=Ropa%20mujer` o `cat=Ropa%20hombre`).
   Ropa deportiva de mujer (24-10-2026): cada talla y color es un producto aparte con su código 200… (la ropa no trae
   código). Conjunto Gym Work 3 piezas blanco/negro M ($13.609 → $22.000), Short scrunch M.Minute negro S y azul oscuro S
   (pack de 2 por $7.512 → $3.756 c/u, venta $9.000), Conjunto Easithlete negro M ($8.568), Leggings Yefecy negro M ($11.001 → $16.000), Conjunto Easithlete a $15.000; short negro a $10.000. Ropa de hombre: Polera «Stronger every day» negra M ($7.204). Suplementos en pausa.

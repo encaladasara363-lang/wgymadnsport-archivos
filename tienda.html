@@ -199,7 +199,7 @@ var CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20E
 var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";          /* la misma del mesón: en la compu de recepción ya está guardada */
 var CLAVE_CACHE = "wgym_tienda_cache_v1";           /* última foto del inventario, para abrir al instante y sin señal */
 var CLAVE_PEND = "wgym_tienda_pend_v1";             /* ventas / entradas que no alcanzaron a llegar a la planilla */
-var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa deportiva","👕"],["Otro","📦"]];
+var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Otro","📦"]];
 var PAGOS = [["efectivo","💵 Efectivo"],["transferencia","🏦 Transferencia"],["tarjeta","💳 Tarjeta"],["fiado","📒 Fiado"]];
 
 function $(id){ return document.getElementById(id); }
@@ -235,7 +235,8 @@ function guardarCache(){ lsSet(CLAVE_CACHE, S); }
 /* Lo que todavía no llegó a la planilla se vuelve a aplicar sobre la lista que manda la planilla. */
 function aplicarPendientes(){
  /* «Bebidas» se llama «Bebestibles» desde el 24-10-2026 (pedido de la dueña); lo guardado antes se muestra con el nombre nuevo. */
- S.productos.forEach(function(p){ if(p.cat === "Bebidas") p.cat = "Bebestibles"; });
+ /* «Ropa deportiva» se separó en «Ropa mujer» y «Ropa hombre» (24-10-2026, la dueña: "esta es ropa de hombre"); lo guardado antes era de mujer. */
+ S.productos.forEach(function(p){ p.cat = catNueva(p.cat); });
  pend.forEach(function(p){
   if(p.tipo === "venta") p.datos.items.forEach(function(it){ var q = prod(it.id); if(q) q.stock -= it.cant; });
   if(p.tipo === "entrada"){ var q = prod(p.datos.id); if(q) q.stock += p.datos.cant; }
@@ -293,7 +294,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102410";
+var TIENDA_VERSION = "2026102411";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -509,7 +510,8 @@ var resPer = "hoy", resCat = "";
 function repartos(){ var o = lsGet("wgym_tienda_reparto_v1", {}); return (o && typeof o === "object") ? o : {}; }
 function pctDe(cat){ var o = repartos(); return o[cat || "todo"] != null ? o[cat || "todo"] : (o.todo != null ? o.todo : 30); }
 /* Cada categoría es una caja aparte (24-10-2026, la dueña: "los snack son una recaudación aparte para seguir comprando más snack"). */
-function catDeMov(m){ var p = S.productos.filter(function(x){ return x.id === m.id; })[0]; var c = p ? p.cat : (m.cat || "Otro"); return c === "Bebidas" ? "Bebestibles" : c; }
+function catNueva(c){ return c === "Bebidas" ? "Bebestibles" : c === "Ropa deportiva" ? "Ropa mujer" : c; }
+function catDeMov(m){ var p = S.productos.filter(function(x){ return x.id === m.id; })[0]; return catNueva(p ? p.cat : (m.cat || "Otro")); }
 function rangoPer(){
  var hoy = S.hoy || hoyISO(), d = new Date(hoy + "T12:00:00");
  if(resPer === "hoy") return [hoy, hoy];
@@ -530,7 +532,7 @@ function renderRes(){
   vend = vt.reduce(function(s, m){ return s + m.total; }, 0); ganT = vt.reduce(function(s, m){ return s + m.total - m.cant * m.costo; }, 0);
   inv = deCat.filter(function(m){ return m.tipo === "entrada"; }).reduce(function(s, m){ return s + (m.total || 0); }, 0);
  }
- var catsUsadas = CATS.filter(function(c){ return S.productos.some(function(p){ return p.cat === c[0] || (c[0] === "Bebestibles" && p.cat === "Bebidas"); }); });
+ var catsUsadas = CATS.filter(function(c){ return S.productos.some(function(p){ return catNueva(p.cat) === c[0]; }); });
  var h = '<h2>Resumen</h2><div class="chips">' + [["hoy","Hoy"],["semana","Esta semana"],["mes","Este mes"],["todo","Todo"]].map(function(x){ return '<button class="chip" data-per="' + x[0] + '" aria-pressed="' + (resPer === x[0]) + '">' + x[1] + '</button>'; }).join("") + '</div>' +
   (catsUsadas.length ? '<div class="chips"><button class="chip" data-rcat="" aria-pressed="' + !resCat + '">📦 Toda la tienda</button>' + catsUsadas.map(function(c){ return '<button class="chip" data-rcat="' + c[0] + '" aria-pressed="' + (resCat === c[0]) + '">' + c[1] + ' ' + c[0] + '</button>'; }).join("") + '</div>' : '');
  if(resPer === "todo" && S.desde) h += '<p class="muted" style="font-size:14px;margin:0 0 6px">La lista de ventas muestra desde el ' + esc(S.desde) + '; los totales de arriba cuentan todo.</p>';
@@ -799,6 +801,7 @@ var ENLACE = null;
 try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ["n","cat","det","costo","precio","stock","min","foto","cod"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = qs.get(k); }); history.replaceState(null, "", location.pathname); } }catch(e){}
 function usarEnlace(){
  if(!ENLACE) return; var b = ENLACE; ENLACE = null;
+ if(b.cat) b.cat = catNueva(b.cat);
  /* Mismo código de barras = mismo producto, aunque cambie el nombre (24-10-2026: «Trident Infinit Menta» pasó a «Peppermint»). */
  var ya = (b.cod && b.cod !== "auto" ? porCodigo(b.cod) : null) || activos().filter(function(p){ return normTxt(p.n) === normTxt(b.n) && normTxt(p.det) === normTxt(b.det || ""); })[0];
  tab = "inv"; document.querySelectorAll("#nav button").forEach(function(x){ x.setAttribute("aria-pressed", x.dataset.tab === "inv"); }); render();
