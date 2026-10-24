@@ -125,6 +125,7 @@ table.top td{ padding:7px 4px; border-bottom:1px solid var(--line); }
 table.top td.r{ text-align:right; font-family:var(--num); font-weight:400; color:var(--yel); white-space:nowrap; }
 .etq-sel{ display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); }
 .etq-sel .n{ flex:1; min-width:0; }
+.etq-ph{ width:64px; height:84px; flex:none; border-radius:10px; background:#fff; object-fit:contain; display:flex; align-items:center; justify-content:center; font-size:30px; }
 .etq-sel input[type=number]{ width:70px; }
 #hojaEtiquetas{ display:none; }
 /* Letras más grandes y pastillas legibles (24-10-2026, la dueña: "eso no se nota nada, pon letras negras y haz el zoom
@@ -300,7 +301,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102414";
+var TIENDA_VERSION = "2026102415";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -657,7 +658,7 @@ function renderCod(){
   '<button class="btn oro" id="crearTodos" style="margin-top:10px">Crear código a todos</button></div>';
  if(con.length){
   h += '<div class="card"><b style="text-transform:uppercase">🖨 Imprimir etiquetas</b><p class="muted" style="font-size:15px;margin:4px 0 8px">Elige cuántas etiquetas de cada uno (hoja A4, 24 etiquetas por hoja). Sirve para imprimir también las de productos que ya traen código, con su precio.</p>' +
-   con.map(function(p){ return '<div class="etq-sel"><span class="n">' + esc(p.n) + (p.det ? '<br><b style="color:var(--yel)">' + esc(p.det) + '</b>' : '') + '<br><span class="muted" style="font-size:13px">' + esc(p.cod) + ' · ' + plata(p.precio) + '</span></span><input class="inp" type="number" min="0" max="99" data-etq="' + esc(p.id) + '" value="' + (etqCant[p.id] || 0) + '" style="width:76px;text-align:center"></div>'; }).join("") +
+   con.map(function(p){ return '<div class="etq-sel">' + (p.foto ? '<img class="etq-ph" src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span class="etq-ph">' + iconoCat(p.cat) + '</span>') + '<span class="n">' + esc(p.n) + (p.det ? '<br><b style="color:var(--yel)">' + esc(p.det) + '</b>' : '') + '<br><span class="muted" style="font-size:13px">' + esc(p.cod) + ' · ' + plata(p.precio) + '</span></span><input class="inp" type="number" min="0" max="99" data-etq="' + esc(p.id) + '" value="' + (etqCant[p.id] || 0) + '" style="width:76px;text-align:center"></div>'; }).join("") +
    '<button class="btn rojo" id="imprimir" style="margin-top:12px">🖨 Imprimir etiquetas</button><p class="muted" style="font-size:14px;margin:6px 0 0">Desde el celular: Imprimir → Guardar como PDF, y lo imprimes en cualquier lado. Mejor en hoja de etiquetas adhesivas A4 de 3 × 8.</p></div>';
  }
  v.innerHTML = h;
