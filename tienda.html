@@ -264,7 +264,7 @@ function cargar(silencioso){
  if(!silencioso) pintarSync("cargando");
  return api("tiendaListar", {}).then(function(d){
   S = { productos:d.productos || [], movs:d.movs || [], total:d.total || {}, hoy:d.hoy || hoyISO(), desde:d.desde };
-  aplicarPendientes(); guardarCache(); pintarSync(); render(); return true;
+  aplicarPendientes(); repararCodificados(); guardarCache(); pintarSync(); render(); return true;
  })["catch"](function(e){
   if(e.motivo === "clave incorrecta"){ salir("La clave guardada no funcionó. Escríbela de nuevo."); return false; }
   if(/action|desconocid|no existe/i.test(e.message || "")){ pintarSync("error"); avisoScript(); return false; }
@@ -294,7 +294,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102411";
+var TIENDA_VERSION = "2026102412";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -798,7 +798,18 @@ function abrirEscanerSimple(alLeer){
    escrito; ella solo pone cuántos tiene y toca Guardar. cod=auto le crea su código propio (para la etiqueta). Si ya
    existe un producto con ese nombre, abre ese para editarlo en vez de duplicarlo. Se borra de la dirección al cargar. ═══ */
 var ENLACE = null;
-try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ["n","cat","det","costo","precio","stock","min","foto","cod"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = qs.get(k); }); history.replaceState(null, "", location.pathname); } }catch(e){}
+/* Algunos chats vuelven a codificar el enlace y llegan textos como «Polera%20Rise» (24-10-2026, la polera Rise LYT quedó con
+   %20 en el nombre y en Bebestibles): se decodifica hasta que no queden %XX. */
+function sinPorcentajes(t){ t = String(t == null ? "" : t); for(var i = 0; i < 3 && /%[0-9A-Fa-f]{2}/.test(t); i++){ try{ var d = decodeURIComponent(t); if(d === t) break; t = d; }catch(e){ break; } } return t; }
+function repararCodificados(){
+ S.productos.forEach(function(p){
+  var n = sinPorcentajes(p.n), det = sinPorcentajes(p.det), cat = catNueva(sinPorcentajes(p.cat));
+  if(n === p.n && det === (p.det || "") && cat === p.cat) return;
+  p.n = n; p.det = det; p.cat = cat;
+  api("tiendaProducto", { datos:JSON.stringify(p) })["catch"](function(){});
+ });
+}
+try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ["n","cat","det","costo","precio","stock","min","foto","cod"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = sinPorcentajes(qs.get(k)); }); history.replaceState(null, "", location.pathname); } }catch(e){}
 function usarEnlace(){
  if(!ENLACE) return; var b = ENLACE; ENLACE = null;
  if(b.cat) b.cat = catNueva(b.cat);
