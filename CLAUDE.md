@@ -1488,6 +1488,29 @@ estado" del buscador "¿No alcanzó a escanear?": se elige tocando la
 sugerencia o con Enter. Desde el 07-10-2026 la tablet (`pantalla.html`) también
 carga `estilo-deportivo.css`: al cambiar el `?v=`, cambiarlo en los TRES archivos.
 
+## 🛒 Tienda WGYM — ventas e inventario de productos (desde 24-10-2026)
+
+La dueña volvió a vender productos en el gimnasio (bebidas, suplementos, accesorios, snacks y ropa deportiva;
+empezó con $100.000 de inversión y quiere duplicarla). `tienda.html` es solo para ella: pide la clave de
+administración (la misma del mesón, `wgym_clave_admin_v1`). Todo se guarda en la planilla (hojas «Tienda
+productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/Ingresos.gs`, **Versión 24**; mientras
+no esté instalada, la página avisa «Falta instalar la Versión 24»). Celular y compu ven el mismo inventario.
+- **🛒 Vender:** escanear (queda abierto y suma cada producto; 2 s entre el mismo código), buscar por nombre,
+  cantidades, cambiar precio de una línea (descuento), medio de pago (efectivo, transferencia, tarjeta, fiado con
+  nombre) y «Cobrar». La venta se descuenta al tiro en el teléfono y se envía a la planilla; sin señal queda en
+  `wgym_tienda_pend_v1` y se reenvía sola (cada venta lleva un id: nunca se descuenta dos veces).
+- **📦 Inventario:** producto nuevo (nombre, categoría, detalle/talla/sabor, código, costo, precio con sugeridos
+  +50 %/+70 %/el doble redondeados a $100, stock inicial, aviso de stock bajo), «Llegó mercadería» (suma stock y
+  actualiza el costo), «Ajustar stock», ocultar. Muestra cuánto gana por unidad y el valor de la bodega.
+- **📊 Resumen:** hoy / semana / mes / todo: vendido, ganancia (precio − costo), unidades, por medio de pago,
+  lo que más se vende, lista de ventas con 🗑 anular, mercadería que llegó, y «💰 Tu inversión»: invertido vs.
+  ganado, con la barra para duplicar la plata.
+- **📒 Fiados:** quién debe y cuánto; «Pagó» con el medio de pago.
+- **🏷 Códigos:** a lo que no trae código le crea un EAN-13 propio que empieza con 200 (rango de uso interno) e
+  imprime etiquetas A4 de 3 × 8 con nombre, precio y código (`svgEAN`; probado: ZXing las lee).
+- Fotos de productos: campo `foto` (ruta dentro del repo, ej. `img/tienda/…`); se ponen cuando la dueña las mande.
+  Nunca escribir costos ni ventas en archivos del repo: viven solo en la planilla.
+
 ## WGYMNUTRI — contador de calorías aparte (desde 10/2026)
 
 App propia para socios, al estilo Cal AI pero **gratis** (la dueña eligió
