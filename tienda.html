@@ -292,7 +292,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102404";
+var TIENDA_VERSION = "2026102405";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -660,9 +660,9 @@ function iniciarLector(vid, alLeer, alFallar){
      var ocupado = false, vuelta = 0;
      cam.timer = setInterval(function(){
       if(ocupado || vid.readyState < 2 || !vid.videoWidth) return; ocupado = true;
-      try{ var vw = vid.videoWidth, vh = vid.videoHeight, code = null, parado = (vuelta++ % 3) === 2;
+      try{ var vw = vid.videoWidth, vh = vid.videoHeight, code = null, parado = (vuelta++ % 2) === 1;
        if(!parado){ var sw = vw * 0.92, sh = Math.min(vh, sw * 0.45), W = Math.min(720, Math.round(sw)), H = Math.round(W * sh / sw); cv.width = W; cv.height = H; cx.drawImage(vid, (vw - sw) / 2, (vh - sh) / 2, sw, sh, 0, 0, W, H); code = intentar(cv); }
-       else { var sh2 = vh * 0.85, sw2 = Math.min(vw, sh2 * 0.45), W2 = Math.min(720, Math.round(sh2)), H2 = Math.round(W2 * sw2 / sh2); cvr.width = W2; cvr.height = H2; cxr.setTransform(1, 0, 0, 1, 0, 0); cxr.translate(W2, 0); cxr.rotate(Math.PI / 2); cxr.drawImage(vid, (vw - sw2) / 2, (vh - sh2) / 2, sw2, sh2, 0, 0, H2, W2); code = intentar(cvr); }
+       else { var sh2 = vh * 0.9, sw2 = Math.min(vw * 0.9, sh2 * 0.6), W2 = Math.min(960, Math.round(sh2)), H2 = Math.round(W2 * sw2 / sh2); cvr.width = W2; cvr.height = H2; cxr.setTransform(1, 0, 0, 1, 0, 0); cxr.translate(W2, 0); cxr.rotate(Math.PI / 2); cxr.drawImage(vid, (vw - sw2) / 2, (vh - sh2) / 2, sw2, sh2, 0, 0, H2, W2); code = intentar(cvr); }
        if(code) encontrado(code);
       }catch(e){}
       ocupado = false;
@@ -672,11 +672,45 @@ function iniciarLector(vid, alLeer, alFallar){
   }
  });
 }
+/* Foto del código (24-10-2026, la dueña: "no me escanea cuando la botella está parada"): la cámara del teléfono
+   enfoca sola y la foto quieta se lee acostada y parada (mismo lector que WGYMNUTRI). */
+function leerFotoCodigo(file){
+ return new Promise(function(ok){
+  var url = URL.createObjectURL(file), img = new Image();
+  img.onerror = function(){ URL.revokeObjectURL(url); ok(null); };
+  img.onload = function(){
+   var lienzos = [0, 90].map(function(giro){
+    var e = Math.min(1, 1600 / Math.max(img.width, img.height)), w = Math.round(img.width * e), h = Math.round(img.height * e);
+    var cv = document.createElement("canvas"), cx = cv.getContext("2d");
+    if(giro){ cv.width = h; cv.height = w; cx.translate(h, 0); cx.rotate(Math.PI / 2); } else { cv.width = w; cv.height = h; }
+    cx.drawImage(img, 0, 0, w, h); return cv;
+   });
+   URL.revokeObjectURL(url);
+   var nat = ("BarcodeDetector" in window) ? new BarcodeDetector({ formats:["ean_13","ean_8","upc_a","upc_e"] }).detect(lienzos[0]).then(function(r){ return r && r[0] ? r[0].rawValue : null; })["catch"](function(){ return null; }) : Promise.resolve(null);
+   nat.then(function(code){
+    if(code) return ok(code);
+    cargarZXing().then(function(){
+     var hints = new Map(); hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.UPC_E, ZXing.BarcodeFormat.CODE_128]); hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
+     var lector = new ZXing.MultiFormatReader(); lector.setHints(hints);
+     for(var i = 0; i < lienzos.length; i++){ try{ var r = lector.decode(new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(new ZXing.HTMLCanvasElementLuminanceSource(lienzos[i]))), hints); if(r) return ok(r.getText()); }catch(e){} }
+     ok(null);
+    })["catch"](function(){ ok(null); });
+   });
+  };
+  img.src = url;
+ });
+}
+function botonFotoCodigo(id){ return '<label class="btn oro" for="' + id + '" style="display:block;text-align:center;margin:10px 0">📸 ¿No lo lee? Saca una foto del código</label><input type="file" id="' + id + '" accept="image/*" capture="environment" hidden>'; }
+function usarFotoCodigo(input, alLeer){
+ input.onchange = function(){ var f = input.files && input.files[0]; input.value = ""; if(!f) return; toast("Leyendo la foto…");
+  leerFotoCodigo(f).then(function(code){ if(code) alLeer(code); else toast("No se ve el código en la foto. Acércate más, con buena luz, y que salga entero."); }); };
+}
 /* Escáner para vender: queda abierto y suma cada producto que lee (con 2 s de pausa entre el mismo código). */
 function abrirEscaner(alLeer, seguido){
  abrirHoja('<div class="cab"><h3>📷 Escanear</h3><button class="btn chico oro" id="cListo">Listo</button></div>' +
   '<div class="cam" style="margin-top:10px"><video id="cVid" playsinline muted autoplay></video><div class="marco"></div><div class="laser"></div><div class="flash" id="cFlash"></div></div>' +
-  '<p class="muted" id="cTxt" style="text-align:center;margin:10px 0">' + (seguido ? 'Apunta al código de barras. Puedes escanear varios productos seguidos.' : 'Apunta al código de un producto. Se suma 1 y se cierra solo.') + '</p>' +
+  '<p class="muted" id="cTxt" style="text-align:center;margin:10px 0">' + (seguido ? 'Apunta al código de barras. Puedes escanear varios productos seguidos.' : 'Apunta al código de un producto. Se suma 1 y se cierra solo.') + '<br>Si el código está parado, gira el teléfono de lado.</p>' +
+  botonFotoCodigo("cFoto") +
   '<div class="fila"><input class="inp" id="cMan" inputmode="numeric" placeholder="¿No lee? Escribe el número"><button class="btn chico" id="cManOk" style="flex:none">OK</button></div><div id="cNuevo"></div>');
  var ultimo = { c:"", t:0 };
  function leer(code){
@@ -692,6 +726,7 @@ function abrirEscaner(alLeer, seguido){
   if(!seguido && msg){ pararCamara(); toast(msg); setTimeout(cerrarHoja, 700); }
  }
  $("cListo").onclick = cerrarHoja;
+ usarFotoCodigo($("cFoto"), leer);
  $("cManOk").onclick = function(){ var v = $("cMan").value.replace(/\D/g, ""); if(v.length >= 6){ leer(v); $("cMan").value = ""; } };
  $("cMan").onkeydown = function(e){ if(e.key === "Enter") $("cManOk").click(); };
  iniciarLector($("cVid"), leer, function(){ $("cTxt").textContent = "No pudimos abrir la cámara. Revisa el permiso de cámara del navegador o escribe el número del código."; });
@@ -699,9 +734,10 @@ function abrirEscaner(alLeer, seguido){
 /* Escáner de una sola lectura (para llenar el código al crear un producto). */
 function abrirEscanerSimple(alLeer){
  var caja = document.createElement("div");
- caja.innerHTML = '<div class="cam" style="margin:10px 0"><video id="sVid" playsinline muted autoplay></video><div class="marco"></div><div class="laser"></div></div><button class="btn chico" id="sCancel">Cancelar</button>';
+ caja.innerHTML = '<div class="cam" style="margin:10px 0"><video id="sVid" playsinline muted autoplay></video><div class="marco"></div><div class="laser"></div></div>' + botonFotoCodigo("sFoto") + '<button class="btn chico" id="sCancel">Cancelar</button>';
  $("fCod").parentNode.after(caja);
  $("sCancel").onclick = function(){ pararCamara(); caja.remove(); };
+ usarFotoCodigo($("sFoto"), function(code){ bip(); vibrar(60); pararCamara(); caja.remove(); alLeer(code); toast("Código " + code); });
  iniciarLector($("sVid"), function(code){ bip(); vibrar(60); pararCamara(); caja.remove(); alLeer(code); toast("Código " + code); }, function(){ caja.remove(); toast("No se pudo abrir la cámara."); });
 }
 

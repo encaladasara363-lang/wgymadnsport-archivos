@@ -1497,7 +1497,7 @@ productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/In
 dueña el 24-10-2026 cerca de las 13:15, INGRESOS.gs verificado idéntico al repo vía Drive**; volver atrás: lápiz →
 Versión 23). Celular y compu ven el mismo inventario.
 - **🛒 Vender:** escanear (desde el 24-10-2026 una lectura por vez: suma 1 y se cierra solo; la dueña: "se queda ahí marcando
-  todo el rato"; un código desconocido deja la cámara abierta con «Crear producto»), buscar por nombre,
+  todo el rato"; un código desconocido deja la cámara abierta con «Crear producto»), códigos parados (botellas de pie): el lector del iPhone prueba una vuelta acostada y otra girada, y bajo la cámara va «📸 ¿No lo lee? Saca una foto del código» (`leerFotoCodigo`, lee la foto acostada y parada; 24-10-2026, la dueña no podía escanear el Powerade de pie), buscar por nombre,
   cantidades, cambiar precio de una línea (descuento), medio de pago (efectivo, transferencia, tarjeta, fiado con
   nombre) y «Cobrar». La venta se descuenta al tiro en el teléfono y se envía a la planilla; sin señal queda en
   `wgym_tienda_pend_v1` y se reenvía sola (cada venta lleva un id: nunca se descuenta dos veces).
