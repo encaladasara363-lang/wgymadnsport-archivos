@@ -292,7 +292,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102405";
+var TIENDA_VERSION = "2026102406";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -522,6 +522,21 @@ function renderRes(){
  if(resPer === "todo" && S.desde) h += '<p class="muted" style="font-size:14px;margin:0 0 6px">La lista de ventas muestra desde el ' + esc(S.desde) + '; los totales de arriba cuentan todo.</p>';
  h += '<div class="kpis"><div class="kpi"><small>Vendido</small><b>' + plata(resPer === "todo" ? vend : tot) + '</b></div><div class="kpi verde"><small>Ganancia</small><b>' + plata(resPer === "todo" ? ganT : gan) + '</b></div>' +
   '<div class="kpi"><small>Productos vendidos</small><b>' + uds + '</b></div><div class="kpi"><small>Ventas</small><b>' + Object.keys(ventas.reduce(function(o, m){ o[m.vid] = 1; return o; }, {})).length + '</b></div></div>';
+ /* Reparto de la plata (24-10-2026, la dueña: "la ganancia que me queda para mí y la que se debería invertir"):
+    de cada venta, el costo vuelve a la caja para reponer y la ganancia se parte entre ella y lo que se reinvierte para crecer. */
+ var vendP = resPer === "todo" ? vend : tot, ganP = resPer === "todo" ? ganT : gan, costoP = vendP - ganP, pctYo = lsGet("wgym_tienda_reparto_v1", 50);
+ var yo = Math.round(ganP * pctYo / 100), crecer = ganP - yo;
+ var ej = activos().filter(function(p){ return p.costo > 0 && p.precio > p.costo; })[0];
+ h += '<div class="card oro"><b style="text-transform:uppercase">🧮 ¿Cómo repartir la plata?</b>' +
+  '<p class="muted" style="margin:6px 0 4px;font-size:15px">De la ganancia, ¿qué porcentaje es para ti?</p><div class="chips">' + [30, 50, 70].map(function(x){ return '<button class="chip" data-rep="' + x + '" aria-pressed="' + (pctYo === x) + '">' + x + ' %</button>'; }).join("") + '</div>' +
+  (vendP > 0 ?
+   '<table class="top"><tr><td>🔄 Para reponer mercadería<br><span class="muted" style="font-size:13px">Lo que te costaron los productos: no se gasta</span></td><td class="r">' + plata(costoP) + '</td></tr>' +
+   '<tr><td>💵 Para ti (' + pctYo + ' % de la ganancia)</td><td class="r" style="color:#7CE39A">' + plata(yo) + '</td></tr>' +
+   '<tr><td>📈 Para invertir en más productos (' + (100 - pctYo) + ' %)</td><td class="r" style="color:var(--yel)">' + plata(crecer) + '</td></tr></table>' +
+   '<p class="muted" style="margin:6px 0 0;font-size:14px">Para reponer + para invertir = ' + plata(costoP + crecer) + ' que vuelven a la tienda.</p>'
+  : '<p class="muted" style="margin:8px 0 0">Todavía no hay ventas en este período.</p>') +
+  (ej ? '<p style="margin:10px 0 0;font-size:15px">📌 Ejemplo: vendes 1 ' + esc(ej.n) + ' a ' + plata(ej.precio) + ' → ' + plata(ej.costo) + ' para reponer, ' + plata(Math.round((ej.precio - ej.costo) * pctYo / 100)) + ' para ti y ' + plata((ej.precio - ej.costo) - Math.round((ej.precio - ej.costo) * pctYo / 100)) + ' para invertir.</p>' : '') +
+  '</div>';
  /* Meta de la dueña: que su plata se duplique (lo que ganó llega a lo que invirtió). */
  if(inv > 0){
   var pct = Math.min(100, Math.round(ganT / inv * 100));
@@ -541,6 +556,7 @@ function renderRes(){
  if(compras.length) h += '<div class="card"><b style="text-transform:uppercase">📥 Mercadería y ajustes</b>' + compras.slice().reverse().map(function(m){ return '<div class="mov"><div class="d">' + (m.cant > 0 ? '+' : '') + m.cant + ' × ' + esc(m.n) + '<small>' + esc(m.f.slice(5, 16).replace("-", "/")) + ' · ' + (m.tipo === "entrada" ? 'llegó mercadería' : 'ajuste' + (m.nota ? ': ' + esc(m.nota) : '')) + '</small></div>' + (m.tipo === "entrada" ? '<b class="precio" style="font-size:18px;color:#FF8A8F">−' + plata(m.total) + '</b>' : '') + '</div>'; }).join("") + '</div>';
  v.innerHTML = h;
  v.querySelectorAll("[data-per]").forEach(function(b){ b.onclick = function(){ resPer = b.dataset.per; renderRes(); }; });
+ v.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){ lsSet("wgym_tienda_reparto_v1", Number(b.dataset.rep)); renderRes(); }; });
  v.querySelectorAll("[data-anular]").forEach(function(b){ b.onclick = function(){
   if(!confirm("¿Anular esta venta? El stock vuelve al inventario.")) return;
   b.disabled = true;
