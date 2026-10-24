@@ -1543,7 +1543,7 @@ Versión 23). Celular y compu ven el mismo inventario.
   El botón «💾 Guardar» de las fichas queda pegado abajo (sticky), siempre a la vista: la dueña cambió el precio del agua
   y no vio el Guardar, que estaba más abajo, y el cambio no se guardó.
   Foto del agua cambiada el 24-10-2026 por la que mandó la dueña (botella WOL con logo); al reemplazar una foto en
-  `img/tienda/` con el mismo nombre, subir `FOTO_V` en `tienda.html` (las fotos se piden con `?v=`). La foto del inventario se ve entera
+  `img/tienda/` con el mismo nombre, subir `FOTO_V` en `tienda.html` (las fotos se piden con `?v=`). Al tocar la foto de un producto se abre en pantalla completa con su nombre (`#fotoGrande`; se cierra tocando; 24-10-2026, pedido de la dueña). La foto del inventario se ve entera
   (`object-fit:contain`, cuadro de 78 × 104 px con fondo blanco), pedido de la dueña. Tarjeta del inventario: foto, nombre, detalle y
   precio arriba; debajo, fila `.pills` con Quedan / Costo / Ganas en letra de 20 px (la dueña: "un poco más grande").
   Si el enlace `?nuevo=1…` trae un producto que ya existe, abre su ficha con los datos nuevos del enlace (ej. otro
