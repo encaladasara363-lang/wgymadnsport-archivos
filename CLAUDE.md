@@ -1876,7 +1876,9 @@ probado: ella se activó desde el mesón y entró a la app).
   `comidas-saludables.html` aquí), cada una con «Agregar a mi día».
   **🔎 Buscador de recetas (24-10-2026, pedido de la dueña):** casillero amarillo `#recQ` arriba de las categorías;
   `filtrarRecetas` busca por nombre, categoría o ingrediente (sin tildes, acepta plural) en todas las categorías y
-  oculta las demás sin redibujar la lista; sin texto vuelve a la categoría elegida.
+  oculta las demás sin redibujar la lista; sin texto vuelve a la categoría elegida. Al buscar también salen las recetas
+  ocultas por «lo que no como», con el aviso «🙈 Tiene algo que marcaste que no comes» (la dueña marcó lácteos y no veía
+  sus recetas con queso sin lactosa).
   «Waffles alto en fibra» (24-10-2026, receta de la dueña, primera de Desayuno): 2 porciones, cada una ≈303 kcal,
   14 g de proteína, 26 g de carbohidratos y 16 g de grasa (calculado con sus ingredientes y la etiqueta de Simi Fibra).
   «Desayuno fit A» (sándwich masa madre con huevo, palta y pavo; 24-10-2026, nombre elegido por la dueña, armada con el desayuno que la dueña anotó en la app):
