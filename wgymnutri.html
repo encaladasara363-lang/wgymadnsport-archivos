@@ -2793,10 +2793,10 @@ function renderRec(){
   '<input class="inp" id="recQ" type="search" placeholder="🔎 Buscar receta o ingrediente: waffles, pollo, avena…" value="' + esc(recQ) + '" autocomplete="off" enterkeyhint="search">' +
   '<div class="tabs">' + cats.map(function(c){ return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === recCat) + '">' + esc(c) + '</button>'; }).join("") + '</div><div class="stack" id="recLista">';
  var ocultas = RECETAS.filter(function(r){ return (recCat === "Todas" || r.cat === recCat) && !recetaPermitida(r); }).length;
- if(ocultas) h += '<p class="muted" style="font-size:15px;margin:0 0 6px">🙈 Ocultamos ' + ocultas + ' recetas con alimentos que no comes. Cámbialo en «Mi perfil» → «Recalcular».</p>';
+ if(ocultas) h += '<p class="muted" style="font-size:15px;margin:0 0 6px">🙈 Ocultamos ' + ocultas + ' recetas con alimentos que no comes. Igual las encuentras con el buscador, o cámbialo en «Mi perfil» → «Recalcular».</p>';
  RECETAS.forEach(function(r, i){
-  if(!recetaPermitida(r)) return;
-  h += '<button type="button" class="card receta" data-r="' + i + '" data-rc="' + esc(r.cat) + '" data-rt="' + esc(normName(r.n + " " + r.cat + " " + r.ing.join(" "))) + '" style="width:100%;text-align:left"><span class="e">' + r.e + '</span><span style="flex:1;min-width:0"><b style="display:block;font-family:var(--cond);font-size:19px;text-transform:uppercase;letter-spacing:.03em">' + esc(r.n) + '</b><span class="muted" style="font-size:14px">' + esc(r.cat) + ' · ' + r.min + ' min · P ' + r.p + ' g</span></span><span style="font-family:var(--num);font-size:20px;color:var(--gold2);white-space:nowrap">' + miles(r.k) + '<small style="font-family:var(--cond);font-size:12px;color:var(--muted)"> kcal</small></span></button>';
+  var oc = !recetaPermitida(r);
+  h += '<button type="button" class="card receta" data-r="' + i + '"' + (oc ? ' data-oc="1"' : '') + ' data-rc="' + esc(r.cat) + '" data-rt="' + esc(normName(r.n + " " + r.cat + " " + r.ing.join(" "))) + '" style="width:100%;text-align:left"><span class="e">' + r.e + '</span><span style="flex:1;min-width:0"><b style="display:block;font-family:var(--cond);font-size:19px;text-transform:uppercase;letter-spacing:.03em">' + esc(r.n) + '</b><span class="muted" style="font-size:14px">' + esc(r.cat) + ' · ' + r.min + ' min · P ' + r.p + ' g</span>' + (oc ? '<span style="display:block;font-size:13px;color:#F5A623">🙈 Tiene algo que marcaste que no comes</span>' : '') + '</span><span style="font-family:var(--num);font-size:20px;color:var(--gold2);white-space:nowrap">' + miles(r.k) + '<small style="font-family:var(--cond);font-size:12px;color:var(--muted)"> kcal</small></span></button>';
  });
  h += '</div><p class="muted center" id="recNada" style="display:none;margin:0">No encontramos recetas con eso. Prueba con otra palabra.</p>';
  box.innerHTML = h;
@@ -2818,11 +2818,13 @@ function renderRec(){
   renderRec(); window.scrollTo(0, 0); }; });
 }
 /* 🔎 Buscador de recetas (24-10-2026, pedido de la dueña): busca por nombre, categoría o ingrediente
-   (sin tildes); mientras hay texto busca en todas las categorías. Filtra sin redibujar la lista. */
+   (sin tildes); mientras hay texto busca en todas las categorías. Filtra sin redibujar la lista.
+   Al buscar también muestra las recetas ocultas por «lo que no como», con aviso (24-10-2026: la dueña marcó
+   lácteos, no veía sus recetas con queso sin lactosa y creía que el buscador no funcionaba). */
 function filtrarRecetas(){
  var q = normName(recQ).split(" ").filter(Boolean), n = 0;
  document.querySelectorAll("#recLista [data-rt]").forEach(function(b){
-  var t = b.dataset.rt, ok = q.length ? q.every(function(w){ return t.indexOf(w) >= 0 || (w.length > 3 && /S$/.test(w) && t.indexOf(w.slice(0, -1)) >= 0); }) : (recCat === "Todas" || b.dataset.rc === recCat);
+  var t = b.dataset.rt, ok = q.length ? q.every(function(w){ return t.indexOf(w) >= 0 || (w.length > 3 && /S$/.test(w) && t.indexOf(w.slice(0, -1)) >= 0); }) : (!b.dataset.oc && (recCat === "Todas" || b.dataset.rc === recCat));
   b.style.display = ok ? "" : "none"; if(ok) n++;
  });
  var nada = $("recNada"); if(nada) nada.style.display = n ? "none" : "";
@@ -2964,7 +2966,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102410", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102411", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
