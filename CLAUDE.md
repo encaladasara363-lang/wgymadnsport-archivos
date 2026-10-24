@@ -1898,7 +1898,9 @@ probado: ella se activó desde el mesón y entró a la app).
   **Fibra, potasio, azúcar, sodio y vitamina C de las recetas (24-10-2026, la dueña: "los waffles tienen fibra y no
   marca"):** 8.º campo de cada `ingr` = objeto `{fi, po, az, na, vc}` de esa cantidad (valores de las tablas NUTRI_*);
   `microReceta` los suma según lo comido (`microDe` lo usa para `cat:"Receta"`). Por porción: Waffles fibra 5,8 g ·
-  Desayuno fit A 3,7 g · Postre fit A 7,4 g (Cereal Balls sin dato de fibra).
+  Desayuno fit A 3,7 g · Postre fit A 9,8 g.
+  Cereal En Línea Hojuela Choc con Balls sin azúcar (24-10-2026, la dueña mandó la etiqueta; es su «Cereal Balls»): Marcas,
+  «3/4 taza (30 g)»: 96 kcal, 3,2 g P, 20 g HC, 1,6 g G, 3,7 g de fibra, 15 mg de sodio, azúcar añadida 0.
 - **Se vende también a los vencidos (17-10-2026, la dueña: "quiero que los vencidos igual lo vean… tendría más
   posibilidades de vender esa app"):** la tarjeta bloqueada muestra igual el aviso `#nutriCard`, y en la app la
   mensualidad del gimnasio ya no bloquea: con WGYMNUTRI pagada se entra aunque el plan esté vencido; sin pagarla
