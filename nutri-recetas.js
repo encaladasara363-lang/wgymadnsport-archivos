@@ -1081,6 +1081,9 @@ window.NUTRI_RECETAS = [
    ing:["1 taza de frutas picadas (sandía, melón, frutilla)", "Menta"],
    pasos:["Pica la fruta.", "Mezcla.", "Sirve con menta."] },
  /* Postre */
+ { n:"Postre fit A", cat:"Postre", e:"🍎", min:10, porc:"1 bowl", k:453, p:29, c:59, g:13,
+   ing:["1 pote de yogur proteico (150 g)", "50 ml de batido de proteína whey con leche descremada", "20 g de avena integral instantánea", "7 g de chía (1 cucharada)", "1/2 manzana verde picada (90 g)", "20 g de Cereal Balls", "5 avellanas picadas", "20 botones de chocolate blanco (7 g)"],
+   pasos:["Mezcla el yogur proteico con el batido de proteína hasta que quede cremoso.", "Agrega la chía y la avena, revuelve y deja reposar 5 minutos para que se hidraten.", "Pica la media manzana verde en cubitos.", "Sirve en un bowl y cubre con la manzana, los Cereal Balls y las avellanas picadas.", "Termina con los botones de chocolate blanco encima."] },
  { n:"Mousse de yogur y cacao", cat:"Postre", e:"🍫", min:5, porc:"1 pote", k:112, p:16, c:10, g:1,
    ing:["1 yogur proteico natural (160 g)", "1 cucharadita de cacao amargo", "Endulzante a gusto"],
    pasos:["Mezcla el yogur con el cacao y el endulzante.", "Bate con un tenedor hasta que quede cremoso.", "Enfría 10 minutos antes de comer."] },

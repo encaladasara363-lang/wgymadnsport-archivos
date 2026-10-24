@@ -1881,6 +1881,9 @@ probado: ella se activó desde el mesón y entró a la app).
   14 g de proteína, 26 g de carbohidratos y 16 g de grasa (calculado con sus ingredientes y la etiqueta de Simi Fibra).
   «Desayuno fit A» (sándwich masa madre con huevo, palta y pavo; 24-10-2026, nombre elegido por la dueña, armada con el desayuno que la dueña anotó en la app):
   1 porción ≈455 kcal, 26 g de proteína, 34 g de carbohidratos y 23 g de grasa.
+  «Postre fit A» (24-10-2026, armado con la colación que anotó la dueña; primera de Postre): bowl de yogur proteico con
+  batido whey, avena, chía, manzana verde, Cereal Balls, avellanas y botones de chocolate blanco (7 g): ≈453 kcal,
+  29 g de proteína, 59 g de carbohidratos y 13 g de grasa.
 - **Se vende también a los vencidos (17-10-2026, la dueña: "quiero que los vencidos igual lo vean… tendría más
   posibilidades de vender esa app"):** la tarjeta bloqueada muestra igual el aviso `#nutriCard`, y en la app la
   mensualidad del gimnasio ya no bloquea: con WGYMNUTRI pagada se entra aunque el plan esté vencido; sin pagarla
