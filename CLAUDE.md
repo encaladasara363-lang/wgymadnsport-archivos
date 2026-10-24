@@ -1879,7 +1879,7 @@ probado: ella se activó desde el mesón y entró a la app).
   oculta las demás sin redibujar la lista; sin texto vuelve a la categoría elegida.
   «Waffles alto en fibra» (24-10-2026, receta de la dueña, primera de Desayuno): 2 porciones, cada una ≈303 kcal,
   14 g de proteína, 26 g de carbohidratos y 16 g de grasa (calculado con sus ingredientes y la etiqueta de Simi Fibra).
-  «Sándwich masa madre con huevo, palta y pavo» (24-10-2026, armada con el desayuno que la dueña anotó en la app):
+  «Desayuno fit A» (sándwich masa madre con huevo, palta y pavo; 24-10-2026, nombre elegido por la dueña, armada con el desayuno que la dueña anotó en la app):
   1 porción ≈455 kcal, 26 g de proteína, 34 g de carbohidratos y 23 g de grasa.
 - **Se vende también a los vencidos (17-10-2026, la dueña: "quiero que los vencidos igual lo vean… tendría más
   posibilidades de vender esa app"):** la tarjeta bloqueada muestra igual el aviso `#nutriCard`, y en la app la

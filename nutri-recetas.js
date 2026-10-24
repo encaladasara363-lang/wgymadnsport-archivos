@@ -5,7 +5,7 @@
    porción, aproximados. k = kcal, p = proteína g, c = carbohidratos g, g = grasas g. */
 window.NUTRI_RECETAS = [
  /* Desayuno */
- { n:"Sándwich masa madre con huevo, palta y pavo", cat:"Desayuno", e:"🥪", min:15, porc:"1 sándwich + 1 cuadradito de chocolate", k:455, p:26, c:34, g:23,
+ { n:"Desayuno fit A", cat:"Desayuno", e:"🥪", min:15, porc:"1 sándwich + 1 cuadradito de chocolate", k:455, p:26, c:34, g:23,
    ing:["61 g de pan artesano de masa madre (2 rebanadas)", "2 huevos duros", "30 g de palta", "1 lámina de queso gouda sin lactosa (17 g)", "22 g de pechuga de pavo en láminas", "1 cuadradito de chocolate (5 g)", "Sal, pimienta y orégano a gusto"],
    pasos:["Cuece los huevos 10 minutos desde que el agua hierve, pásalos a agua fría y pélalos.", "Tuesta las rebanadas de pan.", "Muele la palta con un tenedor, agrega sal y pimienta y úntala sobre una rebanada.", "Pon encima la lámina de queso, el pavo y los huevos en rodajas; termina con orégano.", "Tapa con la otra rebanada y acompaña con el cuadradito de chocolate."] },
  { n:"Waffles alto en fibra", cat:"Desayuno", e:"🧇", min:15, porc:"1 porción (la mitad de la receta)", k:303, p:14, c:26, g:16,
