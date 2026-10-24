@@ -1524,6 +1524,9 @@ Versión 23). Celular y compu ven el mismo inventario.
   foto `img/tienda/trident-infinit-spearmint.jpg`). Trident Infinit Peppermint (mismo costo/precio, código 7622201678036, foto `img/tienda/trident-infinit-peppermint.jpg`).
   Barra En Línea Proteína relleno coco, 13 g de proteína (Snacks, código 7804000003237, foto
   `img/tienda/barra-enlinea-proteina-coco.jpg`; costo $1.000, venta $2.000).
+  Suplementos por porción (24-10-2026): cada porción es 1 unidad del stock; costo = precio del tarro ÷ porciones; el
+  tarro lleva una etiqueta 200… propia (cada escaneo vende 1 porción). Pre entreno Mr Hyde Signature Fruit Punch
+  (tarro $21.400, 30 porciones → $713; venta $2.000; foto `img/tienda/pre-entreno-mr-hyde-signature.jpg`).
   Bebestibles en pausa hasta que llegue más mercadería. Un enlace `?nuevo=1` con un código que ya existe abre ese producto (aunque cambie el nombre).
   **Todo se actualiza solo (24-10-2026, la dueña: "si hago una modificación en el celular, que se cambie igual en el
   computador"):** los datos se piden a la planilla cada 30 s si la página está a la vista y sin ficha abierta, y cada
