@@ -1874,6 +1874,9 @@ probado: ella se activó desde el mesón y entró a la app).
   comidas por momento (la once se llama «Snack» desde el 10-10-2026, la clave interna sigue siendo `once`) y frase del día. Recetas: recetario
   propio en `nutri-recetas.js` (la dueña NO quiere sus recetas de
   `comidas-saludables.html` aquí), cada una con «Agregar a mi día».
+  **🔎 Buscador de recetas (24-10-2026, pedido de la dueña):** casillero amarillo `#recQ` arriba de las categorías;
+  `filtrarRecetas` busca por nombre, categoría o ingrediente (sin tildes, acepta plural) en todas las categorías y
+  oculta las demás sin redibujar la lista; sin texto vuelve a la categoría elegida.
   «Waffles alto en fibra» (24-10-2026, receta de la dueña, primera de Desayuno): 2 porciones, cada una ≈303 kcal,
   14 g de proteína, 26 g de carbohidratos y 16 g de grasa (calculado con sus ingredientes y la etiqueta de Simi Fibra).
 - **Se vende también a los vencidos (17-10-2026, la dueña: "quiero que los vencidos igual lo vean… tendría más
