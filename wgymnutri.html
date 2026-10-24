@@ -343,7 +343,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 
 <script src="pago-datos.js?v=4"></script>
 <script src="nutri-alimentos.js?v=30"></script>
-<script src="nutri-recetas.js?v=15"></script>
+<script src="nutri-recetas.js?v=16"></script>
 <script>
 (function(){
 "use strict";
@@ -1915,8 +1915,45 @@ function seguroN_(f){ try{ f(); }catch(e){} }
 /* ✏️ Editar cantidad de un alimento ya anotado (17-10-2026, la dueña: "a veces tengo que cambiar los gramos
    y tengo que borrar la comida y agregarla de nuevo"). En gramos/ml se escribe el total; si no, cuántas unidades
    o porciones. Las calorías y macros se recalculan solas (it.x). */
+/* 🍽 Recetas con ingredientes (24-10-2026, la dueña: "cuando ponga editar pueda ver cada ingrediente… a veces
+   consumo menos gramos, sin que se cambie la receta, solo en este lado cada día"). Las recetas con `ingr` (sus
+   recetas) guardan en el alimento anotado cada ingrediente con su cantidad base (q0) y lo que comió hoy (q); al
+   editar se cambia solo ese día: la receta del recetario no se toca. */
+function ingDeReceta(r){ return r && r.ingr ? r.ingr.map(function(x){ return { n:x[0], q0:x[1], u:x[2], k:x[3], p:x[4], c:x[5], g:x[6], q:x[1] }; }) : null; }
+function recetaDeItem(it){ if(it.cat !== "Receta") return null; var i = recetaPorNombre(it.n); return i >= 0 ? RECETAS[i] : null; }
+function sumaIng(ing){ return ing.reduce(function(t, x){ var f = x.q0 ? x.q / x.q0 : 0; t.k += x.k * f; t.p += x.p * f; t.c += x.c * f; t.g += x.g * f; return t; }, { k:0, p:0, c:0, g:0 }); }
+function cantTxt(v){ return String(Math.round(v * 100) / 100).replace(".", ","); }
+function editarReceta(m, j, it){
+ var r = recetaDeItem(it), mult = it.x || 1;
+ var ing = (it.ing || ingDeReceta(r)).map(function(x){ var y = {}; for(var k in x) y[k] = x[k]; if(!it.ing) y.q = y.q0 * mult; return y; });
+ var orig = ingDeReceta(r);
+ abrirHoja('<div class="cab"><h3>✏️ Editar</h3><button type="button" class="chip" id="edCerrar">Cerrar</button></div>' +
+  '<p style="font-size:19px;margin:4px 0 4px"><b>' + iconoAlim(it) + ' ' + esc(it.n) + '</b></p>' +
+  '<p class="muted" style="font-size:14px;margin:0 0 10px">Cambia lo que comiste hoy. La receta guardada no cambia.</p>' +
+  ing.map(function(x, i){ return '<div class="ing-ed" style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.12)">' +
+   '<span style="flex:1;min-width:0;font-size:15px">' + esc(x.n) + '<small class="muted" id="ingK' + i + '" style="display:block;font-size:12px"></small></span>' +
+   '<input class="inp" data-ing="' + i + '" type="text" inputmode="decimal" autocomplete="off" value="' + cantTxt(x.q) + '" style="width:76px;text-align:center;font-size:18px;padding:8px 4px">' +
+   '<span style="width:78px;font-size:13px">' + esc(x.u) + '</span></div>'; }).join("") +
+  '<p class="center" id="edRes" style="font-size:18px;margin:12px 0"></p>' +
+  '<button type="button" class="btn rojo" id="edOk">✅ Guardar cambio</button>' +
+  (orig ? '<button type="button" class="btn sec" id="edOrig" style="margin-top:8px">↩ Volver a la receta original</button>' : ''));
+ function pinta(){
+  document.querySelectorAll("[data-ing]").forEach(function(inp){ var x = ing[+inp.dataset.ing], v = parseFloat(String(inp.value).replace(",", ".")); x.q = v >= 0 ? v : 0;
+   $("ingK" + inp.dataset.ing).textContent = miles(x.q0 ? x.k * x.q / x.q0 : 0) + " kcal"; });
+  var t = sumaIng(ing); $("edRes").textContent = miles(t.k) + " kcal · P " + r1(t.p) + " · C " + r1(t.c) + " · G " + r1(t.g);
+ }
+ document.querySelectorAll("[data-ing]").forEach(function(inp){ inp.oninput = pinta; }); pinta();
+ $("edCerrar").onclick = cerrarHoja;
+ if($("edOrig")) $("edOrig").onclick = function(){ orig.forEach(function(x, i){ ing[i].q = x.q0; var inp = document.querySelector('[data-ing="' + i + '"]'); if(inp) inp.value = cantTxt(x.q0); }); pinta(); };
+ $("edOk").onclick = function(){ var y = diaDe(diaSel), t = (y.c[m] || [])[j]; if(!t) return cerrarHoja();
+  var s = sumaIng(ing), igual = ing.every(function(x){ return Math.abs(x.q - x.q0) < 1e-9; });
+  t.ing = ing; t.x = 1; t.k = Math.round(s.k); t.pr = r1(s.p); t.c = r1(s.c); t.g = r1(s.g);
+  t.p = r ? r.porc + (igual ? "" : " · ajustada hoy") : t.p;
+  setDia(diaSel, y); guardar(); cerrarHoja(); vibrar(15); renderHoy(); };
+}
 function editarItem(m, j){
  var xx = diaDe(diaSel), it = (xx.c[m] || [])[j]; if(!it) return;
+ if(it.ing || (recetaDeItem(it) || {}).ingr) return editarReceta(m, j, it);
  var u1 = !it.gr && String(it.p || "").match(/^1 (\S+)(.*)$/), mult = it.x || 1;
  var etiqueta = it.gr ? (it.ml ? "¿Cuántos ml tomaste?" : "¿Cuántos gramos?") : u1 ? "Cantidad de " + plural(u1[1], 2) : "¿Cuántas porciones? (1 porción = " + it.p + ")";
  var val = it.gr ? Math.round(it.gr * mult) : mult;
@@ -2783,7 +2820,7 @@ function renderRec(){
   $("recCompra").onclick = function(){ var antes = recetaEnLista(r); alternarRecetaLista(r); toast(antes ? "Quitada de tu lista de compras" : "🛒 Ingredientes agregados a tu lista"); renderRec(); };
   $("recAgregar").onclick = function(){
    agr.comida = RECETA_COMIDA[r.cat] || comidaPorHora(); diaSel = hoyISO();
-   agregar({ n:r.n, p:r.porc, k:r.k, pr:r.p, c:r.c, g:r.g, cat:"Receta" }, 1, false);
+   agregar({ n:r.n, p:r.porc, k:r.k, pr:r.p, c:r.c, g:r.g, cat:"Receta", ing:ingDeReceta(r) }, 1, false);
   };
   return;
  }
@@ -2966,7 +3003,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102411", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102412", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
