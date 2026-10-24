@@ -5,6 +5,9 @@
    porción, aproximados. k = kcal, p = proteína g, c = carbohidratos g, g = grasas g. */
 window.NUTRI_RECETAS = [
  /* Desayuno */
+ { n:"Sándwich masa madre con huevo, palta y pavo", cat:"Desayuno", e:"🥪", min:15, porc:"1 sándwich + 1 cuadradito de chocolate", k:455, p:26, c:34, g:23,
+   ing:["61 g de pan artesano de masa madre (2 rebanadas)", "2 huevos duros", "30 g de palta", "1 lámina de queso gouda sin lactosa (17 g)", "22 g de pechuga de pavo en láminas", "1 cuadradito de chocolate (5 g)", "Sal, pimienta y orégano a gusto"],
+   pasos:["Cuece los huevos 10 minutos desde que el agua hierve, pásalos a agua fría y pélalos.", "Tuesta las rebanadas de pan.", "Muele la palta con un tenedor, agrega sal y pimienta y úntala sobre una rebanada.", "Pon encima la lámina de queso, el pavo y los huevos en rodajas; termina con orégano.", "Tapa con la otra rebanada y acompaña con el cuadradito de chocolate."] },
  { n:"Waffles alto en fibra", cat:"Desayuno", e:"🧇", min:15, porc:"1 porción (la mitad de la receta)", k:303, p:14, c:26, g:16,
    ing:["Rinde 2 porciones:", "2 huevos", "60 g de leche", "40 g de avena", "20 g de harina de almendras", "10 g de Simi Fibra con Cacao (trae salvado de trigo)", "10 g de mantequilla de maní", "1 cucharadita de polvo de hornear", "1 cucharadita de canela", "1 cucharadita de esencia de vainilla", "15 gotas de estevia", "20 botones de chocolate blanco (7 g)"],
    pasos:["Bate los huevos con la leche, la mantequilla de maní, la vainilla y la estevia.", "Agrega la avena, la harina de almendras, la fibra, el polvo de hornear y la canela, y mezcla hasta que no queden grumos.", "Deja reposar la mezcla 5 minutos para que la avena y la fibra se hidraten.", "Calienta la waflera, píntala con muy poco aceite y cocina la mezcla 4 a 5 minutos, hasta que esté dorada.", "Sirve con los botones de chocolate blanco encima y divide en 2 porciones."] },
