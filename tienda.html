@@ -198,6 +198,9 @@ function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e)
 function hoyISO(){ return new Intl.DateTimeFormat("en-CA", { timeZone:"America/Santiago" }).format(new Date()); }
 function ahoraTxt(){ var f = new Intl.DateTimeFormat("sv-SE", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }).format(new Date()); return f.replace("T", " ").slice(0, 16); }
 function normTxt(s){ return String(s || "").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+/* Al cambiar una foto en img/tienda/ (mismo nombre), subir FOTO_V para que los teléfonos no muestren la antigua. */
+var FOTO_V = "2";
+function fotoUrl(f){ return f ? f + (f.indexOf("?") < 0 ? "?v=" + FOTO_V : "") : ""; }
 function iconoCat(c){ var x = CATS.filter(function(k){ return k[0] === c; })[0]; return x ? x[1] : "📦"; }
 function toast(t, ms){ var el = $("toast"); el.textContent = t; el.style.display = "block"; clearTimeout(toast.t); toast.t = setTimeout(function(){ el.style.display = "none"; }, ms || 2600); }
 function vibrar(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms || 30); }catch(e){} }
@@ -399,7 +402,7 @@ function htmlListaInv(){
  return activos().filter(function(p){ return (invFiltro === "Todos" || p.cat === invFiltro) && (!q || normTxt(p.n + " " + p.det + " " + p.cod).indexOf(q) >= 0); })
   .sort(function(a, b){ return a.n.localeCompare(b.n); }).map(function(p){
    var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0;
-   return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(p.foto) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span>' +
+   return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span>' +
     '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span><span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + '</div><span class="precio">' + plata(p.precio) + '</span></div>' +
     '<div class="grid2" style="margin-top:10px"><button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button><button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div></div>';
   }).join("");
@@ -416,7 +419,7 @@ function redondeo(n){ return Math.ceil(n / 100) * 100; }
 function formProducto(p, codNuevo, base){
  var nuevo = !p; p = p || Object.assign({ n:"", cat:"Bebestibles", det:"", cod:codNuevo || "", costo:"", precio:"", stock:"", min:3, foto:"" }, base || {});
  abrirHoja('<div class="cab"><h3>' + (nuevo ? '➕ Producto nuevo' : '✏️ Editar producto') + '</h3><button class="btn chico" id="fCerrar">Cerrar</button></div>' +
-  (p.foto ? '<div style="text-align:center;margin:8px 0"><img src="' + esc(p.foto) + '" alt="" style="max-height:140px;border-radius:12px;border:1px solid var(--line)"></div>' : '') +
+  (p.foto ? '<div style="text-align:center;margin:8px 0"><img src="' + esc(fotoUrl(p.foto)) + '" alt="" style="max-height:140px;border-radius:12px;border:1px solid var(--line)"></div>' : '') +
   '<label class="lab" for="fN">Nombre</label><input class="inp" id="fN" value="' + esc(p.n) + '" placeholder="Ej: Agua mineral 500 ml">' +
   '<label class="lab" for="fCat">Categoría</label><select class="inp" id="fCat">' + CATS.map(function(c){ return '<option' + (c[0] === p.cat ? ' selected' : '') + '>' + c[0] + '</option>'; }).join("") + '</select>' +
   '<label class="lab" for="fDet">Detalle (sabor, talla, color, tamaño)</label><input class="inp" id="fDet" value="' + esc(p.det) + '" placeholder="Ej: Talla M · negro">' +
