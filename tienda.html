@@ -276,7 +276,7 @@ $("gOk").onclick = function(){
  api("tiendaListar", {}).then(function(d){
   try{ localStorage.setItem(CLAVE_ADMIN_LS, c); }catch(e){}
   S = { productos:d.productos || [], movs:d.movs || [], total:d.total || {}, hoy:d.hoy || hoyISO() };
-  aplicarPendientes(); guardarCache(); entrar();
+  aplicarPendientes(); guardarCache(); entrar(); usarEnlace();
  })["catch"](function(e){
   $("gErr").hidden = false;
   $("gErr").textContent = e.motivo === "clave incorrecta" ? "Clave incorrecta." : /action|desconocid|no existe/i.test(e.message || "") ? "Falta instalar la Versión 24 del Apps Script (ver instrucciones)." : "No se pudo conectar. Revisa tu internet.";
@@ -398,9 +398,10 @@ function cerrarHoja(){ $("velo").hidden = true; $("hoja").innerHTML = ""; pararC
 $("velo").onclick = function(e){ if(e.target === $("velo")) cerrarHoja(); };
 /* Precio sugerido (redondeado hacia arriba a $100): costo + 50 %, + 70 % y el doble. */
 function redondeo(n){ return Math.ceil(n / 100) * 100; }
-function formProducto(p, codNuevo){
- var nuevo = !p; p = p || { n:"", cat:"Bebidas", det:"", cod:codNuevo || "", costo:"", precio:"", stock:"", min:3 };
+function formProducto(p, codNuevo, base){
+ var nuevo = !p; p = p || Object.assign({ n:"", cat:"Bebidas", det:"", cod:codNuevo || "", costo:"", precio:"", stock:"", min:3, foto:"" }, base || {});
  abrirHoja('<div class="cab"><h3>' + (nuevo ? '➕ Producto nuevo' : '✏️ Editar producto') + '</h3><button class="btn chico" id="fCerrar">Cerrar</button></div>' +
+  (p.foto ? '<div style="text-align:center;margin:8px 0"><img src="' + esc(p.foto) + '" alt="" style="max-height:140px;border-radius:12px;border:1px solid var(--line)"></div>' : '') +
   '<label class="lab" for="fN">Nombre</label><input class="inp" id="fN" value="' + esc(p.n) + '" placeholder="Ej: Agua mineral 500 ml">' +
   '<label class="lab" for="fCat">Categoría</label><select class="inp" id="fCat">' + CATS.map(function(c){ return '<option' + (c[0] === p.cat ? ' selected' : '') + '>' + c[0] + '</option>'; }).join("") + '</select>' +
   '<label class="lab" for="fDet">Detalle (sabor, talla, color, tamaño)</label><input class="inp" id="fDet" value="' + esc(p.det) + '" placeholder="Ej: Talla M · negro">' +
@@ -660,8 +661,26 @@ function abrirEscanerSimple(alLeer){
  iniciarLector($("sVid"), function(code){ bip(); vibrar(60); pararCamara(); caja.remove(); alLeer(code); toast("Código " + code); }, function(){ caja.remove(); toast("No se pudo abrir la cámara."); });
 }
 
+/* ═══ Enlace con la ficha ya llena (24-10-2026, la dueña: "quiero que todos los productos que te empiece a mandar
+   tengan su inventario solito… yo soy un desastre para administración"). Claude le manda por el chat un enlace
+   tienda.html?nuevo=1&n=…&cat=…&det=…&costo=…&precio=…&min=…&foto=…&cod=auto que abre «Producto nuevo» con todo
+   escrito; ella solo pone cuántos tiene y toca Guardar. cod=auto le crea su código propio (para la etiqueta). Si ya
+   existe un producto con ese nombre, abre ese para editarlo en vez de duplicarlo. Se borra de la dirección al cargar. ═══ */
+var ENLACE = null;
+try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ["n","cat","det","costo","precio","stock","min","foto","cod"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = qs.get(k); }); history.replaceState(null, "", location.pathname); } }catch(e){}
+function usarEnlace(){
+ if(!ENLACE) return; var b = ENLACE; ENLACE = null;
+ var ya = activos().filter(function(p){ return normTxt(p.n) === normTxt(b.n) && normTxt(p.det) === normTxt(b.det || ""); })[0];
+ tab = "inv"; document.querySelectorAll("#nav button").forEach(function(x){ x.setAttribute("aria-pressed", x.dataset.tab === "inv"); }); render();
+ if(ya){ toast("«" + ya.n + "» ya está en tu inventario: revisa y guarda si cambió algo.", 5000); formProducto(ya); return; }
+ if(b.cod === "auto") b.cod = nuevoCodigo();
+ ["costo","precio","stock","min"].forEach(function(k){ if(b[k] !== undefined) b[k] = num(b[k]); });
+ formProducto(null, "", b);
+ setTimeout(function(){ var i = $("fStock"); if(i && !i.value){ i.focus(); } }, 300);
+}
+
 /* ═══ Inicio ═══ */
-if(clave){ entrar(); cargar(); } else { $("gate").hidden = false; }
+if(clave){ entrar(); cargar().then(usarEnlace); } else { $("gate").hidden = false; }
 })();
 </script>
 </body>
