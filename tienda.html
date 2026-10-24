@@ -147,9 +147,11 @@ body{ zoom:1.22; }
 .prod .ph{ width:78px; height:104px; background:#fff; }
 .prod .ph img{ cursor:zoom-in; }
 #fotoGrande{ position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.92); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; }
-#fotoGrande img{ max-width:100%; max-height:82vh; object-fit:contain; border-radius:14px; background:#fff; }
+#fotoGrande img{ max-width:100%; max-height:calc(100vh / 1.22 - 190px); object-fit:contain; border-radius:14px; background:#fff; }
 #fotoGrande b{ color:#fff; font-size:20px; text-transform:uppercase; margin-top:12px; text-align:center; }
 #fotoGrande span{ color:#CFCFD6; font-size:15px; margin-top:6px; }
+#fotoGrande .volver{ margin-top:16px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:14px 34px; font:800 italic 22px "Barlow Condensed",sans-serif; text-transform:uppercase; cursor:pointer; }
+#fotoGrande b br{ display:block; }
 .prod .ph img{ object-fit:contain; }
 /* El botón Guardar de las fichas queda siempre a la vista, abajo (24-10-2026: la dueña cambió el precio y no vio
    el Guardar, que estaba más abajo; el cambio no se guardó). */
@@ -301,7 +303,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102421";
+var TIENDA_VERSION = "2026102422";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -805,12 +807,13 @@ function abrirEscanerSimple(alLeer){
    escrito; ella solo pone cuántos tiene y toca Guardar. cod=auto le crea su código propio (para la etiqueta). Si ya
    existe un producto con ese nombre, abre ese para editarlo en vez de duplicarlo. Se borra de la dirección al cargar. ═══ */
 /* Foto en pantalla completa (24-10-2026, la dueña: "cuando apreté la foto, que se vea en pantalla completa"); se cierra tocando. */
+/* También en la lista de 🏷 Códigos, y con botón «← Volver» (24-10-2026, la dueña). */
 document.addEventListener("click", function(e){
- var img = e.target.closest && e.target.closest(".prod .ph img"); if(!img) return;
- var card = img.closest(".prod"), nom = card && card.querySelector(".tx b");
+ var img = e.target.closest && e.target.closest(".prod .ph img, img.etq-ph"); if(!img) return;
+ var card = img.closest(".prod, .etq-sel"), nom = card && card.querySelector(".tx b, .n");
  var d = document.createElement("div"); d.id = "fotoGrande";
- d.innerHTML = '<img src="' + img.getAttribute("src") + '" alt=""><b>' + (nom ? nom.innerHTML : "") + '</b><span>Toca para cerrar</span>';
- d.onclick = function(){ d.remove(); }; document.body.appendChild(d);
+ d.innerHTML = '<img src="' + img.getAttribute("src") + '" alt=""><b>' + (nom ? nom.innerHTML : "") + '</b><button type="button" class="volver">← Volver</button>';
+ d.onclick = function(ev){ if(ev.target.tagName !== "IMG") d.remove(); }; document.body.appendChild(d);
 });
 var ENLACE = null;
 /* Algunos chats vuelven a codificar el enlace y llegan textos como «Polera%20Rise» (24-10-2026, la polera Rise LYT quedó con
