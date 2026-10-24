@@ -1887,6 +1887,14 @@ probado: ella se activó desde el mesón y entró a la app).
   «Postre fit A» (24-10-2026, armado con la colación que anotó la dueña; primera de Postre): bowl de yogur proteico con
   batido whey, avena, chía, manzana verde, Cereal Balls, avellanas y botones de chocolate blanco (7 g): ≈453 kcal,
   29 g de proteína, 59 g de carbohidratos y 13 g de grasa.
+  **✏️ Editar cada ingrediente de una receta anotada (24-10-2026, la dueña: "a veces consumo menos gramos, sin que se
+  cambie la receta, solo en este lado cada día"):** las recetas con `ingr` en `nutri-recetas.js` (por ahora sus 3:
+  Waffles alto en fibra, Desayuno fit A y Postre fit A; formato `[nombre, cantidad, unidad, kcal, P, C, G]` por porción)
+  guardan los ingredientes en el alimento anotado (`it.ing`, con `q0` base y `q` de ese día). El ✏️ de «Hoy» abre
+  `editarReceta`: un casillero por ingrediente, total al instante, «Guardar cambio» (solo ese día, la porción dice
+  «· ajustada hoy») y «↩ Volver a la receta original». Lo anotado antes sin `it.ing` toma los ingredientes de la receta
+  por nombre. Al agregar otra receta de la dueña, ponerle `ingr` con valores que sumen sus totales. Waffles quedó en
+  300 kcal, 15 g P, 24 g C y 16 g G por porción (suma exacta de sus ingredientes).
 - **Se vende también a los vencidos (17-10-2026, la dueña: "quiero que los vencidos igual lo vean… tendría más
   posibilidades de vender esa app"):** la tarjeta bloqueada muestra igual el aviso `#nutriCard`, y en la app la
   mensualidad del gimnasio ya no bloquea: con WGYMNUTRI pagada se entra aunque el plan esté vencido; sin pagarla
