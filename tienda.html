@@ -186,7 +186,7 @@ var CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20E
 var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";          /* la misma del mesón: en la compu de recepción ya está guardada */
 var CLAVE_CACHE = "wgym_tienda_cache_v1";           /* última foto del inventario, para abrir al instante y sin señal */
 var CLAVE_PEND = "wgym_tienda_pend_v1";             /* ventas / entradas que no alcanzaron a llegar a la planilla */
-var CATS = [["Bebidas","🥤"],["Snacks","🍫"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa deportiva","👕"],["Otro","📦"]];
+var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa deportiva","👕"],["Otro","📦"]];
 var PAGOS = [["efectivo","💵 Efectivo"],["transferencia","🏦 Transferencia"],["tarjeta","💳 Tarjeta"],["fiado","📒 Fiado"]];
 
 function $(id){ return document.getElementById(id); }
@@ -218,6 +218,8 @@ function api(action, params){
 function guardarCache(){ lsSet(CLAVE_CACHE, S); }
 /* Lo que todavía no llegó a la planilla se vuelve a aplicar sobre la lista que manda la planilla. */
 function aplicarPendientes(){
+ /* «Bebidas» se llama «Bebestibles» desde el 24-10-2026 (pedido de la dueña); lo guardado antes se muestra con el nombre nuevo. */
+ S.productos.forEach(function(p){ if(p.cat === "Bebidas") p.cat = "Bebestibles"; });
  pend.forEach(function(p){
   if(p.tipo === "venta") p.datos.items.forEach(function(it){ var q = prod(it.id); if(q) q.stock -= it.cant; });
   if(p.tipo === "entrada"){ var q = prod(p.datos.id); if(q) q.stock += p.datos.cant; }
@@ -412,7 +414,7 @@ $("velo").onclick = function(e){ if(e.target === $("velo")) cerrarHoja(); };
 /* Precio sugerido (redondeado hacia arriba a $100): costo + 50 %, + 70 % y el doble. */
 function redondeo(n){ return Math.ceil(n / 100) * 100; }
 function formProducto(p, codNuevo, base){
- var nuevo = !p; p = p || Object.assign({ n:"", cat:"Bebidas", det:"", cod:codNuevo || "", costo:"", precio:"", stock:"", min:3, foto:"" }, base || {});
+ var nuevo = !p; p = p || Object.assign({ n:"", cat:"Bebestibles", det:"", cod:codNuevo || "", costo:"", precio:"", stock:"", min:3, foto:"" }, base || {});
  abrirHoja('<div class="cab"><h3>' + (nuevo ? '➕ Producto nuevo' : '✏️ Editar producto') + '</h3><button class="btn chico" id="fCerrar">Cerrar</button></div>' +
   (p.foto ? '<div style="text-align:center;margin:8px 0"><img src="' + esc(p.foto) + '" alt="" style="max-height:140px;border-radius:12px;border:1px solid var(--line)"></div>' : '') +
   '<label class="lab" for="fN">Nombre</label><input class="inp" id="fN" value="' + esc(p.n) + '" placeholder="Ej: Agua mineral 500 ml">' +

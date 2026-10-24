@@ -1520,6 +1520,8 @@ Versión 23). Celular y compu ven el mismo inventario.
   La página se actualiza sola cada 60 s si está a la vista y sin ficha abierta (celular y compu ven lo mismo).
   Letras grandes (24-10-2026, la dueña: "haz el zoom más grande que puedas"): `body{zoom:1.22}` (sin zoom al imprimir) y
   pastillas del inventario con letra negra sobre color (Ganas = amarillo, Quedan = verde, poco stock = rojo).
+  La categoría «Bebidas» se llama «Bebestibles» (24-10-2026, pedido de la dueña; lo guardado como «Bebidas» se muestra
+  como «Bebestibles» y queda así al editarlo). En los enlaces de productos usar `cat=Bebestibles`.
 - Fotos de productos: campo `foto` (ruta dentro del repo, ej. `img/tienda/…`); se ponen cuando la dueña las mande.
   Nunca escribir costos ni ventas en archivos del repo: viven solo en la planilla.
 
