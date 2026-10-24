@@ -1496,7 +1496,8 @@ administración (la misma del mesón, `wgym_clave_admin_v1`). Todo se guarda en 
 productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/Ingresos.gs`, **Versión 24, instalada por la
 dueña el 24-10-2026 cerca de las 13:15, INGRESOS.gs verificado idéntico al repo vía Drive**; volver atrás: lápiz →
 Versión 23). Celular y compu ven el mismo inventario.
-- **🛒 Vender:** escanear (queda abierto y suma cada producto; 2 s entre el mismo código), buscar por nombre,
+- **🛒 Vender:** escanear (desde el 24-10-2026 una lectura por vez: suma 1 y se cierra solo; la dueña: "se queda ahí marcando
+  todo el rato"; un código desconocido deja la cámara abierta con «Crear producto»), buscar por nombre,
   cantidades, cambiar precio de una línea (descuento), medio de pago (efectivo, transferencia, tarjeta, fiado con
   nombre) y «Cobrar». La venta se descuenta al tiro en el teléfono y se envía a la planilla; sin señal queda en
   `wgym_tienda_pend_v1` y se reenvía sola (cada venta lleva un id: nunca se descuenta dos veces).

@@ -292,7 +292,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102402";
+var TIENDA_VERSION = "2026102403";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -365,7 +365,7 @@ function renderVender(){
  h += htmlHoyMini();
  v.innerHTML = h;
  if($("irInv")) $("irInv").onclick = function(){ document.querySelector('#nav [data-tab="inv"]').click(); };
- $("bEsc").onclick = function(){ abrirEscaner(function(cod){ var p = porCodigo(cod); if(p){ agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }, true); };
+ $("bEsc").onclick = function(){ abrirEscaner(function(cod){ var p = porCodigo(cod); if(p){ agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }, false); };
  $("bq").oninput = function(){ var q = normTxt(this.value).trim(), r = $("bres");
   if(!q){ r.hidden = true; return; }
   var l = activos().filter(function(p){ return normTxt(p.n + " " + p.cat + " " + p.det + " " + p.cod).indexOf(q) >= 0; }).slice(0, 30);
@@ -676,7 +676,7 @@ function iniciarLector(vid, alLeer, alFallar){
 function abrirEscaner(alLeer, seguido){
  abrirHoja('<div class="cab"><h3>📷 Escanear</h3><button class="btn chico oro" id="cListo">Listo</button></div>' +
   '<div class="cam" style="margin-top:10px"><video id="cVid" playsinline muted autoplay></video><div class="marco"></div><div class="laser"></div><div class="flash" id="cFlash"></div></div>' +
-  '<p class="muted" id="cTxt" style="text-align:center;margin:10px 0">Apunta al código de barras. Puedes escanear varios productos seguidos.</p>' +
+  '<p class="muted" id="cTxt" style="text-align:center;margin:10px 0">' + (seguido ? 'Apunta al código de barras. Puedes escanear varios productos seguidos.' : 'Apunta al código de un producto. Se suma 1 y se cierra solo.') + '</p>' +
   '<div class="fila"><input class="inp" id="cMan" inputmode="numeric" placeholder="¿No lee? Escribe el número"><button class="btn chico" id="cManOk" style="flex:none">OK</button></div><div id="cNuevo"></div>');
  var ultimo = { c:"", t:0 };
  function leer(code){
@@ -687,7 +687,9 @@ function abrirEscaner(alLeer, seguido){
   else { fl.style.background = "rgba(227,6,19,.95)"; fl.textContent = "Código " + code + " no está en tu inventario"; fl.style.display = "block";
    $("cNuevo").innerHTML = '<button class="btn oro" id="cCrear" style="margin-top:10px">➕ Crear producto con el código ' + esc(code) + '</button>';
    $("cCrear").onclick = function(){ cerrarHoja(); formProducto(null, code); }; }
-  if(!seguido){ cerrarHoja(); }
+  /* Una lectura por vez (24-10-2026, la dueña: "si lo escaneo se queda ahí marcando todo el rato"): al leer un producto
+     conocido, suma 1 y se cierra; para llevar más del mismo se toca «+» en la venta o se escanea de nuevo. */
+  if(!seguido && msg){ pararCamara(); toast(msg); setTimeout(cerrarHoja, 700); }
  }
  $("cListo").onclick = cerrarHoja;
  $("cManOk").onclick = function(){ var v = $("cMan").value.replace(/\D/g, ""); if(v.length >= 6){ leer(v); $("cMan").value = ""; } };
