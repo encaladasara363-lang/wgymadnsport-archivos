@@ -2444,19 +2444,32 @@ function renderEvolucion(s){
     y después WhatsApp a Sara con el pedido. El stock solo baja cuando ella cobra en la tienda.
     Al cambiar una foto de img/tienda/ con el mismo nombre, subir TIENDA_FOTO_V junto con FOTO_V de tienda.html. */
  var TIENDA_FOTO_V = "44", TIENDA_WSP = "56975196394";
+ /* Interruptor (25-10-2026, la dueña: "no quiero publicar la tienda el lunes porque compré ropa en Shein y no sé
+    cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
+    Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
+ var TIENDA_VITRINA_ACTIVA = false;
  var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Otro":"📦" };
  function tiendaCat_(c){ return c === "Bebidas" ? "Bebestibles" : (c === "Ropa deportiva" ? "Ropa mujer" : (c || "Otro")); }
  function tiendaFoto_(p){ return p.foto ? escapeHtml(p.foto) + "?v=" + TIENDA_FOTO_V : "maquinas-wgymadnsport/comun/logo.png"; }
  function renderTienda_(s){
   var box = document.getElementById("tiendaCard"); if(!box) return;
-  if(!CHECKIN_URL){ box.hidden = true; return; }
+  if(!CHECKIN_URL || !TIENDA_VITRINA_ACTIVA){ box.hidden = true; return; }
   salidaJsonp({ action:"tiendaVitrina" }, function(d){
    var l = d && d.vitrina && d.productos ? d.productos.slice() : [];
    if(!l.length){ box.hidden = true; return; }
    l.forEach(function(p){ p.cat = tiendaCat_(p.cat); });
-   /* Primero lo disponible; los agotados al final de su categoría. */
-   l.sort(function(a, b){ return (b.q > 0) - (a.q > 0); });
-   var cats = ["Todos"].concat(Object.keys(TIENDA_ICONOS).filter(function(c){ return l.some(function(p){ return p.cat === c; }); }));
+   /* Ropa por sexo (25-10-2026, la dueña: "me conviene poner todo porque le sirve para regalar"): todos
+      ven toda la ropa, pero primero la de su sexo (mismo criterio que las rutinas, coachSexo) y al final
+      «¿Buscas un regalo?». Si el sexo no se sabe, queda el orden normal. */
+   var sexo = ""; try{ sexo = coachSexo(s); }catch(e){}
+   var suya = sexo === "F" ? "Ropa mujer" : (sexo === "M" ? "Ropa hombre" : ""), otra = sexo === "F" ? "Ropa hombre" : (sexo === "M" ? "Ropa mujer" : "");
+   function orden(p){ return p.cat === suya ? 0 : (p.cat === otra ? 1 : 2); }
+   /* Primero lo disponible y, dentro de eso, la ropa de su sexo y después la del otro. */
+   l.sort(function(a, b){ return ((b.q > 0) - (a.q > 0)) || (orden(a) - orden(b)); });
+   var orCats = Object.keys(TIENDA_ICONOS);
+   if(suya) orCats = [suya, otra].concat(orCats.filter(function(c){ return c !== suya && c !== otra; }));
+   var cats = ["Todos"].concat(orCats.filter(function(c){ return l.some(function(p){ return p.cat === c; }); }));
+   var hayOtra = !!otra && l.some(function(p){ return p.cat === otra; });
    var cat = "Todos", todos = false;
    box.hidden = false;
    function pintar(){
@@ -2472,10 +2485,12 @@ function renderEvolucion(s){
        '<span class="tv-pr">' + clp(p.precio) + '</span><span class="tv-btn">' + (ag ? 'Pronto vuelve' : '💬 Lo quiero') + '</span></div></button>';
      }).join("") + '</div>' +
      (cortar ? '<button type="button" class="tv-mas" id="tvMas">Ver todos (' + vis.length + ') ▼</button>' : '') +
+     (hayOtra && cat !== otra ? '<button type="button" class="tv-mas" id="tvRegalo">🎁 ¿Buscas un regalo? Mira la ' + (otra === "Ropa hombre" ? 'ropa de hombre' : 'ropa de mujer') + '</button>' : '') +
      '<p class="tv-nota">💳 Paga en el mesón: efectivo, tarjeta o transferencia.</p>';
     Array.prototype.forEach.call(box.querySelectorAll("[data-tc]"), function(b){ b.addEventListener("click", function(){ cat = b.getAttribute("data-tc"); todos = false; pintar(); }); });
     Array.prototype.forEach.call(box.querySelectorAll("[data-tp]"), function(b){ b.addEventListener("click", function(){ var p = l[+b.getAttribute("data-tp")]; if(p && p.q > 0) tiendaVentanita_(s, p); }); });
     var m = box.querySelector("#tvMas"); if(m) m.addEventListener("click", function(){ todos = true; pintar(); });
+    var rg = box.querySelector("#tvRegalo"); if(rg) rg.addEventListener("click", function(){ cat = otra; todos = false; pintar(); box.scrollIntoView({ behavior:"smooth", block:"start" }); });
    }
    pintar();
   });
@@ -2545,7 +2560,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102501", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102504", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
