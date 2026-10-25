@@ -1540,6 +1540,8 @@ Versión 23). Celular y compu ven el mismo inventario.
   minuto (y al volver a la pestaña) se revisa `tienda-version.txt`: si es mayor que `TIENDA_VERSION`, la página se
   recarga sola (no con una ficha abierta ni con productos en la venta actual). **Cada vez que se cambie `tienda.html`,
   subir `TIENDA_VERSION` y `tienda-version.txt` juntos (AAAAMMDDNN).**
+  **Stock editable en la ficha (25-10-2026, la dueña: "en el stock no puedo editar"):** al editar un producto, el casillero
+  Stock se puede cambiar; al Guardar, la diferencia se anota en la planilla como «ajuste» (`tiendaEntrada`, nota «ajuste en la ficha»).
   El botón «💾 Guardar» de las fichas queda pegado abajo (sticky), siempre a la vista: la dueña cambió el precio del agua
   y no vio el Guardar, que estaba más abajo, y el cambio no se guardó.
   Foto del agua cambiada el 24-10-2026 por la que mandó la dueña (botella WOL con logo); al reemplazar una foto en
