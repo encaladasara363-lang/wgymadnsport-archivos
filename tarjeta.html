@@ -243,6 +243,37 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .nutri-promo .np-tx p{ margin:0 0 8px; font-size:14px; line-height:1.4; color:#ddd; }
 .nutri-promo .np-tx b{ color:var(--dorado); }
 .nutri-promo a.pago-btn{ display:block; text-align:center; text-decoration:none; }
+/* 🛍 Tienda WGYM (25-10-2026, la dueña eligió la idea 1): vitrina con precio de venta y "Lo quiero". */
+.tv-chips{ display:flex; gap:7px; overflow-x:auto; padding:2px 0 8px; margin:8px 0 4px; }
+.tv-chip{ flex:none; font:800 italic 15px 'Barlow Condensed',Arial,sans-serif; padding:7px 13px; border-radius:999px; border:2px solid #333; background:#0D0D0F; color:#fff; white-space:nowrap; }
+.tv-chip.on{ background:#E30613; border-color:#E30613; }
+.tv-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.tv-p{ background:#0D0D0F; border:1px solid #2a2a2e; border-radius:14px; overflow:hidden; display:flex; flex-direction:column; position:relative; text-align:left; color:#fff; padding:0; font:inherit; }
+.tv-ph{ background:#fff; aspect-ratio:3/4; }
+.tv-ph img{ width:100%; height:100%; object-fit:contain; display:block; }
+.tv-in{ padding:8px 9px 10px; display:flex; flex-direction:column; gap:4px; flex:1; }
+.tv-n{ font:800 15px/1.1 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; }
+.tv-d{ font-size:13px; color:#bbb; }
+.tv-ok{ font-size:12.5px; font-weight:800; color:#0A0A0B; background:#2ECC71; border-radius:6px; padding:2px 7px; align-self:flex-start; }
+.tv-ok.poco{ background:#FFD400; }
+.tv-pr{ font-family:'Anton',Impact,sans-serif; color:var(--dorado); font-size:24px; margin-top:auto; }
+.tv-btn{ text-align:center; font:800 italic 15px 'Barlow Condensed',Arial,sans-serif; padding:8px; border-radius:10px; background:linear-gradient(180deg,#FF2A35,#E30613 55%,#B8040F); box-shadow:0 4px 0 #7a030b; margin-bottom:4px; }
+.tv-p.agotado .tv-ph img{ filter:grayscale(1) brightness(.55); }
+.tv-p.agotado .tv-btn{ background:#333; box-shadow:none; color:#aaa; }
+.tv-sello{ position:absolute; top:34%; left:50%; transform:translate(-50%,-50%) rotate(-12deg); font-family:'Rubik Distressed','Anton',sans-serif; font-size:26px; color:#fff; background:#E30613; border:3px solid #fff; padding:3px 10px; border-radius:8px; }
+.tv-mas{ display:block; width:100%; margin-top:10px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:12px; font:800 italic 17px 'Barlow Condensed',Arial,sans-serif; }
+.tv-nota{ margin:12px 0 0; font-size:14px; line-height:1.4; color:#ddd; border-left:4px solid var(--dorado); padding:8px 10px; background:#0D0D0F; border-radius:8px; }
+.tv-modal{ position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.82); display:flex; align-items:flex-end; justify-content:center; }
+.tv-hoja{ background:#151517; border:2px solid var(--dorado); border-radius:20px 20px 0 0; width:100%; max-width:480px; max-height:94vh; overflow-y:auto; padding:14px 16px 22px; color:#fff; }
+.tv-hoja .tv-big{ background:#fff; border-radius:12px; overflow:hidden; }
+.tv-hoja .tv-big img{ width:100%; max-height:40vh; object-fit:contain; display:block; }
+.tv-hoja h3{ margin:12px 0 2px; font-size:24px; text-transform:uppercase; }
+.tv-cant{ display:flex; align-items:center; justify-content:center; gap:18px; margin:12px 0; }
+.tv-cant button{ width:52px; height:52px; border-radius:50%; border:2px solid var(--dorado); background:#0D0D0F; color:#fff; font-size:28px; font-weight:800; }
+.tv-cant b{ font-family:'Anton',Impact,sans-serif; font-size:34px; min-width:40px; text-align:center; }
+.tv-total{ text-align:center; font-size:18px; margin:0 0 12px; }
+.tv-total b{ font-family:'Anton',Impact,sans-serif; color:var(--dorado); font-size:28px; }
+.tv-volver{ display:block; width:100%; margin-top:10px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:12px; font:800 italic 17px 'Barlow Condensed',Arial,sans-serif; }
 .pago-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 6px; }
 .pago-monto{ display:inline-block; font-size:34px; font-weight:900; color:#FFD84D; line-height:1.1; margin:2px 0 0; padding:6px 16px; border:2px solid var(--dorado); border-radius:12px; background:#211c0c; }
 .pago-plan{ font-size:12.5px; color:var(--gris-soft); font-weight:700; margin:2px 0 12px; }
@@ -473,6 +504,7 @@ select{ font-family:inherit; font-size:13.5px; color:var(--blanco); background:v
  <div class="member-card" id="memberCard"></div>
  <div class="pago-card" id="pagoCard" hidden></div>
  <div class="pago-card nutri-promo" id="nutriCard" hidden></div>
+ <div class="pago-card tienda-card" id="tiendaCard" hidden></div>
  <div class="pago-card cal-card" id="calCard" hidden></div>
  <div class="pago-card cal-card coach-card" id="coachCard" hidden></div>
  <div class="pago-card rank-card" id="rankCard" hidden></div>
@@ -2302,7 +2334,7 @@ function renderEvolucion(s){
  function tarjetaBloqueada_(s){ return !!s && estadoDe(s.vencimiento).cls === "danger"; }
  function mostrarBloqueo_(s){
   var bloq = tarjetaBloqueada_(s), box = document.getElementById("bloqueoCard");
-  ["instCard","calCard","coachCard","rankCard","evoCard"].forEach(function(id){ if(bloq) document.getElementById(id).hidden = true; });
+  ["instCard","calCard","coachCard","rankCard","evoCard","tiendaCard"].forEach(function(id){ if(bloq) document.getElementById(id).hidden = true; });
   Array.prototype.forEach.call(document.querySelectorAll("#cardView .band-box"), function(b){ b.hidden = bloq; });
   box.hidden = !bloq;
   if(!bloq){ box.innerHTML = ""; return false; }
@@ -2405,6 +2437,77 @@ function renderEvolucion(s){
    });
   });
  }
+ /* 🛍 Tienda WGYM en la tarjeta (25-10-2026, la dueña eligió la idea 1 y la "ventanita"): la acción
+    pública tiendaVitrina del Apps Script (Versión 25) entrega solo nombre, categoría, detalle, precio
+    de venta, foto y cuántos quedan (tope 9); nunca costos. Sin stock → AGOTADO; lo que la dueña
+    oculta con «Ya no lo vendo» no llega. «Lo quiero» abre una ventanita (foto grande, cantidad, total)
+    y después WhatsApp a Sara con el pedido. El stock solo baja cuando ella cobra en la tienda.
+    Al cambiar una foto de img/tienda/ con el mismo nombre, subir TIENDA_FOTO_V junto con FOTO_V de tienda.html. */
+ var TIENDA_FOTO_V = "44", TIENDA_WSP = "56975196394";
+ var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Otro":"📦" };
+ function tiendaCat_(c){ return c === "Bebidas" ? "Bebestibles" : (c === "Ropa deportiva" ? "Ropa mujer" : (c || "Otro")); }
+ function tiendaFoto_(p){ return p.foto ? escapeHtml(p.foto) + "?v=" + TIENDA_FOTO_V : "maquinas-wgymadnsport/comun/logo.png"; }
+ function renderTienda_(s){
+  var box = document.getElementById("tiendaCard"); if(!box) return;
+  if(!CHECKIN_URL){ box.hidden = true; return; }
+  salidaJsonp({ action:"tiendaVitrina" }, function(d){
+   var l = d && d.vitrina && d.productos ? d.productos.slice() : [];
+   if(!l.length){ box.hidden = true; return; }
+   l.forEach(function(p){ p.cat = tiendaCat_(p.cat); });
+   /* Primero lo disponible; los agotados al final de su categoría. */
+   l.sort(function(a, b){ return (b.q > 0) - (a.q > 0); });
+   var cats = ["Todos"].concat(Object.keys(TIENDA_ICONOS).filter(function(c){ return l.some(function(p){ return p.cat === c; }); }));
+   var cat = "Todos", todos = false;
+   box.hidden = false;
+   function pintar(){
+    var vis = l.filter(function(p){ return cat === "Todos" || p.cat === cat; }), cortar = !todos && vis.length > 6;
+    box.innerHTML = '<p class="pago-kicker">🛍 Tienda WGYM</p><p class="rank-sub">Lo que tenemos hoy en el gimnasio. Toca «Lo quiero» y Sara te lo guarda.</p>' +
+     '<div class="tv-chips">' + cats.map(function(c){ return '<button type="button" class="tv-chip' + (c === cat ? ' on' : '') + '" data-tc="' + escapeHtml(c) + '">' + (c === "Todos" ? "🛍" : TIENDA_ICONOS[c]) + ' ' + escapeHtml(c) + '</button>'; }).join("") + '</div>' +
+     '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
+      var ag = !(p.q > 0), i = l.indexOf(p);
+      return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph"><img loading="lazy" src="' + tiendaFoto_(p) + '" alt=""></div>' +
+       (ag ? '<span class="tv-sello">AGOTADO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' +
+       (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
+       (ag ? '' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
+       '<span class="tv-pr">' + clp(p.precio) + '</span><span class="tv-btn">' + (ag ? 'Pronto vuelve' : '💬 Lo quiero') + '</span></div></button>';
+     }).join("") + '</div>' +
+     (cortar ? '<button type="button" class="tv-mas" id="tvMas">Ver todos (' + vis.length + ') ▼</button>' : '') +
+     '<p class="tv-nota">💳 Paga en el mesón: efectivo, tarjeta o transferencia.</p>';
+    Array.prototype.forEach.call(box.querySelectorAll("[data-tc]"), function(b){ b.addEventListener("click", function(){ cat = b.getAttribute("data-tc"); todos = false; pintar(); }); });
+    Array.prototype.forEach.call(box.querySelectorAll("[data-tp]"), function(b){ b.addEventListener("click", function(){ var p = l[+b.getAttribute("data-tp")]; if(p && p.q > 0) tiendaVentanita_(s, p); }); });
+    var m = box.querySelector("#tvMas"); if(m) m.addEventListener("click", function(){ todos = true; pintar(); });
+   }
+   pintar();
+  });
+ }
+ function tiendaVentanita_(s, p){
+  var ropa = /^Ropa/.test(p.cat), max = ropa ? 1 : Math.max(1, Math.min(p.q, 9)), cant = 1;
+  var fondo = document.createElement("div"); fondo.className = "tv-modal";
+  fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big"><img src="' + tiendaFoto_(p) + '" alt=""></div>' +
+   '<h3>' + escapeHtml(p.n) + '</h3>' + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
+   '<p class="tv-total">Precio: <b>' + clp(p.precio) + '</b></p>' +
+   (max > 1 ? '<div class="tv-cant"><button type="button" id="tvMenos">−</button><b id="tvCant">1</b><button type="button" id="tvMasUno">+</button></div>' : '') +
+   '<p class="tv-total" id="tvTot"></p>' +
+   '<button type="button" class="pago-btn principal" id="tvSi" style="width:100%">💬 Sí, avisarle a Sara</button>' +
+   '<button type="button" class="tv-volver" id="tvVolver">← Volver</button></div>';
+  document.body.appendChild(fondo);
+  function tot(){ var c = fondo.querySelector("#tvCant"); if(c) c.textContent = cant; fondo.querySelector("#tvTot").innerHTML = max > 1 ? 'Total: <b>' + clp(p.precio * cant) + '</b>' : ''; }
+  function cerrar(){ fondo.remove(); }
+  tot();
+  if(max > 1){
+   fondo.querySelector("#tvMenos").addEventListener("click", function(){ if(cant > 1){ cant--; tot(); } });
+   fondo.querySelector("#tvMasUno").addEventListener("click", function(){ if(cant < max){ cant++; tot(); } });
+  }
+  fondo.querySelector("#tvVolver").addEventListener("click", cerrar);
+  fondo.addEventListener("click", function(ev){ if(ev.target === fondo) cerrar(); });
+  fondo.querySelector("#tvSi").addEventListener("click", function(){
+   var quien = ((s.nombre || "") + " " + (s.apellido || "")).trim().toUpperCase();
+   var txt = "Hola Sara 👋 Soy " + quien + " (socio/a WGYM).\nQuiero de la tienda:\n🛍 " + (cant > 1 ? cant + " × " : "") + p.n + (p.det ? " · " + p.det : "") +
+    " · " + clp(p.precio * cant) + "\n¿Me lo puedes guardar?";
+   window.open("https://wa.me/" + TIENDA_WSP + "?text=" + encodeURIComponent(txt), "_blank");
+   cerrar();
+  });
+ }
  function unlockCardView(s){
  document.getElementById("gate").hidden = true;
  document.getElementById("cardView").hidden = false;
@@ -2422,6 +2525,7 @@ function renderEvolucion(s){
  seguro_(function(){ renderPago(s); });
  calAbierto = false; calEditando = false;
  seguro_(renderNutriPromo_);   /* aviso de WGYMNUTRI (cobro instalado el 10-10-2026) */
+ seguro_(function(){ renderTienda_(s); });
  /* "Mis calorías del día" se sacó de la tarjeta el 10-10-2026 (la dueña vende
     WGYMNUTRI aparte). Los datos que el socio ya había guardado
     (wgym_calorias_v1) quedan en su teléfono y WGYMNUTRI los usa para rellenar. */
@@ -2441,7 +2545,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102203", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102501", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

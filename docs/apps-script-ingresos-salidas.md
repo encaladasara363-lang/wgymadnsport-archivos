@@ -194,7 +194,7 @@ Las hojas «Tienda productos» y «Tienda movimientos» se crean solas la primer
 anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar → Administrar implementaciones →
 lápiz → Versión nueva → Implementar (para volver atrás: Versión 23).
 
-## Versión 25 (25-10-2026): 🛒 Tienda — fecha de vencimiento y cierre de caja
+## Versión 25 (25-10-2026): 🛒 Tienda — fecha de vencimiento, cierre de caja y vitrina en la tarjeta
 
 - La hoja «Tienda productos» suma la columna M «Vence» (fecha de vencimiento de cada producto, AAAA-MM-DD).
   Si una página antigua edita un producto sin mandar la fecha, se deja la que tenía.
@@ -202,6 +202,9 @@ lápiz → Versión nueva → Implementar (para volver atrás: Versión 23).
   «Tienda cierres» (fondo, efectivo de ventas, fiados cobrados en efectivo, esperado, contado, diferencia y
   nota). Un cierre por día: si se cierra de nuevo, se corrige el de ese día.
 - `tiendaListar` entrega además los cierres de los últimos 120 días y `v: 25`.
+- Acción pública nueva `tiendaVitrina` (para la tarjeta de los socios): entrega solo nombre, categoría,
+  detalle, precio de venta, foto y cuántos quedan (tope 9) de los productos activos. Nunca costos, códigos
+  ni ventas. Caché de 60 s. Mientras no esté instalada, la tarjeta no muestra la tienda.
 
 Se instala igual que las anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar →
 Administrar implementaciones → lápiz → Versión nueva → Implementar (para volver atrás: Versión 24).
