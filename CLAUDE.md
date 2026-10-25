@@ -1529,6 +1529,9 @@ Versión 23). Celular y compu ven el mismo inventario.
   (tarro $21.400, 30 porciones → $713; venta $2.000; foto `img/tienda/pre-entreno-mr-hyde-signature.jpg`: tarro en el gimnasio con scoop lleno, shaker con el logo del gimnasio y franja roja/dorada «SE VENDE POR PORCIÓN» en Rubik Distressed, hecha con ffmpeg).
   Llegan el lunes 26-10-2026 (cargar ese día): Creatina Xtreme Boost en sachet (pack $19.990 con tabletas de pre entreno que
   son para la dueña → costo $1.000 c/u, venta $2.000; foto `img/tienda/creatina-xtreme-boost-sachet.jpg`: caja abierta y dos sobres en el gimnasio, shaker con el logo; franja roja/dorada abajo «VENTA POR SACHET», igual que la del pre entreno, pedida por la dueña) y Creatina Ostrovit 500 g mango por tarro (2 por $22.220 → $11.110 c/u; venta $30.000; foto `img/tienda/creatina-ostrovit-500g.jpg` en el gimnasio, shaker con el logo).
+  **Logo del gimnasio en todas las fotos (25-10-2026, la dueña: "ponlo así mismo en todos mis productos, ropa, todo"):** cada foto de
+  `img/tienda/` lleva `maquinas-wgymadnsport/comun/logo.png` arriba a la izquierda (34 % del ancho, margen 2,7 %, ffmpeg `overlay`).
+  Las fotos actuales YA lo tienen: no volver a ponérselo encima. Toda foto nueva o rehecha lo lleva (el cuadro va a la derecha).
   **«SHAKER NO INCLUIDO» (25-10-2026, pedido de la dueña):** las fotos con shaker (Mr Hyde, Ostrovit, Xtreme Boost) llevan arriba a la derecha
   una etiqueta amarilla `#FFD400` con borde negro y letra negra Anton de 50 px (`contenido/fuentes/Anton.ttf`, ffmpeg `drawtext`; la dueña la pidió «más llamativa»; antes era negra con letra blanca). Toda foto nueva con shaker la lleva.
   Categorías de ropa (24-10-2026, la dueña: "esta es ropa de hombre"): «Ropa mujer» 👚 y «Ropa hombre» 👕 (`catNueva`: lo
