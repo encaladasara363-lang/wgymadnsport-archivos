@@ -221,7 +221,7 @@ function hoyISO(){ return new Intl.DateTimeFormat("en-CA", { timeZone:"America/S
 function ahoraTxt(){ var f = new Intl.DateTimeFormat("sv-SE", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }).format(new Date()); return f.replace("T", " ").slice(0, 16); }
 function normTxt(s){ return String(s || "").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
 /* Al cambiar una foto en img/tienda/ (mismo nombre), subir FOTO_V para que los teléfonos no muestren la antigua. */
-var FOTO_V = "40";
+var FOTO_V = "41";
 function fotoUrl(f){ return f ? f + (f.indexOf("?") < 0 ? "?v=" + FOTO_V : "") : ""; }
 function iconoCat(c){ var x = CATS.filter(function(k){ return k[0] === c; })[0]; return x ? x[1] : "📦"; }
 function toast(t, ms){ var el = $("toast"); el.textContent = t; el.style.display = "block"; clearTimeout(toast.t); toast.t = setTimeout(function(){ el.style.display = "none"; }, ms || 2600); }
@@ -303,7 +303,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102532";
+var TIENDA_VERSION = "2026102533";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
