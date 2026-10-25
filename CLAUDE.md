@@ -1584,7 +1584,9 @@ Versión 23). Celular y compu ven el mismo inventario.
   sexo (botón y lista; mismo `coachSexo` de las rutinas) y al final «🎁 ¿Buscas un regalo? Mira la ropa de hombre/mujer»;
   si el sexo no se sabe (nombre de `COACH_DUDA` sin responder), queda el orden normal. Al reemplazar una foto de `img/tienda/` con el mismo
   nombre, subir `TIENDA_FOTO_V` de `tarjeta.html` junto con `FOTO_V` de `tienda.html`. Sin la Versión 25 instalada, el
-  cuadro no aparece.
+  cuadro no aparece. **Apagada con `TIENDA_VITRINA_ACTIVA = false` (25-10-2026, la dueña: "no quiero publicar la tienda
+  el lunes porque compré ropa en Shein y no sé cuándo me llegaría"):** la Versión 25 se instala igual (vencimientos y
+  cierre de caja); la tienda en la tarjeta se enciende (true + subir `TARJETA_VERSION`) solo cuando ella lo pida.
 - **En el mesón (24-10-2026, la dueña: "también hazlo en el mesón"):** panel «🛒 Tienda WGYM» en `control.html` (antes de
   «Socios del gimnasio»): «Abrir la tienda aquí» carga `tienda.html` en un cuadro (`#tiendaFrame`, con la clave del mesón ya
   guardada en ese equipo) y «Abrir en otra pestaña».
