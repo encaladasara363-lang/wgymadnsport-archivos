@@ -1529,6 +1529,8 @@ Versión 23). Celular y compu ven el mismo inventario.
   (tarro $21.400, 30 porciones → $713; venta $2.000; foto `img/tienda/pre-entreno-mr-hyde-signature.jpg`: tarro en el gimnasio con scoop lleno, shaker con el logo del gimnasio y franja roja/dorada «SE VENDE POR PORCIÓN» en Rubik Distressed, hecha con ffmpeg).
   Llegan el lunes 26-10-2026 (cargar ese día): Creatina Xtreme Boost en sachet (pack $19.990 con tabletas de pre entreno que
   son para la dueña → costo $1.000 c/u, venta $2.000; foto `img/tienda/creatina-xtreme-boost-sachet.jpg`: caja abierta y dos sobres en el gimnasio, shaker con el logo, sin franja porque los sobres ya muestran que se vende por unidad) y Creatina Ostrovit 500 g mango por tarro (2 por $22.220 → $11.110 c/u; venta $30.000; foto `img/tienda/creatina-ostrovit-500g.jpg` en el gimnasio, shaker con el logo).
+  **«SHAKER NO INCLUIDO» (25-10-2026, pedido de la dueña):** las fotos con shaker (Mr Hyde, Ostrovit, Xtreme Boost) llevan arriba a la derecha
+  una etiqueta negra con letra blanca Anton (`contenido/fuentes/Anton.ttf`, ffmpeg `drawtext`). Toda foto nueva con shaker la lleva.
   Categorías de ropa (24-10-2026, la dueña: "esta es ropa de hombre"): «Ropa mujer» 👚 y «Ropa hombre» 👕 (`catNueva`: lo
   guardado como «Ropa deportiva» se muestra como «Ropa mujer»; en los enlaces usar `cat=Ropa%20mujer` o `cat=Ropa%20hombre`).
   Ropa deportiva de mujer (24-10-2026): cada talla y color es un producto aparte con su código 200… (la ropa no trae
