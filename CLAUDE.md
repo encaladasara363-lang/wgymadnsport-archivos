@@ -1561,8 +1561,9 @@ Versión 23). Celular y compu ven el mismo inventario.
     acción `tiendaCierre`; `tiendaListar` responde `v:25` y `cierres`). Con la Versión 24 la fecha no se guarda (la ficha lo
     avisa) y el cierre queda solo en el equipo (`wgym_tienda_cierres_v1`). Pendiente de instalar por la dueña (25-10-2026).
   **🐢 No se venden y 📸 Publicación para redes (25-10-2026, la dueña eligió las ideas 2 y 3, sin cambiar el Apps Script):**
-  - En 📦 Inventario, «🐢 No se venden (N)» (`noSeMueven`/`verNoSeMueven`): productos con stock y 30 días o más sin venta
-    (o sin ninguna desde que llegaron; lo recién llegado no sale; mira los 120 días de movimientos que trae la página),
+  - En 📦 Inventario, «🐢 Ropa que no se vende (N)» (`noSeMueven`/`verNoSeMueven`): SOLO ropa (la dueña: "que solo corran
+    las ofertas por la ropa si no se vende en dos meses"; `esRopa`, `DIAS_SIN_VENTA = 60`), prendas con stock y 60 días o
+    más sin venta (o sin ninguna desde que llegaron; lo recién llegado no sale; mira los 120 días de movimientos que trae la página),
     ordenados por plata parada a costo, con oferta sugerida (precio −15 % a $100, nunca bajo costo +15 %), «📸 Publicar
     oferta» y «✏️ Cambiar precio».
   - En la ficha de cada producto, «📸 Crear publicación para redes» (`crearPublicacion`/`dibujarPublicacion`, canvas en el
