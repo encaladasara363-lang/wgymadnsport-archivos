@@ -717,6 +717,7 @@ function accionIngresos_(e) {
     case "origenNutri": return origenNutri_(e);
     case "guardarReto": return guardarReto_(e);
     case "listarRetos": return listarRetos_(e);
+    case "tiendaVitrina": return tiendaVitrina_(e);
   }
   return null;
 }
@@ -804,6 +805,20 @@ function tiendaListar_(e) {
     }
     return respond_(e, { ok: true, tienda: true, v: 25, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde) });
   });
+}
+/* 🛍 Vitrina pública para la tarjeta de los socios (25-10-2026, la dueña eligió la idea 1): solo nombre,
+   categoría, detalle, precio de venta, foto y cuántos quedan (tope 9). Nunca costo, código ni ventas.
+   Los ocultos («Ya no lo vendo») no salen; sin stock sale como agotado. Caché de 60 s. */
+function tiendaVitrina_(e) {
+  var cache = null; try { cache = CacheService.getScriptCache(); } catch (err) {}
+  var guardado = cache && cache.get("tienda_vitrina");
+  if (guardado) return respond_(e, JSON.parse(guardado));
+  var l = productosTienda_().filter(function (p) { return p.activo && p.precio > 0 && p.n; }).map(function (p) {
+    return { n: p.n, cat: p.cat, det: p.det, precio: p.precio, foto: p.foto, q: Math.max(0, Math.min(9, p.stock)) };
+  });
+  var r = { ok: true, vitrina: true, productos: l };
+  try { if (cache) cache.put("tienda_vitrina", JSON.stringify(r), 60); } catch (err) {}
+  return respond_(e, r);
 }
 /* Crear o editar un producto. Si es nuevo y trae stock, ese stock queda como «entrada» (compra) con su costo. */
 function tiendaProducto_(e) {

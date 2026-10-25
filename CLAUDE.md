@@ -1572,6 +1572,17 @@ Versión 23). Celular y compu ven el mismo inventario.
   pastillas del inventario con letra negra sobre color (Ganas = amarillo, Quedan = verde, poco stock = rojo).
   La categoría «Bebidas» se llama «Bebestibles» (24-10-2026, pedido de la dueña; lo guardado como «Bebidas» se muestra
   como «Bebestibles» y queda así al editarlo). En los enlaces de productos usar `cat=Bebestibles`.
+- **🛍 Vitrina en la tarjeta de los socios (25-10-2026, la dueña eligió la idea 1 con la "ventanita"):** cuadro
+  `#tiendaCard` en `tarjeta.html` (`renderTienda_`, después del aviso de WGYMNUTRI; oculto con la tarjeta bloqueada) con
+  la acción pública `tiendaVitrina` (Versión 25: solo nombre, categoría, detalle, precio de venta, foto y cuántos quedan,
+  tope 9; nunca costos). Botones por categoría, 6 productos y «Ver todos», «✔ Disponible» o «¡Quedan N!» (≤3); sin stock,
+  foto gris con sello **AGOTADO** y «Pronto vuelve» (vuelve solo al cargar mercadería); «🗑 Ya no lo vendo (ocultar)» del
+  inventario lo saca de la tarjeta. «💬 Lo quiero» abre la ventanita (`tiendaVentanita_`: foto grande, precio, cantidad
+  −/+ hasta lo que queda, en ropa fija en 1, total) y «Sí, avisarle a Sara» abre WhatsApp a +56 9 7519 6394 con «Soy
+  NOMBRE APELLIDO… Quiero: N × producto · detalle · $total». El stock solo baja cuando ella cobra en 🛒 Vender. Toda la
+  ropa se ve para todos (la dueña no pidió separarla por sexo). Al reemplazar una foto de `img/tienda/` con el mismo
+  nombre, subir `TIENDA_FOTO_V` de `tarjeta.html` junto con `FOTO_V` de `tienda.html`. Sin la Versión 25 instalada, el
+  cuadro no aparece.
 - **En el mesón (24-10-2026, la dueña: "también hazlo en el mesón"):** panel «🛒 Tienda WGYM» en `control.html` (antes de
   «Socios del gimnasio»): «Abrir la tienda aquí» carga `tienda.html` en un cuadro (`#tiendaFrame`, con la clave del mesón ya
   guardada en ese equipo) y «Abrir en otra pestaña».
