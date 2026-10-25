@@ -2454,6 +2454,10 @@ function renderEvolucion(s){
    var l = d && d.vitrina && d.productos ? d.productos.slice() : [];
    if(!l.length){ box.hidden = true; return; }
    l.forEach(function(p){ p.cat = tiendaCat_(p.cat); });
+   /* Ropa por sexo (25-10-2026, pedido de la dueña): mismo criterio que las rutinas (coachSexo).
+      Si no se sabe (nombre dudoso que aún no respondió en el coach), se ve toda la ropa. */
+   var sexo = ""; try{ sexo = coachSexo(s); }catch(e){}
+   if(sexo) l = l.filter(function(p){ return p.cat !== (sexo === "F" ? "Ropa hombre" : "Ropa mujer"); });
    /* Primero lo disponible; los agotados al final de su categoría. */
    l.sort(function(a, b){ return (b.q > 0) - (a.q > 0); });
    var cats = ["Todos"].concat(Object.keys(TIENDA_ICONOS).filter(function(c){ return l.some(function(p){ return p.cat === c; }); }));
@@ -2545,7 +2549,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102501", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102502", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

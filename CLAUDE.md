@@ -1579,8 +1579,9 @@ Versión 23). Celular y compu ven el mismo inventario.
   foto gris con sello **AGOTADO** y «Pronto vuelve» (vuelve solo al cargar mercadería); «🗑 Ya no lo vendo (ocultar)» del
   inventario lo saca de la tarjeta. «💬 Lo quiero» abre la ventanita (`tiendaVentanita_`: foto grande, precio, cantidad
   −/+ hasta lo que queda, en ropa fija en 1, total) y «Sí, avisarle a Sara» abre WhatsApp a +56 9 7519 6394 con «Soy
-  NOMBRE APELLIDO… Quiero: N × producto · detalle · $total». El stock solo baja cuando ella cobra en 🛒 Vender. Toda la
-  ropa se ve para todos (la dueña no pidió separarla por sexo). Al reemplazar una foto de `img/tienda/` con el mismo
+  NOMBRE APELLIDO… Quiero: N × producto · detalle · $total». El stock solo baja cuando ella cobra en 🛒 Vender. Ropa por
+  sexo (pedido de la dueña): mujeres ven solo «Ropa mujer» y hombres solo «Ropa hombre», con el mismo `coachSexo` de las
+  rutinas; si el sexo no se sabe (nombre de `COACH_DUDA` sin responder), se ve toda. Al reemplazar una foto de `img/tienda/` con el mismo
   nombre, subir `TIENDA_FOTO_V` de `tarjeta.html` junto con `FOTO_V` de `tienda.html`. Sin la Versión 25 instalada, el
   cuadro no aparece.
 - **En el mesón (24-10-2026, la dueña: "también hazlo en el mesón"):** panel «🛒 Tienda WGYM» en `control.html` (antes de
