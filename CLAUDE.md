@@ -1526,7 +1526,7 @@ Versión 23). Celular y compu ven el mismo inventario.
   `img/tienda/barra-enlinea-proteina-coco.jpg`; costo $1.000, venta $2.000).
   Suplementos por porción (24-10-2026): cada porción es 1 unidad del stock; costo = precio del tarro ÷ porciones; el
   tarro lleva una etiqueta 200… propia (cada escaneo vende 1 porción). Pre entreno Mr Hyde Signature Fruit Punch
-  (tarro $21.400, 30 porciones → $713; venta $2.000; foto `img/tienda/pre-entreno-mr-hyde-signature.jpg`).
+  (tarro $21.400, 30 porciones → $713; venta $2.000; foto `img/tienda/pre-entreno-mr-hyde-signature.jpg`: tarro en el gimnasio con scoop lleno y franja roja/dorada «SE VENDE POR PORCIÓN» en Rubik Distressed, hecha con ffmpeg).
   Llegan el lunes 26-10-2026 (cargar ese día): Creatina Xtreme Boost en sachet (pack $19.990 con tabletas de pre entreno que
   son para la dueña → costo $1.000 c/u, venta $2.000) y Creatina Ostrovit 500 g por tarro (2 por $22.220 → $11.110 c/u).
   Categorías de ropa (24-10-2026, la dueña: "esta es ropa de hombre"): «Ropa mujer» 👚 y «Ropa hombre» 👕 (`catNueva`: lo
