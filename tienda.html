@@ -303,7 +303,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102515";
+var TIENDA_VERSION = "2026102516";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -462,9 +462,9 @@ function formProducto(p, codNuevo, base){
   '<p class="muted" style="font-size:14px;margin:4px 0 0">¿No trae código? Déjalo vacío y créalo en 🏷 Códigos para imprimir la etiqueta.</p>' +
   '<div class="grid2"><div><label class="lab" for="fCosto">Te costó (c/u)</label><input class="inp" id="fCosto" inputmode="decimal" value="' + esc(p.costo) + '" placeholder="$"></div><div><label class="lab" for="fPrecio">Lo vendes a</label><input class="inp" id="fPrecio" inputmode="decimal" value="' + esc(p.precio) + '" placeholder="$"></div></div>' +
   '<div id="fSug"></div>' +
-  '<div class="grid2">' + (nuevo ? '<div><label class="lab" for="fStock">¿Cuántos tienes?</label><input class="inp" id="fStock" inputmode="numeric" value="' + esc(p.stock) + '" placeholder="0"></div>' : '<div><label class="lab">Stock</label><div class="inp" style="opacity:.7">' + p.stock + '</div></div>') +
+  '<div class="grid2">' + (nuevo ? '<div><label class="lab" for="fStock">¿Cuántos tienes?</label><input class="inp" id="fStock" inputmode="numeric" value="' + esc(p.stock) + '" placeholder="0"></div>' : '<div><label class="lab" for="fStock">Stock (cuántos hay)</label><input class="inp" id="fStock" inputmode="numeric" value="' + esc(p.stock) + '"></div>') +
   '<div><label class="lab" for="fMin">Avisar cuando queden</label><input class="inp" id="fMin" inputmode="numeric" value="' + esc(p.min) + '"></div></div>' +
-  (nuevo ? '' : '<p class="muted" style="font-size:14px">El stock cambia con las ventas, con «➕ Llegó mercadería» o con «Ajustar stock».</p>') +
+  (nuevo ? '' : '<p class="muted" style="font-size:14px">Puedes cambiar el stock aquí mismo (queda anotado como ajuste). Las ventas lo descuentan solas.</p>') +
   '<p class="err" id="fErr" hidden></p><button class="btn rojo" id="fOk" style="margin-top:12px">💾 Guardar</button>' +
   (nuevo ? '' : '<button class="btn" id="fAj" style="margin-top:8px">⚖️ Ajustar stock (se rompió, se perdió, conteo)</button><button class="btn" id="fDel" style="margin-top:8px;color:#FF8A8F">🗑 Ya no lo vendo (ocultar)</button>'));
  function sug(){
@@ -480,11 +480,16 @@ function formProducto(p, codNuevo, base){
  $("fOk").onclick = function(){
   var x = { id:nuevo ? "" : p.id, n:$("fN").value.trim(), cat:$("fCat").value, det:$("fDet").value.trim(), cod:$("fCod").value.replace(/\s/g, ""), costo:num($("fCosto").value), precio:num($("fPrecio").value), min:num($("fMin").value), foto:p.foto || "" };
   if(nuevo) x.stock = Math.max(0, Math.round(num($("fStock").value)));
+  /* Stock editable en la ficha (25-10-2026, la dueña: "en el stock no puedo editar"): la diferencia se anota como ajuste. */
+  var stTxt = nuevo ? "" : $("fStock").value.trim(), difSt = (!nuevo && stTxt !== "") ? Math.max(0, Math.round(num(stTxt))) - (Number(p.stock) || 0) : 0;
   var err = !x.n ? "Escribe el nombre." : !(x.precio > 0) ? "Escribe el precio de venta." : (x.cod && S.productos.some(function(q){ return q.activo && q.cod === x.cod && q.id !== x.id; })) ? "Ese código ya es de otro producto." : "";
   if(err){ $("fErr").hidden = false; $("fErr").textContent = err; return; }
   $("fOk").disabled = true; $("fOk").textContent = "Guardando…";
   api("tiendaProducto", { datos:JSON.stringify(x) }).then(function(d){
-   S.productos = d.productos || S.productos; aplicarPendientes(); guardarCache(); cerrarHoja(); toast("✅ Guardado"); cargar(true); render();
+   S.productos = d.productos || S.productos;
+   return difSt ? api("tiendaEntrada", { datos:JSON.stringify({ id:p.id, cant:difSt, tipo:"ajuste", nota:"ajuste en la ficha" }) }).then(function(d2){ S.productos = d2.productos || S.productos; }) : null;
+  }).then(function(){
+   aplicarPendientes(); guardarCache(); cerrarHoja(); toast("✅ Guardado"); cargar(true); render();
   })["catch"](function(e){ $("fOk").disabled = false; $("fOk").textContent = "💾 Guardar"; $("fErr").hidden = false; $("fErr").textContent = e.motivo || "No se pudo guardar. Revisa tu internet e intenta de nuevo."; });
  };
  if($("fAj")) $("fAj").onclick = function(){ formEntrada(p, true); };
