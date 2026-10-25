@@ -1547,6 +1547,19 @@ Versión 23). Celular y compu ven el mismo inventario.
   subir `TIENDA_VERSION` y `tienda-version.txt` juntos (AAAAMMDDNN).**
   **Stock editable en la ficha (25-10-2026, la dueña: "en el stock no puedo editar"):** al editar un producto, el casillero
   Stock se puede cambiar; al Guardar, la diferencia se anota en la planilla como «ajuste» (`tiendaEntrada`, nota «ajuste en la ficha»).
+  **🛍 Qué comprar, ⏰ Por vencer y 🧾 Cierre de caja (25-10-2026, la dueña eligió las ideas 6, 7 y 8):**
+  - En 📦 Inventario, botón «🛍 Qué comprar (N)» (`queComprar`/`verQueComprar`): con lo vendido en 30 días (`vendido30`)
+    muestra lo que está bajo el aviso o alcanza para ≤10 días, sugiere comprar lo vendido en 30 días (mínimo el doble del
+    aviso), el costo aproximado, «➕ Ya llegó» y «📋 Copiar lista (para WhatsApp)», sin costos en el texto copiado.
+  - Fecha de vencimiento: casillero «⏰ Vence» en la ficha y en «Llegó mercadería» (si cambia, se guarda con
+    `tiendaProducto`); botón «⏰ Por vencer (N)» (`porVencer`, 30 días), pastilla «⏰ Vence dd/mm/aa» (amarilla ≤30 días,
+    roja «⛔ Vencido») y aviso rojo arriba del inventario si hay algo vencido.
+  - En 📊 Resumen, arriba, «🧾 Cerrar la caja de hoy» (`formCierre`): esperado = sencillo con que partió (se recuerda en
+    `wgym_tienda_fondo_v1`) + ventas en efectivo de hoy + fiados cobrados hoy en efectivo; ella escribe lo contado y ve
+    «cuadra / sobran / faltan»; transferencias, tarjeta y fiados del día se muestran aparte. Lista de cierres anteriores.
+  - Necesita la **Versión 25 del Apps Script** (columna M «Vence» en «Tienda productos», hoja nueva «Tienda cierres»,
+    acción `tiendaCierre`; `tiendaListar` responde `v:25` y `cierres`). Con la Versión 24 la fecha no se guarda (la ficha lo
+    avisa) y el cierre queda solo en el equipo (`wgym_tienda_cierres_v1`). Pendiente de instalar por la dueña (25-10-2026).
   El botón «💾 Guardar» de las fichas queda pegado abajo (sticky), siempre a la vista: la dueña cambió el precio del agua
   y no vio el Guardar, que estaba más abajo, y el cambio no se guardó.
   Foto del agua cambiada el 24-10-2026 por la que mandó la dueña (botella WOL con logo) y el 25-10-2026 por una de ChatGPT en el gimnasio, con el logo del gimnasio arriba a la izquierda (`maquinas-wgymadnsport/comun/logo.png`, 380 px, pedido de la dueña) (bebestibles y snacks se rehacen así, sobre un banco de pesas negro con el mismo gimnasio de los modelos); al reemplazar una foto en
