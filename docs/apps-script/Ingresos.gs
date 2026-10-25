@@ -736,6 +736,7 @@ function accionIngresosPost_(e) {
     case "tiendaEntrada": return tiendaEntrada_(e);
     case "tiendaAnular": return tiendaAnular_(e);
     case "tiendaFiadoPagado": return tiendaFiadoPagado_(e);
+    case "tiendaCierre": return tiendaCierre_(e);
   }
   return null;
 }
@@ -745,7 +746,7 @@ function accionIngresosPost_(e) {
    Todo es solo de administración (POST con la clave): los costos y las ganancias nunca salen por una acción
    pública. Dos hojas que se crean solas:
      «Tienda productos»: Id · Código · Nombre · Categoría · Detalle · Costo · Precio · Stock · Mínimo · Foto ·
-                         Activo · Actualizado
+                         Activo · Actualizado · Vence (desde la Versión 25: fecha de vencimiento AAAA-MM-DD, con apóstrofo)
      «Tienda movimientos»: Fecha · Tipo (venta / entrada / ajuste) · Venta · Id producto · Producto · Cantidad ·
                          Precio unit. · Costo unit. · Total · Pago · Cliente · Nota · Estado
    Estado: "" normal · "fiado" (debe) · "pagado …" (fiado ya pagado) · "anulada". Cada venta trae un id que
@@ -756,9 +757,14 @@ function hojaTienda_(nombre, cab) {
   if (!h) { h = ss.insertSheet(nombre); h.appendRow(cab); h.getRange("A:B").setNumberFormat("@"); h.setFrozenRows(1); }
   return h;
 }
-function hojaTiendaP_() { return hojaTienda_(HOJA_TIENDA_P_, ["Id", "Código", "Nombre", "Categoría", "Detalle", "Costo", "Precio", "Stock", "Mínimo", "Foto", "Activo", "Actualizado"]); }
+function hojaTiendaP_() {
+  var h = hojaTienda_(HOJA_TIENDA_P_, ["Id", "Código", "Nombre", "Categoría", "Detalle", "Costo", "Precio", "Stock", "Mínimo", "Foto", "Activo", "Actualizado", "Vence"]);
+  if (h.getLastColumn() < 13) h.getRange(1, 13).setValue("Vence");
+  return h;
+}
 function hojaTiendaM_() { return hojaTienda_(HOJA_TIENDA_M_, ["Fecha", "Tipo", "Venta", "Id producto", "Producto", "Cantidad", "Precio unit.", "Costo unit.", "Total", "Pago", "Cliente", "Nota", "Estado"]); }
 function ahoraTienda_() { return Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd HH:mm"); }
+function diaTxt_(v) { return v instanceof Date ? Utilities.formatDate(v, TZ_INGRESOS_, "yyyy-MM-dd") : (/^\d{4}-\d{2}-\d{2}$/.test(String(v || "")) ? String(v) : ""); }
 function txtFecha_(v) { return v instanceof Date ? Utilities.formatDate(v, TZ_INGRESOS_, "yyyy-MM-dd HH:mm") : String(v || ""); }
 function datosTienda_(p) { try { return JSON.parse(String(p.datos || "{}")); } catch (err) { return null; } }
 function conClaveTienda_(e, escribe, fn) {
@@ -772,7 +778,7 @@ function conClaveTienda_(e, escribe, fn) {
 function filaProducto_(r, i) {
   return { fila: i + 1, id: String(r[0]), cod: String(r[1] || ""), n: String(r[2] || ""), cat: String(r[3] || ""), det: String(r[4] || ""),
     costo: Number(r[5]) || 0, precio: Number(r[6]) || 0, stock: Number(r[7]) || 0, min: Number(r[8]) || 0, foto: String(r[9] || ""),
-    activo: String(r[10]) !== "no", act: txtFecha_(r[11]) };
+    activo: String(r[10]) !== "no", act: txtFecha_(r[11]), vence: diaTxt_(r[12]) };
 }
 function productosTienda_() {
   var d = hojaTiendaP_().getDataRange().getValues(), l = [];
@@ -796,7 +802,7 @@ function tiendaListar_(e) {
         precio: Number(d[i][6]) || 0, costo: Number(d[i][7]) || 0, total: Number(d[i][8]) || 0, pago: String(d[i][9] || ""),
         cliente: String(d[i][10] || ""), nota: String(d[i][11] || ""), est: est });
     }
-    return respond_(e, { ok: true, tienda: true, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total });
+    return respond_(e, { ok: true, tienda: true, v: 25, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde) });
   });
 }
 /* Crear o editar un producto. Si es nuevo y trae stock, ese stock queda como «entrada» (compra) con su costo. */
@@ -809,7 +815,10 @@ function tiendaProducto_(e) {
     var fila = [p ? p.id : "P" + Date.now().toString(36).toUpperCase(), cod, String(x.n).trim(), String(x.cat || ""), String(x.det || ""),
       Number(x.costo) || 0, Number(x.precio) || 0, p ? p.stock : (Number(x.stock) || 0), Number(x.min) || 0, String(x.foto || ""),
       x.activo === false ? "no" : "sí", ahora];
-    if (p) h.getRange(p.fila, 1, 1, 12).setValues([fila]);
+    /* Vence: si el teléfono no la manda (página antigua), se deja la que tenía. */
+    var vence = x.vence === undefined ? (p ? p.vence : "") : diaTxt_(String(x.vence || ""));
+    fila.push(vence ? "'" + vence : "");
+    if (p) h.getRange(p.fila, 1, 1, 13).setValues([fila]);
     else {
       h.appendRow(fila);
       if (fila[7] > 0) hojaTiendaM_().appendRow([ahora, "entrada", "", fila[0], fila[2], fila[7], "", fila[5], fila[7] * fila[5], "", "", "stock inicial", ""]);
@@ -865,6 +874,31 @@ function tiendaAnular_(e) {
     }
     if (!n) return respond_(e, { ok: false, error: "venta no encontrada" });
     return respond_(e, { ok: true, tienda: true, productos: productosTienda_() });
+  });
+}
+/* ── Cierre de caja (25-10-2026, la dueña eligió la idea 8): un cierre por día en la hoja «Tienda cierres»
+   (Día · Hora · Fondo · Efectivo ventas · Fiados cobrados en efectivo · Esperado · Contado · Diferencia · Nota).
+   Si se cierra dos veces el mismo día, se corrige la fila de ese día. */
+var HOJA_TIENDA_C_ = "Tienda cierres";
+function hojaTiendaC_() { return hojaTienda_(HOJA_TIENDA_C_, ["Día", "Hora", "Fondo", "Efectivo ventas", "Fiados en efectivo", "Esperado", "Contado", "Diferencia", "Nota"]); }
+function cierresTienda_(desde) {
+  var d = hojaTiendaC_().getDataRange().getValues(), l = [];
+  for (var i = 1; i < d.length; i++) {
+    var dia = diaTxt_(d[i][0]); if (!dia || dia < desde) continue;
+    l.push({ dia: dia, hora: String(d[i][1] || ""), fondo: Number(d[i][2]) || 0, ef: Number(d[i][3]) || 0, fiado: Number(d[i][4]) || 0,
+      esperado: Number(d[i][5]) || 0, contado: Number(d[i][6]) || 0, dif: Number(d[i][7]) || 0, nota: String(d[i][8] || "") });
+  }
+  return l;
+}
+function tiendaCierre_(e) {
+  return conClaveTienda_(e, true, function () {
+    var x = datosTienda_(e.parameter), dia = x ? diaTxt_(String(x.dia || "")) : ""; if (!dia) return respond_(e, { ok: false, error: "faltan datos" });
+    var h = hojaTiendaC_(), d = h.getDataRange().getValues(), filaN = 0;
+    for (var i = 1; i < d.length; i++) if (diaTxt_(d[i][0]) === dia) { filaN = i + 1; break; }
+    var fila = ["'" + dia, Utilities.formatDate(new Date(), TZ_INGRESOS_, "HH:mm"), Number(x.fondo) || 0, Number(x.ef) || 0, Number(x.fiado) || 0,
+      Number(x.esperado) || 0, Number(x.contado) || 0, Number(x.dif) || 0, String(x.nota || "").slice(0, 300)];
+    if (filaN) h.getRange(filaN, 1, 1, 9).setValues([fila]); else h.appendRow(fila);
+    return respond_(e, { ok: true, tienda: true, cierres: cierresTienda_(dia.slice(0, 8) + "01") });
   });
 }
 /* Un fiado pagado: { vid, pago } → Estado «pagado <medio> <fecha>». */

@@ -272,7 +272,7 @@ function pintarSync(estado){
 function cargar(silencioso){
  if(!silencioso) pintarSync("cargando");
  return api("tiendaListar", {}).then(function(d){
-  S = { productos:d.productos || [], movs:d.movs || [], total:d.total || {}, hoy:d.hoy || hoyISO(), desde:d.desde };
+  S = { productos:d.productos || [], movs:d.movs || [], total:d.total || {}, hoy:d.hoy || hoyISO(), desde:d.desde, v:d.v || 24, cierres:d.cierres || [] };
   aplicarPendientes(); repararCodificados(); guardarCache(); pintarSync(); render(); return true;
  })["catch"](function(e){
   if(e.motivo === "clave incorrecta"){ salir("La clave guardada no funcionó. Escríbela de nuevo."); return false; }
@@ -303,7 +303,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102536";
+var TIENDA_VERSION = "2026102537";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -328,7 +328,7 @@ $("gOk").onclick = function(){
  clave = c; $("gOk").disabled = true; $("gOk").textContent = "Revisando…";
  api("tiendaListar", {}).then(function(d){
   try{ localStorage.setItem(CLAVE_ADMIN_LS, c); }catch(e){}
-  S = { productos:d.productos || [], movs:d.movs || [], total:d.total || {}, hoy:d.hoy || hoyISO() };
+  S = { productos:d.productos || [], movs:d.movs || [], total:d.total || {}, hoy:d.hoy || hoyISO(), desde:d.desde, v:d.v || 24, cierres:d.cierres || [] };
   aplicarPendientes(); guardarCache(); entrar(); usarEnlace();
  })["catch"](function(e){
   $("gErr").hidden = false;
@@ -419,7 +419,13 @@ function renderInv(){
  var bajos = l.filter(function(p){ return p.stock <= p.min; });
  var h = '<h2>Inventario</h2><button class="btn rojo" id="nuevo">➕ Producto nuevo</button>';
  if(l.length) h += '<div class="kpis" style="margin-top:10px"><div class="kpi"><small>Productos en bodega (costo)</small><b>' + plata(valorCosto) + '</b></div><div class="kpi verde"><small>Si vendes todo, entra</small><b>' + plata(valorVenta) + '</b></div></div>';
- if(bajos.length) h += '<div class="aviso">⚠️ Quedan pocos: ' + bajos.map(function(p){ return esc(p.n) + ' (' + p.stock + ')'; }).join(", ") + '. Es hora de reponer.</div>';
+ if(l.length){
+  var qc = queComprar().length, pv = porVencer();
+  h += '<div class="grid2" style="margin-top:10px"><button class="btn oro" id="bComprar">🛍 Qué comprar' + (qc ? ' (' + qc + ')' : '') + '</button><button class="btn" id="bVence">⏰ Por vencer' + (pv.length ? ' (' + pv.length + ')' : '') + '</button></div>';
+  var vencidos = pv.filter(function(x){ return x.dias < 0; });
+  if(vencidos.length) h += '<div class="aviso">⛔ Vencido: ' + vencidos.map(function(x){ return esc(x.p.n); }).join(", ") + '. Sácalo de la venta.</div>';
+  else if(bajos.length) h += '<div class="aviso">⚠️ Quedan pocos: ' + bajos.map(function(p){ return esc(p.n) + ' (' + p.stock + ')'; }).join(", ") + '. Toca «🛍 Qué comprar».</div>';
+ }
  var cats = ["Todos"].concat(CATS.map(function(c){ return c[0]; }).filter(function(c){ return l.some(function(p){ return p.cat === c; }); }));
  if(l.length){
   h += '<input class="inp amarillo" id="iq" placeholder="🔎 Buscar producto…" value="' + esc(invQ) + '" autocomplete="off" style="margin-top:10px"><div class="chips" style="margin-top:8px">' + cats.map(function(c){ return '<button class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === invFiltro) + '">' + esc(c) + '</button>'; }).join("") + '</div>';
@@ -428,6 +434,8 @@ function renderInv(){
  if(!l.length) h += '<div class="card"><p class="muted" style="margin:0">Aquí verás cada producto con su stock, costo, precio y cuánto ganas por cada uno. Empieza con «➕ Producto nuevo».</p></div>';
  v.innerHTML = h;
  $("nuevo").onclick = function(){ formProducto(null); };
+ if($("bComprar")) $("bComprar").onclick = verQueComprar;
+ if($("bVence")) $("bVence").onclick = verPorVencer;
  if($("iq")) $("iq").oninput = function(){ invQ = this.value; $("ilista").innerHTML = htmlListaInv(); enlazarInv(); };
  v.querySelectorAll("[data-cat]").forEach(function(b){ b.onclick = function(){ invFiltro = b.dataset.cat; renderInv(); }; });
  enlazarInv();
@@ -438,7 +446,7 @@ function htmlListaInv(){
   .sort(function(a, b){ return a.n.localeCompare(b.n); }).map(function(p){
    var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0;
    return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
-    '<div class="pills"><span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span><span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + '</div>' +
+    '<div class="pills"><span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span><span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
     '<div class="grid2" style="margin-top:10px"><button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button><button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div></div>';
   }).join("");
 }
@@ -446,6 +454,66 @@ function enlazarInv(){
  document.querySelectorAll("[data-ed]").forEach(function(b){ b.onclick = function(){ formProducto(prod(b.dataset.ed)); }; });
  document.querySelectorAll("[data-ent]").forEach(function(b){ b.onclick = function(){ formEntrada(prod(b.dataset.ent)); }; });
 }
+/* ═══ 🛍 Qué tengo que comprar (25-10-2026, la dueña eligió la idea 6) ═══
+   Mira lo vendido en los últimos 30 días y el stock: aparece lo que está bajo el aviso («Avisar cuando queden») o lo
+   que alcanza para 10 días o menos. Sugiere comprar lo que se vendió en 30 días (mínimo el doble del aviso). */
+function vendido30(id){
+ var desde = new Date(new Date((S.hoy || hoyISO()) + "T12:00:00").getTime() - 30 * 86400000).toISOString().slice(0, 10);
+ return todosMovs().filter(function(m){ return m.tipo === "venta" && m.est !== "anulada" && m.id === id && m.f.slice(0, 10) > desde; }).reduce(function(s, m){ return s + m.cant; }, 0);
+}
+function queComprar(){
+ return activos().map(function(p){
+  var v = vendido30(p.id), dia = v / 30, alcanza = dia > 0 ? Math.max(0, p.stock) / dia : Infinity;
+  var meta = Math.max(Math.ceil(v), p.min * 2, p.min + 1), comprar = Math.max(1, meta - Math.max(0, p.stock));
+  return { p:p, v:v, alcanza:alcanza, comprar:comprar, falta:p.stock <= p.min || alcanza <= 10 };
+ }).filter(function(x){ return x.falta; }).sort(function(a, b){ return a.alcanza - b.alcanza || a.p.stock - b.p.stock; });
+}
+function verQueComprar(){
+ var l = queComprar(), total = l.reduce(function(s, x){ return s + x.comprar * x.p.costo; }, 0);
+ abrirHoja('<div class="cab"><h3>🛍 Qué comprar</h3><button class="btn chico" id="qCerrar">Cerrar</button></div>' +
+  (l.length ? '<p class="muted" style="margin:6px 0">Según lo que vendiste en los últimos 30 días. La cantidad es una sugerencia: cámbiala si quieres.</p>' +
+   l.map(function(x){ var p = x.p;
+    return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.det || p.cat) + '</span></div></div>' +
+     '<p style="margin:8px 0 0;font-size:16px">' + (p.stock <= 0 ? '⛔ <b>Se agotó</b>' : 'Quedan <b>' + p.stock + '</b>') + ' · vendiste <b>' + x.v + '</b> en 30 días' + (isFinite(x.alcanza) && p.stock > 0 ? ' · te alcanza para ~' + Math.max(1, Math.round(x.alcanza)) + ' días' : '') + '</p>' +
+     '<div class="pills"><span class="pill oro">Comprar ' + x.comprar + '</span><span class="pill">≈ ' + plata(x.comprar * p.costo) + '</span></div>' +
+     '<button class="btn chico" style="width:100%;margin-top:8px" data-qent="' + esc(p.id) + '">➕ Ya llegó: sumar al stock</button></div>';
+   }).join("") +
+   '<div class="kpi" style="margin-top:8px"><small>Para comprar todo necesitas aprox.</small><b>' + plata(total) + '</b></div>' +
+   '<button class="btn rojo" id="qCopiar" style="margin-top:10px">📋 Copiar lista (para WhatsApp)</button>'
+  : '<div class="card"><p style="margin:0">✅ Tienes de todo. Nada está por acabarse.</p></div>'));
+ $("qCerrar").onclick = cerrarHoja;
+ document.querySelectorAll("[data-qent]").forEach(function(b){ b.onclick = function(){ formEntrada(prod(b.dataset.qent)); }; });
+ if($("qCopiar")) $("qCopiar").onclick = function(){
+  var t = "🛍 PEDIDO WGYM\n" + l.map(function(x){ return "• " + x.comprar + " × " + x.p.n + (x.p.det ? " (" + x.p.det + ")" : ""); }).join("\n");
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ toast("📋 Lista copiada"); })["catch"](function(){ prompt("Copia la lista:", t); });
+ };
+}
+/* ═══ ⏰ Fecha de vencimiento (25-10-2026, la dueña eligió la idea 7): aviso desde 30 días antes. ═══ */
+function diasHasta(f){ return Math.round((new Date(f + "T12:00:00") - new Date((S.hoy || hoyISO()) + "T12:00:00")) / 86400000); }
+function fechaCorta(f){ return f.slice(8, 10) + "/" + f.slice(5, 7) + "/" + f.slice(2, 4); }
+function porVencer(){
+ return activos().filter(function(p){ return p.vence && p.stock > 0; }).map(function(p){ return { p:p, dias:diasHasta(p.vence) }; })
+  .filter(function(x){ return x.dias <= 30; }).sort(function(a, b){ return a.dias - b.dias; });
+}
+function pillVence(p){
+ if(!p.vence) return "";
+ var d = diasHasta(p.vence);
+ return '<span class="pill' + (d < 0 ? ' bajo' : d <= 30 ? ' oro' : '') + '">' + (d < 0 ? '⛔ Vencido ' : '⏰ Vence ') + fechaCorta(p.vence) + '</span>';
+}
+function verPorVencer(){
+ var l = porVencer(), con = activos().filter(function(p){ return p.vence; }).length;
+ abrirHoja('<div class="cab"><h3>⏰ Por vencer</h3><button class="btn chico" id="vCerrar">Cerrar</button></div>' +
+  (l.length ? '<p class="muted" style="margin:6px 0">Lo que vence en los próximos 30 días. Véndelo primero o haz una oferta.</p>' +
+   l.map(function(x){ var p = x.p;
+    return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>Quedan ' + p.stock + '</span></div></div>' +
+     '<p style="margin:8px 0 0;font-size:17px;color:' + (x.dias < 0 ? '#FF8A8F' : 'var(--yel)') + '">' + (x.dias < 0 ? '⛔ Venció el ' + fechaCorta(p.vence) + '. No lo vendas.' : x.dias === 0 ? '⚠️ Vence HOY.' : '⏰ Vence el ' + fechaCorta(p.vence) + ' (en ' + x.dias + ' día' + (x.dias === 1 ? '' : 's') + ').') + '</p>' +
+     '<button class="btn chico" style="width:100%;margin-top:8px" data-ved="' + esc(p.id) + '">✏️ Cambiar la fecha</button></div>';
+   }).join("")
+  : '<div class="card"><p style="margin:0">✅ Nada vence en los próximos 30 días.</p>' + (con ? '' : '<p class="muted" style="margin:8px 0 0">Para que te avise, pon la fecha de vencimiento en la ficha de cada producto (✏️ Editar → «⏰ Vence»).</p>') + '</div>'));
+ $("vCerrar").onclick = cerrarHoja;
+ document.querySelectorAll("[data-ved]").forEach(function(b){ b.onclick = function(){ formProducto(prod(b.dataset.ved)); }; });
+}
+
 function abrirHoja(html){ $("hoja").innerHTML = html; $("velo").hidden = false; }
 function cerrarHoja(){ $("velo").hidden = true; $("hoja").innerHTML = ""; pararCamara(); }
 $("velo").onclick = function(e){ if(e.target === $("velo")) cerrarHoja(); };
@@ -464,6 +532,8 @@ function formProducto(p, codNuevo, base){
   '<div id="fSug"></div>' +
   '<div class="grid2">' + (nuevo ? '<div><label class="lab" for="fStock">¿Cuántos tienes?</label><input class="inp" id="fStock" inputmode="numeric" value="' + esc(p.stock) + '" placeholder="0"></div>' : '<div><label class="lab" for="fStock">Stock (cuántos hay)</label><input class="inp" id="fStock" inputmode="numeric" value="' + esc(p.stock) + '"></div>') +
   '<div><label class="lab" for="fMin">Avisar cuando queden</label><input class="inp" id="fMin" inputmode="numeric" value="' + esc(p.min) + '"></div></div>' +
+  '<label class="lab" for="fVence">⏰ Vence (si tiene fecha de vencimiento)</label><input class="inp" id="fVence" type="date" value="' + esc(p.vence || "") + '">' +
+  (S.v < 25 ? '<p class="muted" style="font-size:14px;margin:4px 0 0">Para que la fecha quede guardada, instala la Versión 25 del Apps Script.</p>' : '') +
   (nuevo ? '' : '<p class="muted" style="font-size:14px">Puedes cambiar el stock aquí mismo (queda anotado como ajuste). Las ventas lo descuentan solas.</p>') +
   '<p class="err" id="fErr" hidden></p><button class="btn rojo" id="fOk" style="margin-top:12px">💾 Guardar</button>' +
   (nuevo ? '' : '<button class="btn" id="fAj" style="margin-top:8px">⚖️ Ajustar stock (se rompió, se perdió, conteo)</button><button class="btn" id="fDel" style="margin-top:8px;color:#FF8A8F">🗑 Ya no lo vendo (ocultar)</button>'));
@@ -478,7 +548,7 @@ function formProducto(p, codNuevo, base){
  $("fCerrar").onclick = cerrarHoja;
  $("fEsc").onclick = function(){ abrirEscanerSimple(function(cod){ $("fCod").value = cod; }); };
  $("fOk").onclick = function(){
-  var x = { id:nuevo ? "" : p.id, n:$("fN").value.trim(), cat:$("fCat").value, det:$("fDet").value.trim(), cod:$("fCod").value.replace(/\s/g, ""), costo:num($("fCosto").value), precio:num($("fPrecio").value), min:num($("fMin").value), foto:p.foto || "" };
+  var x = { id:nuevo ? "" : p.id, n:$("fN").value.trim(), cat:$("fCat").value, det:$("fDet").value.trim(), cod:$("fCod").value.replace(/\s/g, ""), costo:num($("fCosto").value), precio:num($("fPrecio").value), min:num($("fMin").value), foto:p.foto || "", vence:$("fVence").value || "" };
   if(nuevo) x.stock = Math.max(0, Math.round(num($("fStock").value)));
   /* Stock editable en la ficha (25-10-2026, la dueña: "en el stock no puedo editar"): la diferencia se anota como ajuste. */
   var stTxt = nuevo ? "" : $("fStock").value.trim(), difSt = (!nuevo && stTxt !== "") ? Math.max(0, Math.round(num(stTxt))) - (Number(p.stock) || 0) : 0;
@@ -504,7 +574,8 @@ function formEntrada(p, ajuste){
   (ajuste ? '<label class="lab" for="eCant">¿Cuántos hay de verdad ahora? (cuéntalos)</label><input class="inp" id="eCant" inputmode="numeric" value="' + p.stock + '">' +
    '<label class="lab" for="eNota">Motivo</label><input class="inp" id="eNota" placeholder="Ej: se rompió uno · conteo">'
    : '<label class="lab" for="eCant">¿Cuántos llegaron?</label><input class="inp" id="eCant" inputmode="numeric" placeholder="Ej: 12">' +
-   '<label class="lab" for="eCosto">¿Cuánto te costó cada uno?</label><input class="inp" id="eCosto" inputmode="decimal" value="' + p.costo + '">') +
+   '<label class="lab" for="eCosto">¿Cuánto te costó cada uno?</label><input class="inp" id="eCosto" inputmode="decimal" value="' + p.costo + '">' +
+   '<label class="lab" for="eVence">⏰ Vence (si la mercadería nueva trae otra fecha)</label><input class="inp" id="eVence" type="date" value="' + esc(p.vence || "") + '">') +
   '<p class="err" id="eErr" hidden></p><button class="btn rojo" id="eOk" style="margin-top:12px">💾 Guardar</button>');
  $("eCerrar").onclick = cerrarHoja;
  $("eOk").onclick = function(){
@@ -512,7 +583,14 @@ function formEntrada(p, ajuste){
   if(ajuste){ var dif = c - p.stock; if(!dif){ cerrarHoja(); return; } datos = { id:p.id, cant:dif, tipo:"ajuste", nota:$("eNota").value.trim() || "ajuste" }; }
   else { if(!(c > 0)){ $("eErr").hidden = false; $("eErr").textContent = "Escribe cuántos llegaron."; return; } datos = { id:p.id, cant:c, costo:num($("eCosto").value), tipo:"entrada" }; }
   $("eOk").disabled = true;
-  api("tiendaEntrada", { datos:JSON.stringify(datos) }).then(function(d){ S.productos = d.productos || S.productos; aplicarPendientes(); guardarCache(); cerrarHoja(); toast("✅ Stock actualizado"); cargar(true); render(); })
+  var venceNueva = !ajuste && $("eVence") ? $("eVence").value : "";
+  api("tiendaEntrada", { datos:JSON.stringify(datos) }).then(function(d){
+   if(venceNueva && venceNueva !== (p.vence || "")){
+    var x = { id:p.id, n:p.n, cat:p.cat, det:p.det, cod:p.cod, costo:datos.costo || p.costo, precio:p.precio, min:p.min, foto:p.foto || "", vence:venceNueva };
+    return api("tiendaProducto", { datos:JSON.stringify(x) });
+   }
+   return d;
+  }).then(function(d){ S.productos = d.productos || S.productos; aplicarPendientes(); guardarCache(); cerrarHoja(); toast("✅ Stock actualizado"); cargar(true); render(); })
    ["catch"](function(e){ $("eOk").disabled = false; $("eErr").hidden = false; $("eErr").textContent = e.motivo || "No se pudo guardar. Revisa tu internet."; });
  };
 }
@@ -549,6 +627,7 @@ function renderRes(){
  var catsUsadas = CATS.filter(function(c){ return S.productos.some(function(p){ return catNueva(p.cat) === c[0]; }); });
  var h = '<h2>Resumen</h2><div class="chips">' + [["hoy","Hoy"],["semana","Esta semana"],["mes","Este mes"],["todo","Todo"]].map(function(x){ return '<button class="chip" data-per="' + x[0] + '" aria-pressed="' + (resPer === x[0]) + '">' + x[1] + '</button>'; }).join("") + '</div>' +
   (catsUsadas.length ? '<div class="chips"><button class="chip" data-rcat="" aria-pressed="' + !resCat + '">📦 Toda la tienda</button>' + catsUsadas.map(function(c){ return '<button class="chip" data-rcat="' + c[0] + '" aria-pressed="' + (resCat === c[0]) + '">' + c[1] + ' ' + c[0] + '</button>'; }).join("") + '</div>' : '');
+ h += htmlCierreBoton();
  if(resPer === "todo" && S.desde) h += '<p class="muted" style="font-size:14px;margin:0 0 6px">La lista de ventas muestra desde el ' + esc(S.desde) + '; los totales de arriba cuentan todo.</p>';
  h += '<div class="kpis"><div class="kpi"><small>Vendido</small><b>' + plata(resPer === "todo" ? vend : tot) + '</b></div><div class="kpi verde"><small>Ganancia</small><b>' + plata(resPer === "todo" ? ganT : gan) + '</b></div>' +
   '<div class="kpi"><small>Productos vendidos</small><b>' + uds + '</b></div><div class="kpi"><small>Ventas</small><b>' + Object.keys(ventas.reduce(function(o, m){ o[m.vid] = 1; return o; }, {})).length + '</b></div></div>';
@@ -603,6 +682,7 @@ function renderRes(){
  var compras = ms.filter(function(m){ return m.tipo === "entrada" || m.tipo === "ajuste"; });
  if(compras.length) h += '<div class="card"><b style="text-transform:uppercase">📥 Mercadería y ajustes</b>' + compras.slice().reverse().map(function(m){ return '<div class="mov"><div class="d">' + (m.cant > 0 ? '+' : '') + m.cant + ' × ' + esc(m.n) + '<small>' + esc(m.f.slice(5, 16).replace("-", "/")) + ' · ' + (m.tipo === "entrada" ? 'llegó mercadería' : 'ajuste' + (m.nota ? ': ' + esc(m.nota) : '')) + '</small></div>' + (m.tipo === "entrada" ? '<b class="precio" style="font-size:18px;color:#FF8A8F">−' + plata(m.total) + '</b>' : '') + '</div>'; }).join("") + '</div>';
  v.innerHTML = h;
+ if($("bCierre")) $("bCierre").onclick = formCierre;
  v.querySelectorAll("[data-per]").forEach(function(b){ b.onclick = function(){ resPer = b.dataset.per; renderRes(); }; });
  v.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){ var o = repartos(); o[resCat || "todo"] = Number(b.dataset.rep); lsSet("wgym_tienda_reparto_v1", o); renderRes(); }; });
  v.querySelectorAll("[data-rcat]").forEach(function(b){ b.onclick = function(){ resCat = b.dataset.rcat; renderRes(); }; });
@@ -611,6 +691,61 @@ function renderRes(){
   b.disabled = true;
   api("tiendaAnular", { vid:b.dataset.anular }).then(function(){ toast("Venta anulada"); return cargar(true); })["catch"](function(e){ b.disabled = false; toast(e.motivo || "No se pudo anular"); });
  }; });
+}
+
+/* ═══ 🧾 Cierre de caja (25-10-2026, la dueña eligió la idea 8) ═══
+   Efectivo esperado = fondo con que partió el día + ventas en efectivo de hoy + fiados cobrados hoy en efectivo.
+   Ella cuenta la plata, la anota y ve si cuadra. Se guarda en la hoja «Tienda cierres» (Versión 25 del Apps Script);
+   con un script antiguo, solo en este equipo. */
+var CLAVE_CIERRES = "wgym_tienda_cierres_v1", CLAVE_FONDO = "wgym_tienda_fondo_v1";
+function cuentasHoy(){
+ var hoy = S.hoy || hoyISO(), vs = todosMovs().filter(function(m){ return m.tipo === "venta" && m.est !== "anulada" && m.f.slice(0, 10) === hoy; });
+ var o = { ef:0, tr:0, ta:0, fiadoHoy:0, fiadoEf:0, n:{} };
+ vs.forEach(function(m){ o.n[m.vid] = 1; if(m.pago === "efectivo") o.ef += m.total; else if(m.pago === "transferencia") o.tr += m.total; else if(m.pago === "tarjeta") o.ta += m.total; else if(m.pago === "fiado") o.fiadoHoy += m.total; });
+ todosMovs().forEach(function(m){ if(m.tipo === "venta" && String(m.est).indexOf("pagado efectivo " + hoy) === 0) o.fiadoEf += m.total; });
+ o.ventas = Object.keys(o.n).length; return o;
+}
+function cierres(){ return (S.v >= 25 ? (S.cierres || []) : lsGet(CLAVE_CIERRES, [])).slice().sort(function(a, b){ return a.dia < b.dia ? 1 : -1; }); }
+function htmlCierreBoton(){
+ var hoy = S.hoy || hoyISO(), c = cierres().filter(function(x){ return x.dia === hoy; })[0];
+ return '<button class="btn ' + (c ? '' : 'rojo') + '" id="bCierre" style="margin:0 0 10px">🧾 ' + (c ? 'Caja cerrada hoy (' + (c.dif === 0 ? 'cuadró' : c.dif > 0 ? 'sobraron ' + plata(c.dif) : 'faltaron ' + plata(-c.dif)) + ') · ver o corregir' : 'Cerrar la caja de hoy') + '</button>';
+}
+function formCierre(){
+ var o = cuentasHoy(), hoy = S.hoy || hoyISO(), prev = cierres().filter(function(x){ return x.dia === hoy; })[0], fondo = prev ? prev.fondo : lsGet(CLAVE_FONDO, 0);
+ abrirHoja('<div class="cab"><h3>🧾 Cierre de caja</h3><button class="btn chico" id="cCerrar">Cerrar</button></div>' +
+  '<p class="muted" style="margin:6px 0">Hoy, ' + fechaCorta(hoy) + ' · ' + o.ventas + ' venta' + (o.ventas === 1 ? '' : 's') + '</p>' +
+  '<table class="top"><tr><td>💵 Ventas en efectivo</td><td class="r">' + plata(o.ef) + '</td></tr>' +
+  (o.fiadoEf ? '<tr><td>📒 Fiados que te pagaron hoy en efectivo</td><td class="r">' + plata(o.fiadoEf) + '</td></tr>' : '') +
+  '<tr><td class="muted">🏦 Transferencias (no están en la caja)</td><td class="r muted">' + plata(o.tr) + '</td></tr>' +
+  '<tr><td class="muted">💳 Tarjeta (no está en la caja)</td><td class="r muted">' + plata(o.ta) + '</td></tr>' +
+  (o.fiadoHoy ? '<tr><td class="muted">📒 Fiado hoy (te lo deben)</td><td class="r muted">' + plata(o.fiadoHoy) + '</td></tr>' : '') + '</table>' +
+  '<label class="lab" for="cFondo">¿Con cuánto sencillo partiste el día?</label><input class="inp" id="cFondo" inputmode="numeric" value="' + (fondo || "") + '" placeholder="$0">' +
+  '<div class="kpi" style="margin-top:10px"><small>Debería haber en la caja</small><b id="cEsp"></b></div>' +
+  '<label class="lab" for="cCont">¿Cuánto efectivo contaste?</label><input class="inp amarillo" id="cCont" inputmode="numeric" value="' + (prev ? prev.contado : "") + '" placeholder="Cuenta la plata y escríbela">' +
+  '<div id="cRes"></div>' +
+  '<label class="lab" for="cNota">Nota (opcional)</label><input class="inp" id="cNota" value="' + esc(prev ? prev.nota : "") + '" placeholder="Ej: saqué $5.000 para comprar hielo">' +
+  '<p class="err" id="cErr" hidden></p><button class="btn rojo" id="cOk" style="margin-top:12px">💾 Guardar cierre</button>' +
+  (cierres().length ? '<div class="card" style="margin-top:12px"><b style="text-transform:uppercase">Cierres anteriores</b><table class="top">' + cierres().slice(0, 10).map(function(c){ return '<tr><td>' + fechaCorta(c.dia) + '<br><span class="muted" style="font-size:13px">esperado ' + plata(c.esperado) + ' · contado ' + plata(c.contado) + (c.nota ? ' · ' + esc(c.nota) : '') + '</span></td><td class="r" style="color:' + (c.dif === 0 ? '#7CE39A' : c.dif > 0 ? 'var(--yel)' : '#FF8A8F') + '">' + (c.dif === 0 ? '✅ Cuadró' : (c.dif > 0 ? '+' : '−') + plata(Math.abs(c.dif))) + '</td></tr>'; }).join("") + '</table></div>' : '') +
+  (S.v < 25 ? '<p class="muted" style="font-size:14px">Este cierre queda guardado solo en este equipo. Para que quede en la planilla, instala la Versión 25 del Apps Script.</p>' : ''));
+ function calc(){
+  var esp = Math.round(num($("cFondo").value)) + o.ef + o.fiadoEf, txt = $("cCont").value.trim(), dif = Math.round(num(txt)) - esp;
+  $("cEsp").textContent = plata(esp);
+  $("cRes").innerHTML = txt === "" ? "" : '<div class="aviso" style="' + (dif === 0 ? 'background:#0B2A14;border-color:#1fa856;color:#7CE39A' : dif > 0 ? 'background:#2a2205;border-color:var(--gold);color:var(--yel)' : '') + '">' + (dif === 0 ? '✅ ¡La caja cuadra!' : dif > 0 ? '🟡 Sobran ' + plata(dif) + '. Revisa si te pagaron algo que no anotaste.' : '🔴 Faltan ' + plata(-dif) + '. Revisa si hubo una venta en efectivo anotada como otra cosa, o si sacaste plata.') + '</div>';
+  return { esp:esp, dif:dif, txt:txt };
+ }
+ $("cFondo").oninput = $("cCont").oninput = calc; calc();
+ $("cCerrar").onclick = cerrarHoja;
+ $("cOk").onclick = function(){
+  var r = calc(); if(r.txt === ""){ $("cErr").hidden = false; $("cErr").textContent = "Escribe cuánto efectivo contaste."; return; }
+  var x = { dia:hoy, hora:ahoraTxt().slice(11, 16), fondo:Math.round(num($("cFondo").value)), ef:o.ef, fiado:o.fiadoEf, esperado:r.esp, contado:Math.round(num(r.txt)), dif:r.dif, nota:$("cNota").value.trim() };
+  lsSet(CLAVE_FONDO, x.fondo);
+  function listo(){ cerrarHoja(); toast(x.dif === 0 ? "✅ Caja cerrada: cuadró" : "Caja cerrada"); render(); }
+  if(S.v < 25){ var l = lsGet(CLAVE_CIERRES, []).filter(function(c){ return c.dia !== hoy; }); l.push(x); lsSet(CLAVE_CIERRES, l); listo(); return; }
+  $("cOk").disabled = true; $("cOk").textContent = "Guardando…";
+  api("tiendaCierre", { datos:JSON.stringify(x) }).then(function(d){
+   S.cierres = (S.cierres || []).filter(function(c){ return c.dia !== hoy; }).concat([x]); guardarCache(); listo();
+  })["catch"](function(e){ $("cOk").disabled = false; $("cOk").textContent = "💾 Guardar cierre"; $("cErr").hidden = false; $("cErr").textContent = e.motivo || "No se pudo guardar. Revisa tu internet."; });
+ };
 }
 
 /* ═══ 📒 FIADOS ═══ */

@@ -193,3 +193,15 @@ traen costos y ganancias:
 Las hojas «Tienda productos» y «Tienda movimientos» se crean solas la primera vez. Se instala igual que las
 anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar → Administrar implementaciones →
 lápiz → Versión nueva → Implementar (para volver atrás: Versión 23).
+
+## Versión 25 (25-10-2026): 🛒 Tienda — fecha de vencimiento y cierre de caja
+
+- La hoja «Tienda productos» suma la columna M «Vence» (fecha de vencimiento de cada producto, AAAA-MM-DD).
+  Si una página antigua edita un producto sin mandar la fecha, se deja la que tenía.
+- Acción nueva `tiendaCierre` (solo con la clave): guarda el cierre de caja del día en la hoja nueva
+  «Tienda cierres» (fondo, efectivo de ventas, fiados cobrados en efectivo, esperado, contado, diferencia y
+  nota). Un cierre por día: si se cierra de nuevo, se corrige el de ese día.
+- `tiendaListar` entrega además los cierres de los últimos 120 días y `v: 25`.
+
+Se instala igual que las anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar →
+Administrar implementaciones → lápiz → Versión nueva → Implementar (para volver atrás: Versión 24).
