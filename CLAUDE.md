@@ -1560,6 +1560,17 @@ Versión 23). Celular y compu ven el mismo inventario.
   - Necesita la **Versión 25 del Apps Script** (columna M «Vence» en «Tienda productos», hoja nueva «Tienda cierres»,
     acción `tiendaCierre`; `tiendaListar` responde `v:25` y `cierres`). Con la Versión 24 la fecha no se guarda (la ficha lo
     avisa) y el cierre queda solo en el equipo (`wgym_tienda_cierres_v1`). Pendiente de instalar por la dueña (25-10-2026).
+  **🐢 No se venden y 📸 Publicación para redes (25-10-2026, la dueña eligió las ideas 2 y 3, sin cambiar el Apps Script):**
+  - En 📦 Inventario, «🐢 No se venden (N)» (`noSeMueven`/`verNoSeMueven`): productos con stock y 30 días o más sin venta
+    (o sin ninguna desde que llegaron; lo recién llegado no sale; mira los 120 días de movimientos que trae la página),
+    ordenados por plata parada a costo, con oferta sugerida (precio −15 % a $100, nunca bajo costo +15 %), «📸 Publicar
+    oferta» y «✏️ Cambiar precio».
+  - En la ficha de cada producto, «📸 Crear publicación para redes» (`crearPublicacion`/`dibujarPublicacion`, canvas en el
+    teléfono): 1080×1350 (publicación) o 1080×1920 (historia/estado), «TIENDA WGYM» en Rubik Distressed, la foto (que ya
+    trae el logo; costados con la misma foto borrosa) con borde dorado, etiqueta opcional abajo a la derecha (NUEVO,
+    OFERTA, ÚLTIMAS UNIDADES, LLEGÓ), nombre, detalle, precio en Anton dorado (u oferta con el anterior tachado) y franja
+    roja con «PÍDELO EN EL MESÓN DEL GIMNASIO» y los DOS WhatsApp. «📤 Compartir» (o descarga si el teléfono no comparte
+    archivos) y «⬇️ Descargar». No se sube nada. Para publicarla con Metricool, sigue la regla de las 3 redes y su aprobación.
   El botón «💾 Guardar» de las fichas queda pegado abajo (sticky), siempre a la vista: la dueña cambió el precio del agua
   y no vio el Guardar, que estaba más abajo, y el cambio no se guardó.
   Foto del agua cambiada el 24-10-2026 por la que mandó la dueña (botella WOL con logo) y el 25-10-2026 por una de ChatGPT en el gimnasio, con el logo del gimnasio arriba a la izquierda (`maquinas-wgymadnsport/comun/logo.png`, 380 px, pedido de la dueña) (bebestibles y snacks se rehacen así, sobre un banco de pesas negro con el mismo gimnasio de los modelos); al reemplazar una foto en

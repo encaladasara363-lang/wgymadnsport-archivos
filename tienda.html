@@ -303,7 +303,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102537";
+var TIENDA_VERSION = "2026102538";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -422,6 +422,8 @@ function renderInv(){
  if(l.length){
   var qc = queComprar().length, pv = porVencer();
   h += '<div class="grid2" style="margin-top:10px"><button class="btn oro" id="bComprar">🛍 Qué comprar' + (qc ? ' (' + qc + ')' : '') + '</button><button class="btn" id="bVence">⏰ Por vencer' + (pv.length ? ' (' + pv.length + ')' : '') + '</button></div>';
+  var nm = noSeMueven().length;
+  h += '<button class="btn" id="bLentos" style="margin-top:8px">🐢 No se venden' + (nm ? ' (' + nm + ')' : '') + '</button>';
   var vencidos = pv.filter(function(x){ return x.dias < 0; });
   if(vencidos.length) h += '<div class="aviso">⛔ Vencido: ' + vencidos.map(function(x){ return esc(x.p.n); }).join(", ") + '. Sácalo de la venta.</div>';
   else if(bajos.length) h += '<div class="aviso">⚠️ Quedan pocos: ' + bajos.map(function(p){ return esc(p.n) + ' (' + p.stock + ')'; }).join(", ") + '. Toca «🛍 Qué comprar».</div>';
@@ -436,6 +438,7 @@ function renderInv(){
  $("nuevo").onclick = function(){ formProducto(null); };
  if($("bComprar")) $("bComprar").onclick = verQueComprar;
  if($("bVence")) $("bVence").onclick = verPorVencer;
+ if($("bLentos")) $("bLentos").onclick = verNoSeMueven;
  if($("iq")) $("iq").oninput = function(){ invQ = this.value; $("ilista").innerHTML = htmlListaInv(); enlazarInv(); };
  v.querySelectorAll("[data-cat]").forEach(function(b){ b.onclick = function(){ invFiltro = b.dataset.cat; renderInv(); }; });
  enlazarInv();
@@ -514,6 +517,159 @@ function verPorVencer(){
  document.querySelectorAll("[data-ved]").forEach(function(b){ b.onclick = function(){ formProducto(prod(b.dataset.ved)); }; });
 }
 
+/* ═══ 🐢 No se venden (25-10-2026, la dueña eligió la idea 3) ═══
+   Productos con stock que llevan 30 días o más sin una venta (o sin ninguna desde que llegaron). Lo recién llegado
+   (menos de 30 días) no aparece. Solo mira los movimientos que ya trae la página (120 días). */
+function noSeMueven(){
+ var hoy = S.hoy || hoyISO(), mv = todosMovs();
+ return activos().filter(function(p){ return p.stock > 0; }).map(function(p){
+  var ult = "", ent = "";
+  mv.forEach(function(m){
+   if(m.id !== p.id || m.est === "anulada") return;
+   var f = (m.f || "").slice(0, 10);
+   if(m.tipo === "venta" && f > ult) ult = f;
+   if(m.tipo === "entrada" && (!ent || f < ent)) ent = f;
+  });
+  var desde = ult || ent || S.desde || hoy, dias = -diasHasta(desde);
+  /* Desde cuándo bajarle el precio: precio −15 % (a $100), sin bajar del costo + 15 %. */
+  var oferta = Math.max(redondeo(p.costo * 1.15), Math.floor(p.precio * 0.85 / 100) * 100);
+  return { p:p, dias:dias, vendio:!!ult, sinFecha:!ult && !ent, oferta:oferta < p.precio ? oferta : 0 };
+ }).filter(function(x){ return x.dias >= 30; }).sort(function(a, b){ return b.p.stock * b.p.costo - a.p.stock * a.p.costo; });
+}
+function verNoSeMueven(){
+ var l = noSeMueven(), parado = l.reduce(function(s, x){ return s + x.p.stock * x.p.costo; }, 0);
+ abrirHoja('<div class="cab"><h3>🐢 No se venden</h3><button class="btn chico" id="nCerrar">Cerrar</button></div>' +
+  (l.length ? '<p class="muted" style="margin:6px 0">Llevan 30 días o más sin venderse. Muévelos con una oferta o una publicación antes de que se venzan o pasen de moda.</p>' +
+   '<div class="kpi" style="margin-bottom:8px"><small>Plata parada en estos productos (a costo)</small><b>' + plata(parado) + '</b></div>' +
+   l.map(function(x){ var p = x.p;
+    return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.det || p.cat) + ' · quedan ' + p.stock + '</span></div></div>' +
+     '<p style="margin:8px 0 0;font-size:17px;color:var(--yel)">🐢 ' + (x.vendio ? 'Última venta hace ' + x.dias + ' días' : x.sinFecha ? 'Sin ventas en los últimos ' + x.dias + ' días' : 'No se ha vendido desde que llegó (hace ' + x.dias + ' días)') + '</p>' +
+     '<div class="pills"><span class="pill">Precio ' + plata(p.precio) + '</span>' + (x.oferta ? '<span class="pill oro">Oferta sugerida ' + plata(x.oferta) + ' · ganas ' + plata(x.oferta - p.costo) + '</span>' : '') + '</div>' +
+     '<div class="grid2" style="margin-top:10px"><button class="btn chico oro" style="width:100%" data-npub="' + esc(p.id) + '">📸 Publicar oferta</button><button class="btn chico" style="width:100%" data-ned="' + esc(p.id) + '">✏️ Cambiar precio</button></div></div>';
+   }).join("")
+  : '<div class="card"><p style="margin:0">✅ Todo se está vendiendo. Nada lleva 30 días parado.</p></div>'));
+ $("nCerrar").onclick = cerrarHoja;
+ document.querySelectorAll("[data-ned]").forEach(function(b){ b.onclick = function(){ formProducto(prod(b.dataset.ned)); }; });
+ document.querySelectorAll("[data-npub]").forEach(function(b){ b.onclick = function(){
+  var x = l.filter(function(y){ return y.p.id === b.dataset.npub; })[0]; crearPublicacion(x.p, { etq:"OFERTA", oferta:x.oferta });
+ }; });
+}
+
+/* ═══ 📸 Publicación para redes (25-10-2026, la dueña eligió la idea 2) ═══
+   Imagen 1080×1350 (publicación) o 1080×1920 (historia/estado) con la foto, nombre, detalle, precio (o precio de
+   oferta con el anterior tachado), una etiqueta opcional y los DOS WhatsApp (regla permanente). La foto ya trae el
+   logo del gimnasio, por eso arriba solo va «TIENDA WGYM». Se arma en el teléfono: no se sube a ningún lado. */
+var PUB_ETQS = ["", "NUEVO", "OFERTA", "ÚLTIMAS UNIDADES", "LLEGÓ"];
+function crearPublicacion(p, op){
+ op = op || {};
+ var est = { fmt:"post", etq:op.etq || "", oferta:op.oferta || "" };
+ abrirHoja('<div class="cab"><h3>📸 Publicación</h3><button class="btn chico" id="pCerrar">Cerrar</button></div>' +
+  '<div class="chips" style="margin-top:6px"><button class="chip" data-pf="post">Publicación</button><button class="chip" data-pf="hist">Historia / estado</button></div>' +
+  '<label class="lab">Etiqueta</label><div class="chips">' + PUB_ETQS.map(function(e){ return '<button class="chip" data-pe="' + e + '">' + (e || "Sin etiqueta") + '</button>'; }).join("") + '</div>' +
+  '<label class="lab" for="pOf">Precio de oferta (opcional)</label><input class="inp" id="pOf" inputmode="decimal" placeholder="Déjalo vacío para el precio normal (' + plata(p.precio) + ')" value="' + (est.oferta || "") + '">' +
+  '<p class="err" id="pErr" hidden></p>' +
+  '<div style="text-align:center;margin-top:10px"><img id="pImg" alt="" style="max-width:100%;max-height:60vh;border-radius:12px;border:2px solid var(--gold,#D4AF37)"></div>' +
+  '<div class="grid2" style="margin-top:10px"><button class="btn rojo" id="pShare">📤 Compartir</button><button class="btn" id="pBajar">⬇️ Descargar</button></div>');
+ var lienzo = document.createElement("canvas"), timer = 0;
+ function marcar(){
+  document.querySelectorAll("[data-pf]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.pf === est.fmt); });
+  document.querySelectorAll("[data-pe]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.pe === est.etq); });
+ }
+ function rehacer(){
+  var of = num($("pOf").value), e = $("pErr");
+  e.hidden = !(of > 0 && of >= p.precio); e.textContent = "La oferta tiene que ser menor que el precio normal (" + plata(p.precio) + ").";
+  dibujarPublicacion(lienzo, p, { fmt:est.fmt, etq:est.etq, oferta:of > 0 && of < p.precio ? of : 0 }).then(function(){
+   if($("pImg")) $("pImg").src = lienzo.toDataURL("image/jpeg", 0.9);
+  });
+ }
+ marcar(); rehacer();
+ $("pCerrar").onclick = cerrarHoja;
+ document.querySelectorAll("[data-pf]").forEach(function(b){ b.onclick = function(){ est.fmt = b.dataset.pf; marcar(); rehacer(); }; });
+ document.querySelectorAll("[data-pe]").forEach(function(b){ b.onclick = function(){ est.etq = b.dataset.pe; marcar(); rehacer(); }; });
+ $("pOf").oninput = function(){ clearTimeout(timer); timer = setTimeout(rehacer, 400); };
+ var nombreArch = "wgym-" + normTxt(p.n + " " + p.det).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + ".jpg";
+ function bajar(blob){ var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = nombreArch; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); toast("⬇️ Imagen descargada"); }
+ $("pBajar").onclick = function(){ lienzo.toBlob(bajar, "image/jpeg", 0.92); };
+ $("pShare").onclick = function(){
+  lienzo.toBlob(function(blob){
+   var f = null; try{ f = new File([blob], nombreArch, { type:"image/jpeg" }); }catch(err){}
+   if(f && navigator.canShare && navigator.canShare({ files:[f] })) navigator.share({ files:[f] })["catch"](function(){});
+   else bajar(blob);
+  }, "image/jpeg", 0.92);
+ };
+}
+function cargarImg(src){ return new Promise(function(ok){ if(!src){ ok(null); return; } var i = new Image(); i.onload = function(){ ok(i); }; i.onerror = function(){ ok(null); }; i.src = src; }); }
+function dibujarPublicacion(c, p, op){
+ var W = 1080, H = op.fmt === "hist" ? 1920 : 1350;
+ var fuentes = ['72px "Rubik Distressed"', '140px "Anton"', 'italic 800 44px "Barlow Condensed"'];
+ var listas = (document.fonts && document.fonts.load) ? Promise.all(fuentes.map(function(f){ return document.fonts.load(f)["catch"](function(){}); })) : Promise.resolve();
+ return Promise.all([listas, cargarImg(p.foto ? fotoUrl(p.foto) : "")]).then(function(r){
+  var img = r[1], x = c.getContext("2d");
+  c.width = W; c.height = H;
+  /* Fondo negro con rayas sutiles y luz roja arriba (mismo estilo de la tarjeta y la tablet). */
+  x.fillStyle = "#0A0A0B"; x.fillRect(0, 0, W, H);
+  var g = x.createRadialGradient(W / 2, -100, 50, W / 2, -100, 900); g.addColorStop(0, "rgba(227,6,19,.35)"); g.addColorStop(1, "rgba(227,6,19,0)");
+  x.fillStyle = g; x.fillRect(0, 0, W, H);
+  x.strokeStyle = "rgba(255,255,255,.025)"; x.lineWidth = 3;
+  for(var k = -H; k < W; k += 16){ x.beginPath(); x.moveTo(k, 0); x.lineTo(k + H, H); x.stroke(); }
+  /* Encabezado. */
+  x.textAlign = "center"; x.textBaseline = "alphabetic";
+  x.fillStyle = "#FFD400"; x.font = '72px "Rubik Distressed", Impact, sans-serif'; x.fillText("TIENDA WGYM", W / 2, 105);
+  x.fillStyle = "#E30613"; x.fillRect(0, 132, W * 0.7, 10); x.fillStyle = "#D4AF37"; x.fillRect(W * 0.7, 132, W * 0.3, 10);
+  /* Primero se mide el nombre (hasta 2 líneas, achica la letra si no cabe) para que la foto deje espacio al
+     nombre, al detalle y al precio sin que se monten. */
+  var bar = 160, tam = 70, lineas;
+  do { x.font = tam + 'px "Rubik Distressed", Impact, sans-serif'; lineas = partir(x, p.n.toUpperCase(), W - 120); tam -= 4; } while(lineas.length > 2 && tam > 40);
+  tam += 4; lineas = lineas.slice(0, 2);
+  var altoTexto = lineas.length * (tam + 10) + (p.det ? 60 : 0), py = H - bar - 40;
+  /* Foto. */
+  var fy = 175, fx = 60, fw = W - 120, fh = Math.min(op.fmt === "hist" ? 1080 : 680, py - 150 - altoTexto - 70 - fy);
+  x.save(); redondo(x, fx, fy, fw, fh, 26); x.fillStyle = "#151517"; x.fill(); x.clip();
+  if(img){
+   /* Los costados se rellenan con la misma foto borrosa y oscura. */
+   var cu = Math.max(fw / img.width, fh / img.height);
+   try{ x.filter = "blur(28px) brightness(.45)"; x.drawImage(img, fx + (fw - img.width * cu) / 2, fy + (fh - img.height * cu) / 2, img.width * cu, img.height * cu); }catch(err){}
+   x.filter = "none";
+   var e = Math.min(fw / img.width, fh / img.height), iw = img.width * e, ih = img.height * e; x.drawImage(img, fx + (fw - iw) / 2, fy + (fh - ih) / 2, iw, ih);
+  }
+  else { x.font = "260px sans-serif"; x.fillText(iconoCat(p.cat), W / 2, fy + fh / 2 + 90); }
+  x.restore();
+  x.save(); redondo(x, fx, fy, fw, fh, 26); x.strokeStyle = "#D4AF37"; x.lineWidth = 5; x.stroke(); x.restore();
+  /* Etiqueta abajo a la derecha de la foto (arriba van el logo y el cuadro de la otra vista). */
+  if(op.etq){
+   x.save(); x.translate(fx + fw - 24, fy + fh - 110); x.rotate(-0.06);
+   x.font = '54px "Rubik Distressed", Impact, sans-serif'; var tw = x.measureText(op.etq).width + 56;
+   redondo(x, -tw, -10, tw, 84, 14); x.fillStyle = "#E30613"; x.fill(); x.lineWidth = 5; x.strokeStyle = "#fff"; x.stroke();
+   x.fillStyle = "#fff"; x.textAlign = "right"; x.fillText(op.etq, -28, 56); x.restore();
+  }
+  /* Nombre, detalle y precio, centrados en el espacio entre la foto y la franja. */
+  var libre = py - 130 - (fy + fh), y = fy + fh + Math.max(70, (libre - altoTexto) / 2 + tam);
+  x.textAlign = "center"; x.font = tam + 'px "Rubik Distressed", Impact, sans-serif';
+  x.fillStyle = "#fff"; lineas.forEach(function(l){ x.fillText(l, W / 2, y); y += tam + 10; });
+  if(p.det){ x.font = 'italic 800 44px "Barlow Condensed", Arial, sans-serif'; x.fillStyle = "#cfcfcf"; x.fillText(p.det.toUpperCase(), W / 2, y + 2); }
+  if(op.oferta){
+   x.font = '64px "Anton", Impact, sans-serif'; x.fillStyle = "#9a9a9a"; var antes = plata(p.precio), aw = x.measureText(antes).width;
+   x.textAlign = "left"; var nuevo = plata(op.oferta); x.font = '140px "Anton", Impact, sans-serif'; var nw = x.measureText(nuevo).width;
+   var x0 = (W - (aw + 40 + nw)) / 2;
+   x.font = '64px "Anton", Impact, sans-serif'; x.fillText(antes, x0, py - 18);
+   x.strokeStyle = "#E30613"; x.lineWidth = 7; x.beginPath(); x.moveTo(x0 - 6, py - 40); x.lineTo(x0 + aw + 6, py - 52); x.stroke();
+   x.font = '140px "Anton", Impact, sans-serif'; x.fillStyle = "#D4AF37"; x.fillText(nuevo, x0 + aw + 40, py);
+  } else { x.font = '140px "Anton", Impact, sans-serif'; x.fillStyle = "#D4AF37"; x.fillText(plata(p.precio), W / 2, py); }
+  /* Franja de abajo con los dos WhatsApp. */
+  x.textAlign = "center";
+  x.fillStyle = "#D4AF37"; x.fillRect(0, H - bar - 8, W, 8);
+  x.fillStyle = "#E30613"; x.fillRect(0, H - bar, W, bar);
+  x.fillStyle = "#fff"; x.font = 'italic 800 46px "Barlow Condensed", Arial, sans-serif'; x.fillText("PÍDELO EN EL MESÓN DEL GIMNASIO", W / 2, H - bar + 62);
+  x.fillStyle = "#FFD400"; x.font = 'italic 800 42px "Barlow Condensed", Arial, sans-serif'; x.fillText("WHATSAPP +56 9 9154 0156 · +56 9 7519 6394", W / 2, H - bar + 122);
+ });
+}
+function redondo(x, a, b, w, h, r){ x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); }
+function partir(x, t, max){
+ var pal = t.split(/\s+/), l = [], cur = "";
+ pal.forEach(function(w){ var prueba = cur ? cur + " " + w : w; if(x.measureText(prueba).width > max && cur){ l.push(cur); cur = w; } else cur = prueba; });
+ if(cur) l.push(cur); return l;
+}
+
 function abrirHoja(html){ $("hoja").innerHTML = html; $("velo").hidden = false; }
 function cerrarHoja(){ $("velo").hidden = true; $("hoja").innerHTML = ""; pararCamara(); }
 $("velo").onclick = function(e){ if(e.target === $("velo")) cerrarHoja(); };
@@ -536,7 +692,7 @@ function formProducto(p, codNuevo, base){
   (S.v < 25 ? '<p class="muted" style="font-size:14px;margin:4px 0 0">Para que la fecha quede guardada, instala la Versión 25 del Apps Script.</p>' : '') +
   (nuevo ? '' : '<p class="muted" style="font-size:14px">Puedes cambiar el stock aquí mismo (queda anotado como ajuste). Las ventas lo descuentan solas.</p>') +
   '<p class="err" id="fErr" hidden></p><button class="btn rojo" id="fOk" style="margin-top:12px">💾 Guardar</button>' +
-  (nuevo ? '' : '<button class="btn" id="fAj" style="margin-top:8px">⚖️ Ajustar stock (se rompió, se perdió, conteo)</button><button class="btn" id="fDel" style="margin-top:8px;color:#FF8A8F">🗑 Ya no lo vendo (ocultar)</button>'));
+  (nuevo ? '' : '<button class="btn oro" id="fPub" style="margin-top:8px">📸 Crear publicación para redes</button><button class="btn" id="fAj" style="margin-top:8px">⚖️ Ajustar stock (se rompió, se perdió, conteo)</button><button class="btn" id="fDel" style="margin-top:8px;color:#FF8A8F">🗑 Ya no lo vendo (ocultar)</button>'));
  function sug(){
   var c = num($("fCosto").value), pr = num($("fPrecio").value), h = "";
   if(c > 0){ h = '<p class="lab" style="margin-top:8px">Precio sugerido (toca uno):</p><div class="chips">' + [[1.5,"+50 %"],[1.7,"+70 %"],[2,"El doble"]].map(function(x){ return '<button class="chip" data-sug="' + redondeo(c * x[0]) + '">' + x[1] + ' · ' + plata(redondeo(c * x[0])) + '</button>'; }).join("") + '</div>'; }
@@ -546,6 +702,7 @@ function formProducto(p, codNuevo, base){
  }
  $("fCosto").oninput = $("fPrecio").oninput = sug; sug();
  $("fCerrar").onclick = cerrarHoja;
+ if($("fPub")) $("fPub").onclick = function(){ crearPublicacion(p); };
  $("fEsc").onclick = function(){ abrirEscanerSimple(function(cod){ $("fCod").value = cod; }); };
  $("fOk").onclick = function(){
   var x = { id:nuevo ? "" : p.id, n:$("fN").value.trim(), cat:$("fCat").value, det:$("fDet").value.trim(), cod:$("fCod").value.replace(/\s/g, ""), costo:num($("fCosto").value), precio:num($("fPrecio").value), min:num($("fMin").value), foto:p.foto || "", vence:$("fVence").value || "" };
