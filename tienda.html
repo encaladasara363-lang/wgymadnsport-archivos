@@ -283,6 +283,26 @@ var DIAS_VENDIDO = 15;
 function ultimaVenta(id){ var u = ""; todosMovs().forEach(function(m){ if(m.tipo === "venta" && m.est !== "anulada" && m.id === id && m.f.slice(0, 10) > u) u = m.f.slice(0, 10); }); return u; }
 function ropaVendida(p){ if(!esRopa(p) || p.stock > 0) return null; var u = ultimaVenta(p.id); if(!u) return null; var d = -diasHasta(u); return { f:u, dias:d, quedan:Math.max(0, DIAS_VENDIDO - d) }; }
 function retirada(p){ var v = ropaVendida(p); return !!v && v.dias > DIAS_VENDIDO; }
+/* 🥤 Batidos del mismo tarro (26-10-2026, la dueña: el ganador de masa y el batido normal "tienen diferente valor"; eligió
+   que el ganador descuente solo del tarro): un producto cuyo nombre calza con «de» no lleva stock propio; cada venta suya
+   anota además un ajuste de −1 porción en el producto «base» (el que lleva el stock real del tarro). Al anular la venta,
+   la porción vuelve. Para sumar otro batido del mismo tarro, agregar su regla aquí. */
+var USA_PORCION = [{ de:/^batido ganador/i, base:/^batido de prote/i }];
+function basePorcion(p){
+ if(!p || !p.n) return null;
+ for(var i = 0; i < USA_PORCION.length; i++){ var r = USA_PORCION[i]; if(!r.de.test(p.n)) continue;
+  var b = S.productos.filter(function(q){ return q.activo && q.id !== p.id && r.base.test(q.n); })[0]; if(b) return b; }
+ return null;
+}
+function stockVer(p){ var b = basePorcion(p); return b ? b.stock : p.stock; }
+/* 💪 «+ Creatina» en los batidos (misma fecha): suma CREATINA_EXTRA al precio de esa línea. */
+var CREATINA_EXTRA = 1000;
+function esBatido(p){ return !!p && /^batido/i.test(p.n || ""); }
+function ajustePorciones(vid, items, signo, nota){
+ items.forEach(function(it){ var q = prod(it.id), b = basePorcion(q); if(!b) return;
+  pend.push({ tipo:"entrada", f:ahoraTxt(), datos:{ id:b.id, cant:signo * it.cant, tipo:"ajuste", nota:nota + " " + q.n + " (" + vid + ")" } });
+  b.stock += signo * it.cant; });
+}
 function pintarSync(estado){
  var el = $("sync"); el.className = "";
  if(estado === "cargando"){ el.textContent = "⏳ Actualizando…"; return; }
@@ -324,7 +344,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102607";
+var TIENDA_VERSION = "2026102608";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -371,7 +391,7 @@ function render(){
 function precioDe(it){ return it.precio; }
 function totalCarro(){ return carro.reduce(function(s, it){ return s + it.cant * it.precio; }, 0); }
 function agregarAlCarro(p, cant){
- var it = carro.filter(function(x){ return x.id === p.id; })[0];
+ var it = carro.filter(function(x){ return x.id === p.id && !x.crea; })[0];
  if(it) it.cant += cant || 1; else carro.push({ id:p.id, n:p.n, precio:p.precio, cant:cant || 1 });
  vibrar(25);
 }
@@ -384,8 +404,8 @@ function renderVender(){
   '<div class="lista-p" id="bres" hidden></div>';
  h += '<div class="card"><div class="fila" style="justify-content:space-between"><b style="font-size:20px;text-transform:uppercase;flex:none">🧾 Venta actual</b>' + (carro.length ? '<button class="btn chico" id="vaciar" style="flex:none">Vaciar</button>' : '') + '</div>';
  if(!carro.length) h += '<p class="muted" style="margin:8px 0 0">Escanea o busca los productos que lleva el cliente.</p>';
- carro.forEach(function(it, i){ var p = prod(it.id) || {}, sin = p.stock !== undefined && p.stock - it.cant < 0;
-  h += '<div class="carro-it"><div><b style="text-transform:uppercase">' + esc(it.n) + '</b><br><span class="muted" style="font-size:15px">' + plata(it.precio) + ' c/u · <a href="#" data-pr="' + i + '" style="color:var(--yel)">cambiar precio</a></span>' + (sin ? '<br><span class="pill bajo">⚠️ Te quedan ' + (p.stock || 0) + ' en el inventario</span>' : '') + '</div>' +
+ carro.forEach(function(it, i){ var p = prod(it.id) || {}, stv = stockVer(p), sin = stv !== undefined && stv - it.cant < 0;
+  h += '<div class="carro-it"><div><b style="text-transform:uppercase">' + esc(it.n) + '</b><br><span class="muted" style="font-size:15px">' + plata(it.precio) + ' c/u · <a href="#" data-pr="' + i + '" style="color:var(--yel)">cambiar precio</a></span>' + (esBatido(p) ? '<br><button class="btn chico" data-crea="' + i + '" style="margin-top:6px;' + (it.crea ? 'background:#2ECC71;color:#000' : '') + '">' + (it.crea ? '✔ Con creatina (+' + plata(CREATINA_EXTRA) + ') · quitar' : '💪 + Creatina ' + plata(CREATINA_EXTRA)) + '</button>' : '') + (sin ? '<br><span class="pill bajo">⚠️ Te quedan ' + (stv || 0) + (basePorcion(p) ? ' porciones en el tarro' : ' en el inventario') + '</span>' : '') + '</div>' +
    '<div style="text-align:right"><div class="cant"><button data-m="' + i + '">−</button><b>' + it.cant + '</b><button data-p="' + i + '">+</button></div><span class="precio" style="font-size:20px">' + plata(it.cant * it.precio) + '</span></div></div>'; });
  if(carro.length){
   h += '<div class="total"><span>Total</span><b>' + plata(totalCarro()) + '</b></div><label class="lab">¿Cómo pagó?</label><div class="pagos">' +
@@ -402,13 +422,14 @@ function renderVender(){
   if(!q){ r.hidden = true; return; }
   var l = activos().filter(function(p){ return normTxt(p.n + " " + p.cat + " " + p.det + " " + p.cod).indexOf(q) >= 0; }).slice(0, 30);
   r.hidden = false;
-  r.innerHTML = l.length ? l.map(function(p){ return '<button data-add="' + esc(p.id) + '"><span style="font-size:24px">' + iconoCat(p.cat) + '</span><span class="n"><b>' + esc(p.n) + '</b><small>' + (ropaVendida(p) ? '✅ VENDIDO' : 'Quedan ' + p.stock) + (p.det ? ' · ' + esc(p.det) : '') + '</small></span><span class="precio" style="font-size:20px">' + plata(p.precio) + '</span></button>'; }).join("") : '<p class="muted" style="padding:10px;margin:0">No hay productos con ese nombre.</p>';
+  r.innerHTML = l.length ? l.map(function(p){ return '<button data-add="' + esc(p.id) + '"><span style="font-size:24px">' + iconoCat(p.cat) + '</span><span class="n"><b>' + esc(p.n) + '</b><small>' + (ropaVendida(p) ? '✅ VENDIDO' : 'Quedan ' + stockVer(p)) + (p.det ? ' · ' + esc(p.det) : '') + '</small></span><span class="precio" style="font-size:20px">' + plata(p.precio) + '</span></button>'; }).join("") : '<p class="muted" style="padding:10px;margin:0">No hay productos con ese nombre.</p>';
   r.querySelectorAll("[data-add]").forEach(function(b){ b.onclick = function(){ agregarAlCarro(prod(b.dataset.add)); renderVender(); toast("✅ Agregado"); }; });
  };
  if($("vaciar")) $("vaciar").onclick = function(){ carro = []; renderVender(); };
  v.querySelectorAll("[data-m]").forEach(function(b){ b.onclick = function(){ var it = carro[+b.dataset.m]; it.cant--; if(it.cant <= 0) carro.splice(+b.dataset.m, 1); renderVender(); }; });
  v.querySelectorAll("[data-p]").forEach(function(b){ b.onclick = function(){ carro[+b.dataset.p].cant++; renderVender(); }; });
  v.querySelectorAll("[data-pr]").forEach(function(a){ a.onclick = function(e){ e.preventDefault(); var it = carro[+a.dataset.pr], n = prompt("Precio por unidad para esta venta (ej. si haces un descuento):", it.precio); if(n === null) return; var x = num(n); if(x >= 0){ it.precio = x; renderVender(); } }; });
+ v.querySelectorAll("[data-crea]").forEach(function(b){ b.onclick = function(){ var it = carro[+b.dataset.crea]; it.crea = !it.crea; it.precio += it.crea ? CREATINA_EXTRA : -CREATINA_EXTRA; if(it.precio < 0) it.precio = 0; renderVender(); }; });
  v.querySelectorAll("[data-pago]").forEach(function(b){ b.onclick = function(){ pagoSel = b.dataset.pago; renderVender(); }; });
  if($("cobrar")) $("cobrar").onclick = cobrar;
 }
@@ -425,7 +446,9 @@ function cobrar(){
  var datos = { vid:"V" + Date.now().toString(36).toUpperCase() + Math.floor(Math.random() * 1e4), items:carro.map(function(it){ return { id:it.id, cant:it.cant, precio:it.precio }; }), pago:pagoSel, cliente:cliente.toUpperCase() };
  var total = totalCarro();
  datos.items.forEach(function(it){ var q = prod(it.id); if(q) q.stock -= it.cant; });
- pend.push({ tipo:"venta", f:ahoraTxt(), datos:datos }); lsSet(CLAVE_PEND, pend); guardarCache();
+ pend.push({ tipo:"venta", f:ahoraTxt(), datos:datos });
+ ajustePorciones(datos.vid, datos.items, -1, "porción usada en");
+ lsSet(CLAVE_PEND, pend); guardarCache();
  carro = []; pagoSel = "efectivo"; vibrar([40, 60, 40]);
  toast("✅ Venta de " + plata(total) + " anotada");
  renderVender(); enviarPendientes();
@@ -435,8 +458,8 @@ function todosMovs(){ return (S.movs || []).concat(movsPendientes()); }
 /* ═══ 📦 INVENTARIO ═══ */
 var invFiltro = "Todos", invQ = "";
 function renderInv(){
- var v = $("vista"), l = activos();
- var valorCosto = l.reduce(function(s, p){ return s + Math.max(0, p.stock) * p.costo; }, 0), valorVenta = l.reduce(function(s, p){ return s + Math.max(0, p.stock) * p.precio; }, 0);
+ var v = $("vista"), l = activos(), lv = l.filter(function(p){ return !basePorcion(p); });
+ var valorCosto = lv.reduce(function(s, p){ return s + Math.max(0, p.stock) * p.costo; }, 0), valorVenta = lv.reduce(function(s, p){ return s + Math.max(0, p.stock) * p.precio; }, 0);
  var h = '<h2>Inventario</h2><button class="btn rojo" id="nuevo">➕ Producto nuevo</button>';
  if(l.length) h += '<div class="kpis" style="margin-top:10px"><div class="kpi"><small>Productos en bodega (costo)</small><b>' + plata(valorCosto) + '</b></div><div class="kpi verde"><small>Si vendes todo, entra</small><b>' + plata(valorVenta) + '</b></div></div>';
  if(l.length){
@@ -467,10 +490,10 @@ function htmlListaInv(){
  var q = normTxt(invQ).trim();
  return activos().filter(function(p){ return (invFiltro === "Todos" || p.cat === invFiltro) && (!q || normTxt(p.n + " " + p.det + " " + p.cod).indexOf(q) >= 0); })
   .sort(function(a, b){ return a.n.localeCompare(b.n); }).map(function(p){
-   var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0, vd = ropaVendida(p);
+   var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0, vd = ropaVendida(p), bp = basePorcion(p);
    return '<div class="card' + (vd ? ' vendida' : '') + '"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + (vd ? '<span class="sello-v">VENDIDO</span>' : '') + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
-    '<div class="pills">' + (vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
-    '<div class="grid2" style="margin-top:10px"><button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button><button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div></div>';
+    '<div class="pills">' + (bp ? '<span class="pill ' + (bp.stock <= bp.min ? 'bajo' : 'ok') + '">🥤 Sale del tarro · quedan ' + bp.stock + '</span>' : vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
+    (bp ? '<p class="muted" style="font-size:15px;margin:8px 0 0">Cada venta descuenta 1 porción de «' + esc(bp.n) + '». Cuando compres otro tarro, súmalo ahí.</p>' : '') + '<div class="grid2" style="margin-top:10px">' + (bp ? '<span></span>' : '<button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button>') + '<button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div></div>';
   }).join("");
 }
 function enlazarInv(){
@@ -482,10 +505,10 @@ function enlazarInv(){
    que alcanza para 10 días o menos. Sugiere comprar lo que se vendió en 30 días (mínimo el doble del aviso). */
 function vendido30(id){
  var desde = new Date(new Date((S.hoy || hoyISO()) + "T12:00:00").getTime() - 30 * 86400000).toISOString().slice(0, 10);
- return todosMovs().filter(function(m){ return m.tipo === "venta" && m.est !== "anulada" && m.id === id && m.f.slice(0, 10) > desde; }).reduce(function(s, m){ return s + m.cant; }, 0);
+ return todosMovs().filter(function(m){ if(m.tipo !== "venta" || m.est === "anulada" || m.f.slice(0, 10) <= desde) return false; if(m.id === id) return true; var b = basePorcion(prod(m.id)); return !!b && b.id === id; }).reduce(function(s, m){ return s + m.cant; }, 0);
 }
 function queComprar(){
- return activos().filter(function(p){ return !(esRopa(p) && p.stock <= 0); }).map(function(p){
+ return activos().filter(function(p){ return !(esRopa(p) && p.stock <= 0) && !basePorcion(p); }).map(function(p){
   var v = vendido30(p.id), dia = v / 30, alcanza = dia > 0 ? Math.max(0, p.stock) / dia : Infinity;
   var meta = Math.max(Math.ceil(v), p.min * 2, p.min + 1), comprar = Math.max(1, meta - Math.max(0, p.stock));
   return { p:p, v:v, alcanza:alcanza, comprar:comprar, falta:p.stock <= p.min || alcanza <= 10 };
@@ -869,7 +892,8 @@ function renderRes(){
  v.querySelectorAll("[data-anular]").forEach(function(b){ b.onclick = function(){
   if(!confirm("¿Anular esta venta? El stock vuelve al inventario.")) return;
   b.disabled = true;
-  api("tiendaAnular", { vid:b.dataset.anular }).then(function(){ toast("Venta anulada"); return cargar(true); })["catch"](function(e){ b.disabled = false; toast(e.motivo || "No se pudo anular"); });
+  var vidA = b.dataset.anular, itsA = todosMovs().filter(function(m){ return m.tipo === "venta" && m.vid === vidA && m.est !== "anulada"; }).map(function(m){ return { id:m.id, cant:m.cant }; });
+  api("tiendaAnular", { vid:vidA }).then(function(){ ajustePorciones(vidA, itsA, 1, "porción devuelta (venta anulada) de"); lsSet(CLAVE_PEND, pend); guardarCache(); toast("Venta anulada"); return enviarPendientes().then(function(){ return cargar(true); }); })["catch"](function(e){ b.disabled = false; toast(e.motivo || "No se pudo anular"); });
  }; });
 }
 
