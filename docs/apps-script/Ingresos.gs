@@ -809,12 +809,35 @@ function tiendaListar_(e) {
 /* 🛍 Vitrina pública para la tarjeta de los socios (25-10-2026, la dueña eligió la idea 1): solo nombre,
    categoría, detalle, precio de venta, foto y cuántos quedan (tope 9). Nunca costo, código ni ventas.
    Los ocultos («Ya no lo vendo») no salen; sin stock sale como agotado. Caché de 60 s. */
+var DIAS_VENDIDO_TIENDA_ = 15;
+/* Fecha (AAAA-MM-DD) de la última venta no anulada de cada producto. */
+function ultimaVentaTienda_() {
+  var d = hojaTiendaM_().getDataRange().getValues(), u = {};
+  for (var i = 1; i < d.length; i++) {
+    if (String(d[i][1] || "") !== "venta" || String(d[i][12] || "") === "anulada") continue;
+    var id = String(d[i][3] || ""), f = txtFecha_(d[i][0]).slice(0, 10);
+    if (id && (!u[id] || f > u[id])) u[id] = f;
+  }
+  return u;
+}
+function diasEntre_(a, b) { return Math.round((new Date(b + "T12:00:00") - new Date(a + "T12:00:00")) / 86400000); }
 function tiendaVitrina_(e) {
   var cache = null; try { cache = CacheService.getScriptCache(); } catch (err) {}
   var guardado = cache && cache.get("tienda_vitrina");
   if (guardado) return respond_(e, JSON.parse(guardado));
-  var l = productosTienda_().filter(function (p) { return p.activo && p.precio > 0 && p.n; }).map(function (p) {
-    return { n: p.n, cat: p.cat, det: p.det, precio: p.precio, foto: p.foto, q: Math.max(0, Math.min(9, p.stock)) };
+  /* Ropa vendida (26-10-2026, la dueña: cada prenda es única; "cuando se venda que se coloque vendido automático y
+     que se quede en la tienda por 15 días y luego la eliminas"): una prenda sin stock sale con vendido:true hasta
+     15 días después de su última venta y después ya no aparece. Si se anula la venta, el stock vuelve y reaparece. */
+  var ult = ultimaVentaTienda_(), hoy = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd");
+  var l = [];
+  productosTienda_().forEach(function (p) {
+    if (!p.activo || !(p.precio > 0) || !p.n) return;
+    var x = { n: p.n, cat: p.cat, det: p.det, precio: p.precio, foto: p.foto, q: Math.max(0, Math.min(9, p.stock)) };
+    if (/^Ropa/.test(p.cat) && p.stock <= 0 && ult[p.id]) {
+      if (diasEntre_(ult[p.id], hoy) > DIAS_VENDIDO_TIENDA_) return;
+      x.vendido = true;
+    }
+    l.push(x);
   });
   var r = { ok: true, vitrina: true, productos: l };
   try { if (cache) cache.put("tienda_vitrina", JSON.stringify(r), 60); } catch (err) {}
