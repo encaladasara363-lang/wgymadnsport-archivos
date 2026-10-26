@@ -1532,6 +1532,12 @@ Versión 23). Celular y compu ven el mismo inventario.
   Suplementos por porción (24-10-2026): cada porción es 1 unidad del stock; costo = precio del tarro ÷ porciones; el
   tarro lleva una etiqueta 200… propia (cada escaneo vende 1 porción). Pre entreno Mr Hyde Signature Fruit Punch
   (tarro $21.400, 30 porciones → $713; venta $2.000; foto `img/tienda/pre-entreno-mr-hyde-signature.jpg`: tarro en el gimnasio con scoop lleno, shaker con el logo del gimnasio y franja roja/dorada «SE VENDE POR PORCIÓN» en Rubik Distressed, hecha con ffmpeg).
+  Batido de proteína (26-10-2026): tarro Clear Protein Double Chocolate 2,3 kg, 65 porciones a $67.000 → $1.031 por porción;
+  un solo producto «Batido de proteína» con stock 65 (cada batido descuenta 1 porción), costo $1.591 (proteína + 200 ml de
+  leche + ½ plátano + vaso) y precio $4.000 (cremoso); el ganador de masa ($5.500) y «+ creatina» (+$1.000, Ostrovit ≈$110
+  la dosis) se cobran cambiando el precio de la línea al vender. Foto provisoria `img/tienda/proteina-clear-double-chocolate.jpg`
+  (foto real del tarro + logo + franja «SE VENDE POR PORCIÓN»). Letreros de recepción en `letreros-batidos.html`/`.pdf`
+  (2 por A4, sin cantidades a pedido de la dueña: "si no lo harán en su casa"); las recetas con cantidades NO se publican.
   Llegan el lunes 26-10-2026 (cargar ese día): Creatina Xtreme Boost en sachet (pack $19.990 con tabletas de pre entreno que
   son para la dueña → costo $1.000 c/u, venta $2.000; foto `img/tienda/creatina-xtreme-boost-sachet.jpg`: caja abierta y dos sobres en el gimnasio, shaker con el logo; franja roja/dorada abajo «VENTA POR SACHET», igual que la del pre entreno, pedida por la dueña) y Creatina Ostrovit 500 g mango por tarro (2 por $22.220 → $11.110 c/u; venta $30.000; foto `img/tienda/creatina-ostrovit-500g.jpg` en el gimnasio, shaker con el logo).
   **Logo del gimnasio en todas las fotos (25-10-2026, la dueña: "ponlo así mismo en todos mis productos, ropa, todo"):** cada foto de
