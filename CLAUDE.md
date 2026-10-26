@@ -1509,7 +1509,7 @@ Versión 23). Celular y compu ven el mismo inventario.
   ganado, con la barra para duplicar la plata.
 - **📒 Fiados:** quién debe y cuánto; «Pagó» con el medio de pago.
 - **🏷 Códigos:** a lo que no trae código le crea un EAN-13 propio que empieza con 200 (rango de uso interno) e
-  imprime etiquetas A4 de 3 × 8 con nombre, precio y código (`svgEAN`; probado: ZXing las lee). El detalle (color · talla) va en una franja negra propia bajo el nombre, también en la lista para elegir (24-10-2026, la dueña: "a los short ponle el color en el código de barra"). La lista para elegir etiquetas muestra la foto de cada producto (`.etq-ph`; si no tiene foto, el ícono de su categoría).
+  imprime etiquetas A4 de 3 × 8 con nombre, precio y código (`svgEAN`; probado: ZXing las lee). Desde el 26-10-2026 (la dueña compró hoja adhesiva de 5 × 7) se elige el tipo de hoja: 3 × 8 (24) o 5 × 7 (35, clase `.f57`); el equipo recuerda la elección (`wgym_tienda_etq_formato_v1`). El detalle (color · talla) va en una franja negra propia bajo el nombre, también en la lista para elegir (24-10-2026, la dueña: "a los short ponle el color en el código de barra"). La lista para elegir etiquetas muestra la foto de cada producto (`.etq-ph`; si no tiene foto, el ícono de su categoría).
 - **Cargar productos que manda la dueña (24-10-2026, ella: "quiero que todos los productos que te empiece a mandar tengan
   su inventario solito… yo soy un desastre para administración"):** Claude NO puede escribir en la planilla (el script
   está bloqueado desde la sesión); por cada producto le manda un enlace

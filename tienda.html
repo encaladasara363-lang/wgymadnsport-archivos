@@ -167,6 +167,13 @@ body{ zoom:1.22; }
  .etq .pr{ font-size:12pt; font-weight:900; }
  .etq svg{ width:44mm; height:13mm; }
  @page{ size:A4; margin:10mm; }
+ /* Hoja adhesiva de 5 × 7 = 35 etiquetas (26-10-2026, pedido de la dueña para el maní) */
+ #hojaEtiquetas.f57{ grid-template-columns:repeat(5, 1fr); }
+ #hojaEtiquetas.f57 .etq{ height:39mm; padding:1.5mm 1mm; }
+ #hojaEtiquetas.f57 .etq b{ font-size:7.5pt; }
+ #hojaEtiquetas.f57 .etq .det{ font-size:8pt; padding:0 1mm; }
+ #hojaEtiquetas.f57 .etq .pr{ font-size:10pt; }
+ #hojaEtiquetas.f57 .etq svg{ width:35mm; height:14mm; }
 }
 </style>
 </head>
@@ -303,7 +310,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102602";
+var TIENDA_VERSION = "2026102603";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -958,16 +965,20 @@ function renderCod(){
  if(sin.length) h += '<div class="card oro"><b style="text-transform:uppercase">Productos sin código (' + sin.length + ')</b>' + sin.map(function(p){ return '<div class="etq-sel"><span class="n">' + esc(p.n) + (p.det ? ' <span class="muted">· ' + esc(p.det) + '</span>' : '') + '</span><button class="btn chico oro" data-crear="' + esc(p.id) + '">Crear código</button></div>'; }).join("") +
   '<button class="btn oro" id="crearTodos" style="margin-top:10px">Crear código a todos</button></div>';
  if(con.length){
-  h += '<div class="card"><b style="text-transform:uppercase">🖨 Imprimir etiquetas</b><p class="muted" style="font-size:15px;margin:4px 0 8px">Elige cuántas etiquetas de cada uno (hoja A4, 24 etiquetas por hoja). Sirve para imprimir también las de productos que ya traen código, con su precio.</p>' +
+  h += '<div class="card"><b style="text-transform:uppercase">🖨 Imprimir etiquetas</b><p class="muted" style="font-size:15px;margin:4px 0 8px">Elige cuántas etiquetas de cada uno y el tipo de hoja. Sirve para imprimir también las de productos que ya traen código, con su precio.</p>' +
+   '<label class="lab">Tipo de hoja adhesiva</label><div class="chips">' + [["38","3 × 8 (24 por hoja)"],["57","5 × 7 (35 por hoja)"]].map(function(f){ return '<button class="chip" data-fmt="' + f[0] + '" aria-pressed="' + (etqFormato() === f[0]) + '">' + f[1] + '</button>'; }).join("") + '</div>' +
    con.map(function(p){ return '<div class="etq-sel">' + (p.foto ? '<img class="etq-ph" src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span class="etq-ph">' + iconoCat(p.cat) + '</span>') + '<span class="n">' + esc(p.n) + (p.det ? '<br><b style="color:var(--yel)">' + esc(p.det) + '</b>' : '') + '<br><span class="muted" style="font-size:13px">' + esc(p.cod) + ' · ' + plata(p.precio) + '</span></span><input class="inp" type="number" min="0" max="99" data-etq="' + esc(p.id) + '" value="' + (etqCant[p.id] || 0) + '" style="width:76px;text-align:center"></div>'; }).join("") +
-   '<button class="btn rojo" id="imprimir" style="margin-top:12px">🖨 Imprimir etiquetas</button><p class="muted" style="font-size:14px;margin:6px 0 0">Desde el celular: Imprimir → Guardar como PDF, y lo imprimes en cualquier lado. Mejor en hoja de etiquetas adhesivas A4 de 3 × 8.</p></div>';
+   '<button class="btn rojo" id="imprimir" style="margin-top:12px">🖨 Imprimir etiquetas</button><p class="muted" style="font-size:14px;margin:6px 0 0">Desde el celular: Imprimir → Guardar como PDF, y lo imprimes en cualquier lado. Usa una hoja adhesiva A4 del tipo que elegiste arriba.</p></div>';
  }
  v.innerHTML = h;
  v.querySelectorAll("[data-crear]").forEach(function(b){ b.onclick = function(){ crearCodigos([prod(b.dataset.crear)]); }; });
  if($("crearTodos")) $("crearTodos").onclick = function(){ crearCodigos(sin); };
  v.querySelectorAll("[data-etq]").forEach(function(i){ i.oninput = function(){ etqCant[i.dataset.etq] = Math.max(0, Math.min(99, parseInt(i.value, 10) || 0)); }; });
  if($("imprimir")) $("imprimir").onclick = imprimirEtiquetas;
+ v.querySelectorAll("[data-fmt]").forEach(function(b){ b.onclick = function(){ try{ localStorage.setItem("wgym_tienda_etq_formato_v1", b.dataset.fmt); }catch(e){} etqFmt = b.dataset.fmt; renderCod(); }; });
 }
+var etqFmt = null;
+function etqFormato(){ if(!etqFmt){ try{ etqFmt = localStorage.getItem("wgym_tienda_etq_formato_v1"); }catch(e){} } return etqFmt === "57" ? "57" : "38"; }
 function crearCodigos(lista){
  var cola = lista.slice(), hechos = 0;
  function sig(){
@@ -983,6 +994,7 @@ function imprimirEtiquetas(){
  activos().forEach(function(p){ var n = etqCant[p.id] || 0; for(var i = 0; i < n; i++) h += '<div class="etq"><b>' + esc(p.n) + '</b>' + (p.det ? '<span class="det">' + esc(p.det) + '</span>' : '') + '<span class="pr">' + plata(p.precio) + '</span>' + svgEAN(p.cod) + '</div>'; });
  if(!h){ toast("Elige cuántas etiquetas quieres imprimir."); return; }
  $("hojaEtiquetas").innerHTML = h;
+ $("hojaEtiquetas").className = etqFormato() === "57" ? "f57" : "";
  setTimeout(function(){ window.print(); }, 150);
 }
 
