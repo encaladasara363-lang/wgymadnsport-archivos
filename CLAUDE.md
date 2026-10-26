@@ -1610,6 +1610,14 @@ Versión 23). Celular y compu ven el mismo inventario.
   cuadro no aparece. **Apagada con `TIENDA_VITRINA_ACTIVA = false` (25-10-2026, la dueña: "no quiero publicar la tienda
   el lunes porque compré ropa en Shein y no sé cuándo me llegaría"):** la Versión 25 se instala igual (vencimientos y
   cierre de caja); la tienda en la tarjeta se enciende (true + subir `TARJETA_VERSION`) solo cuando ella lo pida.
+- **🏷 Ropa VENDIDA (26-10-2026, la dueña: "la ropa que traigo la mayoría es de un modelo cada uno… cuando se venda una
+  prenda que se coloque vendido automático y que se quede en la tienda por 15 días y luego la eliminas"):** cada prenda
+  se carga con stock 1. Al cobrarla, en 📦 Inventario sale con la foto gris, sello rojo «VENDIDO» y «✅ VENDIDO el dd/mm ·
+  se quita en N días» (`ropaVendida`, `DIAS_VENDIDO = 15`); 15 días después de su última venta `activos()` ya no la
+  muestra (`retirada`). Solo ropa (`esRopa`) con stock 0 y una venta no anulada; si se anula la venta, el stock vuelve y
+  reaparece. No escribe en la planilla. «🛍 Qué comprar» no sugiere volver a comprar ropa agotada. En la vitrina de la
+  tarjeta, `tiendaVitrina_` (Versión 25, `ultimaVentaTienda_`) manda `vendido:true` y la tarjeta muestra «VENDIDO» en vez
+  de «AGOTADO»; pasados los 15 días la prenda ya no se envía.
 - **En el mesón (24-10-2026, la dueña: "también hazlo en el mesón"):** panel «🛒 Tienda WGYM» en `control.html` (antes de
   «Socios del gimnasio»): «Abrir la tienda aquí» carga `tienda.html` en un cuadro (`#tiendaFrame`, con la clave del mesón ya
   guardada en ese equipo) y «Abrir en otra pestaña».

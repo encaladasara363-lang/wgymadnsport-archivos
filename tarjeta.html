@@ -2479,10 +2479,10 @@ function renderEvolucion(s){
      '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
       var ag = !(p.q > 0), i = l.indexOf(p);
       return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph"><img loading="lazy" src="' + tiendaFoto_(p) + '" alt=""></div>' +
-       (ag ? '<span class="tv-sello">AGOTADO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' +
+       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'AGOTADO') + '</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' +
        (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
        (ag ? '' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
-       '<span class="tv-pr">' + clp(p.precio) + '</span><span class="tv-btn">' + (ag ? 'Pronto vuelve' : '💬 Lo quiero') + '</span></div></button>';
+       '<span class="tv-pr">' + clp(p.precio) + '</span><span class="tv-btn">' + (ag ? (p.vendido ? 'Ya se vendió' : 'Pronto vuelve') : '💬 Lo quiero') + '</span></div></button>';
      }).join("") + '</div>' +
      (cortar ? '<button type="button" class="tv-mas" id="tvMas">Ver todos (' + vis.length + ') ▼</button>' : '') +
      (hayOtra && cat !== otra ? '<button type="button" class="tv-mas" id="tvRegalo">🎁 ¿Buscas un regalo? Mira la ' + (otra === "Ropa hombre" ? 'ropa de hombre' : 'ropa de mujer') + '</button>' : '') +
@@ -2560,7 +2560,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102603", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102604", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

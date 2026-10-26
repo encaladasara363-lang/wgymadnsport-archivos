@@ -146,6 +146,10 @@ body{ zoom:1.22; }
 /* La foto del producto se ve entera, sin recortar (24-10-2026, la dueña: "que se vea entera"). */
 .prod .ph{ width:78px; height:104px; background:#fff; }
 .prod .ph img{ cursor:zoom-in; }
+.prod .ph{ position:relative; }
+.card.vendida .prod .ph img{ filter:grayscale(1) brightness(.6); }
+.sello-v{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-14deg); font-family:'Rubik Distressed','Anton',sans-serif; font-size:15px; color:#fff; background:#E30613; border:2px solid #fff; padding:1px 5px; border-radius:6px; pointer-events:none; }
+.pills .pill.vend{ background:#E30613; color:#fff; border-color:#fff; }
 #fotoGrande{ position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.92); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; }
 #fotoGrande img{ max-width:100%; max-height:calc(100vh / 1.22 - 190px); object-fit:contain; border-radius:14px; background:#fff; }
 #fotoGrande b{ color:#fff; font-size:20px; text-transform:uppercase; margin-top:12px; text-align:center; }
@@ -270,7 +274,15 @@ function movsPendientes(){
 function prod(id){ for(var i = 0; i < S.productos.length; i++) if(S.productos[i].id === id) return S.productos[i]; return null; }
 function porCodigo(cod){ cod = String(cod || "").replace(/\s/g, ""); var b = cod.replace(/^0+/, "");
  for(var i = 0; i < S.productos.length; i++){ var p = S.productos[i]; if(!p.activo || !p.cod) continue; if(p.cod === cod || p.cod.replace(/^0+/, "") === b) return p; } return null; }
-function activos(){ return S.productos.filter(function(p){ return p.activo; }); }
+function activos(){ return S.productos.filter(function(p){ return p.activo && !retirada(p); }); }
+/* 🏷 Ropa vendida (26-10-2026, la dueña: casi toda la ropa es de una sola prenda; "cuando se venda una prenda que se
+   coloque vendido automático y que se quede en la tienda por 15 días y luego la eliminas"): una prenda sin stock con
+   una venta muestra «VENDIDO» y desaparece 15 días después de esa venta. Solo se esconde en pantalla (la planilla no
+   se toca): si se anula la venta, el stock vuelve y la prenda reaparece sola. */
+var DIAS_VENDIDO = 15;
+function ultimaVenta(id){ var u = ""; todosMovs().forEach(function(m){ if(m.tipo === "venta" && m.est !== "anulada" && m.id === id && m.f.slice(0, 10) > u) u = m.f.slice(0, 10); }); return u; }
+function ropaVendida(p){ if(!esRopa(p) || p.stock > 0) return null; var u = ultimaVenta(p.id); if(!u) return null; var d = -diasHasta(u); return { f:u, dias:d, quedan:Math.max(0, DIAS_VENDIDO - d) }; }
+function retirada(p){ var v = ropaVendida(p); return !!v && v.dias > DIAS_VENDIDO; }
 function pintarSync(estado){
  var el = $("sync"); el.className = "";
  if(estado === "cargando"){ el.textContent = "⏳ Actualizando…"; return; }
@@ -312,7 +324,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102606";
+var TIENDA_VERSION = "2026102607";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -390,7 +402,7 @@ function renderVender(){
   if(!q){ r.hidden = true; return; }
   var l = activos().filter(function(p){ return normTxt(p.n + " " + p.cat + " " + p.det + " " + p.cod).indexOf(q) >= 0; }).slice(0, 30);
   r.hidden = false;
-  r.innerHTML = l.length ? l.map(function(p){ return '<button data-add="' + esc(p.id) + '"><span style="font-size:24px">' + iconoCat(p.cat) + '</span><span class="n"><b>' + esc(p.n) + '</b><small>Quedan ' + p.stock + (p.det ? ' · ' + esc(p.det) : '') + '</small></span><span class="precio" style="font-size:20px">' + plata(p.precio) + '</span></button>'; }).join("") : '<p class="muted" style="padding:10px;margin:0">No hay productos con ese nombre.</p>';
+  r.innerHTML = l.length ? l.map(function(p){ return '<button data-add="' + esc(p.id) + '"><span style="font-size:24px">' + iconoCat(p.cat) + '</span><span class="n"><b>' + esc(p.n) + '</b><small>' + (ropaVendida(p) ? '✅ VENDIDO' : 'Quedan ' + p.stock) + (p.det ? ' · ' + esc(p.det) : '') + '</small></span><span class="precio" style="font-size:20px">' + plata(p.precio) + '</span></button>'; }).join("") : '<p class="muted" style="padding:10px;margin:0">No hay productos con ese nombre.</p>';
   r.querySelectorAll("[data-add]").forEach(function(b){ b.onclick = function(){ agregarAlCarro(prod(b.dataset.add)); renderVender(); toast("✅ Agregado"); }; });
  };
  if($("vaciar")) $("vaciar").onclick = function(){ carro = []; renderVender(); };
@@ -455,9 +467,9 @@ function htmlListaInv(){
  var q = normTxt(invQ).trim();
  return activos().filter(function(p){ return (invFiltro === "Todos" || p.cat === invFiltro) && (!q || normTxt(p.n + " " + p.det + " " + p.cod).indexOf(q) >= 0); })
   .sort(function(a, b){ return a.n.localeCompare(b.n); }).map(function(p){
-   var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0;
-   return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
-    '<div class="pills"><span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span><span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
+   var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0, vd = ropaVendida(p);
+   return '<div class="card' + (vd ? ' vendida' : '') + '"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + (vd ? '<span class="sello-v">VENDIDO</span>' : '') + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
+    '<div class="pills">' + (vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
     '<div class="grid2" style="margin-top:10px"><button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button><button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div></div>';
   }).join("");
 }
@@ -473,7 +485,7 @@ function vendido30(id){
  return todosMovs().filter(function(m){ return m.tipo === "venta" && m.est !== "anulada" && m.id === id && m.f.slice(0, 10) > desde; }).reduce(function(s, m){ return s + m.cant; }, 0);
 }
 function queComprar(){
- return activos().map(function(p){
+ return activos().filter(function(p){ return !(esRopa(p) && p.stock <= 0); }).map(function(p){
   var v = vendido30(p.id), dia = v / 30, alcanza = dia > 0 ? Math.max(0, p.stock) / dia : Infinity;
   var meta = Math.max(Math.ceil(v), p.min * 2, p.min + 1), comprar = Math.max(1, meta - Math.max(0, p.stock));
   return { p:p, v:v, alcanza:alcanza, comprar:comprar, falta:p.stock <= p.min || alcanza <= 10 };
