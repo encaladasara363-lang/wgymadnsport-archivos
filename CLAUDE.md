@@ -1524,6 +1524,7 @@ Versión 23). Celular y compu ven el mismo inventario.
   foto `img/tienda/trident-infinit-spearmint.jpg`). Trident Infinit Peppermint (mismo costo/precio, código 7622201678036, foto `img/tienda/trident-infinit-peppermint.jpg`).
   Barra En Línea Proteína relleno coco, 13 g de proteína (Snacks, código 7804000003237, foto
   `img/tienda/barra-enlinea-proteina-coco.jpg`; costo $1.000, venta $2.000).
+  Power Mix frutos secos 50 g (26-10-2026, Snacks; nombre puesto por Claude a pedido de la dueña: "ponerle algún nombre, está muy fome así"; bolsita sin marca: nueces, almendras, avellanas, maní, pasas rubias y fruta deshidratada; costo $600, venta $1.000, 6 unidades, código propio 200…; foto `img/tienda/power-mix-frutos-secos.jpg`: bolsa sobre banco negro en el gimnasio (ChatGPT) + franja roja/dorada «POWER MIX» en Rubik Distressed y «FRUTOS SECOS · 50 G» en Anton amarillo, hecha con ffmpeg).
   Suplementos por porción (24-10-2026): cada porción es 1 unidad del stock; costo = precio del tarro ÷ porciones; el
   tarro lleva una etiqueta 200… propia (cada escaneo vende 1 porción). Pre entreno Mr Hyde Signature Fruit Punch
   (tarro $21.400, 30 porciones → $713; venta $2.000; foto `img/tienda/pre-entreno-mr-hyde-signature.jpg`: tarro en el gimnasio con scoop lleno, shaker con el logo del gimnasio y franja roja/dorada «SE VENDE POR PORCIÓN» en Rubik Distressed, hecha con ffmpeg).
