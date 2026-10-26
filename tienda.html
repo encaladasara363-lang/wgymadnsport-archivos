@@ -303,7 +303,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102601";
+var TIENDA_VERSION = "2026102602";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -416,7 +416,6 @@ var invFiltro = "Todos", invQ = "";
 function renderInv(){
  var v = $("vista"), l = activos();
  var valorCosto = l.reduce(function(s, p){ return s + Math.max(0, p.stock) * p.costo; }, 0), valorVenta = l.reduce(function(s, p){ return s + Math.max(0, p.stock) * p.precio; }, 0);
- var bajos = l.filter(function(p){ return p.stock <= p.min; });
  var h = '<h2>Inventario</h2><button class="btn rojo" id="nuevo">➕ Producto nuevo</button>';
  if(l.length) h += '<div class="kpis" style="margin-top:10px"><div class="kpi"><small>Productos en bodega (costo)</small><b>' + plata(valorCosto) + '</b></div><div class="kpi verde"><small>Si vendes todo, entra</small><b>' + plata(valorVenta) + '</b></div></div>';
  if(l.length){
@@ -426,7 +425,7 @@ function renderInv(){
   h += '<button class="btn" id="bLentos" style="margin-top:8px">🐢 Ropa que no se vende' + (nm ? ' (' + nm + ')' : '') + '</button>';
   var vencidos = pv.filter(function(x){ return x.dias < 0; });
   if(vencidos.length) h += '<div class="aviso">⛔ Vencido: ' + vencidos.map(function(x){ return esc(x.p.n); }).join(", ") + '. Sácalo de la venta.</div>';
-  else if(bajos.length) h += '<div class="aviso">⚠️ Quedan pocos: ' + bajos.map(function(p){ return esc(p.n) + ' (' + p.stock + ')'; }).join(", ") + '. Toca «🛍 Qué comprar».</div>';
+  /* El aviso «Quedan pocos» se sacó el 26-10-2026 (la dueña: "me sacas ese aviso, no me gusta"); lo que falta se ve en «🛍 Qué comprar». */
  }
  var cats = ["Todos"].concat(CATS.map(function(c){ return c[0]; }).filter(function(c){ return l.some(function(p){ return p.cat === c; }); }));
  if(l.length){

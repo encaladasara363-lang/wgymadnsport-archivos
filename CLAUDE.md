@@ -1557,7 +1557,7 @@ Versión 23). Celular y compu ven el mismo inventario.
     aviso), el costo aproximado, «➕ Ya llegó» y «📋 Copiar lista (para WhatsApp)», sin costos en el texto copiado.
   - Fecha de vencimiento: casillero «⏰ Vence» en la ficha y en «Llegó mercadería» (si cambia, se guarda con
     `tiendaProducto`); botón «⏰ Por vencer (N)» (`porVencer`, 30 días), pastilla «⏰ Vence dd/mm/aa» (amarilla ≤30 días,
-    roja «⛔ Vencido») y aviso rojo arriba del inventario si hay algo vencido.
+    roja «⛔ Vencido») y aviso rojo arriba del inventario si hay algo vencido. El aviso amarillo «⚠️ Quedan pocos: …» se sacó el 26-10-2026 (la dueña: "me sacas ese aviso, no me gusta"); no volver a ponerlo.
   - En 📊 Resumen, arriba, «🧾 Cerrar la caja de hoy» (`formCierre`): esperado = sencillo con que partió (se recuerda en
     `wgym_tienda_fondo_v1`) + ventas en efectivo de hoy + fiados cobrados hoy en efectivo; ella escribe lo contado y ve
     «cuadra / sobran / faltan»; transferencias, tarjeta y fiados del día se muestran aparte. Lista de cierres anteriores.
