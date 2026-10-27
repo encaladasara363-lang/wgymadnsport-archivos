@@ -474,7 +474,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102716";
+var TIENDA_VERSION = "2026102717";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -532,7 +532,7 @@ function renderVender(){
  var v = $("vista"), lista = activos(), hayStock = lista.length;
  var h = '<h2>Vender</h2>';
  if(!hayStock) h += '<div class="card oro"><b>Todavía no tienes productos.</b><p class="muted">Ve a 📦 Inventario y agrega lo que compraste: nombre, cuánto te costó, a cuánto lo vendes y cuántos tienes.</p><button class="btn oro" id="irInv">📦 Agregar mis productos</button></div>';
- h += '<button class="btn rojo" id="bEsc">📷 Escanear producto</button>' +
+ h += '<div class="fila"><button class="btn rojo" id="bEsc">📷 Escanear producto</button><button class="btn oro" id="bEscV">📷 Escanear varias</button></div>' +
   '<input class="inp amarillo" id="bq" placeholder="🔎 O busca por nombre…" autocomplete="off" style="margin-top:10px">' +
   '<div class="lista-p" id="bres" hidden></div>';
  h += '<div class="card"><div class="fila" style="justify-content:space-between"><b style="font-size:20px;text-transform:uppercase;flex:none">🧾 Venta actual</b>' + (carro.length ? '<button class="btn chico" id="vaciar" style="flex:none">Vaciar</button>' : '') + '</div>';
@@ -554,7 +554,11 @@ function renderVender(){
  h += htmlHoyMini();
  v.innerHTML = h;
  if($("irInv")) $("irInv").onclick = function(){ document.querySelector('#nav [data-tab="inv"]').click(); };
- $("bEsc").onclick = function(){ abrirEscaner(function(cod){ var p = porCodigo(cod); if(p){ if(packDesarmado(p)){ agregarAlCarro(p); return "🧩 Pack desarmado"; } agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }, false); };
+ function alEscanear(cod){ var p = porCodigo(cod); if(p){ if(packDesarmado(p)){ agregarAlCarro(p); return "🧩 Pack desarmado"; } agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }
+ $("bEsc").onclick = function(){ abrirEscaner(alEscanear, false); };
+ /* «Escanear varias» (27-10-2026, la dueña: "si alguien me compra 5 prendas… que vaya sumando"): la cámara queda abierta,
+    cada código suma a la venta con bip y aviso, y se cierra con «Listo». El escaneo normal sigue de a uno. */
+ $("bEscV").onclick = function(){ abrirEscaner(alEscanear, true); };
  $("bq").oninput = function(){ var q = normTxt(this.value).trim(), r = $("bres");
   if(!q){ r.hidden = true; return; }
   var l = activos().filter(function(p){ return !packDesarmado(p) && normTxt(p.n + " " + p.cat + " " + p.det + " " + p.cod).indexOf(q) >= 0; }).slice(0, 30);
@@ -1524,16 +1528,19 @@ function usarFotoCodigo(input, alLeer){
 }
 /* Escáner para vender: queda abierto y suma cada producto que lee (con 2 s de pausa entre el mismo código). */
 function abrirEscaner(alLeer, seguido){
- abrirHoja('<div class="cab"><h3>📷 Escanear</h3><button class="btn chico oro" id="cListo">Listo</button></div>' +
+ abrirHoja('<div class="cab"><h3>📷 Escanear</h3><button class="btn chico oro" id="cListo">' + (seguido ? '✅ Listo' : 'Listo') + '</button></div>' + (seguido ? '<p id="cCuenta" style="text-align:center;margin:8px 0 0;font-size:19px;font-weight:800;text-transform:uppercase;color:var(--yel)"></p>' : '') +
   '<div class="cam" style="margin-top:10px"><video id="cVid" playsinline muted autoplay></video><div class="marco"></div><div class="laser"></div><div class="flash" id="cFlash"></div></div>' +
   '<p class="muted" id="cTxt" style="text-align:center;margin:10px 0">' + (seguido ? 'Apunta al código de barras. Puedes escanear varios productos seguidos.' : 'Apunta al código de un producto. Se suma 1 y se cierra solo.') + '<br>Si el código está parado, gira el teléfono de lado.</p>' +
   botonFotoCodigo("cFoto") +
   '<div class="fila"><input class="inp" id="cMan" inputmode="numeric" placeholder="¿No lee? Escribe el número"><button class="btn chico" id="cManOk" style="flex:none">OK</button></div><div id="cNuevo"></div>');
  var ultimo = { c:"", t:0 };
+ function cuenta(){ var c = $("cCuenta"); if(!c) return; var n = carro.reduce(function(s, it){ return s + it.cant; }, 0);
+  c.textContent = n ? "🧾 En la venta: " + n + (n === 1 ? " producto" : " productos") + " · " + plata(totalCarro()) : "🧾 La venta está vacía"; }
+ cuenta();
  function leer(code){
   var ahora = Date.now(); if(code === ultimo.c && ahora - ultimo.t < 2000) return; ultimo = { c:code, t:ahora };
   bip(); vibrar(60);
-  var msg = alLeer(code), fl = $("cFlash");
+  var msg = alLeer(code), fl = $("cFlash"); cuenta();
   if(msg){ fl.style.background = "rgba(31,168,86,.95)"; fl.textContent = msg; fl.style.display = "block"; clearTimeout(leer.t); leer.t = setTimeout(function(){ if($("cFlash")) $("cFlash").style.display = "none"; }, 1500); $("cNuevo").innerHTML = ""; }
   else { fl.style.background = "rgba(227,6,19,.95)"; fl.textContent = "Código " + code + " no está en tu inventario"; fl.style.display = "block";
    $("cNuevo").innerHTML = '<button class="btn oro" id="cCrear" style="margin-top:10px">➕ Crear producto con el código ' + esc(code) + '</button>';
