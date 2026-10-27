@@ -191,7 +191,6 @@ body{ zoom:1.22; }
  .etq .pr{ font-size:12pt; font-weight:900; }
  .etq .fila-pr{ display:flex; align-items:center; justify-content:center; gap:2mm; }
  .etq .tp{ font-size:12pt; font-weight:900; letter-spacing:.5pt; border:.6mm solid #000; border-radius:1mm; padding:0 1.5mm; line-height:1.15; }
- .etq .tp.amer{ background:#000; color:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
  .etq svg{ width:44mm; height:13mm; }
  @page{ size:A4; margin:10mm; }
  /* Hoja adhesiva chica de 5 × 7 cm, lisa: 2 etiquetas de 5 × 3,5 cm por hoja, para recortar por la línea
@@ -479,7 +478,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102722";
+var TIENDA_VERSION = "2026102723";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1462,9 +1461,17 @@ function crearCodigos(lista){
  }
  sig();
 }
+/* Etiqueta impresa. Ropa americana (27-10-2026, la dueña: "eliminar esa, con la de arriba está bien"): sin recuadro
+   aparte; «ROPA AMERICANA» va en la franja negra del detalle. La nueva lleva el recuadro «NUEVA» junto al precio. */
+function etiquetaHtml(p){
+ var t = tipoDe(p), det = p.det || "";
+ if(t === "americana" && !/americana/i.test(det)) det = det ? det + " · ropa americana" : "Ropa americana";
+ return '<div class="etq"><b>' + esc(p.n) + '</b>' + (det ? '<span class="det">' + esc(det) + '</span>' : '') +
+  (t === "nueva" ? '<span class="fila-pr"><span class="tp">NUEVA</span><span class="pr">' + plata(p.precio) + '</span></span>' : '<span class="pr">' + plata(p.precio) + '</span>') + svgEAN(p.cod) + '</div>';
+}
 function imprimirEtiquetas(){
  var h = "";
- activos().forEach(function(p){ var n = etqCant[p.id] || 0; for(var i = 0; i < n; i++) h += '<div class="etq"><b>' + esc(p.n) + '</b>' + (p.det ? '<span class="det">' + esc(p.det) + '</span>' : '') + (tipoDe(p) ? '<span class="fila-pr"><span class="tp' + (tipoDe(p) === "americana" ? ' amer">AMERICANA' : '">NUEVA') + '</span><span class="pr">' + plata(p.precio) + '</span></span>' : '<span class="pr">' + plata(p.precio) + '</span>') + svgEAN(p.cod) + '</div>'; });
+ activos().forEach(function(p){ var n = etqCant[p.id] || 0; for(var i = 0; i < n; i++) h += etiquetaHtml(p); });
  if(!h){ toast("Elige cuántas etiquetas quieres imprimir."); return; }
  $("hojaEtiquetas").innerHTML = h;
  var chica = etqFormato() === "chica";
