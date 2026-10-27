@@ -2040,6 +2040,7 @@ probado: ella se activó desde el mesón y entró a la app).
   marca"):** 8.º campo de cada `ingr` = objeto `{fi, po, az, na, vc}` de esa cantidad (valores de las tablas NUTRI_*);
   `microReceta` los suma según lo comido (`microDe` lo usa para `cat:"Receta"`). Por porción: Waffles fibra 5,8 g ·
   Desayuno fit A 3,7 g · Postre fit A 9,8 g.
+  «Banana split en taza» (27-10-2026, receta armada para la dueña con lo que tenía: sin proteína ni frutillas; leche en polvo, crema de avellanas En Línea sin azúcar al centro, láminas de almendra y gotas de chocolate Carat sin azúcar; Ninja y microondas de perillas): Postre, 2 tazas, por taza 555 kcal, 26 g P, 63 g C y 24 g G (suma exacta de su `ingr`; crema de avellanas y gotas estimadas, la tabla no se leía).
   Cereal En Línea Hojuela Choc con Balls sin azúcar (24-10-2026, la dueña mandó la etiqueta; es su «Cereal Balls»): Marcas,
   «3/4 taza (30 g)»: 96 kcal, 3,2 g P, 20 g HC, 1,6 g G, 3,7 g de fibra, 15 mg de sodio, azúcar añadida 0.
 - **Se vende también a los vencidos (17-10-2026, la dueña: "quiero que los vencidos igual lo vean… tendría más
