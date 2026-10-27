@@ -267,7 +267,7 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-hoja .tv-big .tv-pack{ height:40vh; }
 .tv-hoja .tv-big .tv-pack img{ height:100%; max-height:none; object-fit:contain; }
 .tv-nuevo.pronto{ background:#5BC0FF; font-family:'Anton',sans-serif; font-size:14px; white-space:nowrap; }
-.tv-ok.pronto{ color:#5BC0FF; }
+.tv-ok.pronto{ background:#5BC0FF; color:#000; }
 .tv-nuevo.ahorro{ font-family:'Anton',sans-serif; font-size:15px; white-space:nowrap; letter-spacing:.02em; }
 .tv-nuevo{ position:absolute; top:8px; left:8px; font-family:'Rubik Distressed','Anton',sans-serif; font-size:18px; color:#000; background:#FFD400; border:2px solid #000; padding:1px 8px; border-radius:6px; }
 .tv-antes{ text-decoration:line-through; opacity:.6; font-size:.7em; margin-right:6px; }
@@ -2576,7 +2576,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102711", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102712", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
