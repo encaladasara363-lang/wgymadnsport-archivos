@@ -813,7 +813,7 @@ function tiendaListar_(e) {
         precio: Number(d[i][6]) || 0, costo: Number(d[i][7]) || 0, total: Number(d[i][8]) || 0, pago: String(d[i][9] || ""),
         cliente: String(d[i][10] || ""), nota: String(d[i][11] || ""), est: est });
     }
-    return respond_(e, { ok: true, tienda: true, v: 28, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde), gastos: gastosTienda_() });
+    return respond_(e, { ok: true, tienda: true, v: 29, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde), gastos: gastosTienda_() });
   });
 }
 /* 🛍 Vitrina pública para la tarjeta de los socios (25-10-2026, la dueña eligió la idea 1): solo nombre,
@@ -821,13 +821,20 @@ function tiendaListar_(e) {
    Los ocultos («Ya no lo vendo») no salen; sin stock sale como agotado. Caché de 60 s. */
 var DIAS_VENDIDO_TIENDA_ = 15;
 /* Fecha (AAAA-MM-DD) de la última venta no anulada de cada producto. */
-function ultimaVentaTienda_() {
-  var d = hojaTiendaM_().getDataRange().getValues(), u = {};
+function ultimaVentaTienda_(apt) {
+  var d = hojaTiendaM_().getDataRange().getValues(), u = {}, a = {}, fin = {};
   for (var i = 1; i < d.length; i++) {
+    /* Versión 29: apartados del mesón (ajuste con nota «APARTADO #tok: …»; se cierran con «LIBERADO/RETIRADO #tok»). */
+    if (apt && String(d[i][1] || "") === "ajuste") {
+      var nota = String(d[i][11] || ""), r = /^APARTADO #(\w+):/.exec(nota), r2 = /^(LIBERADO|RETIRADO) #(\w+)/.exec(nota);
+      if (r) a[r[1]] = String(d[i][3] || ""); else if (r2) fin[r2[2]] = 1;
+      continue;
+    }
     if (String(d[i][1] || "") !== "venta" || String(d[i][12] || "") === "anulada") continue;
     var id = String(d[i][3] || ""), f = txtFecha_(d[i][0]).slice(0, 10);
     if (id && (!u[id] || f > u[id])) u[id] = f;
   }
+  if (apt) Object.keys(a).forEach(function (k) { if (!fin[k] && a[k]) apt[a[k]] = true; });
   return u;
 }
 function diasEntre_(a, b) { return Math.round((new Date(b + "T12:00:00") - new Date(a + "T12:00:00")) / 86400000); }
@@ -838,7 +845,7 @@ function tiendaVitrina_(e) {
   /* Ropa vendida (26-10-2026, la dueña: cada prenda es única; "cuando se venda que se coloque vendido automático y
      que se quede en la tienda por 15 días y luego la eliminas"): una prenda sin stock sale con vendido:true hasta
      15 días después de su última venta y después ya no aparece. Si se anula la venta, el stock vuelve y reaparece. */
-  var ult = ultimaVentaTienda_(), hoy = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd");
+  var apartado = {}, ult = ultimaVentaTienda_(apartado), hoy = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd");
   var l = [], todos = productosTienda_(), porId = {};
   todos.forEach(function (p) { porId[p.id] = p; });
   todos.forEach(function (p) {
@@ -871,12 +878,14 @@ function tiendaVitrina_(e) {
     if (lz && lz.hasta >= hoy && Number(lz.precio) > 0 && Number(lz.precio) < p.precio) { x.antes = p.precio; x.precio = Number(lz.precio); x.nuevo = true; }
     /* Versión 27: ⏳ «Llega pronto» (ext.pronto): se muestra para reservar aunque todavía no haya stock. */
     if (p.ext && p.ext.pronto) { x.pronto = true; x.llega = typeof p.ext.pronto === "object" && p.ext.pronto.f ? String(p.ext.pronto.f) : ""; }
-    if (unica && stock <= 0 && ult[p.id] && !x.pronto) {
+    /* Versión 29: apartado en el mesón y sin stock → «RESERVADO» (nunca el nombre). */
+    var apt = apartado[p.id] && stock <= 0;
+    if (unica && stock <= 0 && ult[p.id] && !x.pronto && !apt) {
       if (diasEntre_(ult[p.id], hoy) > DIAS_VENDIDO_TIENDA_) return;
       x.vendido = true;
     }
     /* Versión 28: 📌 reservado (ext.reserva): sale «RESERVADO» y ya no se puede pedir. El nombre nunca se envía. */
-    if (p.ext && p.ext.reserva && !x.vendido) { x.reservado = true; delete x.pronto; delete x.llega; }
+    if (((p.ext && p.ext.reserva) || apt) && !x.vendido) { x.reservado = true; delete x.pronto; delete x.llega; }
     l.push(x);
   });
   var r = { ok: true, vitrina: true, productos: l };
