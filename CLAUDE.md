@@ -1643,6 +1643,7 @@ productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/In
   «Socios del gimnasio»): «Abrir la tienda aquí» carga `tienda.html` en un cuadro (`#tiendaFrame`, con la clave del mesón ya
   guardada en ese equipo) y «Abrir en otra pestaña».
 - Fotos de productos: campo `foto` (ruta dentro del repo, ej. `img/tienda/…`); se ponen cuando la dueña las mande.
+  **📸 Foto desde el celular (27-10-2026, la dueña: "¿no lo puedo hacer todo sin depender de ti?"):** en la ficha de cada producto (nuevo o editar), botón «📸 Poner foto del producto / Cambiar la foto» (`prepararFotoTienda`): la achica a máx. 480 × 640, le pone el logo arriba a la izquierda (34 % del ancho) y la guarda como texto `data:image/jpeg` (< 45.000 letras, cabe en una celda) en el campo `foto` de la planilla. `fotoUrl` (tienda) y `tiendaFotoUrl_` (tarjeta) no le agregan `?v=`; el WhatsApp de la vitrina no manda enlace de esas fotos. Las fotos hechas por Claude siguen en `img/tienda/`.
   Nunca escribir costos ni ventas en archivos del repo: viven solo en la planilla.
 
 ## WGYMNUTRI — contador de calorías aparte (desde 10/2026)
