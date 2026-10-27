@@ -426,7 +426,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102705";
+var TIENDA_VERSION = "2026102706";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -550,6 +550,7 @@ function renderInv(){
   h += '<div class="grid2" style="margin-top:10px"><button class="btn oro" id="bComprar">🛍 Qué comprar' + (qc ? ' (' + qc + ')' : '') + '</button><button class="btn" id="bVence">⏰ Por vencer' + (pv.length ? ' (' + pv.length + ')' : '') + '</button></div>';
   var nm = noSeMueven().length;
   h += '<button class="btn" id="bLentos" style="margin-top:8px">🐢 Ropa que no se vende' + (nm ? ' (' + nm + ')' : '') + '</button>';
+  h += '<button class="btn" id="bCalc" style="margin-top:8px">🧮 Calcular pedido (Shein)</button>';
   var na = apartados().length;
   h += '<button class="btn' + (na ? ' oro' : '') + '" id="bApart" style="margin-top:8px">📌 Apartados' + (na ? ' (' + na + ')' : '') + '</button>';
   var vencidos = pv.filter(function(x){ return x.dias < 0; });
@@ -567,6 +568,7 @@ function renderInv(){
  if($("bComprar")) $("bComprar").onclick = verQueComprar;
  if($("bVence")) $("bVence").onclick = verPorVencer;
  if($("bLentos")) $("bLentos").onclick = verNoSeMueven;
+ if($("bCalc")) $("bCalc").onclick = verCalcPedido;
  if($("bApart")) $("bApart").onclick = verApartados;
  if($("iq")) $("iq").oninput = function(){ invQ = this.value; $("ilista").innerHTML = htmlListaInv(); enlazarInv(); };
  v.querySelectorAll("[data-cat]").forEach(function(b){ b.onclick = function(){ invFiltro = b.dataset.cat; renderInv(); }; });
@@ -621,6 +623,65 @@ function verQueComprar(){
   var t = "🛍 PEDIDO WGYM\n" + l.map(function(x){ return "• " + x.comprar + " × " + x.p.n + (x.p.det ? " (" + x.p.det + ")" : ""); }).join("\n");
   (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ toast("📋 Lista copiada"); })["catch"](function(){ prompt("Copia la lista:", t); });
  };
+}
+/* ═══ 🧮 Calcular pedido (27-10-2026, la dueña eligió la idea 18): reparte lo pagado en total (con envío e impuestos)
+   entre las prendas según su precio en la boleta, y sugiere a cuánto venderlas. Se guarda solo en el equipo. ═══ */
+var CALC_KEY = "wgym_tienda_calc_v1";
+function calcLeer(){ try{ var c = JSON.parse(localStorage.getItem(CALC_KEY)); if(c && c.l) return c; }catch(e){} return { total:"", x:2, cat:"Ropa mujer", l:[{ n:"", p:"", c:1 }] }; }
+function calcGuardar(c){ try{ localStorage.setItem(CALC_KEY, JSON.stringify(c)); }catch(e){} }
+function redondeo500(n){ return Math.ceil(n / 500) * 500; }
+function calcCuentas(c){
+ var total = num(c.total), suma = c.l.reduce(function(s, x){ return s + num(x.p) * Math.max(1, Math.round(num(x.c) || 1)); }, 0), f = total > 0 && suma > 0 ? total / suma : 0;
+ return { total:total, suma:suma, f:f, l:c.l.map(function(x){ var cu = Math.round(num(x.p) * f), pv = cu ? redondeo500(cu * c.x) : 0; return { costo:cu, venta:pv, cant:Math.max(1, Math.round(num(x.c) || 1)) }; }) };
+}
+function verCalcPedido(){
+ var c = calcLeer();
+ function pintar(){
+  var k = calcCuentas(c), inv = 0, entra = 0;
+  k.l.forEach(function(x){ inv += x.costo * x.cant; entra += x.venta * x.cant; });
+  $("cRes").innerHTML = !k.f ? '<p class="muted" style="margin:8px 0">Escribe lo que pagaste en total y el precio de cada prenda en la boleta.</p>' :
+   '<div class="aviso" style="background:#0B2A14;border-color:#1fa856;color:#7CE39A">Envío e impuestos: cada $1.000 de la boleta te costó en verdad ' + plata(1000 * k.f) + '.</div>' +
+   k.l.map(function(x, i){ var it = c.l[i]; if(!x.costo) return "";
+    return '<div class="card"><b style="font-size:18px">' + esc(it.n || ("Prenda " + (i + 1))) + (x.cant > 1 ? ' · ' + x.cant + ' unidades' : '') + '</b>' +
+     '<div class="pills"><span class="pill">Te costó ' + plata(x.costo) + (x.cant > 1 ? ' c/u' : '') + '</span><span class="pill ok">Véndela a ' + plata(x.venta) + '</span><span class="pill oro">Ganas ' + plata(x.venta - x.costo) + '</span></div>' +
+     (it.hecho ? '<p class="muted" style="margin:8px 0 0">✅ Ya la creaste en el inventario.</p>' : '<button class="btn chico" style="width:100%;margin-top:8px" data-ccrear="' + i + '">➕ Crear producto con estos datos</button>') + '</div>';
+   }).join("") +
+   '<div class="kpis" style="margin-top:8px"><div class="kpi"><small>Invertiste</small><b>' + plata(inv) + '</b></div><div class="kpi verde"><small>Si vendes todo, entra</small><b>' + plata(entra) + '</b></div></div>' +
+   '<div class="kpi" style="margin-top:8px"><small>Ganancia si vendes todo</small><b>' + plata(entra - inv) + '</b></div>';
+  $("cRes").querySelectorAll("[data-ccrear]").forEach(function(b){ b.onclick = function(){
+   var i = +b.dataset.ccrear, x = calcCuentas(c).l[i], it = c.l[i];
+   it.hecho = true; calcGuardar(c);
+   formProducto(null, "", { n:it.n, cat:c.cat, costo:x.costo, precio:x.venta, stock:x.cant, min:0, cod:nuevoCodigo() });
+  }; });
+ }
+ function lineas(){
+  return c.l.map(function(x, i){
+   return '<div class="card" style="padding:10px"><input class="inp" data-cl="n" data-i="' + i + '" value="' + esc(x.n) + '" placeholder="Prenda ' + (i + 1) + ' (ej: Calza negra M)">' +
+    '<div class="grid2" style="margin-top:6px"><div><label class="lab">Precio en la boleta</label><input class="inp" data-cl="p" data-i="' + i + '" inputmode="numeric" value="' + esc(x.p) + '" placeholder="$"></div>' +
+    '<div><label class="lab">Cantidad</label><input class="inp" data-cl="c" data-i="' + i + '" inputmode="numeric" value="' + esc(x.c) + '"></div></div>' +
+    (c.l.length > 1 ? '<button class="btn chico" data-cdel="' + i + '" style="margin-top:6px;color:#FF8A8F">🗑 Quitar</button>' : '') + '</div>';
+  }).join("");
+ }
+ abrirHoja('<div class="cab"><h3>🧮 Calcular pedido</h3><button class="btn chico" id="cCerrar">Cerrar</button></div>' +
+  '<p class="muted" style="margin:6px 0">Para la ropa de Shein (o cualquier pedido): reparte el envío y los impuestos entre las prendas y te dice a cuánto venderlas.</p>' +
+  '<label class="lab" for="cTot">¿Cuánto pagaste en total? (con envío e impuestos)</label><input class="inp" id="cTot" inputmode="numeric" value="' + esc(c.total) + '" placeholder="$">' +
+  '<label class="lab">¿Cuánto quieres ganar?</label><div class="chips" id="cX">' + [[1.5,"+50 %"],[1.7,"+70 %"],[2,"El doble"],[2.5,"+150 %"]].map(function(x){ return '<button class="chip" data-x="' + x[0] + '" aria-pressed="' + (c.x === x[0]) + '">' + x[1] + '</button>'; }).join("") + '</div>' +
+  '<label class="lab" for="cCat">Categoría para crear los productos</label><select class="inp" id="cCat">' + CATS.map(function(k){ return '<option' + (k[0] === c.cat ? ' selected' : '') + '>' + k[0] + '</option>'; }).join("") + '</select>' +
+  '<h3 style="margin:14px 0 6px">Prendas del pedido</h3><div id="cLin">' + lineas() + '</div>' +
+  '<button class="btn" id="cMas" style="margin-top:6px">➕ Agregar otra prenda</button>' +
+  '<div id="cRes" style="margin-top:12px"></div>' +
+  '<button class="btn chico" id="cNuevo" style="margin-top:12px;width:100%">🧹 Empezar otro pedido</button>');
+ function enlazar(){
+  $("cLin").querySelectorAll("[data-cl]").forEach(function(inp){ inp.oninput = function(){ c.l[+inp.dataset.i][inp.dataset.cl] = inp.value; calcGuardar(c); pintar(); }; });
+  $("cLin").querySelectorAll("[data-cdel]").forEach(function(b){ b.onclick = function(){ c.l.splice(+b.dataset.cdel, 1); calcGuardar(c); $("cLin").innerHTML = lineas(); enlazar(); pintar(); }; });
+ }
+ $("cCerrar").onclick = cerrarHoja;
+ $("cTot").oninput = function(){ c.total = this.value; calcGuardar(c); pintar(); };
+ $("cCat").onchange = function(){ c.cat = this.value; calcGuardar(c); };
+ $("cX").querySelectorAll("[data-x]").forEach(function(b){ b.onclick = function(){ c.x = +b.dataset.x; calcGuardar(c); $("cX").querySelectorAll("[data-x]").forEach(function(o){ o.setAttribute("aria-pressed", o === b); }); pintar(); }; });
+ $("cMas").onclick = function(){ c.l.push({ n:"", p:"", c:1 }); calcGuardar(c); $("cLin").innerHTML = lineas(); enlazar(); pintar(); var ins = $("cLin").querySelectorAll('[data-cl="n"]'); ins[ins.length - 1].focus(); };
+ $("cNuevo").onclick = function(){ if(!confirm("¿Borrar este pedido y empezar otro?")) return; try{ localStorage.removeItem(CALC_KEY); }catch(e){} verCalcPedido(); };
+ enlazar(); pintar();
 }
 /* ═══ ⏰ Fecha de vencimiento (25-10-2026, la dueña eligió la idea 7): aviso desde 30 días antes. ═══ */
 function diasHasta(f){ return Math.round((new Date(f + "T12:00:00") - new Date((S.hoy || hoyISO()) + "T12:00:00")) / 86400000); }
