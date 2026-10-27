@@ -80,6 +80,7 @@ nav#nav button[aria-pressed="true"]{ color:var(--red2); }
 .pk-chip{ flex:none; display:flex; align-items:center; gap:8px; max-width:230px; background:#2a2205; border:2px solid var(--gold); border-radius:12px; padding:6px 8px; color:var(--txt); font-weight:800; text-transform:uppercase; font-size:14px; text-align:left; }
 .pk-chip small{ display:block; font-weight:600; color:var(--yel); font-size:12px; }
 .pk-chip b{ color:#FF8A8F; font-size:18px; }
+.pk-chip i{ font-style:normal; color:#7CE39A; font-size:20px; padding:0 4px; }
 .chip{ flex:none; border-radius:999px; padding:8px 14px; background:var(--card2); border:1px solid var(--line); font-size:15px; font-weight:800; text-transform:uppercase; }
 .chip[aria-pressed="true"]{ background:var(--red); border-color:var(--red); color:#fff; }
 .kpis{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
@@ -447,7 +448,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102708";
+var TIENDA_VERSION = "2026102709";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -968,29 +969,39 @@ function verPedidos(){
    de la categoría «Packs» con su código propio. Su costo es la suma de los costos de las partes. */
 function formPack(){
  if(S.v < 26){ toast("Para armar packs, instala la Versión 26 del Apps Script.", 5000); return; }
- var sel = {}, q = "";
+ var sel = {}, q = "", fcat = "Todos";
  function partes(){ return Object.keys(sel).map(function(id){ return { p:prod(id), c:sel[id] }; }).filter(function(x){ return x.p; }); }
  function pintar(){
   var ps = partes(), suma = ps.reduce(function(s, x){ return s + x.p.precio * x.c; }, 0), costo = ps.reduce(function(s, x){ return s + x.p.costo * x.c; }, 0);
-  var cand = activos().filter(function(p){ return !esPack(p) && !basePorcion(p) && stockVer(p) > 0 && (!q || normTxt(p.n + " " + p.det + " " + p.cat).indexOf(normTxt(q)) >= 0); }).sort(function(a, b){ return a.n.localeCompare(b.n); }).slice(0, 40);
+  /* Todos los productos, por categoría (27-10-2026, la dueña: "quiero que se pueda elegir más productos"). */
+  var todosP = activos().filter(function(p){ return !esPack(p) && stockVer(p) > 0; });
+  var catsP = ["Todos"].concat(CATS.map(function(c){ return c[0]; }).filter(function(c){ return todosP.some(function(p){ return p.cat === c; }); }));
+  $("pkCats").innerHTML = catsP.map(function(c){ return '<button class="chip" data-pkc="' + esc(c) + '" aria-pressed="' + (c === fcat) + '">' + (c === "Todos" ? "Todos" : iconoCat(c) + ' ' + esc(c)) + '</button>'; }).join("");
+  $("pkCats").querySelectorAll("[data-pkc]").forEach(function(b){ b.onclick = function(){ fcat = b.dataset.pkc; pintar(); }; });
+  var cand = todosP.filter(function(p){ return (fcat === "Todos" || p.cat === fcat) && (!q || normTxt(p.n + " " + p.det + " " + p.cat).indexOf(normTxt(q)) >= 0); }).sort(function(a, b){ return a.n.localeCompare(b.n); });
   /* Con foto de cada producto (27-10-2026, la dueña: "debería aparecer la imagen de cada producto"). */
   function mini(p){ return '<span class="pk-ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="" loading="lazy">' : iconoCat(p.cat)) + '</span>'; }
-  $("pkElegidos").innerHTML = ps.length ? '<p class="lab" style="margin:8px 0 4px">Elegidos (' + ps.length + '):</p><div class="pk-sel">' + ps.map(function(x){ return '<button type="button" class="pk-chip" data-pkq="' + esc(x.p.id) + '">' + mini(x.p) + '<span>' + esc(x.p.n) + (x.p.det ? '<small>' + esc(x.p.det) + '</small>' : '') + '</span><b>✕</b></button>'; }).join("") + '</div>' : '';
-  $("pkElegidos").querySelectorAll("[data-pkq]").forEach(function(b){ b.onclick = function(){ delete sel[b.dataset.pkq]; pintar(); }; });
+  $("pkElegidos").innerHTML = ps.length ? '<p class="lab" style="margin:8px 0 4px">Elegidos (' + ps.length + '):</p><div class="pk-sel">' + ps.map(function(x){ return '<button type="button" class="pk-chip" data-pkq="' + esc(x.p.id) + '">' + mini(x.p) + '<span>' + (x.c > 1 ? x.c + ' × ' : '') + esc(x.p.n) + (x.p.det ? '<small>' + esc(x.p.det) + '</small>' : '') + '</span>' + (esUnica(x.p) ? '' : '<i data-pkmas="' + esc(x.p.id) + '" title="Uno más">＋</i>') + '<b>✕</b></button>'; }).join("") + '</div>' : '';
+  $("pkElegidos").querySelectorAll("[data-pkq]").forEach(function(b){ b.onclick = function(e){
+   var mas = e.target.closest("[data-pkmas]"), id = b.dataset.pkq, p = prod(id);
+   if(mas){ if(sel[id] < stockVer(p)) sel[id]++; else toast("No quedan más en el inventario"); }
+   else if(sel[id] > 1) sel[id]--; else delete sel[id];
+   pintar(); }; });
   $("pkLista").innerHTML = cand.map(function(p){ return '<button class="chip pk-it" data-pk="' + esc(p.id) + '" aria-pressed="' + !!sel[p.id] + '">' + mini(p) + '<span>' + (sel[p.id] ? '✔ ' : '') + esc(p.n) + (p.det ? ' · ' + esc(p.det) : '') + ' · ' + plata(p.precio) + '</span></button>'; }).join("") || '<p class="muted">No hay productos con ese nombre.</p>';
   $("pkLista").querySelectorAll("[data-pk]").forEach(function(b){ b.onclick = function(){ var id = b.dataset.pk; if(sel[id]) delete sel[id]; else sel[id] = 1; pintar(); }; });
-  $("pkRes").innerHTML = ps.length < 2 ? '<p class="muted" style="margin:8px 0 0">Elige al menos 2 productos.</p>' :
-   '<p style="margin:8px 0 4px;font-size:16px">' + ps.map(function(x){ return esc(x.p.n); }).join(" + ") + '</p>' +
+  var uds = ps.reduce(function(s, x){ return s + x.c; }, 0);
+  $("pkRes").innerHTML = uds < 2 ? '<p class="muted" style="margin:8px 0 0">Elige al menos 2 productos (o toca ＋ para llevar 2 del mismo).</p>' :
+   '<p style="margin:8px 0 4px;font-size:16px">' + ps.map(function(x){ return (x.c > 1 ? x.c + ' × ' : '') + esc(x.p.n); }).join(" + ") + '</p>' +
    '<p class="muted" style="margin:0 0 6px">Separados valen ' + plata(suma) + ' · te costaron ' + plata(costo) + '</p><div class="chips">' +
    [[0.9,"−10 %"],[0.85,"−15 %"],[0.8,"−20 %"]].map(function(x){ var v = Math.ceil(suma * x[0] / 500) * 500; return '<button class="chip" data-pkp="' + v + '">' + x[1] + ' · ' + plata(v) + '</button>'; }).join("") + '</div>';
   $("pkRes").querySelectorAll("[data-pkp]").forEach(function(b){ b.onclick = function(){ $("pkPre").value = b.dataset.pkp; gan(); }; });
   if(!$("pkN").dataset.tocado) $("pkN").value = ps.length ? "Pack " + ps.map(function(x){ return x.p.n.split(" ")[0]; }).join(" + ") : "";
   gan();
  }
- function gan(){ var ps = partes(), costo = ps.reduce(function(s, x){ return s + x.p.costo * x.c; }, 0), pr = num($("pkPre").value); $("pkGan").textContent = pr > 0 && ps.length > 1 ? (pr > costo ? "💰 Ganas " + plata(pr - costo) + " con el pack" : "⚠️ Ese precio no deja ganancia") : ""; }
+ function gan(){ var ps = partes().filter(function(x){ return x.c; }), costo = ps.reduce(function(s, x){ return s + x.p.costo * x.c; }, 0), pr = num($("pkPre").value); $("pkGan").textContent = pr > 0 && ps.reduce(function(s, x){ return s + x.c; }, 0) > 1 ? (pr > costo ? "💰 Ganas " + plata(pr - costo) + " con el pack" : "⚠️ Ese precio no deja ganancia") : ""; }
  abrirHoja('<div class="cab"><h3>🎁 Armar pack</h3><button class="btn chico" id="pkCerrar">Cerrar</button></div>' +
   '<p class="muted" style="margin:6px 0">Junta 2 o más productos (ej. top + calza) a un precio especial. Al venderlo se descuenta cada parte.</p>' +
-  '<div id="pkElegidos"></div><input class="inp amarillo" id="pkQ" placeholder="🔎 Buscar producto…" autocomplete="off" style="margin-top:8px"><div id="pkLista" style="max-height:340px;overflow:auto;margin-top:6px"></div>' +
+  '<div id="pkElegidos"></div><input class="inp amarillo" id="pkQ" placeholder="🔎 Buscar producto…" autocomplete="off" style="margin-top:8px"><div class="chips" id="pkCats" style="margin-top:8px"></div><div id="pkLista" style="margin-top:6px"></div>' +
   '<div id="pkRes"></div><label class="lab" for="pkN">Nombre del pack</label><input class="inp" id="pkN">' +
   '<label class="lab" for="pkPre">Precio del pack</label><input class="inp" id="pkPre" inputmode="numeric" placeholder="$"><p id="pkGan" style="margin:6px 0 0;font-size:16px"></p>' +
   '<p class="err" id="pkErr" hidden></p><button class="btn rojo" id="pkOk" style="margin-top:12px">💾 Guardar pack</button>');
@@ -1000,9 +1011,9 @@ function formPack(){
  $("pkPre").oninput = gan;
  $("pkOk").onclick = function(){
   var ps = partes(), pr = Math.round(num($("pkPre").value)), n = $("pkN").value.trim();
-  var err = ps.length < 2 ? "Elige al menos 2 productos." : !n ? "Escribe el nombre del pack." : !(pr > 0) ? "Escribe el precio del pack." : "";
+  var err = ps.reduce(function(s, y){ return s + y.c; }, 0) < 2 ? "Elige al menos 2 productos." : !n ? "Escribe el nombre del pack." : !(pr > 0) ? "Escribe el precio del pack." : "";
   if(err){ $("pkErr").hidden = false; $("pkErr").textContent = err; return; }
-  var x = { n:n, cat:"Packs", det:ps.map(function(y){ return y.p.n + (y.p.det ? " (" + y.p.det + ")" : ""); }).join(" + ").slice(0, 200), cod:nuevoCodigo(), costo:ps.reduce(function(s, y){ return s + y.p.costo * y.c; }, 0), precio:pr, stock:0, min:0, foto:(ps.filter(function(y){ return y.p.foto; })[0] || { p:{} }).p.foto || "", ext:{ pack:ps.map(function(y){ return { id:y.p.id, c:y.c }; }) } };
+  var x = { n:n, cat:"Packs", det:ps.map(function(y){ return (y.c > 1 ? y.c + " × " : "") + y.p.n + (y.p.det ? " (" + y.p.det + ")" : ""); }).join(" + ").slice(0, 200), cod:nuevoCodigo(), costo:ps.reduce(function(s, y){ return s + y.p.costo * y.c; }, 0), precio:pr, stock:0, min:0, foto:(ps.filter(function(y){ return y.p.foto; })[0] || { p:{} }).p.foto || "", ext:{ pack:ps.map(function(y){ return { id:y.p.id, c:y.c }; }) } };
   $("pkOk").disabled = true; $("pkOk").textContent = "Guardando…";
   api("tiendaProducto", { datos:JSON.stringify(x) }).then(function(d){ S.productos = d.productos || S.productos; aplicarPendientes(); guardarCache(); cerrarHoja(); render(); toast("🎁 Pack guardado"); })
   ["catch"](function(e){ $("pkOk").disabled = false; $("pkOk").textContent = "💾 Guardar pack"; $("pkErr").hidden = false; $("pkErr").textContent = e.motivo || "No se pudo guardar."; });
