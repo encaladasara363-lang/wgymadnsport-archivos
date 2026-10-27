@@ -2482,6 +2482,10 @@ function renderEvolucion(s){
    var l = d && d.vitrina && d.productos ? d.productos.slice() : [];
    if(!l.length){ box.hidden = true; return; }
    l.forEach(function(p){ p.cat = tiendaCat_(p.cat); });
+   /* El batido ganador de masa no tiene stock propio: sale de las porciones del tarro de «Batido de proteína»
+      (27-10-2026, la dueña: "el ganador de masa me aparece sin stock"; mismo criterio que USA_PORCION de tienda.html). */
+   var tarro = l.filter(function(p){ return /^batido de prote/i.test(p.n); })[0];
+   l.forEach(function(p){ if(/^batido ganador/i.test(p.n)){ p.q = tarro ? tarro.q : 0; p.vendido = false; } });
    /* Ropa por sexo (25-10-2026, la dueña: "me conviene poner todo porque le sirve para regalar"): todos
       ven toda la ropa, pero primero la de su sexo (mismo criterio que las rutinas, coachSexo) y al final
       «¿Buscas un regalo?». Si el sexo no se sabe, queda el orden normal. */
@@ -2610,7 +2614,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102719", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102720", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
