@@ -474,7 +474,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102714";
+var TIENDA_VERSION = "2026102715";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -650,7 +650,7 @@ function htmlListaInv(){
    return '<div class="card' + (vd || ss || dz ? ' vendida' : '') + '"><div class="prod"><div class="ph">' + phHtml(p) + (vd ? '<span class="sello-v">VENDIDO</span>' : dz ? '<span class="sello-v" style="font-size:11px">DESARMADO</span>' : ss ? '<span class="sello-v">SIN STOCK</span>' : '') + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
     '<div class="pills">' + (lz ? '<span class="pill oro">🚀 ' + plata(lz.precio) + ' hasta el ' + lz.hasta.slice(8, 10) + '/' + lz.hasta.slice(5, 7) + '</span>' : '') + (p.ext.ped ? '<span class="pill">📦 ' + esc(nombrePedido(p.ext.ped)) + '</span>' : '') + (ap ? '<span class="pill oro">📌 APARTADO · ' + esc(ap.nombre) + ' · ' + (aptVencido(ap) ? 'se le pasó la hora' : 'hasta ' + aptHasta(ap)) + '</span>' : '') + (bp ? '<span class="pill ' + (bp.stock <= bp.min ? 'bajo' : 'ok') + '">🥤 Sale del tarro · quedan ' + bp.stock + '</span>' : vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : dz ? '<span class="pill vend" style="white-space:normal;line-height:1.2">🧩 Se desarmó: ' + esc(dz.parte) + ' se vendió por separado · se quita ' + (dz.quedan ? 'en ' + dz.quedan + (dz.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : pk && !ss ? '<span class="pill ' + (stockPack(p) <= 0 ? 'bajo' : 'ok') + '">🎁 Alcanza para ' + stockPack(p) + '</span>' : ss ? '<span class="pill vend">⛔ SIN STOCK · repón con «Llegó mercadería»</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
     (bp ? '<p class="muted" style="font-size:15px;margin:8px 0 0">Cada venta descuenta 1 porción de «' + esc(bp.n) + '». Cuando compres otro tarro, súmalo ahí.</p>' : '') +
-    (pk ? '<p class="muted" style="font-size:15px;margin:8px 0 0">🎁 Pack de: ' + partesPack(p).map(function(x){ return (x.c > 1 ? x.c + ' × ' : '') + esc(x.p ? x.p.n + (x.p.det ? ' (' + x.p.det + ')' : '') : '(producto borrado)'); }).join(' + ') + '. Al venderlo se descuenta cada parte.</p>' : '') + '<div class="grid2" style="margin-top:10px">' + (bp || pk ? '<span></span>' : '<button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button>') + '<button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div>' +
+    (pk ? '<p class="muted" style="font-size:15px;margin:8px 0 0">🎁 Pack de: ' + partesPack(p).map(function(x){ return (x.c > 1 ? x.c + ' × ' : '') + esc(x.p ? x.p.n + (x.p.det ? ' (' + x.p.det + ')' : '') : '(producto borrado)'); }).join(' + ') + '. Al venderlo se descuenta cada parte.' + (function(){ var su = partesPack(p).reduce(function(t, x){ return t + (x.p ? x.p.precio * x.c : 0); }, 0); return su > p.precio ? '<br><b style="color:#7CE39A">Separado valen ' + plata(su) + ': el socio ahorra ' + plata(su - p.precio) + ' (' + Math.round((su - p.precio) / su * 100) + ' %).</b>' : ''; })() + '</p>' : '') + '<div class="grid2" style="margin-top:10px">' + (bp || pk ? '<span></span>' : '<button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button>') + '<button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div>' +
     (ap ? '<div class="grid2" style="margin-top:8px"><button class="btn chico verde" style="width:100%" data-ret="' + ap.tok + '">💵 Retiró y pagó</button><button class="btn chico" style="width:100%" data-lib="' + ap.tok + '">↩ Liberar</button></div>' : (!bp && stockVer(p) > 0 && sePuedeApartar(p) ? '<button class="btn chico" style="width:100%;margin-top:8px" data-apt="' + esc(p.id) + '">📌 Apartar</button>' : '')) + '</div>';
   }).join("");
 }
@@ -1021,9 +1021,12 @@ function formPack(){
   var uds = ps.reduce(function(s, x){ return s + x.c; }, 0);
   $("pkRes").innerHTML = uds < 2 ? '<p class="muted" style="margin:8px 0 0">Elige al menos 2 productos (o toca ＋ para llevar 2 del mismo).</p>' :
    '<p style="margin:8px 0 4px;font-size:16px">' + ps.map(function(x){ return (x.c > 1 ? x.c + ' × ' : '') + esc(x.p.n); }).join(" + ") + '</p>' +
+   '<p class="muted" style="margin:0 0 4px;font-size:15px">A los socios les sale «🎁 AHORRAS X %» con el precio por separado tachado.</p>' +
    '<p class="muted" style="margin:0 0 6px">Separados valen ' + plata(suma) + ' · te costaron ' + plata(costo) + '</p><div class="chips">' +
    [[0.9,"−10 %"],[0.85,"−15 %"],[0.8,"−20 %"]].map(function(x){ var v = Math.ceil(suma * x[0] / 500) * 500; return '<button class="chip desc" data-pkp="' + v + '">' + x[1] + ' · ' + plata(v) + '</button>'; }).join("") + '</div>';
-  $("pkRes").querySelectorAll("[data-pkp]").forEach(function(b){ b.onclick = function(){ $("pkPre").value = b.dataset.pkp; gan(); }; });
+  $("pkRes").querySelectorAll("[data-pkp]").forEach(function(b){ b.onclick = function(){ $("pkPre").value = b.dataset.pkp; $("pkPre").dataset.tocado = 1; gan(); }; });
+  /* Por defecto, 15 % menos que por separado (27-10-2026, la dueña: "que aparezca con un 15 % de descuento"). */
+  if(uds >= 2 && !$("pkPre").dataset.tocado){ var b15 = $("pkRes").querySelector('[data-pkp]:nth-child(2)'); if(b15) $("pkPre").value = b15.dataset.pkp; }
   if(!$("pkN").dataset.tocado) $("pkN").value = ps.length ? "Pack " + ps.map(function(x){ return x.p.n.split(" ")[0]; }).join(" + ") : "";
   gan();
  }
@@ -1037,7 +1040,7 @@ function formPack(){
  $("pkCerrar").onclick = cerrarHoja;
  $("pkQ").oninput = function(){ q = this.value; pintar(); };
  $("pkN").oninput = function(){ this.dataset.tocado = 1; };
- $("pkPre").oninput = gan;
+ $("pkPre").oninput = function(){ this.dataset.tocado = 1; gan(); };
  $("pkOk").onclick = function(){
   var ps = partes(), pr = Math.round(num($("pkPre").value)), n = $("pkN").value.trim();
   var err = ps.reduce(function(s, y){ return s + y.c; }, 0) < 2 ? "Elige al menos 2 productos." : !n ? "Escribe el nombre del pack." : !(pr > 0) ? "Escribe el precio del pack." : "";

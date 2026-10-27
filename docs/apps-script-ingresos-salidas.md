@@ -231,6 +231,8 @@ Administrar implementaciones → lápiz → Versión nueva → Implementar (para
 
 - `tiendaVitrina`: un pack de prendas únicas al que le vendieron una parte por separado ya no sale en la tarjeta
   de los socios, y cada pack manda `fotos` (las fotos de sus partes) para mostrarlas juntas.
+- Cada pack manda además `antes` (lo que valen sus partes por separado) y `ahorro` (el % que se ahorra), para que
+  la tarjeta muestre «🎁 AHORRAS X %» con el precio suelto tachado.
 - `tiendaListar` responde `v: 27`. Nada más cambia: solo hace falta instalarla antes de encender la tienda en la
   tarjeta de los socios.
 

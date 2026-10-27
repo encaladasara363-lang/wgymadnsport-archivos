@@ -857,6 +857,9 @@ function tiendaVitrina_(e) {
       x.pack = true;
       /* Versión 27: las fotos de todas sus partes, para mostrarlas juntas en la tarjeta. */
       x.fotos = pack.map(function (c) { var q = porId[c.id]; return q && q.foto ? q.foto : ""; }).filter(String).slice(0, 4);
+      /* Lo que costarían las partes por separado, para mostrar «AHORRAS X %» con el precio suelto tachado. */
+      var suelto = pack.reduce(function (s2, c) { var q = porId[c.id]; return s2 + (q ? q.precio * (Number(c.c) || 1) : 0); }, 0);
+      if (suelto > p.precio) { x.antes = suelto; x.ahorro = Math.round((suelto - p.precio) / suelto * 100); }
     }
     /* Precio de lanzamiento (Versión 26): hasta la fecha elegida sale con el precio especial y «NUEVO». */
     var lz = p.ext && p.ext.lanz;
