@@ -8,6 +8,7 @@ Uso: python3 scripts/tienda-semana.py <planilla-completa.xlsx> [AAAA-MM-DD] [--h
 Nunca guardar la salida en el repositorio: trae costos, ganancias y nombres de quienes deben fiado.
 """
 import sys, datetime, html
+# Fondo blanco y letra negra (27-10-2026): el modo oscuro de Gmail en iPhone dejaba casi invisibles las letras blancas.
 import openpyxl
 
 args = [a for a in sys.argv[1:] if not a.startswith("--")]
@@ -140,12 +141,12 @@ if not HTML:
         for l in ls: print("• " + l)
 else:
     e = html.escape
-    out = [f'<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;background:#0A0A0B;color:#fff;padding:18px;border-radius:12px">',
-           f'<h1 style="font-size:22px;margin:0 0 6px;color:#fff;border-bottom:4px solid #E30613;padding-bottom:8px">🛒 {e(titulo)}</h1>']
+    out = [f'<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;background:#ffffff;color:#111111;padding:18px;border:3px solid #E30613;border-radius:12px">',
+           f'<h1 style="font-size:22px;margin:0 0 6px;color:#111111;border-bottom:4px solid #E30613;padding-bottom:8px">🛒 {e(titulo)}</h1>']
     for t, ls in sec:
-        out.append(f'<h2 style="font-size:18px;color:#D4AF37;margin:18px 0 6px">{e(t)}</h2><ul style="margin:0;padding-left:20px">')
-        out += [f'<li style="font-size:16px;margin:4px 0">{e(l)}</li>' for l in ls]
+        out.append(f'<h2 style="font-size:19px;color:#E30613;margin:18px 0 6px">{e(t)}</h2><ul style="margin:0;padding-left:20px">')
+        out += [f'<li style="font-size:17px;margin:5px 0;color:#111111">{e(l)}</li>' for l in ls]
         out.append("</ul>")
-    out.append('<p style="font-size:13px;color:#aaa;margin-top:18px">Abre la tienda para ver el detalle: '
-               '<a style="color:#D4AF37" href="https://encaladasara363-lang.github.io/wgymadnsport-archivos/tienda.html">tienda.html</a></p></div>')
+    out.append('<p style="font-size:14px;color:#444444;margin-top:18px">Abre la tienda para ver el detalle: '
+               '<a style="color:#E30613" href="https://encaladasara363-lang.github.io/wgymadnsport-archivos/tienda.html">tienda.html</a></p></div>')
     print("\n".join(out))
