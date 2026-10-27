@@ -260,6 +260,8 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-btn{ text-align:center; font:800 italic 15px 'Barlow Condensed',Arial,sans-serif; padding:8px; border-radius:10px; background:linear-gradient(180deg,#FF2A35,#E30613 55%,#B8040F); box-shadow:0 4px 0 #7a030b; margin-bottom:4px; }
 .tv-p.agotado .tv-ph img{ filter:grayscale(1) brightness(.55); }
 .tv-p.agotado .tv-btn{ background:#333; box-shadow:none; color:#aaa; }
+.tv-pack{ display:flex; gap:2px; width:100%; height:100%; background:#fff; }
+.tv-pack img{ flex:1 1 0; min-width:0; width:100%; height:100%; object-fit:cover; }
 .tv-nuevo{ position:absolute; top:8px; left:8px; font-family:'Rubik Distressed','Anton',sans-serif; font-size:18px; color:#000; background:#FFD400; border:2px solid #000; padding:1px 8px; border-radius:6px; }
 .tv-antes{ text-decoration:line-through; opacity:.6; font-size:.7em; margin-right:6px; }
 .tv-sello{ position:absolute; top:34%; left:50%; transform:translate(-50%,-50%) rotate(-12deg); font-family:'Rubik Distressed','Anton',sans-serif; font-size:26px; color:#fff; background:#E30613; border:3px solid #fff; padding:3px 10px; border-radius:8px; }
@@ -2453,6 +2455,11 @@ function renderEvolucion(s){
  var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Packs":"🎁", "Otro":"📦" };
  function tiendaCat_(c){ return c === "Bebidas" ? "Bebestibles" : (c === "Ropa deportiva" ? "Ropa mujer" : (c || "Otro")); }
  function tiendaFoto_(p){ return p.foto ? escapeHtml(p.foto) + "?v=" + TIENDA_FOTO_V : "maquinas-wgymadnsport/comun/logo.png"; }
+ /* Pack (Versión 27 del Apps Script): las fotos de todas sus partes juntas, lado a lado. */
+ function tiendaFotos_(p){
+  if(p.fotos && p.fotos.length > 1) return '<div class="tv-pack">' + p.fotos.map(function(f){ return '<img loading="lazy" src="' + escapeHtml(f) + '?v=' + TIENDA_FOTO_V + '" alt="">'; }).join("") + '</div>';
+  return '<img loading="lazy" src="' + tiendaFoto_(p) + '" alt="">';
+ }
  function renderTienda_(s){
   var box = document.getElementById("tiendaCard"); if(!box) return;
   if(!CHECKIN_URL || !TIENDA_VITRINA_ACTIVA){ box.hidden = true; return; }
@@ -2480,7 +2487,7 @@ function renderEvolucion(s){
      '<div class="tv-chips">' + cats.map(function(c){ return '<button type="button" class="tv-chip' + (c === cat ? ' on' : '') + '" data-tc="' + escapeHtml(c) + '">' + (c === "Todos" ? "🛍" : TIENDA_ICONOS[c]) + ' ' + escapeHtml(c) + '</button>'; }).join("") + '</div>' +
      '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
       var ag = !(p.q > 0), i = l.indexOf(p);
-      return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph"><img loading="lazy" src="' + tiendaFoto_(p) + '" alt=""></div>' +
+      return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + '</div>' +
        (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' +
        (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
        (ag ? '' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
@@ -2500,7 +2507,7 @@ function renderEvolucion(s){
  function tiendaVentanita_(s, p){
   var ropa = /^(Ropa|Zapatillas)/.test(p.cat) || (p.pack && p.q <= 1), max = ropa ? 1 : Math.max(1, Math.min(p.q, 9)), cant = 1;
   var fondo = document.createElement("div"); fondo.className = "tv-modal";
-  fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big"><img src="' + tiendaFoto_(p) + '" alt=""></div>' +
+  fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big">' + tiendaFotos_(p) + '</div>' +
    '<h3>' + escapeHtml(p.n) + '</h3>' + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
    '<p class="tv-total">Precio: ' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + '<b>' + clp(p.precio) + '</b>' + (p.nuevo ? ' 🚀 precio de lanzamiento' : '') + '</p>' +
    (max > 1 ? '<div class="tv-cant"><button type="button" id="tvMenos">−</button><b id="tvCant">1</b><button type="button" id="tvMasUno">+</button></div>' : '') +
@@ -2562,7 +2569,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102703", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102704", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

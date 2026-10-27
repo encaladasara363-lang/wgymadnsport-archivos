@@ -813,7 +813,7 @@ function tiendaListar_(e) {
         precio: Number(d[i][6]) || 0, costo: Number(d[i][7]) || 0, total: Number(d[i][8]) || 0, pago: String(d[i][9] || ""),
         cliente: String(d[i][10] || ""), nota: String(d[i][11] || ""), est: est });
     }
-    return respond_(e, { ok: true, tienda: true, v: 26, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde), gastos: gastosTienda_() });
+    return respond_(e, { ok: true, tienda: true, v: 27, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde), gastos: gastosTienda_() });
   });
 }
 /* 🛍 Vitrina pública para la tarjeta de los socios (25-10-2026, la dueña eligió la idea 1): solo nombre,
@@ -850,8 +850,14 @@ function tiendaVitrina_(e) {
       pack.forEach(function (c) { var q = porId[c.id]; stock = Math.min(stock, q && q.activo ? Math.floor(q.stock / (Number(c.c) || 1)) : 0); if (!q || !/^(Ropa|Zapatillas)/.test(q.cat)) unica = false; });
       if (!isFinite(stock)) stock = 0;
     }
+    /* Versión 27: un pack de prendas únicas al que le vendieron una parte por separado (sin venta del pack) ya no sale. */
+    if (pack && pack.length && unica && stock <= 0 && !ult[p.id]) return;
     var x = { n: p.n, cat: p.cat, det: p.det, precio: p.precio, foto: p.foto, q: Math.max(0, Math.min(9, stock)) };
-    if (pack && pack.length) x.pack = true;
+    if (pack && pack.length) {
+      x.pack = true;
+      /* Versión 27: las fotos de todas sus partes, para mostrarlas juntas en la tarjeta. */
+      x.fotos = pack.map(function (c) { var q = porId[c.id]; return q && q.foto ? q.foto : ""; }).filter(String).slice(0, 4);
+    }
     /* Precio de lanzamiento (Versión 26): hasta la fecha elegida sale con el precio especial y «NUEVO». */
     var lz = p.ext && p.ext.lanz;
     if (lz && lz.hasta >= hoy && Number(lz.precio) > 0 && Number(lz.precio) < p.precio) { x.antes = p.precio; x.precio = Number(lz.precio); x.nuevo = true; }

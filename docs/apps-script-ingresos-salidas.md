@@ -226,3 +226,14 @@ Administrar implementaciones → lápiz → Versión nueva → Implementar (para
 
 Se instala igual que las anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar →
 Administrar implementaciones → lápiz → Versión nueva → Implementar (para volver atrás: Versión 25).
+
+## Versión 27 (27-10-2026): 🛒 Tienda — packs en la vitrina
+
+- `tiendaVitrina`: un pack de prendas únicas al que le vendieron una parte por separado ya no sale en la tarjeta
+  de los socios, y cada pack manda `fotos` (las fotos de sus partes) para mostrarlas juntas.
+- `tiendaListar` responde `v: 27`. Nada más cambia: solo hace falta instalarla antes de encender la tienda en la
+  tarjeta de los socios.
+
+Se instala igual que las anteriores (o con el botón de `copiar-codigo.html`): pegar `Ingresos.gs` completo en
+INGRESOS.gs, guardar, Implementar → Administrar implementaciones → lápiz → Versión nueva → Implementar
+(para volver atrás: Versión 26).
