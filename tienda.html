@@ -344,7 +344,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102701";
+var TIENDA_VERSION = "2026102702";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -508,7 +508,7 @@ function vendido30(id){
  return todosMovs().filter(function(m){ if(m.tipo !== "venta" || m.est === "anulada" || m.f.slice(0, 10) <= desde) return false; if(m.id === id) return true; var b = basePorcion(prod(m.id)); return !!b && b.id === id; }).reduce(function(s, m){ return s + m.cant; }, 0);
 }
 function queComprar(){
- return activos().filter(function(p){ return !(esRopa(p) && p.stock <= 0) && !basePorcion(p); }).map(function(p){
+ return activos().filter(function(p){ return !esRopa(p) && !basePorcion(p); }).map(  /* ropa y zapatillas son prendas únicas: no se reponen */function(p){
   var v = vendido30(p.id), dia = v / 30, alcanza = dia > 0 ? Math.max(0, p.stock) / dia : Infinity;
   var meta = Math.max(Math.ceil(v), p.min * 2, p.min + 1), comprar = Math.max(1, meta - Math.max(0, p.stock));
   return { p:p, v:v, alcanza:alcanza, comprar:comprar, falta:p.stock <= p.min || alcanza <= 10 };
