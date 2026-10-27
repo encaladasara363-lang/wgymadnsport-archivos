@@ -262,6 +262,14 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-badges.grande{ margin:8px 0 4px; }
 .tv-badges.grande .tv-tipo{ font-size:21px; padding:5px 14px; }
 .tv-tipo.pronto{ background:#5BC0FF; }
+.tv-mac{ font-size:18px; font-weight:800; color:#FFD400; }
+.tv-macros{ margin:10px 0; padding:10px; border:2px solid var(--dorado); border-radius:12px; background:#0D0D0F; }
+.tv-mac-t{ margin:0 0 8px; font:800 italic 20px 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; color:var(--dorado); text-align:center; }
+.tv-mac-g{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; text-align:center; }
+.tv-mac-g div{ background:#151517; border-radius:10px; padding:6px 2px; display:flex; flex-direction:column; }
+.tv-mac-g span{ font-size:20px; }
+.tv-mac-g b{ font-family:'Anton',Impact,sans-serif; font-size:26px; color:#fff; }
+.tv-mac-g small{ font-size:13px; color:#bbb; font-weight:700; }
 .tv-tipo{ display:inline-block; align-self:flex-start; font:800 18px/1.2 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; color:#000; background:#7CE39A; border-radius:999px; padding:4px 11px; }
 .tv-tipo.amer{ background:#D4AF37; }
 .tv-ok{ font-size:18px; font-weight:800; color:#0A0A0B; background:#2ECC71; border-radius:6px; padding:2px 7px; align-self:flex-start; }
@@ -2524,7 +2532,7 @@ function renderEvolucion(s){
      '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
       var ag = !(p.q > 0) && !p.pronto, i = l.indexOf(p), ll = p.llega ? ' · ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) : '';
       return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + '</div>' +
-       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' + tvBadges_(p, ag, false) +
+       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' + tvBadges_(p, ag, false) + tvMacrosHtml_(tvMacros_(p), false) +
        (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
        (ag ? '' : p.pronto ? '<span class="tv-ok pronto">⏳ LLEGA PRONTO' + ll + '</span>' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
        '<span class="tv-pr">' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + clp(p.precio) + '</span><span class="tv-btn">' + (p.pronto && !ag ? '🔔 Reservar' : ag ? (p.vendido ? 'Ya se vendió' : 'Pronto vuelve') : '💬 Lo quiero') + '</span></div></button>';
@@ -2542,6 +2550,20 @@ function renderEvolucion(s){
    pintar();
   });
  }
+ /* 🥤 Macros de los batidos (27-10-2026, la dueña: "a mis socios ponle el cálculo de los macros en los batidos"):
+    los mismos de los letreros de recepción (letreros-batidos.html), por vaso de 500 ml. */
+ var TIENDA_MACROS = [
+  { re:/^batido ganador/i, k:670, p:44, c:74, g:24, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, avena y mantequilla de maní", al:"leche, soya y maní" },
+  { re:/^batido de prote/i, k:315, p:32, c:27, g:9, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, hielo y un toque de canela o cacao", al:"leche y soya" }
+ ];
+ function tvMacros_(p){ for(var i = 0; i < TIENDA_MACROS.length; i++) if(TIENDA_MACROS[i].re.test(p.n)) return TIENDA_MACROS[i]; return null; }
+ function tvMacrosHtml_(m, grande){
+  if(!m) return "";
+  if(!grande) return '<span class="tv-mac">🔥 ' + m.k + ' kcal · 💪 ' + m.p + ' g proteína</span>';
+  return '<div class="tv-macros"><p class="tv-mac-t">Macros por vaso (500 ml)</p><div class="tv-mac-g">' +
+   [["🔥", m.k, "Calorías"], ["💪", m.p + " g", "Proteína"], ["🍞", m.c + " g", "Carbohidratos"], ["🥑", m.g + " g", "Grasas"]].map(function(x){ return '<div><span>' + x[0] + '</span><b>' + x[1] + '</b><small>' + x[2] + '</small></div>'; }).join("") +
+   '</div><p class="rank-sub">🥤 Lleva: ' + m.lleva + '.</p><p class="rank-sub">⚠️ Contiene ' + m.al + '.</p></div>';
+ }
  /* «✨ Nueva / ♻️ Americana» y «⏳ Llega pronto» en una misma fila (27-10-2026, la dueña: "el llega pronto al lado de nueva"). */
  function tvBadges_(p, ag, grande){
   var ll = p.llega ? ' · ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) : '';
@@ -2553,7 +2575,7 @@ function renderEvolucion(s){
   var ropa = /^(Ropa|Zapatillas)/.test(p.cat) || (p.pack && p.q <= 1), max = ropa ? 1 : p.pronto ? 9 : Math.max(1, Math.min(p.q, 9)), cant = 1;
   var fondo = document.createElement("div"); fondo.className = "tv-modal";
   fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big">' + tiendaFotos_(p) + '</div>' +
-   '<h3>' + escapeHtml(p.n) + '</h3>' + tvBadges_(p, false, true) + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
+   '<h3>' + escapeHtml(p.n) + '</h3>' + tvBadges_(p, false, true) + tvMacrosHtml_(tvMacros_(p), true) + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
    '<p class="tv-total">Precio: ' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + '<b>' + clp(p.precio) + '</b>' + (p.nuevo ? ' 🚀 precio de lanzamiento' : '') + '</p>' +  (p.ahorro ? '<p class="tv-total" style="color:#7CE39A">🎁 Llevando el pack ahorras ' + clp(p.antes - p.precio) + ' (' + p.ahorro + ' %) que comprando cada cosa por separado</p>' : '') +
    (max > 1 ? '<div class="tv-cant"><button type="button" id="tvMenos">−</button><b id="tvCant">1</b><button type="button" id="tvMasUno">+</button></div>' : '') +
    '<p class="tv-total" id="tvTot"></p>' +
@@ -2614,7 +2636,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102720", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102721", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
