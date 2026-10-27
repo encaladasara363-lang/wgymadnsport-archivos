@@ -109,8 +109,11 @@ nav#nav button[aria-pressed="true"]{ color:var(--red2); }
 #toast{ position:fixed; left:50%; bottom:calc(96px + env(safe-area-inset-bottom)); transform:translateX(-50%); background:#111; border:2px solid var(--gold); color:#fff; padding:12px 18px; border-radius:14px; z-index:60; font-size:17px; max-width:92vw; text-align:center; display:none; }
 .velo{ position:fixed; inset:0; background:rgba(0,0,0,.72); z-index:40; display:flex; align-items:flex-end; justify-content:center; }
 .velo[hidden]{ display:none; }
-.hoja{ background:var(--card); border-top:3px solid var(--gold); border-radius:20px 20px 0 0; width:100%; max-width:760px; max-height:92vh; overflow:auto; padding:16px 16px calc(20px + env(safe-area-inset-bottom)); }
+.hoja{ background:var(--card); border-top:3px solid var(--gold); border-radius:20px 20px 0 0; width:100%; max-width:760px; max-height:92vh; max-height:calc(92vh / 1.22); overflow:auto; padding:16px 16px calc(20px + env(safe-area-inset-bottom)); }
 .hoja .cab{ display:flex; justify-content:space-between; align-items:center; gap:10px; }
+/* El título con «← Volver» queda pegado arriba al bajar por la ficha (27-10-2026, la dueña: "debería haber un botón volver"). */
+.hoja .cab{ position:sticky; top:-16px; z-index:5; background:var(--card); margin:-16px -16px 8px; padding:14px 16px 10px; border-bottom:1px solid var(--line); }
+.btn.chico.volver{ background:#FFD400; color:#000; border-color:#000; flex:none; }
 .hoja h3{ font-family:var(--tit); font-weight:400; text-transform:uppercase; font-size:24px; margin:0; }
 .cam{ position:relative; border-radius:16px; overflow:hidden; background:#000; aspect-ratio:4/3; border:2px solid var(--gold); }
 .cam video{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -369,7 +372,7 @@ function moverApartado(id, cant, nota){ var q = prod(id); if(q) q.stock += cant;
 function formApartar(p){
  var horas = 48;
  function pintar(){
-  abrirHoja('<div class="cab"><h3>📌 Apartar</h3><button class="btn chico" id="aCerrar">Cerrar</button></div><p style="font-size:19px;text-transform:uppercase;margin:8px 0">' + esc(p.n) + (p.det ? ' · <span class="muted">' + esc(p.det) + '</span>' : '') + '</p>' +
+  abrirHoja('<div class="cab"><h3>📌 Apartar</h3><button class="btn chico volver" id="aCerrar">← Volver</button></div><p style="font-size:19px;text-transform:uppercase;margin:8px 0">' + esc(p.n) + (p.det ? ' · <span class="muted">' + esc(p.det) + '</span>' : '') + '</p>' +
    '<label class="lab" for="aNom">¿Para quién? (nombre y apellido)</label><input class="inp" id="aNom" placeholder="Ej: Juan Pérez" autocomplete="off">' +
    '<label class="lab">¿Por cuánto tiempo?</label><div class="chips">' + HORAS_APARTADO.map(function(h){ return '<button class="chip" data-h="' + h + '" aria-pressed="' + (h === horas) + '">' + h + ' horas</button>'; }).join("") + '</div>' +
    '<p class="muted" style="font-size:15px">Mientras esté apartado nadie más lo puede comprar. Si no lo retira a tiempo, vuelve solo a la venta.</p>' +
@@ -411,7 +414,7 @@ function revisarApartados(){
 }
 function verApartados(){
  var l = apartados();
- abrirHoja('<div class="cab"><h3>📌 Apartados</h3><button class="btn chico" id="vaCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>📌 Apartados</h3><button class="btn chico volver" id="vaCerrar">← Volver</button></div>' +
   (l.length ? l.map(function(x){ var p = prod(x.id);
    return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.det || p.cat) + '</span></div></div>' +
     '<p style="margin:8px 0 0;font-size:17px">Para <b>' + esc(x.nombre) + '</b> · ' + (aptVencido(x) ? '<b style="color:#FF8A8F">⏰ se le pasó la hora</b>' : 'hasta ' + aptHasta(x)) + '</p>' +
@@ -471,7 +474,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102713";
+var TIENDA_VERSION = "2026102714";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -672,7 +675,7 @@ function queComprar(){
 }
 function verQueComprar(){
  var l = queComprar(), total = l.reduce(function(s, x){ return s + x.comprar * x.p.costo; }, 0);
- abrirHoja('<div class="cab"><h3>🛍 Qué comprar</h3><button class="btn chico" id="qCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>🛍 Qué comprar</h3><button class="btn chico volver" id="qCerrar">← Volver</button></div>' +
   (l.length ? '<p class="muted" style="margin:6px 0">Según lo que vendiste en los últimos 30 días. La cantidad es una sugerencia: cámbiala si quieres.</p>' +
    l.map(function(x){ var p = x.p;
     return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.det || p.cat) + '</span></div></div>' +
@@ -736,7 +739,7 @@ function verCalcPedido(){
     (c.l.length > 1 ? '<button class="btn chico" data-cdel="' + i + '" style="margin-top:6px;color:#FF8A8F">🗑 Quitar</button>' : '') + '</div>';
   }).join("");
  }
- abrirHoja('<div class="cab"><h3>🧮 Calcular pedido</h3><button class="btn chico" id="cCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>🧮 Calcular pedido</h3><button class="btn chico volver" id="cCerrar">← Volver</button></div>' +
   '<p class="muted" style="margin:6px 0">Para la ropa de Shein (o cualquier pedido): reparte el envío y los impuestos entre las prendas y te dice a cuánto venderlas.</p>' +
   '<label class="lab" for="cNom">Nombre del pedido</label><input class="inp" id="cNom" value="' + esc(c.nom || "") + '" placeholder="Ej: Shein octubre">' +
   '<label class="lab" for="cTot">¿Cuánto pagaste en total? (con envío e impuestos)</label><input class="inp" id="cTot" inputmode="numeric" value="' + esc(c.total) + '" placeholder="$">' +
@@ -773,7 +776,7 @@ function pillVence(p){
 }
 function verPorVencer(){
  var l = porVencer(), con = activos().filter(function(p){ return p.vence; }).length;
- abrirHoja('<div class="cab"><h3>⏰ Por vencer</h3><button class="btn chico" id="vCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>⏰ Por vencer</h3><button class="btn chico volver" id="vCerrar">← Volver</button></div>' +
   (l.length ? '<p class="muted" style="margin:6px 0">Lo que vence en los próximos 30 días. Véndelo primero o haz una oferta.</p>' +
    l.map(function(x){ var p = x.p;
     return '<div class="card"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>Quedan ' + p.stock + '</span></div></div>' +
@@ -810,7 +813,7 @@ function noSeMueven(){
 }
 function verNoSeMueven(){
  var l = noSeMueven(), parado = l.reduce(function(s, x){ return s + x.p.stock * x.p.costo; }, 0);
- abrirHoja('<div class="cab"><h3>🐢 Ropa que no se vende</h3><button class="btn chico" id="nCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>🐢 Ropa que no se vende</h3><button class="btn chico volver" id="nCerrar">← Volver</button></div>' +
   (l.length ? '<p class="muted" style="margin:6px 0">Prendas que llevan 2 meses o más sin venderse. Muévelas con una oferta antes de que pasen de moda.</p>' +
    '<div class="kpi" style="margin-bottom:8px"><small>Plata parada en esta ropa (a costo)</small><b>' + plata(parado) + '</b></div>' +
    l.map(function(x){ var p = x.p;
@@ -835,7 +838,7 @@ var PUB_ETQS = ["", "NUEVO", "OFERTA", "ÚLTIMAS UNIDADES", "LLEGÓ"];
 function crearPublicacion(p, op){
  op = op || {};
  var est = { fmt:"post", etq:op.etq || "", oferta:op.oferta || "" };
- abrirHoja('<div class="cab"><h3>📸 Publicación</h3><button class="btn chico" id="pCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>📸 Publicación</h3><button class="btn chico volver" id="pCerrar">← Volver</button></div>' +
   '<div class="chips" style="margin-top:6px"><button class="chip" data-pf="post">Publicación</button><button class="chip" data-pf="hist">Historia / estado</button></div>' +
   '<label class="lab">Etiqueta</label><div class="chips">' + PUB_ETQS.map(function(e){ return '<button class="chip" data-pe="' + e + '">' + (e || "Sin etiqueta") + '</button>'; }).join("") + '</div>' +
   '<label class="lab" for="pOf">Precio de oferta (opcional)</label><input class="inp" id="pOf" inputmode="decimal" placeholder="Déjalo vacío para el precio normal (' + plata(p.precio) + ')" value="' + (est.oferta || "") + '">' +
@@ -972,7 +975,7 @@ function pedidos(){ return (S.gastos || []).filter(function(g){ return g.tipo ==
 function nombrePedido(id){ var g = pedidos().filter(function(x){ return x.id === id; })[0]; return g ? g.det : "Pedido"; }
 function verPedidos(){
  var l = pedidos();
- abrirHoja('<div class="cab"><h3>📦 Mis pedidos</h3><button class="btn chico" id="pdCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>📦 Mis pedidos</h3><button class="btn chico volver" id="pdCerrar">← Volver</button></div>' +
   '<p class="muted" style="margin:6px 0">Cuánto llevas recuperado de lo que pagaste por cada pedido. Los productos se unen al pedido al crearlos desde «🧮 Calcular pedido» o eligiendo el pedido en su ficha.</p>' +
   (l.length ? l.map(function(g){
    var ps = S.productos.filter(function(p){ return p.ext && p.ext.ped === g.id; }), ids = {}; ps.forEach(function(p){ ids[p.id] = 1; });
@@ -1025,7 +1028,7 @@ function formPack(){
   gan();
  }
  function gan(){ var ps = partes().filter(function(x){ return x.c; }), costo = ps.reduce(function(s, x){ return s + x.p.costo * x.c; }, 0), pr = num($("pkPre").value); $("pkGan").textContent = pr > 0 && ps.reduce(function(s, x){ return s + x.c; }, 0) > 1 ? (pr > costo ? "💰 Ganas " + plata(pr - costo) + " con el pack" : "⚠️ Ese precio no deja ganancia") : ""; }
- abrirHoja('<div class="cab"><h3>🎁 Armar pack</h3><button class="btn chico" id="pkCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>🎁 Armar pack</h3><button class="btn chico volver" id="pkCerrar">← Volver</button></div>' +
   '<p class="muted" style="margin:6px 0">Junta 2 o más productos (ej. top + calza) a un precio especial. Al venderlo se descuenta cada parte.</p>' +
   '<div id="pkElegidos"></div><input class="inp amarillo" id="pkQ" placeholder="🔎 Buscar producto…" autocomplete="off" style="margin-top:8px"><div class="chips" id="pkCats" style="margin-top:8px"></div><div id="pkLista" style="margin-top:6px"></div>' +
   '<div id="pkRes"></div><label class="lab" for="pkN">Nombre del pack</label><input class="inp" id="pkN">' +
@@ -1048,7 +1051,7 @@ function formPack(){
 }
 function formProducto(p, codNuevo, base){
  var nuevo = !p; p = p || Object.assign({ n:"", cat:"Bebestibles", det:"", cod:codNuevo || "", costo:"", precio:"", stock:"", min:3, foto:"" }, base || {});
- abrirHoja('<div class="cab"><h3>' + (nuevo ? '➕ Producto nuevo' : '✏️ Editar producto') + '</h3><button class="btn chico" id="fCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>' + (nuevo ? '➕ Producto nuevo' : '✏️ Editar producto') + '</h3><button class="btn chico volver" id="fCerrar">← Volver</button></div>' +
   (p.foto ? '<div style="text-align:center;margin:8px 0"><img src="' + esc(fotoUrl(p.foto)) + '" alt="" style="max-height:140px;border-radius:12px;border:1px solid var(--line)"></div>' : '') +
   '<label class="lab" for="fN">Nombre</label><input class="inp" id="fN" value="' + esc(p.n) + '" placeholder="Ej: Agua mineral 500 ml">' +
   '<label class="lab" for="fCat">Categoría</label><select class="inp" id="fCat">' + CATS.map(function(c){ return '<option' + (c[0] === p.cat ? ' selected' : '') + '>' + c[0] + '</option>'; }).join("") + '</select>' +
@@ -1102,7 +1105,7 @@ function formProducto(p, codNuevo, base){
  };
 }
 function formEntrada(p, ajuste){
- abrirHoja('<div class="cab"><h3>' + (ajuste ? '⚖️ Ajustar stock' : '➕ Llegó mercadería') + '</h3><button class="btn chico" id="eCerrar">Cerrar</button></div><p style="font-size:19px;text-transform:uppercase;margin:8px 0">' + esc(p.n) + ' · <span class="muted">quedan ' + p.stock + '</span></p>' +
+ abrirHoja('<div class="cab"><h3>' + (ajuste ? '⚖️ Ajustar stock' : '➕ Llegó mercadería') + '</h3><button class="btn chico volver" id="eCerrar">← Volver</button></div><p style="font-size:19px;text-transform:uppercase;margin:8px 0">' + esc(p.n) + ' · <span class="muted">quedan ' + p.stock + '</span></p>' +
   (ajuste ? '<label class="lab" for="eCant">¿Cuántos hay de verdad ahora? (cuéntalos)</label><input class="inp" id="eCant" inputmode="numeric" value="' + p.stock + '">' +
    '<label class="lab" for="eNota">Motivo</label><input class="inp" id="eNota" placeholder="Ej: se rompió uno · conteo">'
    : '<label class="lab" for="eCant">¿Cuántos llegaron?</label><input class="inp" id="eCant" inputmode="numeric" placeholder="Ej: 12">' +
@@ -1137,7 +1140,7 @@ function pctDe(cat){ var o = repartos(); return o[cat || "todo"] != null ? o[cat
 function catNueva(c){ return c === "Bebidas" ? "Bebestibles" : c === "Ropa deportiva" ? "Ropa mujer" : c; }
 function catDeMov(m){ var p = S.productos.filter(function(x){ return x.id === m.id; })[0]; return catNueva(p ? p.cat : (m.cat || "Otro")); }
 function formGasto(){
- abrirHoja('<div class="cab"><h3>🧾 Anotar gasto</h3><button class="btn chico" id="gCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>🧾 Anotar gasto</h3><button class="btn chico volver" id="gCerrar">← Volver</button></div>' +
   '<label class="lab" for="gDet">¿En qué gastaste?</label><input class="inp" id="gDet" placeholder="Ej: bolsas · etiquetas · hielo · envío">' +
   '<div class="chips" style="margin-top:6px">' + ["Bolsas","Etiquetas","Hielo","Envío","Vasos"].map(function(x){ return '<button class="chip" data-gs="' + x + '">' + x + '</button>'; }).join("") + '</div>' +
   '<label class="lab" for="gMon">¿Cuánto?</label><input class="inp amarillo" id="gMon" inputmode="numeric" placeholder="$">' +
@@ -1281,7 +1284,7 @@ function htmlCierreBoton(){
 }
 function formCierre(){
  var o = cuentasHoy(), hoy = S.hoy || hoyISO(), prev = cierres().filter(function(x){ return x.dia === hoy; })[0], fondo = prev ? prev.fondo : lsGet(CLAVE_FONDO, 0);
- abrirHoja('<div class="cab"><h3>🧾 Cierre de caja</h3><button class="btn chico" id="cCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>🧾 Cierre de caja</h3><button class="btn chico volver" id="cCerrar">← Volver</button></div>' +
   '<p class="muted" style="margin:6px 0">Hoy, ' + fechaCorta(hoy) + ' · ' + o.ventas + ' venta' + (o.ventas === 1 ? '' : 's') + '</p>' +
   '<table class="top"><tr><td>💵 Ventas en efectivo</td><td class="r">' + plata(o.ef) + '</td></tr>' +
   (o.fiadoEf ? '<tr><td>📒 Fiados que te pagaron hoy en efectivo</td><td class="r">' + plata(o.fiadoEf) + '</td></tr>' : '') +
@@ -1321,7 +1324,7 @@ function formCierre(){
 /* Abono de un fiado en cuotas (o el saldo completo si «todo»). Va directo a la planilla (Versión 26). */
 function formAbono(vid, debe, todo){
  var medio = "efectivo";
- abrirHoja('<div class="cab"><h3>' + (todo ? '✅ Pagó lo que debía' : '💵 Abonar') + '</h3><button class="btn chico" id="abCerrar">Cerrar</button></div>' +
+ abrirHoja('<div class="cab"><h3>' + (todo ? '✅ Pagó lo que debía' : '💵 Abonar') + '</h3><button class="btn chico volver" id="abCerrar">← Volver</button></div>' +
   '<p style="font-size:18px;margin:8px 0">Debe ' + plata(debe) + '</p>' +
   '<label class="lab" for="abM">¿Cuánto pagó?</label><input class="inp amarillo" id="abM" inputmode="numeric" value="' + debe + '"' + (todo ? ' readonly' : '') + '>' +
   '<label class="lab">¿Cómo pagó?</label><div class="pagos">' + PAGOS.filter(function(p){ return p[0] !== "fiado"; }).map(function(p){ return '<button data-abp="' + p[0] + '" aria-pressed="' + (p[0] === medio) + '">' + p[1] + '</button>'; }).join("") + '</div>' +
@@ -1360,7 +1363,7 @@ function renderFiados(){
  v.querySelectorAll("[data-abonar]").forEach(function(b){ b.onclick = function(){ formAbono(b.dataset.abonar, +b.dataset.debe, false); }; });
  v.querySelectorAll("[data-pagado]").forEach(function(b){ b.onclick = function(){
   if(+b.dataset.ab > 0){ formAbono(b.dataset.pagado, +b.dataset.debe, true); return; }
-  abrirHoja('<div class="cab"><h3>¿Cómo pagó?</h3><button class="btn chico" id="pCerrar">Cerrar</button></div><div class="pagos" style="margin-top:12px">' + PAGOS.filter(function(p){ return p[0] !== "fiado"; }).map(function(p){ return '<button data-pp="' + p[0] + '">' + p[1] + '</button>'; }).join("") + '</div>');
+  abrirHoja('<div class="cab"><h3>¿Cómo pagó?</h3><button class="btn chico volver" id="pCerrar">← Volver</button></div><div class="pagos" style="margin-top:12px">' + PAGOS.filter(function(p){ return p[0] !== "fiado"; }).map(function(p){ return '<button data-pp="' + p[0] + '">' + p[1] + '</button>'; }).join("") + '</div>');
   $("pCerrar").onclick = cerrarHoja;
   document.querySelectorAll("[data-pp]").forEach(function(x){ x.onclick = function(){
    x.disabled = true;
