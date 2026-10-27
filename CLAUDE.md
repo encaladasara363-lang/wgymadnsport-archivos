@@ -1600,7 +1600,7 @@ productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/In
   tope 9; nunca costos). Botones por categoría, 6 productos y «Ver todos», «✔ Disponible» o «¡Quedan N!» (≤3); sin stock,
   foto gris con sello **AGOTADO** y «Pronto vuelve» (vuelve solo al cargar mercadería); «🗑 Ya no lo vendo (ocultar)» del
   inventario lo saca de la tarjeta. «💬 Lo quiero» abre la ventanita (`tiendaVentanita_`: foto grande, precio, cantidad
-  −/+ hasta lo que queda, en ropa fija en 1, total) y «Sí, avisarle a Sara» abre WhatsApp a +56 9 7519 6394 con «Soy
+  −/+ hasta lo que queda, en ropa fija en 1, total) y «💬 Pedir por WhatsApp» (antes «Sí, avisarle a Sara»; la dueña lo cambió el 27-10-2026) abre WhatsApp a +56 9 7519 6394 con «Soy
   NOMBRE APELLIDO… Quiero: N × producto · detalle · $total». El stock solo baja cuando ella cobra en 🛒 Vender. Ropa por
   sexo (la dueña: "me conviene poner todo porque le sirve para regalar"): todos ven toda la ropa, pero primero la de su
   sexo (botón y lista; mismo `coachSexo` de las rutinas) y al final «🎁 ¿Buscas un regalo? Mira la ropa de hombre/mujer»;
