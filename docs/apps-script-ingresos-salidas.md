@@ -255,3 +255,12 @@ INGRESOS.gs, guardar, Implementar → Administrar implementaciones → lápiz �
 Se instala igual que las anteriores (o con el botón de `copiar-codigo.html`): pegar `Ingresos.gs` completo en
 INGRESOS.gs, guardar, Implementar → Administrar implementaciones → lápiz → Versión nueva → Implementar
 (para volver atrás: Versión 27).
+
+## Versión 29 (27-10-2026): 📌 Tienda — apartados como «RESERVADO»
+
+- `tiendaVitrina`: un producto apartado desde el inventario («📌 Apartar», ajuste con nota «APARTADO #…» que todavía no
+  tiene «LIBERADO» ni «RETIRADO») y sin stock manda `reservado: true`, para que la tarjeta lo muestre «RESERVADO» en vez
+  de «SIN STOCK». Nunca se envía el nombre.
+- `tiendaListar` responde `v: 29`.
+
+Se instala igual que las anteriores (o con el botón de `copiar-codigo.html`); para volver atrás: Versión 28.
