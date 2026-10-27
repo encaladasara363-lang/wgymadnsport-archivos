@@ -262,6 +262,8 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-badges.grande{ margin:8px 0 4px; }
 .tv-badges.grande .tv-tipo{ font-size:21px; padding:5px 14px; }
 .tv-tipo.pronto{ background:#5BC0FF; }
+.tv-crea{ display:block; width:100%; margin:4px 0 12px; padding:12px; border-radius:12px; border:2px solid var(--dorado); background:#0D0D0F; color:#FFD400; font:800 italic 22px 'Barlow Condensed',Arial,sans-serif; }
+.tv-crea.on{ background:#2ECC71; border-color:#1fa856; color:#000; }
 .tv-mac{ font-size:18px; font-weight:800; color:#FFD400; }
 .tv-macros{ margin:10px 0; padding:10px; border:2px solid var(--dorado); border-radius:12px; background:#0D0D0F; }
 .tv-mac-t{ margin:0 0 8px; font:800 italic 20px 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; color:var(--dorado); text-align:center; }
@@ -2573,28 +2575,34 @@ function renderEvolucion(s){
  }
  function tiendaVentanita_(s, p){
   var ropa = /^(Ropa|Zapatillas)/.test(p.cat) || (p.pack && p.q <= 1), max = ropa ? 1 : p.pronto ? 9 : Math.max(1, Math.min(p.q, 9)), cant = 1;
+  /* «+ Creatina $1.000» en los batidos (27-10-2026, la dueña: "le falta por 1000 más la creatina"), igual que en 🛒 Vender. */
+  var conCrea = !!tvMacros_(p), crea = false, CREA = 1000;
+  function unidad(){ return p.precio + (crea ? CREA : 0); }
   var fondo = document.createElement("div"); fondo.className = "tv-modal";
   fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big">' + tiendaFotos_(p) + '</div>' +
    '<h3>' + escapeHtml(p.n) + '</h3>' + tvBadges_(p, false, true) + tvMacrosHtml_(tvMacros_(p), true) + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
    '<p class="tv-total">Precio: ' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + '<b>' + clp(p.precio) + '</b>' + (p.nuevo ? ' 🚀 precio de lanzamiento' : '') + '</p>' +  (p.ahorro ? '<p class="tv-total" style="color:#7CE39A">🎁 Llevando el pack ahorras ' + clp(p.antes - p.precio) + ' (' + p.ahorro + ' %) que comprando cada cosa por separado</p>' : '') +
+   (conCrea ? '<button type="button" class="tv-crea" id="tvCrea">💪 + Creatina ' + clp(CREA) + '</button>' : '') +
    (max > 1 ? '<div class="tv-cant"><button type="button" id="tvMenos">−</button><b id="tvCant">1</b><button type="button" id="tvMasUno">+</button></div>' : '') +
    '<p class="tv-total" id="tvTot"></p>' +
    '<button type="button" class="pago-btn principal" id="tvSi" style="width:100%">' + (p.pronto ? '🔔 Reservar por WhatsApp' : '💬 Pedir por WhatsApp') + '</button>' +
    '<button type="button" class="tv-volver" id="tvVolver">← Volver</button></div>';
   document.body.appendChild(fondo);
-  function tot(){ var c = fondo.querySelector("#tvCant"); if(c) c.textContent = cant; fondo.querySelector("#tvTot").innerHTML = max > 1 ? 'Total: <b>' + clp(p.precio * cant) + '</b>' : ''; }
+  function tot(){ var c = fondo.querySelector("#tvCant"); if(c) c.textContent = cant; fondo.querySelector("#tvTot").innerHTML = max > 1 || crea ? 'Total: <b>' + clp(unidad() * cant) + '</b>' + (crea ? ' (con creatina)' : '') : '';
+   var bc = fondo.querySelector("#tvCrea"); if(bc){ bc.classList.toggle("on", crea); bc.textContent = crea ? '✔ Con creatina (+' + clp(CREA) + ') · quitar' : '💪 + Creatina ' + clp(CREA); } }
   function cerrar(){ fondo.remove(); }
   tot();
   if(max > 1){
    fondo.querySelector("#tvMenos").addEventListener("click", function(){ if(cant > 1){ cant--; tot(); } });
    fondo.querySelector("#tvMasUno").addEventListener("click", function(){ if(cant < max){ cant++; tot(); } });
   }
+  if(conCrea) fondo.querySelector("#tvCrea").addEventListener("click", function(){ crea = !crea; tot(); });
   fondo.querySelector("#tvVolver").addEventListener("click", cerrar);
   fondo.addEventListener("click", function(ev){ if(ev.target === fondo) cerrar(); });
   fondo.querySelector("#tvSi").addEventListener("click", function(){
    var quien = ((s.nombre || "") + " " + (s.apellido || "")).trim().toUpperCase();
-   var txt = "Hola 👋 Soy " + quien + " (socio/a WGYM).\nQuiero de la tienda:\n🛍 " + (cant > 1 ? cant + " × " : "") + p.n + (p.det ? " · " + p.det : "") +
-    " · " + clp(p.precio * cant) + (p.pronto ? "\n⏳ Sé que llega pronto: ¿me lo reservas y me avisas cuando llegue?" : "\n¿Me lo puedes guardar?");
+   var txt = "Hola 👋 Soy " + quien + " (socio/a WGYM).\nQuiero de la tienda:\n🛍 " + (cant > 1 ? cant + " × " : "") + p.n + (crea ? " + creatina" : "") + (p.det ? " · " + p.det : "") +
+    " · " + clp(unidad() * cant) + (p.pronto ? "\n⏳ Sé que llega pronto: ¿me lo reservas y me avisas cuando llegue?" : "\n¿Me lo puedes guardar?");
    window.open("https://wa.me/" + TIENDA_WSP + "?text=" + encodeURIComponent(txt), "_blank");
    cerrar();
   });
@@ -2636,7 +2644,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102721", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102722", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
