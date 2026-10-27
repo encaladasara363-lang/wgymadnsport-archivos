@@ -2479,10 +2479,11 @@ function renderEvolucion(s){
  var TIENDA_VITRINA_ACTIVA = true;
  var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Packs":"🎁", "Otro":"📦" };
  function tiendaCat_(c){ return c === "Bebidas" ? "Bebestibles" : (c === "Ropa deportiva" ? "Ropa mujer" : (c || "Otro")); }
- function tiendaFoto_(p){ return p.foto ? escapeHtml(p.foto) + "?v=" + TIENDA_FOTO_V : "maquinas-wgymadnsport/comun/logo.png"; }
+ function tiendaFotoUrl_(f){ return /^data:/.test(f) ? f : escapeHtml(f) + "?v=" + TIENDA_FOTO_V; }
+ function tiendaFoto_(p){ return p.foto ? tiendaFotoUrl_(p.foto) : "maquinas-wgymadnsport/comun/logo.png"; }
  /* Pack (Versión 27 del Apps Script): las fotos de todas sus partes juntas, lado a lado. */
  function tiendaFotos_(p){
-  if(p.fotos && p.fotos.length > 1) return '<div class="tv-pack">' + p.fotos.map(function(f){ return '<img loading="lazy" src="' + escapeHtml(f) + '?v=' + TIENDA_FOTO_V + '" alt="">'; }).join("") + '</div>';
+  if(p.fotos && p.fotos.length > 1) return '<div class="tv-pack">' + p.fotos.map(function(f){ return '<img loading="lazy" src="' + tiendaFotoUrl_(f) + '" alt="">'; }).join("") + '</div>';
   return '<img loading="lazy" src="' + tiendaFoto_(p) + '" alt="">';
  }
  function renderTienda_(s){
@@ -2605,7 +2606,7 @@ function renderEvolucion(s){
     " · " + clp(unidad() * cant) + (p.pronto ? "\n⏳ Sé que llega pronto: ¿me lo reservas y me avisas cuando llegue?" : "\n¿Me lo puedes guardar?") +
     /* La foto del producto al final (27-10-2026, la dueña: "me cuesta identificar por nombre lo que quiere"):
        WhatsApp muestra la vista previa de la primera foto. */
-    (p.fotos && p.fotos.length ? p.fotos : p.foto ? [p.foto] : []).map(function(f){ return "\n📷 " + TIENDA_SITIO + encodeURI(f); }).join("");
+    (p.fotos && p.fotos.length ? p.fotos : p.foto ? [p.foto] : []).filter(function(f){ return !/^data:/.test(f); }).map(function(f){ return "\n📷 " + TIENDA_SITIO + encodeURI(f); }).join("");
    window.open("https://wa.me/" + TIENDA_WSP + "?text=" + encodeURIComponent(txt), "_blank");
    cerrar();
   });
@@ -2647,7 +2648,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102724", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102725", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

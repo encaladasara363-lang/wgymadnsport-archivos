@@ -258,7 +258,27 @@ function ahoraTxt(){ var f = new Intl.DateTimeFormat("sv-SE", { timeZone:"Americ
 function normTxt(s){ return String(s || "").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
 /* Al cambiar una foto en img/tienda/ (mismo nombre), subir FOTO_V para que los teléfonos no muestren la antigua. */
 var FOTO_V = "49";
-function fotoUrl(f){ return f ? f + (f.indexOf("?") < 0 ? "?v=" + FOTO_V : "") : ""; }
+function fotoUrl(f){ return f ? (/^data:/.test(f) ? f : f + (f.indexOf("?") < 0 ? "?v=" + FOTO_V : "")) : ""; }
+/* 📷 Foto subida desde el celular (27-10-2026, la dueña: "¿no lo puedo hacer todo sin depender de ti?"): se achica a
+   máx. 480 × 640, se le pone el logo del gimnasio arriba a la izquierda (34 % del ancho, como las demás fotos) y se guarda
+   como imagen dentro de la planilla (texto «data:», menos de 45.000 letras: una celda aguanta 50.000). */
+var LOGO_TIENDA = "maquinas-wgymadnsport/comun/logo.png";
+function prepararFotoTienda(file){
+ function cargar(src){ return new Promise(function(ok, mal){ var i = new Image(); i.onload = function(){ ok(i); }; i.onerror = mal; i.src = src; }); }
+ var url = URL.createObjectURL(file);
+ return Promise.all([cargar(url), cargar(LOGO_TIENDA)["catch"](function(){ return null; })]).then(function(r){
+  URL.revokeObjectURL(url);
+  var img = r[0], logo = r[1], lados = [[480, 640], [400, 533], [330, 440]];
+  for(var k = 0; k < lados.length; k++){
+   var e = Math.min(1, lados[k][0] / img.width, lados[k][1] / img.height), w = Math.round(img.width * e), h = Math.round(img.height * e);
+   var cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+   var cx = cv.getContext("2d"); cx.fillStyle = "#fff"; cx.fillRect(0, 0, w, h); cx.drawImage(img, 0, 0, w, h);
+   if(logo){ var lw = Math.round(w * 0.34), lh = Math.round(lw * logo.height / logo.width), m = Math.round(w * 0.027); cx.drawImage(logo, m, m, lw, lh); }
+   for(var q = 0.8; q >= 0.45; q -= 0.07){ var d = cv.toDataURL("image/jpeg", q); if(d.length < 45000) return d; }
+  }
+  throw new Error("grande");
+ });
+}
 function iconoCat(c){ var x = CATS.filter(function(k){ return k[0] === c; })[0]; return x ? x[1] : "📦"; }
 function toast(t, ms){ var el = $("toast"); el.textContent = t; el.style.display = "block"; clearTimeout(toast.t); toast.t = setTimeout(function(){ el.style.display = "none"; }, ms || 2600); }
 function vibrar(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms || 30); }catch(e){} }
@@ -479,7 +499,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102728";
+var TIENDA_VERSION = "2026102729";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1118,7 +1138,9 @@ function formPack(){
 function formProducto(p, codNuevo, base){
  var nuevo = !p; p = p || Object.assign({ n:"", cat:"Bebestibles", det:"", cod:codNuevo || "", costo:"", precio:"", stock:"", min:3, foto:"" }, base || {});
  abrirHoja('<div class="cab"><h3>' + (nuevo ? '➕ Producto nuevo' : '✏️ Editar producto') + '</h3><button class="btn chico volver" id="fCerrar">← Volver</button></div>' +
-  (p.foto ? '<div style="text-align:center;margin:8px 0"><img src="' + esc(fotoUrl(p.foto)) + '" alt="" style="max-height:140px;border-radius:12px;border:1px solid var(--line)"></div>' : '') +
+  '<div style="text-align:center;margin:8px 0"><img id="fFotoPrev" src="' + esc(fotoUrl(p.foto)) + '" alt=""' + (p.foto ? '' : ' hidden') + ' style="max-height:160px;border-radius:12px;border:1px solid var(--line)"></div>' +
+  '<label class="btn oro" for="fFotoIn" style="display:block;text-align:center">📸 ' + (p.foto ? 'Cambiar la foto' : 'Poner foto del producto') + '</label><input type="file" id="fFotoIn" accept="image/*" hidden>' +
+  '<p class="muted" id="fFotoTxt" style="font-size:14px;margin:4px 0 0">Saca la foto o elígela de tu galería: el logo del gimnasio se le pone solo.</p>' +
   '<label class="lab" for="fN">Nombre</label><input class="inp" id="fN" value="' + esc(p.n) + '" placeholder="Ej: Agua mineral 500 ml">' +
   '<label class="lab" for="fCat">Categoría</label><select class="inp" id="fCat">' + CATS.map(function(c){ return '<option' + (c[0] === p.cat ? ' selected' : '') + '>' + c[0] + '</option>'; }).join("") + '</select>' +
   '<label class="lab" for="fDet">Detalle (sabor, talla, color, tamaño)</label><input class="inp" id="fDet" value="' + esc(p.det) + '" placeholder="Ej: Talla M · negro">' +
@@ -1151,8 +1173,15 @@ function formProducto(p, codNuevo, base){
  $("fCerrar").onclick = cerrarHoja;
  if($("fPub")) $("fPub").onclick = function(){ crearPublicacion(p); };
  $("fEsc").onclick = function(){ abrirEscanerSimple(function(cod){ $("fCod").value = cod; }); };
+ var fotoForm = p.foto || "";
+ $("fFotoIn").onchange = function(){
+  var f = this.files && this.files[0]; this.value = ""; if(!f) return;
+  $("fFotoTxt").textContent = "Preparando la foto…";
+  prepararFotoTienda(f).then(function(d){ fotoForm = d; $("fFotoPrev").src = d; $("fFotoPrev").hidden = false; $("fFotoTxt").textContent = "✅ Foto lista con el logo. Toca Guardar."; })
+   ["catch"](function(){ $("fFotoTxt").textContent = "⚠️ No se pudo usar esa foto. Prueba con otra."; });
+ };
  $("fOk").onclick = function(){
-  var x = { id:nuevo ? "" : p.id, n:$("fN").value.trim(), cat:$("fCat").value, det:$("fDet").value.trim(), cod:$("fCod").value.replace(/\s/g, ""), costo:num($("fCosto").value), precio:num($("fPrecio").value), min:num($("fMin").value), foto:p.foto || "", vence:$("fVence").value || "" };
+  var x = { id:nuevo ? "" : p.id, n:$("fN").value.trim(), cat:$("fCat").value, det:$("fDet").value.trim(), cod:$("fCod").value.replace(/\s/g, ""), costo:num($("fCosto").value), precio:num($("fPrecio").value), min:num($("fMin").value), foto:fotoForm, vence:$("fVence").value || "" };
   if(nuevo) x.stock = Math.max(0, Math.round(num($("fStock").value)));
   if(S.v >= 26) x.ext = leerExtraForm(p, x);
   /* Stock editable en la ficha (25-10-2026, la dueña: "en el stock no puedo editar"): la diferencia se anota como ajuste. */
