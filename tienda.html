@@ -166,6 +166,12 @@ body{ zoom:1.22; }
 #fotoGrande .volver{ margin-top:16px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:14px 34px; font:800 italic 22px "Barlow Condensed",sans-serif; text-transform:uppercase; cursor:pointer; }
 #fotoGrande b br{ display:block; }
 .prod .ph img{ object-fit:contain; }
+.ph-pack{ display:grid; width:100%; height:100%; gap:2px; background:#fff; }
+.ph-pack.n2{ grid-template-columns:1fr 1fr; }
+.ph-pack.n3, .ph-pack.n4{ grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; }
+.ph-pack img{ width:100%; height:100%; min-height:0; min-width:0; object-fit:cover !important; }
+#fotoGrande .fg-pack{ display:flex; gap:6px; max-width:100%; justify-content:center; }
+#fotoGrande .fg-pack img{ min-width:0; flex:1 1 0; max-width:48%; max-height:calc(100vh / 1.22 - 190px); }
 /* El botón Guardar de las fichas queda siempre a la vista, abajo (24-10-2026: la dueña cambió el precio y no vio
    el Guardar, que estaba más abajo; el cambio no se guardó). */
 .hoja #fOk, .hoja #eOk{ position:sticky; bottom:0; z-index:3; box-shadow:0 -10px 18px rgba(0,0,0,.55), 0 4px 0 #8a020b; }
@@ -313,6 +319,12 @@ function stockVer(p){ if(esPack(p)) return stockPack(p); var b = basePorcion(p);
 function esPack(p){ return !!(p && p.ext && p.ext.pack && p.ext.pack.length); }
 function partesPack(p){ return esPack(p) ? p.ext.pack.map(function(c){ return { p:prod(c.id), c:Number(c.c) || 1 }; }) : []; }
 function stockPack(p){ var m = Infinity; partesPack(p).forEach(function(x){ m = Math.min(m, x.p && x.p.activo ? Math.floor(x.p.stock / x.c) : 0); }); return isFinite(m) ? m : 0; }
+/* Foto de un pack: las fotos de todas sus partes juntas (27-10-2026, la dueña: "solo me aparece la polera, no el short"). */
+function phHtml(p){
+ var fs = esPack(p) ? partesPack(p).filter(function(x){ return x.p && x.p.foto; }).map(function(x){ return x.p.foto; }) : [];
+ if(fs.length > 1) return '<div class="ph-pack n' + Math.min(fs.length, 4) + '">' + fs.slice(0, 4).map(function(f){ return '<img src="' + esc(fotoUrl(f)) + '" alt="">'; }).join("") + '</div>';
+ return p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat);
+}
 function esUnica(p){ if(esPack(p)) return partesPack(p).every(function(x){ return x.p && esRopa(x.p); }); return esRopa(p); }
 function descontar(id, cant){ var q = prod(id); if(!q) return; if(esPack(q)) partesPack(q).forEach(function(x){ if(x.p) x.p.stock -= cant * x.c; }); else q.stock -= cant; }
 /* 🚀 Precio de lanzamiento (27-10-2026, la dueña eligió la idea 26): ext.lanz = { hasta, precio }; hasta esa fecha se
@@ -449,7 +461,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102711";
+var TIENDA_VERSION = "2026102712";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -621,7 +633,7 @@ function htmlListaInv(){
  return activos().filter(function(p){ return (invFiltro === "Todos" || p.cat === invFiltro) && (!q || normTxt(p.n + " " + p.det + " " + p.cod).indexOf(q) >= 0); })
   .sort(function(a, b){ return a.n.localeCompare(b.n); }).map(function(p){
    var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0, vd = ropaVendida(p), bp = basePorcion(p), ap = apartadoDe(p), pk = esPack(p), lz = lanzDe(p), ss = !vd && !bp && !ap && stockVer(p) <= 0;   // SIN STOCK (27-10-2026, pedido de la dueña)
-   return '<div class="card' + (vd || ss ? ' vendida' : '') + '"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + (vd ? '<span class="sello-v">VENDIDO</span>' : ss ? '<span class="sello-v">SIN STOCK</span>' : '') + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
+   return '<div class="card' + (vd || ss ? ' vendida' : '') + '"><div class="prod"><div class="ph">' + phHtml(p) + (vd ? '<span class="sello-v">VENDIDO</span>' : ss ? '<span class="sello-v">SIN STOCK</span>' : '') + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
     '<div class="pills">' + (lz ? '<span class="pill oro">🚀 ' + plata(lz.precio) + ' hasta el ' + lz.hasta.slice(8, 10) + '/' + lz.hasta.slice(5, 7) + '</span>' : '') + (p.ext.ped ? '<span class="pill">📦 ' + esc(nombrePedido(p.ext.ped)) + '</span>' : '') + (ap ? '<span class="pill oro">📌 APARTADO · ' + esc(ap.nombre) + ' · ' + (aptVencido(ap) ? 'se le pasó la hora' : 'hasta ' + aptHasta(ap)) + '</span>' : '') + (bp ? '<span class="pill ' + (bp.stock <= bp.min ? 'bajo' : 'ok') + '">🥤 Sale del tarro · quedan ' + bp.stock + '</span>' : vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : pk && !ss ? '<span class="pill ' + (stockPack(p) <= 0 ? 'bajo' : 'ok') + '">🎁 Alcanza para ' + stockPack(p) + '</span>' : ss ? '<span class="pill vend">⛔ SIN STOCK · repón con «Llegó mercadería»</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
     (bp ? '<p class="muted" style="font-size:15px;margin:8px 0 0">Cada venta descuenta 1 porción de «' + esc(bp.n) + '». Cuando compres otro tarro, súmalo ahí.</p>' : '') +
     (pk ? '<p class="muted" style="font-size:15px;margin:8px 0 0">🎁 Pack de: ' + partesPack(p).map(function(x){ return (x.c > 1 ? x.c + ' × ' : '') + esc(x.p ? x.p.n + (x.p.det ? ' (' + x.p.det + ')' : '') : '(producto borrado)'); }).join(' + ') + '. Al venderlo se descuenta cada parte.</p>' : '') + '<div class="grid2" style="margin-top:10px">' + (bp || pk ? '<span></span>' : '<button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button>') + '<button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div>' +
@@ -1534,8 +1546,9 @@ function abrirEscanerSimple(alLeer){
 document.addEventListener("click", function(e){
  var img = e.target.closest && e.target.closest(".prod .ph img, img.etq-ph"); if(!img) return;
  var card = img.closest(".prod, .etq-sel"), nom = card && card.querySelector(".tx b, .n");
- var d = document.createElement("div"); d.id = "fotoGrande";
- d.innerHTML = '<img src="' + img.getAttribute("src") + '" alt=""><b>' + (nom ? nom.innerHTML : "") + '</b><button type="button" class="volver">← Volver</button>';
+ var d = document.createElement("div"), pk = img.closest(".ph-pack"); d.id = "fotoGrande";
+ var fotos = pk ? '<div class="fg-pack">' + Array.prototype.map.call(pk.querySelectorAll("img"), function(i){ return '<img src="' + i.getAttribute("src") + '" alt="">'; }).join("") + '</div>' : '<img src="' + img.getAttribute("src") + '" alt="">';
+ d.innerHTML = fotos + '<b>' + (nom ? nom.innerHTML : "") + '</b><button type="button" class="volver">← Volver</button>';
  d.onclick = function(ev){ if(ev.target.tagName !== "IMG") d.remove(); }; document.body.appendChild(d);
 });
 var ENLACE = null;
