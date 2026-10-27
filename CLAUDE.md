@@ -1493,9 +1493,7 @@ carga `estilo-deportivo.css`: al cambiar el `?v=`, cambiarlo en los TRES archivo
 La dueña volvió a vender productos en el gimnasio (bebidas, suplementos, accesorios, snacks y ropa deportiva;
 empezó con $100.000 de inversión y quiere duplicarla). `tienda.html` es solo para ella: pide la clave de
 administración (la misma del mesón, `wgym_clave_admin_v1`). Todo se guarda en la planilla (hojas «Tienda
-productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/Ingresos.gs`, **Versión 24, instalada por la
-dueña el 24-10-2026 cerca de las 13:15, INGRESOS.gs verificado idéntico al repo vía Drive**; volver atrás: lápiz →
-Versión 23). Celular y compu ven el mismo inventario.
+productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/Ingresos.gs`, **Versión 25 desde el 26-10-2026** (ver «Cierre de caja» más abajo; antes Versión 24, instalada el 24-10-2026)). Celular y compu ven el mismo inventario.
 - **🛒 Vender:** escanear (desde el 24-10-2026 una lectura por vez: suma 1 y se cierra solo; la dueña: "se queda ahí marcando
   todo el rato"; un código desconocido deja la cámara abierta con «Crear producto»), códigos parados (botellas de pie): el lector del iPhone prueba una vuelta acostada y otra girada, y bajo la cámara va «📸 ¿No lo lee? Saca una foto del código» (`leerFotoCodigo`, lee la foto acostada y parada; 24-10-2026, la dueña no podía escanear el Powerade de pie), buscar por nombre,
   cantidades, cambiar precio de una línea (descuento), medio de pago (efectivo, transferencia, tarjeta, fiado con
@@ -1570,7 +1568,7 @@ Versión 23). Celular y compu ven el mismo inventario.
     «cuadra / sobran / faltan»; transferencias, tarjeta y fiados del día se muestran aparte. Lista de cierres anteriores.
   - Necesita la **Versión 25 del Apps Script** (columna M «Vence» en «Tienda productos», hoja nueva «Tienda cierres»,
     acción `tiendaCierre`; `tiendaListar` responde `v:25` y `cierres`). Con la Versión 24 la fecha no se guarda (la ficha lo
-    avisa) y el cierre queda solo en el equipo (`wgym_tienda_cierres_v1`). Pendiente de instalar por la dueña (25-10-2026).
+    avisa) y el cierre queda solo en el equipo (`wgym_tienda_cierres_v1`). **Instalada por la dueña el 26-10-2026 cerca de las 22:05, INGRESOS.gs verificado idéntico al repo vía Drive** (volver atrás: lápiz → Versión 24). La primera vez creó la versión sin pegar el código: revisar siempre en Drive que INGRESOS sea igual al del repo.
   **🐢 No se venden y 📸 Publicación para redes (25-10-2026, la dueña eligió las ideas 2 y 3, sin cambiar el Apps Script):**
   - En 📦 Inventario, «🐢 Ropa que no se vende (N)» (`noSeMueven`/`verNoSeMueven`): SOLO ropa (la dueña: "que solo corran
     las ofertas por la ropa si no se vende en dos meses"; `esRopa`, `DIAS_SIN_VENTA = 60`), prendas con stock y 60 días o
