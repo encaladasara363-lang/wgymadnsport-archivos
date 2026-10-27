@@ -862,6 +862,8 @@ function tiendaVitrina_(e) {
       if (suelto > p.precio) { x.antes = suelto; x.ahorro = Math.round((suelto - p.precio) / suelto * 100); }
     }
     /* Precio de lanzamiento (Versión 26): hasta la fecha elegida sale con el precio especial y «NUEVO». */
+    /* Versión 27: ropa ✨ nueva o ♻️ americana (ext.tipo; si no lo tiene, «americana» en el detalle). */
+    if (unica && !(pack && pack.length)) x.tipo = p.ext && (p.ext.tipo === "americana" || p.ext.tipo === "nueva") ? p.ext.tipo : (/americana/i.test(p.det || "") ? "americana" : "nueva");
     var lz = p.ext && p.ext.lanz;
     if (lz && lz.hasta >= hoy && Number(lz.precio) > 0 && Number(lz.precio) < p.precio) { x.antes = p.precio; x.precio = Number(lz.precio); x.nuevo = true; }
     if (unica && stock <= 0 && ult[p.id]) {
