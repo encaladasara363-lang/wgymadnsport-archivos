@@ -260,6 +260,8 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-btn{ text-align:center; font:800 italic 15px 'Barlow Condensed',Arial,sans-serif; padding:8px; border-radius:10px; background:linear-gradient(180deg,#FF2A35,#E30613 55%,#B8040F); box-shadow:0 4px 0 #7a030b; margin-bottom:4px; }
 .tv-p.agotado .tv-ph img{ filter:grayscale(1) brightness(.55); }
 .tv-p.agotado .tv-btn{ background:#333; box-shadow:none; color:#aaa; }
+.tv-nuevo{ position:absolute; top:8px; left:8px; font-family:'Rubik Distressed','Anton',sans-serif; font-size:18px; color:#000; background:#FFD400; border:2px solid #000; padding:1px 8px; border-radius:6px; }
+.tv-antes{ text-decoration:line-through; opacity:.6; font-size:.7em; margin-right:6px; }
 .tv-sello{ position:absolute; top:34%; left:50%; transform:translate(-50%,-50%) rotate(-12deg); font-family:'Rubik Distressed','Anton',sans-serif; font-size:26px; color:#fff; background:#E30613; border:3px solid #fff; padding:3px 10px; border-radius:8px; }
 .tv-mas{ display:block; width:100%; margin-top:10px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:12px; font:800 italic 17px 'Barlow Condensed',Arial,sans-serif; }
 .tv-nota{ margin:12px 0 0; font-size:14px; line-height:1.4; color:#ddd; border-left:4px solid var(--dorado); padding:8px 10px; background:#0D0D0F; border-radius:8px; }
@@ -2448,7 +2450,7 @@ function renderEvolucion(s){
     cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
     Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
  var TIENDA_VITRINA_ACTIVA = false;
- var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Otro":"📦" };
+ var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Packs":"🎁", "Otro":"📦" };
  function tiendaCat_(c){ return c === "Bebidas" ? "Bebestibles" : (c === "Ropa deportiva" ? "Ropa mujer" : (c || "Otro")); }
  function tiendaFoto_(p){ return p.foto ? escapeHtml(p.foto) + "?v=" + TIENDA_FOTO_V : "maquinas-wgymadnsport/comun/logo.png"; }
  function renderTienda_(s){
@@ -2479,10 +2481,10 @@ function renderEvolucion(s){
      '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
       var ag = !(p.q > 0), i = l.indexOf(p);
       return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph"><img loading="lazy" src="' + tiendaFoto_(p) + '" alt=""></div>' +
-       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' +
+       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' +
        (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
        (ag ? '' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
-       '<span class="tv-pr">' + clp(p.precio) + '</span><span class="tv-btn">' + (ag ? (p.vendido ? 'Ya se vendió' : 'Pronto vuelve') : '💬 Lo quiero') + '</span></div></button>';
+       '<span class="tv-pr">' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + clp(p.precio) + '</span><span class="tv-btn">' + (ag ? (p.vendido ? 'Ya se vendió' : 'Pronto vuelve') : '💬 Lo quiero') + '</span></div></button>';
      }).join("") + '</div>' +
      (cortar ? '<button type="button" class="tv-mas" id="tvMas">Ver todos (' + vis.length + ') ▼</button>' : '') +
      (hayOtra && cat !== otra ? '<button type="button" class="tv-mas" id="tvRegalo">🎁 ¿Buscas un regalo? Mira la ' + (otra === "Ropa hombre" ? 'ropa de hombre' : 'ropa de mujer') + '</button>' : '') +
@@ -2496,11 +2498,11 @@ function renderEvolucion(s){
   });
  }
  function tiendaVentanita_(s, p){
-  var ropa = /^(Ropa|Zapatillas)/.test(p.cat), max = ropa ? 1 : Math.max(1, Math.min(p.q, 9)), cant = 1;
+  var ropa = /^(Ropa|Zapatillas)/.test(p.cat) || (p.pack && p.q <= 1), max = ropa ? 1 : Math.max(1, Math.min(p.q, 9)), cant = 1;
   var fondo = document.createElement("div"); fondo.className = "tv-modal";
   fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big"><img src="' + tiendaFoto_(p) + '" alt=""></div>' +
    '<h3>' + escapeHtml(p.n) + '</h3>' + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
-   '<p class="tv-total">Precio: <b>' + clp(p.precio) + '</b></p>' +
+   '<p class="tv-total">Precio: ' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + '<b>' + clp(p.precio) + '</b>' + (p.nuevo ? ' 🚀 precio de lanzamiento' : '') + '</p>' +
    (max > 1 ? '<div class="tv-cant"><button type="button" id="tvMenos">−</button><b id="tvCant">1</b><button type="button" id="tvMasUno">+</button></div>' : '') +
    '<p class="tv-total" id="tvTot"></p>' +
    '<button type="button" class="pago-btn principal" id="tvSi" style="width:100%">💬 Sí, avisarle a Sara</button>' +
@@ -2560,7 +2562,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102702", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102703", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

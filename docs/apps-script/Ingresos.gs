@@ -738,6 +738,8 @@ function accionIngresosPost_(e) {
     case "tiendaAnular": return tiendaAnular_(e);
     case "tiendaFiadoPagado": return tiendaFiadoPagado_(e);
     case "tiendaCierre": return tiendaCierre_(e);
+    case "tiendaAbono": return tiendaAbono_(e);
+    case "tiendaGasto": return tiendaGasto_(e);
   }
   return null;
 }
@@ -747,7 +749,8 @@ function accionIngresosPost_(e) {
    Todo es solo de administración (POST con la clave): los costos y las ganancias nunca salen por una acción
    pública. Dos hojas que se crean solas:
      «Tienda productos»: Id · Código · Nombre · Categoría · Detalle · Costo · Precio · Stock · Mínimo · Foto ·
-                         Activo · Actualizado · Vence (desde la Versión 25: fecha de vencimiento AAAA-MM-DD, con apóstrofo)
+                         Activo · Actualizado · Vence (desde la Versión 25: fecha de vencimiento AAAA-MM-DD, con apóstrofo) ·
+                         Extra (desde la Versión 26: JSON con pack, pedido y precio de lanzamiento; ver más abajo)
      «Tienda movimientos»: Fecha · Tipo (venta / entrada / ajuste) · Venta · Id producto · Producto · Cantidad ·
                          Precio unit. · Costo unit. · Total · Pago · Cliente · Nota · Estado
    Estado: "" normal · "fiado" (debe) · "pagado …" (fiado ya pagado) · "anulada". Cada venta trae un id que
@@ -759,8 +762,9 @@ function hojaTienda_(nombre, cab) {
   return h;
 }
 function hojaTiendaP_() {
-  var h = hojaTienda_(HOJA_TIENDA_P_, ["Id", "Código", "Nombre", "Categoría", "Detalle", "Costo", "Precio", "Stock", "Mínimo", "Foto", "Activo", "Actualizado", "Vence"]);
+  var h = hojaTienda_(HOJA_TIENDA_P_, ["Id", "Código", "Nombre", "Categoría", "Detalle", "Costo", "Precio", "Stock", "Mínimo", "Foto", "Activo", "Actualizado", "Vence", "Extra"]);
   if (h.getLastColumn() < 13) h.getRange(1, 13).setValue("Vence");
+  if (h.getLastColumn() < 14) h.getRange(1, 14).setValue("Extra");
   return h;
 }
 function hojaTiendaM_() { return hojaTienda_(HOJA_TIENDA_M_, ["Fecha", "Tipo", "Venta", "Id producto", "Producto", "Cantidad", "Precio unit.", "Costo unit.", "Total", "Pago", "Cliente", "Nota", "Estado"]); }
@@ -779,8 +783,12 @@ function conClaveTienda_(e, escribe, fn) {
 function filaProducto_(r, i) {
   return { fila: i + 1, id: String(r[0]), cod: String(r[1] || ""), n: String(r[2] || ""), cat: String(r[3] || ""), det: String(r[4] || ""),
     costo: Number(r[5]) || 0, precio: Number(r[6]) || 0, stock: Number(r[7]) || 0, min: Number(r[8]) || 0, foto: String(r[9] || ""),
-    activo: String(r[10]) !== "no", act: txtFecha_(r[11]), vence: diaTxt_(r[12]) };
+    activo: String(r[10]) !== "no", act: txtFecha_(r[11]), vence: diaTxt_(r[12]), ext: extTienda_(r[13]) };
 }
+/* Extra (Versión 26, 27-10-2026): { pack:[{id, c}] } = pack armado con otros productos (no lleva stock propio: cada
+   venta descuenta sus partes); { ped:"PED…" } = pedido del que vino (para «cuánto llevas recuperado»);
+   { lanz:{ hasta:"AAAA-MM-DD", precio } } = precio de lanzamiento hasta esa fecha. */
+function extTienda_(v) { try { var o = JSON.parse(String(v || "{}")); return o && typeof o === "object" ? o : {}; } catch (err) { return {}; } }
 function productosTienda_() {
   var d = hojaTiendaP_().getDataRange().getValues(), l = [];
   for (var i = 1; i < d.length; i++) if (d[i][0]) l.push(filaProducto_(d[i], i));
@@ -791,19 +799,21 @@ function tiendaListar_(e) {
   return conClaveTienda_(e, false, function () {
     var desde = String(e.parameter.desde || "");
     if (!/^\d{4}-\d{2}-\d{2}$/.test(desde)) desde = Utilities.formatDate(new Date(Date.now() - 120 * 86400000), TZ_INGRESOS_, "yyyy-MM-dd");
-    var d = hojaTiendaM_().getDataRange().getValues(), movs = [], total = { ventas: 0, ganancia: 0, invertido: 0 };
+    var d = hojaTiendaM_().getDataRange().getValues(), movs = [], total = { ventas: 0, ganancia: 0, invertido: 0 }, fiadoVid = {};
+    /* Los abonos de un fiado que sigue pendiente se mandan siempre, aunque sean antiguos (Versión 26). */
+    for (var k = 1; k < d.length; k++) if (String(d[k][12] || "") === "fiado") fiadoVid[String(d[k][2] || "")] = 1;
     for (var i = 1; i < d.length; i++) {
       var f = txtFecha_(d[i][0]), tipo = String(d[i][1] || ""), est = String(d[i][12] || ""), cant = Number(d[i][5]) || 0;
       if (est !== "anulada") {
         if (tipo === "venta") { total.ventas += Number(d[i][8]) || 0; total.ganancia += (Number(d[i][8]) || 0) - cant * (Number(d[i][7]) || 0); }
         if (tipo === "entrada") total.invertido += cant * (Number(d[i][7]) || 0);
       }
-      if (f.slice(0, 10) < desde && est !== "fiado") continue;
+      if (f.slice(0, 10) < desde && est !== "fiado" && !(tipo === "abono" && fiadoVid[String(d[i][2] || "")])) continue;
       movs.push({ fila: i + 1, f: f, tipo: tipo, vid: String(d[i][2] || ""), id: String(d[i][3] || ""), n: String(d[i][4] || ""), cant: cant,
         precio: Number(d[i][6]) || 0, costo: Number(d[i][7]) || 0, total: Number(d[i][8]) || 0, pago: String(d[i][9] || ""),
         cliente: String(d[i][10] || ""), nota: String(d[i][11] || ""), est: est });
     }
-    return respond_(e, { ok: true, tienda: true, v: 25, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde) });
+    return respond_(e, { ok: true, tienda: true, v: 26, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde), gastos: gastosTienda_() });
   });
 }
 /* 🛍 Vitrina pública para la tarjeta de los socios (25-10-2026, la dueña eligió la idea 1): solo nombre,
@@ -829,11 +839,23 @@ function tiendaVitrina_(e) {
      que se quede en la tienda por 15 días y luego la eliminas"): una prenda sin stock sale con vendido:true hasta
      15 días después de su última venta y después ya no aparece. Si se anula la venta, el stock vuelve y reaparece. */
   var ult = ultimaVentaTienda_(), hoy = Utilities.formatDate(new Date(), TZ_INGRESOS_, "yyyy-MM-dd");
-  var l = [];
-  productosTienda_().forEach(function (p) {
+  var l = [], todos = productosTienda_(), porId = {};
+  todos.forEach(function (p) { porId[p.id] = p; });
+  todos.forEach(function (p) {
     if (!p.activo || !(p.precio > 0) || !p.n) return;
-    var x = { n: p.n, cat: p.cat, det: p.det, precio: p.precio, foto: p.foto, q: Math.max(0, Math.min(9, p.stock)) };
-    if (/^(Ropa|Zapatillas)/.test(p.cat) && p.stock <= 0 && ult[p.id]) {
+    /* Pack (Versión 26): quedan tantos como alcancen sus partes; si todas son ropa, se trata como prenda única. */
+    var stock = p.stock, unica = /^(Ropa|Zapatillas)/.test(p.cat), pack = p.ext && p.ext.pack;
+    if (pack && pack.length) {
+      stock = Infinity; unica = true;
+      pack.forEach(function (c) { var q = porId[c.id]; stock = Math.min(stock, q && q.activo ? Math.floor(q.stock / (Number(c.c) || 1)) : 0); if (!q || !/^(Ropa|Zapatillas)/.test(q.cat)) unica = false; });
+      if (!isFinite(stock)) stock = 0;
+    }
+    var x = { n: p.n, cat: p.cat, det: p.det, precio: p.precio, foto: p.foto, q: Math.max(0, Math.min(9, stock)) };
+    if (pack && pack.length) x.pack = true;
+    /* Precio de lanzamiento (Versión 26): hasta la fecha elegida sale con el precio especial y «NUEVO». */
+    var lz = p.ext && p.ext.lanz;
+    if (lz && lz.hasta >= hoy && Number(lz.precio) > 0 && Number(lz.precio) < p.precio) { x.antes = p.precio; x.precio = Number(lz.precio); x.nuevo = true; }
+    if (unica && stock <= 0 && ult[p.id]) {
       if (diasEntre_(ult[p.id], hoy) > DIAS_VENDIDO_TIENDA_) return;
       x.vendido = true;
     }
@@ -856,7 +878,10 @@ function tiendaProducto_(e) {
     /* Vence: si el teléfono no la manda (página antigua), se deja la que tenía. */
     var vence = x.vence === undefined ? (p ? p.vence : "") : diaTxt_(String(x.vence || ""));
     fila.push(vence ? "'" + vence : "");
-    if (p) h.getRange(p.fila, 1, 1, 13).setValues([fila]);
+    /* Extra: si el teléfono no lo manda (página antigua), se deja el que tenía. */
+    var ext = x.ext === undefined ? (p ? p.ext : {}) : (x.ext && typeof x.ext === "object" ? x.ext : {});
+    fila.push(Object.keys(ext).length ? JSON.stringify(ext).slice(0, 4000) : "");
+    if (p) h.getRange(p.fila, 1, 1, 14).setValues([fila]);
     else {
       h.appendRow(fila);
       if (fila[7] > 0) hojaTiendaM_().appendRow([ahora, "entrada", "", fila[0], fila[2], fila[7], "", fila[5], fila[7] * fila[5], "", "", "stock inicial", ""]);
@@ -870,15 +895,25 @@ function tiendaVenta_(e) {
     var x = datosTienda_(e.parameter); if (!x || !x.vid || !x.items || !x.items.length) return respond_(e, { ok: false, error: "faltan datos" });
     var hm = hojaTiendaM_(), vids = hm.getRange(1, 3, hm.getLastRow(), 1).getValues();
     for (var j = 0; j < vids.length; j++) if (String(vids[j][0]) === String(x.vid)) return respond_(e, { ok: true, tienda: true, repetida: true, productos: productosTienda_() });
-    var h = hojaTiendaP_(), lista = productosTienda_(), ahora = ahoraTienda_(), pago = String(x.pago || "efectivo"), filas = [];
+    var h = hojaTiendaP_(), lista = productosTienda_(), ahora = ahoraTienda_(), pago = String(x.pago || "efectivo"), filas = [], ajustes = [];
     x.items.forEach(function (it) {
       var p = lista.filter(function (q) { return q.id === String(it.id); })[0]; if (!p) return;
       var cant = Number(it.cant) || 0, precio = Number(it.precio); if (!(cant > 0)) return; if (isNaN(precio)) precio = p.precio;
-      p.stock -= cant; h.getRange(p.fila, 8).setValue(p.stock); h.getRange(p.fila, 12).setValue(ahora);
+      var pack = p.ext && p.ext.pack;
+      if (pack && pack.length) {
+        /* Pack (Versión 26): no tiene stock propio; descuenta cada parte y lo anota como ajuste «PACK <venta>». */
+        pack.forEach(function (c) {
+          var q = lista.filter(function (z) { return z.id === String(c.id); })[0]; if (!q) return;
+          var n = cant * (Number(c.c) || 1); q.stock -= n; h.getRange(q.fila, 8).setValue(q.stock); h.getRange(q.fila, 12).setValue(ahora);
+          ajustes.push([ahora, "ajuste", "", q.id, q.n, -n, "", q.costo, 0, "", "", "PACK " + String(x.vid) + ": " + p.n, ""]);
+        });
+      } else { p.stock -= cant; h.getRange(p.fila, 8).setValue(p.stock); }
+      h.getRange(p.fila, 12).setValue(ahora);
       filas.push([ahora, "venta", String(x.vid), p.id, p.n, cant, precio, p.costo, cant * precio, pago, String(x.cliente || ""), String(x.nota || ""), pago === "fiado" ? "fiado" : ""]);
     });
     if (!filas.length) return respond_(e, { ok: false, error: "productos no encontrados" });
     hm.getRange(hm.getLastRow() + 1, 1, filas.length, 13).setValues(filas);
+    if (ajustes.length) hm.getRange(hm.getLastRow() + 1, 1, ajustes.length, 13).setValues(ajustes);
     return respond_(e, { ok: true, tienda: true, productos: productosTienda_() });
   });
 }
@@ -905,10 +940,13 @@ function tiendaAnular_(e) {
     var vid = String(e.parameter.vid || ""); if (!vid) return respond_(e, { ok: false, error: "faltan datos" });
     var hm = hojaTiendaM_(), d = hm.getDataRange().getValues(), h = hojaTiendaP_(), lista = productosTienda_(), n = 0;
     for (var i = 1; i < d.length; i++) {
-      if (String(d[i][2]) !== vid || String(d[i][1]) !== "venta" || String(d[i][12]) === "anulada") continue;
+      /* Las partes de un pack (ajustes «PACK <venta>: …») también vuelven al stock. */
+      var esParte = String(d[i][1]) === "ajuste" && String(d[i][11] || "").indexOf("PACK " + vid + ":") === 0;
+      if (String(d[i][12]) === "anulada" || !(esParte || (String(d[i][2]) === vid && String(d[i][1]) === "venta"))) continue;
       var p = lista.filter(function (q) { return q.id === String(d[i][3]); })[0];
-      if (p) { p.stock += Number(d[i][5]) || 0; h.getRange(p.fila, 8).setValue(p.stock); }
-      hm.getRange(i + 1, 13).setValue("anulada"); n++;
+      var vuelve = esParte ? -(Number(d[i][5]) || 0) : (p && p.ext && p.ext.pack && p.ext.pack.length ? 0 : Number(d[i][5]) || 0);
+      if (p && vuelve) { p.stock += vuelve; h.getRange(p.fila, 8).setValue(p.stock); }
+      hm.getRange(i + 1, 13).setValue("anulada"); if (!esParte) n++;
     }
     if (!n) return respond_(e, { ok: false, error: "venta no encontrada" });
     return respond_(e, { ok: true, tienda: true, productos: productosTienda_() });
@@ -947,6 +985,52 @@ function tiendaFiadoPagado_(e) {
     for (var i = 1; i < d.length; i++) if (String(d[i][2]) === vid && String(d[i][12]) === "fiado") { hm.getRange(i + 1, 13).setValue("pagado " + pago + " " + ahoraTienda_()); n++; }
     if (!n) return respond_(e, { ok: false, error: "fiado no encontrado" });
     return respond_(e, { ok: true, tienda: true });
+  });
+}
+/* ── Versión 26 (27-10-2026, la dueña eligió las ideas 23, 25, 26, 28 y 29) ──
+   💳 Cuotas: un fiado se puede pagar por partes. Cada abono es una fila «abono» en «Tienda movimientos»
+   (Venta = id del fiado, Total = monto, Pago = medio). Cuando los abonos llegan al total, el fiado queda
+   «pagado cuotas <fecha>» (el efectivo de cada abono se cuenta en el cierre de caja del día del abono). */
+function tiendaAbono_(e) {
+  return conClaveTienda_(e, true, function () {
+    var x = datosTienda_(e.parameter), vid = x ? String(x.vid || "") : "", monto = x ? Math.round(Number(x.monto) || 0) : 0, pago = x ? String(x.pago || "efectivo") : "";
+    if (!vid || !(monto > 0)) return respond_(e, { ok: false, error: "faltan datos" });
+    var hm = hojaTiendaM_(), d = hm.getDataRange().getValues(), total = 0, abonado = 0, filas = [], cliente = "";
+    for (var i = 1; i < d.length; i++) {
+      if (String(d[i][2]) !== vid) continue;
+      if (String(d[i][1]) === "venta" && String(d[i][12]) === "fiado") { total += Number(d[i][8]) || 0; filas.push(i + 1); cliente = String(d[i][10] || ""); }
+      if (String(d[i][1]) === "abono") abonado += Number(d[i][8]) || 0;
+    }
+    if (!filas.length) return respond_(e, { ok: false, error: "fiado no encontrado" });
+    var ahora = ahoraTienda_();
+    hm.appendRow([ahora, "abono", vid, "", "Abono de fiado", 0, "", "", monto, pago, cliente, String(x.nota || "").slice(0, 200), ""]);
+    var pagado = abonado + monto >= total;
+    if (pagado) filas.forEach(function (f) { hm.getRange(f, 13).setValue("pagado cuotas " + ahora); });
+    return respond_(e, { ok: true, tienda: true, pagado: pagado, debe: Math.max(0, total - abonado - monto) });
+  });
+}
+/* 🧾 Gastos y 📦 pedidos: hoja «Tienda gastos» (Fecha · Tipo · Id · Detalle · Monto · Categoría).
+   Tipo «gasto» = bolsas, etiquetas, envíos, hielo… (se restan de la ganancia); tipo «pedido» = lo pagado por un
+   pedido (ej. Shein), para ver cuánto lleva recuperado con las ventas de sus productos. { id, tipo, det, monto,
+   cat, fecha } crea o corrige; { id, borrar:true } lo borra. */
+var HOJA_TIENDA_G_ = "Tienda gastos";
+function hojaTiendaG_() { return hojaTienda_(HOJA_TIENDA_G_, ["Fecha", "Tipo", "Id", "Detalle", "Monto", "Categoría"]); }
+function gastosTienda_() {
+  var d = hojaTiendaG_().getDataRange().getValues(), l = [];
+  for (var i = 1; i < d.length; i++) if (d[i][2]) l.push({ f: txtFecha_(d[i][0]), tipo: String(d[i][1] || "gasto"), id: String(d[i][2]), det: String(d[i][3] || ""), monto: Number(d[i][4]) || 0, cat: String(d[i][5] || "") });
+  return l;
+}
+function tiendaGasto_(e) {
+  return conClaveTienda_(e, true, function () {
+    var x = datosTienda_(e.parameter); if (!x) return respond_(e, { ok: false, error: "faltan datos" });
+    var h = hojaTiendaG_(), d = h.getDataRange().getValues(), filaN = 0, id = String(x.id || "");
+    if (id) for (var i = 1; i < d.length; i++) if (String(d[i][2]) === id) { filaN = i + 1; break; }
+    if (x.borrar) { if (filaN) h.deleteRow(filaN); return respond_(e, { ok: true, tienda: true, gastos: gastosTienda_() }); }
+    if (!(Number(x.monto) > 0)) return respond_(e, { ok: false, error: "faltan datos" });
+    var fecha = /^\d{4}-\d{2}-\d{2}/.test(String(x.fecha || "")) ? String(x.fecha).slice(0, 16) : ahoraTienda_();
+    var fila = [fecha, x.tipo === "pedido" ? "pedido" : "gasto", id || "G" + Date.now().toString(36).toUpperCase(), String(x.det || "").slice(0, 200), Math.round(Number(x.monto)), String(x.cat || "")];
+    if (filaN) h.getRange(filaN, 1, 1, 6).setValues([fila]); else h.appendRow(fila);
+    return respond_(e, { ok: true, tienda: true, id: fila[2], gastos: gastosTienda_() });
   });
 }
 
