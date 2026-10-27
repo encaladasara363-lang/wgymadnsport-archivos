@@ -304,6 +304,9 @@ function esBatido(p){ return !!p && /^batido/i.test(p.n || ""); }
    Apps Script). «Liberar» o el vencimiento anotan +1 «LIBERADO #tok»; «Retiró y pagó» lo pasa a la venta y al cobrar
    anota +1 «RETIRADO #tok» justo antes de la venta (el stock queda igual que si se hubiera vendido directo). */
 var HORAS_APARTADO = [24, 48, 72];
+/* Snacks y bebestibles (aguas, latas) no se apartan (la dueña, 27-10-2026: "en todo menos en los snack y las aguas"). */
+var SIN_APARTAR = ["Snacks", "Bebestibles"];
+function sePuedeApartar(p){ return SIN_APARTAR.indexOf(catNueva(p.cat)) < 0; }
 function fmtCL(ms){ return new Intl.DateTimeFormat("sv-SE", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }).format(new Date(ms)).replace("T", " ").slice(0, 16); }
 function apartados(){
  var a = {}, fin = {};
@@ -423,7 +426,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102703";
+var TIENDA_VERSION = "2026102704";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -577,7 +580,7 @@ function htmlListaInv(){
    return '<div class="card' + (vd ? ' vendida' : '') + '"><div class="prod"><div class="ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat)) + (vd ? '<span class="sello-v">VENDIDO</span>' : '') + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
     '<div class="pills">' + (ap ? '<span class="pill oro">📌 APARTADO · ' + esc(ap.nombre) + ' · ' + (aptVencido(ap) ? 'se le pasó la hora' : 'hasta ' + aptHasta(ap)) + '</span>' : '') + (bp ? '<span class="pill ' + (bp.stock <= bp.min ? 'bajo' : 'ok') + '">🥤 Sale del tarro · quedan ' + bp.stock + '</span>' : vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
     (bp ? '<p class="muted" style="font-size:15px;margin:8px 0 0">Cada venta descuenta 1 porción de «' + esc(bp.n) + '». Cuando compres otro tarro, súmalo ahí.</p>' : '') + '<div class="grid2" style="margin-top:10px">' + (bp ? '<span></span>' : '<button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button>') + '<button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div>' +
-    (ap ? '<div class="grid2" style="margin-top:8px"><button class="btn chico verde" style="width:100%" data-ret="' + ap.tok + '">💵 Retiró y pagó</button><button class="btn chico" style="width:100%" data-lib="' + ap.tok + '">↩ Liberar</button></div>' : (!bp && stockVer(p) > 0 ? '<button class="btn chico" style="width:100%;margin-top:8px" data-apt="' + esc(p.id) + '">📌 Apartar</button>' : '')) + '</div>';
+    (ap ? '<div class="grid2" style="margin-top:8px"><button class="btn chico verde" style="width:100%" data-ret="' + ap.tok + '">💵 Retiró y pagó</button><button class="btn chico" style="width:100%" data-lib="' + ap.tok + '">↩ Liberar</button></div>' : (!bp && stockVer(p) > 0 && sePuedeApartar(p) ? '<button class="btn chico" style="width:100%;margin-top:8px" data-apt="' + esc(p.id) + '">📌 Apartar</button>' : '')) + '</div>';
   }).join("");
 }
 function enlazarInv(){
