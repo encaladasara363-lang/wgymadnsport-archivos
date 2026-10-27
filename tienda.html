@@ -479,7 +479,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102721";
+var TIENDA_VERSION = "2026102722";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -806,7 +806,10 @@ function esRopa(p){ return /^(Ropa|Zapatillas)/.test(catNueva(p.cat)); }
 /* ✨ Nueva / ♻️ Americana (27-10-2026, la dueña vende ropa nueva y americana; eligió el sello y la ganancia por tipo):
    ext.tipo de la ficha; lo cargado antes con «americana» en el detalle cuenta como americana y el resto como nueva. */
 function tipoRopa(p){ if(!p || !esRopa(p)) return ""; var t = p.ext && p.ext.tipo; return t === "americana" || t === "nueva" ? t : /americana/i.test(p.det || "") ? "americana" : "nueva"; }
-function pillTipo(p){ var t = tipoRopa(p); return t ? '<span class="pill ' + (t === "americana" ? 'amer' : 'nueva') + '">' + (t === "americana" ? '♻️ AMERICANA' : '✨ NUEVA') + '</span>' : ''; }
+/* Packs de ropa (27-10-2026, la dueña: "armar pack americana y packs de ropa nueva"): si todas sus prendas son del mismo tipo. */
+function tipoPack(p){ var ts = partesPack(p).map(function(x){ return tipoRopa(x.p); }); return ts.length && ts.every(function(t){ return t && t === ts[0]; }) ? ts[0] : ""; }
+function tipoDe(p){ return p && esPack(p) ? tipoPack(p) : tipoRopa(p); }
+function pillTipo(p){ var t = tipoDe(p), pk = esPack(p); return t ? '<span class="pill ' + (t === "americana" ? 'amer' : 'nueva') + '">' + (t === "americana" ? '♻️ ' + (pk ? 'PACK AMERICANO' : 'AMERICANA') : '✨ ' + (pk ? 'PACK NUEVO' : 'NUEVA')) + '</span>' : ''; }
 function diasSinVenta(p){ return tipoRopa(p) === "americana" ? DIAS_SIN_VENTA_AMERICANA : DIAS_SIN_VENTA; }
 function noSeMueven(){
  var hoy = S.hoy || hoyISO(), mv = todosMovs();
@@ -1026,10 +1029,10 @@ function formPack(){
   var ps = partes(), suma = ps.reduce(function(s, x){ return s + x.p.precio * x.c; }, 0), costo = ps.reduce(function(s, x){ return s + x.p.costo * x.c; }, 0);
   /* Todos los productos, por categoría (27-10-2026, la dueña: "quiero que se pueda elegir más productos"). */
   var todosP = activos().filter(function(p){ return !esPack(p) && stockVer(p) > 0; });
-  var catsP = ["Todos"].concat(CATS.map(function(c){ return c[0]; }).filter(function(c){ return todosP.some(function(p){ return p.cat === c; }); }));
-  $("pkCats").innerHTML = catsP.map(function(c){ return '<button class="chip" data-pkc="' + esc(c) + '" aria-pressed="' + (c === fcat) + '">' + (c === "Todos" ? "Todos" : iconoCat(c) + ' ' + esc(c)) + '</button>'; }).join("");
+  var catsP = ["Todos"].concat(["nueva", "americana"].filter(function(t){ return todosP.some(function(p){ return tipoRopa(p) === t; }); }).map(function(t){ return "__" + t; })).concat(CATS.map(function(c){ return c[0]; }).filter(function(c){ return todosP.some(function(p){ return p.cat === c; }); }));
+  $("pkCats").innerHTML = catsP.map(function(c){ return '<button class="chip' + (c === "__americana" ? ' desc' : '') + '" data-pkc="' + esc(c) + '" aria-pressed="' + (c === fcat) + '">' + (c === "Todos" ? "Todos" : c === "__nueva" ? "✨ Ropa nueva" : c === "__americana" ? "♻️ Ropa americana" : iconoCat(c) + ' ' + esc(c)) + '</button>'; }).join("");
   $("pkCats").querySelectorAll("[data-pkc]").forEach(function(b){ b.onclick = function(){ fcat = b.dataset.pkc; pintar(); }; });
-  var cand = todosP.filter(function(p){ return (fcat === "Todos" || p.cat === fcat) && (!q || normTxt(p.n + " " + p.det + " " + p.cat).indexOf(normTxt(q)) >= 0); }).sort(function(a, b){ return a.n.localeCompare(b.n); });
+  var cand = todosP.filter(function(p){ return (fcat === "Todos" || p.cat === fcat || (fcat.slice(0, 2) === "__" && tipoRopa(p) === fcat.slice(2))) && (!q || normTxt(p.n + " " + p.det + " " + p.cat).indexOf(normTxt(q)) >= 0); }).sort(function(a, b){ return a.n.localeCompare(b.n); });
   /* Con foto de cada producto (27-10-2026, la dueña: "debería aparecer la imagen de cada producto"). */
   function mini(p){ return '<span class="pk-ph">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="" loading="lazy">' : iconoCat(p.cat)) + '</span>'; }
   $("pkElegidos").innerHTML = ps.length ? '<p class="lab" style="margin:8px 0 4px">Elegidos (' + ps.length + '):</p><div class="pk-sel">' + ps.map(function(x){ return '<button type="button" class="pk-chip" data-pkq="' + esc(x.p.id) + '">' + mini(x.p) + '<span>' + (x.c > 1 ? x.c + ' × ' : '') + esc(x.p.n) + (x.p.det ? '<small>' + esc(x.p.det) + '</small>' : '') + '</span>' + (esUnica(x.p) ? '' : '<i data-pkmas="' + esc(x.p.id) + '" title="Uno más">＋</i>') + '<b>✕</b></button>'; }).join("") + '</div>' : '';
@@ -1049,7 +1052,8 @@ function formPack(){
   $("pkRes").querySelectorAll("[data-pkp]").forEach(function(b){ b.onclick = function(){ $("pkPre").value = b.dataset.pkp; $("pkPre").dataset.tocado = 1; gan(); }; });
   /* Por defecto, 15 % menos que por separado (27-10-2026, la dueña: "que aparezca con un 15 % de descuento"). */
   if(uds >= 2 && !$("pkPre").dataset.tocado){ var b15 = $("pkRes").querySelector('[data-pkp]:nth-child(2)'); if(b15) $("pkPre").value = b15.dataset.pkp; }
-  if(!$("pkN").dataset.tocado) $("pkN").value = ps.length ? "Pack " + ps.map(function(x){ return x.p.n.split(" ")[0]; }).join(" + ") : "";
+  var tps = ps.map(function(x){ return tipoRopa(x.p); }), tpk = tps.length && tps.every(function(t){ return t && t === tps[0]; }) ? tps[0] : "";
+  if(!$("pkN").dataset.tocado) $("pkN").value = ps.length ? (tpk === "americana" ? "Pack americano " : "Pack ") + ps.map(function(x){ return x.p.n.split(" ")[0]; }).join(" + ") : "";
   gan();
  }
  function gan(){ var ps = partes().filter(function(x){ return x.c; }), costo = ps.reduce(function(s, x){ return s + x.p.costo * x.c; }, 0), pr = num($("pkPre").value); $("pkGan").textContent = pr > 0 && ps.reduce(function(s, x){ return s + x.c; }, 0) > 1 ? (pr > costo ? "💰 Ganas " + plata(pr - costo) + " con el pack" : "⚠️ Ese precio no deja ganancia") : ""; }
@@ -1214,7 +1218,7 @@ function renderRes(){
   '<div class="kpi"><small>Productos vendidos</small><b>' + uds + '</b></div><div class="kpi"><small>Ventas</small><b>' + Object.keys(ventas.reduce(function(o, m){ o[m.vid] = 1; return o; }, {})).length + '</b></div></div>';
  /* 👕 Ropa nueva vs americana (27-10-2026, la dueña eligió ver la ganancia por tipo). */
  var porTipo = { nueva:{ v:0, g:0, u:0 }, americana:{ v:0, g:0, u:0 } };
- (resPer === "todo" ? deCat : ms).forEach(function(m){ if(m.tipo !== "venta" || m.est === "anulada") return; var t = tipoRopa(prod(m.id)); if(!t) return; var o = porTipo[t]; o.v += m.total; o.g += m.total - m.cant * m.costo; o.u += m.cant; });
+ (resPer === "todo" ? deCat : ms).forEach(function(m){ if(m.tipo !== "venta" || m.est === "anulada") return; var t = tipoDe(prod(m.id)); if(!t) return; var o = porTipo[t]; o.v += m.total; o.g += m.total - m.cant * m.costo; o.u += m.cant; });
  if(porTipo.nueva.u || porTipo.americana.u){
   h += '<div class="card"><b style="text-transform:uppercase">👕 Ropa: nueva y americana</b><table class="top">' + [["nueva","✨ Nueva"],["americana","♻️ Americana"]].map(function(t){ var o = porTipo[t[0]], c = o.v - o.g;
    return '<tr><td>' + t[1] + '<br><span class="muted" style="font-size:13px">' + o.u + (o.u === 1 ? ' prenda' : ' prendas') + ' · vendido ' + plata(o.v) + (c > 0 ? ' · ganas ' + Math.round(o.g / c * 100) + ' % sobre el costo' : '') + '</span></td><td class="r" style="color:#7CE39A">' + plata(o.g) + '</td></tr>'; }).join("") + '</table></div>';
@@ -1436,7 +1440,7 @@ function renderCod(){
  if(con.length){
   h += '<div class="card"><b style="text-transform:uppercase">🖨 Imprimir etiquetas</b><p class="muted" style="font-size:15px;margin:4px 0 8px">Elige cuántas etiquetas de cada uno y el tipo de hoja. Sirve para imprimir también las de productos que ya traen código, con su precio.</p>' +
    '<label class="lab">Tipo de hoja adhesiva</label><div class="chips">' + [["38","A4 de 3 × 8 (24 por hoja)"],["chica","Chica de 5 × 7 cm (2 por hoja)"]].map(function(f){ return '<button class="chip" data-fmt="' + f[0] + '" aria-pressed="' + (etqFormato() === f[0]) + '">' + f[1] + '</button>'; }).join("") + '</div>' +
-   con.map(function(p){ return '<div class="etq-sel">' + (p.foto ? '<img class="etq-ph" src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span class="etq-ph">' + iconoCat(p.cat) + '</span>') + '<span class="n">' + esc(p.n) + (p.det ? '<br><b style="color:var(--yel)">' + esc(p.det) + '</b>' : '') + (tipoRopa(p) ? '<br>' + pillTipo(p) : '') + '<br><span class="muted" style="font-size:13px">' + esc(p.cod) + ' · ' + plata(p.precio) + '</span></span><input class="inp" type="number" min="0" max="99" data-etq="' + esc(p.id) + '" value="' + (etqCant[p.id] || 0) + '" style="width:76px;text-align:center"></div>'; }).join("") +
+   con.map(function(p){ return '<div class="etq-sel">' + (p.foto ? '<img class="etq-ph" src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span class="etq-ph">' + iconoCat(p.cat) + '</span>') + '<span class="n">' + esc(p.n) + (p.det ? '<br><b style="color:var(--yel)">' + esc(p.det) + '</b>' : '') + (tipoDe(p) ? '<br>' + pillTipo(p) : '') + '<br><span class="muted" style="font-size:13px">' + esc(p.cod) + ' · ' + plata(p.precio) + '</span></span><input class="inp" type="number" min="0" max="99" data-etq="' + esc(p.id) + '" value="' + (etqCant[p.id] || 0) + '" style="width:76px;text-align:center"></div>'; }).join("") +
    '<button class="btn rojo" id="imprimir" style="margin-top:12px">🖨 Imprimir etiquetas</button><p class="muted" style="font-size:14px;margin:6px 0 0">Desde el celular: Imprimir → Guardar como PDF, y lo imprimes en cualquier lado. Usa una hoja adhesiva A4 del tipo que elegiste arriba.</p></div>';
  }
  v.innerHTML = h;
@@ -1460,7 +1464,7 @@ function crearCodigos(lista){
 }
 function imprimirEtiquetas(){
  var h = "";
- activos().forEach(function(p){ var n = etqCant[p.id] || 0; for(var i = 0; i < n; i++) h += '<div class="etq"><b>' + esc(p.n) + '</b>' + (p.det ? '<span class="det">' + esc(p.det) + '</span>' : '') + (tipoRopa(p) ? '<span class="fila-pr"><span class="tp' + (tipoRopa(p) === "americana" ? ' amer">AMERICANA' : '">NUEVA') + '</span><span class="pr">' + plata(p.precio) + '</span></span>' : '<span class="pr">' + plata(p.precio) + '</span>') + svgEAN(p.cod) + '</div>'; });
+ activos().forEach(function(p){ var n = etqCant[p.id] || 0; for(var i = 0; i < n; i++) h += '<div class="etq"><b>' + esc(p.n) + '</b>' + (p.det ? '<span class="det">' + esc(p.det) + '</span>' : '') + (tipoDe(p) ? '<span class="fila-pr"><span class="tp' + (tipoDe(p) === "americana" ? ' amer">AMERICANA' : '">NUEVA') + '</span><span class="pr">' + plata(p.precio) + '</span></span>' : '<span class="pr">' + plata(p.precio) + '</span>') + svgEAN(p.cod) + '</div>'; });
  if(!h){ toast("Elige cuántas etiquetas quieres imprimir."); return; }
  $("hojaEtiquetas").innerHTML = h;
  var chica = etqFormato() === "chica";

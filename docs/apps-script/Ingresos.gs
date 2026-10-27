@@ -863,7 +863,10 @@ function tiendaVitrina_(e) {
     }
     /* Precio de lanzamiento (Versión 26): hasta la fecha elegida sale con el precio especial y «NUEVO». */
     /* Versión 27: ropa ✨ nueva o ♻️ americana (ext.tipo; si no lo tiene, «americana» en el detalle). */
-    if (unica && !(pack && pack.length)) x.tipo = p.ext && (p.ext.tipo === "americana" || p.ext.tipo === "nueva") ? p.ext.tipo : (/americana/i.test(p.det || "") ? "americana" : "nueva");
+    function tipoRopa_(q) { return q.ext && (q.ext.tipo === "americana" || q.ext.tipo === "nueva") ? q.ext.tipo : (/americana/i.test(q.det || "") ? "americana" : "nueva"); }
+    if (unica && !(pack && pack.length)) x.tipo = tipoRopa_(p);
+    /* Un pack de ropa es «americana» o «nueva» si todas sus prendas lo son. */
+    if (unica && pack && pack.length) { var tps = pack.map(function (c) { var q = porId[c.id]; return q ? tipoRopa_(q) : ""; }); if (tps[0] && tps.every(function (t) { return t === tps[0]; })) x.tipo = tps[0]; }
     var lz = p.ext && p.ext.lanz;
     if (lz && lz.hasta >= hoy && Number(lz.precio) > 0 && Number(lz.precio) < p.precio) { x.antes = p.precio; x.precio = Number(lz.precio); x.nuevo = true; }
     if (unica && stock <= 0 && ult[p.id]) {

@@ -235,6 +235,7 @@ Administrar implementaciones → lápiz → Versión nueva → Implementar (para
   la tarjeta muestre «🎁 AHORRAS X %» con el precio suelto tachado.
 - Cada prenda (ropa y zapatillas, no packs) manda `tipo`: `nueva` o `americana` (de `ext.tipo` de la ficha; si no lo
   tiene, «americana» en el detalle), para que la tarjeta muestre «✨ Nueva» o «♻️ Americana».
+  Un pack de ropa manda `tipo` si todas sus prendas son del mismo tipo.
 - `tiendaListar` responde `v: 27`. Nada más cambia: solo hace falta instalarla antes de encender la tienda en la
   tarjeta de los socios.
 
