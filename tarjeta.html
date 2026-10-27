@@ -2448,7 +2448,7 @@ function renderEvolucion(s){
     cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
     Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
  var TIENDA_VITRINA_ACTIVA = false;
- var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Otro":"📦" };
+ var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Otro":"📦" };
  function tiendaCat_(c){ return c === "Bebidas" ? "Bebestibles" : (c === "Ropa deportiva" ? "Ropa mujer" : (c || "Otro")); }
  function tiendaFoto_(p){ return p.foto ? escapeHtml(p.foto) + "?v=" + TIENDA_FOTO_V : "maquinas-wgymadnsport/comun/logo.png"; }
  function renderTienda_(s){
@@ -2496,7 +2496,7 @@ function renderEvolucion(s){
   });
  }
  function tiendaVentanita_(s, p){
-  var ropa = /^Ropa/.test(p.cat), max = ropa ? 1 : Math.max(1, Math.min(p.q, 9)), cant = 1;
+  var ropa = /^(Ropa|Zapatillas)/.test(p.cat), max = ropa ? 1 : Math.max(1, Math.min(p.q, 9)), cant = 1;
   var fondo = document.createElement("div"); fondo.className = "tv-modal";
   fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big"><img src="' + tiendaFoto_(p) + '" alt=""></div>' +
    '<h3>' + escapeHtml(p.n) + '</h3>' + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
@@ -2560,7 +2560,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102604", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102701", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
