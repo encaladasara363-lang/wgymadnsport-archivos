@@ -2472,7 +2472,7 @@ function renderEvolucion(s){
     oculta con «Ya no lo vendo» no llega. «Lo quiero» abre una ventanita (foto grande, cantidad, total)
     y después WhatsApp a Sara con el pedido. El stock solo baja cuando ella cobra en la tienda.
     Al cambiar una foto de img/tienda/ con el mismo nombre, subir TIENDA_FOTO_V junto con FOTO_V de tienda.html. */
- var TIENDA_FOTO_V = "49", TIENDA_WSP = "56975196394";
+ var TIENDA_FOTO_V = "49", TIENDA_WSP = "56975196394", TIENDA_SITIO = "https://encaladasara363-lang.github.io/wgymadnsport-archivos/";
  /* Interruptor (25-10-2026, la dueña: "no quiero publicar la tienda el lunes porque compré ropa en Shein y no sé
     cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
     Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
@@ -2602,7 +2602,10 @@ function renderEvolucion(s){
   fondo.querySelector("#tvSi").addEventListener("click", function(){
    var quien = ((s.nombre || "") + " " + (s.apellido || "")).trim().toUpperCase();
    var txt = "Hola 👋 Soy " + quien + " (socio/a WGYM).\nQuiero de la tienda:\n🛍 " + (cant > 1 ? cant + " × " : "") + p.n + (crea ? " + creatina" : "") + (p.det ? " · " + p.det : "") +
-    " · " + clp(unidad() * cant) + (p.pronto ? "\n⏳ Sé que llega pronto: ¿me lo reservas y me avisas cuando llegue?" : "\n¿Me lo puedes guardar?");
+    " · " + clp(unidad() * cant) + (p.pronto ? "\n⏳ Sé que llega pronto: ¿me lo reservas y me avisas cuando llegue?" : "\n¿Me lo puedes guardar?") +
+    /* La foto del producto al final (27-10-2026, la dueña: "me cuesta identificar por nombre lo que quiere"):
+       WhatsApp muestra la vista previa de la primera foto. */
+    (p.fotos && p.fotos.length ? p.fotos : p.foto ? [p.foto] : []).map(function(f){ return "\n📷 " + TIENDA_SITIO + encodeURI(f); }).join("");
    window.open("https://wa.me/" + TIENDA_WSP + "?text=" + encodeURIComponent(txt), "_blank");
    cerrar();
   });
@@ -2644,7 +2647,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102723", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102724", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
