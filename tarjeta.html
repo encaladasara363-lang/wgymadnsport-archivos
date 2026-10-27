@@ -245,23 +245,29 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .nutri-promo a.pago-btn{ display:block; text-align:center; text-decoration:none; }
 /* 🛍 Tienda WGYM (25-10-2026, la dueña eligió la idea 1): vitrina con precio de venta y "Lo quiero". */
 .tv-chips{ display:flex; gap:7px; overflow-x:auto; padding:2px 0 8px; margin:8px 0 4px; }
-.tv-chip{ flex:none; font:800 italic 15px 'Barlow Condensed',Arial,sans-serif; padding:7px 13px; border-radius:999px; border:2px solid #333; background:#0D0D0F; color:#fff; white-space:nowrap; }
+.tv-chip{ flex:none; font:800 italic 18px 'Barlow Condensed',Arial,sans-serif; padding:7px 13px; border-radius:999px; border:2px solid #333; background:#0D0D0F; color:#fff; white-space:nowrap; }
 .tv-chip.on{ background:#E30613; border-color:#E30613; }
 .tv-grid{ display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:8px; }
 .tv-grid > .tv-p{ flex:0 0 46%; scroll-snap-align:start; }
-.tv-desliza{ margin:2px 0 6px; font-size:13px; color:#bbb; text-align:right; }
+.tv-desliza{ margin:2px 0 6px; font-size:16px; color:#bbb; text-align:right; }
 .tv-p{ background:#0D0D0F; border:1px solid #2a2a2e; border-radius:14px; overflow:hidden; display:flex; flex-direction:column; position:relative; text-align:left; color:#fff; padding:0; font:inherit; }
 .tv-ph{ background:#fff; aspect-ratio:3/4; }
 .tv-ph img{ width:100%; height:100%; object-fit:contain; display:block; }
 .tv-in{ padding:8px 9px 10px; display:flex; flex-direction:column; gap:4px; flex:1; }
-.tv-n{ font:800 15px/1.1 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; }
-.tv-d{ font-size:13px; color:#bbb; }
-.tv-tipo{ display:inline-block; align-self:flex-start; font:800 12px/1.2 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; color:#000; background:#7CE39A; border-radius:999px; padding:2px 8px; }
+.tv-n{ font:800 20px/1.1 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; }
+.tv-d{ font-size:16px; color:#ccc; }
+#tiendaCard .rank-sub{ font-size:18px; }
+.tv-hoja .rank-sub{ font-size:18px; }
+.tv-badges{ display:flex; flex-wrap:wrap; gap:5px; }
+.tv-badges.grande{ margin:8px 0 4px; }
+.tv-badges.grande .tv-tipo{ font-size:18px; padding:4px 12px; }
+.tv-tipo.pronto{ background:#5BC0FF; }
+.tv-tipo{ display:inline-block; align-self:flex-start; font:800 15px/1.2 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; color:#000; background:#7CE39A; border-radius:999px; padding:3px 9px; }
 .tv-tipo.amer{ background:#D4AF37; }
-.tv-ok{ font-size:12.5px; font-weight:800; color:#0A0A0B; background:#2ECC71; border-radius:6px; padding:2px 7px; align-self:flex-start; }
+.tv-ok{ font-size:15px; font-weight:800; color:#0A0A0B; background:#2ECC71; border-radius:6px; padding:2px 7px; align-self:flex-start; }
 .tv-ok.poco{ background:#FFD400; }
-.tv-pr{ font-family:'Anton',Impact,sans-serif; color:var(--dorado); font-size:24px; margin-top:auto; }
-.tv-btn{ text-align:center; font:800 italic 15px 'Barlow Condensed',Arial,sans-serif; padding:8px; border-radius:10px; background:linear-gradient(180deg,#FF2A35,#E30613 55%,#B8040F); box-shadow:0 4px 0 #7a030b; margin-bottom:4px; }
+.tv-pr{ font-family:'Anton',Impact,sans-serif; color:var(--dorado); font-size:30px; margin-top:auto; }
+.tv-btn{ text-align:center; font:800 italic 18px 'Barlow Condensed',Arial,sans-serif; padding:8px; border-radius:10px; background:linear-gradient(180deg,#FF2A35,#E30613 55%,#B8040F); box-shadow:0 4px 0 #7a030b; margin-bottom:4px; }
 .tv-p.agotado .tv-ph img{ filter:grayscale(1) brightness(.55); }
 .tv-p.agotado .tv-btn{ background:#333; box-shadow:none; color:#aaa; }
 .tv-pack{ display:flex; gap:2px; width:100%; height:100%; background:#fff; }
@@ -274,19 +280,19 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-nuevo{ position:absolute; top:8px; left:8px; font-family:'Rubik Distressed','Anton',sans-serif; font-size:18px; color:#000; background:#FFD400; border:2px solid #000; padding:1px 8px; border-radius:6px; }
 .tv-antes{ text-decoration:line-through; opacity:.6; font-size:.7em; margin-right:6px; }
 .tv-sello{ position:absolute; top:34%; left:50%; transform:translate(-50%,-50%) rotate(-12deg); font-family:'Rubik Distressed','Anton',sans-serif; font-size:26px; color:#fff; background:#E30613; border:3px solid #fff; padding:3px 10px; border-radius:8px; }
-.tv-mas{ display:block; width:100%; margin-top:10px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:12px; font:800 italic 17px 'Barlow Condensed',Arial,sans-serif; }
-.tv-nota{ margin:12px 0 0; font-size:14px; line-height:1.4; color:#ddd; border-left:4px solid var(--dorado); padding:8px 10px; background:#0D0D0F; border-radius:8px; }
+.tv-mas{ display:block; width:100%; margin-top:10px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:12px; font:800 italic 20px 'Barlow Condensed',Arial,sans-serif; }
+.tv-nota{ margin:12px 0 0; font-size:17px; line-height:1.4; color:#ddd; border-left:4px solid var(--dorado); padding:8px 10px; background:#0D0D0F; border-radius:8px; }
 .tv-modal{ position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.82); display:flex; align-items:flex-end; justify-content:center; }
 .tv-hoja{ background:#151517; border:2px solid var(--dorado); border-radius:20px 20px 0 0; width:100%; max-width:480px; max-height:94vh; overflow-y:auto; padding:14px 16px 22px; color:#fff; }
 .tv-hoja .tv-big{ background:#fff; border-radius:12px; overflow:hidden; }
 .tv-hoja .tv-big img{ width:100%; max-height:40vh; object-fit:contain; display:block; }
-.tv-hoja h3{ margin:12px 0 2px; font-size:24px; text-transform:uppercase; }
+.tv-hoja h3{ margin:12px 0 2px; font-size:28px; text-transform:uppercase; }
 .tv-cant{ display:flex; align-items:center; justify-content:center; gap:18px; margin:12px 0; }
 .tv-cant button{ width:52px; height:52px; border-radius:50%; border:2px solid var(--dorado); background:#0D0D0F; color:#fff; font-size:28px; font-weight:800; }
 .tv-cant b{ font-family:'Anton',Impact,sans-serif; font-size:34px; min-width:40px; text-align:center; }
-.tv-total{ text-align:center; font-size:18px; margin:0 0 12px; }
-.tv-total b{ font-family:'Anton',Impact,sans-serif; color:var(--dorado); font-size:28px; }
-.tv-volver{ display:block; width:100%; margin-top:10px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:12px; font:800 italic 17px 'Barlow Condensed',Arial,sans-serif; }
+.tv-total{ text-align:center; font-size:21px; margin:0 0 12px; }
+.tv-total b{ font-family:'Anton',Impact,sans-serif; color:var(--dorado); font-size:34px; }
+.tv-volver{ display:block; width:100%; margin-top:10px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:12px; font:800 italic 20px 'Barlow Condensed',Arial,sans-serif; }
 .pago-kicker{ font-size:10.5px; font-weight:800; letter-spacing:.14em; color:var(--dorado); text-transform:uppercase; margin:0 0 6px; }
 .pago-monto{ display:inline-block; font-size:34px; font-weight:900; color:#FFD84D; line-height:1.1; margin:2px 0 0; padding:6px 16px; border:2px solid var(--dorado); border-radius:12px; background:#211c0c; }
 .pago-plan{ font-size:12.5px; color:var(--gris-soft); font-weight:700; margin:2px 0 12px; }
@@ -2500,7 +2506,7 @@ function renderEvolucion(s){
      (ropa ? '<p class="rank-sub">👚 Ropa deportiva <b style="color:var(--dorado)">nueva</b>' + (amer ? ' y <b style="color:var(--dorado)">americana</b>' : '') + '</p>' : '') +
      (snack || beb ? '<p class="rank-sub">🍫 ' + (snack && beb ? 'Snacks saludables y bebestibles' : snack ? 'Snacks saludables' : 'Bebestibles') + '</p>' : '') +
      (pack ? '<p class="rank-sub">🎁 Packs con descuento</p>' : '') +
-     '<p class="rank-sub"><b style="color:var(--dorado)">' + disp + (disp === 1 ? ' producto disponible' : ' productos disponibles') + '</b>' + (pr ? ' · ⏳ ' + pr + ' llegan pronto' : '') + '. Pídelos por WhatsApp a Sara.</p>' +
+     '<p class="rank-sub"><b style="color:var(--dorado)">' + disp + (disp === 1 ? ' producto disponible' : ' productos disponibles') + '</b>' + (pr ? ' · ⏳ ' + pr + ' llegan pronto' : '') + '. Pídelos por WhatsApp.</p>' +
      '<button type="button" class="pago-btn principal" id="tvAbrir" style="width:100%">🛍 Ver tienda WGYM</button>';
     box.querySelector("#tvAbrir").addEventListener("click", function(){ abierta = true; pintar(); });
    }
@@ -2508,15 +2514,15 @@ function renderEvolucion(s){
     if(!abierta){ cerrada(); return; }
     /* Una fila que se desliza de lado (27-10-2026, la dueña: "no una lista grande para abajo"): sin «Ver todos». */
     var vis = l.filter(function(p){ return cat === "Todos" || p.cat === cat; }), cortar = false;
-    box.innerHTML = '<p class="pago-kicker">🛍 Tienda WGYM</p><p class="rank-sub">Lo que tenemos hoy en el gimnasio. Toca «Lo quiero» y Sara te lo guarda.</p>' +
+    box.innerHTML = '<p class="pago-kicker">🛍 Tienda WGYM</p><p class="rank-sub">Lo que tenemos hoy en el gimnasio. Toca «Lo quiero» y te lo guardamos.</p>' +
      '<div class="tv-chips">' + cats.map(function(c){ return '<button type="button" class="tv-chip' + (c === cat ? ' on' : '') + '" data-tc="' + escapeHtml(c) + '">' + (c === "Todos" ? "🛍" : TIENDA_ICONOS[c]) + ' ' + escapeHtml(c) + '</button>'; }).join("") + '</div>' +
      (vis.length > 2 ? '<p class="tv-desliza">' + vis.length + ' productos · desliza ➜</p>' : '') +
      '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
       var ag = !(p.q > 0) && !p.pronto, i = l.indexOf(p), ll = p.llega ? ' · ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) : '';
       return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + '</div>' +
-       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.pronto ? '<span class="tv-nuevo pronto">⏳ LLEGA PRONTO</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' + (p.tipo ? '<span class="tv-tipo ' + (p.tipo === "americana" ? 'amer' : '') + '">' + (p.tipo === "americana" ? '♻️ Americana' : '✨ Nueva') + '</span>' : '') +
+       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' + tvBadges_(p, ag, false) +
        (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
-       (ag ? '' : p.pronto ? '<span class="tv-ok pronto">🕒 Llega pronto' + ll + '</span>' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
+       (ag || p.pronto ? '' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
        '<span class="tv-pr">' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + clp(p.precio) + '</span><span class="tv-btn">' + (p.pronto && !ag ? '🔔 Reservar' : ag ? (p.vendido ? 'Ya se vendió' : 'Pronto vuelve') : '💬 Lo quiero') + '</span></div></button>';
      }).join("") + '</div>' +
      (cortar ? '<button type="button" class="tv-mas" id="tvMas">Ver todos (' + vis.length + ') ▼</button>' : '') +
@@ -2532,12 +2538,19 @@ function renderEvolucion(s){
    pintar();
   });
  }
+ /* «✨ Nueva / ♻️ Americana» y «⏳ Llega pronto» en una misma fila (27-10-2026, la dueña: "el llega pronto al lado de nueva"). */
+ function tvBadges_(p, ag, grande){
+  var ll = p.llega ? ' · ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) : '';
+  var h = (p.tipo ? '<span class="tv-tipo' + (p.tipo === "americana" ? ' amer' : '') + '">' + (p.tipo === "americana" ? '♻️ Americana' : '✨ Nueva') + '</span>' : '') +
+   (p.pronto && !ag ? '<span class="tv-tipo pronto">⏳ Llega pronto' + ll + '</span>' : '');
+  return h ? '<span class="tv-badges' + (grande ? ' grande' : '') + '">' + h + '</span>' : '';
+ }
  function tiendaVentanita_(s, p){
   var ropa = /^(Ropa|Zapatillas)/.test(p.cat) || (p.pack && p.q <= 1), max = ropa ? 1 : p.pronto ? 9 : Math.max(1, Math.min(p.q, 9)), cant = 1;
   var fondo = document.createElement("div"); fondo.className = "tv-modal";
   fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big">' + tiendaFotos_(p) + '</div>' +
-   '<h3>' + escapeHtml(p.n) + '</h3>' + (p.tipo ? '<p><span class="tv-tipo ' + (p.tipo === "americana" ? 'amer' : '') + '">' + (p.tipo === "americana" ? '♻️ Americana · seleccionada y lista para usar' : '✨ Nueva') + '</span></p>' : '') + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
-   '<p class="tv-total">Precio: ' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + '<b>' + clp(p.precio) + '</b>' + (p.nuevo ? ' 🚀 precio de lanzamiento' : '') + '</p>' + (p.pronto ? '<p class="tv-total" style="color:#5BC0FF">⏳ Llega pronto' + (p.llega ? ' (aprox. ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) + ')' : '') + '. Resérvalo y Sara te avisa cuando llegue.</p>' : '') + (p.ahorro ? '<p class="tv-total" style="color:#7CE39A">🎁 Llevando el pack ahorras ' + clp(p.antes - p.precio) + ' (' + p.ahorro + ' %) que comprando cada cosa por separado</p>' : '') +
+   '<h3>' + escapeHtml(p.n) + '</h3>' + tvBadges_(p, false, true) + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
+   '<p class="tv-total">Precio: ' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + '<b>' + clp(p.precio) + '</b>' + (p.nuevo ? ' 🚀 precio de lanzamiento' : '') + '</p>' +  (p.ahorro ? '<p class="tv-total" style="color:#7CE39A">🎁 Llevando el pack ahorras ' + clp(p.antes - p.precio) + ' (' + p.ahorro + ' %) que comprando cada cosa por separado</p>' : '') +
    (max > 1 ? '<div class="tv-cant"><button type="button" id="tvMenos">−</button><b id="tvCant">1</b><button type="button" id="tvMasUno">+</button></div>' : '') +
    '<p class="tv-total" id="tvTot"></p>' +
    '<button type="button" class="pago-btn principal" id="tvSi" style="width:100%">' + (p.pronto ? '🔔 Reservar por WhatsApp' : '💬 Pedir por WhatsApp') + '</button>' +
@@ -2554,7 +2567,7 @@ function renderEvolucion(s){
   fondo.addEventListener("click", function(ev){ if(ev.target === fondo) cerrar(); });
   fondo.querySelector("#tvSi").addEventListener("click", function(){
    var quien = ((s.nombre || "") + " " + (s.apellido || "")).trim().toUpperCase();
-   var txt = "Hola Sara 👋 Soy " + quien + " (socio/a WGYM).\nQuiero de la tienda:\n🛍 " + (cant > 1 ? cant + " × " : "") + p.n + (p.det ? " · " + p.det : "") +
+   var txt = "Hola 👋 Soy " + quien + " (socio/a WGYM).\nQuiero de la tienda:\n🛍 " + (cant > 1 ? cant + " × " : "") + p.n + (p.det ? " · " + p.det : "") +
     " · " + clp(p.precio * cant) + (p.pronto ? "\n⏳ Sé que llega pronto: ¿me lo reservas y me avisas cuando llegue?" : "\n¿Me lo puedes guardar?");
    window.open("https://wa.me/" + TIENDA_WSP + "?text=" + encodeURIComponent(txt), "_blank");
    cerrar();
@@ -2597,7 +2610,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102715", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102716", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
