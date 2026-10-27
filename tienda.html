@@ -300,7 +300,17 @@ function activos(){ return S.productos.filter(function(p){ return p.activo && !r
 var DIAS_VENDIDO = 15;
 function ultimaVenta(id){ var u = ""; todosMovs().forEach(function(m){ if(m.est !== "anulada" && m.id === id && (m.tipo === "venta" || (m.tipo === "ajuste" && /^PACK /.test(m.nota || ""))) && m.f.slice(0, 10) > u) u = m.f.slice(0, 10); }); return u; }
 function ropaVendida(p){ if(!esUnica(p) || stockVer(p) > 0) return null; var u = ultimaVenta(p.id); if(!u) return null; var d = -diasHasta(u); return { f:u, dias:d, quedan:Math.max(0, DIAS_VENDIDO - d) }; }
-function retirada(p){ var v = ropaVendida(p); return !!v && v.dias > DIAS_VENDIDO; }
+function retirada(p){ var v = ropaVendida(p) || packDesarmado(p); return !!v && v.dias > DIAS_VENDIDO; }
+/* 🧩 Pack desarmado (27-10-2026, la dueña eligió la recomendación): si una prenda única de un pack se vendió por separado,
+   el pack ya no se puede vender: sale en gris «Se desarmó…», no se puede agregar a la venta (ni sale en la vitrina, con
+   la Versión 27) y 15 días después se quita solo. Los packs de productos que se reponen solo quedan SIN STOCK. */
+function packDesarmado(p){
+ if(!esPack(p) || !esUnica(p) || stockPack(p) > 0 || ultimaVenta(p.id)) return null;
+ var falta = partesPack(p).filter(function(x){ return !x.p || !x.p.activo || x.p.stock < x.c; })[0]; if(!falta) return null;
+ var u = falta.p ? ultimaVenta(falta.p.id) : ""; if(!u && falta.p) return null;
+ var d = u ? -diasHasta(u) : 0;
+ return { parte:falta.p ? falta.p.n : "una prenda", f:u, dias:d, quedan:Math.max(0, DIAS_VENDIDO - d) };
+}
 /* 🥤 Batidos del mismo tarro (26-10-2026, la dueña: el ganador de masa y el batido normal "tienen diferente valor"; eligió
    que el ganador descuente solo del tarro): un producto cuyo nombre calza con «de» no lleva stock propio; cada venta suya
    anota además un ajuste de −1 porción en el producto «base» (el que lleva el stock real del tarro). Al anular la venta,
@@ -461,7 +471,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102712";
+var TIENDA_VERSION = "2026102713";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -510,6 +520,7 @@ function render(){
 function precioDe(it){ return it.precio; }
 function totalCarro(){ return carro.reduce(function(s, it){ return s + it.cant * it.precio; }, 0); }
 function agregarAlCarro(p, cant){
+ var dz = packDesarmado(p); if(dz){ toast("🧩 Ese pack se desarmó: " + dz.parte + " se vendió por separado.", 4000); return; }
  var it = carro.filter(function(x){ return x.id === p.id && !x.crea && !x.apt; })[0];
  if(it) it.cant += cant || 1; else carro.push({ id:p.id, n:p.n, precio:precioVenta(p), cant:cant || 1 });
  vibrar(25);
@@ -540,10 +551,10 @@ function renderVender(){
  h += htmlHoyMini();
  v.innerHTML = h;
  if($("irInv")) $("irInv").onclick = function(){ document.querySelector('#nav [data-tab="inv"]').click(); };
- $("bEsc").onclick = function(){ abrirEscaner(function(cod){ var p = porCodigo(cod); if(p){ agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }, false); };
+ $("bEsc").onclick = function(){ abrirEscaner(function(cod){ var p = porCodigo(cod); if(p){ if(packDesarmado(p)){ agregarAlCarro(p); return "🧩 Pack desarmado"; } agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }, false); };
  $("bq").oninput = function(){ var q = normTxt(this.value).trim(), r = $("bres");
   if(!q){ r.hidden = true; return; }
-  var l = activos().filter(function(p){ return normTxt(p.n + " " + p.cat + " " + p.det + " " + p.cod).indexOf(q) >= 0; }).slice(0, 30);
+  var l = activos().filter(function(p){ return !packDesarmado(p) && normTxt(p.n + " " + p.cat + " " + p.det + " " + p.cod).indexOf(q) >= 0; }).slice(0, 30);
   r.hidden = false;
   r.innerHTML = l.length ? l.map(function(p){ return '<button data-add="' + esc(p.id) + '"><span style="font-size:24px">' + iconoCat(p.cat) + '</span><span class="n"><b>' + esc(p.n) + '</b><small>' + (apartadoDe(p) ? '📌 APARTADO · ' : '') + (ropaVendida(p) ? '✅ VENDIDO' : !basePorcion(p) && !apartadoDe(p) && stockVer(p) <= 0 ? '⛔ SIN STOCK' : 'Quedan ' + stockVer(p)) + (p.det ? ' · ' + esc(p.det) : '') + '</small></span><span class="precio" style="font-size:20px">' + plata(precioVenta(p)) + '</span></button>'; }).join("") : '<p class="muted" style="padding:10px;margin:0">No hay productos con ese nombre.</p>';
   r.querySelectorAll("[data-add]").forEach(function(b){ b.onclick = function(){ agregarAlCarro(prod(b.dataset.add)); renderVender(); toast("✅ Agregado"); }; });
@@ -632,9 +643,9 @@ function htmlListaInv(){
  var q = normTxt(invQ).trim();
  return activos().filter(function(p){ return (invFiltro === "Todos" || p.cat === invFiltro) && (!q || normTxt(p.n + " " + p.det + " " + p.cod).indexOf(q) >= 0); })
   .sort(function(a, b){ return a.n.localeCompare(b.n); }).map(function(p){
-   var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0, vd = ropaVendida(p), bp = basePorcion(p), ap = apartadoDe(p), pk = esPack(p), lz = lanzDe(p), ss = !vd && !bp && !ap && stockVer(p) <= 0;   // SIN STOCK (27-10-2026, pedido de la dueña)
-   return '<div class="card' + (vd || ss ? ' vendida' : '') + '"><div class="prod"><div class="ph">' + phHtml(p) + (vd ? '<span class="sello-v">VENDIDO</span>' : ss ? '<span class="sello-v">SIN STOCK</span>' : '') + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
-    '<div class="pills">' + (lz ? '<span class="pill oro">🚀 ' + plata(lz.precio) + ' hasta el ' + lz.hasta.slice(8, 10) + '/' + lz.hasta.slice(5, 7) + '</span>' : '') + (p.ext.ped ? '<span class="pill">📦 ' + esc(nombrePedido(p.ext.ped)) + '</span>' : '') + (ap ? '<span class="pill oro">📌 APARTADO · ' + esc(ap.nombre) + ' · ' + (aptVencido(ap) ? 'se le pasó la hora' : 'hasta ' + aptHasta(ap)) + '</span>' : '') + (bp ? '<span class="pill ' + (bp.stock <= bp.min ? 'bajo' : 'ok') + '">🥤 Sale del tarro · quedan ' + bp.stock + '</span>' : vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : pk && !ss ? '<span class="pill ' + (stockPack(p) <= 0 ? 'bajo' : 'ok') + '">🎁 Alcanza para ' + stockPack(p) + '</span>' : ss ? '<span class="pill vend">⛔ SIN STOCK · repón con «Llegó mercadería»</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
+   var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0, vd = ropaVendida(p), bp = basePorcion(p), ap = apartadoDe(p), pk = esPack(p), lz = lanzDe(p), dz = packDesarmado(p), ss = !vd && !dz && !bp && !ap && stockVer(p) <= 0;   // SIN STOCK (27-10-2026, pedido de la dueña)
+   return '<div class="card' + (vd || ss || dz ? ' vendida' : '') + '"><div class="prod"><div class="ph">' + phHtml(p) + (vd ? '<span class="sello-v">VENDIDO</span>' : dz ? '<span class="sello-v" style="font-size:11px">DESARMADO</span>' : ss ? '<span class="sello-v">SIN STOCK</span>' : '') + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
+    '<div class="pills">' + (lz ? '<span class="pill oro">🚀 ' + plata(lz.precio) + ' hasta el ' + lz.hasta.slice(8, 10) + '/' + lz.hasta.slice(5, 7) + '</span>' : '') + (p.ext.ped ? '<span class="pill">📦 ' + esc(nombrePedido(p.ext.ped)) + '</span>' : '') + (ap ? '<span class="pill oro">📌 APARTADO · ' + esc(ap.nombre) + ' · ' + (aptVencido(ap) ? 'se le pasó la hora' : 'hasta ' + aptHasta(ap)) + '</span>' : '') + (bp ? '<span class="pill ' + (bp.stock <= bp.min ? 'bajo' : 'ok') + '">🥤 Sale del tarro · quedan ' + bp.stock + '</span>' : vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : dz ? '<span class="pill vend" style="white-space:normal;line-height:1.2">🧩 Se desarmó: ' + esc(dz.parte) + ' se vendió por separado · se quita ' + (dz.quedan ? 'en ' + dz.quedan + (dz.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : pk && !ss ? '<span class="pill ' + (stockPack(p) <= 0 ? 'bajo' : 'ok') + '">🎁 Alcanza para ' + stockPack(p) + '</span>' : ss ? '<span class="pill vend">⛔ SIN STOCK · repón con «Llegó mercadería»</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
     (bp ? '<p class="muted" style="font-size:15px;margin:8px 0 0">Cada venta descuenta 1 porción de «' + esc(bp.n) + '». Cuando compres otro tarro, súmalo ahí.</p>' : '') +
     (pk ? '<p class="muted" style="font-size:15px;margin:8px 0 0">🎁 Pack de: ' + partesPack(p).map(function(x){ return (x.c > 1 ? x.c + ' × ' : '') + esc(x.p ? x.p.n + (x.p.det ? ' (' + x.p.det + ')' : '') : '(producto borrado)'); }).join(' + ') + '. Al venderlo se descuenta cada parte.</p>' : '') + '<div class="grid2" style="margin-top:10px">' + (bp || pk ? '<span></span>' : '<button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button>') + '<button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div>' +
     (ap ? '<div class="grid2" style="margin-top:8px"><button class="btn chico verde" style="width:100%" data-ret="' + ap.tok + '">💵 Retiró y pagó</button><button class="btn chico" style="width:100%" data-lib="' + ap.tok + '">↩ Liberar</button></div>' : (!bp && stockVer(p) > 0 && sePuedeApartar(p) ? '<button class="btn chico" style="width:100%;margin-top:8px" data-apt="' + esc(p.id) + '">📌 Apartar</button>' : '')) + '</div>';
