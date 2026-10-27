@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Copiar código del Apps Script · WGYM</title>
+<!-- Página para la dueña (27-10-2026, "me mandas el código para llegar y copiar"): un botón copia completo
+     docs/apps-script/Ingresos.gs para pegarlo en INGRESOS del Apps Script. Lee siempre la versión publicada. -->
+<style>
+body{margin:0;background:#0A0A0B;color:#fff;font-family:Arial,sans-serif;padding:18px 16px 40px}
+h1{font-size:24px;margin:0 0 6px;color:#FFD400;text-transform:uppercase}
+p{font-size:17px;line-height:1.45;margin:8px 0}
+button{display:block;width:100%;border:2px solid #D4AF37;border-radius:14px;padding:18px;font-size:21px;font-weight:800;text-transform:uppercase;background:#E30613;color:#fff;margin:14px 0 8px;cursor:pointer}
+button[disabled]{opacity:.5}
+#estado{min-height:24px;font-weight:800;font-size:18px;text-align:center}
+.ok{color:#7CE39A}.mal{color:#FF8A8F}
+ol{font-size:17px;line-height:1.6;padding-left:22px}
+textarea{width:100%;box-sizing:border-box;height:180px;background:#17171A;color:#ccc;border:1px solid #333;border-radius:10px;font:12px monospace;padding:8px}
+</style>
+</head>
+<body>
+<h1>📋 Código del Apps Script</h1>
+<p id="info">Cargando el código…</p>
+<button id="copiar" disabled>📋 Copiar todo el código</button>
+<p id="estado"></p>
+<ol>
+ <li>Toca el botón rojo.</li>
+ <li>Abre el Apps Script y entra a <b>INGRESOS</b>.</li>
+ <li>Borra todo lo que hay (seleccionar todo → borrar).</li>
+ <li>Pega (mantén apretado → Pegar).</li>
+ <li>Guarda 💾 y espera que no diga «Cambios sin guardar».</li>
+ <li>Implementar → Administrar implementaciones → lápiz → <b>Versión nueva</b> → Implementar.</li>
+</ol>
+<p style="color:#aaa;font-size:15px">Si el botón no copia, mantén apretado dentro del cuadro de abajo → Seleccionar todo → Copiar.</p>
+<textarea id="txt" readonly></textarea>
+<script>
+(function(){
+ var codigo = "", $ = function(id){ return document.getElementById(id); };
+ fetch("docs/apps-script/Ingresos.gs?t=" + Date.now(), { cache:"no-store" }).then(function(r){ if(!r.ok) throw 0; return r.text(); }).then(function(t){
+  codigo = t; $("txt").value = t; $("copiar").disabled = false;
+  var v = (/v: (\d+), hoy:/.exec(t) || [])[1];
+  $("info").textContent = "Listo: " + t.split("\n").length + " líneas" + (v ? " · Versión " + v + " de la tienda" : "") + ".";
+ })["catch"](function(){ $("info").textContent = "No se pudo cargar el código. Revisa tu internet y recarga la página."; });
+ function viejo(){ var t = $("txt"); t.focus(); t.select(); t.setSelectionRange(0, codigo.length); var ok = false; try{ ok = document.execCommand("copy"); }catch(e){} return ok; }
+ $("copiar").onclick = function(){
+  function bien(){ $("estado").className = "ok"; $("estado").textContent = "✅ Copiado. Ahora pégalo en INGRESOS."; }
+  function mal(){ $("estado").className = "mal"; $("estado").textContent = "No se pudo copiar solo. Usa el cuadro de abajo."; }
+  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(codigo).then(bien, function(){ viejo() ? bien() : mal(); });
+  else viejo() ? bien() : mal();
+ };
+})();
+</script>
+</body>
+</html>
