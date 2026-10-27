@@ -479,7 +479,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102726";
+var TIENDA_VERSION = "2026102727";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -627,7 +627,8 @@ function renderInv(){
   var nped = pedidos().length;
   h += '<div class="grid2" style="margin-top:8px"><button class="btn" id="bPack">🎁 Armar pack</button><button class="btn" id="bPed">📦 Mis pedidos' + (nped ? ' (' + nped + ')' : '') + '</button></div>';
   var na = apartados().length;
-  h += '<button class="btn' + (na ? ' oro' : '') + '" id="bApart" style="margin-top:8px">📌 Apartados' + (na ? ' (' + na + ')' : '') + '</button>';
+  var nr = reservados().length;
+  h += '<div class="grid2" style="margin-top:8px"><button class="btn' + (na ? ' oro' : '') + '" id="bApart">📌 Apartados' + (na ? ' (' + na + ')' : '') + '</button><button class="btn' + (nr ? ' oro' : '') + '" id="bReserv">📌 Reservados' + (nr ? ' (' + nr + ')' : '') + '</button></div>';
   var vencidos = pv.filter(function(x){ return x.dias < 0; });
   if(vencidos.length) h += '<div class="aviso">⛔ Vencido: ' + vencidos.map(function(x){ return esc(x.p.n); }).join(", ") + '. Sácalo de la venta.</div>';
   /* El aviso «Quedan pocos» se sacó el 26-10-2026 (la dueña: "me sacas ese aviso, no me gusta"); lo que falta se ve en «🛍 Qué comprar». */
@@ -646,6 +647,7 @@ function renderInv(){
  if($("bPack")) $("bPack").onclick = function(){ formPack(); };
  if($("bPed")) $("bPed").onclick = verPedidos;
  if($("bApart")) $("bApart").onclick = verApartados;
+ if($("bReserv")) $("bReserv").onclick = verReservados;
  if($("iq")) $("iq").oninput = function(){ invQ = this.value; $("ilista").innerHTML = htmlListaInv(); enlazarInv(); };
  v.querySelectorAll("[data-cat]").forEach(function(b){ b.onclick = function(){ invFiltro = b.dataset.cat; renderInv(); }; });
  enlazarInv();
@@ -976,6 +978,25 @@ function prontoDe(p){ var x = p && p.ext && p.ext.pronto; return x ? (typeof x =
    En la vitrina de la tarjeta sale «RESERVADO» y ya no se puede pedir (Versión 28; el nombre nunca sale ahí). Se mantiene
    al cargar «Llegó mercadería»; cuando la cobras sale como vendida. */
 function reservaDe(p){ var x = p && p.ext && p.ext.reserva; return x && x.n ? x : null; }
+/* «📌 Reservados» (27-10-2026, la dueña: "que me aparezca la foto del producto que me reservaron"): lista con la foto
+   grande de cada reservado (no vendido), quién lo reservó y desde cuándo; tocar la foto la abre en pantalla completa. */
+function reservados(){ return activos().filter(function(p){ return reservaDe(p) && !ropaVendida(p); }); }
+function verReservados(){
+ var l = reservados();
+ abrirHoja('<div class="cab"><h3>📌 Reservados</h3><button class="btn chico volver" id="vrCerrar">← Volver</button></div>' +
+  (l.length ? l.map(function(p){ var r = reservaDe(p), pr = prontoDe(p);
+   return '<div class="card"><div class="prod"><div class="ph" style="width:150px;height:200px">' + phHtml(p) + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.det || p.cat) + '</span>' +
+    '<span style="font-size:20px;color:#FFD400;font-weight:800;margin-top:6px">Para ' + esc(r.n) + '</span>' +
+    (r.f ? '<span>Desde el ' + r.f.slice(8, 10) + '/' + r.f.slice(5, 7) + '</span>' : '') +
+    '<span>' + (pr ? '⏳ Todavía no llega' + (pr.f ? ' · ' + pr.f.slice(8, 10) + '/' + pr.f.slice(5, 7) : '') : stockVer(p) > 0 ? '✅ Ya llegó: avísale' : '⛔ Sin stock') + '</span>' +
+    '<span style="font-size:22px;font-weight:800">' + plata(precioVenta(p)) + '</span></div></div>' +
+    '<div class="grid2" style="margin-top:8px">' + (stockVer(p) > 0 ? '<button class="btn chico verde" style="width:100%" data-rcob="' + esc(p.id) + '">💵 Retiró y pagó</button>' : '<span></span>') +
+    '<button class="btn chico" style="width:100%" data-rfic="' + esc(p.id) + '">✏️ Abrir ficha</button></div></div>'; }).join("")
+  : '<div class="card"><p style="margin:0">No hay nada reservado. Para reservar algo, abre su ficha y marca «📌 Ya me lo reservaron».</p></div>'));
+ $("vrCerrar").onclick = cerrarHoja;
+ document.querySelectorAll("[data-rfic]").forEach(function(b){ b.onclick = function(){ var p = prod(b.dataset.rfic); if(p){ cerrarHoja(); formProducto(p); } }; });
+ document.querySelectorAll("[data-rcob]").forEach(function(b){ b.onclick = function(){ var p = prod(b.dataset.rcob); if(!p) return; agregarAlCarro(p, 1); cerrarHoja(); document.querySelector('#nav [data-tab="vender"]').click(); toast("Ahora cobra la venta"); }; });
+}
 function htmlExtraForm(p, nuevo){
  var ext = p.ext || {}, tp = tipoRopa(Object.assign({}, p, { cat:esRopa(p) ? p.cat : "Ropa mujer" })), lz = ext.lanz && ext.lanz.hasta >= (S.hoy || hoyISO()) ? ext.lanz : null, peds = pedidos();
  return '<div id="fTipoBox"' + (esRopa(p) ? '' : ' hidden') + '><label class="lab">¿Es ropa nueva o americana?</label><div class="chips"><button type="button" class="chip" data-ftipo="nueva" aria-pressed="' + (tp === "nueva") + '">✨ Nueva</button><button type="button" class="chip" data-ftipo="americana" aria-pressed="' + (tp === "americana") + '">♻️ Americana</button></div></div>' +
