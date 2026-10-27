@@ -80,6 +80,7 @@ nav#nav button[aria-pressed="true"]{ color:var(--red2); }
 .pk-chip{ flex:none; display:flex; align-items:center; gap:8px; max-width:230px; background:#2a2205; border:2px solid var(--gold); border-radius:12px; padding:6px 8px; color:var(--txt); font-weight:800; text-transform:uppercase; font-size:14px; text-align:left; }
 .pk-chip small{ display:block; font-weight:600; color:var(--yel); font-size:12px; }
 .pk-chip b{ color:#FF8A8F; font-size:18px; }
+.chip.desc{ background:#FFD400; color:#000; border-color:#000; }
 .pk-chip i{ font-style:normal; color:#7CE39A; font-size:20px; padding:0 4px; }
 .chip{ flex:none; border-radius:999px; padding:8px 14px; background:var(--card2); border:1px solid var(--line); font-size:15px; font-weight:800; text-transform:uppercase; }
 .chip[aria-pressed="true"]{ background:var(--red); border-color:var(--red); color:#fff; }
@@ -448,7 +449,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102710";
+var TIENDA_VERSION = "2026102711";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -995,7 +996,7 @@ function formPack(){
   $("pkRes").innerHTML = uds < 2 ? '<p class="muted" style="margin:8px 0 0">Elige al menos 2 productos (o toca ＋ para llevar 2 del mismo).</p>' :
    '<p style="margin:8px 0 4px;font-size:16px">' + ps.map(function(x){ return (x.c > 1 ? x.c + ' × ' : '') + esc(x.p.n); }).join(" + ") + '</p>' +
    '<p class="muted" style="margin:0 0 6px">Separados valen ' + plata(suma) + ' · te costaron ' + plata(costo) + '</p><div class="chips">' +
-   [[0.9,"−10 %"],[0.85,"−15 %"],[0.8,"−20 %"]].map(function(x){ var v = Math.ceil(suma * x[0] / 500) * 500; return '<button class="chip" data-pkp="' + v + '">' + x[1] + ' · ' + plata(v) + '</button>'; }).join("") + '</div>';
+   [[0.9,"−10 %"],[0.85,"−15 %"],[0.8,"−20 %"]].map(function(x){ var v = Math.ceil(suma * x[0] / 500) * 500; return '<button class="chip desc" data-pkp="' + v + '">' + x[1] + ' · ' + plata(v) + '</button>'; }).join("") + '</div>';
   $("pkRes").querySelectorAll("[data-pkp]").forEach(function(b){ b.onclick = function(){ $("pkPre").value = b.dataset.pkp; gan(); }; });
   if(!$("pkN").dataset.tocado) $("pkN").value = ps.length ? "Pack " + ps.map(function(x){ return x.p.n.split(" ")[0]; }).join(" + ") : "";
   gan();
