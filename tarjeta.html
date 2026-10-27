@@ -2458,7 +2458,7 @@ function renderEvolucion(s){
  /* Interruptor (25-10-2026, la dueña: "no quiero publicar la tienda el lunes porque compré ropa en Shein y no sé
     cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
     Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
- var TIENDA_VITRINA_ACTIVA = false;
+ var TIENDA_VITRINA_ACTIVA = true;
  var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Packs":"🎁", "Otro":"📦" };
  function tiendaCat_(c){ return c === "Bebidas" ? "Bebestibles" : (c === "Ropa deportiva" ? "Ropa mujer" : (c || "Otro")); }
  function tiendaFoto_(p){ return p.foto ? escapeHtml(p.foto) + "?v=" + TIENDA_FOTO_V : "maquinas-wgymadnsport/comun/logo.png"; }
@@ -2576,7 +2576,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102712", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102713", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
