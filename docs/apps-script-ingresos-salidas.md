@@ -208,3 +208,21 @@ lápiz → Versión nueva → Implementar (para volver atrás: Versión 23).
 
 Se instala igual que las anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar →
 Administrar implementaciones → lápiz → Versión nueva → Implementar (para volver atrás: Versión 24).
+
+## Versión 26 (27-10-2026): 🛒 Tienda — cuotas, packs, precio de lanzamiento, gastos y pedidos
+
+- La hoja «Tienda productos» suma la columna N «Extra» (JSON): `pack` (partes de un pack), `ped` (pedido del que
+  vino) y `lanz` (precio de lanzamiento hasta una fecha). Si una página antigua edita un producto sin mandarlo, se
+  deja el que tenía.
+- `tiendaVenta`: un pack no tiene stock propio; descuenta cada parte y lo anota como ajuste «PACK <venta>: …».
+  `tiendaAnular` devuelve también esas partes.
+- Acción nueva `tiendaAbono` (solo con la clave): abono de un fiado en cuotas (fila «abono» en «Tienda
+  movimientos»). Cuando los abonos llegan al total, el fiado queda «pagado cuotas <fecha>».
+- Acción nueva `tiendaGasto` (solo con la clave): gastos de la tienda y pedidos (hoja nueva «Tienda gastos»:
+  Fecha · Tipo · Id · Detalle · Monto · Categoría). `tiendaListar` entrega `gastos` y `v: 26`, y siempre trae los
+  abonos de los fiados pendientes.
+- `tiendaVitrina`: los packs muestran cuántos alcanzan sus partes y el precio de lanzamiento sale con `nuevo` y
+  el precio anterior (`antes`).
+
+Se instala igual que las anteriores: pegar `Ingresos.gs` completo en INGRESOS.gs, guardar, Implementar →
+Administrar implementaciones → lápiz → Versión nueva → Implementar (para volver atrás: Versión 25).
