@@ -869,7 +869,9 @@ function tiendaVitrina_(e) {
     if (unica && pack && pack.length) { var tps = pack.map(function (c) { var q = porId[c.id]; return q ? tipoRopa_(q) : ""; }); if (tps[0] && tps.every(function (t) { return t === tps[0]; })) x.tipo = tps[0]; }
     var lz = p.ext && p.ext.lanz;
     if (lz && lz.hasta >= hoy && Number(lz.precio) > 0 && Number(lz.precio) < p.precio) { x.antes = p.precio; x.precio = Number(lz.precio); x.nuevo = true; }
-    if (unica && stock <= 0 && ult[p.id]) {
+    /* Versión 27: ⏳ «Llega pronto» (ext.pronto): se muestra para reservar aunque todavía no haya stock. */
+    if (p.ext && p.ext.pronto) { x.pronto = true; x.llega = typeof p.ext.pronto === "object" && p.ext.pronto.f ? String(p.ext.pronto.f) : ""; }
+    if (unica && stock <= 0 && ult[p.id] && !x.pronto) {
       if (diasEntre_(ult[p.id], hoy) > DIAS_VENDIDO_TIENDA_) return;
       x.vendido = true;
     }
