@@ -478,7 +478,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102723";
+var TIENDA_VERSION = "2026102724";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1630,11 +1630,14 @@ function usarEnlace(){
  if(!ENLACE) return; var b = ENLACE; ENLACE = null;
  if(b.cat) b.cat = catNueva(b.cat);
  /* Mismo código de barras = mismo producto, aunque cambie el nombre (24-10-2026: «Trident Infinit Menta» pasó a «Peppermint»). */
- var ya = (b.cod && b.cod !== "auto" ? porCodigo(b.cod) : null) || activos().filter(function(p){ return normTxt(p.n) === normTxt(b.n) && normTxt(p.det) === normTxt(b.det || ""); })[0];
+ var ya = (b.cod && b.cod !== "auto" ? porCodigo(b.cod) : null) || activos().filter(function(p){ return normTxt(p.n) === normTxt(b.n) && normTxt(p.det) === normTxt(b.det || ""); })[0] ||
+  /* Solo foto (27-10-2026): un enlace con foto + tipo marca como americana/nueva una prenda ya cargada. */
+  (!b.n && b.foto ? activos().filter(function(p){ return p.foto === b.foto; })[0] : null);
  tab = "inv"; document.querySelectorAll("#nav button").forEach(function(x){ x.setAttribute("aria-pressed", x.dataset.tab === "inv"); }); render();
  ["costo","precio","stock","min"].forEach(function(k){ if(b[k] !== undefined) b[k] = num(b[k]); });
  /* Si ya existe, abre su ficha con los datos nuevos del enlace (ej. otro precio): ella revisa y toca Guardar. */
  if(ya){ var cambio = Object.assign({}, ya); ["n","cat","det","costo","precio","min","foto"].forEach(function(k){ if(b[k] !== undefined && b[k] !== "") cambio[k] = b[k]; });
+  if(b.tipo) cambio.ext = Object.assign({}, ya.ext || {}, { tipo:b.tipo === "americana" ? "americana" : "nueva" });
   toast("«" + ya.n + "» ya está en tu inventario: revisa el cambio y toca Guardar.", 5000); formProducto(cambio); return; }
  if(b.cod === "auto") b.cod = nuevoCodigo();
  if(b.tipo){ b.ext = { tipo:b.tipo === "americana" ? "americana" : "nueva" }; } delete b.tipo;
