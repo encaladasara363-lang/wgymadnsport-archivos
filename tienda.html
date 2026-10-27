@@ -479,7 +479,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102727";
+var TIENDA_VERSION = "2026102728";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1320,7 +1320,7 @@ function renderRes(){
  var gl = Object.keys(grupos).map(function(k){ return grupos[k]; }).sort(function(a, b){ return a.f < b.f ? 1 : -1; });
  h += '<div class="card"><b style="text-transform:uppercase">🧾 Ventas</b>' + (gl.length ? gl.map(function(g){
   return '<div class="mov' + (g.est === "anulada" ? ' anulada' : '') + '"><div class="d">' + g.items.map(function(i){ return i.cant + ' × ' + esc(i.n); }).join(", ") + '<small>' + esc(g.f.slice(5, 16).replace("-", "/")) + ' · ' + esc(g.pago) + (g.cliente ? ' · ' + esc(g.cliente) : '') + (g.pend ? ' · ⏳ por enviar' : '') + (g.est === "anulada" ? ' · ANULADA' : '') + '</small></div><b class="precio" style="font-size:19px">' + plata(g.total) + '</b>' +
-   (g.est === "anulada" || g.pend ? '' : '<button class="x" data-anular="' + esc(g.vid) + '" title="Anular venta">🗑</button>') + '</div>';
+   (g.est === "anulada" || g.pend ? '' : (g.pago !== "fiado" ? '<button class="btn chico oro" style="width:auto;padding:6px 10px;margin-left:6px" data-afiado="' + esc(g.vid) + '">📒 Fiado</button>' : '') + '<button class="x" data-anular="' + esc(g.vid) + '" title="Anular venta">🗑</button>') + '</div>';
  }).join("") : '<p class="muted" style="margin:8px 0 0">No hay ventas en este período.</p>') + '</div>';
  var compras = ms.filter(function(m){ return m.tipo === "entrada" || m.tipo === "ajuste"; });
  if(compras.length) h += '<div class="card"><b style="text-transform:uppercase">📥 Mercadería y ajustes</b>' + compras.slice().reverse().map(function(m){ return '<div class="mov"><div class="d">' + (m.cant > 0 ? '+' : '') + m.cant + ' × ' + esc(m.n) + '<small>' + esc(m.f.slice(5, 16).replace("-", "/")) + ' · ' + (m.tipo === "entrada" ? 'llegó mercadería' : 'ajuste' + (m.nota ? ': ' + esc(m.nota) : '')) + '</small></div>' + (m.tipo === "entrada" ? '<b class="precio" style="font-size:18px;color:#FF8A8F">−' + plata(m.total) + '</b>' : '') + '</div>'; }).join("") + '</div>';
@@ -1334,12 +1334,45 @@ function renderRes(){
  v.querySelectorAll("[data-per]").forEach(function(b){ b.onclick = function(){ resPer = b.dataset.per; renderRes(); }; });
  v.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){ var o = repartos(); o[resCat || "todo"] = Number(b.dataset.rep); lsSet("wgym_tienda_reparto_v1", o); renderRes(); }; });
  v.querySelectorAll("[data-rcat]").forEach(function(b){ b.onclick = function(){ resCat = b.dataset.rcat; renderRes(); }; });
+ v.querySelectorAll("[data-afiado]").forEach(function(b){ b.onclick = function(){ formAFiado(grupos[b.dataset.afiado]); }; });
  v.querySelectorAll("[data-anular]").forEach(function(b){ b.onclick = function(){
   if(!confirm("¿Anular esta venta? El stock vuelve al inventario.")) return;
   b.disabled = true;
   var vidA = b.dataset.anular, itsA = todosMovs().filter(function(m){ return m.tipo === "venta" && m.vid === vidA && m.est !== "anulada"; }).map(function(m){ return { id:m.id, cant:m.cant }; });
   api("tiendaAnular", { vid:vidA }).then(function(){ ajustePorciones(vidA, itsA, 1, "porción devuelta (venta anulada) de"); lsSet(CLAVE_PEND, pend); guardarCache(); toast("Venta anulada"); return enviarPendientes().then(function(){ return cargar(true); }); })["catch"](function(e){ b.disabled = false; toast(e.motivo || "No se pudo anular"); });
  }; });
+}
+
+/* 📒 Pasar a fiado una venta ya hecha (27-10-2026, la dueña: "ya le hice la venta… ¿un método más sencillo?"):
+   anula la venta y la vuelve a anotar igual, como fiado a nombre de la persona; si pagó algo, va como abono. */
+function formAFiado(g){
+ if(!g) return;
+ abrirHoja('<div class="cab"><h3>📒 Pasar a fiado</h3><button class="btn chico volver" id="afCerrar">← Volver</button></div>' +
+  '<p style="font-size:18px;margin:8px 0">' + g.items.map(function(i){ return i.cant + ' × ' + esc(i.n); }).join(", ") + ' · <b>' + plata(g.total) + '</b></p>' +
+  '<label class="lab" for="afNom">¿Quién te quedó debiendo?</label><input class="inp" id="afNom" placeholder="Ej: Juan Pérez" autocomplete="off">' +
+  '<label class="lab" for="afPago">¿Cuánto te pagó? (si no pagó nada, deja 0)</label><input class="inp" id="afPago" inputmode="numeric" value="0">' +
+  '<p class="muted" id="afDebe" style="font-size:18px;margin:8px 0">Queda debiendo <b style="color:#FF8A8F">' + plata(g.total) + '</b></p>' +
+  '<p class="err" id="afErr" hidden></p><button class="btn rojo" id="afOk" style="margin-top:12px">📒 Pasar a fiado</button>');
+ $("afCerrar").onclick = cerrarHoja;
+ $("afPago").oninput = function(){ $("afDebe").innerHTML = 'Queda debiendo <b style="color:#FF8A8F">' + plata(Math.max(0, g.total - Math.round(num(this.value)))) + '</b>'; };
+ $("afOk").onclick = function(){
+  var nom = ($("afNom").value || "").trim().toUpperCase(), pago = Math.round(num($("afPago").value)) || 0;
+  function err(t){ $("afErr").hidden = false; $("afErr").textContent = t; }
+  if(!nom) return err("Escribe quién te quedó debiendo.");
+  if(pago >= g.total) return err("Si te pagó todo, no es fiado.");
+  $("afOk").disabled = true;
+  var items = g.items.map(function(m){ return { id:m.id, cant:m.cant, precio:m.cant ? m.total / m.cant : m.precio }; });
+  api("tiendaAnular", { vid:g.vid }).then(function(){
+   ajustePorciones(g.vid, items, 1, "porción devuelta (venta anulada) de");
+   var datos = { vid:"V" + Date.now().toString(36).toUpperCase() + Math.floor(Math.random() * 1e4), items:items, pago:"fiado", cliente:nom };
+   pend.push({ tipo:"venta", f:g.f, datos:datos });
+   if(pago > 0) pend.push({ tipo:"abono", f:ahoraTxt(), datos:{ vid:datos.vid, monto:pago, pago:g.pago || "efectivo" } });
+   ajustePorciones(datos.vid, items, -1, "porción usada en");
+   lsSet(CLAVE_PEND, pend); guardarCache(); cerrarHoja();
+   toast("📒 " + nom + " queda debiendo " + plata(g.total - pago), 4000);
+   return enviarPendientes().then(function(){ return cargar(true); });
+  })["catch"](function(e){ $("afOk").disabled = false; err(e.motivo || "No se pudo. Revisa tu internet."); });
+ };
 }
 
 /* ═══ 🧾 Cierre de caja (25-10-2026, la dueña eligió la idea 8) ═══
