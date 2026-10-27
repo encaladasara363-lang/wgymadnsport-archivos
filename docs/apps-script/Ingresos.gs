@@ -833,7 +833,7 @@ function tiendaVitrina_(e) {
   productosTienda_().forEach(function (p) {
     if (!p.activo || !(p.precio > 0) || !p.n) return;
     var x = { n: p.n, cat: p.cat, det: p.det, precio: p.precio, foto: p.foto, q: Math.max(0, Math.min(9, p.stock)) };
-    if (/^Ropa/.test(p.cat) && p.stock <= 0 && ult[p.id]) {
+    if (/^(Ropa|Zapatillas)/.test(p.cat) && p.stock <= 0 && ult[p.id]) {
       if (diasEntre_(ult[p.id], hoy) > DIAS_VENDIDO_TIENDA_) return;
       x.vendido = true;
     }

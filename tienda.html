@@ -221,7 +221,7 @@ var CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20E
 var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";          /* la misma del mesón: en la compu de recepción ya está guardada */
 var CLAVE_CACHE = "wgym_tienda_cache_v1";           /* última foto del inventario, para abrir al instante y sin señal */
 var CLAVE_PEND = "wgym_tienda_pend_v1";             /* ventas / entradas que no alcanzaron a llegar a la planilla */
-var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Otro","📦"]];
+var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Otro","📦"]];
 var PAGOS = [["efectivo","💵 Efectivo"],["transferencia","🏦 Transferencia"],["tarjeta","💳 Tarjeta"],["fiado","📒 Fiado"]];
 
 function $(id){ return document.getElementById(id); }
@@ -344,7 +344,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102608";
+var TIENDA_VERSION = "2026102701";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -565,7 +565,8 @@ function verPorVencer(){
    llevan 60 días o más sin una venta (o sin ninguna desde que llegaron). Lo recién llegado no aparece. Solo mira los
    movimientos que ya trae la página (120 días). Bebestibles, snacks y suplementos se cuidan con «⏰ Por vencer». */
 var DIAS_SIN_VENTA = 60;
-function esRopa(p){ return /^Ropa/.test(catNueva(p.cat)); }
+/* Zapatillas (27-10-2026, la dueña: unisex, una sola por modelo) se tratan como ropa: VENDIDO 15 días, ofertas, etc. */
+function esRopa(p){ return /^(Ropa|Zapatillas)/.test(catNueva(p.cat)); }
 function noSeMueven(){
  var hoy = S.hoy || hoyISO(), mv = todosMovs();
  return activos().filter(function(p){ return p.stock > 0 && esRopa(p); }).map(function(p){
