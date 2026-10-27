@@ -472,7 +472,7 @@ ver cuándo el gym está más vacío.
   elegido, en mesón y tablet. El cobro se sigue anotando en la Caja
   (artifact "Caja WGYM", https://claude.ai/artifact/DgNKVW8XfuTFcnrtJCgQJq,
   creado de cero el 07-10-2026 con botón "Pase diario"; la Caja antigua se
-  eliminó a pedido de la dueña). No pedir ni guardar teléfonos ahí:
+  eliminó a pedido de la dueña). **Caja (27-10-2026, la dueña):** se sacó «Venta de productos» de Anotar (la tienda lleva esas ventas; lo anotado antes sigue sumando) y se agregó «📷 Escanear plan»: cada plan tiene su código EAN-13 interno 209… (`CODIGOS_PLANES` de la Caja = `codigos-planes.html` del sitio, hoja para imprimir) y al leerlo se elige el plan y se anota solo. Dentro de Claude la cámara en vivo puede no abrir: entonces usa «📸 Sacar foto del código» (ZXing de jsdelivr o BarcodeDetector). Lo anotado en el celular aparece en el computador (base de datos de la Caja). No pedir ni guardar teléfonos ahí:
   `listarIngresos` es público.
   **Acceso todo el día (03-10-2026):** el mismo botón además guarda a la
   persona como socio (`guardarSocio`, hoja "Socios") con plan "Pase
