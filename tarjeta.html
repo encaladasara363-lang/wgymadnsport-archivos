@@ -262,6 +262,9 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-p.agotado .tv-btn{ background:#333; box-shadow:none; color:#aaa; }
 .tv-pack{ display:flex; gap:2px; width:100%; height:100%; background:#fff; }
 .tv-pack img{ flex:1 1 0; min-width:0; width:100%; height:100%; object-fit:cover; }
+.tv-hoja .tv-big .tv-pack{ height:40vh; }
+.tv-hoja .tv-big .tv-pack img{ height:100%; max-height:none; object-fit:contain; }
+.tv-nuevo.ahorro{ font-family:'Anton',sans-serif; font-size:15px; white-space:nowrap; letter-spacing:.02em; }
 .tv-nuevo{ position:absolute; top:8px; left:8px; font-family:'Rubik Distressed','Anton',sans-serif; font-size:18px; color:#000; background:#FFD400; border:2px solid #000; padding:1px 8px; border-radius:6px; }
 .tv-antes{ text-decoration:line-through; opacity:.6; font-size:.7em; margin-right:6px; }
 .tv-sello{ position:absolute; top:34%; left:50%; transform:translate(-50%,-50%) rotate(-12deg); font-family:'Rubik Distressed','Anton',sans-serif; font-size:26px; color:#fff; background:#E30613; border:3px solid #fff; padding:3px 10px; border-radius:8px; }
@@ -2488,7 +2491,7 @@ function renderEvolucion(s){
      '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
       var ag = !(p.q > 0), i = l.indexOf(p);
       return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + '</div>' +
-       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo">🎁 AHORRAS ' + p.ahorro + ' %</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' +
+       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' +
        (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
        (ag ? '' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
        '<span class="tv-pr">' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + clp(p.precio) + '</span><span class="tv-btn">' + (ag ? (p.vendido ? 'Ya se vendió' : 'Pronto vuelve') : '💬 Lo quiero') + '</span></div></button>';
@@ -2569,7 +2572,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102705", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102706", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
