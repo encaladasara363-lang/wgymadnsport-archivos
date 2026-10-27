@@ -2515,7 +2515,7 @@ function renderEvolucion(s){
    '<p class="tv-total">Precio: ' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + '<b>' + clp(p.precio) + '</b>' + (p.nuevo ? ' 🚀 precio de lanzamiento' : '') + '</p>' + (p.ahorro ? '<p class="tv-total" style="color:#7CE39A">🎁 Llevando el pack ahorras ' + clp(p.antes - p.precio) + ' (' + p.ahorro + ' %) que comprando cada cosa por separado</p>' : '') +
    (max > 1 ? '<div class="tv-cant"><button type="button" id="tvMenos">−</button><b id="tvCant">1</b><button type="button" id="tvMasUno">+</button></div>' : '') +
    '<p class="tv-total" id="tvTot"></p>' +
-   '<button type="button" class="pago-btn principal" id="tvSi" style="width:100%">💬 Sí, avisarle a Sara</button>' +
+   '<button type="button" class="pago-btn principal" id="tvSi" style="width:100%">💬 Pedir por WhatsApp</button>' +
    '<button type="button" class="tv-volver" id="tvVolver">← Volver</button></div>';
   document.body.appendChild(fondo);
   function tot(){ var c = fondo.querySelector("#tvCant"); if(c) c.textContent = cant; fondo.querySelector("#tvTot").innerHTML = max > 1 ? 'Total: <b>' + clp(p.precio * cant) + '</b>' : ''; }
@@ -2572,7 +2572,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102706", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102707", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
