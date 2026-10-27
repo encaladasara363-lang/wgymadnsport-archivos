@@ -244,3 +244,14 @@ Administrar implementaciones → lápiz → Versión nueva → Implementar (para
 Se instala igual que las anteriores (o con el botón de `copiar-codigo.html`): pegar `Ingresos.gs` completo en
 INGRESOS.gs, guardar, Implementar → Administrar implementaciones → lápiz → Versión nueva → Implementar
 (para volver atrás: Versión 26).
+
+## Versión 28 (27-10-2026): 📌 Tienda — productos reservados
+
+- `tiendaVitrina`: un producto marcado en su ficha con «📌 Ya me lo reservaron» (`ext.reserva`) manda
+  `reservado: true` (sin el nombre de quien lo reservó) y deja de mandar `pronto`, para que la tarjeta lo muestre
+  en gris con «RESERVADO» y nadie más lo pueda pedir. Si ya se vendió, sale como VENDIDO.
+- `tiendaListar` responde `v: 28`.
+
+Se instala igual que las anteriores (o con el botón de `copiar-codigo.html`): pegar `Ingresos.gs` completo en
+INGRESOS.gs, guardar, Implementar → Administrar implementaciones → lápiz → Versión nueva → Implementar
+(para volver atrás: Versión 27).

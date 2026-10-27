@@ -813,7 +813,7 @@ function tiendaListar_(e) {
         precio: Number(d[i][6]) || 0, costo: Number(d[i][7]) || 0, total: Number(d[i][8]) || 0, pago: String(d[i][9] || ""),
         cliente: String(d[i][10] || ""), nota: String(d[i][11] || ""), est: est });
     }
-    return respond_(e, { ok: true, tienda: true, v: 27, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde), gastos: gastosTienda_() });
+    return respond_(e, { ok: true, tienda: true, v: 28, hoy: diaCL_(Date.now()), desde: desde, productos: productosTienda_(), movs: movs, total: total, cierres: cierresTienda_(desde), gastos: gastosTienda_() });
   });
 }
 /* 🛍 Vitrina pública para la tarjeta de los socios (25-10-2026, la dueña eligió la idea 1): solo nombre,
@@ -875,6 +875,8 @@ function tiendaVitrina_(e) {
       if (diasEntre_(ult[p.id], hoy) > DIAS_VENDIDO_TIENDA_) return;
       x.vendido = true;
     }
+    /* Versión 28: 📌 reservado (ext.reserva): sale «RESERVADO» y ya no se puede pedir. El nombre nunca se envía. */
+    if (p.ext && p.ext.reserva && !x.vendido) { x.reservado = true; delete x.pronto; delete x.llega; }
     l.push(x);
   });
   var r = { ok: true, vitrina: true, productos: l };
