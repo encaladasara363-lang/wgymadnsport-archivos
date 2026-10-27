@@ -342,7 +342,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=4"></script>
-<script src="nutri-alimentos.js?v=33"></script>
+<script src="nutri-alimentos.js?v=34"></script>
 <script src="nutri-recetas.js?v=23"></script>
 <script>
 (function(){
@@ -2103,15 +2103,15 @@ function porcionES(t){
 /* Unidades de la porción (10-10-2026, la dueña: "cuántas láminas es la porción").
    Sale del texto de la porción ("2 láminas (34 g)", "2 slices") o de lo que se anotó. */
 var UNIDADES = ["lámina","rebanada","unidad","galleta","barra","pote","sobre","scoop","cucharada","taza","tajada","trozo","cuadradito"];
-function plural(u, n){ return n <= 1 ? u : /z$/.test(u) ? u.slice(0, -1) + "ces" : /(ch|[dlnr])$/.test(u) ? u + "es" : u + "s"; }
+function plural(u, n){ return n <= 1 ? u : /ón$/.test(u) ? u.slice(0, -2) + "ones" : /z$/.test(u) ? u.slice(0, -1) + "ces" : /(ch|[dlnr])$/.test(u) ? u + "es" : u + "s"; }
 /* Alimentos que se cuentan (huevos, unidades, rebanadas…): se muestran de a 1 y la persona
    elige cuántos comió, 1 a 6 (10-10-2026, la dueña: "aparece medio huevo, es tonto"). */
-var CONTABLES = /^(\d+)\s+(huevos?|unidad(?:es)?|rebanadas?|l[aá]minas?|galletas?|marraquetas?|hallullas?|tostadas?|trozos?|claras?|panqueques?|empanadas?|s[aá]ndwich(?:es)?|wraps?|barras?|sobres?|potes?|latas?|botellas?|frutillas?|nueces|almendras?|tajadas?|avellanas?|pistachos?|casta[nñ]as?|granos?|cuadr(?:it|adit)os?|discos?|cucharaditas?(?!\s*\()|comprimidos?|c[aá]psulas?|mitad(?:es)?)\b\s*(.*)$/i;
+var CONTABLES = /^(\d+)\s+(huevos?|unidad(?:es)?|rebanadas?|l[aá]minas?|galletas?|marraquetas?|hallullas?|tostadas?|trozos?|claras?|panqueques?|empanadas?|s[aá]ndwich(?:es)?|wraps?|barras?|sobres?|potes?|latas?|botellas?|frutillas?|nueces|almendras?|tajadas?|avellanas?|pistachos?|casta[nñ]as?|granos?|cuadr(?:it|adit)os?|discos?|cucharaditas?(?!\s*\()|comprimidos?|c[aá]psulas?|mitad(?:es)?|porci[oó]n(?:es)?)\b\s*(.*)$/i;  /* «porción» desde el 27-10-2026 (la dueña: gotas Carat «por porción») */
 function porUnidad(a){
  if(a.gr || a.cat === "Verduras") return null;   /* verduras siempre en gramos (10-10-2026, la dueña) */
  var m = String(a.p || "").match(CONTABLES); if(!m) return null;
  var n = +m[1]; if(!(n >= 1)) return null;
- var w = m[2].toLowerCase(), sing = /(unidad|mitad)es$/.test(w) ? w.slice(0, -2) : /ches$/.test(w) ? w.slice(0, -2) : /nueces$/.test(w) ? "nuez" : w.replace(/s$/, "");
+ var w = m[2].toLowerCase(), sing = /porci[oó]n(es)?$/.test(w) ? "porción" : /(unidad|mitad)es$/.test(w) ? w.slice(0, -2) : /ches$/.test(w) ? w.slice(0, -2) : /nueces$/.test(w) ? "nuez" : w.replace(/s$/, "");
  var resto = m[3] ? " " + m[3].replace(/^\(.*\)$/, "") : "";
  if(n === 1) return { a:a, sing:sing, n:1 };
  return { a:Object.assign({}, a, { p:"1 " + sing, k:a.k / n, pr:a.pr / n, c:a.c / n, g:a.g / n, vc:typeof a.vc === "number" ? a.vc / n : a.vc, po:typeof a.po === "number" ? a.po / n : a.po, fi:typeof a.fi === "number" ? a.fi / n : a.fi, az:typeof a.az === "number" ? a.az / n : a.az, na:typeof a.na === "number" ? a.na / n : a.na }), sing:sing, n:n };
@@ -3012,7 +3012,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102703", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102704", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
