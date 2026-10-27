@@ -343,7 +343,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
 
 <script src="pago-datos.js?v=4"></script>
 <script src="nutri-alimentos.js?v=34"></script>
-<script src="nutri-recetas.js?v=23"></script>
+<script src="nutri-recetas.js?v=24"></script>
 <script>
 (function(){
 "use strict";
@@ -2817,10 +2817,10 @@ function renderRec(){
   h += '<button type="button" class="btn sec chico" id="recVolver" style="align-self:flex-start;width:auto;padding:12px 18px">‹ Volver a las recetas</button>' +
    '<div class="card"><div style="font-size:54px;line-height:1">' + r.e + '</div><p class="kick" style="margin-top:8px">' + esc(r.cat) + ' · ' + r.min + ' min · ' + esc(r.porc) + '</p>' +
    '<h3 style="font-family:var(--cond);font-weight:700;font-size:26px;text-transform:uppercase;letter-spacing:.03em;margin:4px 0 12px">' + esc(r.n) + '</h3>' +
-   '<div class="det-macros"><div><b style="color:var(--gold2)">' + miles(r.k) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + r.p + '</b><span>Prot. g</span></div><div><b>' + r.c + '</b><span>Carb. g</span></div><div><b>' + r.g + '</b><span>Grasa g</span></div></div></div>' +
+   (r.rinde > 1 ? '<p class="kick" style="margin:0 0 6px;color:var(--gold2)">🍽 Por 1 porción · la receta rinde ' + r.rinde + '</p>' : '') + '<div class="det-macros"><div><b style="color:var(--gold2)">' + miles(r.k) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + r.p + '</b><span>Prot. g</span></div><div><b>' + r.c + '</b><span>Carb. g</span></div><div><b>' + r.g + '</b><span>Grasa g</span></div></div>' + (r.rinde > 1 ? '<p class="muted" style="margin:8px 0 0;font-size:15px">Receta entera (' + r.rinde + ' porciones): ' + miles(r.k * r.rinde) + ' kcal. Al agregarla a tu día se anota solo 1 porción.</p>' : '') + '</div>' +
    '<div class="card"><p class="kick">Ingredientes</p><ul style="margin:8px 0 0;padding-left:20px;line-height:1.7">' + r.ing.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>' +
    '<div class="card"><p class="kick">Preparación</p><ol style="margin:8px 0 0;padding-left:22px;line-height:1.7">' + r.pasos.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ol></div>' +
-   '<button type="button" class="btn rojo" id="recAgregar">+ Agregar a mi día</button>' +
+   '<button type="button" class="btn rojo" id="recAgregar">' + (r.rinde > 1 ? '+ Agregar 1 porción a mi día' : '+ Agregar a mi día') + '</button>' +
    '<button type="button" class="btn sec" id="recCompra">' + (recetaEnLista(r) ? '✅ En tu lista de compras (quitar)' : '🛒 Agregar a mi lista de compras') + '</button>' +
    '<p class="muted center" style="font-size:13px;margin:0">Calorías aproximadas por porción.</p>' +
    '<button type="button" class="btn sec" id="recVolver2">‹ Volver a las recetas</button>';
@@ -3012,7 +3012,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102704", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026102705", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
