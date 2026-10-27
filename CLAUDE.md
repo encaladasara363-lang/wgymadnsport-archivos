@@ -1618,7 +1618,7 @@ Versión 23). Celular y compu ven el mismo inventario.
   reaparece. No escribe en la planilla. «🛍 Qué comprar» no sugiere volver a comprar ropa agotada. En la vitrina de la
   tarjeta, `tiendaVitrina_` (Versión 25, `ultimaVentaTienda_`) manda `vendido:true` y la tarjeta muestra «VENDIDO» en vez
   de «AGOTADO»; pasados los 15 días la prenda ya no se envía.
-- **👟 Categoría «Zapatillas» (27-10-2026, la dueña: zapatillas unisex, una por modelo):** en `CATS` de `tienda.html` y `TIENDA_ICONOS` de `tarjeta.html`; `esRopa` (y la vitrina/`tiendaVitrina_`) la tratan como ropa: prenda única, VENDIDO 15 días, ofertas a los 60 días, cantidad fija 1 en la ventanita. En los enlaces, `cat=Zapatillas`. Sus fotos son solo de la zapatilla (sin modelo), sobre el banco negro del gimnasio.
+- **👟 Categoría «Zapatillas» (27-10-2026, la dueña: zapatillas unisex, una por modelo):** en `CATS` de `tienda.html` y `TIENDA_ICONOS` de `tarjeta.html`; `esRopa` (y la vitrina/`tiendaVitrina_`) la tratan como ropa: prenda única, VENDIDO 15 días, ofertas a los 60 días, cantidad fija 1 en la ventanita. En los enlaces, `cat=Zapatillas`. Sus fotos son solo de la zapatilla (sin modelo), sobre el banco negro del gimnasio. Zapatillas de caña media blancas con lila grisáceo, con velcro, n.º 40, unisex, con caja (27-10-2026; $30.000 → $40.000; marca sin el nombre en el producto; foto `img/tienda/zapatillas-cana-media-lila.jpg`: par sobre su caja en el banco negro, ChatGPT + logo).
 - **En el mesón (24-10-2026, la dueña: "también hazlo en el mesón"):** panel «🛒 Tienda WGYM» en `control.html` (antes de
   «Socios del gimnasio»): «Abrir la tienda aquí» carga `tienda.html` en un cuadro (`#tiendaFrame`, con la clave del mesón ya
   guardada en ese equipo) y «Abrir en otra pestaña».
