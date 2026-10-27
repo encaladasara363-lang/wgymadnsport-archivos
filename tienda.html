@@ -474,7 +474,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102715";
+var TIENDA_VERSION = "2026102716";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -614,7 +614,7 @@ function renderInv(){
   h += '<div class="grid2" style="margin-top:10px"><button class="btn oro" id="bComprar">🛍 Qué comprar' + (qc ? ' (' + qc + ')' : '') + '</button><button class="btn" id="bVence">⏰ Por vencer' + (pv.length ? ' (' + pv.length + ')' : '') + '</button></div>';
   var nm = noSeMueven().length;
   h += '<button class="btn" id="bLentos" style="margin-top:8px">🐢 Ropa que no se vende' + (nm ? ' (' + nm + ')' : '') + '</button>';
-  h += '<button class="btn" id="bCalc" style="margin-top:8px">🧮 Calcular pedido (Shein)</button>';
+  /* «🧮 Calcular pedido (Shein)» se sacó el 27-10-2026 (la dueña: "no me gustó"); verCalcPedido queda sin botón. */
   var nped = pedidos().length;
   h += '<div class="grid2" style="margin-top:8px"><button class="btn" id="bPack">🎁 Armar pack</button><button class="btn" id="bPed">📦 Mis pedidos' + (nped ? ' (' + nped + ')' : '') + '</button></div>';
   var na = apartados().length;
@@ -634,7 +634,6 @@ function renderInv(){
  if($("bComprar")) $("bComprar").onclick = verQueComprar;
  if($("bVence")) $("bVence").onclick = verPorVencer;
  if($("bLentos")) $("bLentos").onclick = verNoSeMueven;
- if($("bCalc")) $("bCalc").onclick = verCalcPedido;
  if($("bPack")) $("bPack").onclick = function(){ formPack(); };
  if($("bPed")) $("bPed").onclick = verPedidos;
  if($("bApart")) $("bApart").onclick = verApartados;
@@ -976,7 +975,8 @@ function nombrePedido(id){ var g = pedidos().filter(function(x){ return x.id ===
 function verPedidos(){
  var l = pedidos();
  abrirHoja('<div class="cab"><h3>📦 Mis pedidos</h3><button class="btn chico volver" id="pdCerrar">← Volver</button></div>' +
-  '<p class="muted" style="margin:6px 0">Cuánto llevas recuperado de lo que pagaste por cada pedido. Los productos se unen al pedido al crearlos desde «🧮 Calcular pedido» o eligiendo el pedido en su ficha.</p>' +
+  '<p class="muted" style="margin:6px 0">Cuánto llevas recuperado de lo que pagaste por cada pedido. Une cada prenda a su pedido en su ficha («📦 ¿De qué pedido vino?»).</p>' +
+  '<button class="btn oro" id="pdNuevo" style="margin:4px 0 10px">➕ Nuevo pedido</button>' +
   (l.length ? l.map(function(g){
    var ps = S.productos.filter(function(p){ return p.ext && p.ext.ped === g.id; }), ids = {}; ps.forEach(function(p){ ids[p.id] = 1; });
    var vs = todosMovs().filter(function(m){ return m.tipo === "venta" && m.est !== "anulada" && ids[m.id]; });
@@ -987,8 +987,13 @@ function verPedidos(){
     '<div class="kpis"><div class="kpi"><small>Pagaste</small><b>' + plata(g.monto) + '</b></div><div class="kpi verde"><small>Recuperado</small><b>' + plata(rec) + '</b></div></div>' +
     '<div class="barra"><i style="width:' + pct + '%"></i></div><p style="margin:4px 0 0;font-size:16px">' + (rec >= g.monto ? '🎉 ¡Recuperaste el pedido! Ya llevas ' + plata(rec - g.monto) + ' de ganancia.' : 'Te faltan ' + plata(g.monto - rec) + ' para recuperarlo (' + pct + ' %).') + '</p>' +
     (ps.length ? '<p class="muted" style="margin:8px 0 0;font-size:15px">' + ps.map(function(p){ return (stockVer(p) <= 0 && ultimaVenta(p.id) ? '✅ ' : '⏳ ') + esc(p.n); }).join(' · ') + '</p>' : '<p class="muted" style="margin:8px 0 0;font-size:15px">Todavía no hay productos unidos a este pedido.</p>') + '</div>';
-  }).join("") : '<div class="card"><p style="margin:0">Todavía no tienes pedidos. Se crean solos al usar «🧮 Calcular pedido» y crear un producto desde ahí.</p></div>'));
+  }).join("") : '<div class="card"><p style="margin:0">Todavía no tienes pedidos. Toca «➕ Nuevo pedido» y escribe cuánto pagaste.</p></div>'));
  $("pdCerrar").onclick = cerrarHoja;
+ $("pdNuevo").onclick = function(){
+  var nom = prompt("Nombre del pedido (ej: Shein octubre):", "Shein " + fechaCorta(S.hoy || hoyISO())); if(nom === null || !nom.trim()) return;
+  var m = Math.round(num(prompt("¿Cuánto pagaste en total? (con envío e impuestos)", "") || "")); if(!(m > 0)){ toast("Escribe cuánto pagaste."); return; }
+  api("tiendaGasto", { datos:JSON.stringify({ id:"PED" + Date.now().toString(36).toUpperCase(), tipo:"pedido", det:nom.trim(), monto:m }) }).then(function(d){ S.gastos = d.gastos || S.gastos; guardarCache(); toast("📦 Pedido guardado: ahora únele sus prendas en cada ficha", 4000); verPedidos(); })["catch"](function(e){ toast(e.motivo || "No se pudo guardar"); });
+ };
  document.querySelectorAll("[data-pdel]").forEach(function(b){ b.onclick = function(){
   if(!confirm("¿Borrar este pedido? Los productos y sus ventas no se borran.")) return;
   api("tiendaGasto", { datos:JSON.stringify({ id:b.dataset.pdel, borrar:true }) }).then(function(d){ S.gastos = d.gastos || []; guardarCache(); verPedidos(); })["catch"](function(e){ toast(e.motivo || "No se pudo"); });
