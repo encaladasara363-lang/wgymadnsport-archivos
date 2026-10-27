@@ -247,7 +247,9 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-chips{ display:flex; gap:7px; overflow-x:auto; padding:2px 0 8px; margin:8px 0 4px; }
 .tv-chip{ flex:none; font:800 italic 15px 'Barlow Condensed',Arial,sans-serif; padding:7px 13px; border-radius:999px; border:2px solid #333; background:#0D0D0F; color:#fff; white-space:nowrap; }
 .tv-chip.on{ background:#E30613; border-color:#E30613; }
-.tv-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.tv-grid{ display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:8px; }
+.tv-grid > .tv-p{ flex:0 0 46%; scroll-snap-align:start; }
+.tv-desliza{ margin:2px 0 6px; font-size:13px; color:#bbb; text-align:right; }
 .tv-p{ background:#0D0D0F; border:1px solid #2a2a2e; border-radius:14px; overflow:hidden; display:flex; flex-direction:column; position:relative; text-align:left; color:#fff; padding:0; font:inherit; }
 .tv-ph{ background:#fff; aspect-ratio:3/4; }
 .tv-ph img{ width:100%; height:100%; object-fit:contain; display:block; }
@@ -2504,9 +2506,11 @@ function renderEvolucion(s){
    }
    function pintar(){
     if(!abierta){ cerrada(); return; }
-    var vis = l.filter(function(p){ return cat === "Todos" || p.cat === cat; }), cortar = !todos && vis.length > 6;
+    /* Una fila que se desliza de lado (27-10-2026, la dueña: "no una lista grande para abajo"): sin «Ver todos». */
+    var vis = l.filter(function(p){ return cat === "Todos" || p.cat === cat; }), cortar = false;
     box.innerHTML = '<p class="pago-kicker">🛍 Tienda WGYM</p><p class="rank-sub">Lo que tenemos hoy en el gimnasio. Toca «Lo quiero» y Sara te lo guarda.</p>' +
      '<div class="tv-chips">' + cats.map(function(c){ return '<button type="button" class="tv-chip' + (c === cat ? ' on' : '') + '" data-tc="' + escapeHtml(c) + '">' + (c === "Todos" ? "🛍" : TIENDA_ICONOS[c]) + ' ' + escapeHtml(c) + '</button>'; }).join("") + '</div>' +
+     (vis.length > 2 ? '<p class="tv-desliza">' + vis.length + ' productos · desliza ➜</p>' : '') +
      '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
       var ag = !(p.q > 0) && !p.pronto, i = l.indexOf(p), ll = p.llega ? ' · ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) : '';
       return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + '</div>' +
@@ -2593,7 +2597,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102714", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102715", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
