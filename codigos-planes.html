@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Códigos de los planes · WGYMADNSPORT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Rubik+Distressed&family=Barlow+Condensed:ital,wght@0,700;0,800;1,800&display=swap">
+<!-- Códigos de barra de cada plan para escanear desde la Caja WGYM (27-10-2026, pedido de la dueña:
+     "tener un código de cada plan para escanear cada vez que se haga una venta"). Los códigos 209… son de uso
+     interno (rango 200-299) y deben ser los mismos que CODIGOS_PLANES de la Caja. -->
+<style>
+@page{size:A4;margin:10mm}
+*{box-sizing:border-box}
+body{margin:0;background:#0A0A0B;color:#fff;font-family:'Barlow Condensed',Arial,sans-serif}
+.hoja{max-width:190mm;margin:0 auto;padding:14px}
+header{display:flex;align-items:center;gap:14px;justify-content:center;text-align:center}
+header img{height:64px}
+h1{font-family:'Rubik Distressed','Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:30px;margin:0;line-height:1}
+h1 em{font-style:normal;color:#E30613}
+.franja{height:7px;margin:10px 0 12px;background:repeating-linear-gradient(-45deg,#E30613 0 14px,transparent 14px 20px,#D4AF37 20px 24px,transparent 24px 30px)}
+.ayuda{text-align:center;color:#CFCFD6;font-size:16px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:#fff;color:#000;border-radius:12px;border:3px solid #D4AF37;padding:10px 12px 8px;text-align:center;break-inside:avoid}
+.card .n{font-family:'Rubik Distressed','Anton',sans-serif;text-transform:uppercase;font-size:22px;line-height:1.05}
+.card .p{font-family:Anton,sans-serif;font-size:26px;color:#B8901E;margin:2px 0 4px}
+.card svg{width:100%;height:78px;display:block}
+.pie{margin-top:12px;text-align:center;font-size:15px;color:#CFCFD6}
+.pie b{color:#D4AF37}
+.btn{display:block;margin:14px auto 0;background:#E30613;color:#fff;border:0;border-radius:10px;padding:12px 22px;font:800 italic 20px 'Barlow Condensed',sans-serif;text-transform:uppercase;cursor:pointer}
+@media print{.btn,.ayuda{display:none}body{background:#0A0A0B;-webkit-print-color-adjust:exact;print-color-adjust:exact}.hoja{padding:0}}
+</style>
+</head>
+<body>
+<div class="hoja">
+  <header><img src="assets/logo-oficial.webp" alt="WGYMADNSPORT"><h1>Códigos de <em>planes</em></h1></header>
+  <div class="franja"></div>
+  <p class="ayuda">En la Caja toca «📷 Escanear plan» y apunta al código del plan que te pagaron: queda anotado solo.</p>
+  <div class="grid" id="grid"></div>
+  <p class="pie">WGYMADNSPORT Tocopilla · WhatsApp <b>+56 9 9154 0156</b> · <b>+56 9 7519 6394</b></p>
+  <button class="btn" onclick="print()">🖨 Imprimir</button>
+</div>
+<script>
+var PLANES = [["Full Mensual", 33000, "2090000000016"], ["3 Veces por Semana", 28000, "2090000000023"],
+ ["Funcionarios Públicos", 28000, "2090000000030"], ["Estudiante / Profesor", 28000, "2090000000047"],
+ ["Mensual Tercera Edad", 23000, "2090000000054"], ["Mensual por Turno", 23000, "2090000000061"],
+ ["Semanal", 15000, "2090000000078"], ["Pase diario", 4000, "2090000000085"]];
+var EAN_L = ["0001101","0011001","0010011","0111101","0100011","0110001","0101111","0111011","0110111","0001011"];
+var EAN_G = ["0100111","0110011","0011011","0100001","0011101","0111001","0000101","0010001","0001001","0010111"];
+var EAN_R = ["1110010","1100110","1101100","1000010","1011100","1001110","1010000","1000100","1001000","1110100"];
+var EAN_P = ["LLLLLL","LLGLGG","LLGGLG","LLGGGL","LGLLGG","LGGLLG","LGGGLL","LGLGLG","LGLGGL","LGGLGL"];
+function svgEAN(cod){
+ var bits = "101", par = EAN_P[+cod[0]];
+ for(var i = 1; i <= 6; i++) bits += (par[i - 1] === "L" ? EAN_L : EAN_G)[+cod[i]];
+ bits += "01010"; for(i = 7; i <= 12; i++) bits += EAN_R[+cod[i]]; bits += "101";
+ var w = bits.length + 18, rects = "";
+ for(i = 0; i < bits.length; i++) if(bits[i] === "1"){ var largo = i < 3 || (i >= 45 && i < 50) || i >= 92; rects += '<rect x="' + (i + 9) + '" y="0" width="1" height="' + (largo ? 46 : 40) + '"/>'; }
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' 54" preserveAspectRatio="none"><g fill="#000">' + rects + '</g><text x="2" y="53" font-size="9" font-family="Arial">' + cod[0] + '</text><text x="33" y="53" font-size="9" font-family="Arial" text-anchor="middle" letter-spacing="1.5">' + cod.slice(1, 7) + '</text><text x="79" y="53" font-size="9" font-family="Arial" text-anchor="middle" letter-spacing="1.5">' + cod.slice(7) + '</text></svg>';
+}
+function plata(n){ return "$" + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+document.getElementById("grid").innerHTML = PLANES.map(function(p){
+ return '<div class="card"><div class="n">' + p[0] + '</div><div class="p">' + plata(p[1]) + '</div>' + svgEAN(p[2]) + '</div>';
+}).join("");
+</script>
+</body>
+</html>
