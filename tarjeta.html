@@ -254,6 +254,8 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-in{ padding:8px 9px 10px; display:flex; flex-direction:column; gap:4px; flex:1; }
 .tv-n{ font:800 15px/1.1 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; }
 .tv-d{ font-size:13px; color:#bbb; }
+.tv-tipo{ display:inline-block; align-self:flex-start; font:800 12px/1.2 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; color:#000; background:#7CE39A; border-radius:999px; padding:2px 8px; }
+.tv-tipo.amer{ background:#D4AF37; }
 .tv-ok{ font-size:12.5px; font-weight:800; color:#0A0A0B; background:#2ECC71; border-radius:6px; padding:2px 7px; align-self:flex-start; }
 .tv-ok.poco{ background:#FFD400; }
 .tv-pr{ font-family:'Anton',Impact,sans-serif; color:var(--dorado); font-size:24px; margin-top:auto; }
@@ -2491,7 +2493,7 @@ function renderEvolucion(s){
      '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
       var ag = !(p.q > 0), i = l.indexOf(p);
       return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + '</div>' +
-       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' +
+       (ag ? '<span class="tv-sello">' + (p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' + (p.tipo ? '<span class="tv-tipo ' + (p.tipo === "americana" ? 'amer' : '') + '">' + (p.tipo === "americana" ? '♻️ Americana' : '✨ Nueva') + '</span>' : '') +
        (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
        (ag ? '' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
        '<span class="tv-pr">' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + clp(p.precio) + '</span><span class="tv-btn">' + (ag ? (p.vendido ? 'Ya se vendió' : 'Pronto vuelve') : '💬 Lo quiero') + '</span></div></button>';
@@ -2511,7 +2513,7 @@ function renderEvolucion(s){
   var ropa = /^(Ropa|Zapatillas)/.test(p.cat) || (p.pack && p.q <= 1), max = ropa ? 1 : Math.max(1, Math.min(p.q, 9)), cant = 1;
   var fondo = document.createElement("div"); fondo.className = "tv-modal";
   fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big">' + tiendaFotos_(p) + '</div>' +
-   '<h3>' + escapeHtml(p.n) + '</h3>' + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
+   '<h3>' + escapeHtml(p.n) + '</h3>' + (p.tipo ? '<p><span class="tv-tipo ' + (p.tipo === "americana" ? 'amer' : '') + '">' + (p.tipo === "americana" ? '♻️ Americana · seleccionada y lista para usar' : '✨ Nueva') + '</span></p>' : '') + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
    '<p class="tv-total">Precio: ' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + '<b>' + clp(p.precio) + '</b>' + (p.nuevo ? ' 🚀 precio de lanzamiento' : '') + '</p>' + (p.ahorro ? '<p class="tv-total" style="color:#7CE39A">🎁 Llevando el pack ahorras ' + clp(p.antes - p.precio) + ' (' + p.ahorro + ' %) que comprando cada cosa por separado</p>' : '') +
    (max > 1 ? '<div class="tv-cant"><button type="button" id="tvMenos">−</button><b id="tvCant">1</b><button type="button" id="tvMasUno">+</button></div>' : '') +
    '<p class="tv-total" id="tvTot"></p>' +
@@ -2572,7 +2574,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102709", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026102710", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
