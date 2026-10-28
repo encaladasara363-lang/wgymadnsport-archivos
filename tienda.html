@@ -264,19 +264,26 @@ function fotoUrl(f){ return f ? (/^data:/.test(f) ? f : f + (f.indexOf("?") < 0 
    como imagen dentro de la planilla (texto «data:», menos de 45.000 letras: una celda aguanta 50.000). */
 var LOGO_TIENDA = "maquinas-wgymadnsport/comun/logo.png";
 function prepararFotoTienda(file){
- function cargar(src){ return new Promise(function(ok, mal){ var i = new Image(); i.onload = function(){ ok(i); }; i.onerror = mal; i.src = src; }); }
- var url = URL.createObjectURL(file);
- return Promise.all([cargar(url), cargar(LOGO_TIENDA)["catch"](function(){ return null; })]).then(function(r){
-  URL.revokeObjectURL(url);
-  var img = r[0], logo = r[1], lados = [[480, 640], [400, 533], [330, 440]];
+ /* 28-10-2026 (la dueña: "no me deja poner la foto" en el iPhone): se prueban 3 formas de abrir la foto (createImageBitmap,
+    dirección temporal y lectura completa del archivo), más tamaños y calidades, y el aviso dice qué pasó. */
+ function cargar(src){ return new Promise(function(ok, mal){ var i = new Image(); i.onload = function(){ ok(i); }; i.onerror = function(){ mal(new Error("no abre")); }; i.src = src; }); }
+ function leerDataUrl(){ return new Promise(function(ok, mal){ var r = new FileReader(); r.onload = function(){ ok(r.result); }; r.onerror = function(){ mal(new Error("no se pudo leer")); }; r.readAsDataURL(file); }); }
+ function abrir(){
+  var porUrl = function(){ var url = URL.createObjectURL(file); return cargar(url).then(function(i){ setTimeout(function(){ URL.revokeObjectURL(url); }, 3000); return i; }, function(){ URL.revokeObjectURL(url); return leerDataUrl().then(cargar); }); };
+  if(window.createImageBitmap) return createImageBitmap(file).then(function(b){ if(!b.width) throw 0; return b; })["catch"](porUrl);
+  return porUrl();
+ }
+ return Promise.all([abrir(), cargar(LOGO_TIENDA)["catch"](function(){ return null; })]).then(function(r){
+  var img = r[0], logo = r[1], lados = [[480, 640], [420, 560], [360, 480], [300, 400], [240, 320]];
+  if(!img.width || !img.height) throw new Error("foto vacía");
   for(var k = 0; k < lados.length; k++){
-   var e = Math.min(1, lados[k][0] / img.width, lados[k][1] / img.height), w = Math.round(img.width * e), h = Math.round(img.height * e);
+   var e = Math.min(1, lados[k][0] / img.width, lados[k][1] / img.height), w = Math.max(1, Math.round(img.width * e)), h = Math.max(1, Math.round(img.height * e));
    var cv = document.createElement("canvas"); cv.width = w; cv.height = h;
    var cx = cv.getContext("2d"); cx.fillStyle = "#fff"; cx.fillRect(0, 0, w, h); cx.drawImage(img, 0, 0, w, h);
-   if(logo){ var lw = Math.round(w * 0.34), lh = Math.round(lw * logo.height / logo.width), m = Math.round(w * 0.027); cx.drawImage(logo, m, m, lw, lh); }
-   for(var q = 0.8; q >= 0.45; q -= 0.07){ var d = cv.toDataURL("image/jpeg", q); if(d.length < 45000) return d; }
+   if(logo){ try{ var lw = Math.round(w * 0.34), lh = Math.round(lw * logo.height / logo.width), m = Math.round(w * 0.027); cx.drawImage(logo, m, m, lw, lh); }catch(x){} }
+   for(var q = 0.8; q >= 0.3; q -= 0.1){ var d = cv.toDataURL("image/jpeg", q); if(d.length > 100 && d.length < 45000) return d; }
   }
-  throw new Error("grande");
+  throw new Error("muy pesada");
  });
 }
 function iconoCat(c){ var x = CATS.filter(function(k){ return k[0] === c; })[0]; return x ? x[1] : "📦"; }
@@ -499,7 +506,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026102729";
+var TIENDA_VERSION = "2026102801";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1175,10 +1182,10 @@ function formProducto(p, codNuevo, base){
  $("fEsc").onclick = function(){ abrirEscanerSimple(function(cod){ $("fCod").value = cod; }); };
  var fotoForm = p.foto || "";
  $("fFotoIn").onchange = function(){
-  var f = this.files && this.files[0]; this.value = ""; if(!f) return;
+  var inp = this, f = inp.files && inp.files[0]; if(!f) return;
   $("fFotoTxt").textContent = "Preparando la foto…";
-  prepararFotoTienda(f).then(function(d){ fotoForm = d; $("fFotoPrev").src = d; $("fFotoPrev").hidden = false; $("fFotoTxt").textContent = "✅ Foto lista con el logo. Toca Guardar."; })
-   ["catch"](function(){ $("fFotoTxt").textContent = "⚠️ No se pudo usar esa foto. Prueba con otra."; });
+  prepararFotoTienda(f).then(function(d){ inp.value = ""; fotoForm = d; $("fFotoPrev").src = d; $("fFotoPrev").hidden = false; $("fFotoTxt").textContent = "✅ Foto lista con el logo. Toca Guardar."; })
+   ["catch"](function(err){ inp.value = ""; $("fFotoTxt").textContent = "⚠️ No se pudo usar esa foto (" + ((err && err.message) || "error") + "). Prueba sacándola con la cámara o elige otra de tu galería."; });
  };
  $("fOk").onclick = function(){
   var x = { id:nuevo ? "" : p.id, n:$("fN").value.trim(), cat:$("fCat").value, det:$("fDet").value.trim(), cod:$("fCod").value.replace(/\s/g, ""), costo:num($("fCosto").value), precio:num($("fPrecio").value), min:num($("fMin").value), foto:fotoForm, vence:$("fVence").value || "" };
