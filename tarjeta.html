@@ -2477,7 +2477,7 @@ function renderEvolucion(s){
     cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
     Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
  var TIENDA_VITRINA_ACTIVA = true;
- var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Packs":"🎁", "Otro":"📦" };
+ var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Helados":"🍦", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Packs":"🎁", "Otro":"📦" };
  function tiendaCat_(c){ return c === "Bebidas" ? "Bebestibles" : (c === "Ropa deportiva" ? "Ropa mujer" : (c || "Otro")); }
  function tiendaFotoUrl_(f){ return /^data:/.test(f) ? f : escapeHtml(f) + "?v=" + TIENDA_FOTO_V; }
  function tiendaFoto_(p){ return p.foto ? tiendaFotoUrl_(p.foto) : "maquinas-wgymadnsport/comun/logo.png"; }
@@ -2515,11 +2515,12 @@ function renderEvolucion(s){
       unas líneas de lo que hay y el botón rojo «VER TIENDA WGYM» que la despliega. */
    function cerrada(){
     var ropa = l.some(function(p){ return /^Ropa/.test(p.cat); }), amer = l.some(function(p){ return p.tipo === "americana"; }),
-     snack = l.some(function(p){ return p.cat === "Snacks"; }), beb = l.some(function(p){ return p.cat === "Bebestibles"; }),
+     snack = l.some(function(p){ return p.cat === "Snacks"; }), hel = l.some(function(p){ return p.cat === "Helados"; }), beb = l.some(function(p){ return p.cat === "Bebestibles"; }),
      pack = l.some(function(p){ return p.pack; }), disp = l.filter(function(p){ return p.q > 0 && !p.pronto && !p.reservado; }).length, pr = l.filter(function(p){ return p.pronto && !p.reservado; }).length;
     box.innerHTML = '<p class="pago-kicker">🛍 Tienda WGYM</p><p class="rank-sub">Lo que vendemos en el gimnasio:</p>' +
      (ropa ? '<p class="rank-sub">👚 Ropa deportiva <b style="color:var(--dorado)">nueva</b>' + (amer ? ' y <b style="color:var(--dorado)">americana</b>' : '') + '</p>' : '') +
      (snack || beb ? '<p class="rank-sub">🍫 ' + (snack && beb ? 'Snacks saludables y bebestibles' : snack ? 'Snacks saludables' : 'Bebestibles') + '</p>' : '') +
+     (hel ? '<p class="rank-sub">🍦 Helados proteicos sin azúcar</p>' : '') +
      (pack ? '<p class="rank-sub">🎁 Packs con descuento</p>' : '') +
      '<p class="rank-sub"><b style="color:var(--dorado)">' + disp + (disp === 1 ? ' producto disponible' : ' productos disponibles') + '</b>' + (pr ? ' · ⏳ ' + pr + ' llegan pronto' : '') + '. Pídelos por WhatsApp.</p>' +
      '<button type="button" class="pago-btn principal" id="tvAbrir" style="width:100%">🛍 Ver tienda WGYM</button>';
@@ -2557,13 +2558,19 @@ function renderEvolucion(s){
     los mismos de los letreros de recepción (letreros-batidos.html), por vaso de 500 ml. */
  var TIENDA_MACROS = [
   { re:/^batido ganador/i, k:670, p:44, c:74, g:24, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, avena y mantequilla de maní", al:"leche, soya y maní" },
-  { re:/^batido de prote/i, k:315, p:32, c:27, g:9, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, hielo y un toque de canela o cacao", al:"leche y soya" }
+  { re:/^batido de prote/i, k:315, p:32, c:27, g:9, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, hielo y un toque de canela o cacao", al:"leche y soya" },
+  /* Helados proteicos sin azúcar (31-10-2026, catálogo de la dueña: endulzados con stevia y alulosa; valores estimados del catálogo). */
+  { re:/^helado proteico manjarate/i, k:176, p:11.9, c:19.8, g:5.8, por:"125 g", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
+  { re:/^helado proteico capuchino/i, k:130, p:10, c:11, g:5, por:"110 g", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
+  { re:/^helado proteico tropical/i, k:143, p:9.8, c:14, g:5.3, por:"130 g", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
+  { re:/^helado proteico banana/i, k:161, p:10.9, c:16.3, g:5.8, por:"130 g", lleva:"Proteína de chocolate, sin azúcar: endulzado con stevia y alulosa", al:"leche y maní" },
+  { re:/^helado proteico berry/i, k:126, p:9.9, c:12.3, g:3.9, por:"130 g", lleva:"Proteína de frutilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" }
  ];
  function tvMacros_(p){ for(var i = 0; i < TIENDA_MACROS.length; i++) if(TIENDA_MACROS[i].re.test(p.n)) return TIENDA_MACROS[i]; return null; }
  function tvMacrosHtml_(m, grande){
   if(!m) return "";
   if(!grande) return '<span class="tv-mac">🔥 ' + m.k + ' kcal · 💪 ' + m.p + ' g proteína</span>';
-  return '<div class="tv-macros"><p class="tv-mac-t">Macros por vaso (500 ml)</p><div class="tv-mac-g">' +
+  return '<div class="tv-macros"><p class="tv-mac-t">Macros por vaso (' + (m.por || "500 ml") + ')</p><div class="tv-mac-g">' +
    [["🔥", m.k, "Calorías"], ["💪", m.p + " g", "Proteína"], ["🍞", m.c + " g", "Carbohidratos"], ["🥑", m.g + " g", "Grasas"]].map(function(x){ return '<div><span>' + x[0] + '</span><b>' + x[1] + '</b><small>' + x[2] + '</small></div>'; }).join("") +
    '</div><p class="rank-sub">🥤 Lleva: ' + m.lleva + '.</p><p class="rank-sub">⚠️ Contiene ' + m.al + '.</p></div>';
  }
@@ -2648,7 +2655,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026102725", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026103101", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
