@@ -204,6 +204,7 @@ body{ zoom:1.22; }
  #hojaEtiquetas.fchica .etq .pr{ font-size:11pt; }
  #hojaEtiquetas.fchica .etq svg{ width:44mm; height:12mm; }
 }
+.grupo-l{display:grid;gap:10px;margin-top:10px}.grupo-b{display:flex;align-items:center;gap:12px;width:100%;padding:8px;border-radius:14px;border:2px solid var(--gold,#D4AF37);background:#141416;color:#fff;text-align:left;font:inherit;cursor:pointer}.grupo-b img{width:70px;height:93px;object-fit:contain;background:#fff;border-radius:8px;flex:none}.grupo-b b{display:block;font-size:22px;text-transform:uppercase}.grupo-b small{font-size:17px;color:#ccc}
 </style>
 </head>
 <body>
@@ -327,6 +328,20 @@ function movsPendientes(){
 function prod(id){ for(var i = 0; i < S.productos.length; i++) if(S.productos[i].id === id) return S.productos[i]; return null; }
 function porCodigo(cod){ cod = String(cod || "").replace(/\s/g, ""); var b = cod.replace(/^0+/, "");
  for(var i = 0; i < S.productos.length; i++){ var p = S.productos[i]; if(!p.activo || !p.cod) continue; if(p.cod === cod || p.cod.replace(/^0+/, "") === b) return p; } return null; }
+/* 🍦 Código de grupo (31-10-2026, la dueña: "un código para todos los sabores"): un solo código pegado en el refrigerador;
+   al escanearlo pregunta qué sabor es y descuenta del stock de ese sabor. Para otro grupo, sumar código → categoría. */
+var CODIGOS_GRUPO = { "2001500000000": "Helados" };
+function grupoDeCodigo(cod){ var c = String(cod || "").replace(/\D/g, "").replace(/^0+/, ""); for(var k in CODIGOS_GRUPO) if(k.replace(/^0+/, "") === c) return CODIGOS_GRUPO[k]; return ""; }
+function elegirDelGrupo(cat, alElegir){
+ var l = activos().filter(function(p){ return catNueva(p.cat) === cat; }).sort(function(a, b){ return a.n.localeCompare(b.n); });
+ abrirHoja('<div class="cab"><h3>' + iconoCat(cat) + ' ¿Qué sabor?</h3><button class="btn chico volver" id="gVolver">← Volver</button></div>' +
+  (l.length ? '<div class="grupo-l">' + l.map(function(p){ var q = stockVer(p);
+   return '<button class="grupo-b" data-g="' + esc(p.id) + '">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span style="font-size:40px">' + iconoCat(p.cat) + '</span>') +
+    '<span><b>' + esc(p.n.replace(/^helado proteico\s*/i, "")) + '</b><small>' + (q > 0 ? 'Quedan ' + q : '⛔ SIN STOCK') + ' · ' + plata(precioVenta(p)) + '</small></span></button>'; }).join("") + '</div>'
+   : '<p class="muted">Todavía no hay productos en «' + esc(cat) + '». Cárgalos en 📦 Inventario.</p>'));
+ $("gVolver").onclick = cerrarHoja;
+ document.querySelectorAll("[data-g]").forEach(function(b){ b.onclick = function(){ alElegir(prod(b.dataset.g)); }; });
+}
 function activos(){ return S.productos.filter(function(p){ return p.activo && !retirada(p); }); }
 /* 🏷 Ropa vendida (26-10-2026, la dueña: casi toda la ropa es de una sola prenda; "cuando se venda una prenda que se
    coloque vendido automático y que se quede en la tienda por 15 días y luego la eliminas"): una prenda sin stock con
@@ -506,7 +521,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026103101";
+var TIENDA_VERSION = "2026103102";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -586,11 +601,14 @@ function renderVender(){
  h += htmlHoyMini();
  v.innerHTML = h;
  if($("irInv")) $("irInv").onclick = function(){ document.querySelector('#nav [data-tab="inv"]').click(); };
- function alEscanear(cod){ var p = porCodigo(cod); if(p){ if(packDesarmado(p)){ agregarAlCarro(p); return "🧩 Pack desarmado"; } agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }
- $("bEsc").onclick = function(){ abrirEscaner(alEscanear, false); };
+ function alEscanear(cod, seguido){
+  var g = grupoDeCodigo(cod);
+  if(g){ pararCamara(); elegirDelGrupo(g, function(p){ agregarAlCarro(p); renderVender(); toast("✅ " + p.n + " agregado"); if(seguido) abrirEscaner(function(c){ return alEscanear(c, true); }, true); else cerrarHoja(); }); return "__grupo"; }
+  var p = porCodigo(cod); if(p){ if(packDesarmado(p)){ agregarAlCarro(p); return "🧩 Pack desarmado"; } agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }
+ $("bEsc").onclick = function(){ abrirEscaner(function(c){ return alEscanear(c, false); }, false); };
  /* «Escanear varias» (27-10-2026, la dueña: "si alguien me compra 5 prendas… que vaya sumando"): la cámara queda abierta,
     cada código suma a la venta con bip y aviso, y se cierra con «Listo». El escaneo normal sigue de a uno. */
- $("bEscV").onclick = function(){ abrirEscaner(alEscanear, true); };
+ $("bEscV").onclick = function(){ abrirEscaner(function(c){ return alEscanear(c, true); }, true); };
  $("bq").oninput = function(){ var q = normTxt(this.value).trim(), r = $("bres");
   if(!q){ r.hidden = true; return; }
   var l = activos().filter(function(p){ return !packDesarmado(p) && normTxt(p.n + " " + p.cat + " " + p.det + " " + p.cod).indexOf(q) >= 0; }).slice(0, 30);
@@ -1684,7 +1702,8 @@ function abrirEscaner(alLeer, seguido){
  function leer(code){
   var ahora = Date.now(); if(code === ultimo.c && ahora - ultimo.t < 2000) return; ultimo = { c:code, t:ahora };
   bip(); vibrar(60);
-  var msg = alLeer(code), fl = $("cFlash"); cuenta();
+  var msg = alLeer(code); if(msg === "__grupo") return;
+  var fl = $("cFlash"); cuenta();
   if(msg){ fl.style.background = "rgba(31,168,86,.95)"; fl.textContent = msg; fl.style.display = "block"; clearTimeout(leer.t); leer.t = setTimeout(function(){ if($("cFlash")) $("cFlash").style.display = "none"; }, 1500); $("cNuevo").innerHTML = ""; }
   else { fl.style.background = "rgba(227,6,19,.95)"; fl.textContent = "Código " + code + " no está en tu inventario"; fl.style.display = "block";
    $("cNuevo").innerHTML = '<button class="btn oro" id="cCrear" style="margin-top:10px">➕ Crear producto con el código ' + esc(code) + '</button>';
@@ -1695,7 +1714,7 @@ function abrirEscaner(alLeer, seguido){
  }
  $("cListo").onclick = cerrarHoja;
  usarFotoCodigo($("cFoto"), leer);
- $("cManOk").onclick = function(){ var v = $("cMan").value.replace(/\D/g, ""); if(v.length >= 6){ leer(v); $("cMan").value = ""; } };
+ $("cManOk").onclick = function(){ var v = $("cMan").value.replace(/\D/g, ""); if(v.length >= 6){ leer(v); if($("cMan")) $("cMan").value = ""; } };
  $("cMan").onkeydown = function(e){ if(e.key === "Enter") $("cManOk").click(); };
  iniciarLector($("cVid"), leer, function(){ $("cTxt").textContent = "No pudimos abrir la cámara. Revisa el permiso de cámara del navegador o escribe el número del código."; });
 }
