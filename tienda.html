@@ -264,7 +264,8 @@ function fotoUrl(f){ return f ? (/^data:/.test(f) ? f : f + (f.indexOf("?") < 0 
    máx. 480 × 640, se le pone el logo del gimnasio arriba a la izquierda (34 % del ancho, como las demás fotos) y se guarda
    como imagen dentro de la planilla (texto «data:», menos de 45.000 letras: una celda aguanta 50.000). */
 var LOGO_TIENDA = "maquinas-wgymadnsport/comun/logo.png";
-function prepararFotoTienda(file){
+function fotoSinLogo(){ try{ return localStorage.getItem("wgym_tienda_foto_sinlogo_v1") === "1"; }catch(e){ return false; } }
+function prepararFotoTienda(file, sinLogo){
  /* 28-10-2026 (la dueña: "no me deja poner la foto" en el iPhone): se prueban 3 formas de abrir la foto (createImageBitmap,
     dirección temporal y lectura completa del archivo), más tamaños y calidades, y el aviso dice qué pasó. */
  function cargar(src){ return new Promise(function(ok, mal){ var i = new Image(); i.onload = function(){ ok(i); }; i.onerror = function(){ mal(new Error("no abre")); }; i.src = src; }); }
@@ -274,7 +275,8 @@ function prepararFotoTienda(file){
   if(window.createImageBitmap) return createImageBitmap(file).then(function(b){ if(!b.width) throw 0; return b; })["catch"](porUrl);
   return porUrl();
  }
- return Promise.all([abrir(), cargar(LOGO_TIENDA)["catch"](function(){ return null; })]).then(function(r){
+ /* 01-11-2026 (la dueña: "no dejes que se me sobrescriba el logo"): con «Mi foto ya trae el logo» no se le pone otro. */
+ return Promise.all([abrir(), sinLogo ? null : cargar(LOGO_TIENDA)["catch"](function(){ return null; })]).then(function(r){
   var img = r[0], logo = r[1], lados = [[480, 640], [420, 560], [360, 480], [300, 400], [240, 320]];
   if(!img.width || !img.height) throw new Error("foto vacía");
   for(var k = 0; k < lados.length; k++){
@@ -521,7 +523,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110101";
+var TIENDA_VERSION = "2026110102";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1165,7 +1167,8 @@ function formProducto(p, codNuevo, base){
  abrirHoja('<div class="cab"><h3>' + (nuevo ? '➕ Producto nuevo' : '✏️ Editar producto') + '</h3><button class="btn chico volver" id="fCerrar">← Volver</button></div>' +
   '<div style="text-align:center;margin:8px 0"><img id="fFotoPrev" src="' + esc(fotoUrl(p.foto)) + '" alt=""' + (p.foto ? '' : ' hidden') + ' style="max-height:160px;border-radius:12px;border:1px solid var(--line)"></div>' +
   '<label class="btn oro" for="fFotoIn" style="display:block;text-align:center">📸 ' + (p.foto ? 'Cambiar la foto' : 'Poner foto del producto') + '</label><input type="file" id="fFotoIn" accept="image/*" hidden>' +
-  '<p class="muted" id="fFotoTxt" style="font-size:14px;margin:4px 0 0">Saca la foto o elígela de tu galería: el logo del gimnasio se le pone solo.</p>' +
+  '<label style="display:flex;gap:10px;align-items:center;margin:8px 0 0;font-size:17px;font-weight:700"><input type="checkbox" id="fSinLogo" style="width:24px;height:24px;flex:none"' + (fotoSinLogo() ? ' checked' : '') + '> Mi foto ya trae el logo (no ponerle otro)</label>' +
+  '<p class="muted" id="fFotoTxt" style="font-size:14px;margin:4px 0 0">' + (fotoSinLogo() ? 'Se sube tal cual, sin agregarle el logo.' : 'Saca la foto o elígela de tu galería: el logo del gimnasio se le pone solo.') + '</p>' +
   '<label class="lab" for="fN">Nombre</label><input class="inp" id="fN" value="' + esc(p.n) + '" placeholder="Ej: Agua mineral 500 ml">' +
   '<label class="lab" for="fCat">Categoría</label><select class="inp" id="fCat">' + CATS.map(function(c){ return '<option' + (c[0] === p.cat ? ' selected' : '') + '>' + c[0] + '</option>'; }).join("") + '</select>' +
   '<label class="lab" for="fDet">Detalle (sabor, talla, color, tamaño)</label><input class="inp" id="fDet" value="' + esc(p.det) + '" placeholder="Ej: Talla M · negro">' +
@@ -1198,12 +1201,22 @@ function formProducto(p, codNuevo, base){
  $("fCerrar").onclick = cerrarHoja;
  if($("fPub")) $("fPub").onclick = function(){ crearPublicacion(p); };
  $("fEsc").onclick = function(){ abrirEscanerSimple(function(cod){ $("fCod").value = cod; }); };
- var fotoForm = p.foto || "";
+ var fotoForm = p.foto || "", ultimoArchivo = null;
+ function usarArchivo(f){
+  var sin = $("fSinLogo").checked;
+  $("fFotoTxt").textContent = "Preparando la foto…";
+  return prepararFotoTienda(f, sin).then(function(d){ fotoForm = d; $("fFotoPrev").src = d; $("fFotoPrev").hidden = false; $("fFotoTxt").textContent = sin ? "✅ Foto lista, con tu logo tal cual. Toca Guardar." : "✅ Foto lista con el logo. Toca Guardar."; });
+ }
  $("fFotoIn").onchange = function(){
   var inp = this, f = inp.files && inp.files[0]; if(!f) return;
-  $("fFotoTxt").textContent = "Preparando la foto…";
-  prepararFotoTienda(f).then(function(d){ inp.value = ""; fotoForm = d; $("fFotoPrev").src = d; $("fFotoPrev").hidden = false; $("fFotoTxt").textContent = "✅ Foto lista con el logo. Toca Guardar."; })
+  ultimoArchivo = f;
+  usarArchivo(f).then(function(){ inp.value = ""; })
    ["catch"](function(err){ inp.value = ""; $("fFotoTxt").textContent = "⚠️ No se pudo usar esa foto (" + ((err && err.message) || "error") + "). Prueba sacándola con la cámara o elige otra de tu galería."; });
+ };
+ $("fSinLogo").onchange = function(){
+  try{ localStorage.setItem("wgym_tienda_foto_sinlogo_v1", this.checked ? "1" : "0"); }catch(e){}
+  if(ultimoArchivo) usarArchivo(ultimoArchivo)["catch"](function(){});
+  else $("fFotoTxt").textContent = this.checked ? "Se sube tal cual, sin agregarle el logo." : "Saca la foto o elígela de tu galería: el logo del gimnasio se le pone solo.";
  };
  $("fOk").onclick = function(){
   var x = { id:nuevo ? "" : p.id, n:$("fN").value.trim(), cat:$("fCat").value, det:$("fDet").value.trim(), cod:$("fCod").value.replace(/\s/g, ""), costo:num($("fCosto").value), precio:num($("fPrecio").value), min:num($("fMin").value), foto:fotoForm, vence:$("fVence").value || "" };
