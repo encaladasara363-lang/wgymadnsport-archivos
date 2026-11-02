@@ -264,3 +264,13 @@ INGRESOS.gs, guardar, Implementar → Administrar implementaciones → lápiz �
 - `tiendaListar` responde `v: 29`.
 
 Se instala igual que las anteriores (o con el botón de `copiar-codigo.html`); para volver atrás: Versión 28.
+
+## Versión 30 (02-11-2026): 🏆 Ranking — los inscritos siguen de un mes a otro
+
+- `listarRetos` / `rankingAdmin` (`calcularRetos_`): los días se siguen contando solo dentro del mes (el ranking parte
+  de cero cada mes), pero participan todos los que alguna vez se unieron, no solo los del mes. Vale la fila más nueva
+  de cada persona; si dice «(salió)», no aparece.
+- `rankingAdmin` acepta `mes=AAAA-MM` para ver un mes anterior (botón «📅 Ver ranking del mes pasado» del mesón).
+- Responden `v: 30` y `siguen: true`.
+
+Se instala igual que las anteriores (o con el botón de `copiar-codigo.html`); para volver atrás: Versión 29.
