@@ -664,26 +664,31 @@ function guardarReto_(e) {
     } finally { lock.releaseLock(); }
   } catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
-function calcularRetos_(p, conNombre) {
-  var mes = diaCL_(Date.now()).slice(0, 7);
+function calcularRetos_(p, conNombre, mesPedido) {
+  /* Versión 30 (02-11-2026, la dueña: "que se reinicie mes a mes pero que sigan ahí todos los que ya se habían
+     unido"): los días se cuentan solo en el mes, pero participan todos los que alguna vez se unieron (vale su fila
+     más nueva; si la más nueva dice «(salió)», no aparece). El mesón puede pedir un mes anterior (mesPedido). */
+  var actual = diaCL_(Date.now()).slice(0, 7);
+  var mes = /^\d{4}-\d{2}$/.test(String(mesPedido || "")) && String(mesPedido) <= actual ? String(mesPedido) : actual;
   var hoja = SpreadsheetApp.openById(SHEET_ID).getSheetByName("Retos"), filas = [];
   if (hoja && hoja.getLastRow() >= 2) {
-    /* Si una persona quedó repetida, vale su fila más nueva (la de más abajo). */
     var porClave = {};
     hoja.getRange(2, 1, hoja.getLastRow() - 1, 6).getValues().forEach(function (r) {
-      if (mesDe_(r[0]) === mes && r[3]) porClave[String(r[3])] = { id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]), g: grupoReto_(r[5]) };
+      var m = mesDe_(r[0]);
+      if (m && m <= mes && r[3]) porClave[String(r[3])] = { id: String(r[1]).slice(0, 6), apodo: String(r[2]), clave: String(r[3]), g: grupoReto_(r[5]) };
     });
     Object.keys(porClave).forEach(function (k) { if (porClave[k].apodo !== "(salió)") filas.push(porClave[k]); });
   }
   var dias = filas.length ? diasDesde_(p, mes + "-01") : {};
-  var lista = filas.map(function (f) { var o = { id: f.id, apodo: f.apodo, g: f.g, pts: dias[f.clave] ? Object.keys(dias[f.clave]).length : 0 }; if (conNombre) o.nombre = f.clave; return o; });
+  function cuenta(k) { return dias[k] ? Object.keys(dias[k]).filter(function (d) { return d.slice(0, 7) === mes; }).length : 0; }
+  var lista = filas.map(function (f) { var o = { id: f.id, apodo: f.apodo, g: f.g, pts: cuenta(f.clave) }; if (conNombre) o.nombre = f.clave; return o; });
   lista.sort(function (a, b) { return b.pts - a.pts; });
   if (!conNombre) {
     /* Lo público: hasta 30 por grupo. */
-    var cuenta = {};
-    lista = lista.filter(function (x) { cuenta[x.g] = (cuenta[x.g] || 0) + 1; return cuenta[x.g] <= 30; });
+    var porGrupo = {};
+    lista = lista.filter(function (x) { porGrupo[x.g] = (porGrupo[x.g] || 0) + 1; return porGrupo[x.g] <= 30; });
   }
-  return { ok: true, retos: true, grupos: true, mes: mes, lista: lista };
+  return { ok: true, retos: true, grupos: true, siguen: true, v: 30, mes: mes, lista: lista };
 }
 function listarRetos_(e) {
   try {
@@ -697,7 +702,7 @@ function listarRetos_(e) {
 /* Ranking con nombres reales, solo para el mesón (POST con la clave de administración). */
 function rankingAdmin_(e) {
   if (!claveValida_(e.parameter)) return respond_(e, { ok: false, error: "clave incorrecta" });
-  try { return respond_(e, calcularRetos_(e.parameter, true)); }
+  try { return respond_(e, calcularRetos_(e.parameter, true, e.parameter.mes)); }
   catch (err) { return respond_(e, { ok: false, error: String(err && err.message || err) }); }
 }
 

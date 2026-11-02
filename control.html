@@ -409,8 +409,8 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <div class="panel" id="rankPanel">
 <h2>🏆 Ranking del mes <span class="der" id="rankMes">tarjeta virtual</span></h2>
 <div class="cuerpo">
-<p class="rank-ayuda">Socios que se unieron al ranking desde su tarjeta: apodo, nombre real y días entrenados este mes. Los nombres solo se ven aquí, con tu clave.</p>
-<button class="btn btn-rojo" id="bRanking" type="button">Ver ranking del mes</button>
+<p class="rank-ayuda">Socios que se unieron al ranking desde su tarjeta: apodo, nombre real y días entrenados este mes. Los días parten de cero cada mes, pero los socios siguen inscritos. Los nombres solo se ven aquí, con tu clave.</p>
+<button class="btn btn-rojo" id="bRanking" type="button">Ver ranking del mes</button> <button class="btn" id="bRankingAnt" type="button">📅 Ver ranking del mes pasado</button>
 <div id="rankAdmin"></div>
 </div>
 </div>
@@ -661,14 +661,19 @@ function llamarSocioApi_(action, params, cb, reintento){
 /* 🏆 Ranking del mes con nombres reales (11-10-2026, la dueña: "no veo en el mesón dónde
    está"). Acción rankingAdmin del Apps Script, POST con la clave de administración. */
 function escRank_(t){ return String(t == null ? "" : t).replace(/[&<>"']/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]; }); }
-function verRankingAdmin_(){
- var box = document.getElementById("rankAdmin"), b = document.getElementById("bRanking");
+/* 📅 Mes pasado (02-11-2026, la dueña: "se reinició y no alcancé a ver"): con la Versión 30 del Apps Script
+   rankingAdmin acepta mes=AAAA-MM. */
+function mesPasado_(){ var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - 1); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); }
+function verRankingAdmin_(mes){
+ mes = typeof mes === "string" ? mes : "";
+ var box = document.getElementById("rankAdmin"), b = document.getElementById(mes ? "bRankingAnt" : "bRanking"), txt = b.textContent;
  b.disabled = true; b.textContent = "Cargando…";
- llamarSocioApi_("rankingAdmin", {}, function(ok, d){
-  b.disabled = false; b.textContent = "🔄 Actualizar ranking";
+ llamarSocioApi_("rankingAdmin", mes ? { mes:mes } : {}, function(ok, d){
+  b.disabled = false; b.textContent = mes ? txt : "🔄 Actualizar ranking";
+  if(ok && mes && d.mes !== mes){ box.innerHTML = '<p class="rank-ayuda">Para ver el mes pasado falta instalar la Versión 30 del sistema de Google.</p>'; return; }
   if(!ok){ box.innerHTML = '<p class="rank-ayuda">' + (d === "sin conexión" ? 'Sin conexión. Revisa el internet e intenta de nuevo.' : d === "sin clave" ? 'Falta la clave de administración.' : 'No se pudo cargar (' + escRank_(d) + '). Si recién se agregó, falta actualizar el sistema de Google a la Versión 20.') + '</p>'; return; }
   var l = d.lista || [];
-  document.getElementById("rankMes").textContent = (d.mes || "") + " · " + l.length + (l.length === 1 ? " socio" : " socios");
+  document.getElementById("rankMes").textContent = (mes ? "Mes pasado · " : "") + (d.mes || "") + " · " + l.length + (l.length === 1 ? " socio" : " socios");
   /* Un ranking por grupo de plan (11-10-2026, la dueña): Mensuales, Turno (máx. 14 días)
      y 3 veces por semana (máx. 12). Semanal y pase diario no participan. */
   var grupos = [["mensual", "Mensuales"], ["turno", "Plan Turno · máximo 14 días"], ["tres", "3 veces por semana · máximo 12 días"]];
@@ -683,7 +688,8 @@ function verRankingAdmin_(){
    : '<p class="rank-ayuda">Todavía nadie se une al ranking este mes.</p>';
  });
 }
-document.getElementById("bRanking").addEventListener("click", verRankingAdmin_);
+document.getElementById("bRanking").addEventListener("click", function(){ verRankingAdmin_(""); });
+document.getElementById("bRankingAnt").addEventListener("click", function(){ verRankingAdmin_(mesPasado_()); });
 /* 🥗 Panel de ventas WGYMNUTRI (18-10-2026, la dueña eligió la idea 8): activas, vencen en 7 días,
    vencidas en los últimos 30 (para ofrecerla de nuevo) con listarNutri, y lo que entró en el mes con
    ventasNutri (POST con la clave; anota cada «Activar» desde la Versión 22 del Apps Script). */
