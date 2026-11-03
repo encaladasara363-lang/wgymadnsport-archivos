@@ -2566,6 +2566,7 @@ function renderEvolucion(s){
   { re:/^helado proteico manjarate/i, k:176, p:11.9, c:19.8, g:5.8, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico capuchino/i, k:130, p:10, c:11, g:5, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico tropical/i, k:143, p:9.8, c:14, g:5.3, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
+  { re:/^helado proteico banana split/i, k:137, p:8.2, c:12.3, g:5.8, por:"100 ml", lleva:"Proteína, plátano, nueces y chocolate", al:"leche y nueces" },
   { re:/^helado proteico banana/i, k:161, p:10.9, c:16.3, g:5.8, por:"100 ml", lleva:"Proteína de chocolate, sin azúcar: endulzado con stevia y alulosa", al:"leche y maní" },
   { re:/^helado proteico berry/i, k:126, p:9.9, c:12.3, g:3.9, por:"100 ml", lleva:"Proteína de frutilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico pistacho menta/i, k:184, p:12.5, c:15.4, g:8, por:"100 ml", lleva:"Proteína de vainilla, pistacho y menta", al:"leche y pistacho" },
@@ -2664,7 +2665,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110304", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110305", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
