@@ -2569,7 +2569,8 @@ function renderEvolucion(s){
   { re:/^helado proteico pistacho/i, k:184, p:12.5, c:15.4, g:8, por:"100 ml", lleva:"Proteína de vainilla y pistacho", al:"leche y pistacho" },
   { re:/^helado proteico oreo/i, k:185, p:12.6, c:17.7, g:7.1, por:"100 ml", lleva:"Proteína de vainilla y galletas tipo Oreo", al:"leche y trigo" },
   { re:/^helado proteico coco/i, k:182, p:10, c:12.7, g:10.4, por:"100 ml", lleva:"Proteína, coco, almendras y chocolate blanco", al:"leche y almendras" },
-  { re:/^helado proteico moka/i, k:154, p:9.7, c:14.3, g:7, por:"100 ml", lleva:"Proteína, café y chocolate blanco", al:"leche" }
+  { re:/^helado proteico moka/i, k:154, p:9.7, c:14.3, g:7, por:"100 ml", lleva:"Proteína, café y chocolate blanco", al:"leche" },
+  { re:/^helado proteico avellana/i, k:163, p:10, c:13.5, g:7.8, por:"100 ml", lleva:"Proteína, avellanas y manjar", al:"leche y avellanas" }
  ];
  function tvMacros_(p){ for(var i = 0; i < TIENDA_MACROS.length; i++) if(TIENDA_MACROS[i].re.test(p.n)) return TIENDA_MACROS[i]; return null; }
  function tvMacrosHtml_(m, grande){
@@ -2660,7 +2661,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110302", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110303", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
