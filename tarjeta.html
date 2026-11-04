@@ -2563,6 +2563,7 @@ function renderEvolucion(s){
   { re:/^batido ganador/i, k:670, p:44, c:74, g:24, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, avena y mantequilla de maní", al:"leche, soya y maní" },
   { re:/^batido de prote/i, k:315, p:32, c:27, g:9, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, hielo y un toque de canela o cacao", al:"leche y soya" },
   /* Helados proteicos sin azúcar (31-10-2026, catálogo de la dueña: endulzados con stevia y alulosa; valores estimados del catálogo). */
+  { re:/^helado proteico alfajor/i, k:164, p:9.4, c:18.3, g:6.4, por:"100 ml", lleva:"Proteína, galleta, manjar y chocolate", al:"leche, trigo y soya" },
   { re:/^helado proteico manjarate/i, k:176, p:11.9, c:19.8, g:5.8, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico capuchino/i, k:130, p:10, c:11, g:5, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico tropical/i, k:143, p:9.8, c:14, g:5.3, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
@@ -2666,7 +2667,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110401", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110402", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
