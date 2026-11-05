@@ -2474,7 +2474,7 @@ function renderEvolucion(s){
     oculta con «Ya no lo vendo» no llega. «Lo quiero» abre una ventanita (foto grande, cantidad, total)
     y después WhatsApp a Sara con el pedido. El stock solo baja cuando ella cobra en la tienda.
     Al cambiar una foto de img/tienda/ con el mismo nombre, subir TIENDA_FOTO_V junto con FOTO_V de tienda.html. */
- var TIENDA_FOTO_V = "51", TIENDA_WSP = "56975196394", TIENDA_SITIO = "https://encaladasara363-lang.github.io/wgymadnsport-archivos/";
+ var TIENDA_FOTO_V = "52", TIENDA_WSP = "56975196394", TIENDA_SITIO = "https://encaladasara363-lang.github.io/wgymadnsport-archivos/";
  /* Interruptor (25-10-2026, la dueña: "no quiero publicar la tienda el lunes porque compré ropa en Shein y no sé
     cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
     Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
@@ -2574,7 +2574,7 @@ function renderEvolucion(s){
  var TIENDA_MACROS = [
   { re:/^batido ganador/i, k:670, p:44, c:74, g:24, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, avena y mantequilla de maní", al:"leche, soya y maní" },
   /* Smoothie Choco Banana Cream (05-11-2026, receta de la dueña, vaso de 450 ml; proteína Dragon Pharma Protein Phorm 30 g). */
-  { re:/^smoothie proteico choco banana/i, k:340, p:31, c:33, g:10, por:"450 ml", lleva:"Proteína de chocolate (carne + whey), leche entera sin lactosa, plátano, yogur natural sin azúcar y hielo", al:"leche" },
+  { re:/^smoothie proteico choco banana/i, k:340, p:31, c:33, g:10, por:"450 ml", lleva:"Proteína de chocolate Protein Phorm, leche entera sin lactosa, plátano, yogur natural sin azúcar y hielo", al:"leche" },
   { re:/^batido de prote/i, k:315, p:32, c:27, g:9, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, hielo y un toque de canela o cacao", al:"leche y soya" },
   /* Waffle casero (05-11-2026, receta de la dueña: harina de arroz, avena, dátil, leche sin lactosa, leche en polvo, yogur griego). */
   { re:/^waffle/i, k:355, p:12, c:48, g:13.5, por:"1 waffle", lleva:"Harina de arroz, avena, dátil, leche, yogur griego, huevo y aceite de coco, sin azúcar añadida", al:"huevo y leche" },
@@ -2688,7 +2688,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110510", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110511", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
