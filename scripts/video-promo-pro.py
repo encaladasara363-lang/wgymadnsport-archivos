@@ -3,6 +3,9 @@
 
 Uso: python3 scripts/video-promo-pro.py <video_fuente_vertical> <salida.mp4>
 Variable opcional FRASES (JSON) para cambiar las frases sin tocar el script; COLOR=1 para colores vivos sin oscurecer.
+Para avisos de la tienda (05-11-2026): CIERRE1/CIERRE2 (en vez de «ÚNETE AL / EQUIPO WGYM»), CIERRE_SUB
+(línea dorada, ej. el precio) y CIERRE_DET (línea chica); INSET=<foto> + INSET_TXT muestra un cuadro arriba a la
+derecha durante el video (ej. la polera que la modelo no lleva puesta).
 
 - 720x1280 a 30 cuadros, video a pantalla completa con color más intenso y viñeta roja.
 - Logo grande que entra con destello y queda chico arriba a la izquierda.
@@ -48,6 +51,11 @@ DUR_V = len(archivos) / FPS
 logo = Image.open(os.path.join(REPO, 'maquinas-wgymadnsport/comun/logo.png')).convert('RGBA')
 def logo_a(ancho): return logo.resize((ancho, int(ancho * logo.height / logo.width)), Image.LANCZOS)
 logo_chico, logo_cierre = logo_a(200), logo_a(420)
+INSET = None
+if os.environ.get('INSET'):
+    _im = Image.open(os.environ['INSET']).convert('RGB'); _w = 230
+    _im = _im.resize((_w, int(_w * _im.height / _im.width)), Image.LANCZOS)
+    INSET = Image.new('RGB', (_w + 10, _im.height + 10), GOLD); INSET.paste(_im, (5, 5))
 
 # Viñeta roja y degradado oscuro abajo para que el texto se lea.
 vin = Image.new('L', (W, H), 0); g = ImageDraw.Draw(vin)
@@ -132,6 +140,11 @@ def cuadro(i):
         img.paste(logo_chico, (22, 26), logo_chico)
         d.rectangle((W - 230, 46, W - 24, 92), fill=(0, 0, 0)); d.rectangle((W - 230, 46, W - 224, 92), fill=RED)
         centro(d, 52, "TOCOPILLA", barlow(34), GOLD, cx=W - 124)
+        if INSET is not None:
+            x0, y0 = W - INSET.width - 24, 112
+            img.paste(INSET, (x0, y0)); yb = y0 + INSET.height
+            d.rectangle((x0, yb, x0 + INSET.width, yb + 50), fill=RED)
+            centro(d, yb + 6, os.environ.get('INSET_TXT', ''), anton(32), WHITE, cx=x0 + INSET.width / 2)
     frase(img, t)
     d = ImageDraw.Draw(img)
     p = t / DUR_V
@@ -145,11 +158,13 @@ def cierre(ultimo, k):
     e = 1 - (1 - min(1, k / .45)) ** 3
     lg = logo_a(int(420 * (1.25 - .25 * e)))
     img.paste(lg, ((W - lg.width) // 2, 90 + int(40 * (1 - e))), lg)
-    centro(d, 410, "ÚNETE AL", rubik(84), WHITE)
-    centro(d, 494, "EQUIPO WGYM", rubik(86), RED)
+    centro(d, 410, os.environ.get('CIERRE1', "ÚNETE AL"), ajustar(os.environ.get('CIERRE1', "ÚNETE AL"), 84, W - 60), WHITE)
+    centro(d, 494, os.environ.get('CIERRE2', "EQUIPO WGYM"), ajustar(os.environ.get('CIERRE2', "EQUIPO WGYM"), 86, W - 60), RED)
     if k > .5:
-        centro(d, 640, "TODO EN TU CELULAR", barlow(38), GOLD)
-        centro(d, 686, "TARJETA VIRTUAL · RUTINAS CON QR · APP NUTRICIÓN", barlow(29), (235, 235, 235))
+        sub = os.environ.get('CIERRE_SUB')
+        if sub: centro(d, 600, sub, anton(70), GOLD)
+        else: centro(d, 640, "TODO EN TU CELULAR", barlow(38), GOLD)
+        centro(d, 686, os.environ.get('CIERRE_DET', "TARJETA VIRTUAL · RUTINAS CON QR · APP NUTRICIÓN"), barlow(29), (235, 235, 235))
     for i, n in enumerate(("+56 9 9154 0156", "+56 9 7519 6394")):
         if k < .9 + i * .25: continue
         y = 770 + i * 118

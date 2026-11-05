@@ -823,6 +823,12 @@ arma la publicidad animada del 🏆 Ranking del mes (logo, trofeo, «¿Quién en
 de días, podio con «¿TÚ?», los 3 rankings por plan, cómo unirse con apodo desde la tarjeta y
 cierre con los dos WhatsApp). Sin video de fuente y sin apodos ni nombres reales.
 
+**Avisos de la tienda con el mismo script (05-11-2026, la dueña quería su conjunto «publicitario, que venda»):** variables
+`CIERRE1`/`CIERRE2` (en vez de «ÚNETE AL / EQUIPO WGYM»), `CIERRE_SUB` (precio en dorado), `CIERRE_DET` (línea chica) e
+`INSET=<foto>` + `INSET_TXT` (cuadro arriba a la derecha durante el video, ej. «+ POLERA» cuando la modelo no la lleva).
+Grok bloquea crear la modelo desde cero: usar una foto ya hecha de la tienda (versión sin logo ni cuadro, del historial
+de git) y pedirle solo el video (girar de espaldas a frente y caminar).
+
 ## Rutinas: contenido en JSON, nunca editar a mano el HTML (regla permanente, desde 10/2026)
 
 Las 12 rutinas de los carteles QR usan esta estructura (ver detalle
