@@ -261,7 +261,7 @@ function hoyISO(){ return new Intl.DateTimeFormat("en-CA", { timeZone:"America/S
 function ahoraTxt(){ var f = new Intl.DateTimeFormat("sv-SE", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }).format(new Date()); return f.replace("T", " ").slice(0, 16); }
 function normTxt(s){ return String(s || "").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
 /* Al cambiar una foto en img/tienda/ (mismo nombre), subir FOTO_V para que los teléfonos no muestren la antigua. */
-var FOTO_V = "50";
+var FOTO_V = "51";
 function fotoUrl(f){ return f ? (/^data:/.test(f) ? f : f + (f.indexOf("?") < 0 ? "?v=" + FOTO_V : "")) : ""; }
 /* 📷 Foto subida desde el celular (27-10-2026, la dueña: "¿no lo puedo hacer todo sin depender de ti?"): se achica a
    máx. 480 × 640, se le pone el logo del gimnasio arriba a la izquierda (34 % del ancho, como las demás fotos) y se guarda
@@ -533,7 +533,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110502";
+var TIENDA_VERSION = "2026110503";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
