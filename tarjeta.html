@@ -2503,7 +2503,7 @@ function renderEvolucion(s){
    l.forEach(function(p){ p.cat = tiendaCat_(p.cat); });
    /* El batido ganador de masa no tiene stock propio: sale de las porciones del tarro de «Batido de proteína»
       (27-10-2026, la dueña: "el ganador de masa me aparece sin stock"; mismo criterio que USA_PORCION de tienda.html). */
-   var tarro = l.filter(function(p){ return /^batido de prote/i.test(p.n); })[0];
+   var tarro = l.filter(function(p){ return /^smoothie/i.test(p.n); })[0] || l.filter(function(p){ return /^batido de prote/i.test(p.n); })[0];
    l.forEach(function(p){ if(/^batido ganador/i.test(p.n)){ p.q = tarro ? tarro.q : 0; p.vendido = false; } });
    /* Pre entreno granizado (03-11-2026): sale de las porciones del tarro Mr Hyde Fruit Punch. */
    var hyde = l.filter(function(p){ return /^pre ?entreno mr hyde/i.test(p.n); })[0];
@@ -2569,6 +2569,8 @@ function renderEvolucion(s){
     los mismos de los letreros de recepción (letreros-batidos.html), por vaso de 500 ml. */
  var TIENDA_MACROS = [
   { re:/^batido ganador/i, k:670, p:44, c:74, g:24, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, avena y mantequilla de maní", al:"leche, soya y maní" },
+  /* Smoothie Choco Banana Cream (05-11-2026, receta de la dueña, vaso de 450 ml; proteína Dragon Pharma Protein Phorm 30 g). */
+  { re:/^smoothie/i, k:340, p:31, c:33, g:10, por:"450 ml", lleva:"Proteína de chocolate (carne + whey), leche entera sin lactosa, plátano, yogur natural sin azúcar y hielo", al:"leche" },
   { re:/^batido de prote/i, k:315, p:32, c:27, g:9, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, hielo y un toque de canela o cacao", al:"leche y soya" },
   /* Waffle casero (05-11-2026, receta de la dueña: harina de arroz, avena, dátil, leche sin lactosa, leche en polvo, yogur griego). */
   { re:/^waffle/i, k:355, p:12, c:48, g:13.5, por:"1 waffle", lleva:"Harina de arroz, avena, dátil, leche, yogur griego, huevo y aceite de coco, sin azúcar añadida", al:"huevo y leche" },
@@ -2610,7 +2612,7 @@ function renderEvolucion(s){
  function tiendaVentanita_(s, p){
   var ropa = /^(Ropa|Zapatillas)/.test(p.cat) || (p.pack && p.q <= 1), max = ropa ? 1 : p.pronto ? 9 : Math.max(1, Math.min(p.q, 9)), cant = 1;
   /* «+ Creatina $1.000» en los batidos (27-10-2026, la dueña: "le falta por 1000 más la creatina"), igual que en 🛒 Vender. */
-  var conCrea = !!tvMacros_(p) || /^pre ?entreno granizado/i.test(p.n), crea = false, CREA = 1000;
+  var conCrea = /^(batido|smoothie|pre ?entreno granizado)/i.test(p.n), crea = false, CREA = 1000;
   function unidad(){ return p.precio + (crea ? CREA : 0); }
   var fondo = document.createElement("div"); fondo.className = "tv-modal";
   var vid = tiendaVideo_(p);
@@ -2682,7 +2684,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110508", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110509", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
