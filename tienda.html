@@ -167,6 +167,9 @@ body{ zoom:1.22; }
 .pills .pill.vend{ background:#E30613; color:#fff; border-color:#fff; }
 #fotoGrande{ position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.92); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; }
 #fotoGrande img{ max-width:100%; max-height:calc(100vh / 1.22 - 190px); object-fit:contain; border-radius:14px; background:#fff; }
+#fotoGrande video{ max-width:100%; max-height:calc(100vh / 1.22 - 190px); border-radius:14px; background:#000; }
+.ph{ position:relative; }
+.ph-video{ position:absolute; left:4px; bottom:4px; background:#E30613; color:#fff; font:800 13px/1 "Barlow Condensed",sans-serif; padding:4px 6px; border-radius:6px; border:2px solid #D4AF37; pointer-events:none; }
 #fotoGrande b{ color:#fff; font-size:20px; text-transform:uppercase; margin-top:12px; text-align:center; }
 #fotoGrande span{ color:#CFCFD6; font-size:15px; margin-top:6px; }
 #fotoGrande .volver{ margin-top:16px; background:#FFD400; color:#000; border:0; border-radius:12px; padding:14px 34px; font:800 italic 22px "Barlow Condensed",sans-serif; text-transform:uppercase; cursor:pointer; }
@@ -384,7 +387,13 @@ function esPack(p){ return !!(p && p.ext && p.ext.pack && p.ext.pack.length); }
 function partesPack(p){ return esPack(p) ? p.ext.pack.map(function(c){ return { p:prod(c.id), c:Number(c.c) || 1 }; }) : []; }
 function stockPack(p){ var m = Infinity; partesPack(p).forEach(function(x){ m = Math.min(m, x.p && x.p.activo ? Math.floor(x.p.stock / x.c) : 0); }); return isFinite(m) ? m : 0; }
 /* Foto de un pack: las fotos de todas sus partes juntas (27-10-2026, la dueña: "solo me aparece la polera, no el short"). */
+/* Videos de la ropa (05-11-2026): los mismos de TIENDA_VIDEOS de tarjeta.html; al tocar la foto se ve el video. */
+var TIENDA_VIDEOS = [
+ { re:/^conjunto gym work/i, v:"img/tienda/videos/conjunto-gym-work.mp4" }
+];
+function videoDe(n){ for(var i = 0; i < TIENDA_VIDEOS.length; i++) if(TIENDA_VIDEOS[i].re.test(n || "")) return TIENDA_VIDEOS[i].v; return ""; }
 function phHtml(p){
+ if(videoDe(p.n) && p.foto) return '<img src="' + esc(fotoUrl(p.foto)) + '" alt=""><span class="ph-video">▶ VIDEO</span>';
  var fs = esPack(p) ? partesPack(p).filter(function(x){ return x.p && x.p.foto; }).map(function(x){ return x.p.foto; }) : [];
  if(fs.length > 1) return '<div class="ph-pack n' + Math.min(fs.length, 4) + '">' + fs.slice(0, 4).map(function(f){ return '<img src="' + esc(fotoUrl(f)) + '" alt="">'; }).join("") + '</div>';
  return p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat);
@@ -525,7 +534,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110301";
+var TIENDA_VERSION = "2026110501";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1754,9 +1763,10 @@ document.addEventListener("click", function(e){
  var img = e.target.closest && e.target.closest(".prod .ph img, img.etq-ph"); if(!img) return;
  var card = img.closest(".prod, .etq-sel"), nom = card && card.querySelector(".tx b, .n");
  var d = document.createElement("div"), pk = img.closest(".ph-pack"); d.id = "fotoGrande";
- var fotos = pk ? '<div class="fg-pack">' + Array.prototype.map.call(pk.querySelectorAll("img"), function(i){ return '<img src="' + i.getAttribute("src") + '" alt="">'; }).join("") + '</div>' : '<img src="' + img.getAttribute("src") + '" alt="">';
+ var vid = nom ? videoDe(nom.textContent.trim()) : "";
+ var fotos = vid ? '<video src="' + vid + '?v=' + FOTO_V + '" poster="' + img.getAttribute("src") + '" autoplay muted loop playsinline controls></video>' : pk ? '<div class="fg-pack">' + Array.prototype.map.call(pk.querySelectorAll("img"), function(i){ return '<img src="' + i.getAttribute("src") + '" alt="">'; }).join("") + '</div>' : '<img src="' + img.getAttribute("src") + '" alt="">';
  d.innerHTML = fotos + '<b>' + (nom ? nom.innerHTML : "") + '</b><button type="button" class="volver">← Volver</button>';
- d.onclick = function(ev){ if(ev.target.tagName !== "IMG") d.remove(); }; document.body.appendChild(d);
+ d.onclick = function(ev){ if(ev.target.tagName !== "IMG" && ev.target.tagName !== "VIDEO") d.remove(); }; document.body.appendChild(d);
 });
 var ENLACE = null;
 /* Algunos chats vuelven a codificar el enlace y llegan textos como «Polera%20Rise» (24-10-2026, la polera Rise LYT quedó con
