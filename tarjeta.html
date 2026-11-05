@@ -251,7 +251,9 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .tv-grid > .tv-p{ flex:0 0 72%; scroll-snap-align:start; }
 .tv-desliza{ margin:2px 0 6px; font-size:19px; color:#bbb; text-align:right; }
 .tv-p{ background:#0D0D0F; border:1px solid #2a2a2e; border-radius:14px; overflow:hidden; display:flex; flex-direction:column; position:relative; text-align:left; color:#fff; padding:0; font:inherit; }
-.tv-ph{ background:#fff; aspect-ratio:3/4; }
+.tv-ph{ background:#fff; aspect-ratio:3/4; position:relative; }
+.tv-video{ position:absolute; left:8px; bottom:8px; background:#E30613; color:#fff; font:800 18px/1 'Barlow Condensed',sans-serif; padding:6px 10px; border-radius:8px; border:2px solid #D4AF37; }
+.tv-hoja .tv-big .tv-vid{ width:100%; max-height:58vh; object-fit:contain; display:block; background:#000; }
 .tv-ph img{ width:100%; height:100%; object-fit:contain; display:block; }
 .tv-in{ padding:8px 9px 10px; display:flex; flex-direction:column; gap:4px; flex:1; }
 .tv-n{ font:800 26px/1.1 'Barlow Condensed',Arial,sans-serif; text-transform:uppercase; }
@@ -2486,6 +2488,13 @@ function renderEvolucion(s){
   if(p.fotos && p.fotos.length > 1) return '<div class="tv-pack">' + p.fotos.map(function(f){ return '<img loading="lazy" src="' + tiendaFotoUrl_(f) + '" alt="">'; }).join("") + '</div>';
   return '<img loading="lazy" src="' + tiendaFoto_(p) + '" alt="">';
  }
+ /* Videos de la ropa (05-11-2026, la dueña: "lo quiero para mi tienda, para que mis socios vean cómo es la ropa"):
+    la ventanita muestra el video (sin sonido, en bucle) en vez de la foto. Para sumar uno: el .mp4 en img/tienda/videos/
+    (540 px, sin audio, con el logo) y una línea aquí con el comienzo del nombre del producto. */
+ var TIENDA_VIDEOS = [
+  { re:/^conjunto gym work/i, v:"img/tienda/videos/conjunto-gym-work.mp4" }
+ ];
+ function tiendaVideo_(p){ for(var i = 0; i < TIENDA_VIDEOS.length; i++) if(TIENDA_VIDEOS[i].re.test(p.n || "")) return TIENDA_VIDEOS[i].v; return ""; }
  function renderTienda_(s){
   var box = document.getElementById("tiendaCard"); if(!box) return;
   if(!CHECKIN_URL || !TIENDA_VITRINA_ACTIVA){ box.hidden = true; return; }
@@ -2538,7 +2547,7 @@ function renderEvolucion(s){
      (vis.length > 2 ? '<p class="tv-desliza">' + vis.length + ' productos · desliza ➜</p>' : '') +
      '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
       var ag = p.reservado || (!(p.q > 0) && !p.pronto), i = l.indexOf(p), ll = p.llega ? ' · ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) : '';
-      return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + '</div>' +
+      return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + (tiendaVideo_(p) ? '<span class="tv-video">▶ VIDEO</span>' : '') + '</div>' +
        (ag ? '<span class="tv-sello">' + (p.reservado ? 'RESERVADO' : p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' + tvBadges_(p, ag, false) + tvMacrosHtml_(tvMacros_(p), false) +
        (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
        (ag ? '' : p.pronto ? '<span class="tv-ok pronto">⏳ LLEGA PRONTO' + ll + '</span>' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
@@ -2602,7 +2611,8 @@ function renderEvolucion(s){
   var conCrea = !!tvMacros_(p) || /^pre ?entreno granizado/i.test(p.n), crea = false, CREA = 1000;
   function unidad(){ return p.precio + (crea ? CREA : 0); }
   var fondo = document.createElement("div"); fondo.className = "tv-modal";
-  fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big">' + tiendaFotos_(p) + '</div>' +
+  var vid = tiendaVideo_(p);
+  fondo.innerHTML = '<div class="tv-hoja"><div class="tv-big">' + (vid ? '<video class="tv-vid" src="' + escapeHtml(vid) + '?v=' + TIENDA_FOTO_V + '" poster="' + tiendaFoto_(p) + '" autoplay muted loop playsinline preload="auto"></video>' : tiendaFotos_(p)) + '</div>' +
    '<h3>' + escapeHtml(p.n) + '</h3>' + tvBadges_(p, false, true) + tvMacrosHtml_(tvMacros_(p), true) + (p.det ? '<p class="rank-sub">' + escapeHtml(p.det) + '</p>' : '') +
    '<p class="tv-total">Precio: ' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + '<b>' + clp(p.precio) + '</b>' + (p.nuevo ? ' 🚀 precio de lanzamiento' : '') + '</p>' +  (p.ahorro ? '<p class="tv-total" style="color:#7CE39A">🎁 Llevando el pack ahorras ' + clp(p.antes - p.precio) + ' (' + p.ahorro + ' %) que comprando cada cosa por separado</p>' : '') +
    (conCrea ? '<button type="button" class="tv-crea" id="tvCrea">💪 + Creatina ' + clp(CREA) + '</button>' : '') +
@@ -2670,7 +2680,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110503", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110504", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
