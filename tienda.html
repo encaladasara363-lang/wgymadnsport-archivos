@@ -370,7 +370,7 @@ function packDesarmado(p){
    que el ganador descuente solo del tarro): un producto cuyo nombre calza con «de» no lleva stock propio; cada venta suya
    anota además un ajuste de −1 porción en el producto «base» (el que lleva el stock real del tarro). Al anular la venta,
    la porción vuelve. Para sumar otro batido del mismo tarro, agregar su regla aquí. */
-var USA_PORCION = [{ de:/^batido ganador/i, base:/^batido de prote/i },
+var USA_PORCION = [{ de:/^batido ganador/i, base:/^(smoothie|batido de prote)/i },
  /* Pre entreno granizado (03-11-2026): cada vaso descuenta 1 porción del tarro Mr Hyde Fruit Punch. */
  { de:/^pre ?entreno granizado/i, base:/^pre ?entreno mr hyde/i }];
 function basePorcion(p){
@@ -405,7 +405,7 @@ function lanzDe(p){ var l = p && p.ext && p.ext.lanz; return l && l.hasta >= (S.
 function precioVenta(p){ var l = lanzDe(p); return l ? Number(l.precio) : p.precio; }
 /* 💪 «+ Creatina» en los batidos (misma fecha): suma CREATINA_EXTRA al precio de esa línea. */
 var CREATINA_EXTRA = 1000;
-function esBatido(p){ return !!p && /^(batido|pre ?entreno granizado)/i.test(p.n || ""); }
+function esBatido(p){ return !!p && /^(batido|smoothie|pre ?entreno granizado)/i.test(p.n || ""); }
 /* 📌 Apartados (27-10-2026, la dueña eligió la idea 9): «Apartar» guarda en la planilla un ajuste de −1 con la nota
    «APARTADO #tok: NOMBRE · hasta AAAA-MM-DD HH:MM» (así nadie más lo vende y los dos equipos lo ven, sin cambiar el
    Apps Script). «Liberar» o el vencimiento anotan +1 «LIBERADO #tok»; «Retiró y pagó» lo pasa a la venta y al cobrar
@@ -533,7 +533,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110503";
+var TIENDA_VERSION = "2026110504";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
