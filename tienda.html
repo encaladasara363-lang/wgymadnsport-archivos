@@ -549,7 +549,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110629";
+var TIENDA_VERSION = "2026110630";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1838,17 +1838,26 @@ var FOTOS_MODELO = [
   ["Calza deportiva fuccia", "img/tienda/calza-deportiva-fucsia.jpg"]
 ];
 function fotosConModelo(){
- try{ if(localStorage.getItem("wgym_tienda_fotos_modelo_v1") || hoyISO() > "2026-11-09") return; }catch(e){ return; }
- var n = 0;
+ /* De a una prenda (06-11-2026): mandadas todas a la vez, algunas no alcanzaban a guardarse en la planilla (calza coral).
+    Se recuerda cuáles ya quedaron (para no pisar una foto que ella suba después) y las demás se reintentan en cada carga. */
+ if(fotosConModelo.corriendo || hoyISO() > "2026-11-09") return;
+ var hechos = {}; try{ hechos = JSON.parse(localStorage.getItem("wgym_tienda_fotos_modelo_v2") || "{}"); }catch(e){}
+ var cola = [];
  S.productos.forEach(function(p){
-  if(!p.foto || String(p.foto).indexOf("data:") !== 0) return;
+  if(hechos[p.id] || !p.foto || String(p.foto).indexOf("data:") !== 0) return;
   var r = FOTOS_MODELO.filter(function(m){ var k = m[0].split("|"); return normTxt(p.n).indexOf(normTxt(k[0])) === 0 && (!k[1] || normTxt(p.det).indexOf(normTxt(k[1])) === 0); })[0];
-  if(!r) return;
-  p.foto = r[1]; n++;
-  api("tiendaProducto", { datos:JSON.stringify(p) })["catch"](function(){});
+  if(r) cola.push([p, r[1]]);
  });
- try{ localStorage.setItem("wgym_tienda_fotos_modelo_v1", "1"); }catch(e){}
- if(n) setTimeout(function(){ toast("📸 " + n + " prendas con la foto de la modelo"); }, 800);
+ if(!cola.length) return;
+ fotosConModelo.corriendo = true; var n = 0;
+ (function sig(){
+  var it = cola.shift();
+  if(!it){ fotosConModelo.corriendo = false; if(n){ toast("📸 " + n + " prendas con la foto de la modelo"); guardarCache(); render(); } return; }
+  var x = Object.assign({}, it[0], { foto:it[1] });
+  api("tiendaProducto", { datos:JSON.stringify(x) }).then(function(){
+   it[0].foto = it[1]; n++; hechos[x.id] = 1; try{ localStorage.setItem("wgym_tienda_fotos_modelo_v2", JSON.stringify(hechos)); }catch(e){}
+  })["catch"](function(){}).then(function(){ setTimeout(sig, 400); });
+ })();
 }
 function repararCodificados(){
  S.productos.forEach(function(p){
