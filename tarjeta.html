@@ -2496,7 +2496,8 @@ function renderEvolucion(s){
   { re:/^musculosa boston/i, v:"img/tienda/videos/musculosa-boston.mp4" },
   { re:/^musculosa.*strength/i, v:"img/tienda/videos/musculosa-strength.mp4" },
   { re:/^polera de compresi/i, v:"img/tienda/videos/polera-compresion.mp4" },
-  { re:/^polera.*never give up/i, v:"img/tienda/videos/polera-never-give-up.mp4" }
+  { re:/^polera.*never give up/i, v:"img/tienda/videos/polera-never-give-up.mp4" },
+  { re:/^polera.*stronger/i, v:"img/tienda/videos/polera-stronger.mp4" }
  ];
  function tiendaVideo_(p){ for(var i = 0; i < TIENDA_VIDEOS.length; i++) if(TIENDA_VIDEOS[i].re.test(p.n || "")) return TIENDA_VIDEOS[i].v; return ""; }
  function renderTienda_(s){
@@ -2694,7 +2695,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110524", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110525", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
