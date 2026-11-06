@@ -405,11 +405,13 @@ var TIENDA_VIDEOS = [
   { re:/^calza flare/i, v:"img/tienda/videos/calza-flare-camuflaje.mp4" },
   { re:/^conjunto gym work/i, v:"img/tienda/videos/conjunto-gym-work.mp4" },
   { re:/^calza leopardo/i, v:"img/tienda/videos/calza-leopardo.mp4" },
-  { re:/^calza sin costuras rosado/i, v:"img/tienda/videos/calza-coral.mp4" }
+  { re:/^calza sin costuras rosado/i, v:"img/tienda/videos/calza-coral.mp4" },
+  { re:/^short scrunch m\.?minute/i, det:/^azul/i, v:"img/tienda/videos/short-scrunch-azul.mp4" }
 ];
-function videoDe(n){ for(var i = 0; i < TIENDA_VIDEOS.length; i++) if(TIENDA_VIDEOS[i].re.test(n || "")) return TIENDA_VIDEOS[i].v; return ""; }
+function videoDe(n, det){ for(var i = 0; i < TIENDA_VIDEOS.length; i++){ var t = TIENDA_VIDEOS[i]; if(t.re.test(n || "") && (!t.det || t.det.test(det || ""))) return t.v; } return ""; }
 function phHtml(p){
- if(videoDe(p.n) && p.foto) return '<img src="' + esc(fotoUrl(p.foto)) + '" alt=""><span class="ph-video">▶ VIDEO</span>';
+ var vdo = videoDe(p.n, p.det);
+ if(vdo && p.foto) return '<img src="' + esc(fotoUrl(p.foto)) + '" alt=""><span class="ph-video" data-v="' + esc(vdo) + '">▶ VIDEO</span>';
  var fs = esPack(p) ? partesPack(p).filter(function(x){ return x.p && x.p.foto; }).map(function(x){ return x.p.foto; }) : [];
  if(fs.length > 1) return '<div class="ph-pack n' + Math.min(fs.length, 4) + '">' + fs.slice(0, 4).map(function(f){ return '<img src="' + esc(fotoUrl(f)) + '" alt="">'; }).join("") + '</div>';
  return p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : iconoCat(p.cat);
@@ -550,7 +552,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110631";
+var TIENDA_VERSION = "2026110632";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1779,7 +1781,7 @@ document.addEventListener("click", function(e){
  var img = e.target.closest && e.target.closest(".prod .ph img, img.etq-ph"); if(!img) return;
  var card = img.closest(".prod, .etq-sel"), nom = card && card.querySelector(".tx b, .n");
  var d = document.createElement("div"), pk = img.closest(".ph-pack"); d.id = "fotoGrande";
- var vid = nom ? videoDe(nom.textContent.trim()) : "";
+ var sv = img.parentNode && img.parentNode.querySelector(".ph-video"), vid = sv ? sv.getAttribute("data-v") : "";
  var fotos = vid ? '<video src="' + vid + '?v=' + FOTO_V + '" poster="' + img.getAttribute("src") + '" autoplay muted loop playsinline controls></video>' : pk ? '<div class="fg-pack">' + Array.prototype.map.call(pk.querySelectorAll("img"), function(i){ return '<img src="' + i.getAttribute("src") + '" alt="">'; }).join("") + '</div>' : '<img src="' + img.getAttribute("src") + '" alt="">';
  d.innerHTML = fotos + '<b>' + (nom ? nom.innerHTML : "") + '</b><button type="button" class="volver">← Volver</button>';
  d.onclick = function(ev){ if(ev.target.tagName !== "IMG" && ev.target.tagName !== "VIDEO") d.remove(); }; document.body.appendChild(d);
