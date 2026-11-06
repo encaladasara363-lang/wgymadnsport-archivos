@@ -2492,6 +2492,7 @@ function renderEvolucion(s){
     la ventanita muestra el video (sin sonido, en bucle) en vez de la foto. Para sumar uno: el .mp4 en img/tienda/videos/
     (540 px, sin audio, con el logo) y una línea aquí con el comienzo del nombre del producto. */
  var TIENDA_VIDEOS = [
+  { re:/^polera rise lyt/i, v:"img/tienda/videos/polera-rise-lyt.mp4" }
  ];
  function tiendaVideo_(p){ for(var i = 0; i < TIENDA_VIDEOS.length; i++) if(TIENDA_VIDEOS[i].re.test(p.n || "")) return TIENDA_VIDEOS[i].v; return ""; }
  function renderTienda_(s){
@@ -2689,7 +2690,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110519", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110520", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
