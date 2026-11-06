@@ -392,6 +392,7 @@ function stockPack(p){ var m = Infinity; partesPack(p).forEach(function(x){ m = 
 /* Foto de un pack: las fotos de todas sus partes juntas (27-10-2026, la dueña: "solo me aparece la polera, no el short"). */
 /* Videos de la ropa (05-11-2026): los mismos de TIENDA_VIDEOS de tarjeta.html; al tocar la foto se ve el video. */
 var TIENDA_VIDEOS = [
+  { re:/^polera rise lyt/i, v:"img/tienda/videos/polera-rise-lyt.mp4" }
 ];
 function videoDe(n){ for(var i = 0; i < TIENDA_VIDEOS.length; i++) if(TIENDA_VIDEOS[i].re.test(n || "")) return TIENDA_VIDEOS[i].v; return ""; }
 function phHtml(p){
@@ -536,7 +537,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110514";
+var TIENDA_VERSION = "2026110515";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
