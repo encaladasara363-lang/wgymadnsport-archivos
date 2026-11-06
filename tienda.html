@@ -516,7 +516,7 @@ function cargar(silencioso){
  if(!silencioso) pintarSync("cargando");
  return api("tiendaListar", {}).then(function(d){
   S = { productos:d.productos || [], movs:d.movs || [], total:d.total || {}, hoy:d.hoy || hoyISO(), desde:d.desde, v:d.v || 24, cierres:d.cierres || [], gastos:d.gastos || [] };
-  aplicarPendientes(); repararCodificados(); guardarCache(); pintarSync(); render(); revisarApartados(); return true;
+  aplicarPendientes(); repararCodificados(); fotosConModelo(); guardarCache(); pintarSync(); render(); revisarApartados(); return true;
  })["catch"](function(e){
   if(e.motivo === "clave incorrecta"){ salir("La clave guardada no funcionó. Escríbela de nuevo."); return false; }
   if(/action|desconocid|no existe/i.test(e.message || "")){ pintarSync("error"); avisoScript(); return false; }
@@ -546,7 +546,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110625";
+var TIENDA_VERSION = "2026110626";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1784,6 +1784,69 @@ var ENLACE = null;
 /* Algunos chats vuelven a codificar el enlace y llegan textos como «Polera%20Rise» (24-10-2026, la polera Rise LYT quedó con
    %20 en el nombre y en Bebestibles): se decodifica hasta que no queden %XX. */
 function sinPorcentajes(t){ t = String(t == null ? "" : t); for(var i = 0; i < 3 && /%[0-9A-Fa-f]{2}/.test(t); i++){ try{ var d = decodeURIComponent(t); if(d === t) break; t = d; }catch(e){ break; } } return t; }
+/* Fotos con modelo en toda la ropa (06-11-2026, la dueña: "a toda la ropa deja la foto de mujer, de hombre"): los afiches
+   rosados subidos desde el celular (foto data:) vuelven a la foto con modelo de img/tienda/. Una sola vez por equipo y solo
+   hasta el 09-11-2026, para no pisar fotos que ella suba después. Clave «nombre» o «nombre|comienzo del detalle». */
+var FOTOS_MODELO = [
+  ["Conjunto Gym Work 3 piezas", "img/tienda/conjunto-gym-work-modelo.jpg"],
+  ["Short scrunch M.Minute|Negro", "img/tienda/short-scrunch-negro.jpg"],
+  ["Short scrunch M.Minute|Azul", "img/tienda/short-scrunch-azul.jpg"],
+  ["Conjunto Easithlete", "img/tienda/conjunto-easithlete-negro.jpg"],
+  ["Leggings Yefecy", "img/tienda/leggings-yefecy-negro.jpg"],
+  ["Polera Stronger every day", "img/tienda/polera-stronger-every-day-negra.jpg"],
+  ["Polera Rise LYT", "img/tienda/polera-rise-lyt-negra.jpg"],
+  ["Polera Gym Rark Never give up", "img/tienda/polera-never-give-up-negra.jpg"],
+  ["Polera compresión Gym Rark", "img/tienda/polera-compresion-gym-rark-negra.jpg"],
+  ["Polera This is my therapy", "img/tienda/polera-this-is-my-therapy-negra.jpg"],
+  ["Polera Cherry", "img/tienda/polera-cherry-rosada.jpg"],
+  ["Polera tie-dye", "img/tienda/polera-tie-dye-negra-blanca.jpg"],
+  ["Calza flare camuflaje", "img/tienda/calza-flare-camuflaje.jpg"],
+  ["Calza leopardo con malla", "img/tienda/calza-leopardo-malla.jpg"],
+  ["Musculosa Strength", "img/tienda/musculosa-strength.jpg"],
+  ["Musculosa Boston", "img/tienda/musculosa-boston-gris.jpg"],
+  ["Calza tie-dye|Azul y amarilla", "img/tienda/calza-tie-dye-azul-amarilla.jpg"],
+  ["Calza tie-dye morada y negra", "img/tienda/calza-tie-dye-morada-negra.jpg"],
+  ["Pantalón cargo LA", "img/tienda/pantalon-cargo-la-negro.jpg"],
+  ["Short Jogging", "img/tienda/short-jogging-rojo.jpg"],
+  ["Pantalón cargo jogger|Azul marino", "img/tienda/pantalon-cargo-jogger-azul.jpg"],
+  ["Pantalón jogger blanco y rojo", "img/tienda/pantalon-jogger-blanco-rojo.jpg"],
+  ["Pantalón cargo con cordones", "img/tienda/pantalon-cargo-cordones-gris.jpg"],
+  ["Pantalón deportivo con franjas", "img/tienda/pantalon-deportivo-celeste.jpg"],
+  ["Pantalón Wide Leg gris", "img/tienda/pantalon-punto-gris.jpg"],
+  ["Pantalón Wide Leg de cotelé crema", "img/tienda/pantalon-wide-leg-cotele-crema.jpg"],
+  ["Pantalón cargo jogger palo rosa", "img/tienda/pantalon-cargo-jogger-palo-rosa.jpg"],
+  ["Polerón jersey 54 negro", "img/tienda/poleron-jersey-54-negro.jpg"],
+  ["Top deportivo con tiras|Negro", "img/tienda/top-deportivo-tiras-negro.jpg"],
+  ["Calza tie-dye con frunce|Verde", "img/tienda/calza-tie-dye-verde-negra.jpg"],
+  ["Calza tie-dye con frunce|Azul rey", "img/tienda/calza-tie-dye-azul-negra.jpg"],
+  ["Short tie-dye con frunce", "img/tienda/short-tie-dye-turquesa.jpg"],
+  ["Polera crop sin costuras", "img/tienda/polera-crop-azul-jaspeada.jpg"],
+  ["Calza estampada tiro alto", "img/tienda/calza-estampada-azul-verde.jpg"],
+  ["Calza sin costuras rosado coral", "img/tienda/calza-rosada-coral.jpg"],
+  ["Top deportivo negro abertura en gota", "img/tienda/top-deportivo-negro-gota.jpg"],
+  ["Top deportivo azul rey banda celeste", "img/tienda/top-deportivo-azul-celeste.jpg"],
+  ["Short scrunch verde jaspeado", "img/tienda/short-scrunch-verde.jpg"],
+  ["Top deportivo gris jaspeado con copas", "img/tienda/top-deportivo-gris-copas.jpg"],
+  ["Top deportivo palo rosa con tiras", "img/tienda/top-deportivo-palo-rosa-tiras.jpg"],
+  ["Top deportivo fucsia con tiras", "img/tienda/top-deportivo-fucsia-tiras.jpg"],
+  ["Short scrunch coral jaspeado", "img/tienda/short-scrunch-coral.jpg"],
+  ["Falda short lila con vuelos", "img/tienda/falda-short-lila-vuelos.jpg"],
+  ["Polera crop blanca auto rosado", "img/tienda/polera-crop-blanca-auto-rosado.jpg"],
+  ["Calza deportiva fuccia", "img/tienda/calza-deportiva-fucsia.jpg"]
+];
+function fotosConModelo(){
+ try{ if(localStorage.getItem("wgym_tienda_fotos_modelo_v1") || hoyISO() > "2026-11-09") return; }catch(e){ return; }
+ var n = 0;
+ S.productos.forEach(function(p){
+  if(!p.foto || String(p.foto).indexOf("data:") !== 0) return;
+  var r = FOTOS_MODELO.filter(function(m){ var k = m[0].split("|"); return normTxt(p.n).indexOf(normTxt(k[0])) === 0 && (!k[1] || normTxt(p.det).indexOf(normTxt(k[1])) === 0); })[0];
+  if(!r) return;
+  p.foto = r[1]; n++;
+  api("tiendaProducto", { datos:JSON.stringify(p) })["catch"](function(){});
+ });
+ try{ localStorage.setItem("wgym_tienda_fotos_modelo_v1", "1"); }catch(e){}
+ if(n) setTimeout(function(){ toast("📸 " + n + " prendas con la foto de la modelo"); }, 800);
+}
 function repararCodificados(){
  S.productos.forEach(function(p){
   var n = sinPorcentajes(p.n), det = sinPorcentajes(p.det), cat = catNueva(sinPorcentajes(p.cat));
