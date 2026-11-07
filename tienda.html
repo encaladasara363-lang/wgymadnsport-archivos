@@ -227,6 +227,7 @@ body{ zoom:1.22; }
   <span id="sync">✅ Al día</span>
  </header>
  <div class="franja"></div>
+ <div class="wrap" id="plataBar" style="padding-bottom:0"></div>
  <main class="wrap" id="vista"></main>
 </div>
 
@@ -562,7 +563,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110712";
+var TIENDA_VERSION = "2026110713";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -605,7 +606,16 @@ function render(){
  var t = { vender:renderVender, inv:renderInv, res:renderRes, fiados:renderFiados, cod:renderCod }[tab];
  $("subTit").textContent = { vender:"Vender", inv:"Inventario", res:"Resumen de ventas", fiados:"Fiados", cod:"Códigos de barra" }[tab] + " · v" + TIENDA_VERSION.slice(-2);
  t();
+ pintarPlata();
 }
+/* 💰 Botón siempre visible arriba de Vender, Inventario y Resumen (07-11-2026, pedido de la dueña); va fuera de #vista para
+   que no se borre cuando una pestaña se vuelve a dibujar, y se refresca cada 20 s con los datos nuevos. */
+function pintarPlata(){
+ var b = $("plataBar"); if(!b) return;
+ if(tab !== "vender" && tab !== "inv" && tab !== "res"){ b.innerHTML = ""; return; }
+ try{ b.innerHTML = htmlBotonPlata(); $("bPlata").onclick = verPlata; }catch(e){ b.innerHTML = ""; }
+}
+setInterval(function(){ if(!$("app").hidden) pintarPlata(); }, 20000);
 
 /* ═══ 🛒 VENDER ═══ */
 function precioDe(it){ return it.precio; }
@@ -1306,6 +1316,61 @@ function formEntrada(p, ajuste){
   }).then(function(d){ S.productos = d.productos || S.productos; aplicarPendientes(); guardarCache(); cerrarHoja(); toast("✅ Stock actualizado"); cargar(true); render(); })
    ["catch"](function(e){ $("eOk").disabled = false; $("eErr").hidden = false; $("eErr").textContent = e.motivo || "No se pudo guardar. Revisa tu internet."; });
  };
+}
+
+/* ═══ 💰 ¿CUÁNTO TENGO PARA COMPRAR? (07-11-2026, la dueña: "debería aparecer un botón bien visible para saber siempre
+   cuánto tengo para invertir… en cada lado, ejemplo agua, ropa mujer, snack") ═══
+   Por categoría: de cada venta cobrada vuelve el costo (para reponer) + la parte de la ganancia que NO es para ella
+   (100 − su %, el mismo de «¿Cómo repartir la plata?»). Se resta lo que compró DESPUÉS del punto de partida
+   (PARTIDA_PLATA: ese día se le dijo «$47.037 para ropa» sin descontar la inversión inicial) y los gastos de esa categoría.
+   Los fiados sin pagar no cuentan; lo abonado sí, en proporción. */
+var PARTIDA_PLATA = "2026-11-07 08:00";
+function plataParaComprar(){
+ var cats = {}, ms = todosMovs();
+ function c(k){ return cats[k] = cats[k] || { cat:k, vendido:0, reponer:0, invertir:0, compras:0, gastos:0 }; }
+ var abon = {}; ms.forEach(function(m){ if(m.tipo === "abono") abon[m.vid] = (abon[m.vid] || 0) + (m.total || 0); });
+ var totVid = {}; ms.forEach(function(m){ if(m.tipo === "venta" && m.est === "fiado") totVid[m.vid] = (totVid[m.vid] || 0) + m.total; });
+ ms.forEach(function(m){
+  if(m.tipo === "venta" && m.est !== "anulada"){
+   var k = catDeMov(m), f = 1;
+   if(m.est === "fiado") f = totVid[m.vid] > 0 ? Math.min(1, (abon[m.vid] || 0) / totVid[m.vid]) : 0;
+   if(!f) return;
+   var costo = m.cant * m.costo * f, gan = (m.total - m.cant * m.costo) * f, o = c(k);
+   o.vendido += m.total * f; o.reponer += costo; o.invertir += gan * (100 - pctDe(k)) / 100;
+  } else if(m.tipo === "entrada" && (m.total || 0) > 0 && m.f.slice(0, 16) >= PARTIDA_PLATA){
+   c(catDeMov(m)).compras += m.total;
+  }
+ });
+ var gSin = 0;
+ (S.gastos || []).forEach(function(g){ if(g.tipo === "pedido" || g.f.slice(0, 16) < PARTIDA_PLATA) return; if(g.cat) c(catNueva(g.cat)).gastos += g.monto; else gSin += g.monto; });
+ var l = Object.keys(cats).map(function(k){ var o = cats[k]; o.disp = Math.round(o.reponer + o.invertir - o.compras - o.gastos); return o; })
+  .filter(function(o){ return o.vendido > 0 || o.compras > 0 || o.gastos > 0; });
+ var orden = CATS.map(function(x){ return x[0]; });
+ l.sort(function(a, b){ return orden.indexOf(a.cat) - orden.indexOf(b.cat); });
+ return { l:l, gSin:gSin, total:l.reduce(function(s, o){ return s + o.disp; }, 0) - gSin };
+}
+function iconoCat(k){ var x = CATS.filter(function(c){ return c[0] === k; })[0]; return x ? x[1] : "📦"; }
+function htmlBotonPlata(){
+ var r = plataParaComprar();
+ return '<button class="btn oro" id="bPlata" style="width:100%;margin:4px 0 0;padding:14px 12px;font-size:21px;line-height:1.15">💰 ¿Cuánto tengo para comprar?<br><span style="font-size:30px">' + plata(r.total) + '</span><br><span style="font-size:15px">Toca para verlo por categoría</span></button>';
+}
+function verPlata(){
+ var r = plataParaComprar();
+ var h = '<div class="cab"><h3>💰 Para comprar</h3><button class="btn chico volver" id="plCerrar">← Volver</button></div>' +
+  '<div class="kpi verde" style="margin:10px 0"><small>Tienes para comprar en total</small><b>' + plata(r.total) + '</b></div>' +
+  '<p class="muted" style="margin:0 0 8px;font-size:15px">Cada categoría es una caja aparte: lo que vendes de esa categoría es para volver a comprar de esa misma.</p>';
+ if(!r.l.length) h += '<p class="muted">Todavía no hay ventas.</p>';
+ r.l.forEach(function(o){
+  var col = o.disp > 0 ? '#7CE39A' : o.disp < 0 ? '#FF8A8F' : 'var(--txt)';
+  h += '<div class="card" style="margin:8px 0"><div class="fila" style="justify-content:space-between;align-items:center"><b style="font-size:22px;text-transform:uppercase;flex:1">' + iconoCat(o.cat) + ' ' + esc(o.cat) + '</b><b style="font-size:28px;color:' + col + ';flex:none">' + plata(o.disp) + '</b></div>' +
+   '<p class="muted" style="margin:6px 0 0;font-size:15px">Vendiste ' + plata(o.vendido) + ' · para reponer ' + plata(o.reponer) + ' · para invertir ' + plata(o.invertir) + ' (' + (100 - pctDe(o.cat)) + ' % de la ganancia)' +
+   (o.compras ? ' · ya compraste ' + plata(o.compras) : '') + (o.gastos ? ' · gastos ' + plata(o.gastos) : '') + '</p>' +
+   (o.disp < 0 ? '<p style="margin:6px 0 0;font-size:15px;color:#FF8A8F">Compraste más de lo que han dejado sus ventas: esa diferencia salió de tu bolsillo.</p>' : '') + '</div>';
+ });
+ if(r.gSin) h += '<p class="muted" style="font-size:15px">Gastos de toda la tienda (bolsas, envíos…): −' + plata(r.gSin) + '</p>';
+ h += '<p class="muted" style="font-size:14px;margin:10px 0 0">Cuenta desde el 07/11: cada vez que cargas «➕ Llegó mercadería» o un producto nuevo, lo que pagaste se descuenta de su categoría. Tu parte (' + pctDe("") + ' %) no se incluye: la sacas el día 1 (ver 📊 Resumen).</p>';
+ abrirHoja(h);
+ $("plCerrar").onclick = cerrarHoja;
 }
 
 /* ═══ 📊 RESUMEN ═══ */
