@@ -411,7 +411,8 @@ var TIENDA_VIDEOS = [
   { re:/^calza tie-dye/i, det:/^azul y amarill/i, v:"img/tienda/videos/calza-tie-dye-azul-amarilla.mp4" },
   { re:/^falda short lila/i, v:"img/tienda/videos/falda-short-lila.mp4" },
   { re:/^leggings yefecy/i, v:"img/tienda/videos/leggings-yefecy.mp4" },
-  { re:/^pantal[oó]n cargo con cordones/i, v:"img/tienda/videos/pantalon-cargo-cordones.mp4" }
+  { re:/^pantal[oó]n cargo con cordones/i, v:"img/tienda/videos/pantalon-cargo-cordones.mp4" },
+  { re:/^calza tie-dye con frunce/i, det:/^verde/i, v:"img/tienda/videos/calza-tie-dye-verde.mp4" }
 ];
 function videoDe(n, det){ for(var i = 0; i < TIENDA_VIDEOS.length; i++){ var t = TIENDA_VIDEOS[i]; if(t.re.test(n || "") && (!t.det || t.det.test(det || ""))) return t.v; } return ""; }
 function phHtml(p){
@@ -557,7 +558,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110705";
+var TIENDA_VERSION = "2026110706";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
