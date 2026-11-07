@@ -563,7 +563,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110716";
+var TIENDA_VERSION = "2026110717";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1325,11 +1325,14 @@ function formEntrada(p, ajuste){
    primera venta (07-11-2026, la dueña eligió «restar lo ya comprado»: esa plata ya la gastó); lo cargado antes de la
    primera venta fue su inversión inicial. También se restan los gastos de esa categoría desde esa venta.
    Los fiados sin pagar no cuentan; lo abonado sí, en proporción. */
+/* Cada categoría es una caja (07-11-2026, la dueña: "lo más importante para mí: mi ganancia, cuánto tengo para comprar y lo que
+   he invertido en cada sección, y que cuando agregue mercadería me vaya descontando"):
+   invertiste = todo lo comprado de esa categoría (stock inicial, «Llegó mercadería», gastos de la categoría);
+   recuperaste = lo que dejaron las ventas sin tu parte (costo + el resto de la ganancia); fiados sin pagar no cuentan;
+   para comprar = recuperaste − invertiste (si es menos de 0 se muestra 0: la plata sigue en la mercadería). */
 function plataParaComprar(){
- var cats = {}, ms = todosMovs(), prim = {};
- ms.forEach(function(m){ if(m.tipo === "venta" && m.est !== "anulada"){ var k = catDeMov(m); if(!prim[k] || m.f < prim[k]) prim[k] = m.f; } });
- var primTienda = Object.keys(prim).reduce(function(a, k){ return !a || prim[k] < a ? prim[k] : a; }, "");
- function c(k){ return cats[k] = cats[k] || { cat:k, vendido:0, reponer:0, invertir:0, compras:0, gastos:0 }; }
+ var cats = {}, ms = todosMovs();
+ function c(k){ return cats[k] = cats[k] || { cat:k, vendido:0, recup:0, invertido:0, bodega:0 }; }
  var abon = {}; ms.forEach(function(m){ if(m.tipo === "abono") abon[m.vid] = (abon[m.vid] || 0) + (m.total || 0); });
  var totVid = {}; ms.forEach(function(m){ if(m.tipo === "venta" && m.est === "fiado") totVid[m.vid] = (totVid[m.vid] || 0) + m.total; });
  ms.forEach(function(m){
@@ -1338,18 +1341,18 @@ function plataParaComprar(){
    if(m.est === "fiado") f = totVid[m.vid] > 0 ? Math.min(1, (abon[m.vid] || 0) / totVid[m.vid]) : 0;
    if(!f) return;
    var costo = m.cant * m.costo * f, gan = (m.total - m.cant * m.costo) * f, o = c(k);
-   o.vendido += m.total * f; o.reponer += costo; o.invertir += gan * (100 - pctDe(k)) / 100;
-  } else if(m.tipo === "entrada" && (m.total || 0) > 0){
-   var kc = catDeMov(m); if(prim[kc] && m.f > prim[kc]) c(kc).compras += m.total;
-  }
+   o.vendido += m.total * f; o.recup += costo + gan * (100 - pctDe(k)) / 100;
+  } else if(m.tipo === "entrada" && (m.total || 0) > 0) c(catDeMov(m)).invertido += m.total;
  });
  var gSin = 0;
- (S.gastos || []).forEach(function(g){ if(g.tipo === "pedido") return; var kg = g.cat ? catNueva(g.cat) : ""; var desde = kg ? prim[kg] : primTienda; if(!desde || g.f <= desde) return; if(kg) c(kg).gastos += g.monto; else gSin += g.monto; });
- var l = Object.keys(cats).map(function(k){ var o = cats[k]; o.disp = Math.round(o.reponer + o.invertir - o.compras - o.gastos); return o; })
-  .filter(function(o){ return o.vendido > 0 || o.compras > 0 || o.gastos > 0; });
+ (S.gastos || []).forEach(function(g){ if(g.tipo === "pedido") return; var kg = g.cat ? catNueva(g.cat) : ""; if(kg) c(kg).invertido += g.monto; else gSin += g.monto; });
+ S.productos.forEach(function(p){ if(!p.activo || esPack(p) || !(p.stock > 0)) return; c(catNueva(p.cat)).bodega += p.stock * (p.costo || 0); });
+ var l = Object.keys(cats).map(function(k){ var o = cats[k]; o.disp = Math.round(o.recup - o.invertido); return o; })
+  .filter(function(o){ return o.vendido > 0 || o.invertido > 0; });
  var orden = CATS.map(function(x){ return x[0]; });
  l.sort(function(a, b){ return orden.indexOf(a.cat) - orden.indexOf(b.cat); });
- return { l:l, gSin:gSin, total:Math.max(0, l.reduce(function(s, o){ return s + Math.max(0, o.disp); }, 0) - gSin) };
+ return { l:l, gSin:gSin, total:Math.max(0, l.reduce(function(s, o){ return s + Math.max(0, o.disp); }, 0) - gSin),
+  invertido:l.reduce(function(s, o){ return s + o.invertido; }, 0) + gSin, bodega:l.reduce(function(s, o){ return s + o.bodega; }, 0) };
 }
 function iconoCat(k){ var x = CATS.filter(function(c){ return c[0] === k; })[0]; return x ? x[1] : "📦"; }
 /* Arriba solo dos números (07-11-2026, la dueña: "pon el total de toda la tienda, solo el dinero disponible para comprar,
@@ -1381,25 +1384,23 @@ function verMiParte(){
  $("mpCerrar").onclick = cerrarHoja;
 }
 function verPlata(){
- var r = plataParaComprar();
- var h = '<div class="cab"><h3>💰 Para comprar</h3><button class="btn chico volver" id="plCerrar">← Volver</button></div>' +
-  '<div class="kpis" style="margin:10px 0"><div class="kpi verde"><small>Tienes para comprar (categorías con plata)</small><b>' + plata(r.total) + '</b></div><div class="kpi"><small>📥 Ya compraste desde que vendes</small><b style="color:var(--yel)">' + plata(r.l.reduce(function(s, o){ return s + o.compras; }, 0)) + '</b></div></div>' +
-  '<p class="muted" style="margin:0 0 8px;font-size:15px">Cada categoría es una caja aparte: lo que vendes de esa categoría es para volver a comprar de esa misma.</p>';
+ var r = plataParaComprar(), ms = miParteMeses();
+ function fila(txt, monto, color, grande){ return '<tr><td style="font-size:' + (grande ? 20 : 18) + 'px">' + txt + '</td><td class="r" style="font-size:' + (grande ? 28 : 22) + 'px;font-family:Anton,sans-serif;color:' + color + ';white-space:nowrap">' + monto + '</td></tr>'; }
+ var h = '<div class="cab"><h3>💰 Mi plata</h3><button class="btn chico volver" id="plCerrar">← Volver</button></div>' +
+  '<div class="kpis" style="margin:10px 0"><div class="kpi verde"><small>💵 Tu ganancia de ' + NOM_MES[Number(ms[0].k.slice(5, 7)) - 1] + '</small><b>' + plata(ms[0].yo) + '</b></div>' +
+  '<div class="kpi"><small>💰 Para comprar (toda la tienda)</small><b style="color:var(--yel)">' + plata(r.total) + '</b></div></div>';
  if(!r.l.length) h += '<p class="muted">Todavía no hay ventas.</p>';
-/* Lo comprado va a la vista, en grande (07-11-2026, la dueña: "quiero que me coloque el valor que tengo en compras más visible"). */
  r.l.forEach(function(o){
-  var col = o.disp > 0 ? '#7CE39A' : o.disp < 0 ? '#FF8A8F' : 'var(--txt)', vuelve = o.reponer + o.invertir;
-  function fila(txt, monto, color, grande){ return '<tr><td style="font-size:' + (grande ? 19 : 17) + 'px">' + txt + '</td><td class="r" style="font-size:' + (grande ? 26 : 22) + 'px;font-family:Anton,sans-serif;color:' + color + ';white-space:nowrap">' + monto + '</td></tr>'; }
   h += '<div class="card" style="margin:8px 0"><b style="font-size:23px;text-transform:uppercase">' + iconoCat(o.cat) + ' ' + esc(o.cat) + '</b><table class="top" style="margin-top:6px">' +
-   fila('💵 Te dejaron las ventas<br><span class="muted" style="font-size:13px">vendiste ' + plata(o.vendido) + ' · reponer ' + plata(o.reponer) + ' + invertir ' + plata(o.invertir) + ' (' + (100 - pctDe(o.cat)) + ' %)</span>', plata(vuelve), 'var(--txt)') +
-   fila('📥 Ya compraste', (o.compras ? '−' : '') + plata(o.compras), 'var(--yel)', true) +
-   (o.gastos ? fila('🧾 Gastos', '−' + plata(o.gastos), '#FF8A8F') : '') +
-   fila('<b>' + (o.disp < 0 ? '⛔ Te falta vender' : '💰 Para comprar') + '</b>', o.disp < 0 ? plata(-o.disp) : plata(o.disp), col, true) +
+   fila('📥 Invertiste', plata(o.invertido), 'var(--txt)') +
+   fila('💵 Vendiste', plata(o.vendido), 'var(--txt)') +
+   fila('📦 Tienes en mercadería', plata(o.bodega), 'var(--txt)') +
+   fila('<b>💰 Para comprar</b>', plata(Math.max(0, o.disp)), o.disp > 0 ? '#7CE39A' : 'var(--yel)', true) +
    '</table>' +
-   (o.disp < 0 ? '<p style="margin:6px 0 0;font-size:15px;color:#FF8A8F">Todavía no hay plata para comprar ' + esc(o.cat.toLowerCase()) + ': compraste más de lo que han dejado sus ventas. Vende ' + plata(-o.disp) + ' (a costo) para recuperarlo.</p>' : '') + '</div>';
+   (o.disp <= 0 ? '<p class="muted" style="margin:6px 0 0;font-size:15px">Todavía estás recuperando lo que invertiste: con ' + plata(-o.disp) + ' más en ventas empiezas a juntar plata para comprar. No es pérdida: tu plata está en la mercadería.</p>' : '') + '</div>';
  });
  if(r.gSin) h += '<p class="muted" style="font-size:15px">Gastos de toda la tienda (bolsas, envíos…): −' + plata(r.gSin) + '</p>';
- h += '<p class="muted" style="font-size:14px;margin:10px 0 0">Se resta todo lo que compraste de cada categoría desde su primera venta (lo cargado antes fue tu inversión inicial). Cada vez que cargas «➕ Llegó mercadería» o un producto nuevo, lo que pagaste se descuenta de su categoría. Tu parte (' + pctDe("") + ' %) no se incluye: la sacas el día 1 (ver 📊 Resumen).</p>';
+ h += '<p class="muted" style="font-size:14px;margin:10px 0 0">Cuando cargas «➕ Llegó mercadería» o un producto nuevo, lo que pagaste se suma a «Invertiste» y se descuenta de «Para comprar». Tu ganancia (' + pctDe("") + ' %) va aparte: no se incluye aquí.</p>';
  abrirHoja(h);
  $("plCerrar").onclick = cerrarHoja;
 }
