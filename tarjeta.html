@@ -2514,7 +2514,8 @@ function renderEvolucion(s){
   { re:/^pantal[oó]n cargo con cordones/i, v:"img/tienda/videos/pantalon-cargo-cordones.mp4" },
   { re:/^calza tie-dye con frunce/i, det:/^verde/i, v:"img/tienda/videos/calza-tie-dye-verde.mp4" },
   { re:/^calza tie-dye con frunce/i, det:/^azul rey/i, v:"img/tienda/videos/calza-tie-dye-azul-rey.mp4" },
-  { re:/^poler[oó]n jersey 54/i, v:"img/tienda/videos/poleron-jersey-54.mp4" }
+  { re:/^poler[oó]n jersey 54/i, v:"img/tienda/videos/poleron-jersey-54.mp4" },
+  { re:/^short scrunch verde/i, v:"img/tienda/videos/short-scrunch-verde.mp4" }
  ];
  function tiendaVideo_(p){ for(var i = 0; i < TIENDA_VIDEOS.length; i++){ var t = TIENDA_VIDEOS[i]; if(t.re.test(p.n || "") && (!t.det || t.det.test(p.det || ""))) return t.v; } return ""; }
  function renderTienda_(s){
@@ -2712,7 +2713,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110710", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110711", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
