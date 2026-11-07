@@ -563,7 +563,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110715";
+var TIENDA_VERSION = "2026110716";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -613,7 +613,7 @@ function render(){
 function pintarPlata(){
  var b = $("plataBar"); if(!b) return;
  if(tab !== "vender" && tab !== "inv" && tab !== "res"){ b.innerHTML = ""; return; }
- try{ b.innerHTML = htmlBotonPlata(); $("bPlata").onclick = verPlata; }catch(e){ b.innerHTML = ""; }
+ try{ b.innerHTML = htmlBotonPlata(); $("bPlata").onclick = verPlata; $("bMiParte").onclick = verMiParte; }catch(e){ b.innerHTML = ""; }
 }
 setInterval(function(){ if(!$("app").hidden) pintarPlata(); }, 20000);
 
@@ -1352,9 +1352,33 @@ function plataParaComprar(){
  return { l:l, gSin:gSin, total:Math.max(0, l.reduce(function(s, o){ return s + Math.max(0, o.disp); }, 0) - gSin) };
 }
 function iconoCat(k){ var x = CATS.filter(function(c){ return c[0] === k; })[0]; return x ? x[1] : "📦"; }
+/* Arriba solo dos números (07-11-2026, la dueña: "pon el total de toda la tienda, solo el dinero disponible para comprar,
+   y mi ganancia que tengo para mí de mes a mes"): plata para comprar de toda la tienda y su parte (%) de cada mes. */
+var NOM_MES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+function nomMesK(k){ return NOM_MES[Number(k.slice(5, 7)) - 1] + " " + k.slice(0, 4); }
+function miParteMeses(){
+ var meses = {};
+ todosMovs().forEach(function(m){ if(m.tipo !== "venta" || m.est === "anulada") return;
+  var k = m.f.slice(0, 7), g = m.total - m.cant * m.costo; meses[k] = (meses[k] || 0) + g * pctDe(catDeMov(m)) / 100; });
+ var act = (S.hoy || hoyISO()).slice(0, 7); if(meses[act] == null) meses[act] = 0;
+ return Object.keys(meses).sort().reverse().map(function(k){ return { k:k, yo:Math.max(0, Math.round(meses[k])), act:k === act }; });
+}
 function htmlBotonPlata(){
- var r = plataParaComprar();
- return '<button class="btn oro" id="bPlata" style="width:100%;margin:4px 0 0;padding:14px 12px;font-size:21px;line-height:1.15">💰 ¿Cuánto tengo para comprar?<br><span style="font-size:30px">' + plata(r.total) + '</span><br><span style="font-size:15px">Toca para verlo por categoría</span></button>';
+ var r = plataParaComprar(), ms = miParteMeses(), a = ms[0], ant = ms[1];
+ var st = 'flex:1;min-width:0;margin:0;padding:12px 8px;line-height:1.15;font-size:17px';
+ return '<div style="display:flex;gap:8px;margin:4px 0 0">' +
+  '<button class="btn oro" id="bPlata" style="' + st + '">💰 Para comprar<br><span style="font-size:13px">toda la tienda</span><br><span style="font-size:30px">' + plata(r.total) + '</span></button>' +
+  '<button class="btn" id="bMiParte" style="' + st + ';background:#1f7a3a;color:#fff;border-color:#7CE39A">💵 Tu ganancia<br><span style="font-size:13px">' + esc(NOM_MES[Number(a.k.slice(5, 7)) - 1]) + ' (va sumando)</span><br><span style="font-size:30px">' + plata(a.yo) + '</span>' +
+  (ant ? '<br><span style="font-size:13px">' + esc(NOM_MES[Number(ant.k.slice(5, 7)) - 1]) + ': ' + plata(ant.yo) + ' para sacar</span>' : '') + '</button></div>';
+}
+function verMiParte(){
+ var ms = miParteMeses();
+ var h = '<div class="cab"><h3>💵 Tu ganancia, mes a mes</h3><button class="btn chico volver" id="mpCerrar">← Volver</button></div>' +
+  '<p class="muted" style="margin:8px 0;font-size:15px">Es tu parte (' + pctDe("") + ' %) de la ganancia de cada mes. El mes en curso va sumando; el día 1 sacas la del mes anterior.</p><table class="top">' +
+  ms.map(function(x){ return '<tr><td style="font-size:19px">' + (x.act ? '⏳ ' : '✅ ') + nomMesK(x.k) + '<br><span class="muted" style="font-size:13px">' + (x.act ? 'En curso' : 'Listo para sacar') + '</span></td><td class="r" style="font-size:26px;font-family:Anton,sans-serif;color:#7CE39A">' + plata(x.yo) + '</td></tr>'; }).join("") +
+  '</table>';
+ abrirHoja(h);
+ $("mpCerrar").onclick = cerrarHoja;
 }
 function verPlata(){
  var r = plataParaComprar();
