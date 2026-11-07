@@ -563,7 +563,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110714";
+var TIENDA_VERSION = "2026110715";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1359,15 +1359,20 @@ function htmlBotonPlata(){
 function verPlata(){
  var r = plataParaComprar();
  var h = '<div class="cab"><h3>💰 Para comprar</h3><button class="btn chico volver" id="plCerrar">← Volver</button></div>' +
-  '<div class="kpi verde" style="margin:10px 0"><small>Tienes para comprar en total (suma de las categorías con plata)</small><b>' + plata(r.total) + '</b></div>' +
+  '<div class="kpis" style="margin:10px 0"><div class="kpi verde"><small>Tienes para comprar (categorías con plata)</small><b>' + plata(r.total) + '</b></div><div class="kpi"><small>📥 Ya compraste desde que vendes</small><b style="color:var(--yel)">' + plata(r.l.reduce(function(s, o){ return s + o.compras; }, 0)) + '</b></div></div>' +
   '<p class="muted" style="margin:0 0 8px;font-size:15px">Cada categoría es una caja aparte: lo que vendes de esa categoría es para volver a comprar de esa misma.</p>';
  if(!r.l.length) h += '<p class="muted">Todavía no hay ventas.</p>';
+/* Lo comprado va a la vista, en grande (07-11-2026, la dueña: "quiero que me coloque el valor que tengo en compras más visible"). */
  r.l.forEach(function(o){
-  var col = o.disp > 0 ? '#7CE39A' : o.disp < 0 ? '#FF8A8F' : 'var(--txt)';
-  h += '<div class="card" style="margin:8px 0"><div class="fila" style="justify-content:space-between;align-items:center"><b style="font-size:22px;text-transform:uppercase;flex:1">' + iconoCat(o.cat) + ' ' + esc(o.cat) + '</b><b style="font-size:28px;color:' + col + ';flex:none">' + plata(o.disp) + '</b></div>' +
-   '<p class="muted" style="margin:6px 0 0;font-size:15px">Vendiste ' + plata(o.vendido) + ' · para reponer ' + plata(o.reponer) + ' · para invertir ' + plata(o.invertir) + ' (' + (100 - pctDe(o.cat)) + ' % de la ganancia)' +
-   (o.compras ? ' · ya compraste ' + plata(o.compras) : '') + (o.gastos ? ' · gastos ' + plata(o.gastos) : '') + '</p>' +
-   (o.disp < 0 ? '<p style="margin:6px 0 0;font-size:15px;color:#FF8A8F">Todavía no hay plata para comprar: ya compraste más de lo que han dejado sus ventas. Te falta vender ' + plata(-o.disp) + ' (a costo) para recuperarlo.</p>' : '') + '</div>';
+  var col = o.disp > 0 ? '#7CE39A' : o.disp < 0 ? '#FF8A8F' : 'var(--txt)', vuelve = o.reponer + o.invertir;
+  function fila(txt, monto, color, grande){ return '<tr><td style="font-size:' + (grande ? 19 : 17) + 'px">' + txt + '</td><td class="r" style="font-size:' + (grande ? 26 : 22) + 'px;font-family:Anton,sans-serif;color:' + color + ';white-space:nowrap">' + monto + '</td></tr>'; }
+  h += '<div class="card" style="margin:8px 0"><b style="font-size:23px;text-transform:uppercase">' + iconoCat(o.cat) + ' ' + esc(o.cat) + '</b><table class="top" style="margin-top:6px">' +
+   fila('💵 Te dejaron las ventas<br><span class="muted" style="font-size:13px">vendiste ' + plata(o.vendido) + ' · reponer ' + plata(o.reponer) + ' + invertir ' + plata(o.invertir) + ' (' + (100 - pctDe(o.cat)) + ' %)</span>', plata(vuelve), 'var(--txt)') +
+   fila('📥 Ya compraste', (o.compras ? '−' : '') + plata(o.compras), 'var(--yel)', true) +
+   (o.gastos ? fila('🧾 Gastos', '−' + plata(o.gastos), '#FF8A8F') : '') +
+   fila('<b>' + (o.disp < 0 ? '⛔ Te falta vender' : '💰 Para comprar') + '</b>', o.disp < 0 ? plata(-o.disp) : plata(o.disp), col, true) +
+   '</table>' +
+   (o.disp < 0 ? '<p style="margin:6px 0 0;font-size:15px;color:#FF8A8F">Todavía no hay plata para comprar ' + esc(o.cat.toLowerCase()) + ': compraste más de lo que han dejado sus ventas. Vende ' + plata(-o.disp) + ' (a costo) para recuperarlo.</p>' : '') + '</div>';
  });
  if(r.gSin) h += '<p class="muted" style="font-size:15px">Gastos de toda la tienda (bolsas, envíos…): −' + plata(r.gSin) + '</p>';
  h += '<p class="muted" style="font-size:14px;margin:10px 0 0">Se resta todo lo que compraste de cada categoría desde su primera venta (lo cargado antes fue tu inversión inicial). Cada vez que cargas «➕ Llegó mercadería» o un producto nuevo, lo que pagaste se descuenta de su categoría. Tu parte (' + pctDe("") + ' %) no se incluye: la sacas el día 1 (ver 📊 Resumen).</p>';
