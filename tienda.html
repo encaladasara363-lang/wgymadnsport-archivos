@@ -249,7 +249,7 @@ var CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20E
 var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";          /* la misma del mesón: en la compu de recepción ya está guardada */
 var CLAVE_CACHE = "wgym_tienda_cache_v1";           /* última foto del inventario, para abrir al instante y sin señal */
 var CLAVE_PEND = "wgym_tienda_pend_v1";             /* ventas / entradas que no alcanzaron a llegar a la planilla */
-var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
+var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Paletas","🍭"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
 var PAGOS = [["efectivo","💵 Efectivo"],["transferencia","🏦 Transferencia"],["tarjeta","💳 Tarjeta"],["fiado","📒 Fiado"]];
 
 function $(id){ return document.getElementById(id); }
@@ -336,14 +336,14 @@ function porCodigo(cod){ cod = String(cod || "").replace(/\s/g, ""); var b = cod
  for(var i = 0; i < S.productos.length; i++){ var p = S.productos[i]; if(!p.activo || !p.cod) continue; if(p.cod === cod || p.cod.replace(/^0+/, "") === b) return p; } return null; }
 /* 🍦 Código de grupo (31-10-2026, la dueña: "un código para todos los sabores"): un solo código pegado en el refrigerador;
    al escanearlo pregunta qué sabor es y descuenta del stock de ese sabor. Para otro grupo, sumar código → categoría. */
-var CODIGOS_GRUPO = { "2001500000000": "Helados", "2004500000001": "Smoothies" };
+var CODIGOS_GRUPO = { "2001500000000": "Helados", "2004500000001": "Smoothies", "2001000000005": "Paletas" };
 function grupoDeCodigo(cod){ var c = String(cod || "").replace(/\D/g, "").replace(/^0+/, ""); for(var k in CODIGOS_GRUPO) if(k.replace(/^0+/, "") === c) return CODIGOS_GRUPO[k]; return ""; }
 function elegirDelGrupo(cat, alElegir){
  var l = activos().filter(function(p){ return catNueva(p.cat) === cat; }).sort(function(a, b){ return a.n.localeCompare(b.n); });
  abrirHoja('<div class="cab"><h3>' + iconoCat(cat) + ' ¿Qué sabor?</h3><button class="btn chico volver" id="gVolver">← Volver</button></div>' +
   (l.length ? '<div class="grupo-l">' + l.map(function(p){ var q = stockVer(p);
    return '<button class="grupo-b" data-g="' + esc(p.id) + '">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span style="font-size:40px">' + iconoCat(p.cat) + '</span>') +
-    '<span><b>' + esc(p.n.replace(/^(helado proteico|smoothie proteico|waffle de)\s*/i, "")) + '</b><small>' + (q > 0 ? 'Quedan ' + q : '⛔ SIN STOCK') + ' · ' + plata(precioVenta(p)) + '</small></span></button>'; }).join("") + '</div>'
+    '<span><b>' + esc(p.n.replace(/^(helado proteico|paleta proteica|smoothie proteico|waffle de)\s*/i, "")) + '</b><small>' + (q > 0 ? 'Quedan ' + q : '⛔ SIN STOCK') + ' · ' + plata(precioVenta(p)) + '</small></span></button>'; }).join("") + '</div>'
    : '<p class="muted">Todavía no hay productos en «' + esc(cat) + '». Cárgalos en 📦 Inventario.</p>'));
  $("gVolver").onclick = cerrarHoja;
  document.querySelectorAll("[data-g]").forEach(function(b){ b.onclick = function(){ alElegir(prod(b.dataset.g)); }; });
@@ -444,7 +444,7 @@ function esBatido(p){ return !!p && /^(batido|smoothie|pre ?entreno granizado)/i
    anota +1 «RETIRADO #tok» justo antes de la venta (el stock queda igual que si se hubiera vendido directo). */
 var HORAS_APARTADO = [24, 48, 72];
 /* Snacks y bebestibles (aguas, latas) no se apartan (la dueña, 27-10-2026: "en todo menos en los snack y las aguas"). */
-var SIN_APARTAR = ["Snacks", "Bebestibles", "Helados", "Smoothies"];
+var SIN_APARTAR = ["Snacks", "Bebestibles", "Helados", "Smoothies", "Paletas"];
 function sePuedeApartar(p){ return SIN_APARTAR.indexOf(catNueva(p.cat)) < 0 && !esPack(p); }
 function fmtCL(ms){ return new Intl.DateTimeFormat("sv-SE", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }).format(new Date(ms)).replace("T", " ").slice(0, 16); }
 function apartados(){
@@ -565,7 +565,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110718";
+var TIENDA_VERSION = "2026110801";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
