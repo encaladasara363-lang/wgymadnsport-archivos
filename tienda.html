@@ -565,7 +565,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110803";
+var TIENDA_VERSION = "2026110804";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1979,7 +1979,7 @@ function repararCodificados(){
   api("tiendaProducto", { datos:JSON.stringify(p) })["catch"](function(){});
  });
 }
-try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ["n","cat","det","costo","precio","stock","min","foto","cod","tipo"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = sinPorcentajes(qs.get(k)); }); history.replaceState(null, "", location.pathname); } }catch(e){}
+try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ["n","cat","det","costo","precio","stock","min","foto","cod","tipo","pronto"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = sinPorcentajes(qs.get(k)); }); history.replaceState(null, "", location.pathname); } }catch(e){}
 function usarEnlace(){
  if(!ENLACE) return; var b = ENLACE; ENLACE = null;
  if(b.cat) b.cat = catNueva(b.cat);
@@ -1992,9 +1992,12 @@ function usarEnlace(){
  /* Si ya existe, abre su ficha con los datos nuevos del enlace (ej. otro precio): ella revisa y toca Guardar. */
  if(ya){ var cambio = Object.assign({}, ya); ["n","cat","det","costo","precio","min","foto"].forEach(function(k){ if(b[k] !== undefined && b[k] !== "") cambio[k] = b[k]; });
   if(b.tipo) cambio.ext = Object.assign({}, ya.ext || {}, { tipo:b.tipo === "americana" ? "americana" : "nueva" });
+  if(b.pronto) cambio.ext = Object.assign({}, cambio.ext || ya.ext || {}, { pronto:{ f:"" } });
   toast("«" + ya.n + "» ya está en tu inventario: revisa el cambio y toca Guardar.", 5000); formProducto(cambio); return; }
  if(b.cod === "auto") b.cod = nuevoCodigo();
- if(b.tipo){ b.ext = { tipo:b.tipo === "americana" ? "americana" : "nueva" }; } delete b.tipo;
+ /* «Llega pronto» desde el enlace (08-11-2026, Berry Cream: la dueña lo quiere en la tienda antes de tenerlo). */
+ if(b.pronto){ b.ext = Object.assign({}, b.ext || {}, { pronto:{ f:"" } }); } delete b.pronto;
+ if(b.tipo){ b.ext = Object.assign({}, b.ext || {}, { tipo:b.tipo === "americana" ? "americana" : "nueva" }); } delete b.tipo;
  formProducto(null, "", b);
  setTimeout(function(){ var i = $("fStock"); if(i && !i.value){ i.focus(); } }, 300);
 }
