@@ -2563,7 +2563,7 @@ function renderEvolucion(s){
      (snack || beb ? '<p class="rank-sub">🍫 ' + (snack && beb ? 'Snacks saludables y bebestibles' : snack ? 'Snacks saludables' : 'Bebestibles') + '</p>' : '') +
      (hel ? '<p class="rank-sub">🍦 Helados proteicos sin azúcar</p>' : '') +
      (smo ? '<p class="rank-sub">🍹 Smoothies proteicos</p>' : '') +
-     (pal ? '<p class="rank-sub">🍭 Paletas proteicas a $1.000</p>' : '') +
+     (pal ? '<p class="rank-sub">🍭 Paletas proteicas sin azúcar a $1.000</p>' : '') +
      (pack ? '<p class="rank-sub">🎁 Packs con descuento</p>' : '') +
      '<p class="rank-sub"><b style="color:var(--dorado)">' + disp + (disp === 1 ? ' producto disponible' : ' productos disponibles') + '</b>' + (pr ? ' · ⏳ ' + pr + ' llegan pronto' : '') + '. Pídelos por WhatsApp.</p>' +
      '<button type="button" class="pago-btn principal" id="tvAbrir" style="width:100%">🛍 Ver tienda WGYM</button>';
@@ -2716,7 +2716,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110801", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110802", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
