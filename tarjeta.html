@@ -2479,7 +2479,7 @@ function renderEvolucion(s){
     cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
     Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
  var TIENDA_VITRINA_ACTIVA = true;
- var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Helados":"🍦", "Smoothies":"🍹", "Paletas":"🍭", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Packs":"🎁", "Otro":"📦" };
+ var TIENDA_ICONOS = { "Bebestibles":"🥤", "Bebidas":"🥤", "Snacks":"🍫", "Helados":"🍦", "Smoothies":"🍹", "Helados de palito":"🍭", "Suplementos":"💊", "Accesorios":"🧤", "Ropa mujer":"👚", "Ropa deportiva":"👚", "Ropa hombre":"👕", "Zapatillas":"👟", "Packs":"🎁", "Otro":"📦" };
  function tiendaCat_(c){ return c === "Bebidas" ? "Bebestibles" : (c === "Ropa deportiva" ? "Ropa mujer" : (c || "Otro")); }
  function tiendaFotoUrl_(f){ return /^data:/.test(f) ? f : escapeHtml(f) + "?v=" + TIENDA_FOTO_V; }
  function tiendaFoto_(p){ return p.foto ? tiendaFotoUrl_(p.foto) : "maquinas-wgymadnsport/comun/logo.png"; }
@@ -2534,6 +2534,8 @@ function renderEvolucion(s){
    l = l.filter(function(p){ return !/^tarro de prote/i.test(p.n); });
    /* Waffles fuera de la tienda (07-11-2026, la dueña: "elimina la sección de waffles"). */
    l = l.filter(function(p){ return p.cat !== "Waffles" && !/^waffle/i.test(p.n); });
+   /* «Paletas» se llama «Helados de palito» (08-11-2026, pedido de la dueña). */
+   l.forEach(function(p){ if(p.cat === "Paletas") p.cat = "Helados de palito"; });
    l.forEach(function(p){ if(/^batido ganador/i.test(p.n)){ p.q = tarro ? tarro.q : 0; p.vendido = false; } });
    /* Pre entreno granizado (03-11-2026): sale de las porciones del tarro Mr Hyde Fruit Punch. */
    var hyde = l.filter(function(p){ return /^pre ?entreno mr hyde/i.test(p.n); })[0];
@@ -2556,14 +2558,14 @@ function renderEvolucion(s){
       unas líneas de lo que hay y el botón rojo «VER TIENDA WGYM» que la despliega. */
    function cerrada(){
     var ropa = l.some(function(p){ return /^Ropa/.test(p.cat); }), amer = l.some(function(p){ return p.tipo === "americana"; }),
-     snack = l.some(function(p){ return p.cat === "Snacks"; }), hel = l.some(function(p){ return p.cat === "Helados"; }), smo = l.some(function(p){ return p.cat === "Smoothies"; }), pal = l.some(function(p){ return p.cat === "Paletas"; }), waf = l.some(function(p){ return p.cat === "Waffles"; }), beb = l.some(function(p){ return p.cat === "Bebestibles"; }),
+     snack = l.some(function(p){ return p.cat === "Snacks"; }), hel = l.some(function(p){ return p.cat === "Helados"; }), smo = l.some(function(p){ return p.cat === "Smoothies"; }), pal = l.some(function(p){ return p.cat === "Helados de palito"; }), waf = l.some(function(p){ return p.cat === "Waffles"; }), beb = l.some(function(p){ return p.cat === "Bebestibles"; }),
      pack = l.some(function(p){ return p.pack; }), disp = l.filter(function(p){ return p.q > 0 && !p.pronto && !p.reservado; }).length, pr = l.filter(function(p){ return p.pronto && !p.reservado; }).length;
     box.innerHTML = '<p class="pago-kicker">🛍 Tienda WGYM</p><p class="rank-sub">Lo que vendemos en el gimnasio:</p>' +
      (ropa ? '<p class="rank-sub">👚 Ropa deportiva <b style="color:var(--dorado)">nueva</b>' + (amer ? ' y <b style="color:var(--dorado)">americana</b>' : '') + '</p>' : '') +
      (snack || beb ? '<p class="rank-sub">🍫 ' + (snack && beb ? 'Snacks saludables y bebestibles' : snack ? 'Snacks saludables' : 'Bebestibles') + '</p>' : '') +
      (hel ? '<p class="rank-sub">🍦 Helados proteicos sin azúcar</p>' : '') +
      (smo ? '<p class="rank-sub">🍹 Smoothies proteicos</p>' : '') +
-     (pal ? '<p class="rank-sub">🍭 Paletas proteicas sin azúcar a $1.000</p>' : '') +
+     (pal ? '<p class="rank-sub">🍭 Helados de palito proteicos sin azúcar a $1.000</p>' : '') +
      (pack ? '<p class="rank-sub">🎁 Packs con descuento</p>' : '') +
      '<p class="rank-sub"><b style="color:var(--dorado)">' + disp + (disp === 1 ? ' producto disponible' : ' productos disponibles') + '</b>' + (pr ? ' · ⏳ ' + pr + ' llegan pronto' : '') + '. Pídelos por WhatsApp.</p>' +
      '<button type="button" class="pago-btn principal" id="tvAbrir" style="width:100%">🛍 Ver tienda WGYM</button>';
@@ -2716,7 +2718,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026110802", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026110803", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
