@@ -565,7 +565,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110806";
+var TIENDA_VERSION = "2026110807";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -733,7 +733,9 @@ function renderInv(){
  }
  var cats = ["Todos"].concat(CATS.map(function(c){ return c[0]; }).filter(function(c){ return l.some(function(p){ return p.cat === c; }); }));
  if(l.length){
-  h += '<input class="inp amarillo" id="iq" placeholder="🔎 Buscar producto…" value="' + esc(invQ) + '" autocomplete="off" style="margin-top:10px"><div class="chips" style="margin-top:8px">' + cats.map(function(c){ return '<button class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === invFiltro) + '">' + esc(c) + '</button>'; }).join("") + '</div>';
+  h += '<input class="inp amarillo" id="iq" placeholder="🔎 Buscar producto…" value="' + esc(invQ) + '" autocomplete="off" style="margin-top:10px"><div class="grid2" style="margin-top:8px">' + cats.map(function(c){ var n = c === "Todos" ? l.length : l.filter(function(p){ return p.cat === c; }).length;
+   /* Categorías como botones grandes, igual que «Armar pack» (08-11-2026, pedido de la dueña); la elegida va en rojo. */
+   return '<button class="btn' + (c === invFiltro ? ' rojo' : '') + '" data-cat="' + esc(c) + '" aria-pressed="' + (c === invFiltro) + '" style="margin:0">' + (c === "Todos" ? '📦' : iconoCat(c)) + ' ' + esc(c) + ' <span style="opacity:.75">(' + n + ')</span></button>'; }).join("") + '</div>';
  }
  h += '<div id="ilista">' + htmlListaInv() + '</div>';
  if(!l.length) h += '<div class="card"><p class="muted" style="margin:0">Aquí verás cada producto con su stock, costo, precio y cuánto ganas por cada uno. Empieza con «➕ Producto nuevo».</p></div>';
