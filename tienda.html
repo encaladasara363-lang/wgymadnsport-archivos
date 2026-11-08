@@ -565,7 +565,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110804";
+var TIENDA_VERSION = "2026110805";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1442,6 +1442,33 @@ function rangoPer(){
  if(resPer === "mes") return [hoy.slice(0, 7) + "-01", hoy];
  return ["0000-00-00", hoy];
 }
+/* 📅 Ventas de cada día (08-11-2026, la dueña: "un lado donde me aparezcan las ventas diarias que yo pueda ver"):
+   arriba del Resumen, los últimos 14 días con venta (hoy siempre), con total, cantidad de ventas y ganancia; al tocar un día
+   se ve qué se vendió. Respeta la categoría elegida. */
+var DIAS_SEM = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+function nomDia(f){ var d = new Date(f + "T12:00:00"); return DIAS_SEM[d.getDay()] + " " + f.slice(8, 10) + "/" + f.slice(5, 7); }
+function ventasPorDia(ms){
+ var dias = {}, hoy = S.hoy || hoyISO();
+ ms.forEach(function(m){ if(m.tipo !== "venta" || m.est === "anulada") return; var k = m.f.slice(0, 10);
+  var o = dias[k] = dias[k] || { f:k, total:0, gan:0, ventas:{}, l:[] }; o.total += m.total; o.gan += m.total - m.cant * m.costo; o.ventas[m.vid || m.f] = 1; o.l.push(m); });
+ if(!dias[hoy]) dias[hoy] = { f:hoy, total:0, gan:0, ventas:{}, l:[] };
+ return Object.keys(dias).sort().reverse().slice(0, 14).map(function(k){ var o = dias[k]; o.n = Object.keys(o.ventas).length; return o; });
+}
+function htmlVentasDia(ms){
+ var l = ventasPorDia(ms), hoy = S.hoy || hoyISO();
+ return '<div class="card oro"><b style="text-transform:uppercase;font-size:21px">📅 Ventas de cada día</b><p class="muted" style="margin:4px 0 6px;font-size:14px">Toca un día para ver qué vendiste.</p><table class="top">' +
+  l.map(function(o){ return '<tr data-dia="' + o.f + '" style="cursor:pointer"><td style="font-size:19px"><b>' + (o.f === hoy ? '⭐ Hoy · ' : '') + nomDia(o.f) + '</b><br><span class="muted" style="font-size:14px">' + o.n + (o.n === 1 ? ' venta' : ' ventas') + ' · ganancia ' + plata(o.gan) + '</span></td><td class="r" style="font-size:26px;font-family:Anton,sans-serif;color:var(--yel);white-space:nowrap">' + plata(o.total) + '</td></tr>'; }).join("") +
+  '</table></div>';
+}
+function verDia(f, ms){
+ var o = ventasPorDia(ms).filter(function(x){ return x.f === f; })[0]; if(!o) return;
+ var porPago = {}; o.l.forEach(function(m){ porPago[m.pago || "?"] = (porPago[m.pago || "?"] || 0) + m.total; });
+ abrirHoja('<div class="cab"><h3>📅 ' + esc(nomDia(f)) + '</h3><button class="btn chico volver" id="vdCerrar">← Volver</button></div>' +
+  '<div class="kpis" style="margin:10px 0"><div class="kpi"><small>Vendiste</small><b>' + plata(o.total) + '</b></div><div class="kpi verde"><small>Ganancia</small><b>' + plata(o.gan) + '</b></div></div>' +
+  '<p class="muted" style="margin:0 0 8px;font-size:15px">' + Object.keys(porPago).map(function(k){ return esc(k) + ': ' + plata(porPago[k]); }).join(" · ") + '</p>' +
+  (o.l.length ? '<table class="top">' + o.l.slice().sort(function(a, b){ return a.f < b.f ? -1 : 1; }).map(function(m){ return '<tr><td style="font-size:17px">' + esc(m.f.slice(11, 16)) + ' · ' + (m.cant > 1 ? m.cant + ' × ' : '') + esc(m.n) + (m.est === "fiado" ? ' <span class="muted">(fiado)</span>' : '') + '</td><td class="r" style="font-size:19px;white-space:nowrap">' + plata(m.total) + '</td></tr>'; }).join("") + '</table>' : '<p class="muted">Todavía no hay ventas este día.</p>'));
+ $("vdCerrar").onclick = cerrarHoja;
+}
 function renderRes(){
  var v = $("vista"), r = rangoPer(), deCat = todosMovs().filter(function(m){ return !resCat || catDeMov(m) === resCat; }), ms = deCat.filter(function(m){ var f = m.f.slice(0, 10); return f >= r[0] && f <= r[1]; });
  var ventas = ms.filter(function(m){ return m.tipo === "venta" && m.est !== "anulada"; });
@@ -1459,6 +1486,7 @@ function renderRes(){
  var h = '<h2>Resumen</h2><div class="chips">' + [["hoy","Hoy"],["semana","Esta semana"],["mes","Este mes"],["todo","Todo"]].map(function(x){ return '<button class="chip" data-per="' + x[0] + '" aria-pressed="' + (resPer === x[0]) + '">' + x[1] + '</button>'; }).join("") + '</div>' +
   (catsUsadas.length ? '<div class="chips"><button class="chip" data-rcat="" aria-pressed="' + !resCat + '">📦 Toda la tienda</button>' + catsUsadas.map(function(c){ return '<button class="chip" data-rcat="' + c[0] + '" aria-pressed="' + (resCat === c[0]) + '">' + c[1] + ' ' + c[0] + '</button>'; }).join("") + '</div>' : '');
  h += htmlCierreBoton();
+ h += htmlVentasDia(deCat);
  if(resPer === "todo" && S.desde) h += '<p class="muted" style="font-size:14px;margin:0 0 6px">La lista de ventas muestra desde el ' + esc(S.desde) + '; los totales de arriba cuentan todo.</p>';
  h += '<div class="kpis"><div class="kpi"><small>Vendido</small><b>' + plata(resPer === "todo" ? vend : tot) + '</b></div><div class="kpi verde"><small>Ganancia</small><b>' + plata(resPer === "todo" ? ganT : gan) + '</b></div>' +
   '<div class="kpi"><small>Productos vendidos</small><b>' + uds + '</b></div><div class="kpi"><small>Ventas</small><b>' + Object.keys(ventas.reduce(function(o, m){ o[m.vid] = 1; return o; }, {})).length + '</b></div></div>';
@@ -1537,6 +1565,7 @@ function renderRes(){
   api("tiendaGasto", { datos:JSON.stringify({ id:b.dataset.gdel, borrar:true }) }).then(function(d){ S.gastos = d.gastos || []; guardarCache(); renderRes(); })["catch"](function(e){ toast(e.motivo || "No se pudo"); });
  }; });
  v.querySelectorAll("[data-per]").forEach(function(b){ b.onclick = function(){ resPer = b.dataset.per; renderRes(); }; });
+ v.querySelectorAll("[data-dia]").forEach(function(b){ b.onclick = function(){ verDia(b.dataset.dia, deCat); }; });
  v.querySelectorAll("[data-rep]").forEach(function(b){ b.onclick = function(){ var o = repartos(); o[resCat || "todo"] = Number(b.dataset.rep); lsSet("wgym_tienda_reparto_v1", o); renderRes(); }; });
  v.querySelectorAll("[data-rcat]").forEach(function(b){ b.onclick = function(){ resCat = b.dataset.rcat; renderRes(); }; });
  v.querySelectorAll("[data-afiado]").forEach(function(b){ b.onclick = function(){ formAFiado(grupos[b.dataset.afiado]); }; });
