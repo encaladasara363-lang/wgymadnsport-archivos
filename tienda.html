@@ -565,7 +565,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110805";
+var TIENDA_VERSION = "2026110806";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1350,7 +1350,7 @@ function plataParaComprar(){
  (S.gastos || []).forEach(function(g){ if(g.tipo === "pedido") return; var kg = g.cat ? catNueva(g.cat) : ""; if(kg) c(kg).invertido += g.monto; else gSin += g.monto; });
  S.productos.forEach(function(p){ if(!p.activo || esPack(p) || !(p.stock > 0)) return; c(catNueva(p.cat)).bodega += p.stock * (p.costo || 0); });
  var l = Object.keys(cats).map(function(k){ var o = cats[k]; o.disp = Math.round(o.recup - o.invertido); return o; })
-  .filter(function(o){ return o.vendido > 0 || o.invertido > 0; });
+  .filter(function(o){ return (o.vendido > 0 || o.invertido > 0) && o.cat !== "Waffles"; }); /* sin la caja de Waffles (08-11-2026, la dueña: "borra los waffles") */
  var orden = CATS.map(function(x){ return x[0]; });
  l.sort(function(a, b){ return orden.indexOf(a.cat) - orden.indexOf(b.cat); });
  return { l:l, gSin:gSin, total:Math.max(0, l.reduce(function(s, o){ return s + Math.max(0, o.disp); }, 0) - gSin),
