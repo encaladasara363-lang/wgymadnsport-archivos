@@ -249,7 +249,7 @@ var CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20E
 var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";          /* la misma del mesón: en la compu de recepción ya está guardada */
 var CLAVE_CACHE = "wgym_tienda_cache_v1";           /* última foto del inventario, para abrir al instante y sin señal */
 var CLAVE_PEND = "wgym_tienda_pend_v1";             /* ventas / entradas que no alcanzaron a llegar a la planilla */
-var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Helados de palito","🍭"],["Llaveros","🔑"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
+var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Helados de palito","🍭"],["Resina","🔑"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
 var PAGOS = [["efectivo","💵 Efectivo"],["transferencia","🏦 Transferencia"],["tarjeta","💳 Tarjeta"],["fiado","📒 Fiado"]];
 
 function $(id){ return document.getElementById(id); }
@@ -565,7 +565,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026110901";
+var TIENDA_VERSION = "2026110902";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1416,7 +1416,7 @@ var resPer = "hoy", resCat = "";
 function repartos(){ var o = lsGet("wgym_tienda_reparto_v1", {}); return (o && typeof o === "object") ? o : {}; }
 function pctDe(cat){ var o = repartos(); return o[cat || "todo"] != null ? o[cat || "todo"] : (o.todo != null ? o.todo : 30); }
 /* Cada categoría es una caja aparte (24-10-2026, la dueña: "los snack son una recaudación aparte para seguir comprando más snack"). */
-function catNueva(c){ return c === "Bebidas" ? "Bebestibles" : c === "Paletas" ? "Helados de palito" : c === "Ropa deportiva" ? "Ropa mujer" : c; }
+function catNueva(c){ return c === "Bebidas" ? "Bebestibles" : c === "Llaveros" ? "Resina" : c === "Paletas" ? "Helados de palito" : c === "Ropa deportiva" ? "Ropa mujer" : c; }
 function catDeMov(m){ var p = S.productos.filter(function(x){ return x.id === m.id; })[0]; return catNueva(p ? p.cat : (m.cat || "Otro")); }
 function formGasto(){
  abrirHoja('<div class="cab"><h3>🧾 Anotar gasto</h3><button class="btn chico volver" id="gCerrar">← Volver</button></div>' +
