@@ -207,7 +207,7 @@ body{ zoom:1.22; }
  #hojaEtiquetas.fchica .etq .pr{ font-size:11pt; }
  #hojaEtiquetas.fchica .etq svg{ width:44mm; height:12mm; }
 }
-.grupo-l{display:grid;gap:10px;margin-top:10px}.grupo-b{display:flex;align-items:center;gap:12px;width:100%;padding:8px;border-radius:14px;border:2px solid var(--gold,#D4AF37);background:#141416;color:#fff;text-align:left;font:inherit;cursor:pointer}.grupo-b img{width:70px;height:93px;object-fit:contain;background:#fff;border-radius:8px;flex:none}.grupo-b b{display:block;font-size:22px;text-transform:uppercase}.grupo-b small{font-size:17px;color:#ccc}
+.grupo-l{display:grid;gap:10px;margin-top:10px}.grupo-b{display:flex;align-items:center;gap:12px;width:100%;padding:8px;border-radius:14px;border:2px solid var(--gold,#D4AF37);background:#141416;color:#fff;text-align:left;font:inherit;cursor:pointer}.grupo-b img{width:70px;height:93px;object-fit:contain;background:#fff;border-radius:8px;flex:none}.grupo-b b{display:block;font-size:22px;text-transform:uppercase}.grupo-b small{font-size:17px;color:#ccc}.grupo-b .gdet{display:inline-block;margin:4px 0 3px;padding:2px 10px;border-radius:8px;background:#FFD400;color:#000;font-size:22px;font-weight:800;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -357,7 +357,7 @@ function elegirDelGrupo(cat, alElegir, lista){
  abrirHoja('<div class="cab"><h3>' + (mix ? '💪 ¿Qué lleva?' : cat === "Bebestibles" ? iconoCat(cat) + ' ¿Qué bebestible?' : cat === "Snacks" ? iconoCat(cat) + ' ¿Qué snack?' : iconoCat(cat) + ' ¿Qué sabor?') + '</h3><button class="btn chico volver" id="gVolver">← Volver</button></div>' +
   (l.length ? '<div class="grupo-l">' + l.map(function(p){ var q = stockVer(p);
    return '<button class="grupo-b" data-g="' + esc(p.id) + '">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span style="font-size:40px">' + iconoCat(p.cat) + '</span>') +
-    '<span><b>' + esc(mix ? p.n.replace(/^smoothie proteico\s*/i, "Smoothie ") : p.n.replace(/^(helado proteico|helado de palito|paleta proteica|smoothie proteico|waffle de|pre entreno mr hyde signature)\s*/i, "")) + '</b><small>' + (q > 0 ? 'Quedan ' + q : '⛔ SIN STOCK') + ' · ' + plata(precioVenta(p)) + '</small></span></button>'; }).join("") + '</div>'
+    '<span><b>' + esc(mix ? p.n.replace(/^smoothie proteico\s*/i, "Smoothie ") : p.n.replace(/^(helado proteico|helado de palito|paleta proteica|smoothie proteico|waffle de|pre entreno mr hyde signature)\s*/i, "")) + '</b>' + (p.det ? '<span class="gdet">' + esc(p.det) + '</span><br>' : '') + '<small>' + (q > 0 ? 'Quedan ' + q : '⛔ SIN STOCK') + ' · ' + plata(precioVenta(p)) + '</small></span></button>'; }).join("") + '</div>'
    : '<p class="muted">Todavía no hay productos en «' + esc(cat) + '». Cárgalos en 📦 Inventario.</p>'));
  $("gVolver").onclick = cerrarHoja;
  document.querySelectorAll("[data-g]").forEach(function(b){ b.onclick = function(){ alElegir(prod(b.dataset.g)); }; });
@@ -588,7 +588,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111023";
+var TIENDA_VERSION = "2026111024";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
