@@ -336,7 +336,13 @@ function porCodigo(cod){ cod = String(cod || "").replace(/\s/g, ""); var b = cod
  for(var i = 0; i < S.productos.length; i++){ var p = S.productos[i]; if(!p.activo || !p.cod) continue; if(p.cod === cod || p.cod.replace(/^0+/, "") === b) return p; } return null; }
 /* 🍦 Código de grupo (31-10-2026, la dueña: "un código para todos los sabores"): un solo código pegado en el refrigerador;
    al escanearlo pregunta qué sabor es y descuenta del stock de ese sabor. Para otro grupo, sumar código → categoría. */
-var CODIGOS_GRUPO = { "2001500000000": "Helados", "2004500000001": "Smoothies" };
+var CODIGOS_GRUPO = { "2001500000000": "Helados", "2004500000001": "Smoothies", "2009000000001": "Por porción" };
+/* 💪 Un solo código para todo lo que se vende por porción (10-11-2026, la dueña: "un solo QR como los helados… smoothie,
+   pre entreno, creatina"): smoothies, pre entrenos (y el granizado), creatina por porción/sachet y proteína por porción.
+   Quedan fuera los tarros que se venden enteros (creatina de 500 g). */
+function esPorPorcion(p){ var n = p.n || "";
+ return p.cat === "Smoothies" || /^smoothie/i.test(n) || /^pre ?entreno/i.test(n) || /^prote[ií]na (prostar|dymatize|iso)/i.test(n) ||
+  (/creatina/i.test(n) && !/(500 ?g|tarro|1 ?kg)/i.test(n + " " + (p.det || ""))); }
 function grupoDeCodigo(cod){ var c = String(cod || "").replace(/\D/g, "").replace(/^0+/, ""); for(var k in CODIGOS_GRUPO) if(k.replace(/^0+/, "") === c) return CODIGOS_GRUPO[k]; return ""; }
 /* Mismo código para varios sabores de un producto (10-11-2026, la dueña: "ponme el mismo código que uso del otro pre, solo
    cambia el sabor"): al escanear el código de cualquiera de la familia se pregunta el sabor. */
@@ -344,11 +350,13 @@ var FAMILIAS = [ /^pre entreno mr hyde signature/i ];
 function familiaDe(p){ var re = p && FAMILIAS.filter(function(r){ return r.test(p.n || ""); })[0]; if(!re) return null;
  var l = activos().filter(function(x){ return re.test(x.n || ""); }); return l.length > 1 ? l : null; }
 function elegirDelGrupo(cat, alElegir, lista){
- var l = (lista || activos().filter(function(p){ return catNueva(p.cat) === cat; })).sort(function(a, b){ return a.n.localeCompare(b.n); });
- abrirHoja('<div class="cab"><h3>' + iconoCat(cat) + ' ¿Qué sabor?</h3><button class="btn chico volver" id="gVolver">← Volver</button></div>' +
+ var mix = cat === "Por porción";
+ var orden = function(p){ return /^smoothie/i.test(p.n) || p.cat === "Smoothies" ? 0 : /^pre ?entreno/i.test(p.n) ? 1 : /creatina/i.test(p.n) ? 2 : 3; };
+ var l = (lista || activos().filter(function(p){ return mix ? esPorPorcion(p) : catNueva(p.cat) === cat; })).sort(function(a, b){ return mix ? (orden(a) - orden(b) || a.n.localeCompare(b.n)) : a.n.localeCompare(b.n); });
+ abrirHoja('<div class="cab"><h3>' + (mix ? '💪 ¿Qué lleva?' : iconoCat(cat) + ' ¿Qué sabor?') + '</h3><button class="btn chico volver" id="gVolver">← Volver</button></div>' +
   (l.length ? '<div class="grupo-l">' + l.map(function(p){ var q = stockVer(p);
    return '<button class="grupo-b" data-g="' + esc(p.id) + '">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span style="font-size:40px">' + iconoCat(p.cat) + '</span>') +
-    '<span><b>' + esc(p.n.replace(/^(helado proteico|helado de palito|paleta proteica|smoothie proteico|waffle de|pre entreno mr hyde signature)\s*/i, "")) + '</b><small>' + (q > 0 ? 'Quedan ' + q : '⛔ SIN STOCK') + ' · ' + plata(precioVenta(p)) + '</small></span></button>'; }).join("") + '</div>'
+    '<span><b>' + esc(mix ? p.n.replace(/^smoothie proteico\s*/i, "Smoothie ") : p.n.replace(/^(helado proteico|helado de palito|paleta proteica|smoothie proteico|waffle de|pre entreno mr hyde signature)\s*/i, "")) + '</b><small>' + (q > 0 ? 'Quedan ' + q : '⛔ SIN STOCK') + ' · ' + plata(precioVenta(p)) + '</small></span></button>'; }).join("") + '</div>'
    : '<p class="muted">Todavía no hay productos en «' + esc(cat) + '». Cárgalos en 📦 Inventario.</p>'));
  $("gVolver").onclick = cerrarHoja;
  document.querySelectorAll("[data-g]").forEach(function(b){ b.onclick = function(){ alElegir(prod(b.dataset.g)); }; });
@@ -579,7 +587,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111019";
+var TIENDA_VERSION = "2026111020";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
