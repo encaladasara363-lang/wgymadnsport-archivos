@@ -598,7 +598,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111028";
+var TIENDA_VERSION = "2026111029";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1472,12 +1472,22 @@ function reinversion(){
  return { l:l, gSin:Math.round(gSin), vendido:sum("vendido"), entro:sum("entro"), semana:sum("semana"), compro:sum("compro") + Math.round(gSin), disp:sum("entro") - sum("compro") - Math.round(gSin), yo:sum("yo") };
 }
 /* Lo que ya está invertido hasta antes de PLATA_DESDE: el tope que la dueña no quiere pasar. */
-function invertidoAntes(){
- var t = 0;
- todosMovs().forEach(function(m){ if(m.tipo === "entrada" && (m.total || 0) > 0 && (String(m.f || "").slice(0, 16) < PLATA_DESDE || compraAntigua(m))) t += m.total; });
- (S.gastos || []).forEach(function(g){ if(g.tipo !== "pedido" && String(g.f || "").slice(0, 16) < PLATA_DESDE) t += g.monto || 0; });
- return Math.round(t);
+/* Suma bien todo lo invertido (10-11-2026, la dueña: "en el tope quiero que sumes bien todo lo que he invertido"): además de las
+   compras con costo, cuenta la mercadería cargada sin costo y el stock subido a mano en la ficha (ajustes positivos), a costo
+   del producto; no cuenta los movimientos internos (apartados, packs, porciones). invertidoPorSeccion() da el detalle. */
+function invertidoPorSeccion(){
+ var o = {}, costoDe = function(id){ var p = prod(id); return p ? (p.costo || 0) : 0; };
+ function suma(k, v){ if(v > 0){ var g = GRUPO_PLATA[k] || k; o[g] = (o[g] || 0) + v; } }
+ todosMovs().forEach(function(m){
+  var antes = String(m.f || "").slice(0, 16) < PLATA_DESDE;
+  if(m.tipo === "entrada" && (antes || compraAntigua(m))) suma(catDeMov(m), (m.total || 0) > 0 ? m.total : (m.cant || 0) * costoDe(m.id));
+  else if(m.tipo === "ajuste" && antes && (m.cant || 0) > 0 && !/^(apartado|liberado|retirado|pack|porci)/i.test(m.nota || "")) suma(catDeMov(m), m.cant * costoDe(m.id));
+ });
+ (S.gastos || []).forEach(function(g){ if(g.tipo !== "pedido" && String(g.f || "").slice(0, 16) < PLATA_DESDE) suma(g.cat ? catNueva(g.cat) : "Gastos", g.monto || 0); });
+ Object.keys(o).forEach(function(k){ o[k] = Math.round(o[k]); });
+ return o;
 }
+function invertidoAntes(){ var o = invertidoPorSeccion(); return Object.keys(o).reduce(function(s, k){ return s + o[k]; }, 0); }
 function miParteSemanas(){
  var sem = {}, act = lunesDe(S.hoy || hoyISO());
  todosMovs().forEach(function(m){ if(m.tipo !== "venta" || m.est === "anulada") return; var f0 = String(m.f || "").slice(0, 10); if(String(m.f || "").slice(0, 16) < PLATA_DESDE) return;
@@ -1512,7 +1522,8 @@ function verPlata(){
   '<div class="kpis" style="margin:10px 0"><div class="kpi"><small>💰 Disponible para comprar</small><b style="color:' + (r.disp >= 0 ? 'var(--yel)' : '#FF8A8A') + '">' + disp(r.disp) + '</b></div>' +
   '<div class="kpi verde"><small>💵 Tu ' + pctDe("") + ' % (apártalo)</small><b>' + plata(r.yo) + '</b></div></div>' +
   '<p class="muted" style="margin:0 0 6px;font-size:15px">Cuenta desde el ' + desdeTxt() + '. Cada venta suma a su sección (lo que te costó + la ganancia que no es tuya) y cada compra de mercadería se descuenta. Se va acumulando semana a semana.</p>' +
-  (tope ? '<div class="card" style="margin:8px 0"><b style="font-size:18px">🔒 Tu plata ya invertida (tope)</b><div style="font-size:26px;font-family:Anton,sans-serif;color:var(--yel)">' + plata(tope) + '</div><p class="muted" style="margin:4px 0 0;font-size:14px">Es lo que pusiste hasta el ' + desdeTxt() + '. Desde ahora solo compras con lo que deja cada venta.</p></div>' : '');
+  (tope ? '<div class="card" style="margin:8px 0"><b style="font-size:18px">🔒 Tu plata ya invertida (tope)</b><div style="font-size:26px;font-family:Anton,sans-serif;color:var(--yel)">' + plata(tope) + '</div><p class="muted" style="margin:4px 0 0;font-size:14px">Es lo que pusiste hasta el ' + desdeTxt() + '. Desde ahora solo compras con lo que deja cada venta.</p>' +
+   (function(){ var o = invertidoPorSeccion(); return '<div style="margin-top:8px">' + Object.keys(o).sort(function(a, b){ return o[b] - o[a]; }).map(function(k){ return '<div style="display:flex;justify-content:space-between;font-size:17px;padding:3px 0;border-top:1px solid #333"><span>' + iconoCat(k) + ' ' + esc(k) + '</span><b>' + plata(o[k]) + '</b></div>'; }).join("") + '</div>'; })() + '</div>' : '');
  if(!r.l.length) h += '<p class="muted">Todavía no hay ventas ni compras desde el ' + desdeTxt() + '.</p>';
  r.l.forEach(function(o){
   h += '<div class="card" style="margin:8px 0"><b style="font-size:23px;text-transform:uppercase">' + iconoCat(o.cat) + ' ' + esc(o.cat) + '</b><table class="top" style="margin-top:6px">' +
