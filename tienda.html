@@ -569,7 +569,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111005";
+var TIENDA_VERSION = "2026111006";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1381,77 +1381,94 @@ function miParteMeses(){
  var act = (S.hoy || hoyISO()).slice(0, 7); if(meses[act] == null) meses[act] = 0;
  return Object.keys(meses).sort().reverse().map(function(k){ return { k:k, yo:Math.max(0, Math.round(meses[k])), act:k === act }; });
 }
-/* 🔁 Para volver a invertir, por sección (10-11-2026, la dueña: "solo quiero que me aparte el 30 % de la ganancia y que me
-   muestre lo que tengo que volver a invertir en cada sección… cada vez que vendo"): de cada venta cobrada, lo que te costó +
-   la ganancia que no es tuya vuelve a esa misma sección; tu % de la ganancia va aparte. Fiados: solo lo que ya pagaron. */
-var plPer = "mes";
-function rangoPlata(per){
- var hoy = S.hoy || hoyISO(), d = new Date(hoy + "T12:00:00");
- if(per === "hoy") return [hoy, hoy];
- if(per === "semana"){ var dw = (d.getDay() + 6) % 7, l = new Date(d.getTime() - dw * 86400000); return [l.toISOString().slice(0, 10), hoy]; }
- if(per === "mes") return [hoy.slice(0, 7) + "-01", hoy];
- return ["0000-00-00", hoy];
-}
+/* 💰 Darse vuelta con lo que hay (10-11-2026, la dueña: "ya no quiero invertir más, solo darme vuelta con lo que tengo:
+   cada vez que venda, compro; semanal y que se vaya acumulando; tope = lo que ya tengo invertido; mi ganancia solo desde hoy").
+   Desde PLATA_DESDE: cada venta cobrada (fiado: solo lo abonado) deja en su sección el costo + la ganancia que no es suya;
+   cada compra de mercadería (entradas con costo y gastos de la sección) se descuenta de esa misma sección.
+   Disponible = lo que entró − lo que compró. Si queda bajo 0, gastó más de lo que tenía (ella avisa). */
+var PLATA_DESDE = "2026-11-10";
 var GRUPO_PLATA = { "Ropa mujer":"Ropa y accesorios", "Ropa hombre":"Ropa y accesorios", "Accesorios":"Ropa y accesorios", "Zapatillas":"Ropa y accesorios" };
-function reinversion(per){
- var rg = rangoPlata(per), cats = {}, ms = todosMovs();
+function lunesDe(iso){ var d = new Date(iso.slice(0, 10) + "T12:00:00"), dw = (d.getDay() + 6) % 7; return new Date(d.getTime() - dw * 86400000).toISOString().slice(0, 10); }
+function fechaCorta(iso){ return iso.slice(8, 10) + "/" + iso.slice(5, 7); }
+function reinversion(){
+ var cats = {}, ms = todosMovs(), semAct = lunesDe(S.hoy || hoyISO());
+ function c(k){ var g = GRUPO_PLATA[k] || k; return cats[g] = cats[g] || { cat:g, vendido:0, entro:0, semana:0, compro:0, yo:0 }; }
  var abon = {}; ms.forEach(function(m){ if(m.tipo === "abono") abon[m.vid] = (abon[m.vid] || 0) + (m.total || 0); });
  var totVid = {}; ms.forEach(function(m){ if(m.tipo === "venta" && m.est === "fiado") totVid[m.vid] = (totVid[m.vid] || 0) + m.total; });
  ms.forEach(function(m){
-  if(m.tipo !== "venta" || m.est === "anulada") return;
-  var f0 = String(m.f || "").slice(0, 10); if(f0 < rg[0] || f0 > rg[1]) return;
+  var f0 = String(m.f || "").slice(0, 10); if(f0 < PLATA_DESDE) return;
   var k = catDeMov(m); if(k === "Waffles" || k === "Helados de palito") return;
-  var f = 1; if(m.est === "fiado") f = totVid[m.vid] > 0 ? Math.min(1, (abon[m.vid] || 0) / totVid[m.vid]) : 0;
-  if(!f) return;
-  var costo = m.cant * m.costo * f, gan = (m.total - m.cant * m.costo) * f, pc = pctDe(k);
-  var g = GRUPO_PLATA[k] || k; /* ropa, zapatillas y accesorios van juntos (10-11-2026, la dueña) */
-  var o = cats[g] = cats[g] || { cat:g, vendido:0, reinv:0, yo:0, u:0 };
-  o.vendido += m.total * f; o.u += m.cant * f;
-  var yo = Math.max(0, gan) * pc / 100; o.yo += yo; o.reinv += costo + gan - yo;
+  if(m.tipo === "venta" && m.est !== "anulada"){
+   var f = 1; if(m.est === "fiado") f = totVid[m.vid] > 0 ? Math.min(1, (abon[m.vid] || 0) / totVid[m.vid]) : 0;
+   if(!f) return;
+   var costo = m.cant * m.costo * f, gan = (m.total - m.cant * m.costo) * f, yo = Math.max(0, gan) * pctDe(k) / 100, o = c(k);
+   o.vendido += m.total * f; o.yo += yo; o.entro += costo + gan - yo; if(lunesDe(f0) === semAct) o.semana += costo + gan - yo;
+  } else if(m.tipo === "entrada" && (m.total || 0) > 0) c(k).compro += m.total;
  });
+ var gSin = 0;
+ (S.gastos || []).forEach(function(g){ if(g.tipo === "pedido" || String(g.f || "").slice(0, 10) < PLATA_DESDE) return; if(g.cat) c(catNueva(g.cat)).compro += g.monto; else gSin += g.monto; });
  var orden = CATS.map(function(x){ return x[0]; });
- var l = Object.keys(cats).map(function(k){ var o = cats[k]; o.vendido = Math.round(o.vendido); o.reinv = Math.round(o.reinv); o.yo = Math.round(o.yo); return o; })
-  .sort(function(a, b){ return ordenPlata(a.cat) - ordenPlata(b.cat); });
- function ordenPlata(c){ return c === "Ropa y accesorios" ? orden.indexOf("Accesorios") : orden.indexOf(c); }
- return { l:l, vendido:l.reduce(function(s, o){ return s + o.vendido; }, 0), reinv:l.reduce(function(s, o){ return s + o.reinv; }, 0), yo:l.reduce(function(s, o){ return s + o.yo; }, 0) };
+ function ord(c){ return c === "Ropa y accesorios" ? orden.indexOf("Accesorios") : orden.indexOf(c); }
+ var l = Object.keys(cats).map(function(k){ var o = cats[k]; ["vendido","entro","semana","compro","yo"].forEach(function(x){ o[x] = Math.round(o[x]); }); o.disp = o.entro - o.compro; return o; })
+  .sort(function(a, b){ return ord(a.cat) - ord(b.cat); });
+ function sum(x){ return l.reduce(function(s, o){ return s + o[x]; }, 0); }
+ return { l:l, gSin:Math.round(gSin), vendido:sum("vendido"), entro:sum("entro"), semana:sum("semana"), compro:sum("compro") + Math.round(gSin), disp:sum("entro") - sum("compro") - Math.round(gSin), yo:sum("yo") };
+}
+/* Lo que ya está invertido hasta antes de PLATA_DESDE: el tope que la dueña no quiere pasar. */
+function invertidoAntes(){
+ var t = 0;
+ todosMovs().forEach(function(m){ if(m.tipo === "entrada" && (m.total || 0) > 0 && String(m.f || "").slice(0, 10) < PLATA_DESDE) t += m.total; });
+ (S.gastos || []).forEach(function(g){ if(g.tipo !== "pedido" && String(g.f || "").slice(0, 10) < PLATA_DESDE) t += g.monto || 0; });
+ return Math.round(t);
+}
+function miParteSemanas(){
+ var sem = {}, act = lunesDe(S.hoy || hoyISO());
+ todosMovs().forEach(function(m){ if(m.tipo !== "venta" || m.est === "anulada") return; var f0 = String(m.f || "").slice(0, 10); if(f0 < PLATA_DESDE) return;
+  var k = lunesDe(f0), g = m.total - m.cant * m.costo; sem[k] = (sem[k] || 0) + Math.max(0, g) * pctDe(catDeMov(m)) / 100; });
+ if(sem[act] == null) sem[act] = 0;
+ return Object.keys(sem).sort().reverse().map(function(k){ return { k:k, yo:Math.round(sem[k]), act:k === act }; });
 }
 function htmlBotonPlata(){
- var r = reinversion("mes"), ms = miParteMeses(), a = ms[0], ant = ms[1];
+ var r = reinversion(), ss = miParteSemanas(), tot = ss.reduce(function(s, x){ return s + x.yo; }, 0);
  var st = 'flex:1;min-width:0;margin:0;padding:12px 8px;line-height:1.15;font-size:17px';
  return '<div style="display:flex;gap:8px;margin:4px 0 0">' +
-  '<button class="btn oro" id="bPlata" style="' + st + '">🔁 Para volver a invertir<br><span style="font-size:13px">' + esc(NOM_MES[Number(a.k.slice(5, 7)) - 1]) + ' · por sección</span><br><span style="font-size:30px">' + plata(r.reinv) + '</span></button>' +
-  '<button class="btn" id="bMiParte" style="' + st + ';background:#1f7a3a;color:#fff;border-color:#7CE39A">💵 Tu ' + pctDe("") + ' %<br><span style="font-size:13px">' + esc(NOM_MES[Number(a.k.slice(5, 7)) - 1]) + ' (va sumando)</span><br><span style="font-size:30px">' + plata(a.yo) + '</span>' +
-  (ant ? '<br><span style="font-size:13px">' + esc(NOM_MES[Number(ant.k.slice(5, 7)) - 1]) + ': ' + plata(ant.yo) + ' para sacar</span>' : '') + '</button></div>';
+  '<button class="btn oro" id="bPlata" style="' + st + '">💰 Disponible para comprar<br><span style="font-size:13px">desde el ' + fechaCorta(PLATA_DESDE) + '</span><br><span style="font-size:30px">' + plata(r.disp) + '</span></button>' +
+  '<button class="btn" id="bMiParte" style="' + st + ';background:#1f7a3a;color:#fff;border-color:#7CE39A">💵 Tu ' + pctDe("") + ' %<br><span style="font-size:13px">desde el ' + fechaCorta(PLATA_DESDE) + ' (va sumando)</span><br><span style="font-size:30px">' + plata(tot) + '</span>' +
+  '<br><span style="font-size:13px">esta semana: ' + plata(ss[0].yo) + '</span></button></div>';
 }
 function verMiParte(){
- var ms = miParteMeses();
- var h = '<div class="cab"><h3>💵 Tu ganancia, mes a mes</h3><button class="btn chico volver" id="mpCerrar">← Volver</button></div>' +
-  '<p class="muted" style="margin:8px 0;font-size:15px">Es tu parte (' + pctDe("") + ' %) de la ganancia de cada mes. El mes en curso va sumando; el día 1 sacas la del mes anterior.</p><table class="top">' +
-  ms.map(function(x){ return '<tr><td style="font-size:19px">' + (x.act ? '⏳ ' : '✅ ') + nomMesK(x.k) + '<br><span class="muted" style="font-size:13px">' + (x.act ? 'En curso' : 'Listo para sacar') + '</span></td><td class="r" style="font-size:26px;font-family:Anton,sans-serif;color:#7CE39A">' + plata(x.yo) + '</td></tr>'; }).join("") +
+ var ss = miParteSemanas(), tot = ss.reduce(function(s, x){ return s + x.yo; }, 0);
+ var h = '<div class="cab"><h3>💵 Tu ganancia, semana a semana</h3><button class="btn chico volver" id="mpCerrar">← Volver</button></div>' +
+  '<p class="muted" style="margin:8px 0;font-size:15px">Es tu parte (' + pctDe("") + ' %) de la ganancia de cada venta, desde el ' + fechaCorta(PLATA_DESDE) + '. Semanas de lunes a domingo.</p>' +
+  '<div class="kpis" style="margin:8px 0"><div class="kpi verde"><small>💵 Total acumulado</small><b>' + plata(tot) + '</b></div></div><table class="top">' +
+  ss.map(function(x){ var fin = new Date(new Date(x.k + "T12:00:00").getTime() + 6 * 86400000).toISOString().slice(0, 10);
+   return '<tr><td style="font-size:19px">' + (x.act ? '⏳ ' : '✅ ') + 'Semana del ' + fechaCorta(x.k < PLATA_DESDE ? PLATA_DESDE : x.k) + ' al ' + fechaCorta(fin) + '<br><span class="muted" style="font-size:13px">' + (x.act ? 'En curso' : 'Lista para sacar') + '</span></td><td class="r" style="font-size:26px;font-family:Anton,sans-serif;color:#7CE39A">' + plata(x.yo) + '</td></tr>'; }).join("") +
   '</table>';
  abrirHoja(h);
  $("mpCerrar").onclick = cerrarHoja;
 }
 function verPlata(){
- var r = reinversion(plPer), nom = { hoy:"hoy", semana:"esta semana", mes:"este mes", todo:"desde el comienzo" }[plPer];
+ var r = reinversion(), tope = invertidoAntes();
  function fila(txt, monto, color, grande){ return '<tr><td style="font-size:' + (grande ? 20 : 18) + 'px">' + txt + '</td><td class="r" style="font-size:' + (grande ? 28 : 22) + 'px;font-family:Anton,sans-serif;color:' + color + ';white-space:nowrap">' + monto + '</td></tr>'; }
+ function disp(v){ return v >= 0 ? plata(v) : '−' + plata(-v); }
  var h = '<div class="cab"><h3>💰 Mi plata</h3><button class="btn chico volver" id="plCerrar">← Volver</button></div>' +
-  '<div class="chips" style="margin:8px 0">' + [["hoy","Hoy"],["semana","Esta semana"],["mes","Este mes"],["todo","Todo"]].map(function(x){ return '<button class="chip" data-plper="' + x[0] + '" aria-pressed="' + (plPer === x[0]) + '">' + x[1] + '</button>'; }).join("") + '</div>' +
-  '<div class="kpis" style="margin:10px 0"><div class="kpi"><small>🔁 Para volver a invertir</small><b style="color:var(--yel)">' + plata(r.reinv) + '</b></div>' +
+  '<div class="kpis" style="margin:10px 0"><div class="kpi"><small>💰 Disponible para comprar</small><b style="color:' + (r.disp >= 0 ? 'var(--yel)' : '#FF8A8A') + '">' + disp(r.disp) + '</b></div>' +
   '<div class="kpi verde"><small>💵 Tu ' + pctDe("") + ' % (apártalo)</small><b>' + plata(r.yo) + '</b></div></div>' +
-  '<p class="muted" style="margin:0 0 6px;font-size:15px">Vendiste ' + plata(r.vendido) + ' ' + nom + '. De cada venta, lo amarillo vuelve a comprar mercadería de esa misma sección y lo verde es para ti.</p>';
- if(!r.l.length) h += '<p class="muted">No hay ventas cobradas ' + nom + '.</p>';
+  '<p class="muted" style="margin:0 0 6px;font-size:15px">Cuenta desde el ' + fechaCorta(PLATA_DESDE) + '. Cada venta suma a su sección (lo que te costó + la ganancia que no es tuya) y cada compra de mercadería se descuenta. Se va acumulando semana a semana.</p>' +
+  (tope ? '<div class="card" style="margin:8px 0"><b style="font-size:18px">🔒 Tu plata ya invertida (tope)</b><div style="font-size:26px;font-family:Anton,sans-serif;color:var(--yel)">' + plata(tope) + '</div><p class="muted" style="margin:4px 0 0;font-size:14px">Es lo que pusiste hasta el ' + fechaCorta(PLATA_DESDE) + '. Desde ahora solo compras con lo que deja cada venta.</p></div>' : '');
+ if(!r.l.length) h += '<p class="muted">Todavía no hay ventas ni compras desde el ' + fechaCorta(PLATA_DESDE) + '.</p>';
  r.l.forEach(function(o){
   h += '<div class="card" style="margin:8px 0"><b style="font-size:23px;text-transform:uppercase">' + iconoCat(o.cat) + ' ' + esc(o.cat) + '</b><table class="top" style="margin-top:6px">' +
    fila('💵 Vendiste', plata(o.vendido), 'var(--txt)') +
-   fila('<b>🔁 Para volver a invertir</b><br><span class="muted" style="font-size:13px">compra más ' + esc(o.cat.toLowerCase()) + ' con esto</span>', plata(o.reinv), 'var(--yel)', true) +
+   fila('➕ Entró para comprar<br><span class="muted" style="font-size:13px">esta semana: ' + plata(o.semana) + '</span>', plata(o.entro), '#7CE39A') +
+   fila('➖ Compraste', plata(o.compro), 'var(--txt)') +
+   fila('<b>💰 Disponible</b>', disp(o.disp), o.disp >= 0 ? 'var(--yel)' : '#FF8A8A', true) +
    fila('💵 Tu ' + pctDe(o.cat) + ' %', plata(o.yo), '#7CE39A') +
-   '</table></div>';
+   '</table>' + (o.disp < 0 ? '<p class="muted" style="margin:6px 0 0;font-size:14px">⚠️ Compraste ' + plata(-o.disp) + ' más de lo que entró en esta sección.</p>' : '') + '</div>';
  });
- h += '<p class="muted" style="font-size:14px;margin:10px 0 0">Fiados: solo cuenta lo que ya te pagaron. Tu parte sale de la ganancia (precio − costo), nunca del costo.</p>';
+ if(r.gSin) h += '<p class="muted" style="font-size:15px">Gastos de toda la tienda (bolsas, envíos…): −' + plata(r.gSin) + '</p>';
  abrirHoja(h);
  $("plCerrar").onclick = cerrarHoja;
- document.querySelectorAll("[data-plper]").forEach(function(b){ b.onclick = function(){ plPer = b.dataset.plper; verPlata(); }; });
 }
 
 /* ═══ 📊 RESUMEN ═══ */
