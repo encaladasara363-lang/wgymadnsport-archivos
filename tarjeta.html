@@ -2533,7 +2533,9 @@ function renderEvolucion(s){
       (27-10-2026, la dueña: "el ganador de masa me aparece sin stock"; mismo criterio que USA_PORCION de tienda.html). */
    var tarro = l.filter(function(p){ return /^tarro de prote/i.test(p.n); })[0] || l.filter(function(p){ return /^batido de prote/i.test(p.n); })[0];
    /* 🍹 Smoothies (05-11-2026): todos salen del «Tarro de proteína …», que no se muestra a los socios. */
-   l.forEach(function(p){ if(/^smoothie/i.test(p.n)){ p.q = tarro ? tarro.q : 0; p.vendido = false; } });
+   /* Smoothies de vainilla con la proteína Prostar (10-11-2026): salen del tarro Prostar, que sí se muestra (se vende por porción). */
+   var prostar = l.filter(function(p){ return /^prote[ií]na prostar/i.test(p.n); })[0];
+   l.forEach(function(p){ if(/^smoothie/i.test(p.n)){ var b = /(vainilla|vanilla|prostar)/i.test(p.n) ? prostar : tarro; p.q = b ? b.q : 0; p.vendido = false; } });
    l = l.filter(function(p){ return !/^tarro de prote/i.test(p.n); });
    /* Waffles fuera de la tienda (07-11-2026, la dueña: "elimina la sección de waffles"). */
    l = l.filter(function(p){ return p.cat !== "Waffles" && !/^waffle/i.test(p.n); });
@@ -2543,7 +2545,7 @@ function renderEvolucion(s){
    l = l.filter(function(p){ return p.cat !== "Paletas" && p.cat !== "Helados de palito" && !/^(helado de palito|paleta proteica)/i.test(p.n || ""); });
    l.forEach(function(p){ if(/^batido ganador/i.test(p.n)){ p.q = tarro ? tarro.q : 0; p.vendido = false; } });
    /* Pre entreno granizado (03-11-2026): sale de las porciones del tarro Mr Hyde Fruit Punch. */
-   var hyde = l.filter(function(p){ return /^pre ?entreno mr hyde/i.test(p.n); })[0];
+   var hyde = l.filter(function(p){ return /^pre ?entreno mr hyde signature fruit punch/i.test(p.n); })[0];
    l.forEach(function(p){ if(/^pre ?entreno granizado/i.test(p.n)){ p.q = hyde ? hyde.q : 0; p.vendido = false; } });
    /* Ropa por sexo (25-10-2026, la dueña: "me conviene poner todo porque le sirve para regalar"): todos
       ven toda la ropa, pero primero la de su sexo (mismo criterio que las rutinas, coachSexo) y al final
@@ -2723,7 +2725,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111001", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111002", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
