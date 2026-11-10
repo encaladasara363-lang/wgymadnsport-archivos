@@ -598,7 +598,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111034";
+var TIENDA_VERSION = "2026111035";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1444,7 +1444,10 @@ var COMPRADO_ANTES = [
     a su costo de material: 100 × $500, 200 × $1.000 y 30 × $1.500. */
  { re:/^llavero de resina peque/i, hasta:"2026-11-10", monto:50000, cat:"Resina" },
  { re:/^llavero de resina inicial/i, hasta:"2026-11-10", monto:200000, cat:"Resina" },
- { re:/^lapicero de resina/i, hasta:"2026-11-10", monto:45000, cat:"Resina" }
+ { re:/^lapicero de resina/i, hasta:"2026-11-10", monto:45000, cat:"Resina" },
+ /* Placas de mascota (10-11-2026, la dueña: "como 150", mitad y mitad): 75 grandes × $1.000 y 75 pequeñas × $500. */
+ { re:/^placa de mascota de resina grande/i, hasta:"2026-11-10", monto:75000, cat:"Resina" },
+ { re:/^placa de mascota de resina peque/i, hasta:"2026-11-10", monto:37500, cat:"Resina" }
 ];
 function compraAntigua(m){
  if(m.tipo !== "entrada" || !((m.total || 0) > 0)) return false;
