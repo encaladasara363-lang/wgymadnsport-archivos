@@ -599,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111040";
+var TIENDA_VERSION = "2026111041";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1485,6 +1485,11 @@ function reinversion(){
  function ord(c){ return c === "Ropa y accesorios" ? orden.indexOf("Accesorios") : orden.indexOf(c); }
  var l = Object.keys(cats).map(function(k){ var o = cats[k]; ["vendido","entro","semana","compro","yo"].forEach(function(x){ o[x] = Math.round(o[x]); }); o.disp = o.entro - o.compro; return o; })
   .sort(function(a, b){ return ord(a.cat) - ord(b.cat); });
+ /* Pases diarios = fondo común (10-11-2026, la dueña): si una sección compró más de lo que entró, la diferencia se cubre
+    con lo disponible de los pases. El total no cambia; solo se mueve entre tarjetas. */
+ var pase = l.filter(function(o){ return o.cat === "Pases diarios"; })[0];
+ if(pase) l.forEach(function(o){ if(o === pase || o.disp >= 0 || pase.disp <= 0) return;
+  var x = Math.min(-o.disp, pase.disp); o.fondo = x; o.disp += x; pase.usado = (pase.usado || 0) + x; pase.disp -= x; });
  function sum(x){ return l.reduce(function(s, o){ return s + o[x]; }, 0); }
  return { l:l, gSin:Math.round(gSin), vendido:sum("vendido"), entro:sum("entro"), semana:sum("semana"), compro:sum("compro") + Math.round(gSin), disp:sum("entro") - sum("compro") - Math.round(gSin), yo:sum("yo") };
 }
@@ -1561,6 +1566,8 @@ function verPlata(){
    fila('💵 Vendiste', plata(o.vendido), 'var(--txt)') +
    fila('➕ Entró para comprar<br><span class="muted" style="font-size:13px">esta semana: ' + plata(o.semana) + '</span>', plata(o.entro), '#7CE39A') +
    fila('➖ Compraste', plata(o.compro), 'var(--txt)') +
+   (o.fondo ? fila('🎟 Puesto por los pases diarios', '+' + plata(o.fondo), '#7CE39A') : '') +
+   (o.usado ? fila('🎟 Usado en otras secciones', '−' + plata(o.usado), 'var(--txt)') : '') +
    fila('<b>💰 Disponible</b>', disp(o.disp), o.disp >= 0 ? 'var(--yel)' : '#FF8A8A', true) +
    fila('💵 Tu ' + pctDe(o.cat) + ' %', plata(o.yo), '#7CE39A') +
    '</table>' + (o.disp < 0 ? '<p class="muted" style="margin:6px 0 0;font-size:14px">⚠️ Compraste ' + plata(-o.disp) + ' más de lo que entró en esta sección.</p>' : '') + '</div>';
