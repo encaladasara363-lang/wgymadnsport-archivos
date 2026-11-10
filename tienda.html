@@ -599,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111039";
+var TIENDA_VERSION = "2026111040";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1452,6 +1452,10 @@ var COMPRADO_ANTES = [
  { re:/^placa de mascota de resina grande/i, hasta:"2026-11-10", monto:75000, cat:"Resina" },
  { re:/^placa de mascota de resina peque/i, hasta:"2026-11-10", monto:37500, cat:"Resina" }
 ];
+/* Entradas que no fueron compras (10-11-2026, la dueña: la polera «This is my therapy» de las 16:22 "es la misma… estaba
+   guardada y hoy me la pagaron"): solo se volvió a cargar para poder venderla; no se descuenta de «Compraste». */
+var NO_ES_COMPRA = [ { re:/^polera this is my therapy/i, f:"2026-11-10 16:22" } ];
+function noEsCompra(m){ var n = (prod(m.id) || {}).n || m.n || ""; return NO_ES_COMPRA.some(function(x){ return x.re.test(n) && String(m.f || "").slice(0, 16) === x.f; }); }
 function compraAntigua(m){
  if(m.tipo !== "entrada" || !((m.total || 0) > 0)) return false;
  var p = S.productos.filter(function(x){ return x.id === m.id; })[0], n = p ? p.n : (m.n || ""), f0 = String(m.f || "").slice(0, 10);
@@ -1473,7 +1477,7 @@ function reinversion(){
    if(!f) return;
    var costo = m.cant * m.costo * f, gan = (m.total - m.cant * m.costo) * f, yo = Math.max(0, gan) * pctDe(k) / 100, o = c(k);
    o.vendido += m.total * f; o.yo += yo; o.entro += costo + gan - yo; if(lunesDe(f0) === semAct) o.semana += costo + gan - yo;
-  } else if(m.tipo === "entrada" && (m.total || 0) > 0 && !compraAntigua(m)) c(k).compro += m.total;
+  } else if(m.tipo === "entrada" && (m.total || 0) > 0 && !compraAntigua(m) && !noEsCompra(m)) c(k).compro += m.total;
  });
  var gSin = 0;
  (S.gastos || []).forEach(function(g){ if(g.tipo === "pedido" || String(g.f || "").slice(0, 16) < PLATA_DESDE) return; if(g.cat) c(catNueva(g.cat)).compro += g.monto; else gSin += g.monto; });
