@@ -598,7 +598,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111030";
+var TIENDA_VERSION = "2026111031";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1436,8 +1436,10 @@ function desdeTxt(){ return fechaCorta(PLATA_DESDE) + (PLATA_DESDE.length > 10 ?
    re = comienzo del nombre del producto; hasta = última fecha de carga que cuenta como «compra antigua». */
 var COMPRADO_ANTES = [
  { re:/^pre entreno mr hyde signature blue razz/i, hasta:"2026-11-20", monto:24990 }, /* tarro $24.990, comprado antes del 10-11 (la dueña) */
- { re:/^prote[ií]na prostar/i, hasta:"2026-11-20", monto:95000 },
- { re:/^prote[ií]na (dymatize )?iso ?100/i, hasta:"2026-11-20", monto:130000 } /* tarro Dymatize ISO100 $130.000, 71 porciones (10-11-2026), comprado antes */ /* tarro Prostar 100% Whey $95.000, comprado antes del 10-11 (la dueña) */
+ { re:/^prote[ií]na prostar/i, hasta:"2026-11-20", monto:95000 }, /* tarro Prostar $95.000 */
+ { re:/^prote[ií]na (dymatize )?iso ?100/i, hasta:"2026-11-20", monto:130000 }, /* tarro ISO100 $130.000, 71 porciones; cuenta aunque no esté cargado */
+ /* Batido Clear Protein (tarro $67.000, 26-10-2026): se cargó a $1.591 la porción (con leche y plátano); el tope cuenta lo que costó el tarro. */
+ { re:/^batido de prote/i, hasta:"2026-10-31", monto:67000 }
 ];
 function compraAntigua(m){
  if(m.tipo !== "entrada" || !((m.total || 0) > 0)) return false;
@@ -1483,7 +1485,9 @@ function invertidoPorSeccion(){
     suman aparte para no contarlos dos veces. */
  var fijos = {};
  COMPRADO_ANTES.forEach(function(c){ if(!c.monto) return; var p = S.productos.filter(function(x){ return c.re.test(x.n || ""); })[0];
-  if(p){ fijos[p.id] = 1; suma(catNueva(p.cat), c.monto); } });
+  if(p) fijos[p.id] = 1; suma(p ? catNueva(p.cat) : "Suplementos", c.monto); });
+ /* Lo que sale de un tarro (granizado, smoothies, ganador) no es una compra: su «stock inicial» no suma al tope. */
+ S.productos.forEach(function(x){ if(USA_PORCION.some(function(r){ return r.de.test(x.n || ""); })) fijos[x.id] = 1; });
  todosMovs().forEach(function(m){ if(fijos[m.id]) return;
   var antes = String(m.f || "").slice(0, 16) < PLATA_DESDE;
   if(m.tipo === "entrada" && (antes || compraAntigua(m))) suma(catDeMov(m), (m.total || 0) > 0 ? m.total : (m.cant || 0) * costoDe(m.id));
