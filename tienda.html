@@ -569,7 +569,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111006";
+var TIENDA_VERSION = "2026111007";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1387,6 +1387,16 @@ function miParteMeses(){
    cada compra de mercadería (entradas con costo y gastos de la sección) se descuenta de esa misma sección.
    Disponible = lo que entró − lo que compró. Si queda bajo 0, gastó más de lo que tenía (ella avisa). */
 var PLATA_DESDE = "2026-11-10";
+/* Compras hechas antes de PLATA_DESDE pero cargadas después: van al tope, no se descuentan del disponible.
+   re = comienzo del nombre del producto; hasta = última fecha de carga que cuenta como «compra antigua». */
+var COMPRADO_ANTES = [
+ { re:/^pre entreno mr hyde signature blue razz/i, hasta:"2026-11-20" } /* tarro $24.990, comprado antes del 10-11 (la dueña) */
+];
+function compraAntigua(m){
+ if(m.tipo !== "entrada" || !((m.total || 0) > 0)) return false;
+ var p = S.productos.filter(function(x){ return x.id === m.id; })[0], n = p ? p.n : (m.n || ""), f0 = String(m.f || "").slice(0, 10);
+ return COMPRADO_ANTES.some(function(c){ return c.re.test(n) && f0 <= c.hasta; });
+}
 var GRUPO_PLATA = { "Ropa mujer":"Ropa y accesorios", "Ropa hombre":"Ropa y accesorios", "Accesorios":"Ropa y accesorios", "Zapatillas":"Ropa y accesorios" };
 function lunesDe(iso){ var d = new Date(iso.slice(0, 10) + "T12:00:00"), dw = (d.getDay() + 6) % 7; return new Date(d.getTime() - dw * 86400000).toISOString().slice(0, 10); }
 function fechaCorta(iso){ return iso.slice(8, 10) + "/" + iso.slice(5, 7); }
@@ -1403,7 +1413,7 @@ function reinversion(){
    if(!f) return;
    var costo = m.cant * m.costo * f, gan = (m.total - m.cant * m.costo) * f, yo = Math.max(0, gan) * pctDe(k) / 100, o = c(k);
    o.vendido += m.total * f; o.yo += yo; o.entro += costo + gan - yo; if(lunesDe(f0) === semAct) o.semana += costo + gan - yo;
-  } else if(m.tipo === "entrada" && (m.total || 0) > 0) c(k).compro += m.total;
+  } else if(m.tipo === "entrada" && (m.total || 0) > 0 && !compraAntigua(m)) c(k).compro += m.total;
  });
  var gSin = 0;
  (S.gastos || []).forEach(function(g){ if(g.tipo === "pedido" || String(g.f || "").slice(0, 10) < PLATA_DESDE) return; if(g.cat) c(catNueva(g.cat)).compro += g.monto; else gSin += g.monto; });
@@ -1417,7 +1427,7 @@ function reinversion(){
 /* Lo que ya está invertido hasta antes de PLATA_DESDE: el tope que la dueña no quiere pasar. */
 function invertidoAntes(){
  var t = 0;
- todosMovs().forEach(function(m){ if(m.tipo === "entrada" && (m.total || 0) > 0 && String(m.f || "").slice(0, 10) < PLATA_DESDE) t += m.total; });
+ todosMovs().forEach(function(m){ if(m.tipo === "entrada" && (m.total || 0) > 0 && (String(m.f || "").slice(0, 10) < PLATA_DESDE || compraAntigua(m))) t += m.total; });
  (S.gastos || []).forEach(function(g){ if(g.tipo !== "pedido" && String(g.f || "").slice(0, 10) < PLATA_DESDE) t += g.monto || 0; });
  return Math.round(t);
 }
