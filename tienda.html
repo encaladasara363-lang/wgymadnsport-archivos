@@ -249,7 +249,7 @@ var CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20E
 var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";          /* la misma del mesón: en la compu de recepción ya está guardada */
 var CLAVE_CACHE = "wgym_tienda_cache_v1";           /* última foto del inventario, para abrir al instante y sin señal */
 var CLAVE_PEND = "wgym_tienda_pend_v1";             /* ventas / entradas que no alcanzaron a llegar a la planilla */
-var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Helados de palito","🍭"],["Resina","🔑"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
+var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Resina","🔑"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
 var PAGOS = [["efectivo","💵 Efectivo"],["transferencia","🏦 Transferencia"],["tarjeta","💳 Tarjeta"],["fiado","📒 Fiado"]];
 
 function $(id){ return document.getElementById(id); }
@@ -336,7 +336,7 @@ function porCodigo(cod){ cod = String(cod || "").replace(/\s/g, ""); var b = cod
  for(var i = 0; i < S.productos.length; i++){ var p = S.productos[i]; if(!p.activo || !p.cod) continue; if(p.cod === cod || p.cod.replace(/^0+/, "") === b) return p; } return null; }
 /* 🍦 Código de grupo (31-10-2026, la dueña: "un código para todos los sabores"): un solo código pegado en el refrigerador;
    al escanearlo pregunta qué sabor es y descuenta del stock de ese sabor. Para otro grupo, sumar código → categoría. */
-var CODIGOS_GRUPO = { "2001500000000": "Helados", "2004500000001": "Smoothies", "2001000000005": "Helados de palito" };
+var CODIGOS_GRUPO = { "2001500000000": "Helados", "2004500000001": "Smoothies" };
 function grupoDeCodigo(cod){ var c = String(cod || "").replace(/\D/g, "").replace(/^0+/, ""); for(var k in CODIGOS_GRUPO) if(k.replace(/^0+/, "") === c) return CODIGOS_GRUPO[k]; return ""; }
 function elegirDelGrupo(cat, alElegir){
  var l = activos().filter(function(p){ return catNueva(p.cat) === cat; }).sort(function(a, b){ return a.n.localeCompare(b.n); });
@@ -349,7 +349,8 @@ function elegirDelGrupo(cat, alElegir){
  document.querySelectorAll("[data-g]").forEach(function(b){ b.onclick = function(){ alElegir(prod(b.dataset.g)); }; });
 }
 /* Waffles fuera de la tienda (07-11-2026, la dueña: "elimina la sección de waffles"): no salen en el inventario ni en Vender. */
-function esWaffle(p){ return p && (p.cat === "Waffles" || /^waffle/i.test(p.n || "")); }
+/* Helados de palito fuera de la tienda (10-11-2026, la dueña: "bórrame la sección de helados de palito"), igual que los waffles. */
+function esWaffle(p){ return p && (p.cat === "Waffles" || /^waffle/i.test(p.n || "") || p.cat === "Helados de palito" || p.cat === "Paletas" || /^(helado de palito|paleta proteica)/i.test(p.n || "")); }
 function activos(){ return S.productos.filter(function(p){ return p.activo && !retirada(p) && !esWaffle(p); }); }
 /* 🏷 Ropa vendida (26-10-2026, la dueña: casi toda la ropa es de una sola prenda; "cuando se venda una prenda que se
    coloque vendido automático y que se quede en la tienda por 15 días y luego la eliminas"): una prenda sin stock con
@@ -447,7 +448,7 @@ function esBatido(p){ return !!p && /^(batido|smoothie|pre ?entreno granizado)/i
    anota +1 «RETIRADO #tok» justo antes de la venta (el stock queda igual que si se hubiera vendido directo). */
 var HORAS_APARTADO = [24, 48, 72];
 /* Snacks y bebestibles (aguas, latas) no se apartan (la dueña, 27-10-2026: "en todo menos en los snack y las aguas"). */
-var SIN_APARTAR = ["Snacks", "Bebestibles", "Helados", "Smoothies", "Helados de palito"];
+var SIN_APARTAR = ["Snacks", "Bebestibles", "Helados", "Smoothies"];
 function sePuedeApartar(p){ return SIN_APARTAR.indexOf(catNueva(p.cat)) < 0 && !esPack(p); }
 function fmtCL(ms){ return new Intl.DateTimeFormat("sv-SE", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }).format(new Date(ms)).replace("T", " ").slice(0, 16); }
 function apartados(){
@@ -568,7 +569,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111003";
+var TIENDA_VERSION = "2026111004";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1355,7 +1356,7 @@ function plataParaComprar(){
  (S.gastos || []).forEach(function(g){ if(g.tipo === "pedido") return; var kg = g.cat ? catNueva(g.cat) : ""; if(kg) c(kg).invertido += g.monto; else gSin += g.monto; });
  S.productos.forEach(function(p){ if(!p.activo || esPack(p) || !(p.stock > 0)) return; c(catNueva(p.cat)).bodega += p.stock * (p.costo || 0); });
  var l = Object.keys(cats).map(function(k){ var o = cats[k]; o.disp = Math.round(o.recup - o.invertido); return o; })
-  .filter(function(o){ return (o.vendido > 0 || o.invertido > 0) && o.cat !== "Waffles"; }); /* sin la caja de Waffles (08-11-2026, la dueña: "borra los waffles") */
+  .filter(function(o){ return (o.vendido > 0 || o.invertido > 0) && o.cat !== "Waffles" && o.cat !== "Helados de palito"; }); /* sin la caja de Waffles (08-11-2026, la dueña: "borra los waffles") */
  var orden = CATS.map(function(x){ return x[0]; });
  l.sort(function(a, b){ return orden.indexOf(a.cat) - orden.indexOf(b.cat); });
  /* La caja de la tienda (10-11-2026, la dueña: "cuando vendo compro mercadería para no quedar sin stock"; eligió esta cuenta):
@@ -1398,7 +1399,7 @@ function reinversion(per){
  ms.forEach(function(m){
   if(m.tipo !== "venta" || m.est === "anulada") return;
   var f0 = String(m.f || "").slice(0, 10); if(f0 < rg[0] || f0 > rg[1]) return;
-  var k = catDeMov(m); if(k === "Waffles") return;
+  var k = catDeMov(m); if(k === "Waffles" || k === "Helados de palito") return;
   var f = 1; if(m.est === "fiado") f = totVid[m.vid] > 0 ? Math.min(1, (abon[m.vid] || 0) / totVid[m.vid]) : 0;
   if(!f) return;
   var costo = m.cant * m.costo * f, gan = (m.total - m.cant * m.costo) * f, pc = pctDe(k);
