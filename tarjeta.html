@@ -2549,6 +2549,8 @@ function renderEvolucion(s){
    /* Waffles fuera de la tienda (07-11-2026, la dueña: "elimina la sección de waffles"). */
    l = l.filter(function(p){ return p.cat !== "Waffles" && !/^waffle/i.test(p.n); });
    /* Solo para la dueña, nunca en la tarjeta (09-11-2026, sus llaveros, placas de mascota y lapiceros de resina: "no quiero que los socios lo vean"). */
+   /* 🎟 Pases diarios (10-11-2026): se cobran en la tienda, pero no se muestran a los socios. */
+   l = l.filter(function(p){ return p.cat !== "Pases diarios" && !/^pase diario/i.test(p.n || ""); });
    l = l.filter(function(p){ return p.cat !== "Llaveros" && p.cat !== "Resina" && !/^llavero/i.test(p.n || "") && !/resina/i.test(p.n || ""); });
    /* Helados de palito fuera de la tienda (10-11-2026, la dueña: "bórrame la sección de helados de palito"). */
    l = l.filter(function(p){ return p.cat !== "Paletas" && p.cat !== "Helados de palito" && !/^(helado de palito|paleta proteica)/i.test(p.n || ""); });
@@ -2748,7 +2750,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111010", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111011", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
