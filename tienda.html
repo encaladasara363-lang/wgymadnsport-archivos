@@ -385,6 +385,8 @@ function packDesarmado(p){
 /* Desde el 10-11-2026 la dueña trabaja solo con la Prostar Vanilla: todos los smoothies y el batido ganador descuentan 1
    porción de su tarro (que también se vende por porción sola). */
 var USA_PORCION = [{ de:/^batido ganador/i, base:/^prote[ií]na prostar/i },
+ /* Smoothies de chocolate con Dymatize ISO100 Gourmet Chocolate (10-11-2026); si aún no está cargada, salen de la Prostar. */
+ { de:/^smoothie.*(choco|cacao)/i, base:/^prote[ií]na (dymatize )?iso ?100/i },
  { de:/^smoothie/i, base:/^prote[ií]na prostar/i },
  /* Pre entreno granizado (03-11-2026): cada vaso descuenta 1 porción del tarro Mr Hyde Fruit Punch. */
  { de:/^pre ?entreno granizado/i, base:/^pre ?entreno mr hyde signature fruit punch/i }]; /* solo Fruit Punch: el Blue Razz es otro tarro */
@@ -577,7 +579,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111015";
+var TIENDA_VERSION = "2026111016";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
