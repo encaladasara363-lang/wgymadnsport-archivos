@@ -353,7 +353,17 @@ function familiaDe(p){ var re = p && FAMILIAS.filter(function(r){ return r.test(
 function elegirDelGrupo(cat, alElegir, lista){
  var mix = cat === "Por porción";
  var orden = function(p){ return /^smoothie/i.test(p.n) || p.cat === "Smoothies" ? 0 : /^pre ?entreno/i.test(p.n) ? 1 : /creatina/i.test(p.n) ? 2 : 3; };
- var l = (lista || activos().filter(function(p){ return mix ? esPorPorcion(p) : catNueva(p.cat) === cat; })).sort(function(a, b){ return mix ? (orden(a) - orden(b) || a.n.localeCompare(b.n)) : a.n.localeCompare(b.n); });
+ /* Ordenados de menor a mayor tamaño (500 ml, 1 litro, litro y medio…) y después por nombre (10-11-2026, la dueña). */
+ var tam = function(p){ var t = normTxt((p.det || "") + " " + p.n).toLowerCase(), m;
+  if(/litro y medio|1[.,]5\s*(l|lt|litros?)\b/.test(t)) return 1500;
+  if((m = t.match(/(\d+(?:[.,]\d+)?)\s*(ml|cc)\b/))) return parseFloat(m[1].replace(",", "."));
+  if(/medio litro/.test(t)) return 500;
+  if((m = t.match(/(\d+(?:[.,]\d+)?)\s*(l|lt|litros?)\b/))) return parseFloat(m[1].replace(",", ".")) * 1000;
+  if(/\b(un|1)\s*litro/.test(t)) return 1000;
+  if((m = t.match(/(\d+(?:[.,]\d+)?)\s*(g|gr|grs|gramos)\b/))) return parseFloat(m[1].replace(",", "."));
+  return 1e9; };
+ var porTam = function(a, b){ return tam(a) - tam(b) || a.n.localeCompare(b.n, "es"); };
+ var l = (lista || activos().filter(function(p){ return mix ? esPorPorcion(p) : catNueva(p.cat) === cat; })).sort(function(a, b){ return mix ? (orden(a) - orden(b) || porTam(a, b)) : porTam(a, b); });
  abrirHoja('<div class="cab"><h3>' + (mix ? '💪 ¿Qué lleva?' : cat === "Bebestibles" ? iconoCat(cat) + ' ¿Qué bebestible?' : cat === "Snacks" ? iconoCat(cat) + ' ¿Qué snack?' : iconoCat(cat) + ' ¿Qué sabor?') + '</h3><button class="btn chico volver" id="gVolver">← Volver</button></div>' +
   (l.length ? '<div class="grupo-l">' + l.map(function(p){ var q = stockVer(p);
    return '<button class="grupo-b" data-g="' + esc(p.id) + '">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span style="font-size:40px">' + iconoCat(p.cat) + '</span>') +
@@ -588,7 +598,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111027";
+var TIENDA_VERSION = "2026111028";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
