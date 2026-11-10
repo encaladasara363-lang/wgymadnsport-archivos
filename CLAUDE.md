@@ -1576,7 +1576,7 @@ productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/In
     muestra lo que está bajo el aviso o alcanza para ≤10 días, sugiere comprar lo vendido en 30 días (mínimo el doble del
     aviso), el costo aproximado, «➕ Ya llegó» y «📋 Copiar lista (para WhatsApp)», sin costos en el texto copiado.
   - Fecha de vencimiento: casillero «⏰ Vence» en la ficha y en «Llegó mercadería» (si cambia, se guarda con
-    `tiendaProducto`); botón «⏰ Por vencer (N)» (`porVencer`, 30 días), pastilla «⏰ Vence dd/mm/aa» (amarilla ≤30 días,
+    `tiendaProducto`); bajo la fecha de la ficha, «✕ Quitar la fecha (no vence)» (10-11-2026, la dueña: en el iPhone no podía borrar la fecha; queda vacía y al Guardar se borra en la planilla); botón «⏰ Por vencer (N)» (`porVencer`, 30 días), pastilla «⏰ Vence dd/mm/aa» (amarilla ≤30 días,
     roja «⛔ Vencido») y aviso rojo arriba del inventario si hay algo vencido. El aviso amarillo «⚠️ Quedan pocos: …» se sacó el 26-10-2026 (la dueña: "me sacas ese aviso, no me gusta"); no volver a ponerlo.
   - En 📊 Resumen, arriba, «🧾 Cerrar la caja de hoy» (`formCierre`): esperado = sencillo con que partió (se recuerda en
     `wgym_tienda_fondo_v1`) + ventas en efectivo de hoy + fiados cobrados hoy en efectivo; ella escribe lo contado y ve
