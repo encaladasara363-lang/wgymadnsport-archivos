@@ -598,7 +598,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111032";
+var TIENDA_VERSION = "2026111033";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1439,7 +1439,12 @@ var COMPRADO_ANTES = [
  { re:/^prote[ií]na prostar/i, hasta:"2026-11-20", monto:95000 }, /* tarro Prostar $95.000 */
  { re:/^prote[ií]na (dymatize )?iso ?100/i, hasta:"2026-11-20", monto:130000 }, /* tarro ISO100 $130.000, 71 porciones; cuenta aunque no esté cargado */
  /* Batido Clear Protein (tarro $67.000, 26-10-2026): la dueña lo devolvió por vencido y le devolvieron la plata (10-11-2026): no suma al tope. */
- { re:/^batido de prote/i, hasta:"2026-10-31", devuelto:true }
+ { re:/^batido de prote/i, hasta:"2026-10-31", devuelto:true },
+ /* Resina hecha por la dueña antes del reseteo (10-11-2026: "tengo como 100 llaveros de $1.000, 200 de $2.000 y 30 lapiceras"),
+    a su costo de material: 100 × $500, 200 × $1.000 y 30 × $1.500. */
+ { re:/^llavero de resina peque/i, hasta:"2026-11-10", monto:50000, cat:"Resina" },
+ { re:/^llavero de resina inicial/i, hasta:"2026-11-10", monto:200000, cat:"Resina" },
+ { re:/^lapicero de resina/i, hasta:"2026-11-10", monto:45000, cat:"Resina" }
 ];
 function compraAntigua(m){
  if(m.tipo !== "entrada" || !((m.total || 0) > 0)) return false;
@@ -1486,7 +1491,7 @@ function invertidoPorSeccion(){
  var fijos = {};
  COMPRADO_ANTES.forEach(function(c){ var p = S.productos.filter(function(x){ return c.re.test(x.n || ""); })[0];
   if(c.devuelto){ if(p) fijos[p.id] = 1; return; } if(!c.monto) return;
-  if(p) fijos[p.id] = 1; suma(p ? catNueva(p.cat) : "Suplementos", c.monto); });
+  if(p) fijos[p.id] = 1; suma(c.cat || (p ? catNueva(p.cat) : "Suplementos"), c.monto); });
  /* Lo que sale de un tarro (granizado, smoothies, ganador) no es una compra: su «stock inicial» no suma al tope. */
  S.productos.forEach(function(x){ if(USA_PORCION.some(function(r){ return r.de.test(x.n || ""); })) fijos[x.id] = 1; });
  todosMovs().forEach(function(m){ if(fijos[m.id]) return;
