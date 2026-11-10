@@ -598,7 +598,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111033";
+var TIENDA_VERSION = "2026111034";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1538,6 +1538,11 @@ function verPlata(){
   '<div class="kpis" style="margin:10px 0"><div class="kpi"><small>💰 Disponible para comprar</small><b style="color:' + (r.disp >= 0 ? 'var(--yel)' : '#FF8A8A') + '">' + disp(r.disp) + '</b></div>' +
   '<div class="kpi verde"><small>💵 Tu ' + pctDe("") + ' % (apártalo)</small><b>' + plata(r.yo) + '</b></div></div>' +
   '<p class="muted" style="margin:0 0 6px;font-size:15px">Cuenta desde el ' + desdeTxt() + '. Cada venta suma a su sección (lo que te costó + la ganancia que no es tuya) y cada compra de mercadería se descuenta. Se va acumulando semana a semana.</p>' +
+  /* Toda la inversión (10-11-2026, la dueña: "quiero poner el total de toda mi inversión"): tope + lo comprado desde el reseteo. */
+  (function(){ var desp = r.l.reduce(function(s, o){ return s + (o.compro || 0); }, 0) + (r.gSin || 0), tot = tope + desp;
+   return tot ? '<div class="card" style="margin:8px 0;border:2px solid var(--yel)"><b style="font-size:20px">💼 Toda tu inversión</b><div style="font-size:38px;font-family:Anton,sans-serif;color:var(--yel)">' + plata(tot) + '</div>' +
+    '<div style="display:flex;justify-content:space-between;font-size:17px;padding:3px 0;border-top:1px solid #333"><span>🔒 Hasta el ' + desdeTxt() + '</span><b>' + plata(tope) + '</b></div>' +
+    '<div style="display:flex;justify-content:space-between;font-size:17px;padding:3px 0;border-top:1px solid #333"><span>🛒 Comprado desde entonces</span><b>' + plata(desp) + '</b></div></div>' : ''; })() +
   (tope ? '<div class="card" style="margin:8px 0"><b style="font-size:18px">🔒 Tu plata ya invertida (tope)</b><div style="font-size:26px;font-family:Anton,sans-serif;color:var(--yel)">' + plata(tope) + '</div><p class="muted" style="margin:4px 0 0;font-size:14px">Es lo que pusiste hasta el ' + desdeTxt() + '. Desde ahora solo compras con lo que deja cada venta.</p>' +
    (function(){ var o = invertidoPorSeccion(); return '<div style="margin-top:8px">' + Object.keys(o).sort(function(a, b){ return o[b] - o[a]; }).map(function(k){ return '<div style="display:flex;justify-content:space-between;font-size:17px;padding:3px 0;border-top:1px solid #333"><span>' + iconoCat(k) + ' ' + esc(k) + '</span><b>' + plata(o[k]) + '</b></div>'; }).join("") + '</div>'; })() + '</div>' : '');
  if(!r.l.length) h += '<p class="muted">Todavía no hay ventas ni compras desde el ' + desdeTxt() + '.</p>';
