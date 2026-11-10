@@ -342,7 +342,7 @@ var CODIGOS_GRUPO = { "2001500000000": "Helados", "2004500000001": "Smoothies", 
    pre entreno, creatina"): smoothies, pre entrenos (y el granizado), creatina por porción/sachet y proteína por porción.
    Quedan fuera los tarros que se venden enteros (creatina de 500 g). */
 function esPorPorcion(p){ var n = p.n || "";
- return p.cat === "Smoothies" || /^smoothie/i.test(n) || /^pre ?entreno/i.test(n) || /^prote[ií]na (prostar|dymatize|iso)/i.test(n) ||
+ return p.cat === "Smoothies" || /^smoothie/i.test(n) || /^pre ?entreno/i.test(n) || /^prote[ií]na (prostar|dymatize|iso)/i.test(n) || /^beta ?alanin/i.test(n) ||
   (/creatina/i.test(n) && !/(500 ?g|tarro|1 ?kg)/i.test(n + " " + (p.det || ""))); }
 function grupoDeCodigo(cod){ var c = String(cod || "").replace(/\D/g, "").replace(/^0+/, ""); for(var k in CODIGOS_GRUPO) if(k.replace(/^0+/, "") === c) return CODIGOS_GRUPO[k]; return ""; }
 /* Mismo código para varios sabores de un producto (10-11-2026, la dueña: "ponme el mismo código que uso del otro pre, solo
@@ -598,7 +598,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111036";
+var TIENDA_VERSION = "2026111037";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1445,6 +1445,8 @@ var COMPRADO_ANTES = [
  { re:/^llavero de resina peque/i, hasta:"2026-11-10", monto:50000, cat:"Resina" },
  { re:/^llavero de resina inicial/i, hasta:"2026-11-10", monto:200000, cat:"Resina" },
  { re:/^lapicero de resina/i, hasta:"2026-11-10", monto:45000, cat:"Resina" },
+ /* Beta alanina AS 200 g, 100 porciones (10-11-2026, la dueña: "se me olvidó un producto"): tarro $18.000, comprado antes. */
+ { re:/^beta ?alanin/i, hasta:"2026-11-20", monto:18000, cat:"Suplementos" },
  /* Placas de mascota (10-11-2026, la dueña: "como 150", mitad y mitad): 75 grandes × $1.000 y 75 pequeñas × $500. */
  { re:/^placa de mascota de resina grande/i, hasta:"2026-11-10", monto:75000, cat:"Resina" },
  { re:/^placa de mascota de resina peque/i, hasta:"2026-11-10", monto:37500, cat:"Resina" }
