@@ -353,7 +353,7 @@ function elegirDelGrupo(cat, alElegir, lista){
  var mix = cat === "Por porción";
  var orden = function(p){ return /^smoothie/i.test(p.n) || p.cat === "Smoothies" ? 0 : /^pre ?entreno/i.test(p.n) ? 1 : /creatina/i.test(p.n) ? 2 : 3; };
  var l = (lista || activos().filter(function(p){ return mix ? esPorPorcion(p) : catNueva(p.cat) === cat; })).sort(function(a, b){ return mix ? (orden(a) - orden(b) || a.n.localeCompare(b.n)) : a.n.localeCompare(b.n); });
- abrirHoja('<div class="cab"><h3>' + (mix ? '💪 ¿Qué lleva?' : iconoCat(cat) + ' ¿Qué sabor?') + '</h3><button class="btn chico volver" id="gVolver">← Volver</button></div>' +
+ abrirHoja('<div class="cab"><h3>' + (mix ? '💪 ¿Qué lleva?' : cat === "Bebestibles" ? iconoCat(cat) + ' ¿Qué bebestible?' : iconoCat(cat) + ' ¿Qué sabor?') + '</h3><button class="btn chico volver" id="gVolver">← Volver</button></div>' +
   (l.length ? '<div class="grupo-l">' + l.map(function(p){ var q = stockVer(p);
    return '<button class="grupo-b" data-g="' + esc(p.id) + '">' + (p.foto ? '<img src="' + esc(fotoUrl(p.foto)) + '" alt="">' : '<span style="font-size:40px">' + iconoCat(p.cat) + '</span>') +
     '<span><b>' + esc(mix ? p.n.replace(/^smoothie proteico\s*/i, "Smoothie ") : p.n.replace(/^(helado proteico|helado de palito|paleta proteica|smoothie proteico|waffle de|pre entreno mr hyde signature)\s*/i, "")) + '</b><small>' + (q > 0 ? 'Quedan ' + q : '⛔ SIN STOCK') + ' · ' + plata(precioVenta(p)) + '</small></span></button>'; }).join("") + '</div>'
@@ -587,7 +587,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111021";
+var TIENDA_VERSION = "2026111022";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -682,6 +682,9 @@ function renderVender(){
   var p = porCodigo(cod), fam = familiaDe(p);
   /* La etiqueta ya impresa del pre entreno Mr Hyde abre la lista «Por porción» (10-11-2026, la dueña: "el mismo que escaneo
      el pre, ese ya lo tengo listo imprimido"): smoothies, pre entrenos, creatina y proteína con un solo código. */
+  /* La etiqueta ya impresa del agua WOL (o de la recarga de 1 litro) abre todos los Bebestibles (10-11-2026, la dueña:
+     "lo mismo con los bebestibles, tengo impreso el código de barra del agua"). */
+  if(p && /^(agua purificada wol|agua wol|recarga de agua)/i.test(p.n)){ pararCamara(); elegirDelGrupo("Bebestibles", function(x){ agregarAlCarro(x); renderVender(); toast("✅ " + x.n + " agregado"); if(seguido) abrirEscaner(function(c){ return alEscanear(c, true); }, true); else cerrarHoja(); }); return "__grupo"; }
   if(p && /^pre ?entreno mr hyde/i.test(p.n)){ pararCamara(); elegirDelGrupo("Por porción", function(x){ agregarAlCarro(x); renderVender(); toast("✅ " + x.n + " agregado"); if(seguido) abrirEscaner(function(c){ return alEscanear(c, true); }, true); else cerrarHoja(); }); return "__grupo"; }
   if(fam){ pararCamara(); elegirDelGrupo(catNueva(p.cat), function(x){ agregarAlCarro(x); renderVender(); toast("✅ " + x.n + " agregado"); if(seguido) abrirEscaner(function(c){ return alEscanear(c, true); }, true); else cerrarHoja(); }, fam); return "__grupo"; }
   if(p){ if(packDesarmado(p)){ agregarAlCarro(p); return "🧩 Pack desarmado"; } agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }
