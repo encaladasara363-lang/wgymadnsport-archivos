@@ -579,7 +579,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111016";
+var TIENDA_VERSION = "2026111017";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1403,7 +1403,8 @@ var PLATA_DESDE = "2026-11-10";
    re = comienzo del nombre del producto; hasta = última fecha de carga que cuenta como «compra antigua». */
 var COMPRADO_ANTES = [
  { re:/^pre entreno mr hyde signature blue razz/i, hasta:"2026-11-20" }, /* tarro $24.990, comprado antes del 10-11 (la dueña) */
- { re:/^prote[ií]na prostar/i, hasta:"2026-11-20" } /* tarro Prostar 100% Whey $95.000, comprado antes del 10-11 (la dueña) */
+ { re:/^prote[ií]na prostar/i, hasta:"2026-11-20" },
+ { re:/^prote[ií]na (dymatize )?iso ?100/i, hasta:"2026-11-20" } /* tarro Dymatize ISO100 $130.000, 71 porciones (10-11-2026), comprado antes */ /* tarro Prostar 100% Whey $95.000, comprado antes del 10-11 (la dueña) */
 ];
 function compraAntigua(m){
  if(m.tipo !== "entrada" || !((m.total || 0) > 0)) return false;
