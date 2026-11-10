@@ -244,6 +244,12 @@ header.masthead2 .sub{ font-size:13px; color:var(--gris); margin:0; font-weight:
 .nutri-promo .np-tx b{ color:var(--dorado); }
 .nutri-promo a.pago-btn{ display:block; text-align:center; text-decoration:none; }
 /* 🛍 Tienda WGYM (25-10-2026, la dueña eligió la idea 1): vitrina con precio de venta y "Lo quiero". */
+.tv-prot{ margin:12px 0 6px; padding:8px 12px; border-radius:12px; border:2px solid #D4AF37; background:#14100c; }
+.tv-prot b{ display:block; font:400 26px 'Rubik Distressed','Anton',sans-serif; text-transform:uppercase; color:#FFD400; }
+.tv-prot span{ display:block; font:800 italic 19px 'Barlow Condensed',Arial,sans-serif; color:#ddd; }
+.tv-prot.iso{ border-color:#1E5AA8; background:#0b1424; }
+.tv-tipo.prot-iso{ background:#1E5AA8; color:#fff; }
+.tv-tipo.prot-prostar{ background:#FFD400; color:#000; }
 .tv-chips{ display:flex; gap:7px; overflow-x:auto; padding:2px 0 8px; margin:8px 0 4px; }
 .tv-chip{ flex:none; font:800 italic 21px 'Barlow Condensed',Arial,sans-serif; padding:7px 13px; border-radius:999px; border:2px solid #333; background:#0D0D0F; color:#fff; white-space:nowrap; }
 .tv-chip.on{ background:#E30613; border-color:#E30613; }
@@ -2581,6 +2587,14 @@ function renderEvolucion(s){
      '<button type="button" class="pago-btn principal" id="tvAbrir" style="width:100%">🛍 Ver tienda WGYM</button>';
     box.querySelector("#tvAbrir").addEventListener("click", function(){ abierta = true; pintar(); });
    }
+   function tarjetaP(p){
+      var ag = p.reservado || (!(p.q > 0) && !p.pronto), i = l.indexOf(p), ll = p.llega ? ' · ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) : '';
+      return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + (tiendaVideo_(p) ? '<span class="tv-video">▶ VIDEO</span>' : '') + '</div>' +
+       (ag ? '<span class="tv-sello">' + (p.reservado ? 'RESERVADO' : p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' + tvBadges_(p, ag, false) + tvMacrosHtml_(tvMacros_(p), false) +
+       (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
+       (ag ? '' : p.pronto ? '<span class="tv-ok pronto">⏳ LLEGA PRONTO' + ll + '</span>' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
+       '<span class="tv-pr">' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + clp(p.precio) + '</span><span class="tv-btn">' + (p.pronto && !ag ? '🔔 Reservar' : ag ? (p.reservado ? 'Ya está reservado' : p.vendido ? 'Ya se vendió' : 'Pronto vuelve') : '💬 Lo quiero') + '</span></div></button>';
+   }
    function pintar(){
     if(!abierta){ cerrada(); return; }
     /* Una fila que se desliza de lado (27-10-2026, la dueña: "no una lista grande para abajo"): sin «Ver todos». */
@@ -2588,14 +2602,7 @@ function renderEvolucion(s){
     box.innerHTML = '<p class="pago-kicker">🛍 Tienda WGYM</p><p class="rank-sub">Lo que tenemos hoy en el gimnasio. Toca «Lo quiero» y te lo guardamos.</p>' +
      '<div class="tv-chips">' + cats.map(function(c){ return '<button type="button" class="tv-chip' + (c === cat ? ' on' : '') + '" data-tc="' + escapeHtml(c) + '">' + (c === "Todos" ? "🛍" : TIENDA_ICONOS[c]) + ' ' + escapeHtml(c) + '</button>'; }).join("") + '</div>' +
      (vis.length > 2 ? '<p class="tv-desliza">' + vis.length + ' productos · desliza ➜</p>' : '') +
-     '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(function(p){
-      var ag = p.reservado || (!(p.q > 0) && !p.pronto), i = l.indexOf(p), ll = p.llega ? ' · ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) : '';
-      return '<button type="button" class="tv-p' + (ag ? ' agotado' : '') + '" data-tp="' + i + '"><div class="tv-ph">' + tiendaFotos_(p) + (tiendaVideo_(p) ? '<span class="tv-video">▶ VIDEO</span>' : '') + '</div>' +
-       (ag ? '<span class="tv-sello">' + (p.reservado ? 'RESERVADO' : p.vendido ? 'VENDIDO' : 'SIN STOCK') + '</span>' : p.ahorro ? '<span class="tv-nuevo ahorro">🎁 AHORRAS ' + p.ahorro + '%</span>' : p.nuevo ? '<span class="tv-nuevo">NUEVO</span>' : '') + '<div class="tv-in"><span class="tv-n">' + escapeHtml(p.n) + '</span>' + tvBadges_(p, ag, false) + tvMacrosHtml_(tvMacros_(p), false) +
-       (p.det ? '<span class="tv-d">' + escapeHtml(p.det) + '</span>' : '') +
-       (ag ? '' : p.pronto ? '<span class="tv-ok pronto">⏳ LLEGA PRONTO' + ll + '</span>' : (p.q <= 3 ? '<span class="tv-ok poco">¡Quedan ' + p.q + '!</span>' : '<span class="tv-ok">✔ Disponible</span>')) +
-       '<span class="tv-pr">' + (p.antes ? '<span class="tv-antes">' + clp(p.antes) + '</span>' : '') + clp(p.precio) + '</span><span class="tv-btn">' + (p.pronto && !ag ? '🔔 Reservar' : ag ? (p.reservado ? 'Ya está reservado' : p.vendido ? 'Ya se vendió' : 'Pronto vuelve') : '💬 Lo quiero') + '</span></div></button>';
-     }).join("") + '</div>' +
+     (cat === "Smoothies" ? tvProtGrupos_(vis, tarjetaP) : '<div class="tv-grid">' + (cortar ? vis.slice(0, 6) : vis).map(tarjetaP).join("") + '</div>') +
      (cortar ? '<button type="button" class="tv-mas" id="tvMas">Ver todos (' + vis.length + ') ▼</button>' : '') +
      (hayOtra && cat !== otra ? '<button type="button" class="tv-mas" id="tvRegalo">🎁 ¿Buscas un regalo? Mira la ' + (otra === "Ropa hombre" ? 'ropa de hombre' : 'ropa de mujer') + '</button>' : '') +
      '<p class="tv-nota">💳 Paga en el mesón: efectivo, tarjeta o transferencia.</p>' +
@@ -2650,9 +2657,19 @@ function renderEvolucion(s){
    '</div><p class="rank-sub">🥤 Lleva: ' + m.lleva + '.</p><p class="rank-sub">⚠️ Contiene ' + m.al + '.</p></div>';
  }
  /* «✨ Nueva / ♻️ Americana» y «⏳ Llega pronto» en una misma fila (27-10-2026, la dueña: "el llega pronto al lado de nueva"). */
+ /* 🍹 Smoothies por proteína (10-11-2026, la dueña: "que identifique los sabores con la proteína ISO y con la Prostar"):
+    los de chocolate van con Dymatize ISO100 y el resto con Prostar vainilla (misma regla de USA_PORCION en tienda.html). */
+ function tvProt_(p){ return /^smoothie/i.test(p.n || "") ? (/(choco|cacao)/i.test(p.n) ? "iso" : "prostar") : ""; }
+ function tvProtGrupos_(vis, card){
+  var G = [["iso", "🍫 Con proteína ISO100 Dymatize", "Isolada hidrolizada sabor chocolate"], ["prostar", "🍦 Con proteína Prostar", "100% Whey sabor vainilla"]];
+  return G.map(function(g){ var v = vis.filter(function(p){ return tvProt_(p) === g[0]; }); if(!v.length) return "";
+   return '<div class="tv-prot ' + g[0] + '"><b>' + g[1] + '</b><span>' + g[2] + ' · ' + v.length + (v.length === 1 ? ' sabor' : ' sabores') + '</span></div><div class="tv-grid">' + v.map(card).join("") + '</div>'; }).join("") +
+   (function(){ var o = vis.filter(function(p){ return !tvProt_(p); }); return o.length ? '<div class="tv-grid">' + o.map(card).join("") + '</div>' : ''; })();
+ }
  function tvBadges_(p, ag, grande){
   var ll = p.llega ? ' · ' + p.llega.slice(8, 10) + '/' + p.llega.slice(5, 7) : '';
-  var h = (p.tipo ? '<span class="tv-tipo' + (p.tipo === "americana" ? ' amer' : '') + '">' + (p.tipo === "americana" ? '♻️ Americana' : '✨ Nueva') + '</span>' : '') +
+  var pr = tvProt_(p);
+  var h = (pr ? '<span class="tv-tipo prot-' + pr + '">' + (pr === "iso" ? '🍫 ISO100' : '🍦 Prostar') + '</span>' : '') + (p.tipo ? '<span class="tv-tipo' + (p.tipo === "americana" ? ' amer' : '') + '">' + (p.tipo === "americana" ? '♻️ Americana' : '✨ Nueva') + '</span>' : '') +
    (p.pronto && !ag && grande ? '<span class="tv-tipo pronto">⏳ Llega pronto' + ll + '</span>' : '');
   return h ? '<span class="tv-badges' + (grande ? ' grande' : '') + '">' + h + '</span>' : '';
  }
@@ -2731,7 +2748,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111009", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111010", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
