@@ -2623,6 +2623,7 @@ function renderEvolucion(s){
  var TIENDA_MACROS = [
   { re:/^batido ganador/i, k:670, p:44, c:74, g:24, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, avena y mantequilla de maní", al:"leche, soya y maní" },
   /* Smoothie Choco Banana Cream (05-11-2026, receta de la dueña, vaso de 450 ml; proteína Dragon Pharma Protein Phorm 30 g). */
+  { re:/^smoothie proteico frutilla cream/i, k:305, p:33, c:26, g:9, por:"450 ml", lleva:"Proteína Prostar Whey vainilla, leche entera sin lactosa, frutillas, plátano, yogur natural sin azúcar y hielo", al:"leche" },
   { re:/^smoothie proteico choco banana/i, k:330, p:32, c:30, g:9, por:"450 ml", lleva:"Proteína Dymatize ISO100 chocolate, leche entera sin lactosa, plátano, yogur natural sin azúcar y hielo", al:"leche" },
   { re:/^smoothie proteico choco man[ií]/i, k:400, p:37, c:17, g:20, por:"450 ml", lleva:"Proteína Dymatize ISO100 chocolate, leche entera sin lactosa, mantequilla de maní y hielo", al:"leche y maní" },
   { re:/^smoothie proteico choco oreo/i, k:375, p:33, c:29, g:14, por:"450 ml", lleva:"Proteína Dymatize ISO100 chocolate, leche entera sin lactosa, galletas tipo Oreo y hielo", al:"leche, trigo y soya" },
@@ -2751,7 +2752,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111013", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111014", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
