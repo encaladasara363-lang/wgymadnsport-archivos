@@ -569,7 +569,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111004";
+var TIENDA_VERSION = "2026111005";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1369,7 +1369,7 @@ function plataParaComprar(){
 }
 /* Con cuánto partió la tienda (24-10-2026: $100.000); se puede cambiar en «💰 Mi plata» y lo recuerda cada equipo. */
 function fondoInicial(){ var v = Number(lsGet("wgym_tienda_fondo_inicial_v1", 100000)); return isFinite(v) && v >= 0 ? v : 100000; }
-function iconoCat(k){ var x = CATS.filter(function(c){ return c[0] === k; })[0]; return x ? x[1] : "📦"; }
+function iconoCat(k){ if(k === "Ropa y accesorios") return "👕"; var x = CATS.filter(function(c){ return c[0] === k; })[0]; return x ? x[1] : "📦"; }
 /* Arriba solo dos números (07-11-2026, la dueña: "pon el total de toda la tienda, solo el dinero disponible para comprar,
    y mi ganancia que tengo para mí de mes a mes"): plata para comprar de toda la tienda y su parte (%) de cada mes. */
 var NOM_MES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
@@ -1392,6 +1392,7 @@ function rangoPlata(per){
  if(per === "mes") return [hoy.slice(0, 7) + "-01", hoy];
  return ["0000-00-00", hoy];
 }
+var GRUPO_PLATA = { "Ropa mujer":"Ropa y accesorios", "Ropa hombre":"Ropa y accesorios", "Accesorios":"Ropa y accesorios", "Zapatillas":"Ropa y accesorios" };
 function reinversion(per){
  var rg = rangoPlata(per), cats = {}, ms = todosMovs();
  var abon = {}; ms.forEach(function(m){ if(m.tipo === "abono") abon[m.vid] = (abon[m.vid] || 0) + (m.total || 0); });
@@ -1403,13 +1404,15 @@ function reinversion(per){
   var f = 1; if(m.est === "fiado") f = totVid[m.vid] > 0 ? Math.min(1, (abon[m.vid] || 0) / totVid[m.vid]) : 0;
   if(!f) return;
   var costo = m.cant * m.costo * f, gan = (m.total - m.cant * m.costo) * f, pc = pctDe(k);
-  var o = cats[k] = cats[k] || { cat:k, vendido:0, reinv:0, yo:0, u:0 };
+  var g = GRUPO_PLATA[k] || k; /* ropa, zapatillas y accesorios van juntos (10-11-2026, la dueña) */
+  var o = cats[g] = cats[g] || { cat:g, vendido:0, reinv:0, yo:0, u:0 };
   o.vendido += m.total * f; o.u += m.cant * f;
   var yo = Math.max(0, gan) * pc / 100; o.yo += yo; o.reinv += costo + gan - yo;
  });
  var orden = CATS.map(function(x){ return x[0]; });
  var l = Object.keys(cats).map(function(k){ var o = cats[k]; o.vendido = Math.round(o.vendido); o.reinv = Math.round(o.reinv); o.yo = Math.round(o.yo); return o; })
-  .sort(function(a, b){ return orden.indexOf(a.cat) - orden.indexOf(b.cat); });
+  .sort(function(a, b){ return ordenPlata(a.cat) - ordenPlata(b.cat); });
+ function ordenPlata(c){ return c === "Ropa y accesorios" ? orden.indexOf("Accesorios") : orden.indexOf(c); }
  return { l:l, vendido:l.reduce(function(s, o){ return s + o.vendido; }, 0), reinv:l.reduce(function(s, o){ return s + o.reinv; }, 0), yo:l.reduce(function(s, o){ return s + o.yo; }, 0) };
 }
 function htmlBotonPlata(){
