@@ -341,9 +341,10 @@ var CODIGOS_GRUPO = { "2001500000000": "Helados", "2004500000001": "Smoothies", 
 /* 💪 Un solo código para todo lo que se vende por porción (10-11-2026, la dueña: "un solo QR como los helados… smoothie,
    pre entreno, creatina"): smoothies, pre entrenos (y el granizado), creatina por porción/sachet y proteína por porción.
    Quedan fuera los tarros que se venden enteros (creatina de 500 g). */
+/* 10-11-2026 (la dueña: "todo lo que se vende en tarro, todo lo que es suplementos"): toda la categoría Suplementos
+   (también tarros enteros como la beta alanina o la creatina de 500 g) + smoothies y pre entrenos. */
 function esPorPorcion(p){ var n = p.n || "";
- return p.cat === "Smoothies" || /^smoothie/i.test(n) || /^pre ?entreno/i.test(n) || /^prote[ií]na (prostar|dymatize|iso)/i.test(n) ||
-  (/creatina/i.test(n) && !/(500 ?g|tarro|1 ?kg)/i.test(n + " " + (p.det || ""))); }
+ return catNueva(p.cat) === "Suplementos" || p.cat === "Smoothies" || /^smoothie/i.test(n) || /^pre ?entreno/i.test(n) || /^prote[ií]na (prostar|dymatize|iso)/i.test(n) || /creatina/i.test(n); }
 function grupoDeCodigo(cod){ var c = String(cod || "").replace(/\D/g, "").replace(/^0+/, ""); for(var k in CODIGOS_GRUPO) if(k.replace(/^0+/, "") === c) return CODIGOS_GRUPO[k]; return ""; }
 /* Mismo código para varios sabores de un producto (10-11-2026, la dueña: "ponme el mismo código que uso del otro pre, solo
    cambia el sabor"): al escanear el código de cualquiera de la familia se pregunta el sabor. */
@@ -598,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111038";
+var TIENDA_VERSION = "2026111039";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
