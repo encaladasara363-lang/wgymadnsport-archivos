@@ -2531,9 +2531,9 @@ function renderEvolucion(s){
    l.forEach(function(p){ p.cat = tiendaCat_(p.cat); });
    /* El batido ganador de masa no tiene stock propio: sale de las porciones del tarro de «Batido de proteína»
       (27-10-2026, la dueña: "el ganador de masa me aparece sin stock"; mismo criterio que USA_PORCION de tienda.html). */
-   /* El Batido de proteína Clear se devolvió por vencido (10-11-2026). Chocolate: tarro Protein Phorm; vainilla: Prostar. */
-   l = l.filter(function(p){ return !/^batido de prote/i.test(p.n); });
-   var tarro = l.filter(function(p){ return /^tarro de prote/i.test(p.n); })[0], prostar = l.filter(function(p){ return /^prote[ií]na prostar/i.test(p.n); })[0];
+   /* Desde el 10-11-2026 la única proteína es la Prostar Vanilla (el Clear se devolvió; la Protein Phorm ya no se usa). */
+   l = l.filter(function(p){ return !/^(batido de prote|tarro de prote)/i.test(p.n); });
+   var tarro = l.filter(function(p){ return /^prote[ií]na prostar/i.test(p.n); })[0], prostar = tarro;
    /* 🍹 Smoothies (05-11-2026): todos salen del «Tarro de proteína …», que no se muestra a los socios. */
    /* Smoothies de vainilla con la proteína Prostar (10-11-2026): salen del tarro Prostar, que sí se muestra (se vende por porción). */
    l.forEach(function(p){ if(/^smoothie/i.test(p.n)){ var b = /(choco|cacao)/i.test(p.n) ? tarro : prostar; p.q = b ? b.q : 0; p.vendido = false; } });
@@ -2726,7 +2726,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111005", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111006", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
