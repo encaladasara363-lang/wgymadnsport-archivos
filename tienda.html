@@ -568,7 +568,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111001";
+var TIENDA_VERSION = "2026111002";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1234,7 +1234,7 @@ function formProducto(p, codNuevo, base){
   '<div id="fSug"></div>' +
   '<div class="grid2">' + (nuevo ? '<div><label class="lab" for="fStock">¿Cuántos tienes?</label><input class="inp" id="fStock" inputmode="numeric" value="' + esc(p.stock) + '" placeholder="0"></div>' : '<div><label class="lab" for="fStock">Stock (cuántos hay)</label><input class="inp" id="fStock" inputmode="numeric" value="' + esc(p.stock) + '"></div>') +
   '<div><label class="lab" for="fMin">Avisar cuando queden</label><input class="inp" id="fMin" inputmode="numeric" value="' + esc(p.min) + '"></div></div>' +
-  '<label class="lab" for="fVence">⏰ Vence (si tiene fecha de vencimiento)</label><input class="inp" id="fVence" type="date" value="' + esc(p.vence || "") + '">' +
+  '<label class="lab" for="fVence">⏰ Vence (si tiene fecha de vencimiento)</label><input class="inp" id="fVence" type="date" value="' + esc(p.vence || "") + '"><button class="btn chico" type="button" style="margin-top:6px" onclick="var i=document.getElementById(\'fVence\');i.value=\'\';this.textContent=\'✅ Quedó sin fecha · toca Guardar\'">✕ Quitar la fecha (no vence)</button>' +
   (S.v < 25 ? '<p class="muted" style="font-size:14px;margin:4px 0 0">Para que la fecha quede guardada, instala la Versión 25 del Apps Script.</p>' : '') +
   (S.v >= 26 ? htmlExtraForm(p, nuevo) : '') +
   (nuevo ? '' : '<p class="muted" style="font-size:14px">Puedes cambiar el stock aquí mismo (queda anotado como ajuste). Las ventas lo descuentan solas.</p>') +
