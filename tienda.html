@@ -355,7 +355,8 @@ function elegirDelGrupo(cat, alElegir, lista){
 }
 /* Waffles fuera de la tienda (07-11-2026, la dueña: "elimina la sección de waffles"): no salen en el inventario ni en Vender. */
 /* Helados de palito fuera de la tienda (10-11-2026, la dueña: "bórrame la sección de helados de palito"), igual que los waffles. */
-function esWaffle(p){ return p && (p.cat === "Waffles" || /^waffle/i.test(p.n || "") || p.cat === "Helados de palito" || p.cat === "Paletas" || /^(helado de palito|paleta proteica)/i.test(p.n || "")); }
+/* Proteínas antiguas fuera (10-11-2026): Tarro de proteína Protein Phorm y Batido de proteína Clear. */
+function esWaffle(p){ return p && (p.cat === "Waffles" || /^waffle/i.test(p.n || "") || /^(tarro de prote|batido de prote)/i.test(p.n || "") || p.cat === "Helados de palito" || p.cat === "Paletas" || /^(helado de palito|paleta proteica)/i.test(p.n || "")); }
 function activos(){ return S.productos.filter(function(p){ return p.activo && !retirada(p) && !esWaffle(p); }); }
 /* 🏷 Ropa vendida (26-10-2026, la dueña: casi toda la ropa es de una sola prenda; "cuando se venda una prenda que se
    coloque vendido automático y que se quede en la tienda por 15 días y luego la eliminas"): una prenda sin stock con
@@ -381,11 +382,10 @@ function packDesarmado(p){
    la porción vuelve. Para sumar otro batido del mismo tarro, agregar su regla aquí. */
 /* 🍹 Smoothies (05-11-2026, la dueña: "una sección de smoothies… unos 10 sabores"): todos salen de las porciones del
    «Tarro de proteína …» (30 g por vaso); el tarro se carga con su cantidad de porciones y no se vende. */
-var USA_PORCION = [{ de:/^batido ganador/i, base:/^(tarro de prote|batido de prote)/i },
- /* Smoothies con la proteína Prostar Vanilla (10-11-2026, la dueña: "también venderé smoothie a 4500"): el nombre lleva «vainilla»,
-    «vanilla» o «prostar» y descuentan 1 porción del tarro Prostar (que también se vende por porción sola). */
- { de:/^smoothie.*(vainilla|vanilla|prostar)/i, base:/^prote[ií]na prostar/i },
- { de:/^smoothie/i, base:/^tarro de prote/i },
+/* Desde el 10-11-2026 (la dueña: "borra las otras proteínas") la única proteína es la Prostar Vanilla: smoothies y batido
+   ganador descuentan 1 porción de su tarro (que también se vende por porción sola). */
+var USA_PORCION = [{ de:/^batido ganador/i, base:/^prote[ií]na prostar/i },
+ { de:/^smoothie/i, base:/^prote[ií]na prostar/i },
  /* Pre entreno granizado (03-11-2026): cada vaso descuenta 1 porción del tarro Mr Hyde Fruit Punch. */
  { de:/^pre ?entreno granizado/i, base:/^pre ?entreno mr hyde signature fruit punch/i }]; /* solo Fruit Punch: el Blue Razz es otro tarro */
 function basePorcion(p){
@@ -577,7 +577,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111010";
+var TIENDA_VERSION = "2026111011";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
