@@ -375,7 +375,7 @@ function elegirDelGrupo(cat, alElegir, lista){
 /* Waffles fuera de la tienda (07-11-2026, la dueña: "elimina la sección de waffles"): no salen en el inventario ni en Vender. */
 /* Helados de palito fuera de la tienda (10-11-2026, la dueña: "bórrame la sección de helados de palito"), igual que los waffles. */
 /* Proteínas antiguas fuera (10-11-2026): el Clear se devolvió por vencido y la dueña trabaja solo con la Prostar ("la Prostar es nueva, con esa trabajaré"). */
-function esWaffle(p){ return p && (p.cat === "Waffles" || /^waffle/i.test(p.n || "") || /^(batido de prote|tarro de prote|batido ganador)/i.test(p.n || "") || p.cat === "Helados de palito" || p.cat === "Paletas" || /^(helado de palito|paleta proteica)/i.test(p.n || "")); }
+function esWaffle(p){ return p && (p.cat === "Waffles" || /^waffle/i.test(p.n || "") || /^(batido de prote|tarro de prote|batido ganador)/i.test(p.n || "") || /^smoothie proteico choco (frutilla|oreo|man[ií])/i.test(p.n || "") || p.cat === "Helados de palito" || p.cat === "Paletas" || /^(helado de palito|paleta proteica)/i.test(p.n || "")); }
 function activos(){ return S.productos.filter(function(p){ return p.activo && !retirada(p) && !esWaffle(p); }); }
 /* 🏷 Ropa vendida (26-10-2026, la dueña: casi toda la ropa es de una sola prenda; "cuando se venda una prenda que se
    coloque vendido automático y que se quede en la tienda por 15 días y luego la eliminas"): una prenda sin stock con
@@ -598,7 +598,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111035";
+var TIENDA_VERSION = "2026111036";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
