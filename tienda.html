@@ -587,7 +587,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111020";
+var TIENDA_VERSION = "2026111021";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -680,6 +680,9 @@ function renderVender(){
   var g = grupoDeCodigo(cod);
   if(g){ pararCamara(); elegirDelGrupo(g, function(p){ agregarAlCarro(p); renderVender(); toast("✅ " + p.n + " agregado"); if(seguido) abrirEscaner(function(c){ return alEscanear(c, true); }, true); else cerrarHoja(); }); return "__grupo"; }
   var p = porCodigo(cod), fam = familiaDe(p);
+  /* La etiqueta ya impresa del pre entreno Mr Hyde abre la lista «Por porción» (10-11-2026, la dueña: "el mismo que escaneo
+     el pre, ese ya lo tengo listo imprimido"): smoothies, pre entrenos, creatina y proteína con un solo código. */
+  if(p && /^pre ?entreno mr hyde/i.test(p.n)){ pararCamara(); elegirDelGrupo("Por porción", function(x){ agregarAlCarro(x); renderVender(); toast("✅ " + x.n + " agregado"); if(seguido) abrirEscaner(function(c){ return alEscanear(c, true); }, true); else cerrarHoja(); }); return "__grupo"; }
   if(fam){ pararCamara(); elegirDelGrupo(catNueva(p.cat), function(x){ agregarAlCarro(x); renderVender(); toast("✅ " + x.n + " agregado"); if(seguido) abrirEscaner(function(c){ return alEscanear(c, true); }, true); else cerrarHoja(); }, fam); return "__grupo"; }
   if(p){ if(packDesarmado(p)){ agregarAlCarro(p); return "🧩 Pack desarmado"; } agregarAlCarro(p); renderVender(); return "✅ " + p.n + " agregado"; } return null; }
  $("bEsc").onclick = function(){ abrirEscaner(function(c){ return alEscanear(c, false); }, false); };
