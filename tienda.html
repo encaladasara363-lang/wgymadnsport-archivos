@@ -382,9 +382,12 @@ function packDesarmado(p){
 /* 🍹 Smoothies (05-11-2026, la dueña: "una sección de smoothies… unos 10 sabores"): todos salen de las porciones del
    «Tarro de proteína …» (30 g por vaso); el tarro se carga con su cantidad de porciones y no se vende. */
 var USA_PORCION = [{ de:/^batido ganador/i, base:/^(tarro de prote|batido de prote)/i },
+ /* Smoothies con la proteína Prostar Vanilla (10-11-2026, la dueña: "también venderé smoothie a 4500"): el nombre lleva «vainilla»,
+    «vanilla» o «prostar» y descuentan 1 porción del tarro Prostar (que también se vende por porción sola). */
+ { de:/^smoothie.*(vainilla|vanilla|prostar)/i, base:/^prote[ií]na prostar/i },
  { de:/^smoothie/i, base:/^tarro de prote/i },
  /* Pre entreno granizado (03-11-2026): cada vaso descuenta 1 porción del tarro Mr Hyde Fruit Punch. */
- { de:/^pre ?entreno granizado/i, base:/^pre ?entreno mr hyde/i }];
+ { de:/^pre ?entreno granizado/i, base:/^pre ?entreno mr hyde signature fruit punch/i }]; /* solo Fruit Punch: el Blue Razz es otro tarro */
 function basePorcion(p){
  if(!p || !p.n) return null;
  for(var i = 0; i < USA_PORCION.length; i++){ var r = USA_PORCION[i]; if(!r.de.test(p.n)) continue;
@@ -574,7 +577,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111009";
+var TIENDA_VERSION = "2026111010";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
