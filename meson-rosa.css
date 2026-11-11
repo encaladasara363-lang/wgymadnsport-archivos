@@ -158,3 +158,14 @@ html.rosa .ing-pases b{ color:#8A6200 !important; font-size:16px !important; }
 html.rosa .ing-aviso{ font-size:17px !important; color:#6B4E00 !important; background:#FFF1C9 !important; }
 html.rosa .ing-vacio{ font-size:18px !important; color:#6B2348 !important; }
 html.rosa .ing-est.pase{ color:#2A1A00 !important; background:#FFD400 !important; }
+/* En el celular el cuadro «Último ingreso» más chico y sin cortar palabras (11-11-2026, la dueña: "no la quiero tan grande") */
+html.rosa .hero .name{ overflow-wrap:normal !important; word-break:normal !important; }
+@media (max-width:700px){
+ html.rosa body{ zoom:1; }
+ html.rosa .hero .name, html.rosa .hero-fila .hero .name{ font-size:clamp(24px,8vw,34px) !important; }
+ html.rosa .hero .fallo{ font-size:22px !important; }
+ html.rosa .hero .kicker{ font-size:16px !important; }
+ html.rosa .hero .time{ font-size:26px !important; }
+ html.rosa .hero .venc, html.rosa .hero .plan, html.rosa .hero .turno{ font-size:18px !important; }
+ html.rosa .hero .renovar .btn, html.rosa .hero .renovar button{ font-size:17px !important; padding:10px 14px; }
+}
