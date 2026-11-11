@@ -599,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111105";
+var TIENDA_VERSION = "2026111106";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -774,7 +774,7 @@ function renderInv(){
   var na = apartados().length;
   var nr = reservados().length;
   h += '<div class="grid2" style="margin-top:8px"><button class="btn' + (na ? ' oro' : '') + '" id="bApart">📌 Apartados' + (na ? ' (' + na + ')' : '') + '</button><button class="btn' + (nr ? ' oro' : '') + '" id="bReserv">📌 Reservados' + (nr ? ' (' + nr + ')' : '') + '</button></div>';
-  var vencidos = pv.filter(function(x){ return x.dias < 0; });
+  var vencidos = porVencer().filter(function(x){ return x.dias < 0; });
   if(vencidos.length) h += '<div class="aviso">⛔ Vencido: ' + vencidos.map(function(x){ return esc(x.p.n); }).join(", ") + '. Sácalo de la venta.</div>';
   /* El aviso «Quedan pocos» se sacó el 26-10-2026 (la dueña: "me sacas ese aviso, no me gusta"); lo que falta se ve en «🛍 Qué comprar». */
  }
