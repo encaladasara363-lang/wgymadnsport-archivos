@@ -100,3 +100,9 @@ html.rosa .kpi p, html.rosa .kpi small{ font-size:15px !important; }
 /* Nombre del socio aún más grande (11-11-2026, la dueña: "me interesa grande el nombre del socio") */
 html.rosa .hero .name{ font-size:50px !important; line-height:1.05; overflow-wrap:anywhere; color:#3A0A24; }
 html.rosa .hero-fila .hero .name{ font-size:58px !important; }
+/* Tablet: sin zoom (con zoom las tres columnas quedaban angostas) y el nombre se achica solo según el ancho,
+   sin cortar palabras (11-11-2026, la dueña: "se pierde el nombre"). */
+html.rosa.tablet body{ zoom:1; }
+html.rosa.tablet .hero .name{ font-size:clamp(28px,4.4vw,52px) !important; overflow-wrap:normal; word-break:normal; hyphens:none; }
+html.rosa.tablet .hero .fallo{ font-size:clamp(20px,3vw,30px) !important; }
+html.rosa.tablet .hero .kicker{ font-size:18px !important; }

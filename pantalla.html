@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Rubik+Distressed&family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,700;1,800&family=Barlow:wght@400;500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,700;1,700&display=swap">
-<script>try{if(localStorage.getItem("wgym_meson_tema_v1")!=="negro")document.documentElement.classList.add("rosa");}catch(e){document.documentElement.classList.add("rosa");}</script>
+<script>document.documentElement.classList.add("tablet");try{if(localStorage.getItem("wgym_meson_tema_v1")!=="negro")document.documentElement.classList.add("rosa");}catch(e){document.documentElement.classList.add("rosa");}</script>
 <style>
 :root{
  --negro:#0A0A0A;
@@ -258,7 +258,7 @@ header.top h1 span{ color:var(--rojo); }
 </style>
 
 <link rel="stylesheet" href="estilo-deportivo.css?v=6">
-<link rel="stylesheet" href="meson-rosa.css?v=6">
+<link rel="stylesheet" href="meson-rosa.css?v=7">
 <header class="top">
 <button id="temaMeson" type="button" style="left:12px;right:auto" title="Cambiar el fondo (rosado / negro) solo en este equipo" onclick="var h=document.documentElement,on=h.classList.toggle('rosa');try{localStorage.setItem('wgym_meson_tema_v1',on?'rosa':'negro')}catch(e){}">🎨</button>
 <button id="btnFullscreen" class="fs-btn" type="button" title="Pantalla completa">⛶</button>
