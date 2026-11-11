@@ -218,6 +218,16 @@ html.rosa header.top h1 span, html.rosa .gate h1 span{ color:#D6157A !important;
 html.rosa .gate h1{ color:#4A0E2E; } html.rosa .gate p.muted{ color:#6B2348; }
 html.rosa #tema{ background:#FF5FB0; color:#000; border-color:#4A0E2E; }
 #tema{ font-size:15px; padding:5px 10px; border-radius:999px; background:var(--card2); border:1px solid var(--line); color:var(--txt); white-space:nowrap; }
+/* 🔠 Letra grande y en MAYÚSCULAS para leer mejor (11-11-2026, la dueña: "soy corta de vista, tiene que ser grande").
+   Las letras chicas (12-15 px) suben a 17 px y lo gris se aclara. Lo que se escribe en los casilleros no cambia.
+   Vale para la página (#app) y las ventanas (#velo); no toca las etiquetas impresas. */
+#app, #app *, #velo, #velo *, #toast{ text-transform:uppercase; letter-spacing:.02em; }
+#app input, #app textarea, #app select, #velo input, #velo textarea, #velo select{ text-transform:none; }
+#app .muted, #velo .muted{ color:#D2D2DA; font-weight:700; }
+#app small, #velo small, header.top small{ font-size:17px !important; }
+#app [style*="font-size:12px"], #app [style*="font-size:13px"], #app [style*="font-size:14px"], #app [style*="font-size:15px"],
+#velo [style*="font-size:12px"], #velo [style*="font-size:13px"], #velo [style*="font-size:14px"], #velo [style*="font-size:15px"]{ font-size:17px !important; }
+#app p, #app td, #app li, #app label, #velo p, #velo td, #velo li, #velo label{ font-size:max(1em, 18px); }
 </style>
 </head>
 <body>
@@ -615,7 +625,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v1", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111114";
+var TIENDA_VERSION = "2026111115";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
