@@ -120,3 +120,7 @@ html.rosa .rank-ayuda{ color:#6B2348; font-size:17px; }
 html.rosa #bandasSection .feed-head h2{ color:#3A0A24; }
 html.rosa .btn-linea:hover, html.rosa .ficha .rapidos button:hover{ color:#3A0A24; }
 html.rosa .ficha .nutri-caja .n-quitar{ color:#6B2348; }
+/* Lo escrito en los buscadores se veía blanco sobre rosado (11-11-2026, la dueña: "no me deja escribir") */
+html.rosa #qPuerta, html.rosa #paseNombre, html.rosa input, html.rosa textarea, html.rosa select{ color:#3A0A24 !important; caret-color:#C2185B; -webkit-text-fill-color:#3A0A24; }
+html.rosa #qPuerta::placeholder, html.rosa #paseNombre::placeholder{ color:#9A5C7A !important; -webkit-text-fill-color:#9A5C7A; }
+html.rosa input::placeholder, html.rosa textarea::placeholder{ color:#9A5C7A !important; -webkit-text-fill-color:#9A5C7A; }
