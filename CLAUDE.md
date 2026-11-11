@@ -1568,7 +1568,7 @@ productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/In
   computador"):** los datos se piden a la planilla cada 30 s si la página está a la vista y sin ficha abierta, y cada
   minuto (y al volver a la pestaña) se revisa `tienda-version.txt`: si es mayor que `TIENDA_VERSION`, la página se
   recarga sola (no con una ficha abierta ni con productos en la venta actual). **Cada vez que se cambie `tienda.html`,
-  subir `TIENDA_VERSION` y `tienda-version.txt` juntos (AAAAMMDDNN).**
+  subir `TIENDA_VERSION` y `tienda-version.txt` juntos (AAAAMMDDNN).** Desde el 11-11-2026 la recarga sola ocurre una sola vez por versión (`wgym_tienda_tv` en sessionStorage): mientras GitHub publicaba, la tienda se recargaba sin parar.
   **Stock editable en la ficha (25-10-2026, la dueña: "en el stock no puedo editar"):** al editar un producto, el casillero
   Stock se puede cambiar; al Guardar, la diferencia se anota en la planilla como «ajuste» (`tiendaEntrada`, nota «ajuste en la ficha»).
   **🛍 Qué comprar, ⏰ Por vencer y 🧾 Cierre de caja (25-10-2026, la dueña eligió las ideas 6, 7 y 8):**
