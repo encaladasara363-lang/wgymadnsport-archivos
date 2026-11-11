@@ -331,7 +331,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </style>
 
 <link rel="stylesheet" href="estilo-deportivo.css?v=6">
-<link rel="stylesheet" href="meson-rosa.css?v=17">
+<link rel="stylesheet" href="meson-rosa.css?v=18">
 <header class="top">
 <button id="temaMeson" type="button" title="Cambiar el fondo (rosado / negro) solo en este equipo" onclick="var h=document.documentElement,on=h.classList.toggle('rosa');try{localStorage.setItem('wgym_meson_tema_v1',on?'rosa':'negro')}catch(e){}">🎨</button>
 <img class="logo" id="topLogo" alt="WGYMADNSPORT">
@@ -404,6 +404,41 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <p class="ing-resp" id="paseMsg" hidden></p>
 </div>
 
+<!-- «Socios del gimnasio» arriba, antes de «Ingresos de hoy» (11-11-2026, la dueña); la tabla se desliza dentro de su cuadro. -->
+<div class="panel">
+<h2>Socios del gimnasio <span class="der" id="conteo">—</span></h2>
+<div class="cuerpo">
+<div class="barra">
+<div class="campo"><input id="qLista" type="text" autocomplete="off" placeholder="Buscar por nombre o apellido…" aria-label="Buscar socio"></div>
+<select id="orden" aria-label="Ordenar">
+<option value="venc">Por vencimiento</option>
+<option value="nombre">Por nombre</option>
+<option value="plan">Por plan</option>
+</select>
+<button class="btn btn-rojo" id="bNuevo">
+<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Nuevo socio</button>
+<button class="btn btn-oro" id="bRespaldo">
+<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar respaldo</button>
+<input type="file" id="archivo" accept=".json,.csv,.txt,application/json,text/csv,text/plain" hidden>
+</div>
+<div class="tscroll">
+<table class="socios">
+<thead><tr><th>Nombre</th><th>Apellido</th><th>Plan</th><th class="mon">Monto</th><th>Vence</th><th>Estado</th><th></th></tr></thead>
+<tbody id="tabla"></tbody>
+</table>
+</div>
+<!-- 07-10-2026 (pedido de la dueña): se sacaron "Planilla Excel" y "Buscar
+     lista nueva"; los dos de emergencia quedan chicos y al final. -->
+<div class="emergencia">
+<span>Solo si algo falla:</span>
+<button class="btn btn-linea btn-chico" id="bSitio" title="Vuelve a la lista publicada en el sitio">
+<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3"/><path d="M21 3v6h-6M3 21v-6h6"/></svg> Restaurar del sitio</button>
+<button class="btn btn-linea btn-chico" id="bCargar">
+<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 8l5-5 5 5M12 3v12"/></svg> Cargar respaldo</button>
+</div>
+</div>
+</div>
+
 <div class="feed-head">
 <h2 id="ingTitulo">Ingresos de hoy</h2>
 <span class="dot-status" id="estadoVivo" data-vivo="si"><span class="dot-live"></span> <span id="estadoVivoTxt">Conectando…</span></span>
@@ -450,40 +485,6 @@ document.getElementById("bTienda").onclick = function(){
  else { f.hidden = true; this.textContent = "Abrir la tienda aquí"; }
 };
 </script>
-
-<div class="panel">
-<h2>Socios del gimnasio <span class="der" id="conteo">—</span></h2>
-<div class="cuerpo">
-<div class="barra">
-<div class="campo"><input id="qLista" type="text" autocomplete="off" placeholder="Buscar por nombre o apellido…" aria-label="Buscar socio"></div>
-<select id="orden" aria-label="Ordenar">
-<option value="venc">Por vencimiento</option>
-<option value="nombre">Por nombre</option>
-<option value="plan">Por plan</option>
-</select>
-<button class="btn btn-rojo" id="bNuevo">
-<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Nuevo socio</button>
-<button class="btn btn-oro" id="bRespaldo">
-<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Descargar respaldo</button>
-<input type="file" id="archivo" accept=".json,.csv,.txt,application/json,text/csv,text/plain" hidden>
-</div>
-<div class="tscroll">
-<table class="socios">
-<thead><tr><th>Nombre</th><th>Apellido</th><th>Plan</th><th class="mon">Monto</th><th>Vence</th><th>Estado</th><th></th></tr></thead>
-<tbody id="tabla"></tbody>
-</table>
-</div>
-<!-- 07-10-2026 (pedido de la dueña): se sacaron "Planilla Excel" y "Buscar
-     lista nueva"; los dos de emergencia quedan chicos y al final. -->
-<div class="emergencia">
-<span>Solo si algo falla:</span>
-<button class="btn btn-linea btn-chico" id="bSitio" title="Vuelve a la lista publicada en el sitio">
-<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3"/><path d="M21 3v6h-6M3 21v-6h6"/></svg> Restaurar del sitio</button>
-<button class="btn btn-linea btn-chico" id="bCargar">
-<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 8l5-5 5 5M12 3v12"/></svg> Cargar respaldo</button>
-</div>
-</div>
-</div>
 
 <p class="nota">
 <b>Los clientes siguen entrando con el mismo QR de siempre.</b> Esta página escucha ese mismo registro, así que no hay que cambiar nada en la puerta.<br>
