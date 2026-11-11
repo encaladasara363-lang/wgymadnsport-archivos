@@ -337,7 +337,7 @@ var CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20E
 var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";          /* la misma del mesón: en la compu de recepción ya está guardada */
 var CLAVE_CACHE = "wgym_tienda_cache_v1";           /* última foto del inventario, para abrir al instante y sin señal */
 var CLAVE_PEND = "wgym_tienda_pend_v1";             /* ventas / entradas que no alcanzaron a llegar a la planilla */
-var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Resina","🔑"],["Pases diarios","🎟"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
+var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Muffins","🧁"],["Resina","🔑"],["Pases diarios","🎟"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
 var PAGOS = [["efectivo","💵 Efectivo"],["transferencia","🏦 Transferencia"],["tarjeta","💳 Tarjeta"],["fiado","📒 Fiado"]];
 
 function $(id){ return document.getElementById(id); }
@@ -504,7 +504,7 @@ function basePorcion(p){
   var b = S.productos.filter(function(q){ return q.activo && q.id !== p.id && r.base.test(q.n); })[0]; if(b) return b; }
  return null;
 }
-function stockVer(p){ if(esPack(p)) return stockPack(p); var b = basePorcion(p); return b ? b.stock : p.stock; }
+function stockVer(p){ if(esPack(p)) return stockPack(p); var b = basePorcion(p), v = b ? b.stock : p.stock; return Math.round(v * 10) / 10; }  /* 1 decimal: los muffins descuentan fracciones de porción */
 /* 🎁 Packs (27-10-2026, la dueña eligió la idea 25): un producto armado con otros (ext.pack = [{id, c}]). No lleva stock
    propio: quedan tantos como alcancen sus partes, y al venderlo la planilla (Versión 26) descuenta cada parte con un
    ajuste «PACK <venta>: …». Si todas las partes son ropa, el pack es una prenda única (VENDIDO 15 días). */
@@ -566,7 +566,7 @@ function esBatido(p){ return !!p && /^(batido|smoothie|pre ?entreno granizado)/i
    anota +1 «RETIRADO #tok» justo antes de la venta (el stock queda igual que si se hubiera vendido directo). */
 var HORAS_APARTADO = [24, 48, 72];
 /* Snacks y bebestibles (aguas, latas) no se apartan (la dueña, 27-10-2026: "en todo menos en los snack y las aguas"). */
-var SIN_APARTAR = ["Snacks", "Bebestibles", "Helados", "Smoothies", "Pases diarios"];
+var SIN_APARTAR = ["Snacks", "Bebestibles", "Helados", "Smoothies", "Muffins", "Pases diarios"];
 function sePuedeApartar(p){ return SIN_APARTAR.indexOf(catNueva(p.cat)) < 0 && !esPack(p); }
 function fmtCL(ms){ return new Intl.DateTimeFormat("sv-SE", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }).format(new Date(ms)).replace("T", " ").slice(0, 16); }
 function apartados(){
@@ -691,7 +691,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111204";
+var TIENDA_VERSION = "2026111205";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -869,6 +869,7 @@ function renderInv(){
   /* «🧮 Calcular pedido (Shein)» se sacó el 27-10-2026 (la dueña: "no me gustó"); verCalcPedido queda sin botón. */
   /* «📦 Mis pedidos» se sacó el 11-11-2026 (la dueña: "no lo ocupo"); verPedidos queda sin botón. */
   h += '<button class="btn" id="bPack" style="margin-top:8px;width:100%">🎁 Armar pack</button>';
+  if(activos().some(function(p){ return catNueva(p.cat) === "Muffins"; })) h += '<button class="btn" id="bMuffin" style="margin-top:8px;width:100%">🧁 Hice muffins</button>';
   var na = apartados().length;
   var nr = reservados().length;
   h += '<div class="grid2" style="margin-top:8px"><button class="btn' + (na ? ' oro' : '') + '" id="bApart">📌 Apartados' + (na ? ' (' + na + ')' : '') + '</button><button class="btn' + (nr ? ' oro' : '') + '" id="bReserv">📌 Reservados' + (nr ? ' (' + nr + ')' : '') + '</button></div>';
@@ -890,6 +891,7 @@ function renderInv(){
  if($("bVence")) $("bVence").onclick = verPorVencer;
  if($("bLentos")) $("bLentos").onclick = verNoSeMueven;
  if($("bPack")) $("bPack").onclick = function(){ formPack(); };
+ if($("bMuffin")) $("bMuffin").onclick = function(){ formMuffins(); };
  if($("bPed")) $("bPed").onclick = verPedidos;
  if($("bApart")) $("bApart").onclick = verApartados;
  if($("bReserv")) $("bReserv").onclick = verReservados;
@@ -903,7 +905,7 @@ function htmlListaInv(){
   .sort(function(a, b){ return a.n.localeCompare(b.n); }).map(function(p){
    var gan = p.precio - p.costo, mg = p.costo ? Math.round(gan / p.costo * 100) : 0, vd = ropaVendida(p), bp = basePorcion(p), ap = apartadoDe(p), pk = esPack(p), lz = lanzDe(p), dz = packDesarmado(p), pr = prontoDe(p), rv = !vd ? reservaDe(p) : null, ss = !vd && !dz && !bp && !ap && !pr && stockVer(p) <= 0;   // SIN STOCK (27-10-2026, pedido de la dueña)
    return '<div class="card' + (vd || ss || dz ? ' vendida' : '') + '"><div class="prod"><div class="ph">' + phHtml(p) + (vd ? '<span class="sello-v">VENDIDO</span>' : dz ? '<span class="sello-v" style="font-size:11px">DESARMADO</span>' : ss ? '<span class="sello-v">SIN STOCK</span>' : '') + '</div><div class="tx"><b>' + esc(p.n) + '</b><span>' + esc(p.cat) + (p.det ? ' · ' + esc(p.det) : '') + '</span><span class="precio" style="display:block;margin-top:4px">' + plata(p.precio) + '</span></div></div>' +
-    '<div class="pills">' + (rv ? '<span class="pill oro">📌 RESERVADO · ' + esc(rv.n) + '</span>' : '') + (pr ? '<span class="pill pronto">⏳ LLEGA PRONTO' + (pr.f ? ' · ' + pr.f.slice(8, 10) + '/' + pr.f.slice(5, 7) : '') + '</span>' : '') + (lz ? '<span class="pill oro">🚀 ' + plata(lz.precio) + ' hasta el ' + lz.hasta.slice(8, 10) + '/' + lz.hasta.slice(5, 7) + '</span>' : '') + (p.ext.ped ? '<span class="pill">📦 ' + esc(nombrePedido(p.ext.ped)) + '</span>' : '') + (ap ? '<span class="pill oro">📌 APARTADO · ' + esc(ap.nombre) + ' · ' + (aptVencido(ap) ? 'se le pasó la hora' : 'hasta ' + aptHasta(ap)) + '</span>' : '') + (bp ? '<span class="pill ' + (bp.stock <= bp.min ? 'bajo' : 'ok') + '">🥤 Sale del tarro' + (/iso ?100/i.test(bp.n) ? ' 🍫 ISO100' : /prostar/i.test(bp.n) ? ' 🍦 Prostar' : '') + ' · quedan ' + bp.stock + '</span>' : vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : dz ? '<span class="pill vend" style="white-space:normal;line-height:1.2">🧩 Se desarmó: ' + esc(dz.parte) + ' se vendió por separado · se quita ' + (dz.quedan ? 'en ' + dz.quedan + (dz.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : pk && !ss ? '<span class="pill ' + (stockPack(p) <= 0 ? 'bajo' : 'ok') + '">🎁 Alcanza para ' + stockPack(p) + '</span>' : ss ? '<span class="pill vend">⛔ SIN STOCK · repón con «Llegó mercadería»</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + p.stock + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + pillTipo(p) + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
+    '<div class="pills">' + (rv ? '<span class="pill oro">📌 RESERVADO · ' + esc(rv.n) + '</span>' : '') + (pr ? '<span class="pill pronto">⏳ LLEGA PRONTO' + (pr.f ? ' · ' + pr.f.slice(8, 10) + '/' + pr.f.slice(5, 7) : '') + '</span>' : '') + (lz ? '<span class="pill oro">🚀 ' + plata(lz.precio) + ' hasta el ' + lz.hasta.slice(8, 10) + '/' + lz.hasta.slice(5, 7) + '</span>' : '') + (p.ext.ped ? '<span class="pill">📦 ' + esc(nombrePedido(p.ext.ped)) + '</span>' : '') + (ap ? '<span class="pill oro">📌 APARTADO · ' + esc(ap.nombre) + ' · ' + (aptVencido(ap) ? 'se le pasó la hora' : 'hasta ' + aptHasta(ap)) + '</span>' : '') + (bp ? '<span class="pill ' + (bp.stock <= bp.min ? 'bajo' : 'ok') + '">🥤 Sale del tarro' + (/iso ?100/i.test(bp.n) ? ' 🍫 ISO100' : /prostar/i.test(bp.n) ? ' 🍦 Prostar' : '') + ' · quedan ' + bp.stock + '</span>' : vd ? '<span class="pill vend">✅ VENDIDO el ' + vd.f.slice(8, 10) + '/' + vd.f.slice(5, 7) + ' · se quita ' + (vd.quedan ? 'en ' + vd.quedan + (vd.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : dz ? '<span class="pill vend" style="white-space:normal;line-height:1.2">🧩 Se desarmó: ' + esc(dz.parte) + ' se vendió por separado · se quita ' + (dz.quedan ? 'en ' + dz.quedan + (dz.quedan === 1 ? ' día' : ' días') : 'mañana') + '</span>' : pk && !ss ? '<span class="pill ' + (stockPack(p) <= 0 ? 'bajo' : 'ok') + '">🎁 Alcanza para ' + stockPack(p) + '</span>' : ss ? '<span class="pill vend">⛔ SIN STOCK · repón con «Llegó mercadería»</span>' : '<span class="pill ' + (p.stock <= p.min ? 'bajo' : 'ok') + '">Quedan ' + (Math.round(p.stock * 10) / 10) + '</span>') + '<span class="pill">Costo ' + plata(p.costo) + '</span><span class="pill oro">Ganas ' + plata(gan) + (p.costo ? ' (' + mg + ' %)' : '') + '</span>' + pillTipo(p) + (p.cod ? '' : '<span class="pill">Sin código</span>') + pillVence(p) + '</div>' +
     (bp ? '<p class="muted" style="font-size:15px;margin:8px 0 0">Cada venta descuenta 1 porción de «' + esc(bp.n) + '». Cuando compres otro tarro, súmalo ahí.</p>' : '') +
     (pk ? '<p class="muted" style="font-size:15px;margin:8px 0 0">🎁 Pack de: ' + partesPack(p).map(function(x){ return (x.c > 1 ? x.c + ' × ' : '') + esc(x.p ? x.p.n + (x.p.det ? ' (' + x.p.det + ')' : '') : '(producto borrado)'); }).join(' + ') + '. Al venderlo se descuenta cada parte.' + (function(){ var su = partesPack(p).reduce(function(t, x){ return t + (x.p ? x.p.precio * x.c : 0); }, 0); return su > p.precio ? '<br><b style="color:#7CE39A">Separado valen ' + plata(su) + ': el socio ahorra ' + plata(su - p.precio) + ' (' + Math.round((su - p.precio) / su * 100) + ' %).</b>' : ''; })() + '</p>' : '') + '<div class="grid2" style="margin-top:10px">' + (bp || pk ? '<span></span>' : '<button class="btn chico" style="width:100%" data-ent="' + esc(p.id) + '">➕ Llegó mercadería</button>') + '<button class="btn chico" style="width:100%" data-ed="' + esc(p.id) + '">✏️ Editar</button></div>' +
     (ap ? '<div class="grid2" style="margin-top:8px"><button class="btn chico verde" style="width:100%" data-ret="' + ap.tok + '">💵 Retiró y pagó</button><button class="btn chico" style="width:100%" data-lib="' + ap.tok + '">↩ Liberar</button></div>' : (!bp && stockVer(p) > 0 && sePuedeApartar(p) ? '<button class="btn chico" style="width:100%;margin-top:8px" data-apt="' + esc(p.id) + '">📌 Apartar</button>' : '')) + '</div>';
@@ -1439,6 +1441,28 @@ function formProducto(p, codNuevo, base){
   api("tiendaProducto", { datos:JSON.stringify(x) }).then(function(d){ S.productos = d.productos || S.productos; aplicarPendientes(); guardarCache(); cerrarHoja(); render(); toast("Producto ocultado"); })["catch"](function(e){ toast(e.motivo || "No se pudo"); });
  };
 }
+/* 🧁 Hice muffins (11-11-2026, la dueña: "que se descuente la proteína del tarro lo que estoy usando en los muffins"):
+   anota cuántos hizo de cada sabor (suma al stock) y descuenta del tarro Prostar 1/9 de porción por muffin. */
+function formMuffins(){
+ var l = activos().filter(function(p){ return catNueva(p.cat) === "Muffins"; }), pm = prostar();
+ abrirHoja('<div class="cab"><h3>🧁 Hice muffins</h3><button class="btn chico volver" id="mfCerrar">← Volver</button></div>' +
+  '<p class="muted" style="font-size:17px">Escribe cuántos hiciste de cada sabor (1 tanda = 3 muffins).</p>' +
+  l.map(function(p){ return '<label class="lab" for="mf_' + esc(p.id) + '">' + esc(p.n) + ' · <span class="muted">quedan ' + p.stock + '</span></label><input class="inp" id="mf_' + esc(p.id) + '" inputmode="numeric" placeholder="0">'; }).join("") +
+  '<p id="mfTot" style="font-size:18px;margin:10px 0">' + (pm ? '' : '⚠️ No encontré el tarro Prostar: solo se suma el stock.') + '</p>' +
+  '<p class="err" id="mfErr" hidden></p><button class="btn rojo" id="mfOk" style="margin-top:12px">💾 Guardar</button>');
+ function total(){ return l.reduce(function(s, p){ return s + (Math.round(num($("mf_" + p.id).value)) || 0); }, 0); }
+ function pintar(){ var t = total(); if(pm) $("mfTot").textContent = t ? "💪 Se descuentan " + Math.round(t * PORC_MUFFIN * 30) + " g de Prostar (" + (Math.round(t * PORC_MUFFIN * 100) / 100) + " porciones)" : ""; }
+ l.forEach(function(p){ $("mf_" + p.id).oninput = pintar; });
+ $("mfCerrar").onclick = cerrarHoja;
+ $("mfOk").onclick = function(){
+  var t = total(); if(!(t > 0)){ $("mfErr").hidden = false; $("mfErr").textContent = "Escribe cuántos muffins hiciste."; return; }
+  l.forEach(function(p){ var c = Math.round(num($("mf_" + p.id).value)) || 0; if(c <= 0) return; p.stock += c;
+   pend.push({ tipo:"entrada", f:ahoraTxt(), datos:{ id:p.id, cant:c, tipo:"ajuste", nota:"muffins hechos" } }); });
+  if(pm){ var q = Math.round(t * PORC_MUFFIN * 100) / 100; pm.stock = Math.round((pm.stock - q) * 100) / 100;
+   pend.push({ tipo:"entrada", f:ahoraTxt(), datos:{ id:pm.id, cant:-q, tipo:"ajuste", nota:"porción usada en " + t + " muffins" } }); }
+  lsSet(CLAVE_PEND, pend); guardarCache(); cerrarHoja(); render(); toast("🧁 Anotados " + t + " muffins"); enviarPendientes().then(function(){ return cargar(true); });
+ };
+}
 function formEntrada(p, ajuste){
  abrirHoja('<div class="cab"><h3>' + (ajuste ? '⚖️ Ajustar stock' : '➕ Llegó mercadería') + '</h3><button class="btn chico volver" id="eCerrar">← Volver</button></div><p style="font-size:19px;text-transform:uppercase;margin:8px 0">' + esc(p.n) + ' · <span class="muted">quedan ' + p.stock + '</span></p>' +
   (ajuste ? '<label class="lab" for="eCant">¿Cuántos hay de verdad ahora? (cuéntalos)</label><input class="inp" id="eCant" inputmode="numeric" value="' + p.stock + '">' +
@@ -1564,6 +1588,9 @@ function fechaCorta(iso){ return iso.slice(8, 10) + "/" + iso.slice(5, 7); }
 var HIELO_PORCION = 65; /* hielo del pre entreno por porción: 3 cubos (la dueña); bolsa de 2 kg ≈ $1.600 ≈ 75 cubos → ≈$21 c/u (referencia, 11-11-2026) */
 var PAJILLA_SMOOTHIE = 60; /* pajilla de cada smoothie: 50 por $3.000 (la dueña, 11-11-2026) */
 var STICKER_SMOOTHIE = 18; /* sticker «Smoothie proteico» del vaso: 50 hojas por $7.000 = $140 la hoja ÷ 8 stickers ≈ $18 (la dueña, 11-11-2026) */
+/* 🧁 Muffins: 10 g de Prostar por tanda de 3 → cada muffin usa 1/9 de porción (30 g) del tarro (11-11-2026). */
+var PORC_MUFFIN = 10 / 3 / 30;
+function prostar(){ return S.productos.filter(function(q){ return q.activo && /^prote[ií]na prostar/i.test(q.n || ""); })[0] || null; }
 var VASO_PORCION = 120; /* costo de un vaso, $120 (la dueña, 11-11-2026) */
 function reinversion(){
  var cats = {}, ms = todosMovs(), semAct = lunesDe(S.hoy || hoyISO());
@@ -1584,6 +1611,9 @@ function reinversion(){
    var tarro = basePorcion(pr);
    /* Helados: los hace la dueña (11-11-2026, "los helados los hago yo"): cada helado vendido descuenta su costo completo. */
    if(k === "Helados"){ var mh = m.cant * m.costo * f; o.compro += mh; o.mat = (o.mat || 0) + mh; }
+   /* Muffins (11-11-2026, la dueña los hace): cada muffin vendido descuenta su material; la proteína no, porque ya se
+      descontó del tarro Prostar al anotar «🧁 Hice muffins». */
+   else if(k === "Muffins"){ var pm = prostar(), mm = Math.max(0, m.cant * (m.costo - (pm ? (pm.costo || 0) * PORC_MUFFIN : 0))) * f; o.compro += mm; o.mat = (o.mat || 0) + mm; }
    /* Vaso de $120 en cada porción servida de un tarro (pre entreno Mr Hyde, proteína Prostar o ISO100 sola) (11-11-2026, la dueña:
       "los vasos me cuestan 120"). Los smoothies y el granizado ya traen el vaso en su costo. */
    else if(VASO_PORCION && /^(pre ?entreno mr hyde|prote[ií]na (prostar|dymatize|iso))/i.test((pr && pr.n) || m.n || "")){
@@ -1592,7 +1622,7 @@ function reinversion(){
     var esSm = k === "Smoothies" || /^smoothie/i.test((pr && pr.n) || m.n || "");
     var mat = Math.max(0, m.cant * (m.costo - (tarro ? (tarro.costo || 0) : 0) + (esSm ? PAJILLA_SMOOTHIE + STICKER_SMOOTHIE : 0))) * f;
     o.compro += mat; o.mat = (o.mat || 0) + mat; }
-  } else if(m.tipo === "entrada" && (m.total || 0) > 0 && k !== "Helados" && !compraAntigua(m) && !noEsCompra(m)) c(k).compro += m.total; /* los helados se descuentan al venderlos */
+  } else if(m.tipo === "entrada" && (m.total || 0) > 0 && k !== "Helados" && k !== "Muffins" && !compraAntigua(m) && !noEsCompra(m)) c(k).compro += m.total; /* los helados se descuentan al venderlos */
  });
  /* Toda sección con productos se ve siempre, aunque no tenga ventas desde el reinicio (11-11-2026, la dueña: "no veo la sección de resina"). */
  activos().forEach(function(p){ var k = catNueva(p.cat); if(k && k !== "Waffles" && k !== "Helados de palito" && k !== "Packs") c(k); });
@@ -1684,7 +1714,7 @@ function verPlata(){
  if(!r.l.length) h += '<p class="muted">Todavía no hay ventas ni compras desde el ' + desdeTxt() + '.</p>';
  /* Cada sección con su color de borde y título (11-11-2026, la dueña: "me pierdo y visualmente me confundo"). */
  /* Bebestibles en celeste suave (11-11-2026, la dueña: el rojo "es muy intenso"); cada sección mantiene su color fijo. */
- var COLOR_FIJO = { "Bebestibles":"#9ED9F0", "Smoothies":"#3BA9FF", "Suplementos":"#FF8A00", "Helados":"#B46CFF", "Ropa y accesorios":"#C9C9C9", "Snacks":"#00C2B8", "Resina":"#D4AF37", "Helados de palito":"#9BE15D" };
+ var COLOR_FIJO = { "Bebestibles":"#9ED9F0", "Smoothies":"#3BA9FF", "Suplementos":"#FF8A00", "Helados":"#B46CFF", "Ropa y accesorios":"#C9C9C9", "Snacks":"#00C2B8", "Resina":"#D4AF37", "Helados de palito":"#9BE15D", "Muffins":"#E67E22" };
  var COLORES_SEC = ["#F4A261", "#3BA9FF", "#FF8A00", "#B46CFF", "#C9C9C9", "#00C2B8", "#D4AF37", "#9BE15D"];
  var nSec = 0;
  r.l.forEach(function(o){
