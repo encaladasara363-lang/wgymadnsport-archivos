@@ -172,3 +172,15 @@ html.rosa .hero .name{ overflow-wrap:normal !important; word-break:normal !impor
 /* Control Físico (11-11-2026, la dueña: "también cambia el diseño en control físico") */
 html.rosa #qSocio{ background:#DDF0FF !important; border:3px solid #3B8FD9 !important; }
 html.rosa #qSocio::placeholder{ color:#2F5F8A !important; -webkit-text-fill-color:#2F5F8A; }
+/* Cuadro «Último ingreso» más compacto: menos espacio entre líneas (11-11-2026, la dueña: "el cuadrado está muy grande") */
+html.rosa .hero{ padding:16px 20px !important; min-height:0 !important; }
+html.rosa .hero > *{ margin-top:0 !important; margin-bottom:4px !important; }
+html.rosa .hero .kicker{ font-size:17px !important; margin-bottom:2px !important; }
+html.rosa .hero .fallo{ font-size:26px !important; }
+html.rosa .hero-fila .hero .name{ font-size:52px !important; }
+html.rosa .hero .time{ font-size:28px !important; line-height:1.1; }
+html.rosa .hero .venc{ font-size:21px !important; padding:4px 14px !important; }
+html.rosa .hero .turno{ font-size:20px !important; padding:3px 12px !important; }
+html.rosa .hero .plan{ font-size:20px !important; }
+html.rosa .hero .renovar{ margin-top:6px !important; }
+html.rosa .hero .renovar .btn, html.rosa .hero .renovar button{ font-size:18px !important; padding:9px 16px !important; }
