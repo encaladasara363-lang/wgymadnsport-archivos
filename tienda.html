@@ -680,7 +680,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111129";
+var TIENDA_VERSION = "2026111130";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1550,7 +1550,7 @@ function compraAntigua(m){
 var GRUPO_PLATA = { "Ropa mujer":"Ropa y accesorios", "Ropa hombre":"Ropa y accesorios", "Accesorios":"Ropa y accesorios", "Zapatillas":"Ropa y accesorios" };
 function lunesDe(iso){ var d = new Date(iso.slice(0, 10) + "T12:00:00"), dw = (d.getDay() + 6) % 7; return new Date(d.getTime() - dw * 86400000).toISOString().slice(0, 10); }
 function fechaCorta(iso){ return iso.slice(8, 10) + "/" + iso.slice(5, 7); }
-var HIELO_PORCION = 80; /* hielo del pre entreno por porción: bolsa de 2 kg ≈ $1.600, ≈100 g por vaso (referencia, 11-11-2026) */
+var HIELO_PORCION = 65; /* hielo del pre entreno por porción: 3 cubos (la dueña); bolsa de 2 kg ≈ $1.600 ≈ 75 cubos → ≈$21 c/u (referencia, 11-11-2026) */
 var VASO_PORCION = 120; /* costo de un vaso, $120 (la dueña, 11-11-2026) */
 function reinversion(){
  var cats = {}, ms = todosMovs(), semAct = lunesDe(S.hoy || hoyISO());
