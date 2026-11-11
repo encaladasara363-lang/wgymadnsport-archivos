@@ -1499,7 +1499,10 @@ carga además `meson-rosa.css` (solo el mesón; tablet y Control Físico no): co
 pastel, cuadros claros sin fondos negros, letra Atkinson Hyperlegible en negrita, todo en MAYÚSCULAS y `zoom:1.2`. El botón 🎨
 arriba a la derecha vuelve al negro solo en ese equipo (`wgym_meson_tema_v1`). Desde el mismo día (la dueña: "no se ve que es la misma tipografía")
 los títulos de sección, nombres y casilleros también van en Atkinson (sin letra rugosa ni angosta, salvo «Control de Acceso»),
-con letra mínima de 18 px en textos y botones. Al cambiarlo, subir su `?v=`.
+con letra mínima de 18 px en textos y botones.
+**La Caja (artifact «Caja WGYM») también en rosado (11-11-2026, la dueña: "también mismo diseño en la caja"):** mismo fondo
+rosado pastel, cuadros claros, letra Atkinson en negrita y MAYÚSCULAS (variables de color redefinidas al final de su `<style>`);
+los números siguen en Anton y «Caja del gym» en Rubik Distressed. Al cambiarlo, subir su `?v=`.
 
 ## 🛒 Tienda WGYM — ventas e inventario de productos (desde 24-10-2026)
 
