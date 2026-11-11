@@ -691,7 +691,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111206";
+var TIENDA_VERSION = "2026111207";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1378,7 +1378,7 @@ function formProducto(p, codNuevo, base){
   '<div id="fSug"></div>' +
   '<div class="grid2">' + (nuevo ? '<div><label class="lab" for="fStock">¿Cuántos tienes?</label><input class="inp" id="fStock" inputmode="numeric" value="' + esc(p.stock) + '" placeholder="0"></div>' : '<div><label class="lab" for="fStock">Stock (cuántos hay)</label><input class="inp" id="fStock" inputmode="numeric" value="' + esc(p.stock) + '"></div>') +
   '<div><label class="lab" for="fMin">Avisar cuando queden</label><input class="inp" id="fMin" inputmode="numeric" value="' + esc(p.min) + '"></div></div>' +
-  '<label class="lab" for="fVence">⏰ Vence (si tiene fecha de vencimiento)</label><input class="inp" id="fVence" type="date" value="' + esc(p.vence || "") + '"><button class="btn chico" type="button" style="margin-top:6px" onclick="var i=document.getElementById(\'fVence\');i.value=\'\';this.textContent=\'✅ Quedó sin fecha · toca Guardar\'">✕ Quitar la fecha (no vence)</button>' +
+  '<input type="hidden" id="fVence" value="' + esc(p.vence || "") + '">' +  /* «Vence» sacado de la ficha (11-11-2026, la dueña); se conserva la fecha guardada */
   (S.v < 25 ? '<p class="muted" style="font-size:14px;margin:4px 0 0">Para que la fecha quede guardada, instala la Versión 25 del Apps Script.</p>' : '') +
   (S.v >= 26 ? htmlExtraForm(p, nuevo) : '') +
   (nuevo ? '' : '<p class="muted" style="font-size:14px">Puedes cambiar el stock aquí mismo (queda anotado como ajuste). Las ventas lo descuentan solas.</p>') +
@@ -1469,7 +1469,7 @@ function formEntrada(p, ajuste){
    '<label class="lab" for="eNota">Motivo</label><input class="inp" id="eNota" placeholder="Ej: se rompió uno · conteo">'
    : '<label class="lab" for="eCant">¿Cuántos llegaron?</label><input class="inp" id="eCant" inputmode="numeric" placeholder="Ej: 12">' +
    '<label class="lab" for="eCosto">¿Cuánto te costó cada uno?</label><input class="inp" id="eCosto" inputmode="decimal" value="' + p.costo + '">' +
-   '<label class="lab" for="eVence">⏰ Vence (si la mercadería nueva trae otra fecha)</label><input class="inp" id="eVence" type="date" value="' + esc(p.vence || "") + '">') +
+   '<input type="hidden" id="eVence" value="' + esc(p.vence || "") + '">') +
   '<p class="err" id="eErr" hidden></p><button class="btn rojo" id="eOk" style="margin-top:12px">💾 Guardar</button>');
  $("eCerrar").onclick = cerrarHoja;
  $("eOk").onclick = function(){
