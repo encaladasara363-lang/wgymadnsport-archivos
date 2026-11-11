@@ -634,7 +634,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111117";
+var TIENDA_VERSION = "2026111118";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1573,7 +1573,7 @@ function htmlBotonPlata(){
  var r = reinversion(), ss = miParteSemanas(), tot = ss.reduce(function(s, x){ return s + x.yo; }, 0);
  var st = 'flex:1;min-width:0;margin:0;padding:12px 8px;line-height:1.15;font-size:17px';
  return '<div style="display:flex;gap:8px;margin:4px 0 0">' +
-  '<button class="btn" id="bPlata" style="' + st + ';background:#FF5FB0;color:#000;border-color:#FFD1E8">💰 Disponible para comprar<br><span style="font-size:13px">desde el ' + desdeTxt() + '</span><br><span style="font-size:30px">' + plata(r.disp) + '</span></button>' +
+  '<button class="btn" id="bPlata" style="' + st + ';background:#C2185B;color:#fff;border:3px solid #FFD1E8;text-shadow:0 1px 2px rgba(0,0,0,.35)">💰 Disponible para comprar<br><span style="font-size:13px">desde el ' + desdeTxt() + '</span><br><span style="font-size:30px">' + plata(r.disp) + '</span></button>' +
   '<button class="btn" id="bMiParte" style="' + st + ';background:#1f7a3a;color:#fff;border-color:#7CE39A">💵 Tu ' + pctDe("") + ' %<br><span style="font-size:13px">desde el ' + desdeTxt() + ' (va sumando)</span><br><span style="font-size:30px">' + plata(tot) + '</span>' +
   '<br><span style="font-size:13px">esta semana: ' + plata(ss[0].yo) + '</span></button></div>' +
   (function(){ var pa = r.l.filter(function(o){ return o.cat === "Pases diarios"; })[0] || { disp:0, usado:0, vendido:0 };
