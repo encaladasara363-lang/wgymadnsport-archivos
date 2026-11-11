@@ -221,6 +221,37 @@ html.rosa .hoja{ background:#F9D3E3; }
 html.rosa .hoja .cab{ background:#F9D3E3; border-bottom-color:#E8A9C5; }
 html.rosa .hoja .cab h3{ color:#3A0A24; }
 html.rosa #velo .hoja :is(p, label, .lab, .muted, h4, small):not(.card *, .kpi *, .lista-p *, .btn *, .chip *, table *, .pk-chip *, [style*="background"] *){ color:#3A0A24 !important; }
+/* 🌸 Tema rosado claro COMPLETO, sin fondos negros (11-11-2026, la dueña: "no quiero que tenga fondos negros").
+   Cuadros blancos/rosados con borde rosado, letra vino oscuro; amarillos, verdes y rosados de texto se oscurecen
+   para que se lean sobre claro. Los botones rojos y amarillos quedan iguales. */
+html.rosa{ --card:#FFF6FA; --card2:#FFE6F1; --line:#EAA8C6; --txt:#3A0A24; --muted:#7A3A5A; }
+html.rosa .card, html.rosa .kpi, html.rosa .prod, html.rosa .lista-p, html.rosa .mov{ border-color:#EAA8C6; }
+html.rosa .inp, html.rosa .barra{ background:#fff; color:#3A0A24; border-color:#EAA8C6; }
+html.rosa .inp::placeholder{ color:#B07A95; }
+html.rosa nav#nav{ background:#FFE6F1; border-top:2px solid #EAA8C6; }
+html.rosa nav#nav button{ color:#7A3A5A; }
+html.rosa #app .muted, html.rosa #velo .muted, html.rosa label.lab{ color:#7A3A5A; }
+html.rosa .kpi b, html.rosa .total b, html.rosa .precio, html.rosa .prod .tx .precio, html.rosa table.top td.r, html.rosa .pk-chip small{ color:#8A6200; }
+html.rosa .kpi.verde b, html.rosa .pk-chip i{ color:#157A3C; }
+html.rosa .pill.ok{ background:#DDF5E6; color:#145A2E; }
+html.rosa .aviso, html.rosa #sync.pend{ background:#FFF1C9; color:#6B4E00; }
+html.rosa #toast{ background:#FFF6FA; color:#3A0A24; }
+html.rosa .grupo-b{ background:#FFF6FA; color:#3A0A24; }
+html.rosa #sync{ background:#FFF6FA; color:#3A0A24; border-color:#EAA8C6; }
+html.rosa .hoja{ border-top-color:#C2185B; }
+/* colores puestos en el código (inline) */
+html.rosa :is(#app,#velo) [style*="color:var(--yel)"]:not(.btn):not(.btn *){ color:#8A6200 !important; }
+html.rosa :is(#app,#velo) [style*="color:#7CE39A"]:not(.btn):not(.btn *){ color:#157A3C !important; }
+html.rosa :is(#app,#velo) [style*="color:#FF6EB8"]{ color:#C2185B !important; }
+html.rosa :is(#app,#velo) [style*="color:#fff"]:not(.btn):not(.btn *):not([style*="background:#E30613"]):not([style*="background:#C2185B"]){ color:#3A0A24 !important; }
+html.rosa :is(#app,#velo) [style*="color:#FF8A8A"]{ color:#B3121F !important; }
+html.rosa :is(#app,#velo) [style*="background:#141416"], html.rosa :is(#app,#velo) [style*="background:#0d2a17"]{ background:#FFF6FA !important; }
+html.rosa #bFondo{ background:#E6F7EC !important; color:#14532D !important; border-color:#2E9E5B !important; }
+html.rosa #bFondo span[style*="#7CE39A"]{ color:#157A3C !important; }
+html.rosa .prod .tx span:not(.pill), html.rosa .lista-p .n small, html.rosa .mov .d small, html.rosa .kpi small{ color:#7A3A5A !important; }
+html.rosa #bMiParte{ background:#1F7A3A !important; }
+html.rosa #bMiParte, html.rosa #bMiParte *{ color:#fff !important; }
+html.rosa #bPlata, html.rosa #bPlata *{ color:#fff !important; }
 html.rosa #tema{ background:#FF5FB0; color:#000; border-color:#4A0E2E; }
 #tema{ font-size:15px; padding:5px 10px; border-radius:999px; background:var(--card2); border:1px solid var(--line); color:var(--txt); white-space:nowrap; }
 /* 🔠 Letra grande y en MAYÚSCULAS para leer mejor (11-11-2026, la dueña: "soy corta de vista, tiene que ser grande").
@@ -639,7 +670,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111120";
+var TIENDA_VERSION = "2026111122";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
