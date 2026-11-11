@@ -259,9 +259,15 @@ body{ padding-bottom:calc(104px + env(safe-area-inset-bottom)); }
 nav#nav button{ flex:1; min-width:0; padding:6px 2px; border-radius:14px; font-family:"Barlow Condensed", "Arial Narrow", sans-serif !important; font-size:16px !important; font-weight:800; letter-spacing:0 !important; transition:transform .1s; }
 nav#nav button b{ font-size:28px; }
 nav#nav button:active{ transform:scale(.94); }
-nav#nav button[aria-pressed="true"]{ background:var(--red); color:#fff !important; box-shadow:0 3px 0 #8a020b; }
+nav#nav button{ position:relative; }
+nav#nav button b{ display:flex; align-items:center; justify-content:center; width:46px; height:40px; border-radius:14px; transition:background .15s; }
+nav#nav button[aria-pressed="true"]{ color:var(--red2) !important; }
+nav#nav button[aria-pressed="true"] b{ background:var(--red); box-shadow:0 2px 0 #8a020b; }
+nav#nav button[aria-pressed="true"]::before{ content:""; position:absolute; top:-6px; left:22%; right:22%; height:4px; border-radius:0 0 4px 4px; background:var(--red); }
 html.rosa nav#nav button{ color:#5A1A3A; }
-html.rosa nav#nav button[aria-pressed="true"]{ background:#C2185B; color:#fff !important; box-shadow:0 3px 0 #7A0E3A; }
+html.rosa nav#nav button[aria-pressed="true"]{ color:#C2185B !important; }
+html.rosa nav#nav button[aria-pressed="true"] b{ background:#C2185B; box-shadow:0 2px 0 #7A0E3A; }
+html.rosa nav#nav button[aria-pressed="true"]::before{ background:#C2185B; }
 html.rosa #tema{ background:#FF5FB0; color:#000; border-color:#4A0E2E; }
 #tema{ font-size:15px; padding:5px 10px; border-radius:999px; background:var(--card2); border:1px solid var(--line); color:var(--txt); white-space:nowrap; }
 /* 🔠 Letra grande y en MAYÚSCULAS para leer mejor (11-11-2026, la dueña: "soy corta de vista, tiene que ser grande").
@@ -680,7 +686,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111131";
+var TIENDA_VERSION = "2026111132";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
