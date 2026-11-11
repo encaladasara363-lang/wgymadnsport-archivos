@@ -328,6 +328,11 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 .rank-carpeta[open] .rank-grupo::after{ content:" ▲ Cerrar"; }
 .rank-lider{ display:block; margin-top:4px; color:#D4AF37; font-size:13px; text-transform:none; letter-spacing:0; }
 .rank-carpeta .rank-tabla{ margin-bottom:10px; }
+.ult-carpeta{ margin-top:14px; }
+.ult-tabla tr{ cursor:pointer; }
+.ult-tabla .ult-h{ font-family:'Anton',sans-serif; font-size:20px; white-space:nowrap; }
+.ult-tabla .ult-n{ font-weight:800; font-size:18px; }
+.ult-tabla .fvenc, .ult-tabla .fturno{ display:inline-block; margin:2px 6px 2px 0; }
 .rank-tabla .rank-dias{ font-weight:800; color:#D4AF37; font-size:16px; }
 </style>
 
@@ -364,6 +369,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </div>
 
 <div class="hero-fila">
+<div class="hero-col">
 <div class="hero" id="hero">
 <p class="kicker">Último ingreso</p>
 <p class="empty" id="heroEmpty">Esperando el primer escaneo del día…</p>
@@ -380,6 +386,10 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <button class="btn btn-oro" id="heroEditar">Renovar / editar ficha</button>
 <p class="ing-resp" id="heroIngresoMsg" hidden></p>
 </div>
+</div>
+<!-- 📁 Ingresaron hoy (11-11-2026, la dueña: "una lista que se abra así como ver ranking… que vaya quedando abajo las
+     personas que van ingresando"): todos los ingresos del día, el último arriba; tocar una fila la muestra en el cuadro. -->
+<details class="rank-carpeta ult-carpeta" id="ultCarpeta"><summary class="rank-grupo" id="ultTitulo">📁 Ingresaron hoy · 0</summary><div id="ultLista"></div></details>
 </div>
 
 <div id="bandasSection">
@@ -1616,6 +1626,25 @@ function pintarFeed(){
   });
  }
 }
+
+/* 📁 Ingresaron hoy: lista bajo «Último ingreso», del último que entró al primero. */
+var ultFirma = "";
+try{ if(localStorage.getItem("wgym_ult_abierto_v1") === "1") document.getElementById("ultCarpeta").open = true; }catch(e){}
+document.getElementById("ultCarpeta").addEventListener("toggle", function(){ try{ localStorage.setItem("wgym_ult_abierto_v1", this.open ? "1" : "0"); }catch(e){} });
+function pintarUltimos(){
+ if(!panelIngresos) return;
+ var hoy = panelIngresos.diaHoy ? panelIngresos.diaHoy() : "", l = panelIngresos.filas().filter(function(r){ return !hoy || WgymIngresos.diaCL(r.ts) === hoy; })
+  .sort(function(a, b){ return b.ts - a.ts; });
+ var firma = l.map(function(r){ return r.ts + r.nombre + r.apellido; }).join("|") + "#" + (socios ? socios.length : 0);
+ if(firma === ultFirma) return; ultFirma = firma;
+ document.getElementById("ultTitulo").innerHTML = "📁 Ingresaron hoy · " + l.length + (l.length ? ' <span class="rank-lider">Último: ' + escapeHtml(l[0].nombre + " " + l[0].apellido) + " · " + WgymIngresos.horaCL(l[0].ts) + "</span>" : "");
+ document.getElementById("ultLista").innerHTML = l.length ? '<table class="rank-tabla ult-tabla"><thead><tr><th>Hora</th><th>Nombre</th><th>Estado</th></tr></thead><tbody>' +
+  l.map(function(r, i){ return '<tr data-i="' + i + '"><td class="ult-h">' + WgymIngresos.horaCL(r.ts) + '</td><td class="ult-n">' + escapeHtml(r.nombre + " " + r.apellido) + '</td><td>' + (esPaseFila(r) ? '<span class="fvenc">PASE DIARIO</span>' : notaIngreso(r)) + '</td></tr>'; }).join("") + '</tbody></table>'
+  : '<p class="rank-ayuda">Todavía no entra nadie hoy.</p>';
+ document.querySelectorAll("#ultLista tr[data-i]").forEach(function(tr){ tr.onclick = function(){ var r = l[+tr.dataset.i];
+  mostrarHero(r.nombre + " " + r.apellido, r.ts, socioDelRegistro(r.nombre, r.apellido), 0, esPaseFila(r)); window.scrollTo({ top:0, behavior:"smooth" }); }; });
+}
+setInterval(function(){ try{ pintarUltimos(); }catch(e){} }, 3000);
 
 function llegaronDatos(data){
  filas = data.rows || [];
