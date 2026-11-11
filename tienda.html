@@ -599,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111104";
+var TIENDA_VERSION = "2026111105";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -769,8 +769,8 @@ function renderInv(){
   var qc = queComprar().length;
   h += '<button class="btn oro" id="bComprar" style="margin-top:10px;width:100%">🛍 Qué comprar' + (qc ? ' (' + qc + ')' : '') + '</button>';
   /* «🧮 Calcular pedido (Shein)» se sacó el 27-10-2026 (la dueña: "no me gustó"); verCalcPedido queda sin botón. */
-  var nped = pedidos().length;
-  h += '<div class="grid2" style="margin-top:8px"><button class="btn" id="bPack">🎁 Armar pack</button><button class="btn" id="bPed">📦 Mis pedidos' + (nped ? ' (' + nped + ')' : '') + '</button></div>';
+  /* «📦 Mis pedidos» se sacó el 11-11-2026 (la dueña: "no lo ocupo"); verPedidos queda sin botón. */
+  h += '<button class="btn" id="bPack" style="margin-top:8px;width:100%">🎁 Armar pack</button>';
   var na = apartados().length;
   var nr = reservados().length;
   h += '<div class="grid2" style="margin-top:8px"><button class="btn' + (na ? ' oro' : '') + '" id="bApart">📌 Apartados' + (na ? ' (' + na + ')' : '') + '</button><button class="btn' + (nr ? ' oro' : '') + '" id="bReserv">📌 Reservados' + (nr ? ' (' + nr + ')' : '') + '</button></div>';
@@ -1157,7 +1157,7 @@ function htmlExtraForm(p, nuevo){
   '<p class="muted" style="margin:4px 0 0;font-size:15px">Lo nuevo sale unos días con un precio especial y «NUEVO» en la vitrina, para que se venda rápido.</p>' +
   '<div id="fLzBox"' + (lz || (nuevo && ext.lanzNuevo) ? '' : ' hidden') + '><div class="grid2"><div><label class="lab" for="fLzP">Precio especial</label><input class="inp" id="fLzP" inputmode="numeric" value="' + (lz ? lz.precio : (redondeo(num(p.precio) * 0.9) || "")) + '"' + (lz ? ' data-tocado="1"' : '') + '></div>' +
   '<div><label class="lab" for="fLzH">Hasta el</label><input class="inp" id="fLzH" type="date" value="' + (lz ? lz.hasta : sumarDias(S.hoy || hoyISO(), DIAS_LANZ)) + '"></div></div></div></div>' +
-  (peds.length ? '<label class="lab" for="fPed">📦 ¿De qué pedido vino?</label><select class="inp" id="fPed"><option value="">— Ninguno —</option>' + peds.map(function(g){ return '<option value="' + esc(g.id) + '"' + (ext.ped === g.id ? ' selected' : '') + '>' + esc(g.det) + ' · ' + plata(g.monto) + '</option>'; }).join("") + '</select>' : '');
+  (false && peds.length ? '<label class="lab" for="fPed">📦 ¿De qué pedido vino?</label><select class="inp" id="fPed"><option value="">— Ninguno —</option>' + peds.map(function(g){ return '<option value="' + esc(g.id) + '"' + (ext.ped === g.id ? ' selected' : '') + '>' + esc(g.det) + ' · ' + plata(g.monto) + '</option>'; }).join("") + '</select>' : '');
 }
 function leerExtraForm(p, x){
  var ext = Object.assign({}, p.ext || {}); delete ext.lanzNuevo;
