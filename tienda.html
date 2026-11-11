@@ -287,6 +287,11 @@ html.rosa #tema{ background:#FF5FB0; color:#000; border-color:#4A0E2E; }
 header.top{ gap:8px; padding-left:12px; padding-right:12px; } header.top > div{ min-width:0; } #sync{ font-size:14px !important; padding:5px 8px; } #tema{ padding:5px 8px; flex:none; }
 #velo .hoja h3, #app h2{ font-family:"Atkinson Hyperlegible", Arial, sans-serif; font-weight:700; letter-spacing:.01em; }
 #app p, #app td, #app li, #app label, #velo p, #velo td, #velo li, #velo label{ font-size:max(1em, 18px); }
+/* Buscadores con color pastel propio, como en el mesón (11-11-2026, la dueña: "en todos los buscadores") */
+html.rosa #bq{ background:#DDF0FF !important; border:3px solid #3B8FD9 !important; color:#3A0A24 !important; }
+html.rosa #iq{ background:#EFE4FF !important; border:3px solid #8E5CD9 !important; color:#3A0A24 !important; }
+html.rosa #pkQ{ background:#DFF7E7 !important; border:3px solid #2E9E5B !important; color:#3A0A24 !important; }
+html.rosa #bq::placeholder{ color:#2F5F8A !important; } html.rosa #iq::placeholder{ color:#5E3A99 !important; } html.rosa #pkQ::placeholder{ color:#1F6B3F !important; }
 </style>
 </head>
 <body>
@@ -686,7 +691,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111201";
+var TIENDA_VERSION = "2026111202";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){

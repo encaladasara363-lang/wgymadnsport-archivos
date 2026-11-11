@@ -131,3 +131,5 @@ html.rosa .ing-barra input:not(.ing-fecha){ background:#EFE4FF !important; borde
 html.rosa #qPuerta::placeholder{ color:#2F5F8A !important; -webkit-text-fill-color:#2F5F8A; }
 html.rosa #paseNombre::placeholder{ color:#1F6B3F !important; -webkit-text-fill-color:#1F6B3F; }
 html.rosa .ing-barra input:not(.ing-fecha)::placeholder{ color:#5E3A99 !important; -webkit-text-fill-color:#5E3A99; }
+html.rosa #qLista{ background:#FFE9D6 !important; border:3px solid #E07A2E !important; }
+html.rosa #qLista::placeholder{ color:#8A4210 !important; -webkit-text-fill-color:#8A4210; }
