@@ -195,3 +195,13 @@ html.rosa ul.sugerencias li:hover, html.rosa ul.sugerencias li[aria-selected="tr
 .panel .tscroll thead th{ position:sticky; top:0; z-index:2; }
 html.rosa .panel:has(#qLista){ margin:14px 0; }
 html.rosa .manual.pase-diario{ margin:14px 0 18px; }
+/* Encabezado más chico en mesón, tablet y Control Físico (11-11-2026, la dueña: "me puedes achicar esa parte") */
+html.rosa header.top{ padding:8px 16px 16px !important; }
+html.rosa header.top .logo{ width:min(40%,150px) !important; margin-bottom:2px !important; }
+html.rosa header.top .gymname{ display:none; }
+html.rosa header.top h1{ font-size:24px !important; margin:0 !important; }
+html.rosa header.top .reloj{ font-size:15px !important; margin:2px 0 0 !important; }
+html.rosa header.top #copiar-lista{ padding:5px 10px !important; margin-top:4px !important; }
+html.rosa header.top::after{ height:6px; }
+html.rosa #copiar-aviso:empty{ display:none; }
+html.rosa .wrap{ padding-top:10px !important; }
