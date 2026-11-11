@@ -316,7 +316,7 @@ function guardarCache(){ lsSet(CLAVE_CACHE, S); }
 function aplicarPendientes(){
  /* «Bebidas» se llama «Bebestibles» desde el 24-10-2026 (pedido de la dueña); lo guardado antes se muestra con el nombre nuevo. */
  /* «Ropa deportiva» se separó en «Ropa mujer» y «Ropa hombre» (24-10-2026, la dueña: "esta es ropa de hombre"); lo guardado antes era de mujer. */
- S.productos.forEach(function(p){ p.cat = catNueva(p.cat); if(/^helado de palito/i.test(p.n || "")) p.cat = "Helados de palito"; if(!p.ext || typeof p.ext !== "object") p.ext = {}; });
+ S.productos.forEach(function(p){ p.cat = catNueva(p.cat); if(/^helado de palito/i.test(p.n || "")) p.cat = "Helados de palito"; if(/^pase diario/i.test(p.n || "")) p.cat = "Pases diarios"; if(!p.ext || typeof p.ext !== "object") p.ext = {}; });
  pend.forEach(function(p){
   if(p.tipo === "venta") p.datos.items.forEach(function(it){ descontar(it.id, it.cant); });
   if(p.tipo === "entrada"){ var q = prod(p.datos.id); if(q) q.stock += p.datos.cant; }
@@ -599,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111102";
+var TIENDA_VERSION = "2026111103";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
