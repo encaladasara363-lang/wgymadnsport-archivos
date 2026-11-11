@@ -238,7 +238,9 @@ header.top{ gap:8px; padding-left:12px; padding-right:12px; } header.top > div{ 
 </style>
 </head>
 <body>
-<script>try{ if(localStorage.getItem("wgym_tienda_tema_v1") === "rosa") document.documentElement.classList.add("rosa"); }catch(e){}</script>
+<script>/* Fondo rosita por defecto desde el 11-11-2026 (la dueña: "no está con el fondo pastel"); 🎨 vuelve al negro en ese equipo. */
+var temaT = "rosa"; try{ temaT = localStorage.getItem("wgym_tienda_tema_v2") || "rosa"; }catch(e){}
+if(temaT === "rosa") document.documentElement.classList.add("rosa");</script>
 <div id="gate" class="gate" hidden>
  <img src="assets/logo-oficial.webp" alt="WGYM">
  <h1>Tienda <span style="color:var(--yel)">WGYM</span></h1>
@@ -630,9 +632,9 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
 (function(){ var b = document.getElementById("tema"); if(!b) return; b.onclick = function(){
   var on = document.documentElement.classList.toggle("rosa");
-  try{ localStorage.setItem("wgym_tienda_tema_v1", on ? "rosa" : "oscuro"); }catch(e){}
+  try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111116";
+var TIENDA_VERSION = "2026111117";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
