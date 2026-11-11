@@ -599,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111109";
+var TIENDA_VERSION = "2026111110";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1570,9 +1570,12 @@ function verPlata(){
   (tope ? '<div class="card" style="margin:8px 0"><b style="font-size:18px">🔒 Tu plata ya invertida (tope)</b><div style="font-size:26px;font-family:Anton,sans-serif;color:var(--yel)">' + plata(tope) + '</div><p class="muted" style="margin:4px 0 0;font-size:14px">Es lo que pusiste hasta el ' + desdeTxt() + '. Desde ahora solo compras con lo que deja cada venta.</p>' +
    (function(){ var o = invertidoPorSeccion(); return '<div style="margin-top:8px">' + Object.keys(o).sort(function(a, b){ return o[b] - o[a]; }).map(function(k){ return '<div style="display:flex;justify-content:space-between;font-size:17px;padding:3px 0;border-top:1px solid #333"><span>' + iconoCat(k) + ' ' + esc(k) + '</span><b>' + plata(o[k]) + '</b></div>'; }).join("") + '</div>'; })() + '</div>' : '');
  if(!r.l.length) h += '<p class="muted">Todavía no hay ventas ni compras desde el ' + desdeTxt() + '.</p>';
+ /* Cada sección con su color de borde y título (11-11-2026, la dueña: "me pierdo y visualmente me confundo"). */
+ var COLORES_SEC = ["#E30613", "#3BA9FF", "#FF8A00", "#B46CFF", "#FF4FA3", "#00C2B8", "#D4AF37", "#9BE15D"];
+ var nSec = 0;
  r.l.forEach(function(o){
-  var fondo = o.cat === "Pases diarios";
-  h += '<div class="card" style="margin:8px 0' + (fondo ? ';border:2px solid #7CE39A' : '') + '"><b style="font-size:23px;text-transform:uppercase">' + (fondo ? '🎟 Fondo común · Pases diarios' : iconoCat(o.cat) + ' ' + esc(o.cat)) + '</b>' +
+  var fondo = o.cat === "Pases diarios", col = fondo ? "#7CE39A" : COLORES_SEC[nSec++ % COLORES_SEC.length];
+  h += '<div class="card" style="margin:14px 0;border:4px solid ' + col + ';box-shadow:0 0 0 1px #000, 0 0 14px ' + col + '55"><b style="font-size:23px;text-transform:uppercase;display:block;margin:-4px -4px 6px;padding:6px 10px;border-radius:8px;background:' + col + ';color:#000">' + (fondo ? '🎟 Fondo común · Pases diarios' : iconoCat(o.cat) + ' ' + esc(o.cat)) + '</b>' +
    (fondo ? '<p class="muted" style="margin:4px 0 0;font-size:14px">Cada pase de $4.000 deja $2.800 aquí. Si una sección compra más de lo que tenía, la diferencia sale de este fondo.</p>' : '') + '<table class="top" style="margin-top:6px">' +
    fila('💵 Vendiste', plata(o.vendido), 'var(--txt)') +
    fila('➕ Entró para comprar<br><span class="muted" style="font-size:13px">esta semana: ' + plata(o.semana) + '</span>', plata(o.entro), '#7CE39A') +
