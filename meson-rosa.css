@@ -106,3 +106,17 @@ html.rosa.tablet body{ zoom:1; }
 html.rosa.tablet .hero .name{ font-size:clamp(28px,4.4vw,52px) !important; overflow-wrap:normal; word-break:normal; hyphens:none; }
 html.rosa.tablet .hero .fallo{ font-size:clamp(20px,3vw,30px) !important; }
 html.rosa.tablet .hero .kicker{ font-size:18px !important; }
+/* Tablas del ranking y ventas con números oscuros y grandes (11-11-2026, la dueña: "esos números no se ven casi nada") */
+html.rosa .rank-tabla{ font-size:18px; }
+html.rosa .rank-tabla th{ color:#8A6200; font-size:15px; border-bottom:2px solid #C2185B; }
+html.rosa .rank-tabla td{ color:#3A0A24; border-bottom:1px solid #EAA8C6; }
+html.rosa .rank-tabla .rank-dias{ font-family:'Anton',Impact,sans-serif !important; font-weight:400 !important; font-size:28px; color:#C2185B; }
+html.rosa .rank-lider{ color:#8A6200; }
+html.rosa .rank-grupo{ color:#3A0A24; font-size:19px; }
+html.rosa .rank-grupo::after{ color:#C2185B; font-size:16px; }
+html.rosa .rank-carpeta{ border-color:#C2185B; background:#FFF6FA; }
+html.rosa .rank-lider{ font-size:17px; }
+html.rosa .rank-ayuda{ color:#6B2348; font-size:17px; }
+html.rosa #bandasSection .feed-head h2{ color:#3A0A24; }
+html.rosa .btn-linea:hover, html.rosa .ficha .rapidos button:hover{ color:#3A0A24; }
+html.rosa .ficha .nutri-caja .n-quitar{ color:#6B2348; }
