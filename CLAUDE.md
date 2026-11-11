@@ -1492,7 +1492,7 @@ Desde el 07-10-2026 (pedido de la dueña) el panel "Socios del gimnasio" de
 "Restaurar del sitio" y "Cargar respaldo" quedan chicos al final de la
 tabla, bajo "Solo si algo falla:" (`.emergencia`). También se sacó "Ver
 estado" del buscador "¿No alcanzó a escanear?": se elige tocando la
-sugerencia o con Enter. Desde el 07-10-2026 la tablet (`pantalla.html`) también
+sugerencia o con Enter. Desde el 11-11-2026 (la dueña: "el no alcanzó a escanear lo puedes poner ahí") ese buscador va arriba del cuadro «Último ingreso», justo bajo la franja roja/dorada. Desde el 07-10-2026 la tablet (`pantalla.html`) también
 carga `estilo-deportivo.css`: al cambiar el `?v=`, cambiarlo en los TRES archivos.
 **Mesón rosado como la tienda (11-11-2026, la dueña: "el mesón en este mismo diseño, letras y todo"):** `control.html`
 carga además `meson-rosa.css` (mesón, tablet y, desde el mismo día, `control-fisico.html`, con su 🎨 y el buscador `#qSocio` celeste; la dueña: "también cambia el diseño en control físico"; al cambiar su `?v=`, cambiarlo en los TRES): con `<html class="rosa">` (por defecto) fondo rosado

@@ -93,6 +93,7 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 .hero[data-v="nadie"] .fallo{ color:var(--gris-soft); font-size:20px; }
 
 .manual{ display:flex; gap:9px; flex-wrap:wrap; margin-top:14px; position:relative; }
+.manual:has(#qPuerta){ margin:0 0 14px; z-index:30; }
 .manual input{ flex:1; min-width:200px; background:var(--surface); border:1px solid var(--line);
  border-radius:10px; color:var(--blanco); font-size:16px; font-weight:600;
  font-family:inherit; padding:13px 14px; }
@@ -330,7 +331,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </style>
 
 <link rel="stylesheet" href="estilo-deportivo.css?v=6">
-<link rel="stylesheet" href="meson-rosa.css?v=15">
+<link rel="stylesheet" href="meson-rosa.css?v=16">
 <header class="top">
 <button id="temaMeson" type="button" title="Cambiar el fondo (rosado / negro) solo en este equipo" onclick="var h=document.documentElement,on=h.classList.toggle('rosa');try{localStorage.setItem('wgym_meson_tema_v1',on?'rosa':'negro')}catch(e){}">🎨</button>
 <img class="logo" id="topLogo" alt="WGYMADNSPORT">
@@ -347,6 +348,12 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <p id="avisoTexto"></p>
 <button class="btn btn-oro" id="usarSitio">Usar la del sitio</button>
 <button class="btn btn-linea" id="seguirMia">Seguir con la mía</button>
+</div>
+
+<!-- «¿No alcanzó a escanear?» arriba del «Último ingreso» (11-11-2026, pedido de la dueña) -->
+<div class="manual">
+<input id="qPuerta" type="text" autocomplete="off" spellcheck="false"
+ placeholder="¿No alcanzó a escanear? Busca su nombre aquí…" aria-label="Buscar socio a mano">
 </div>
 
 <div class="hero-fila">
@@ -381,11 +388,6 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </div>
 <div id="candadosFeed"></div>
 </div>
-</div>
-
-<div class="manual">
-<input id="qPuerta" type="text" autocomplete="off" spellcheck="false"
- placeholder="¿No alcanzó a escanear? Busca su nombre aquí…" aria-label="Buscar socio a mano">
 </div>
 
 <!-- Pase diario (03-10-2026): quien paga el pase diario no está en la
