@@ -680,7 +680,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111124";
+var TIENDA_VERSION = "2026111125";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1563,6 +1563,12 @@ function reinversion(){
    if(!f) return;
    var costo = m.cant * m.costo * f, gan = (m.total - m.cant * m.costo) * f, yo = Math.max(0, gan) * pctDe(k) / 100, o = c(k);
    o.vendido += m.total * f; o.yo += yo; o.entro += costo + gan - yo; if(lunesDe(f0) === semAct) o.semana += costo + gan - yo;
+   /* Smoothies: cada uno vendido descuenta solo su material (leche, fruta, yogur, vaso) en «Compraste» (11-11-2026, la dueña:
+      "pensaba que con solo agregar un smoothie ya se me descontaba ese material"). La proteína no: sale del tarro. */
+   var pr = prod(m.id);
+   if(k === "Smoothies" || /^smoothie/i.test((pr && pr.n) || m.n || "")){
+    var tarro = basePorcion(pr), mat = Math.max(0, m.cant * (m.costo - (tarro ? (tarro.costo || 0) : 0))) * f;
+    o.compro += mat; o.mat = (o.mat || 0) + mat; }
   } else if(m.tipo === "entrada" && (m.total || 0) > 0 && !compraAntigua(m) && !noEsCompra(m)) c(k).compro += m.total;
  });
  /* Toda sección con productos se ve siempre, aunque no tenga ventas desde el reinicio (11-11-2026, la dueña: "no veo la sección de resina"). */
@@ -1664,7 +1670,7 @@ function verPlata(){
    (fondo ? '<p class="muted" style="margin:4px 0 0;font-size:14px">Cada pase de $4.000 deja $2.800 aquí. Si una sección compra más de lo que tenía, la diferencia sale de este fondo.</p>' : '') + '<table class="top" style="margin-top:6px">' +
    fila('💵 Vendiste', plata(o.vendido), 'var(--txt)') +
    fila('➕ Entró para comprar<br><span class="muted" style="font-size:13px">esta semana: ' + plata(o.semana) + '</span>', plata(o.entro), '#7CE39A') +
-   fila('➖ Compraste', plata(o.compro), 'var(--txt)') +
+   fila('➖ Compraste' + (o.mat ? '<br><span class="muted" style="font-size:13px">incluye ' + plata(Math.round(o.mat)) + ' de materiales de los smoothies vendidos (automático)</span>' : ''), plata(o.compro), 'var(--txt)') +
    (o.fondo ? fila('🎟 Puesto por los pases diarios', '+' + plata(o.fondo), '#7CE39A') : '') +
    (o.usado ? fila('🎟 Usado en otras secciones', '−' + plata(o.usado), 'var(--txt)') : '') +
    fila('<b style="color:#FF6EB8">💰 Disponible</b>', disp(o.disp), o.disp >= 0 ? '#FF6EB8' : '#FF8A8A', true) +
