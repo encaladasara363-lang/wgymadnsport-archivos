@@ -337,7 +337,7 @@ var CHECKIN_URL = "https://script.google.com/macros/s/AKfycbzDpqUW70UbZTQtH8X20E
 var CLAVE_ADMIN_LS = "wgym_clave_admin_v1";          /* la misma del mesón: en la compu de recepción ya está guardada */
 var CLAVE_CACHE = "wgym_tienda_cache_v1";           /* última foto del inventario, para abrir al instante y sin señal */
 var CLAVE_PEND = "wgym_tienda_pend_v1";             /* ventas / entradas que no alcanzaron a llegar a la planilla */
-var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Muffins","🧁"],["Resina","🔑"],["Pases diarios","🎟"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
+var CATS = [["Bebestibles","🥤"],["Snacks","🍫"],["Helados","🍦"],["Smoothies","🍹"],["Resina","🔑"],["Pases diarios","🎟"],["Suplementos","💊"],["Accesorios","🧤"],["Ropa mujer","👚"],["Ropa hombre","👕"],["Zapatillas","👟"],["Packs","🎁"],["Otro","📦"]];
 var PAGOS = [["efectivo","💵 Efectivo"],["transferencia","🏦 Transferencia"],["tarjeta","💳 Tarjeta"],["fiado","📒 Fiado"]];
 
 function $(id){ return document.getElementById(id); }
@@ -404,7 +404,7 @@ function guardarCache(){ lsSet(CLAVE_CACHE, S); }
 function aplicarPendientes(){
  /* «Bebidas» se llama «Bebestibles» desde el 24-10-2026 (pedido de la dueña); lo guardado antes se muestra con el nombre nuevo. */
  /* «Ropa deportiva» se separó en «Ropa mujer» y «Ropa hombre» (24-10-2026, la dueña: "esta es ropa de hombre"); lo guardado antes era de mujer. */
- S.productos.forEach(function(p){ p.cat = catNueva(p.cat); if(/^helado de palito/i.test(p.n || "")) p.cat = "Helados de palito"; if(/^pase diario/i.test(p.n || "")) p.cat = "Pases diarios"; if(!p.ext || typeof p.ext !== "object") p.ext = {}; });
+ S.productos.forEach(function(p){ p.cat = catNueva(p.cat); if(/^helado de palito/i.test(p.n || "")) p.cat = "Helados de palito"; if(/^pase diario/i.test(p.n || "")) p.cat = "Pases diarios"; if(esMuffin(p)) p.cat = "Snacks"; /* muffins en Snacks: la dueña ya tiene impreso su código (11-11-2026) */ if(!p.ext || typeof p.ext !== "object") p.ext = {}; });
  pend.forEach(function(p){
   if(p.tipo === "venta") p.datos.items.forEach(function(it){ descontar(it.id, it.cant); });
   if(p.tipo === "entrada"){ var q = prod(p.datos.id); if(q) q.stock += p.datos.cant; }
@@ -566,7 +566,7 @@ function esBatido(p){ return !!p && /^(batido|smoothie|pre ?entreno granizado)/i
    anota +1 «RETIRADO #tok» justo antes de la venta (el stock queda igual que si se hubiera vendido directo). */
 var HORAS_APARTADO = [24, 48, 72];
 /* Snacks y bebestibles (aguas, latas) no se apartan (la dueña, 27-10-2026: "en todo menos en los snack y las aguas"). */
-var SIN_APARTAR = ["Snacks", "Bebestibles", "Helados", "Smoothies", "Muffins", "Pases diarios"];
+var SIN_APARTAR = ["Snacks", "Bebestibles", "Helados", "Smoothies", "Pases diarios"];
 function sePuedeApartar(p){ return SIN_APARTAR.indexOf(catNueva(p.cat)) < 0 && !esPack(p); }
 function fmtCL(ms){ return new Intl.DateTimeFormat("sv-SE", { timeZone:"America/Santiago", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }).format(new Date(ms)).replace("T", " ").slice(0, 16); }
 function apartados(){
@@ -691,7 +691,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111205";
+var TIENDA_VERSION = "2026111206";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -869,7 +869,7 @@ function renderInv(){
   /* «🧮 Calcular pedido (Shein)» se sacó el 27-10-2026 (la dueña: "no me gustó"); verCalcPedido queda sin botón. */
   /* «📦 Mis pedidos» se sacó el 11-11-2026 (la dueña: "no lo ocupo"); verPedidos queda sin botón. */
   h += '<button class="btn" id="bPack" style="margin-top:8px;width:100%">🎁 Armar pack</button>';
-  if(activos().some(function(p){ return catNueva(p.cat) === "Muffins"; })) h += '<button class="btn" id="bMuffin" style="margin-top:8px;width:100%">🧁 Hice muffins</button>';
+  if(activos().some(esMuffin)) h += '<button class="btn" id="bMuffin" style="margin-top:8px;width:100%">🧁 Hice muffins</button>';
   var na = apartados().length;
   var nr = reservados().length;
   h += '<div class="grid2" style="margin-top:8px"><button class="btn' + (na ? ' oro' : '') + '" id="bApart">📌 Apartados' + (na ? ' (' + na + ')' : '') + '</button><button class="btn' + (nr ? ' oro' : '') + '" id="bReserv">📌 Reservados' + (nr ? ' (' + nr + ')' : '') + '</button></div>';
@@ -1444,7 +1444,7 @@ function formProducto(p, codNuevo, base){
 /* 🧁 Hice muffins (11-11-2026, la dueña: "que se descuente la proteína del tarro lo que estoy usando en los muffins"):
    anota cuántos hizo de cada sabor (suma al stock) y descuenta del tarro Prostar 1/9 de porción por muffin. */
 function formMuffins(){
- var l = activos().filter(function(p){ return catNueva(p.cat) === "Muffins"; }), pm = prostar();
+ var l = activos().filter(esMuffin), pm = prostar();
  abrirHoja('<div class="cab"><h3>🧁 Hice muffins</h3><button class="btn chico volver" id="mfCerrar">← Volver</button></div>' +
   '<p class="muted" style="font-size:17px">Escribe cuántos hiciste de cada sabor (1 tanda = 3 muffins).</p>' +
   l.map(function(p){ return '<label class="lab" for="mf_' + esc(p.id) + '">' + esc(p.n) + ' · <span class="muted">quedan ' + p.stock + '</span></label><input class="inp" id="mf_' + esc(p.id) + '" inputmode="numeric" placeholder="0">'; }).join("") +
@@ -1590,6 +1590,7 @@ var PAJILLA_SMOOTHIE = 60; /* pajilla de cada smoothie: 50 por $3.000 (la dueña
 var STICKER_SMOOTHIE = 18; /* sticker «Smoothie proteico» del vaso: 50 hojas por $7.000 = $140 la hoja ÷ 8 stickers ≈ $18 (la dueña, 11-11-2026) */
 /* 🧁 Muffins: 10 g de Prostar por tanda de 3 → cada muffin usa 1/9 de porción (30 g) del tarro (11-11-2026). */
 var PORC_MUFFIN = 10 / 3 / 30;
+function esMuffin(p){ return /^muffin/i.test((p && p.n) || ""); }
 function prostar(){ return S.productos.filter(function(q){ return q.activo && /^prote[ií]na prostar/i.test(q.n || ""); })[0] || null; }
 var VASO_PORCION = 120; /* costo de un vaso, $120 (la dueña, 11-11-2026) */
 function reinversion(){
@@ -1613,7 +1614,7 @@ function reinversion(){
    if(k === "Helados"){ var mh = m.cant * m.costo * f; o.compro += mh; o.mat = (o.mat || 0) + mh; }
    /* Muffins (11-11-2026, la dueña los hace): cada muffin vendido descuenta su material; la proteína no, porque ya se
       descontó del tarro Prostar al anotar «🧁 Hice muffins». */
-   else if(k === "Muffins"){ var pm = prostar(), mm = Math.max(0, m.cant * (m.costo - (pm ? (pm.costo || 0) * PORC_MUFFIN : 0))) * f; o.compro += mm; o.mat = (o.mat || 0) + mm; }
+   else if(/^muffin/i.test((pr && pr.n) || m.n || "")){ var pm = prostar(), mm = Math.max(0, m.cant * (m.costo - (pm ? (pm.costo || 0) * PORC_MUFFIN : 0))) * f; o.compro += mm; o.mat = (o.mat || 0) + mm; }
    /* Vaso de $120 en cada porción servida de un tarro (pre entreno Mr Hyde, proteína Prostar o ISO100 sola) (11-11-2026, la dueña:
       "los vasos me cuestan 120"). Los smoothies y el granizado ya traen el vaso en su costo. */
    else if(VASO_PORCION && /^(pre ?entreno mr hyde|prote[ií]na (prostar|dymatize|iso))/i.test((pr && pr.n) || m.n || "")){
@@ -1622,7 +1623,7 @@ function reinversion(){
     var esSm = k === "Smoothies" || /^smoothie/i.test((pr && pr.n) || m.n || "");
     var mat = Math.max(0, m.cant * (m.costo - (tarro ? (tarro.costo || 0) : 0) + (esSm ? PAJILLA_SMOOTHIE + STICKER_SMOOTHIE : 0))) * f;
     o.compro += mat; o.mat = (o.mat || 0) + mat; }
-  } else if(m.tipo === "entrada" && (m.total || 0) > 0 && k !== "Helados" && k !== "Muffins" && !compraAntigua(m) && !noEsCompra(m)) c(k).compro += m.total; /* los helados se descuentan al venderlos */
+  } else if(m.tipo === "entrada" && (m.total || 0) > 0 && k !== "Helados" && !compraAntigua(m) && !noEsCompra(m)) c(k).compro += m.total; /* los helados se descuentan al venderlos */
  });
  /* Toda sección con productos se ve siempre, aunque no tenga ventas desde el reinicio (11-11-2026, la dueña: "no veo la sección de resina"). */
  activos().forEach(function(p){ var k = catNueva(p.cat); if(k && k !== "Waffles" && k !== "Helados de palito" && k !== "Packs") c(k); });
@@ -1714,7 +1715,7 @@ function verPlata(){
  if(!r.l.length) h += '<p class="muted">Todavía no hay ventas ni compras desde el ' + desdeTxt() + '.</p>';
  /* Cada sección con su color de borde y título (11-11-2026, la dueña: "me pierdo y visualmente me confundo"). */
  /* Bebestibles en celeste suave (11-11-2026, la dueña: el rojo "es muy intenso"); cada sección mantiene su color fijo. */
- var COLOR_FIJO = { "Bebestibles":"#9ED9F0", "Smoothies":"#3BA9FF", "Suplementos":"#FF8A00", "Helados":"#B46CFF", "Ropa y accesorios":"#C9C9C9", "Snacks":"#00C2B8", "Resina":"#D4AF37", "Helados de palito":"#9BE15D", "Muffins":"#E67E22" };
+ var COLOR_FIJO = { "Bebestibles":"#9ED9F0", "Smoothies":"#3BA9FF", "Suplementos":"#FF8A00", "Helados":"#B46CFF", "Ropa y accesorios":"#C9C9C9", "Snacks":"#00C2B8", "Resina":"#D4AF37", "Helados de palito":"#9BE15D" };
  var COLORES_SEC = ["#F4A261", "#3BA9FF", "#FF8A00", "#B46CFF", "#C9C9C9", "#00C2B8", "#D4AF37", "#9BE15D"];
  var nSec = 0;
  r.l.forEach(function(o){
