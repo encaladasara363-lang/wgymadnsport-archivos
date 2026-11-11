@@ -331,7 +331,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </style>
 
 <link rel="stylesheet" href="estilo-deportivo.css?v=6">
-<link rel="stylesheet" href="meson-rosa.css?v=18">
+<link rel="stylesheet" href="meson-rosa.css?v=19">
 <header class="top">
 <button id="temaMeson" type="button" title="Cambiar el fondo (rosado / negro) solo en este equipo" onclick="var h=document.documentElement,on=h.classList.toggle('rosa');try{localStorage.setItem('wgym_meson_tema_v1',on?'rosa':'negro')}catch(e){}">🎨</button>
 <img class="logo" id="topLogo" alt="WGYMADNSPORT">
@@ -393,16 +393,6 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </div>
 </div>
 
-<!-- Pase diario (03-10-2026): quien paga el pase diario no está en la
-     planilla de socios. Aquí se anota su nombre y queda en la hoja de
-     ingresos (Vencimiento = "PASE DIARIO"), con etiqueta dorada en el
-     panel. El cobro se sigue anotando en la Caja. -->
-<div class="manual pase-diario">
-<input id="paseNombre" type="text" autocomplete="off" spellcheck="false"
- placeholder="🎟 Pase diario: nombre y apellido de quien pagó" aria-label="Nombre y apellido del pase diario">
-<button class="btn btn-rojo" id="bPase" type="button">Registrar pase diario</button>
-<p class="ing-resp" id="paseMsg" hidden></p>
-</div>
 
 <!-- «Socios del gimnasio» arriba, antes de «Ingresos de hoy» (11-11-2026, la dueña); la tabla se desliza dentro de su cuadro. -->
 <div class="panel">
@@ -446,6 +436,18 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <!-- Todos los ingresos del día, contadores, quién sigue dentro con
      MARCAR SALIDA y el historial. Lo arma ingresos.js con la hoja. -->
 <div id="ingresosPanel"></div>
+
+<!-- «Pase diario» más abajo, después de «Ingresos de hoy» (11-11-2026, la dueña: "no lo uso tanto") -->
+<!-- Pase diario (03-10-2026): quien paga el pase diario no está en la
+     planilla de socios. Aquí se anota su nombre y queda en la hoja de
+     ingresos (Vencimiento = "PASE DIARIO"), con etiqueta dorada en el
+     panel. El cobro se sigue anotando en la Caja. -->
+<div class="manual pase-diario">
+<input id="paseNombre" type="text" autocomplete="off" spellcheck="false"
+ placeholder="🎟 Pase diario: nombre y apellido de quien pagó" aria-label="Nombre y apellido del pase diario">
+<button class="btn btn-rojo" id="bPase" type="button">Registrar pase diario</button>
+<p class="ing-resp" id="paseMsg" hidden></p>
+</div>
 
 <section class="kpis" id="kpis"></section>
 
