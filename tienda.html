@@ -691,7 +691,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111208";
+var TIENDA_VERSION = "2026111209";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -2362,7 +2362,9 @@ function usarEnlace(){
 }
 
 /* ═══ Inicio ═══ */
-if(clave){ entrar(); cargar().then(usarEnlace); } else { $("gate").hidden = false; }
+/* El enlace ?nuevo=1 se abre al tiro con lo guardado en el equipo, sin esperar a la planilla (11-11-2026: el del muffin de
+   frutilla «se queda cargando»); si la planilla falla, igual se abre. */
+if(clave){ entrar(); if(S && S.productos && S.productos.length) usarEnlace(); cargar().then(usarEnlace, usarEnlace); } else { $("gate").hidden = false; }
 })();
 </script>
 </body>
