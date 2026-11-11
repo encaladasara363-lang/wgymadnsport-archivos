@@ -1494,6 +1494,10 @@ tabla, bajo "Solo si algo falla:" (`.emergencia`). También se sacó "Ver
 estado" del buscador "¿No alcanzó a escanear?": se elige tocando la
 sugerencia o con Enter. Desde el 07-10-2026 la tablet (`pantalla.html`) también
 carga `estilo-deportivo.css`: al cambiar el `?v=`, cambiarlo en los TRES archivos.
+**Mesón rosado como la tienda (11-11-2026, la dueña: "el mesón en este mismo diseño, letras y todo"):** `control.html`
+carga además `meson-rosa.css` (solo el mesón; tablet y Control Físico no): con `<html class="rosa">` (por defecto) fondo rosado
+pastel, cuadros claros sin fondos negros, letra Atkinson Hyperlegible en negrita, todo en MAYÚSCULAS y `zoom:1.2`. El botón 🎨
+arriba a la derecha vuelve al negro solo en ese equipo (`wgym_meson_tema_v1`). Al cambiarlo, subir su `?v=`.
 
 ## 🛒 Tienda WGYM — ventas e inventario de productos (desde 24-10-2026)
 
