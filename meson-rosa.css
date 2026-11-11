@@ -18,8 +18,7 @@ html.rosa body, html.rosa body :not(svg):not(svg *):not(input):not(textarea):not
 html.rosa :is(.btn,.btn-copy,.btn-guardar,.ing-btn,.ing-todos,.rapidos button,.ing-carpeta,.pill,button){ font-style:normal !important; }
 html.rosa body{ font-size:17px; }
 /* Títulos y números siguen con la letra de la marca */
-html.rosa header.top h1, html.rosa .feed-head h2, html.rosa .panel > h2, html.rosa .panel h2,
-html.rosa .hero .name, html.rosa .hero .fallo{ font-family:'Rubik Distressed','Anton',Impact,sans-serif !important; font-weight:400 !important; }
+html.rosa header.top h1{ font-family:'Rubik Distressed','Anton',Impact,sans-serif !important; font-weight:400 !important; }
 html.rosa .kpi .kval, html.rosa .ing-tot b, html.rosa .num, html.rosa .hero .time,
 html.rosa table.socios td.mon, html.rosa table.socios td.fec{ font-family:'Anton',Impact,sans-serif !important; font-weight:400 !important; }
 
@@ -74,3 +73,13 @@ html.rosa body{ zoom:1.2; }
 @media print{ html.rosa body{ zoom:1; } }
 html.rosa .banda-item button, html.rosa .btn-oro, html.rosa .ficha .rapidos button.rap-oro, html.rosa .ficha .nutri-caja .n-act{ background:#FFD400 !important; color:#2A1A00 !important; }
 html.rosa .btn-oro svg{ stroke:#2A1A00; }
+
+/* Igual que la tienda (11-11-2026, la dueña: "no se ve que es la misma tipografía, me cuesta"): títulos de sección,
+   nombres y casilleros también en Atkinson; nada de letra rugosa ni angosta fuera del título de arriba; letra mínima 18 px. */
+html.rosa :is(.feed-head h2,.panel > h2,.panel h2,.hist h3,.tablas h4,.hero .name,.hero .fallo,h2,h3,h4){
+ font-family:'Atkinson Hyperlegible',Arial,sans-serif !important; font-weight:700 !important; letter-spacing:.01em !important; }
+html.rosa :is(input,select,textarea,option){ font-family:'Atkinson Hyperlegible',Arial,sans-serif !important; font-weight:700 !important; font-style:normal !important; }
+html.rosa body *{ letter-spacing:.02em !important; }
+html.rosa :is(.kicker,.klbl,.pill,th,.der,.dot-status){ font-size:max(1em,15px) !important; }
+html.rosa :is(p,td,li,label,small,a,button,input,select,.ing-sub){ font-size:max(1em,18px) !important; }
+html.rosa .kpi p, html.rosa .kpi small{ font-size:15px !important; }
