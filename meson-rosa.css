@@ -124,3 +124,10 @@ html.rosa .ficha .nutri-caja .n-quitar{ color:#6B2348; }
 html.rosa #qPuerta, html.rosa #paseNombre, html.rosa input, html.rosa textarea, html.rosa select{ color:#3A0A24 !important; caret-color:#C2185B; -webkit-text-fill-color:#3A0A24; }
 html.rosa #qPuerta::placeholder, html.rosa #paseNombre::placeholder{ color:#9A5C7A !important; -webkit-text-fill-color:#9A5C7A; }
 html.rosa input::placeholder, html.rosa textarea::placeholder{ color:#9A5C7A !important; -webkit-text-fill-color:#9A5C7A; }
+/* Cada buscador con su propio color pastel (11-11-2026, la dueña: "diferencia con colores pasteles clarito") */
+html.rosa #qPuerta{ background:#DDF0FF !important; border:3px solid #3B8FD9 !important; }
+html.rosa #paseNombre{ background:#DFF7E7 !important; border:3px solid #2E9E5B !important; }
+html.rosa .ing-barra input:not(.ing-fecha){ background:#EFE4FF !important; border:3px solid #8E5CD9 !important; }
+html.rosa #qPuerta::placeholder{ color:#2F5F8A !important; -webkit-text-fill-color:#2F5F8A; }
+html.rosa #paseNombre::placeholder{ color:#1F6B3F !important; -webkit-text-fill-color:#1F6B3F; }
+html.rosa .ing-barra input:not(.ing-fecha)::placeholder{ color:#5E3A99 !important; -webkit-text-fill-color:#5E3A99; }
