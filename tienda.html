@@ -599,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111110";
+var TIENDA_VERSION = "2026111111";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1536,7 +1536,7 @@ function htmlBotonPlata(){
  var r = reinversion(), ss = miParteSemanas(), tot = ss.reduce(function(s, x){ return s + x.yo; }, 0);
  var st = 'flex:1;min-width:0;margin:0;padding:12px 8px;line-height:1.15;font-size:17px';
  return '<div style="display:flex;gap:8px;margin:4px 0 0">' +
-  '<button class="btn oro" id="bPlata" style="' + st + '">💰 Disponible para comprar<br><span style="font-size:13px">desde el ' + desdeTxt() + '</span><br><span style="font-size:30px">' + plata(r.disp) + '</span></button>' +
+  '<button class="btn" id="bPlata" style="' + st + ';background:#FF5FB0;color:#000;border-color:#FFD1E8">💰 Disponible para comprar<br><span style="font-size:13px">desde el ' + desdeTxt() + '</span><br><span style="font-size:30px">' + plata(r.disp) + '</span></button>' +
   '<button class="btn" id="bMiParte" style="' + st + ';background:#1f7a3a;color:#fff;border-color:#7CE39A">💵 Tu ' + pctDe("") + ' %<br><span style="font-size:13px">desde el ' + desdeTxt() + ' (va sumando)</span><br><span style="font-size:30px">' + plata(tot) + '</span>' +
   '<br><span style="font-size:13px">esta semana: ' + plata(ss[0].yo) + '</span></button></div>' +
   (function(){ var pa = r.l.filter(function(o){ return o.cat === "Pases diarios"; })[0] || { disp:0, usado:0, vendido:0 };
@@ -1559,7 +1559,7 @@ function verPlata(){
  function fila(txt, monto, color, grande){ return '<tr><td style="font-size:' + (grande ? 20 : 18) + 'px">' + txt + '</td><td class="r" style="font-size:' + (grande ? 28 : 22) + 'px;font-family:Anton,sans-serif;color:' + color + ';white-space:nowrap">' + monto + '</td></tr>'; }
  function disp(v){ return v >= 0 ? plata(v) : '−' + plata(-v); }
  var h = '<div class="cab"><h3>💰 Mi plata</h3><button class="btn chico volver" id="plCerrar">← Volver</button></div>' +
-  '<div class="kpis" style="margin:10px 0"><div class="kpi"><small>💰 Disponible para comprar</small><b style="color:' + (r.disp >= 0 ? 'var(--yel)' : '#FF8A8A') + '">' + disp(r.disp) + '</b></div>' +
+  '<div class="kpis" style="margin:10px 0"><div class="kpi"><small>💰 Disponible para comprar</small><b style="color:' + (r.disp >= 0 ? '#FF6EB8' : '#FF8A8A') + '">' + disp(r.disp) + '</b></div>' +
   '<div class="kpi verde"><small>💵 Tu ' + pctDe("") + ' % (apártalo)</small><b>' + plata(r.yo) + '</b></div></div>' +
   '<p class="muted" style="margin:0 0 6px;font-size:15px">Cuenta desde el ' + desdeTxt() + '. Cada venta suma a su sección (lo que te costó + la ganancia que no es tuya) y cada compra de mercadería se descuenta. Se va acumulando semana a semana.</p>' +
   /* Toda la inversión (10-11-2026, la dueña: "quiero poner el total de toda mi inversión"): tope + lo comprado desde el reseteo. */
@@ -1571,7 +1571,7 @@ function verPlata(){
    (function(){ var o = invertidoPorSeccion(); return '<div style="margin-top:8px">' + Object.keys(o).sort(function(a, b){ return o[b] - o[a]; }).map(function(k){ return '<div style="display:flex;justify-content:space-between;font-size:17px;padding:3px 0;border-top:1px solid #333"><span>' + iconoCat(k) + ' ' + esc(k) + '</span><b>' + plata(o[k]) + '</b></div>'; }).join("") + '</div>'; })() + '</div>' : '');
  if(!r.l.length) h += '<p class="muted">Todavía no hay ventas ni compras desde el ' + desdeTxt() + '.</p>';
  /* Cada sección con su color de borde y título (11-11-2026, la dueña: "me pierdo y visualmente me confundo"). */
- var COLORES_SEC = ["#E30613", "#3BA9FF", "#FF8A00", "#B46CFF", "#FF4FA3", "#00C2B8", "#D4AF37", "#9BE15D"];
+ var COLORES_SEC = ["#E30613", "#3BA9FF", "#FF8A00", "#B46CFF", "#C9C9C9", "#00C2B8", "#D4AF37", "#9BE15D"];
  var nSec = 0;
  r.l.forEach(function(o){
   var fondo = o.cat === "Pases diarios", col = fondo ? "#7CE39A" : COLORES_SEC[nSec++ % COLORES_SEC.length];
@@ -1582,7 +1582,7 @@ function verPlata(){
    fila('➖ Compraste', plata(o.compro), 'var(--txt)') +
    (o.fondo ? fila('🎟 Puesto por los pases diarios', '+' + plata(o.fondo), '#7CE39A') : '') +
    (o.usado ? fila('🎟 Usado en otras secciones', '−' + plata(o.usado), 'var(--txt)') : '') +
-   fila('<b>💰 Disponible</b>', disp(o.disp), o.disp >= 0 ? 'var(--yel)' : '#FF8A8A', true) +
+   fila('<b style="color:#FF6EB8">💰 Disponible</b>', disp(o.disp), o.disp >= 0 ? '#FF6EB8' : '#FF8A8A', true) +
    fila('💵 Tu ' + pctDe(o.cat) + ' %', plata(o.yo), '#7CE39A') +
    '</table>' + (o.disp < 0 ? '<p class="muted" style="margin:6px 0 0;font-size:14px">⚠️ Compraste ' + plata(-o.disp) + ' más de lo que entró en esta sección.</p>' : '') + '</div>';
  });
