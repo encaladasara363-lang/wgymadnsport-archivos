@@ -691,7 +691,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111207";
+var TIENDA_VERSION = "2026111208";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -702,7 +702,8 @@ function revisarVersion(){
    var ya = ""; try{ ya = sessionStorage.getItem("wgym_tienda_tv") || ""; }catch(e){}
    if(ya === v) return;
    try{ sessionStorage.setItem("wgym_tienda_tv", v); }catch(e){}
-   location.replace(location.pathname + "?tv=" + v); }
+   /* Conserva un enlace ?nuevo=1 que todavía no se abre (11-11-2026: el del muffin de frutilla se perdía con la recarga). */
+   location.replace(location.pathname + "?" + (ENLACE && ENLACE_QS ? ENLACE_QS + "&" : "") + "tv=" + v); }
  })["catch"](function(){});
 }
 setInterval(function(){ if(!document.hidden) revisarVersion(); }, 60000);
@@ -2253,7 +2254,7 @@ document.addEventListener("click", function(e){
  d.innerHTML = fotos + '<b>' + (nom ? nom.innerHTML : "") + '</b><button type="button" class="volver">← Volver</button>';
  d.onclick = function(ev){ if(ev.target.tagName !== "IMG" && ev.target.tagName !== "VIDEO") d.remove(); }; document.body.appendChild(d);
 });
-var ENLACE = null;
+var ENLACE = null, ENLACE_QS = "";
 /* Algunos chats vuelven a codificar el enlace y llegan textos como «Polera%20Rise» (24-10-2026, la polera Rise LYT quedó con
    %20 en el nombre y en Bebestibles): se decodifica hasta que no queden %XX. */
 function sinPorcentajes(t){ t = String(t == null ? "" : t); for(var i = 0; i < 3 && /%[0-9A-Fa-f]{2}/.test(t); i++){ try{ var d = decodeURIComponent(t); if(d === t) break; t = d; }catch(e){ break; } } return t; }
@@ -2337,7 +2338,7 @@ function repararCodificados(){
   api("tiendaProducto", { datos:JSON.stringify(p) })["catch"](function(){});
  });
 }
-try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ["n","cat","det","costo","precio","stock","min","foto","cod","tipo","pronto"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = sinPorcentajes(qs.get(k)); }); history.replaceState(null, "", location.pathname); } }catch(e){}
+try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ENLACE_QS = location.search.slice(1).replace(/(^|&)tv=\d*/g, ""); ["n","cat","det","costo","precio","stock","min","foto","cod","tipo","pronto"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = sinPorcentajes(qs.get(k)); }); history.replaceState(null, "", location.pathname); } }catch(e){}
 function usarEnlace(){
  if(!ENLACE) return; var b = ENLACE; ENLACE = null;
  if(b.cat) b.cat = catNueva(b.cat);
