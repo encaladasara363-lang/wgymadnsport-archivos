@@ -599,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111106";
+var TIENDA_VERSION = "2026111107";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -649,7 +649,7 @@ function render(){
 function pintarPlata(){
  var b = $("plataBar"); if(!b) return;
  if(tab !== "vender" && tab !== "inv" && tab !== "res"){ b.innerHTML = ""; return; }
- try{ b.innerHTML = htmlBotonPlata(); $("bPlata").onclick = verPlata; $("bMiParte").onclick = verMiParte; $("bFondo").onclick = verPlata; }catch(e){ b.innerHTML = ""; }
+ try{ b.innerHTML = htmlBotonPlata(); $("bPlata").onclick = verPlata; $("bMiParte").onclick = verMiParte; }catch(e){ b.innerHTML = ""; }
 }
 setInterval(function(){ if(!$("app").hidden) pintarPlata(); }, 20000);
 
@@ -667,7 +667,6 @@ function renderVender(){
  var h = '<h2>Vender</h2>';
  if(!hayStock) h += '<div class="card oro"><b>Todavía no tienes productos.</b><p class="muted">Ve a 📦 Inventario y agrega lo que compraste: nombre, cuánto te costó, a cuánto lo vendes y cuántos tienes.</p><button class="btn oro" id="irInv">📦 Agregar mis productos</button></div>';
  h += '<div class="fila"><button class="btn rojo" id="bEsc">📷 Escanear producto</button><button class="btn oro" id="bEscV">📷 Escanear varias</button></div>' +
-  '<button class="btn" id="bPase" style="margin-top:10px;width:100%;background:#E30613;color:#fff;border:3px solid #D4AF37;font-size:22px">🎟 Pase diario · $4.000</button>' +
   '<input class="inp amarillo" id="bq" placeholder="🔎 O busca por nombre…" autocomplete="off" style="margin-top:10px">' +
   '<div class="lista-p" id="bres" hidden></div>';
  h += '<div class="card"><div class="fila" style="justify-content:space-between"><b style="font-size:20px;text-transform:uppercase;flex:none">🧾 Venta actual</b>' + (carro.length ? '<button class="btn chico" id="vaciar" style="flex:none">Vaciar</button>' : '') + '</div>';
@@ -705,7 +704,7 @@ function renderVender(){
  /* «Escanear varias» (27-10-2026, la dueña: "si alguien me compra 5 prendas… que vaya sumando"): la cámara queda abierta,
     cada código suma a la venta con bip y aviso, y se cierra con «Listo». El escaneo normal sigue de a uno. */
  /* 🎟 Pase diario de un toque (10-11-2026, la dueña: "ponme el pase diario por aquí para que sea más fácil"). */
- $("bPase").onclick = function(){
+ if($("bPase")) $("bPase").onclick = function(){
   var p = activos().filter(function(x){ return catNueva(x.cat) === "Pases diarios" || /^pase diario/i.test(x.n || ""); })[0];
   if(!p){ toast("Primero carga el producto «Pase diario» con el enlace que te mandó Claude"); return; }
   agregarAlCarro(p); renderVender(); toast("✅ Pase diario agregado"); };
@@ -1532,10 +1531,7 @@ function htmlBotonPlata(){
  return '<div style="display:flex;gap:8px;margin:4px 0 0">' +
   '<button class="btn oro" id="bPlata" style="' + st + '">💰 Disponible para comprar<br><span style="font-size:13px">desde el ' + desdeTxt() + '</span><br><span style="font-size:30px">' + plata(r.disp) + '</span></button>' +
   '<button class="btn" id="bMiParte" style="' + st + ';background:#1f7a3a;color:#fff;border-color:#7CE39A">💵 Tu ' + pctDe("") + ' %<br><span style="font-size:13px">desde el ' + desdeTxt() + ' (va sumando)</span><br><span style="font-size:30px">' + plata(tot) + '</span>' +
-  '<br><span style="font-size:13px">esta semana: ' + plata(ss[0].yo) + '</span></button></div>' +
-  (function(){ var pa = r.l.filter(function(o){ return o.cat === "Pases diarios"; })[0] || { disp:0, usado:0, vendido:0 };
-   return '<button class="btn" id="bFondo" style="width:100%;margin:8px 0 0;padding:10px 8px;line-height:1.2;font-size:18px;background:#0d2a17;color:#fff;border:3px solid #7CE39A">🎟 FONDO COMÚN · PASES DIARIOS: <span style="font-size:26px;color:#7CE39A">' + plata(pa.disp) + '</span>' +
-    '<br><span style="font-size:13px">' + (pa.vendido ? 'Vendiste ' + plata(pa.vendido) + ' en pases' + (pa.usado ? ' · usado en otras secciones: ' + plata(pa.usado) : '') : 'Aún no vendes pases desde el ' + desdeTxt() + ': cóbralos en 🛒 Vender') + '</span></button>'; })();
+  '<br><span style="font-size:13px">esta semana: ' + plata(ss[0].yo) + '</span></button></div>';
 }
 function verMiParte(){
  var ss = miParteSemanas(), tot = ss.reduce(function(s, x){ return s + x.yo; }, 0);
