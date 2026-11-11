@@ -194,3 +194,4 @@ html.rosa ul.sugerencias li:hover, html.rosa ul.sugerencias li[aria-selected="tr
 .panel .tscroll{ max-height:420px; overflow-y:auto; }
 .panel .tscroll thead th{ position:sticky; top:0; z-index:2; }
 html.rosa .panel:has(#qLista){ margin:14px 0; }
+html.rosa .manual.pase-diario{ margin:14px 0 18px; }
