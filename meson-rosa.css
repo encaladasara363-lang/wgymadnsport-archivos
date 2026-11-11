@@ -210,3 +210,13 @@ html.rosa .wrap{ padding-top:10px !important; }
 html.rosa .sexo-btn[data-active="1"], html.rosa .tab-sexo[data-active="1"]{
  background:#F48FB1 !important; border-color:#C2185B !important; color:#3A0A24 !important; box-shadow:none !important;
 }
+
+/* Control Físico: etiquetas «% grasa / IMC» grandes y con colores fuertes (11-11-2026, la dueña: "me pones más visible eso") */
+html.rosa .chip-row{gap:12px!important;margin:16px 0 10px!important}
+html.rosa .chip-row .chip{font-size:24px!important;padding:10px 18px!important;border-radius:12px!important;border:3px solid currentColor!important;gap:10px!important}
+html.rosa .chip-row .chip .dot{width:14px!important;height:14px!important;background:currentColor!important}
+html.rosa .chip-row .chip.low{background:#D6EBFF!important;color:#0B4F9C!important}
+html.rosa .chip-row .chip.normal{background:#D8F5E1!important;color:#146C36!important}
+html.rosa .chip-row .chip.high{background:#FFE2C2!important;color:#B34700!important}
+html.rosa .chip-row .chip.veryhigh{background:#FFD3D6!important;color:#B0001A!important}
+html.rosa .chip-row .chip.mudo{background:#fff!important;color:#9A5C7A!important}
