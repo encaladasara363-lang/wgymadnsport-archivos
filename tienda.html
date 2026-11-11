@@ -691,7 +691,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111202";
+var TIENDA_VERSION = "2026111203";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1563,6 +1563,7 @@ function lunesDe(iso){ var d = new Date(iso.slice(0, 10) + "T12:00:00"), dw = (d
 function fechaCorta(iso){ return iso.slice(8, 10) + "/" + iso.slice(5, 7); }
 var HIELO_PORCION = 65; /* hielo del pre entreno por porción: 3 cubos (la dueña); bolsa de 2 kg ≈ $1.600 ≈ 75 cubos → ≈$21 c/u (referencia, 11-11-2026) */
 var PAJILLA_SMOOTHIE = 60; /* pajilla de cada smoothie: 50 por $3.000 (la dueña, 11-11-2026) */
+var STICKER_SMOOTHIE = 80; /* sticker «Smoothie proteico» del vaso, impreso en vinilo y cortado en la Cricut; ≈8 por hoja (estimado, la dueña lo puede corregir; 11-11-2026) */
 var VASO_PORCION = 120; /* costo de un vaso, $120 (la dueña, 11-11-2026) */
 function reinversion(){
  var cats = {}, ms = todosMovs(), semAct = lunesDe(S.hoy || hoyISO());
@@ -1589,7 +1590,7 @@ function reinversion(){
     var mv = m.cant * (VASO_PORCION + (/^pre ?entreno/i.test((pr && pr.n) || m.n || "") ? HIELO_PORCION : 0)) * f; o.compro += mv; o.mat = (o.mat || 0) + mv; }
    else if(tarro || k === "Smoothies" || /^smoothie/i.test((pr && pr.n) || m.n || "")){ /* también el granizado (vaso + hielo) y todo lo que sale de un tarro */
     var esSm = k === "Smoothies" || /^smoothie/i.test((pr && pr.n) || m.n || "");
-    var mat = Math.max(0, m.cant * (m.costo - (tarro ? (tarro.costo || 0) : 0) + (esSm ? PAJILLA_SMOOTHIE : 0))) * f;
+    var mat = Math.max(0, m.cant * (m.costo - (tarro ? (tarro.costo || 0) : 0) + (esSm ? PAJILLA_SMOOTHIE + STICKER_SMOOTHIE : 0))) * f;
     o.compro += mat; o.mat = (o.mat || 0) + mat; }
   } else if(m.tipo === "entrada" && (m.total || 0) > 0 && k !== "Helados" && !compraAntigua(m) && !noEsCompra(m)) c(k).compro += m.total; /* los helados se descuentan al venderlos */
  });
