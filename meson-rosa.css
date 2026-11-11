@@ -169,3 +169,6 @@ html.rosa .hero .name{ overflow-wrap:normal !important; word-break:normal !impor
  html.rosa .hero .venc, html.rosa .hero .plan, html.rosa .hero .turno{ font-size:18px !important; }
  html.rosa .hero .renovar .btn, html.rosa .hero .renovar button{ font-size:17px !important; padding:10px 14px; }
 }
+/* Control Físico (11-11-2026, la dueña: "también cambia el diseño en control físico") */
+html.rosa #qSocio{ background:#DDF0FF !important; border:3px solid #3B8FD9 !important; }
+html.rosa #qSocio::placeholder{ color:#2F5F8A !important; -webkit-text-fill-color:#2F5F8A; }
