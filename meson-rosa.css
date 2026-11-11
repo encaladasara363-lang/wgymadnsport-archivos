@@ -185,3 +185,8 @@ html.rosa .hero .plan{ font-size:20px !important; }
 html.rosa .hero .renovar{ margin-top:6px !important; }
 html.rosa .hero .renovar .btn, html.rosa .hero .renovar button{ font-size:18px !important; padding:9px 16px !important; }
 html.rosa .wrap{ padding-top:14px; }
+/* Lista de nombres del buscador de arriba, grande y legible */
+html.rosa ul.sugerencias{ background:#FFF6FA !important; border:2px solid #3B8FD9 !important; }
+html.rosa ul.sugerencias li{ font-size:20px !important; padding:12px 16px !important; color:#3A0A24 !important; }
+html.rosa ul.sugerencias li .spl{ font-size:16px !important; color:#6B2348 !important; }
+html.rosa ul.sugerencias li:hover, html.rosa ul.sugerencias li[aria-selected="true"]{ background:#DDF0FF !important; }
