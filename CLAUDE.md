@@ -1593,6 +1593,7 @@ productos» y «Tienda movimientos», acciones `tienda*` de `docs/apps-script/In
   - Necesita la **Versión 25 del Apps Script** (columna M «Vence» en «Tienda productos», hoja nueva «Tienda cierres»,
     acción `tiendaCierre`; `tiendaListar` responde `v:25` y `cierres`). Con la Versión 24 la fecha no se guarda (la ficha lo
     avisa) y el cierre queda solo en el equipo (`wgym_tienda_cierres_v1`). **Instalada por la dueña el 26-10-2026 cerca de las 22:05, INGRESOS.gs verificado idéntico al repo vía Drive** (volver atrás: lápiz → Versión 24). La primera vez creó la versión sin pegar el código: revisar siempre en Drive que INGRESOS sea igual al del repo.
+  **Casillero «⏰ Vence» SACADO de la ficha y de «Llegó mercadería» el 11-11-2026 (la dueña: "saca donde dice vence"; queda escondido y conserva la fecha ya guardada; no volver a mostrarlo).**
   **Botones «⏰ Por vencer» y «🐢 Ropa que no se vende» SACADOS del Inventario el 11-11-2026 (la dueña: "no lo ocupo"; no volver a ponerlos). También «📦 Mis pedidos» y el «📦 ¿De qué pedido vino?» de la ficha (lo guardado sigue en la planilla).**
   **🐢 No se venden y 📸 Publicación para redes (25-10-2026, la dueña eligió las ideas 2 y 3, sin cambiar el Apps Script):**
   - En 📦 Inventario, «🐢 Ropa que no se vende (N)» (`noSeMueven`/`verNoSeMueven`): SOLO ropa (la dueña: "que solo corran
