@@ -12,7 +12,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="MESÓN WGYM">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Rubik+Distressed&family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,700;1,800&family=Barlow:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Rubik+Distressed&family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,700;1,800&family=Barlow:wght@400;500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,700;1,700&display=swap">
+<script>try{if(localStorage.getItem("wgym_meson_tema_v1")!=="negro")document.documentElement.classList.add("rosa");}catch(e){document.documentElement.classList.add("rosa");}</script>
 <style>
 :root{
  --negro:#0A0A0A; --surface:#161616; --surface-2:#1F1F1F; --card:#1c1c1c;
@@ -329,7 +330,9 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </style>
 
 <link rel="stylesheet" href="estilo-deportivo.css?v=6">
+<link rel="stylesheet" href="meson-rosa.css?v=1">
 <header class="top">
+<button id="temaMeson" type="button" title="Cambiar el fondo (rosado / negro) solo en este equipo" onclick="var h=document.documentElement,on=h.classList.toggle('rosa');try{localStorage.setItem('wgym_meson_tema_v1',on?'rosa':'negro')}catch(e){}">🎨</button>
 <img class="logo" id="topLogo" alt="WGYMADNSPORT">
 <p class="gymname">WGYMADNSPORT Tocopilla</p>
 <h1>Control de <span>Acceso</span></h1>
