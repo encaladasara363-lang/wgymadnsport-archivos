@@ -331,7 +331,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 </style>
 
 <link rel="stylesheet" href="estilo-deportivo.css?v=6">
-<link rel="stylesheet" href="meson-rosa.css?v=16">
+<link rel="stylesheet" href="meson-rosa.css?v=17">
 <header class="top">
 <button id="temaMeson" type="button" title="Cambiar el fondo (rosado / negro) solo en este equipo" onclick="var h=document.documentElement,on=h.classList.toggle('rosa');try{localStorage.setItem('wgym_meson_tema_v1',on?'rosa':'negro')}catch(e){}">🎨</button>
 <img class="logo" id="topLogo" alt="WGYMADNSPORT">
@@ -353,7 +353,7 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <!-- «¿No alcanzó a escanear?» arriba del «Último ingreso» (11-11-2026, pedido de la dueña) -->
 <div class="manual">
 <input id="qPuerta" type="text" autocomplete="off" spellcheck="false"
- placeholder="¿No alcanzó a escanear? Busca su nombre aquí…" aria-label="Buscar socio a mano">
+ placeholder="🔎 Buscar socio por nombre o apellido (ingreso o ficha)…" aria-label="Buscar socio por nombre o apellido">
 <!-- «Nuevo socio» también arriba (11-11-2026, pedido de la dueña); abre la misma ficha que el botón de «Socios del gimnasio». -->
 <button class="btn btn-rojo" id="bNuevoArriba" type="button" onclick="document.getElementById('bNuevo').click()">
 <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Nuevo socio</button>
@@ -1448,8 +1448,8 @@ function moverMarca(paso){
  });
 }
 function elegir(s){
- /* Si entro sin alcanzar a escanear, el dia se cuenta igual. */
- if(marcarDia(s, hoyISO())) pintarTabla();
+ /* Desde el 11-11-2026 este buscador también sirve para abrir la ficha (la dueña juntó
+    los dos buscadores): el día se cuenta recién al tocar «Registrar ingreso». */
  cerrarSug(); qPuerta.value = "";
  mostrarHero(s.n + " " + s.a, null, s);
  var bi = document.getElementById("heroIngreso");
@@ -1462,6 +1462,8 @@ function elegir(s){
 document.getElementById("heroIngreso").addEventListener("click", function(){
  var s = socioEnHero, b = this, msg = document.getElementById("heroIngresoMsg");
  if(!s) return;
+ /* Si entró sin alcanzar a escanear, el día se cuenta igual. */
+ if(marcarDia(s, hoyISO())) pintarTabla();
  b.disabled = true; b.textContent = "Registrando…";
  var datosIng = { nombre:s.n, apellido:s.a, venc:fechaCL(s.v) };
  if(window.WGYM_PRUEBA_INGRESOS) datosIng.prueba = "1";
