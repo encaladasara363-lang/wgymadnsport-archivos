@@ -680,7 +680,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111127";
+var TIENDA_VERSION = "2026111128";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -1550,6 +1550,7 @@ function compraAntigua(m){
 var GRUPO_PLATA = { "Ropa mujer":"Ropa y accesorios", "Ropa hombre":"Ropa y accesorios", "Accesorios":"Ropa y accesorios", "Zapatillas":"Ropa y accesorios" };
 function lunesDe(iso){ var d = new Date(iso.slice(0, 10) + "T12:00:00"), dw = (d.getDay() + 6) % 7; return new Date(d.getTime() - dw * 86400000).toISOString().slice(0, 10); }
 function fechaCorta(iso){ return iso.slice(8, 10) + "/" + iso.slice(5, 7); }
+var VASO_PORCION = 120; /* costo de un vaso, $120 (la dueña, 11-11-2026) */
 function reinversion(){
  var cats = {}, ms = todosMovs(), semAct = lunesDe(S.hoy || hoyISO());
  function c(k){ var g = GRUPO_PLATA[k] || k; return cats[g] = cats[g] || { cat:g, vendido:0, entro:0, semana:0, compro:0, yo:0 }; }
@@ -1569,6 +1570,10 @@ function reinversion(){
    var tarro = basePorcion(pr);
    /* Helados: los hace la dueña (11-11-2026, "los helados los hago yo"): cada helado vendido descuenta su costo completo. */
    if(k === "Helados"){ var mh = m.cant * m.costo * f; o.compro += mh; o.mat = (o.mat || 0) + mh; }
+   /* Vaso de $120 en cada porción servida de un tarro (pre entreno Mr Hyde, proteína Prostar o ISO100 sola) (11-11-2026, la dueña:
+      "los vasos me cuestan 120"). Los smoothies y el granizado ya traen el vaso en su costo. */
+   else if(VASO_PORCION && /^(pre ?entreno mr hyde|prote[ií]na (prostar|dymatize|iso))/i.test((pr && pr.n) || m.n || "")){
+    var mv = m.cant * VASO_PORCION * f; o.compro += mv; o.mat = (o.mat || 0) + mv; }
    else if(tarro || k === "Smoothies" || /^smoothie/i.test((pr && pr.n) || m.n || "")){ /* también el granizado (vaso + hielo) y todo lo que sale de un tarro */
     var mat = Math.max(0, m.cant * (m.costo - (tarro ? (tarro.costo || 0) : 0))) * f;
     o.compro += mat; o.mat = (o.mat || 0) + mat; }
