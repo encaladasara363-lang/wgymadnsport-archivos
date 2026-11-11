@@ -94,6 +94,7 @@ header.top .reloj{ font-size:12.5px; color:var(--gris-soft); font-weight:600; ma
 
 .manual{ display:flex; gap:9px; flex-wrap:wrap; margin-top:14px; position:relative; }
 .manual:has(#qPuerta){ margin:0 0 14px; z-index:30; }
+#ingresosPanel .ing-todos{ display:none !important; }
 .manual input{ flex:1; min-width:200px; background:var(--surface); border:1px solid var(--line);
  border-radius:10px; color:var(--blanco); font-size:16px; font-weight:600;
  font-family:inherit; padding:13px 14px; }
@@ -353,10 +354,13 @@ table.socios td.acc{ text-align:right; padding-right:0; white-space:nowrap; }
 <!-- «¿No alcanzó a escanear?» arriba del «Último ingreso» (11-11-2026, pedido de la dueña) -->
 <div class="manual">
 <input id="qPuerta" type="text" autocomplete="off" spellcheck="false"
- placeholder="🔎 Buscar socio por nombre o apellido (ingreso o ficha)…" aria-label="Buscar socio por nombre o apellido">
+ placeholder="🔎 Buscar socio (ingreso o ficha)…" aria-label="Buscar socio por nombre o apellido">
 <!-- «Nuevo socio» también arriba (11-11-2026, pedido de la dueña); abre la misma ficha que el botón de «Socios del gimnasio». -->
 <button class="btn btn-rojo" id="bNuevoArriba" type="button" onclick="document.getElementById('bNuevo').click()">
 <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Nuevo socio</button>
+<!-- «Marcar salida a todos» arriba (11-11-2026, la dueña); usa el botón del panel «Ingresos de hoy», que queda escondido. -->
+<button class="btn btn-rojo" id="bSalidaTodos" type="button" hidden onclick="var b=document.querySelector('#ingresosPanel .ing-todos');if(b&&!b.disabled)b.click()">🚪 Marcar salida a todos</button>
+<script>setInterval(function(){var o=document.querySelector("#ingresosPanel .ing-todos"),b=document.getElementById("bSalidaTodos");if(!b)return;var ver=!!(o&&!o.hidden);if(b.hidden===ver)b.hidden=!ver;if(o){if(b.textContent!=="🚪 "+o.textContent)b.textContent="🚪 "+o.textContent;b.disabled=o.disabled;}},700);</script>
 </div>
 
 <div class="hero-fila">
