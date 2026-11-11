@@ -97,3 +97,6 @@ html.rosa .hero .empty{ font-size:22px !important; }
 html.rosa .hero .renovar .btn, html.rosa .hero .renovar button{ font-size:22px !important; padding:14px 22px; }
 html.rosa .hero .ing-resp{ font-size:20px !important; }
 html.rosa .kpi p, html.rosa .kpi small{ font-size:15px !important; }
+/* Nombre del socio aún más grande (11-11-2026, la dueña: "me interesa grande el nombre del socio") */
+html.rosa .hero .name{ font-size:64px !important; line-height:1.05; overflow-wrap:anywhere; color:#3A0A24; }
+html.rosa .hero-fila .hero .name{ font-size:80px !important; }
