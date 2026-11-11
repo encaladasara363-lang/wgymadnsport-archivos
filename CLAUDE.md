@@ -1497,7 +1497,7 @@ carga `estilo-deportivo.css`: al cambiar el `?v=`, cambiarlo en los TRES archivo
 **Mesón rosado como la tienda (11-11-2026, la dueña: "el mesón en este mismo diseño, letras y todo"):** `control.html`
 carga además `meson-rosa.css` (mesón y tablet; Control Físico no): con `<html class="rosa">` (por defecto) fondo rosado
 pastel, cuadros claros sin fondos negros, letra Atkinson Hyperlegible en negrita, todo en MAYÚSCULAS y `zoom:1.2`. El botón 🎨
-arriba a la derecha vuelve al negro solo en ese equipo (`wgym_meson_tema_v1`). **La tablet (`pantalla.html`) también lo carga desde el mismo día** (la dueña: "en la tablet no se cambió el diseño"); su 🎨 va arriba a la izquierda. Desde el mismo día (la dueña: "no se ve que es la misma tipografía")
+arriba a la derecha vuelve al negro solo en ese equipo (`wgym_meson_tema_v1`). **La tablet (`pantalla.html`) también lo carga desde el mismo día** (la dueña: "en la tablet no se cambió el diseño"); su 🎨 va arriba a la izquierda. El cuadro «Último ingreso» va con letras grandes (nombre 56 px, hora 40 px en Anton, vencimiento y plan 30 px; la dueña: "eso está muy pequeño"); no usar `max(1em,…)` en `p`, porque achica los textos que traen su propio tamaño. Desde el mismo día (la dueña: "no se ve que es la misma tipografía")
 los títulos de sección, nombres y casilleros también van en Atkinson (sin letra rugosa ni angosta, salvo «Control de Acceso»),
 con letra mínima de 18 px en textos y botones.
 **La Caja (artifact «Caja WGYM») también en rosado (11-11-2026, la dueña: "también mismo diseño en la caja"):** mismo fondo
