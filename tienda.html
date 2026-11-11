@@ -599,7 +599,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
    el computador"): los datos se vuelven a pedir a la planilla cada 30 s mientras la página está a la vista (sin una ficha
    abierta), y cada minuto se revisa tienda-version.txt: si hay una versión nueva de la página, se recarga sola.
    Cada vez que se cambie tienda.html, subir TIENDA_VERSION y tienda-version.txt juntos (AAAAMMDDNN). */
-var TIENDA_VERSION = "2026111103";
+var TIENDA_VERSION = "2026111104";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -765,10 +765,9 @@ function renderInv(){
  var h = '<h2>Inventario</h2><button class="btn rojo" id="nuevo">➕ Producto nuevo</button>';
  if(l.length) h += '<div class="kpis" style="margin-top:10px"><div class="kpi"><small>Productos en bodega (costo)</small><b>' + plata(valorCosto) + '</b></div><div class="kpi verde"><small>Si vendes todo, entra</small><b>' + plata(valorVenta) + '</b></div></div>';
  if(l.length){
-  var qc = queComprar().length, pv = porVencer();
-  h += '<div class="grid2" style="margin-top:10px"><button class="btn oro" id="bComprar">🛍 Qué comprar' + (qc ? ' (' + qc + ')' : '') + '</button><button class="btn" id="bVence">⏰ Por vencer' + (pv.length ? ' (' + pv.length + ')' : '') + '</button></div>';
-  var nm = noSeMueven().length;
-  h += '<button class="btn" id="bLentos" style="margin-top:8px">🐢 Ropa que no se vende' + (nm ? ' (' + nm + ')' : '') + '</button>';
+  /* «⏰ Por vencer» y «🐢 Ropa que no se vende» se sacaron el 11-11-2026 (la dueña: "no lo ocupo"); sus funciones quedan sin botón. */
+  var qc = queComprar().length;
+  h += '<button class="btn oro" id="bComprar" style="margin-top:10px;width:100%">🛍 Qué comprar' + (qc ? ' (' + qc + ')' : '') + '</button>';
   /* «🧮 Calcular pedido (Shein)» se sacó el 27-10-2026 (la dueña: "no me gustó"); verCalcPedido queda sin botón. */
   var nped = pedidos().length;
   h += '<div class="grid2" style="margin-top:8px"><button class="btn" id="bPack">🎁 Armar pack</button><button class="btn" id="bPed">📦 Mis pedidos' + (nped ? ' (' + nped + ')' : '') + '</button></div>';
