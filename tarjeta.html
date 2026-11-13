@@ -2632,7 +2632,8 @@ function renderEvolucion(s){
   /* Waffle casero (05-11-2026, receta de la dueña: harina de arroz, avena, dátil, leche sin lactosa, leche en polvo, yogur griego). */
   { re:/^waffle de arroz/i, k:355, p:12, c:48, g:13.5, por:"1 waffle", lleva:"Harina de arroz, avena, dátil, leche, yogur griego, huevo y aceite de coco, sin azúcar añadida", al:"huevo y leche" },
   /* Helados proteicos sin azúcar (31-10-2026, catálogo de la dueña: endulzados con stevia y alulosa; valores estimados del catálogo). */
-  { re:/^helado proteico sue[nñ]o de avellana/i, k:137, p:9.4, c:12.4, g:5.8, por:"100 ml", lleva:"Proteína, crema de avellanas con cacao sin azúcar y avellanas", al:"leche y avellanas" },
+  { re:/^helado proteico lem[oó]n p(ie|ai)/i, k:138, p:9.4, c:13.6, g:5.0, por:"100 ml", lleva:"Proteína, limón y galleta", al:"leche" },
+  { re:/^helado proteico sue[nñ]o de (avellana|nutella)/i, k:137, p:9.4, c:12.4, g:5.8, por:"100 ml", lleva:"Proteína, crema de avellanas con cacao sin azúcar y avellanas", al:"leche y avellanas" },
   { re:/^helado proteico alfajor/i, k:164, p:9.4, c:18.3, g:6.4, por:"100 ml", lleva:"Proteína, galleta, manjar y chocolate", al:"leche, trigo y soya" },
   { re:/^helado proteico manjarate/i, k:176, p:11.9, c:19.8, g:5.8, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico capuchino/i, k:130, p:10, c:11, g:5, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
@@ -2653,7 +2654,7 @@ function renderEvolucion(s){
   { re:/^helado proteico man[ií] bomb[oó]n/i, k:175, p:10.9, c:11.6, g:9.6, por:"100 ml", lleva:"Proteína, maní y chocolate", al:"leche y maní" },
   { re:/^helado proteico avellana/i, k:163, p:10, c:13.5, g:7.8, por:"100 ml", lleva:"Proteína, avellanas y manjar", al:"leche y avellanas" }
  ];
- function tvMacros_(p){ for(var i = 0; i < TIENDA_MACROS.length; i++) if(TIENDA_MACROS[i].re.test(p.n)) return TIENDA_MACROS[i]; return null; }
+ function tvMacros_(p){ var t2 = (p.n || "") + " " + (p.det || ""); for(var i = 0; i < TIENDA_MACROS.length; i++) if(TIENDA_MACROS[i].re.test(p.n) || TIENDA_MACROS[i].re.test(t2)) return TIENDA_MACROS[i]; return null; }  /* el sabor puede venir en el detalle (13-11-2026) */
  function tvMacrosHtml_(m, grande){
   if(!m) return "";
   if(!grande) return '<span class="tv-mac">🔥 ' + m.k + ' kcal · 💪 ' + m.p + ' g proteína</span>';
@@ -2753,7 +2754,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111301", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111302", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
