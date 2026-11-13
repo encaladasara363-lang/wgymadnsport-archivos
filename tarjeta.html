@@ -2632,6 +2632,7 @@ function renderEvolucion(s){
   /* Waffle casero (05-11-2026, receta de la dueña: harina de arroz, avena, dátil, leche sin lactosa, leche en polvo, yogur griego). */
   { re:/^waffle de arroz/i, k:355, p:12, c:48, g:13.5, por:"1 waffle", lleva:"Harina de arroz, avena, dátil, leche, yogur griego, huevo y aceite de coco, sin azúcar añadida", al:"huevo y leche" },
   /* Helados proteicos sin azúcar (31-10-2026, catálogo de la dueña: endulzados con stevia y alulosa; valores estimados del catálogo). */
+  { re:/^helado proteico sue[nñ]o de avellana/i, k:137, p:9.4, c:12.4, g:5.8, por:"100 ml", lleva:"Proteína, crema de avellanas con cacao sin azúcar y avellanas", al:"leche y avellanas" },
   { re:/^helado proteico alfajor/i, k:164, p:9.4, c:18.3, g:6.4, por:"100 ml", lleva:"Proteína, galleta, manjar y chocolate", al:"leche, trigo y soya" },
   { re:/^helado proteico manjarate/i, k:176, p:11.9, c:19.8, g:5.8, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico capuchino/i, k:130, p:10, c:11, g:5, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
@@ -2752,7 +2753,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111101", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111301", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
