@@ -694,7 +694,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111503";
+var TIENDA_VERSION = "2026111504";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -2348,12 +2348,13 @@ function repararCodificados(){
   api("tiendaProducto", { datos:JSON.stringify(p) })["catch"](function(){});
  });
 }
-try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ENLACE_QS = location.search.slice(1).replace(/(^|&)tv=\d*/g, ""); ["n","cat","det","costo","precio","stock","min","foto","cod","tipo","pronto"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = sinPorcentajes(qs.get(k)); }); history.replaceState(null, "", location.pathname); } }catch(e){}
+try{ var qs = new URLSearchParams(location.search); if(qs.get("nuevo")){ ENLACE = {}; ENLACE_QS = location.search.slice(1).replace(/(^|&)tv=\d*/g, ""); ["n","cat","det","costo","precio","stock","min","foto","cod","tipo","pronto","porfoto"].forEach(function(k){ if(qs.has(k)) ENLACE[k] = sinPorcentajes(qs.get(k)); }); history.replaceState(null, "", location.pathname); } }catch(e){}
 function usarEnlace(){
  if(!ENLACE) return; var b = ENLACE; ENLACE = null;
  if(b.cat) b.cat = catNueva(b.cat);
  /* Mismo código de barras = mismo producto, aunque cambie el nombre (24-10-2026: «Trident Infinit Menta» pasó a «Peppermint»). */
- var ya = (b.cod && b.cod !== "auto" ? porCodigo(b.cod) : null) || activos().filter(function(p){ return normTxt(p.n) === normTxt(b.n) && normTxt(p.det) === normTxt(b.det || ""); })[0] ||
+ /* porfoto=1 (15-11-2026): cambiar el nombre de un producto ya cargado; se busca por su foto. */
+ var ya = (b.porfoto && b.foto ? activos().filter(function(p){ return p.foto === b.foto; })[0] : null) || (b.cod && b.cod !== "auto" ? porCodigo(b.cod) : null) || activos().filter(function(p){ return normTxt(p.n) === normTxt(b.n) && normTxt(p.det) === normTxt(b.det || ""); })[0] ||
   /* Solo foto (27-10-2026): un enlace con foto + tipo marca como americana/nueva una prenda ya cargada. */
   (!b.n && b.foto ? activos().filter(function(p){ return p.foto === b.foto; })[0] : null);
  tab = "inv"; document.querySelectorAll("#nav button").forEach(function(x){ x.setAttribute("aria-pressed", x.dataset.tab === "inv"); }); render();
