@@ -2637,6 +2637,7 @@ function renderEvolucion(s){
   { re:/^helado proteico lem[oó]n p(ie|ai)/i, k:138, p:9.4, c:13.6, g:5.0, por:"100 ml", lleva:"Proteína, limón y galleta", al:"leche" },
   { re:/^helado proteico sue[nñ]o de (avellana|nutella)/i, k:137, p:9.4, c:12.4, g:5.8, por:"100 ml", lleva:"Proteína, crema de avellanas con cacao sin azúcar y avellanas", al:"leche y avellanas" },
   { re:/^helado proteico alfajor/i, k:164, p:9.4, c:18.3, g:6.4, por:"100 ml", lleva:"Proteína, galleta, manjar y chocolate", al:"leche, trigo y soya" },
+  { re:/^helado proteico confeti choco/i, k:136, p:6.8, c:12.6, g:6.1, por:"100 ml", lleva:"Proteína de vainilla y 8 lentejas de chocolate de colores (M&M's). Base sin azúcar (stevia y alulosa); las lentejas aportan unos 4 g de azúcar añadida por vaso", al:"leche y soya; puede contener maní" },
   { re:/^helado proteico manjarate nuez/i, k:151, p:8.1, c:11.1, g:8.3, por:"100 ml", lleva:"Proteína de vainilla, manjar, cacao y nueces tostadas, sin azúcar: endulzado con stevia y alulosa", al:"leche y nueces" },
   { re:/^helado proteico manjarate/i, k:176, p:11.9, c:19.8, g:5.8, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico capuchino/i, k:130, p:10, c:11, g:5, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
@@ -2758,7 +2759,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111504", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111505", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
