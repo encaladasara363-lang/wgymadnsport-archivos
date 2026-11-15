@@ -694,7 +694,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111502";
+var TIENDA_VERSION = "2026111503";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
@@ -816,8 +816,9 @@ function renderVender(){
   if(!q){ r.hidden = true; return; }
   var l = activos().filter(function(p){ return !packDesarmado(p) && normTxt(p.n + " " + p.cat + " " + p.det + " " + p.cod).indexOf(q) >= 0; }).slice(0, 30);
   r.hidden = false;
-  r.innerHTML = l.length ? l.map(function(p){ return '<button data-add="' + esc(p.id) + '"><span style="font-size:24px">' + iconoCat(p.cat) + '</span><span class="n"><b>' + esc(p.n) + '</b><small>' + (apartadoDe(p) ? '📌 APARTADO · ' : '') + (ropaVendida(p) ? '✅ VENDIDO' : !basePorcion(p) && !apartadoDe(p) && stockVer(p) <= 0 ? '⛔ SIN STOCK' : 'Quedan ' + stockVer(p)) + (p.det ? ' · ' + esc(p.det) : '') + '</small></span><span class="precio" style="font-size:20px">' + plata(precioVenta(p)) + '</span></button>'; }).join("") : '<p class="muted" style="padding:10px;margin:0">No hay productos con ese nombre.</p>';
+  r.innerHTML = l.length ? l.map(function(p){ return '<button data-add="' + esc(p.id) + '"><span style="font-size:24px">' + iconoCat(p.cat) + '</span><span class="n"><b>' + esc(p.n) + '</b><small>' + (apartadoDe(p) ? '📌 APARTADO · ' : '') + (ropaVendida(p) ? '✅ VENDIDO' : !basePorcion(p) && !apartadoDe(p) && stockVer(p) <= 0 ? '⛔ SIN STOCK' : 'Quedan ' + stockVer(p)) + (p.det ? ' · ' + esc(p.det) : '') + '</small></span><span class="precio" style="font-size:20px">' + plata(precioVenta(p)) + '</span></button>' + (esBatido(p) ? '<button data-addc="' + esc(p.id) + '" style="background:#FFD400;color:#000;justify-content:center;font-size:19px;font-weight:900">💪 ' + esc(p.n.replace(/^smoothie proteico /i, '')) + ' CON CREATINA · ' + plata(precioVenta(p) + CREATINA_EXTRA) + '</button>' : ''); }).join("") : '<p class="muted" style="padding:10px;margin:0">No hay productos con ese nombre.</p>';
   r.querySelectorAll("[data-add]").forEach(function(b){ b.onclick = function(){ agregarAlCarro(prod(b.dataset.add)); renderVender(); toast("✅ Agregado"); }; });
+  r.querySelectorAll("[data-addc]").forEach(function(b){ b.onclick = function(){ var p = prod(b.dataset.addc); if(!p) return; carro.push({ id:p.id, n:p.n, precio:precioVenta(p) + CREATINA_EXTRA, cant:1, crea:true }); vibrar(25); renderVender(); toast("✅ Agregado con creatina"); }; });
  };
  if($("vaciar")) $("vaciar").onclick = function(){ carro = []; renderVender(); };
  v.querySelectorAll("[data-m]").forEach(function(b){ b.onclick = function(){ var it = carro[+b.dataset.m]; it.cant--; if(it.cant <= 0) carro.splice(+b.dataset.m, 1); renderVender(); }; });
