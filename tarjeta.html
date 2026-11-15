@@ -2480,7 +2480,7 @@ function renderEvolucion(s){
     oculta con «Ya no lo vendo» no llega. «Lo quiero» abre una ventanita (foto grande, cantidad, total)
     y después WhatsApp a Sara con el pedido. El stock solo baja cuando ella cobra en la tienda.
     Al cambiar una foto de img/tienda/ con el mismo nombre, subir TIENDA_FOTO_V junto con FOTO_V de tienda.html. */
- var TIENDA_FOTO_V = "63", TIENDA_WSP = "56975196394", TIENDA_SITIO = "https://encaladasara363-lang.github.io/wgymadnsport-archivos/";
+ var TIENDA_FOTO_V = "64", TIENDA_WSP = "56975196394", TIENDA_SITIO = "https://encaladasara363-lang.github.io/wgymadnsport-archivos/";
  /* Interruptor (25-10-2026, la dueña: "no quiero publicar la tienda el lunes porque compré ropa en Shein y no sé
     cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
     Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
@@ -2640,7 +2640,7 @@ function renderEvolucion(s){
   { re:/^helado proteico manjarate/i, k:176, p:11.9, c:19.8, g:5.8, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico capuchino/i, k:130, p:10, c:11, g:5, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
   { re:/^helado proteico tropical/i, k:143, p:9.8, c:14, g:5.3, por:"100 ml", lleva:"Proteína de vainilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
-  { re:/^helado proteico banana mu(ss|sse|ousse)/i, k:201, p:12.2, c:17.9, g:7.4, por:"100 ml", lleva:"Proteína, plátano y trozos de maní, sin azúcar: endulzado con stevia y alulosa", al:"leche y maní" },
+  { re:/^helado proteico banana mu(ss|sse|ousse)/i, k:201, p:12.2, c:17.9, g:7.4, por:"100 ml", lleva:"Proteína y plátano, sin azúcar: endulzado con stevia y alulosa", al:"leche y maní" },
   { re:/^helado proteico banana split/i, k:137, p:8.2, c:12.3, g:5.8, por:"100 ml", lleva:"Proteína, plátano, nueces y chocolate", al:"leche y nueces" },
   { re:/^helado proteico banana/i, k:161, p:10.9, c:16.3, g:5.8, por:"100 ml", lleva:"Proteína de chocolate, sin azúcar: endulzado con stevia y alulosa", al:"leche y maní" },
   { re:/^helado proteico berry/i, k:126, p:9.9, c:12.3, g:3.9, por:"100 ml", lleva:"Proteína de frutilla, sin azúcar: endulzado con stevia y alulosa", al:"leche" },
@@ -2757,7 +2757,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111501", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111502", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
