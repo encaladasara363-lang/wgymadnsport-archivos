@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,700&family=Barlow:wght@400;500;600;700&family=Rubik+Distressed&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,700&family=Barlow:wght@400;500;600;700&family=Rubik+Distressed&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <!--
   WGYMNUTRI (10/2026, pedido de la dueña): contador de calorías aparte de la
   tarjeta virtual, al estilo Cal AI pero gratis (sin fotos con IA): búsqueda
@@ -235,6 +235,18 @@ h1,h2,h3{margin:0;font-weight:400}
 </style>
 <link rel="stylesheet" href="nutri-claro.css?v=70">
 <link rel="stylesheet" href="nutri-oscuro.css?v=16">
+<style>
+/* Misma letra del mesón (16-11-2026, la dueña: "la tipografía que tengo en mi mesón"): Atkinson Hyperlegible en
+   negrita, MAYÚSCULAS y sin cursiva. Los números siguen en Anton. Va al final para ganarle a nutri-claro/oscuro. */
+:root{
+ --display:"Atkinson Hyperlegible","Barlow",Arial,sans-serif;
+ --cond:"Atkinson Hyperlegible","Barlow Condensed",Arial,sans-serif;
+ --body:"Atkinson Hyperlegible","Barlow",Arial,sans-serif;
+}
+body, body *:not(svg):not(svg *){ font-style:normal !important; font-weight:700 !important; }
+input::placeholder, textarea::placeholder{ font-style:normal; }
+.disp, .top .t b{ letter-spacing:0; }
+</style>
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
 try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
 </head>
@@ -3026,7 +3038,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026111601", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026111602", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
