@@ -2399,11 +2399,14 @@ function renderEvolucion(s){
   var precio = (window.WGYM_PAGO && WGYM_PAGO.nutri && WGYM_PAGO.nutri.precio) || 3000;
   var tri = ((window.WGYM_PAGO && WGYM_PAGO.nutriOfertas) || []).filter(function(o){ return o.id === "tri"; })[0];
   box.innerHTML = '<img src="assets/wgymnutri-logo.webp" alt="WGYMNUTRI">' +
-   '<div class="np-tx"><p class="pago-kicker">🥗 Nuevo · WGYMNUTRI</p>' +
+   '<div class="np-tx"><p class="pago-kicker">🥗 Gratis para socios · WGYMNUTRI</p>' +
    '<p>Tu contador de calorías y proteínas:</p>' +
    '<ul class="np-lista"><li>📷 <b>Escanea el código de barras</b> de tus productos y ve sus calorías al instante</li>' +
    '<li>🥗 Más de 400 recetas saludables</li><li>🔥 Tu meta diaria, agua, racha y medallas</li></ul>' +
-   '<p><b>' + clp(precio) + ' al mes</b> o <b>3 meses por ' + clp(tri ? tri.precio : 8000) + '</b>. Pídela en recepción.</p>' +
+   /* Gratis para socios desde el 16-11-2026 (la dueña): plan al día = abierta; vencido = bloqueada. */
+   (socioActual && tarjetaBloqueada_(socioActual)
+    ? '<p><b>Gratis para socios con su plan al día.</b> Renueva tu mensualidad y vuelve a usarla.</p>'
+    : '<p><b>GRATIS para ti</b> mientras tu plan esté al día. ¡Ábrela y empieza hoy!</p>') +
    '<a class="pago-btn principal" href="wgymnutri.html?desde=tarjeta">Ver WGYMNUTRI</a></div>';
   box.hidden = false;
  }
@@ -2764,7 +2767,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111511", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111601", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
