@@ -2238,6 +2238,7 @@ probado: ella se activó desde el mesón y entró a la app).
   (los primeros 4,4 s del video, de frente, ida y vuelta para que el bucle no salte; sin
   sonido, 320 px), aro dorado/rojo que gira y brillo dorado que pulsa. Nombre y saludo en una
   sola línea (con «…» si no cabe).
+- **Letra del mesón (16-11-2026, la dueña: "la tipografía que tengo en mi mesón"):** `<style>` después de `nutri-oscuro.css` en `wgymnutri.html`: `--display`, `--cond` y `--body` en Atkinson Hyperlegible, todo en negrita 700, MAYÚSCULAS y **sin cursiva** (reemplaza la cursiva 800 de `nutri-claro.css`); los números siguen en Anton.
 - **Diseño (10-10-2026):** fondo blanco con el estilo de la tablet de la puerta
   (`nutri-claro.css`, va encima del CSS de la app; subir `?v=` al cambiarlo),
   letras grandes y negras a pedido de la dueña. Recetario solo saludable
