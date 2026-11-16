@@ -2,47 +2,47 @@
    de la dueña: "más clarito y más llamativo, que se note más mi logo").
    Va ENCIMA del CSS de wgymnutri.html: solo cambia la apariencia. */
 :root{
- --bg:#FFFFFF; --panel:#FFFFFF; --panel2:#FFFFFF; --line:#ECE6DC;
- --fg:#141416; --muted:#6B6B73; --gold:#B8901F; --gold2:#C99A1E;
+ --bg:#FFFFFF; --panel:#FFFFFF; --panel2:#FFFFFF; --line:#D6F1EA;
+ --fg:#141416; --muted:#6B6B73; --gold:#E8603C; --gold2:#FF7A59;
  color-scheme:light;
 }
-html,body{ background:#F7F5F1; color:var(--fg); }
+html,body{ background:#F4FBF8; color:var(--fg); }
 body{ background:
- radial-gradient(120% 40% at 50% -5%, rgba(227,6,19,.10), transparent 60%),
- repeating-linear-gradient(135deg, rgba(0,0,0,.018) 0 2px, transparent 2px 9px), #F7F5F1; }
+ radial-gradient(120% 40% at 50% -5%, rgba(20,184,166,.10), transparent 60%),
+ repeating-linear-gradient(135deg, rgba(0,0,0,.018) 0 2px, transparent 2px 9px), #F4FBF8; }
 
 /* Encabezado grande con el logo bien visible y la franja roja/dorada del mesón */
 .top{ flex-wrap:wrap; position:relative; padding:6px 0 22px; margin-bottom:16px; }
 .top::after{ content:""; position:absolute; left:-16px; right:-16px; bottom:0; height:8px;
- background:repeating-linear-gradient(-45deg,#E30613 0 14px,transparent 14px 20px,#D4AF37 20px 24px,transparent 24px 30px); }
-.top img{ width:96px; height:96px; filter:drop-shadow(0 6px 14px rgba(227,6,19,.35)); }
+ background:repeating-linear-gradient(-45deg,#14B8A6 0 14px,transparent 14px 20px,#FF7A59 20px 24px,transparent 24px 30px); }
+.top img{ width:96px; height:96px; filter:drop-shadow(0 6px 14px rgba(20,184,166,.35)); }
 .top .t{ padding-right:70px; }
 .top .t b{ font-size:clamp(19px,5.6vw,28px); line-height:1; color:#141416; overflow-wrap:anywhere; }
-.top .t span{ font-family:var(--cond); font-weight:700; font-size:16px; letter-spacing:.06em; text-transform:uppercase; color:#E30613; }
+.top .t span{ font-family:var(--cond); font-weight:700; font-size:16px; letter-spacing:.06em; text-transform:uppercase; color:#14B8A6; }
 .racha{ position:absolute; top:4px; right:0; background:#FFF4E0; border:2px solid #E7B54A; color:#B36B00; box-shadow:0 3px 0 #E7B54A; }
 
 /* Tarjetas blancas con borde rojo a la izquierda y sombra suave */
-.card{ background:#FFFFFF; border:1px solid var(--line); border-left:4px solid #E30613; box-shadow:0 6px 18px rgba(20,20,22,.07); }
-.kick{ color:#B8901F; }
+.card{ background:#FFFFFF; border:1px solid var(--line); border-left:4px solid #14B8A6; box-shadow:0 6px 18px rgba(20,20,22,.07); }
+.kick{ color:#E8603C; }
 .cab h3, .comida .cab h3{ color:#141416; }
-.cab h3::before{ content:""; display:inline-block; width:6px; height:16px; background:#E30613; transform:skewX(-18deg); margin-right:8px; vertical-align:-1px; }
+.cab h3::before{ content:""; display:inline-block; width:6px; height:16px; background:#14B8A6; transform:skewX(-18deg); margin-right:8px; vertical-align:-1px; }
 .comida .cab h3::before{ display:none; }
 h2.disp{ color:#141416; display:flex; align-items:center; gap:10px; }
-h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transform:skewX(-18deg); flex:none; }
+h2.disp::before{ content:""; width:8px; height:26px; background:#14B8A6; transform:skewX(-18deg); flex:none; }
 .gate h1.disp::before, #vPago h2.disp::before, .logro-pop h2.disp::before, .bloq h2.disp::before, #vOnb h2.disp::before{ display:none; }
 .muted{ color:var(--muted); }
 
 /* Botones como el mesón: angostos, cursiva y con "escalón" */
-.btn.rojo{ box-shadow:0 4px 0 #7a030b; }
-.btn.oro{ box-shadow:0 4px 0 #8a6a12; color:#141414; }
-.btn.sec{ background:#FFFFFF; border:2px solid #E2DBCF; color:#141416; font-style:italic; box-shadow:0 3px 0 #E2DBCF; }
-.inp{ background:#FFFFFF; border:2px solid #E2DBCF; color:#141416; }
-.inp:focus{ outline:2px solid #E30613; border-color:transparent; }
+.btn.rojo{ box-shadow:0 4px 0 #0E7C70; }
+.btn.oro{ box-shadow:0 4px 0 #C2492A; color:#141414; }
+.btn.sec{ background:#FFFFFF; border:2px solid #CDEFE6; color:#141416; font-style:italic; box-shadow:0 3px 0 #CDEFE6; }
+.inp{ background:#FFFFFF; border:2px solid #CDEFE6; color:#141416; }
+.inp:focus{ outline:2px solid #14B8A6; border-color:transparent; }
 .campo label{ color:#6B6B73; }
 
 /* Entrada: logo más grande */
 .gate .logo{ width:min(76vw,300px); }
-.gate h1 .g{ color:#C99A1E; }
+.gate h1 .g{ color:#FF7A59; }
 
 /* Anillo y macros */
 .anillo .fondo{ stroke:#F1ECE3; }
@@ -53,7 +53,7 @@ h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transfo
 .m-g i{ background:linear-gradient(90deg,#0B5FD9,#3FA2FF); }
 .macro .fila em{ color:#6B6B73; }
 
-.frase{ background:linear-gradient(90deg,rgba(227,6,19,.10),transparent); color:#141416; }
+.frase{ background:linear-gradient(90deg,rgba(20,184,166,.10),transparent); color:#141416; }
 .aviso{ background:#FFF8E6; border:1px solid #F0D58A; color:#3A2E00; }
 .aviso button{ color:#8A7A50; }
 
@@ -68,29 +68,29 @@ h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transfo
 /* Barra de abajo clara con el botón rojo */
 .nav{ background:rgba(255,255,255,.96); border-top:1px solid var(--line); box-shadow:0 -6px 20px rgba(20,20,22,.06); }
 .nav button{ color:#8A8A92; }
-.nav button.on{ color:#E30613; }
+.nav button.on{ color:#14B8A6; }
 .nav .mas{ border-color:#FFFFFF; }
 
 /* Hoja para agregar comida */
 .velo{ background:rgba(20,20,22,.45); }
 .hoja{ background:#FFFFFF; border-color:var(--line); }
 .hoja .asa{ background:#DDD6CA; }
-.chip{ background:#FFFFFF; border:2px solid #E2DBCF; color:#141416; }
-.chip[aria-pressed="true"]{ background:#E30613; border-color:#E30613; color:#fff; }
+.chip{ background:#FFFFFF; border:2px solid #CDEFE6; color:#141416; }
+.chip[aria-pressed="true"]{ background:#14B8A6; border-color:#14B8A6; color:#fff; }
 .res button{ border-bottom-color:var(--line); color:#141416; }
 .res button span{ color:#6B6B73; }
-.res button .k{ color:#C99A1E; }
-.det-macros div, .plan-res div{ background:#FBF9F5; border:1px solid var(--line); }
+.res button .k{ color:#FF7A59; }
+.det-macros div, .plan-res div{ background:#F4FBF8; border:1px solid var(--line); }
 .det-macros span, .plan-res span{ color:#6B6B73; }
-.opc{ background:#FFFFFF; border:2px solid #E2DBCF; color:#141416; }
+.opc{ background:#FFFFFF; border:2px solid #CDEFE6; color:#141416; }
 .opc small{ color:#6B6B73; }
-.opc[aria-pressed="true"]{ border-color:#E30613; background:#FFF1F1; box-shadow:0 3px 0 #E30613; }
+.opc[aria-pressed="true"]{ border-color:#14B8A6; background:#FFF1F1; box-shadow:0 3px 0 #14B8A6; }
 .grande-inp{ color:#141416; }
 
 /* Progreso */
-.semana .bar.n{ background:#ECE6DC; }
+.semana .bar.n{ background:#D6F1EA; }
 .semana .col span{ color:#6B6B73; }
-.medalla{ background:#FBF9F5; border:1px solid var(--line); }
+.medalla{ background:#F4FBF8; border:1px solid var(--line); }
 .medalla small{ color:#6B6B73; }
 .medalla.on{ background:linear-gradient(180deg,#FFF6DD,#FFFFFF); border-color:#E7C76A; }
 .peso-graf text[fill="#F5F5F6"]{ fill:#141416; }
@@ -104,21 +104,21 @@ h2.disp::before{ content:""; width:8px; height:26px; background:#E30613; transfo
 
 /* ===== Mismo estilo de la tablet de la puerta, en blanco (10-10-2026, pedido de la dueña) ===== */
 /* Cuadros con borde dorado completo, como "BANDAS PEDIDAS" */
-.card{ border:2px solid #E2C35A; border-left:2px solid #E2C35A; border-radius:18px; }
+.card{ border:2px solid #FF9478; border-left:2px solid #FF9478; border-radius:18px; }
 /* Títulos en letra rugosa con la barra roja */
 .cab h3{ font-family:var(--display); font-weight:400; letter-spacing:.04em; text-transform:uppercase; color:#141416; }
 .comida .cab h3{ font-family:var(--body); text-transform:none; letter-spacing:0; }
-.kick{ font-family:var(--cond); letter-spacing:.18em; color:#B8901F; }
+.kick{ font-family:var(--cond); letter-spacing:.18em; color:#E8603C; }
 /* Cuadro principal (meta del día) = "ÚLTIMO INGRESO": degradado rojo suave con rayas doradas */
-.card:has(.anillo-box){ position:relative; overflow:hidden; border-color:#E30613;
- background:linear-gradient(135deg,rgba(227,6,19,.12) 0%,#FFFFFF 55%,#FFFDF6 100%); }
+.card:has(.anillo-box){ position:relative; overflow:hidden; border-color:#14B8A6;
+ background:linear-gradient(135deg,rgba(20,184,166,.12) 0%,#FFFFFF 55%,#FFFDF6 100%); }
 .card:has(.anillo-box)::after{ content:""; position:absolute; right:-30px; top:0; bottom:0; width:150px; pointer-events:none;
  background:repeating-linear-gradient(-60deg,transparent 0 18px,rgba(212,175,55,.20) 18px 22px); }
 .card:has(.anillo-box) > *{ position:relative; z-index:1; }
 /* Botones secundarios amarillos como "DEVOLVER" */
-.btn.sec{ background:#F2D04B; border:0; color:#141416; box-shadow:0 4px 0 #B8901F; }
-.add-l{ background:#FFF4C9; border:2px dashed #E2C35A; color:#7A5A00; }
-.racha{ background:#F2D04B; border:0; color:#141416; box-shadow:0 3px 0 #B8901F; }
+.btn.sec{ background:#F2D04B; border:0; color:#141416; box-shadow:0 4px 0 #E8603C; }
+.add-l{ background:#FFF4C9; border:2px dashed #FF9478; color:#7A5A00; }
+.racha{ background:#F2D04B; border:0; color:#141416; box-shadow:0 3px 0 #E8603C; }
 
 /* Letras más grandes en las comidas (10-10-2026, la dueña: "las letras muy pequeñas") */
 .add-l{ font-size:22px !important; font-weight:800 !important; padding:18px 12px !important; color:#6B4E00 !important; }
@@ -177,7 +177,7 @@ p.muted, div.muted, .muted{ color:#111114 !important; font-weight:600; }
 /* Letras bien marcadas en toda la app (10-10-2026, la dueña: "las letras no están marcadas") */
 body{ color:#111114; font-weight:500; }
 .card li{ font-size:18.5px; font-weight:600; color:#111114; line-height:1.6 !important; }
-.card li::marker{ color:#E30613; font-weight:800; }
+.card li::marker{ color:#14B8A6; font-weight:800; }
 .kick{ color:#8A6500 !important; font-weight:800 !important; }
 .det-macros b, .plan-res b{ font-size:30px; }
 .det-macros span, .plan-res span{ color:#111114 !important; font-weight:800 !important; }
@@ -187,7 +187,7 @@ body{ color:#111114; font-weight:500; }
 .inp{ font-weight:600; color:#111114; }
 .inp::placeholder{ color:#6B6B73; font-weight:500; }
 .nav button{ color:#3F3F46 !important; font-weight:800; }
-.nav button.on{ color:#E30613 !important; }
+.nav button.on{ color:#14B8A6 !important; }
 .opc small{ font-weight:700 !important; }
 
 /* Porción recomendada de la etiqueta (productos escaneados) */
@@ -210,10 +210,10 @@ body{ zoom:1.1; }
 .anillo .centro span{ font-size:12px !important; }
 
 /* Nombre del socio bien llamativo (10-10-2026, la dueña: "los nombres apenas se ven") */
-.top .t span#saludo{ font-family:var(--display) !important; font-weight:400 !important; font-size:24px !important; letter-spacing:.03em !important; color:#E30613 !important; line-height:1.05; display:block; margin-top:2px; }
+.top .t span#saludo{ font-family:var(--display) !important; font-weight:400 !important; font-size:24px !important; letter-spacing:.03em !important; color:#14B8A6 !important; line-height:1.05; display:block; margin-top:2px; }
 .perfil-nombre{ margin:0 0 6px; font-family:var(--display); font-size:30px; line-height:1.05; text-transform:uppercase; letter-spacing:.02em; color:#111114; }
 .campo label{ font-size:16px !important; color:#111114 !important; }
-#borrarB{ background:#FFFFFF !important; border:2px solid #E30613 !important; color:#E30613 !important; box-shadow:0 4px 0 #E30613 !important; }
+#borrarB{ background:#FFFFFF !important; border:2px solid #14B8A6 !important; color:#14B8A6 !important; box-shadow:0 4px 0 #14B8A6 !important; }
 .inst-aparte{ margin-top:10px; }
 .inst-aparte summary{ cursor:pointer; font-weight:700; color:#8A6500; font-size:16px; text-decoration:underline; }
 .inst-aparte[open] summary{ margin-bottom:8px; }
@@ -229,7 +229,7 @@ body{ zoom:1.1; }
 .rec-sw::after{ content:""; position:absolute; top:3px; left:3px; width:26px; height:26px; border-radius:50%; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,.25); transition:left .2s; }
 .rec-op input:checked ~ .rec-sw{ background:#2E9E4F; }
 .rec-op input:checked ~ .rec-sw::after{ left:25px; }
-.rec-op input:focus-visible ~ .rec-sw{ outline:3px solid #E30613; outline-offset:2px; }
+.rec-op input:focus-visible ~ .rec-sw{ outline:3px solid #14B8A6; outline-offset:2px; }
 
 /* Horas de comida del socio (10-10-2026) */
 .horas-com{ display:flex; flex-direction:column; }
@@ -242,15 +242,15 @@ body{ zoom:1.1; }
 /* La hoja usa el alto visible (con teclado abierto) */
 .velo{ bottom:auto; height:100%; }
 .hoja{ max-height:94% !important; overscroll-behavior:contain; }
-.tag-wgym{ display:inline-block; font-style:normal; font-family:var(--cond); font-weight:800; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#fff; background:#E30613; border-radius:6px; padding:2px 8px; margin:3px 0 2px; }
-.uni-falta{ margin:10px 0 0; background:#FFF8E6; border:2px dashed #E2C35A; border-radius:14px; padding:10px 12px; }
+.tag-wgym{ display:inline-block; font-style:normal; font-family:var(--cond); font-weight:800; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#fff; background:#14B8A6; border-radius:6px; padding:2px 8px; margin:3px 0 2px; }
+.uni-falta{ margin:10px 0 0; background:#FFF8E6; border:2px dashed #FF9478; border-radius:14px; padding:10px 12px; }
 .uni-falta summary{ cursor:pointer; font-weight:800; font-size:16px; color:#6B4E00; }
 #dUni{ margin-bottom:10px; }
 /* Bebidas energéticas e isotónicas (10-10-2026) */
 .comida-card .beb-bts,.bebidas-card .beb-bts{display:grid;gap:10px;margin-top:8px}
 .comida-card .beb-bts .btn,.bebidas-card .beb-bts .btn{font-size:19px;padding:15px}
 /* Aviso "Pon WGYMNUTRI en tu pantalla de inicio": fondo claro para que se lea */
-#tabHoy .aviso[style*="160c0d"]{background:#fff4f4 !important;border-color:#e30613 !important}
+#tabHoy .aviso[style*="160c0d"]{background:#fff4f4 !important;border-color:#14B8A6 !important}
 #tabHoy .aviso[style*="160c0d"] p,#tabHoy .aviso[style*="160c0d"] b{color:#111 !important}
 /* Cuadros de comida (10-10-2026): hora y kcal sin cortarse, botones en una línea */
 .comida-card .cab{align-items:center}
@@ -260,7 +260,7 @@ body{ zoom:1.1; }
 .comida-card .beb-bts .btn,.bebidas-card .beb-bts .btn{white-space:nowrap;font-size:18px !important}
 /* Inicio al estilo Fitia (10-10-2026) */
 .onb-prog{height:8px;border-radius:8px;background:#E8E3D8;overflow:hidden}
-.onb-prog i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#E30613,#D4AF37);transition:width .45s ease}
+.onb-prog i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#14B8A6,#FF7A59);transition:width .45s ease}
 .onb-anim{animation:onbEntra .35s ease both}
 @keyframes onbEntra{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
 .bienv{text-align:center;padding:18px 4px 6px}
@@ -269,15 +269,15 @@ body{ zoom:1.1; }
 .bienv-tx{font-size:19px;color:#1A1A1E;line-height:1.5;margin:8px 0 18px}
 .bienv-dots{display:flex;justify-content:center;gap:8px}
 .bienv-dots i{width:10px;height:10px;border-radius:10px;background:#D9D3C6;transition:all .3s}
-.bienv-dots i.on{width:28px;background:#E30613}
+.bienv-dots i.on{width:28px;background:#14B8A6}
 .evita{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .opc.chico-op{flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:14px 8px}
 .opc.chico-op b{font-size:17px}
-.kcal-grande{font-family:var(--num);font-size:68px;font-weight:400;line-height:1.05;display:block;background:linear-gradient(90deg,#E30613,#C99A1E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kcal-grande{font-family:var(--num);font-size:68px;font-weight:400;line-height:1.05;display:block;background:linear-gradient(90deg,#14B8A6,#FF7A59);-webkit-background-clip:text;background-clip:text;color:transparent}
 .plan-pop{animation:pop .5s ease both}.plan-pop2{animation:pop .5s .35s ease both}.plan-pop3{animation:pop .5s .7s ease both}
 @keyframes pop{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
 .fecha-meta{font-size:21px;color:#141416;margin:6px 0 4px}
-.fecha-meta b{color:#E30613}
+.fecha-meta b{color:#14B8A6}
 .graf-meta{width:100%;height:auto;margin:6px 0}
 .graf-linea{stroke-dasharray:400;stroke-dashoffset:400;animation:dibuja 1.4s .9s ease forwards}
 @keyframes dibuja{to{stroke-dashoffset:0}}
@@ -291,9 +291,9 @@ body{ zoom:1.1; }
 .st-dia b{font-family:var(--num);font-weight:400;font-size:22px}
 .st-dia i{width:8px;height:8px;border-radius:8px;background:#D9D3C6}
 .st-dia.con i{background:#1FA34A}
-.st-dia.hoy b{color:#C99A1E}
+.st-dia.hoy b{color:#FF7A59}
 .st-dia.sel .st-l{background:#141416;color:#fff}
-.cod-leido{background:#FFF4C9;border:2px solid #D4AF37;border-radius:16px;padding:14px;text-align:center;margin-top:6px}
+.cod-leido{background:#FFF4C9;border:2px solid #FF7A59;border-radius:16px;padding:14px;text-align:center;margin-top:6px}
 .cod-leido small{display:block;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7A5A00;font-size:13px}
 .cod-leido b{display:block;font-family:var(--num);font-weight:400;font-size:40px;letter-spacing:.06em;color:#141416;margin:2px 0 6px}
 .cod-leido span{display:block;font-size:16px;color:#1A1A1E}
@@ -323,7 +323,7 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .macro .fila{display:flex !important;flex-direction:column !important;align-items:flex-start !important;gap:0 !important}.macro .fila span{font-size:19px !important;line-height:1.15}.macro .fila em{font-size:21px !important;line-height:1.15;color:#141416 !important}.macros{gap:8px !important}
 /* Casillero grande para escribir la cantidad (10-10-2026) */
 .cant-box label{font-size:18px !important}
-.cant-inp, #dGr{font-size:34px !important;text-align:center;padding:14px !important;border:3px solid #E30613 !important;border-radius:16px !important;font-family:var(--num) !important}
+.cant-inp, #dGr{font-size:34px !important;text-align:center;padding:14px !important;border:3px solid #14B8A6 !important;border-radius:16px !important;font-family:var(--num) !important}
 .cant-box small{display:block;margin-top:6px;font-size:14px;color:#1A1A1E}
 
 /* Resumen ordenado + cuadro de calorías restantes (10-10-2026, pedido de la dueña) */
@@ -342,7 +342,7 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .macros3 .mv{display:block;font-family:var(--num);font-weight:400;font-size:28px;line-height:1.1;color:#111114;white-space:nowrap}
 .macros3 .mv small{font-size:14px}
 .macros3 .barra{margin-top:6px;height:10px !important}
-.restantes{display:flex;align-items:center;gap:14px;border:3px solid #E30613;border-radius:20px;padding:14px 16px;background:linear-gradient(135deg,#FFF5F5,#FFFFFF);margin:14px 0}
+.restantes{display:flex;align-items:center;gap:14px;border:3px solid #14B8A6;border-radius:20px;padding:14px 16px;background:linear-gradient(135deg,#FFF5F5,#FFFFFF);margin:14px 0}
 .restantes .e{font-size:40px;line-height:1}
 .restantes small{display:block;font-size:15px;color:#8A6500}
 .restantes b{display:block;font-family:var(--num);font-weight:400;font-size:48px;line-height:1;color:#111114}
@@ -376,13 +376,13 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 
 /* Logo de la cabecera que resalta (10-10-2026, pedido de la dueña con su video del logo) */
 .logo-top{position:relative;flex:none;width:118px;height:118px;border-radius:50%;padding:4px;
- background:conic-gradient(from 0deg,#D4AF37,#FFE58A,#E30613,#D4AF37,#FFE58A,#E30613,#D4AF37);
+ background:conic-gradient(from 0deg,#FF7A59,#FFE58A,#14B8A6,#FF7A59,#FFE58A,#14B8A6,#FF7A59);
  animation:logoGiro 6s linear infinite, logoBrillo 2.4s ease-in-out infinite}
 .logo-top video{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;background:#000;
  animation:logoGiroInv 6s linear infinite}
 @keyframes logoGiro{to{transform:rotate(360deg)}}
 @keyframes logoGiroInv{to{transform:rotate(-360deg)}}
-@keyframes logoBrillo{0%,100%{box-shadow:0 0 14px 2px rgba(212,175,55,.55),0 8px 22px rgba(227,6,19,.35)}50%{box-shadow:0 0 28px 8px rgba(255,215,90,.85),0 10px 28px rgba(227,6,19,.5)}}
+@keyframes logoBrillo{0%,100%{box-shadow:0 0 14px 2px rgba(212,175,55,.55),0 8px 22px rgba(20,184,166,.35)}50%{box-shadow:0 0 28px 8px rgba(255,215,90,.85),0 10px 28px rgba(20,184,166,.5)}}
 @media (prefers-reduced-motion:reduce){.logo-top,.logo-top video{animation:none}}
 .top{gap:10px !important}
 .top .t{padding-right:56px !important}
@@ -426,11 +426,11 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .det-macros .vitc-det .mic-l{background:none !important;border:0 !important;padding:2px 0 !important;border-radius:0}.vitc-det .mic-l span{white-space:nowrap;font-size:14px}.vitc-det .mic-l b{font-size:20px !important}.vitc-det .mic-l small{font-size:12px}
 
 /* Ideas nuevas (10-10-2026): ¿Qué como ahora?, suplementos, repetir de ayer, entrenamiento y voz */
-.sug-it{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#FBF9F5;border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:8px;cursor:pointer}
+.sug-it{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#F4FBF8;border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:8px;cursor:pointer}
 .sug-it .tx{flex:1;min-width:0}.sug-it b{display:block;font-size:16px}.sug-it small{display:block;font-size:13px;color:#1A1A1E}
-.sug-it .mas{flex:none;width:36px;height:36px;border-radius:50%;background:#E30613;color:#fff !important;display:flex;align-items:center;justify-content:center;font-size:22px;font-style:normal}
+.sug-it .mas{flex:none;width:36px;height:36px;border-radius:50%;background:#14B8A6;color:#fff !important;display:flex;align-items:center;justify-content:center;font-size:22px;font-style:normal}
 .supl-l{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-.supl-b{display:flex;align-items:center;gap:8px;background:#FBF9F5;border:2px solid var(--line);border-radius:30px;padding:8px 14px 8px 8px;cursor:pointer}
+.supl-b{display:flex;align-items:center;gap:8px;background:#F4FBF8;border:2px solid var(--line);border-radius:30px;padding:8px 14px 8px 8px;cursor:pointer}
 .supl-b .ck{width:28px;height:28px;border-radius:50%;border:2px solid #C9C2B4;display:flex;align-items:center;justify-content:center;font-size:16px;font-style:normal}
 .supl-b.on{border-color:#1F9D55;background:#EAF8F0}.supl-b.on .ck{background:#1F9D55;border-color:#1F9D55;color:#fff !important}
 .supl-b b{font-size:15px}.supl-b small{font-size:12px;color:#B36B00 !important}
@@ -438,10 +438,10 @@ body{ letter-spacing:.01em; overflow-wrap:break-word; }
 .rep-ay{display:block;width:100%;margin:10px 0 0;background:#EEF6FF;border:2px dashed #7FBFEA;color:#0D2F55;border-radius:14px;padding:12px;font-family:var(--cond);font-weight:800;font-size:15px;text-transform:uppercase;cursor:pointer}
 .st-dia{position:relative}.st-ent{position:absolute;top:-6px;right:2px;font-size:14px;font-style:normal}
 .entreno-av{border-color:#1F9D55 !important;background:#EAF8F0 !important}
-.voz-mic{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;padding:18px 12px;border:3px solid #E30613;border-radius:20px;background:#FFF5F5;cursor:pointer}
+.voz-mic{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;padding:18px 12px;border:3px solid #14B8A6;border-radius:20px;background:#FFF5F5;cursor:pointer}
 .voz-mic span{font-size:44px;font-style:normal}.voz-mic b{font-size:18px}.voz-mic small{font-size:13px;color:#1A1A1E}
 .voz-mic.oye{animation:vozPulso 1s ease-in-out infinite}
-@keyframes vozPulso{0%,100%{box-shadow:0 0 0 0 rgba(227,6,19,.5)}50%{box-shadow:0 0 0 12px rgba(227,6,19,0)}}
+@keyframes vozPulso{0%,100%{box-shadow:0 0 0 0 rgba(20,184,166,.5)}50%{box-shadow:0 0 0 12px rgba(20,184,166,0)}}
 .voz-it{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .voz-it .tx{flex:1;min-width:0}.voz-it b{display:block}.voz-it span{font-size:13px}.voz-it .k{font-family:var(--num);font-size:20px}
 .voz-it.no b{color:#B00010}
@@ -455,21 +455,21 @@ details.compras summary b{font-size:14px;color:#B36B00}
 .compra-it.ok span{text-decoration:line-through;opacity:.55}
 .fotos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .foto-it{position:relative}.foto-it button[data-fsel]{display:block;width:100%;padding:0;border:3px solid transparent;border-radius:12px;overflow:hidden;background:#000;cursor:pointer}
-.foto-it.sel button[data-fsel]{border-color:#E30613}
+.foto-it.sel button[data-fsel]{border-color:#14B8A6}
 .foto-it img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover}
 .foto-it span{position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,.65);color:#fff !important;font-size:12px;padding:2px 6px;border-radius:8px}
 .foto-it .fx{position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff !important;font-size:14px;cursor:pointer}
 .foto-comp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.foto-comp figure{margin:0}.foto-comp img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:3px solid #D4AF37}
+.foto-comp figure{margin:0}.foto-comp img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:3px solid #FF7A59}
 .foto-comp figcaption{text-align:center;font-family:var(--cond);font-weight:800;font-size:14px;margin-top:4px}
 /* Retos del mes (10-10-2026) */
 .reto-l{margin-top:10px}.reto-l span{font-size:15px;font-weight:700}.reto-l b{float:right;font-family:var(--num);font-weight:400;font-size:18px}
-.reto-l .barra{clear:both;margin-top:4px;height:10px}.reto-l .barra i{background:linear-gradient(90deg,#D4AF37,#E30613) !important}
+.reto-l .barra{clear:both;margin-top:4px;height:10px}.reto-l .barra i{background:linear-gradient(90deg,#FF7A59,#14B8A6) !important}
 .ranking{list-style:none;margin:0;padding:0}
 .ranking li{display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid var(--line)}
 .ranking .pos{width:34px;text-align:center;font-size:20px;font-style:normal;font-family:var(--num)}
 .ranking b{flex:1;font-size:16px}.ranking em{font-family:var(--num);font-size:18px;font-style:normal;color:#B36B00}
-.ranking li.yo{background:rgba(227,6,19,.10);border-radius:10px}
+.ranking li.yo{background:rgba(20,184,166,.10);border-radius:10px}
 /* Mis platos, copiar, sellos ALTO EN, medidas y menú de la semana (11-10-2026) */
 .cc-mini{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .cc-mini .chip{flex:1 1 140px;font-size:14px !important;padding:10px 8px;white-space:nowrap}
@@ -494,7 +494,7 @@ details.mes-a-mes summary{cursor:pointer;font-family:var(--cond);font-weight:800
 .mam-vals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}
 .mam-vals span{display:flex;flex-direction:column;align-items:center;background:rgba(127,127,127,.12);border-radius:10px;padding:6px 2px;min-width:0}
 .mam-vals i{font-style:normal;font-size:11px;white-space:nowrap}.mam-vals b{font-family:var(--num);font-size:18px;white-space:nowrap}
-.dif{font-style:normal;font-size:12px;font-weight:800;white-space:nowrap}.dif.baja,.dif.sube{color:#F2D16B}.dif.igual{opacity:.6}
+.dif{font-style:normal;font-size:12px;font-weight:800;white-space:nowrap}.dif.baja,.dif.sube{color:#FFA587}.dif.igual{opacity:.6}
 .sem-fila{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;border-top:1px solid var(--line);padding:7px 0;font-size:14px}.sem-fila span{white-space:nowrap}.sem-fila b{font-family:var(--num);font-size:17px}
 .med-sub{font-family:var(--cond);font-weight:800;font-size:15px;margin:12px 0 0;letter-spacing:.03em}
 .imc-box{margin-top:10px;border:1px solid rgba(212,175,55,.55);border-radius:14px;padding:12px}
@@ -507,7 +507,7 @@ details.mes-a-mes summary{cursor:pointer;font-family:var(--cond);font-weight:800
 .imc-barra i{display:block;height:100%}.imc-barra .b1{width:17.5%;background:#5FB4FF;border-radius:6px 0 0 6px}.imc-barra .b2{width:32.5%;background:#22C55E}.imc-barra .b3{width:25%;background:#F2C94C}.imc-barra .b4{width:25%;background:#FF5A5F;border-radius:0 6px 6px 0}
 .imc-barra em{position:absolute;top:-5px;width:6px;height:20px;margin-left:-3px;background:#fff;border:2px solid #0A0A0B;border-radius:4px}
 .imc-marcas{position:relative;height:16px;font-size:11px}.imc-marcas span{position:absolute;transform:translateX(-50%)}.imc-marcas span:nth-child(1){left:17.5%}.imc-marcas span:nth-child(2){left:50%}.imc-marcas span:nth-child(3){left:75%}
-details.anotar summary{color:var(--gold2,#D4AF37)}
+details.anotar summary{color:var(--gold2,#FF7A59)}
 .med-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}
 .med-grid label{display:flex;flex-direction:column;gap:4px;min-width:0}
 .med-grid label span{font-size:13px;line-height:1.2}
@@ -522,16 +522,16 @@ details.menu-sem summary::-webkit-details-marker{display:none}
 .menu-it{display:flex;width:100%;align-items:center;gap:8px;background:none;border:0;border-bottom:1px solid var(--line);padding:9px 0;text-align:left;color:inherit;cursor:pointer}
 .menu-it span{width:86px;flex:none;font-size:12px;opacity:.8}.menu-it b{flex:1;min-width:0;font-size:15px}.menu-it em{font-style:normal;font-family:var(--num);font-size:17px}
 /* Lista de compras en amarillo (11-10-2026, la dueña: "está en negro y no la veía") */
-details.compras{background:#F2D16B !important;border:2px solid #D4AF37 !important}
+details.compras{background:#FFA587 !important;border:2px solid #FF7A59 !important}
 details.compras, details.compras *{color:#141416 !important}
 details.compras summary span{font-size:20px}
-details.compras summary b{background:#141416;color:#F2D16B !important;border-radius:999px;padding:4px 10px}
+details.compras summary b{background:#141416;color:#FFA587 !important;border-radius:999px;padding:4px 10px}
 details.compras .compra-it{border-bottom-color:rgba(20,20,22,.2)}
-details.compras .btn.sec{background:#141416 !important;border-color:#141416 !important;color:#F2D16B !important}
+details.compras .btn.sec{background:#141416 !important;border-color:#141416 !important;color:#FFA587 !important}
 
 /* 🔥 Racha, niveles y festejo (11-10-2026, ideas 1, 3 y 2 de la dueña) */
 .racha-card{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;align-items:center}
-.fuego{width:86px;height:86px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:radial-gradient(circle,rgba(255,120,0,.35),rgba(227,6,19,.08) 60%,transparent 70%)}
+.fuego{width:86px;height:86px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:radial-gradient(circle,rgba(255,120,0,.35),rgba(20,184,166,.08) 60%,transparent 70%)}
 .fuego .ll{font-size:calc(44px * var(--t,1));line-height:1;display:inline-block;transform-origin:50% 90%;animation:llama 1.1s ease-in-out infinite alternate;filter:drop-shadow(0 0 10px rgba(255,140,0,.8))}
 @keyframes llama{0%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.08,1.14) rotate(2deg)}100%{transform:scale(.96,1.04) rotate(-1deg)}}
 .racha-card.apagado .fuego{background:none}.racha-card.apagado .ll{filter:grayscale(1) opacity(.45);animation:none}
@@ -540,12 +540,12 @@ details.compras .btn.sec{background:#141416 !important;border-color:#141416 !imp
 .racha-tx p{margin:4px 0 6px;font-size:14px;line-height:1.3}
 .nivel{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .nivel-pill{padding:6px 14px;border-radius:999px;font-family:var(--cond);font-weight:900;font-size:16px;white-space:nowrap;color:#141416 !important;background:#9BE58C;text-shadow:none}
-.nivel-pill.n1{background:linear-gradient(90deg,#B87333,#E0A36B)}.nivel-pill.n2{background:linear-gradient(90deg,#BFC4CC,#F1F3F6)}.nivel-pill.n3{background:linear-gradient(90deg,#D4AF37,#F2D16B)}.nivel-pill.n4{background:linear-gradient(90deg,#7FE3FF,#C9B8FF)}
+.nivel-pill.n1{background:linear-gradient(90deg,#B87333,#E0A36B)}.nivel-pill.n2{background:linear-gradient(90deg,#BFC4CC,#F1F3F6)}.nivel-pill.n3{background:linear-gradient(90deg,#FF7A59,#FFA587)}.nivel-pill.n4{background:linear-gradient(90deg,#7FE3FF,#C9B8FF)}
 .nivel-falta{font-size:14px;white-space:nowrap}
-.nivel-barra{height:6px;border-radius:4px;background:rgba(127,127,127,.25);margin-top:6px;overflow:hidden}.nivel-barra i{display:block;height:100%;background:linear-gradient(90deg,#E30613,#D4AF37)}
+.nivel-barra{height:6px;border-radius:4px;background:rgba(127,127,127,.25);margin-top:6px;overflow:hidden}.nivel-barra i{display:block;height:100%;background:linear-gradient(90deg,#14B8A6,#FF7A59)}
 #rachaChip{animation:chipLlama 1.6s ease-in-out infinite alternate}
-@keyframes chipLlama{from{box-shadow:0 3px 0 #B8901F,0 0 0 rgba(255,140,0,0)}to{box-shadow:0 3px 0 #B8901F,0 0 14px rgba(255,140,0,.75)}}
-.anillo.meta-ok svg{filter:drop-shadow(0 0 8px rgba(242,209,107,.9))}.anillo.meta-ok .prog{stroke:#F2D16B !important}
+@keyframes chipLlama{from{box-shadow:0 3px 0 #E8603C,0 0 0 rgba(255,140,0,0)}to{box-shadow:0 3px 0 #E8603C,0 0 14px rgba(255,140,0,.75)}}
+.anillo.meta-ok svg{filter:drop-shadow(0 0 8px rgba(242,209,107,.9))}.anillo.meta-ok .prog{stroke:#FFA587 !important}
 @media (prefers-reduced-motion: reduce){.fuego .ll,#rachaChip{animation:none}}
 
 /* 🍽 Mis platos ordenado (11-10-2026) */
@@ -555,17 +555,17 @@ details.compras .btn.sec{background:#141416 !important;border-color:#141416 !imp
 .pl-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
 .pl-tx b{display:block;font-size:18px;line-height:1.2;white-space:normal;overflow-wrap:anywhere}
 .pl-tx small{display:block;font-size:13px;line-height:1.3;opacity:.85;white-space:normal}
-.pl-tx em{font-style:normal;font-family:var(--num);font-size:16px;color:#D4AF37}
-.pl-add{flex:0 0 44px;width:44px;height:44px;border-radius:50%;background:#E30613;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800}
+.pl-tx em{font-style:normal;font-family:var(--num);font-size:16px;color:#FF7A59}
+.pl-add{flex:0 0 44px;width:44px;height:44px;border-radius:50%;background:#14B8A6;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800}
 .pl-x{flex:0 0 42px;border-radius:14px;border:1px solid var(--line);background:transparent;font-size:20px;cursor:pointer;color:inherit}
 
 /* 💪 Cabecera roja los días de entrenamiento (11-10-2026, idea 2) */
-.top.entreno{background:linear-gradient(135deg,#7A0008 0%,#E30613 55%,#FF2D3A 100%);border-radius:18px;margin-left:-12px;margin-right:-12px;padding:8px 12px 30px !important;box-shadow:0 0 0 2px #D4AF37,0 8px 26px rgba(227,6,19,.55);animation:entPulso 2.4s ease-in-out infinite alternate}
+.top.entreno{background:linear-gradient(135deg,#7A0008 0%,#14B8A6 55%,#2DD4BF 100%);border-radius:18px;margin-left:-12px;margin-right:-12px;padding:8px 12px 30px !important;box-shadow:0 0 0 2px #FF7A59,0 8px 26px rgba(20,184,166,.55);animation:entPulso 2.4s ease-in-out infinite alternate}
 .top.entreno .t b{color:#FFFFFF !important}
 .top.entreno .t span#saludo{color:#FFE08A !important}
-.ent-tag{flex:0 0 100%;margin-top:8px;text-align:center;padding:7px 10px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid #F2D16B;font-family:var(--cond);font-weight:900;font-size:17px;letter-spacing:.04em}
+.ent-tag{flex:0 0 100%;margin-top:8px;text-align:center;padding:7px 10px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid #FFA587;font-family:var(--cond);font-weight:900;font-size:17px;letter-spacing:.04em}
 .ent-tag[hidden]{display:none !important}
-@keyframes entPulso{from{box-shadow:0 0 0 2px #D4AF37,0 6px 18px rgba(227,6,19,.45)}to{box-shadow:0 0 0 2px #F2D16B,0 8px 32px rgba(255,45,58,.8)}}
+@keyframes entPulso{from{box-shadow:0 0 0 2px #FF7A59,0 6px 18px rgba(20,184,166,.45)}to{box-shadow:0 0 0 2px #FFA587,0 8px 32px rgba(255,45,58,.8)}}
 @media (prefers-reduced-motion: reduce){.top.entreno{animation:none}}
 
 /* 🌙 Resumen de la noche, ⭐ receta del día y 📸 foto de perfil (11-10-2026, ideas 6, 8 y 7) */
@@ -573,20 +573,20 @@ details.compras .btn.sec{background:#141416 !important;border-color:#141416 !imp
 .noche-datos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .noche-datos div{text-align:center;border-radius:12px;padding:8px;background:rgba(0,0,0,.25)}
 .noche-datos b{display:block;font-family:var(--num);font-size:28px}.noche-datos span{font-size:13px;white-space:nowrap}
-.receta-dia{border-radius:18px;padding:10px;background:linear-gradient(135deg,#D4AF37,#F2D16B)}
+.receta-dia{border-radius:18px;padding:10px;background:linear-gradient(135deg,#FF7A59,#FFA587)}
 .rd-kick{margin:2px 4px 8px;font-family:var(--cond);font-weight:900;font-size:17px;letter-spacing:.05em}
 .receta-dia .card{margin:0}
-.logo-top img.avatar-top{position:absolute !important;right:-6px !important;bottom:-6px !important;left:auto !important;top:auto !important;width:46px !important;height:46px !important;max-width:46px !important;padding:0 !important;border-radius:50%;object-fit:cover;border:3px solid #F2D16B;box-shadow:0 2px 8px rgba(0,0,0,.6);z-index:2;background:#000}
+.logo-top img.avatar-top{position:absolute !important;right:-6px !important;bottom:-6px !important;left:auto !important;top:auto !important;width:46px !important;height:46px !important;max-width:46px !important;padding:0 !important;border-radius:50%;object-fit:cover;border:3px solid #FFA587;box-shadow:0 2px 8px rgba(0,0,0,.6);z-index:2;background:#000}
 .logo-top img.avatar-top[hidden]{display:none !important}
 .perfil-foto{display:flex;align-items:center;gap:14px;margin-bottom:10px}
-.perfil-foto img,.pf-vacia{flex:none;width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid #D4AF37}
+.perfil-foto img,.pf-vacia{flex:none;width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid #FF7A59}
 .pf-vacia{display:flex;align-items:center;justify-content:center;font-size:44px;background:rgba(127,127,127,.2)}
 .pf-bts{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
 
 .supl-b .supl-ap{display:block;font-style:normal;font-size:11px;font-weight:800;white-space:nowrap}
 
 /* Casillero de búsqueda en amarillo (13-10-2026, la dueña: se confundía con el de «¿A qué comida?»). */
-body #agrQ#agrQ, body #recQ#recQ{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #D4AF37 !important; }
+body #agrQ#agrQ, body #recQ#recQ{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #FF7A59 !important; }
 body #agrQ#agrQ::placeholder, body #recQ#recQ::placeholder{ color:#5A4A10 !important; -webkit-text-fill-color:#5A4A10 !important; opacity:1; }
 
 /* Azúcar y sodio como tope (16-10-2026): barras propias y en rojo al pasarse */
@@ -609,14 +609,14 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .se-bts .chip{flex:1;min-width:0;font-size:12px !important;padding:7px 2px !important;white-space:nowrap;line-height:1.2;display:flex;flex-direction:column;align-items:center}
 .se-bts .se-e{font-size:20px;font-style:normal}
 .se-res{display:flex;flex-direction:column;gap:8px;margin-top:14px}
-.se-r,.tipo-dia{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#2a0306,#0D0D0F);border:2px solid #D4AF37}
+.se-r,.tipo-dia{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#2a0306,#0D0D0F);border:2px solid #FF7A59}
 .se-r .e,.tipo-dia .e{font-size:30px;line-height:1}
-.se-r.t-pierna,.tipo-dia.t-pierna{border-color:#E30613}
+.se-r.t-pierna,.tipo-dia.t-pierna{border-color:#14B8A6}
 .se-r.t-descanso,.tipo-dia.t-descanso{border-color:#5cc8ff;background:linear-gradient(135deg,#06202c,#0D0D0F)}
 .tipo-dia{margin:0 0 12px}.tipo-dia p{margin:0}
 /* 🏋️ Comidas de tu entreno y 📉 ajuste automático (18-10-2026) */
 .ent-t{margin:12px 0 0;font-weight:800;font-size:17px}
-.ajuste-card{background:linear-gradient(135deg,#2a0306,#0D0D0F) !important;border:2px solid #D4AF37 !important}
+.ajuste-card{background:linear-gradient(135deg,#2a0306,#0D0D0F) !important;border:2px solid #FF7A59 !important}
 .ajuste-card h3{color:#fff}
 /* 📅 Todos mis días (19-10-2026) */
 .cal-btn{width:100%;margin:8px 0 4px}
@@ -626,23 +626,23 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 .cal-d b{font-size:17px}.cal-d small{font-size:10px;font-style:normal}
 .cal-d em{position:absolute;top:1px;right:2px;font-size:10px;font-style:normal}
 .cal-d.con{border-color:#2ecc71;background:rgba(46,204,113,.14)}
-.cal-d.hoy{outline:2px solid #D4AF37}.cal-d.sel{background:#E30613;border-color:#E30613}
+.cal-d.hoy{outline:2px solid #FF7A59}.cal-d.sel{background:#14B8A6;border-color:#14B8A6}
 .cal-d:disabled{opacity:.3}
 /* ⏳ Aviso de vencimiento de WGYMNUTRI (19-10-2026) */
-.vence-card{background:linear-gradient(135deg,#3a0207,#0D0D0F) !important;border:2px solid #E30613 !important;animation:venceLate 2.4s ease-in-out infinite}
-@keyframes venceLate{50%{box-shadow:0 0 0 4px rgba(227,6,19,.25)}}
+.vence-card{background:linear-gradient(135deg,#062E2A,#0D0D0F) !important;border:2px solid #14B8A6 !important;animation:venceLate 2.4s ease-in-out infinite}
+@keyframes venceLate{50%{box-shadow:0 0 0 4px rgba(20,184,166,.25)}}
 @media (prefers-reduced-motion:reduce){.vence-card{animation:none}}
 /* ⭐ Lo de siempre y 💧 agua por horas (19-10-2026) */
-.fav-c{background:#FFF7D6 !important;border:2px solid #D4AF37 !important;color:#3A2A00 !important}
+.fav-c{background:#FFF7D6 !important;border:2px solid #FF7A59 !important;color:#3A2A00 !important}
 .agua-hora{margin:10px 0 0;padding:8px 12px;border-radius:12px;font-size:15px;font-weight:800}
-.agua-hora.atras{background:#FFE3E5;color:#A3000C;border:2px solid #E30613}
+.agua-hora.atras{background:#FFE3E5;color:#A3000C;border:2px solid #14B8A6}
 .agua-hora.aldia{background:#E3F7E8;color:#0B6B2B;border:2px solid #2DBE60}
 /* Días que vienen en la franja (19-10-2026): se pueden abrir, se ven un poco más suaves */
 .st-dia.fut{opacity:.6}
 .st-dia.fut.sel{opacity:1}
 .hoy-btn{width:100%;margin:8px 0 0}
 /* 🟢 Nota WGYM del producto (19-10-2026) */
-.nota-card{background:#141417;border:2px solid #D4AF37;border-radius:16px;padding:12px;margin:10px 0}
+.nota-card{background:#141417;border:2px solid #FF7A59;border-radius:16px;padding:12px;margin:10px 0}
 .nt-top{display:flex;align-items:center;gap:14px;margin-bottom:6px}
 .nt-circ{width:78px;height:78px;border-radius:50%;border:6px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
 .nt-circ b{font-family:var(--num);font-size:30px;line-height:1}
@@ -673,4 +673,4 @@ html body .vitc-hoy .mic-h small.tope-medio{color:#C77700 !important}
 /* Aviso de límites en texto, sin dibujar el sello (19-10-2026) */
 .aviso-limite{background:#1A1206;border:2px solid #F39C12;border-radius:14px;padding:10px 12px;margin:10px 0}
 /* Hora de cada comida en amarillo (24-10-2026, pedido de la dueña) */
-body .hora-com.hora-com, body .comida-card .cab h3 .hora-com{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #D4AF37 !important; }
+body .hora-com.hora-com, body .comida-card .cab h3 .hora-com{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #FF7A59 !important; }

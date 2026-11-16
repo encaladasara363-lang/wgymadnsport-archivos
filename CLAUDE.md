@@ -2239,6 +2239,7 @@ probado: ella se activó desde el mesón y entró a la app).
   sonido, 320 px), aro dorado/rojo que gira y brillo dorado que pulsa. Nombre y saludo en una
   sola línea (con «…» si no cabe).
 - **Letra del mesón (16-11-2026, la dueña: "la tipografía que tengo en mi mesón"):** `<style>` después de `nutri-oscuro.css` en `wgymnutri.html`: `--display`, `--cond` y `--body` en Atkinson Hyperlegible, todo en negrita 700, MAYÚSCULAS y **sin cursiva** (reemplaza la cursiva 800 de `nutri-claro.css`); los números siguen en Anton.
+- **🎨 Colores menta y coral (16-11-2026, la dueña eligió la opción 1 de 3: "un color más bonito que sea tanto para hombre como para mujer"):** en `nutri-claro.css`, `nutri-oscuro.css` y las variables `--red`/`--gold` de `wgymnutri.html` el rojo pasó a turquesa menta `#14B8A6` (`#2DD4BF`, sombras `#0E7C70`) y el dorado a coral `#FF7A59` (`#FFA587`); fondo claro `#F4FBF8`. Los avisos de «te pasaste»/tope/nota mala siguen en rojo, y los cuadros amarillos que pidió la dueña (buscador, horas de comida) siguen amarillos. Tema claro por defecto (clave nueva `wgymnutri_tema_v2`); el oscuro sigue en «Mi perfil».
 - **Diseño (10-10-2026):** fondo blanco con el estilo de la tablet de la puerta
   (`nutri-claro.css`, va encima del CSS de la app; subir `?v=` al cambiarlo),
   letras grandes y negras a pedido de la dueña. Recetario solo saludable

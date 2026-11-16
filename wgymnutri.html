@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WGYMNUTRI · WGYMADNSPORT</title>
 <meta name="description" content="WGYMNUTRI: el contador de calorías de los socios de WGYMADNSPORT Tocopilla.">
-<meta name="theme-color" content="#F7F5F1">
+<meta name="theme-color" content="#F4FBF8">
 <link rel="manifest" href="wgymnutri.webmanifest">
 <link rel="icon" href="assets/wgymnutri-192.png">
 <link rel="apple-touch-icon" href="assets/wgymnutri-180.png">
@@ -32,7 +32,7 @@
 <style>
 :root{
  --bg:#0A0A0B; --panel:#141417; --panel2:#1C1C21; --line:#2A2A31;
- --fg:#F5F5F6; --muted:#A3A3AD; --red:#E30613; --red2:#FF2D3A; --gold:#D4AF37; --gold2:#F2D16B;
+ --fg:#F5F5F6; --muted:#A3A3AD; --red:#14B8A6; --red2:#2DD4BF; --gold:#FF7A59; --gold2:#FFA587;
  --ok:#2BD576; --warn:#F5A524;
  --display:"Rubik Distressed", Impact, "Arial Black", sans-serif;
  --num:"Anton", Impact, "Arial Narrow", sans-serif;
@@ -233,8 +233,8 @@ h1,h2,h3{margin:0;font-weight:400}
 .logro-pop .e{font-size:80px;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="nutri-claro.css?v=70">
-<link rel="stylesheet" href="nutri-oscuro.css?v=16">
+<link rel="stylesheet" href="nutri-claro.css?v=71">
+<link rel="stylesheet" href="nutri-oscuro.css?v=17">
 <style>
 /* Misma letra del mesón (16-11-2026, la dueña: "la tipografía que tengo en mi mesón"): Atkinson Hyperlegible en
    negrita, MAYÚSCULAS y sin cursiva. Los números siguen en Anton. Va al final para ganarle a nutri-claro/oscuro. */
@@ -248,11 +248,11 @@ input::placeholder, textarea::placeholder{ font-style:normal; }
 .disp, .top .t b{ letter-spacing:0; }
 </style>
 <script>/* Tema claro u oscuro (10-10-2026, la dueña eligió oscuro por defecto con botón en «Mi perfil») */
-try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){ document.documentElement.classList.add("oscuro"); }</script>
+try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v2")) || "claro") === "oscuro") document.documentElement.classList.add("oscuro"); }catch(e){}</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
- <linearGradient id="gradAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF2D3A"/><stop offset="1" stop-color="#F2D16B"/></linearGradient>
+ <linearGradient id="gradAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2DD4BF"/><stop offset="1" stop-color="#FFA587"/></linearGradient>
 </defs></svg>
 
 <main class="wrap" id="app">
@@ -301,7 +301,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v1")) || "oscuro") === 
   <div>
    <p class="kick">Contador de calorías de WGYMADNSPORT</p>
    <h2 class="disp" style="font-size:40px">Activa <span style="color:var(--gold)">WGYMNUTRI</span></h2>
-   <p style="font-family:var(--num);font-size:46px;margin:6px 0 0;background:linear-gradient(90deg,#FF2D3A,#F2D16B);-webkit-background-clip:text;background-clip:text;color:transparent" id="pagoPrecio">$3.000</p>
+   <p style="font-family:var(--num);font-size:46px;margin:6px 0 0;background:linear-gradient(90deg,#2DD4BF,#FFA587);-webkit-background-clip:text;background-clip:text;color:transparent" id="pagoPrecio">$3.000</p>
    <p class="muted" style="margin:0" id="pagoDetalle">al mes</p>
   </div>
   <div class="stack" id="pagoOfertas" style="text-align:left"></div>
@@ -897,9 +897,9 @@ function renderOnb(){
    '<div class="plan-res plan-pop2"><div><b style="color:var(--red2)">' + m.p + ' g</b><span>Proteína</span></div><div><b style="color:var(--gold2)">' + m.c + ' g</b><span>Carbohidratos</span></div><div><b>' + m.g + ' g</b><span>Grasas</span></div><div><b style="color:#5cc8ff">' + aguaRecomendada(d) + '</b><span>Vasos de agua (' + String(r1(aguaRecomendada(d) * 0.25)).replace(".", ",") + ' L)</span></div></div>';
   if(fm){
    h += '<div class="card plan-pop3"><p class="kick">🎯 Tu meta: ' + String(d.meta).replace(".", ",") + ' kg</p><p class="fecha-meta">Llegarás cerca del <b>' + fechaLindaMeta(fm.f) + '</b></p>' +
-    '<svg class="graf-meta" viewBox="0 0 300 120" role="img" aria-label="Tu peso bajando hasta la meta"><defs><linearGradient id="gm" x1="0" x2="1"><stop offset="0" stop-color="#E30613"/><stop offset="1" stop-color="#D4AF37"/></linearGradient></defs>' +
+    '<svg class="graf-meta" viewBox="0 0 300 120" role="img" aria-label="Tu peso bajando hasta la meta"><defs><linearGradient id="gm" x1="0" x2="1"><stop offset="0" stop-color="#14B8A6"/><stop offset="1" stop-color="#FF7A59"/></linearGradient></defs>' +
     '<path d="M20 28 C 110 34, 170 82, 280 92" fill="none" stroke="url(#gm)" stroke-width="5" stroke-linecap="round" class="graf-linea"/>' +
-    '<circle cx="20" cy="28" r="7" fill="#E30613"/><circle cx="280" cy="92" r="8" fill="#D4AF37"/>' +
+    '<circle cx="20" cy="28" r="7" fill="#14B8A6"/><circle cx="280" cy="92" r="8" fill="#FF7A59"/>' +
     '<text x="20" y="16" font-size="14" font-weight="700" fill="#141416">' + String(d.peso).replace(".", ",") + ' kg</text><text x="280" y="114" font-size="14" font-weight="700" fill="#141416" text-anchor="end">' + String(d.meta).replace(".", ",") + ' kg</text>' +
     '<text x="20" y="114" font-size="12" fill="#555">Hoy</text></svg>' +
     '<p class="muted" style="font-size:14px;margin:4px 0 0">Bajando ≈' + String(fm.kgSem).replace(".", ",") + ' kg por semana (unas ' + Math.ceil(fm.dias / 7) + ' semanas). Es una estimación: depende de que cumplas tu plan.</p></div>';
@@ -2723,7 +2723,7 @@ function mostrarLogro(id){
 function confeti(){
  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
  var cv = $("confeti"), cx = cv.getContext("2d"); cv.hidden = false; cv.width = innerWidth; cv.height = innerHeight;
- var cols = ["#E30613","#FF2D3A","#D4AF37","#F2D16B","#ffffff"], ps = [];
+ var cols = ["#14B8A6","#2DD4BF","#FF7A59","#FFA587","#ffffff"], ps = [];
  for(var i = 0; i < 140; i++) ps.push({ x:Math.random() * cv.width, y:-20 - Math.random() * cv.height * .5, vx:(Math.random() - .5) * 3, vy:2 + Math.random() * 4, r:Math.random() * 6.28, vr:(Math.random() - .5) * .3, s:6 + Math.random() * 8, c:cols[i % cols.length] });
  var t0 = performance.now();
  (function paso(t){
@@ -2909,7 +2909,7 @@ function cerrarReceta(){
 }
 window.addEventListener("popstate", function(){ if(recAbierta >= 0) mostrarListaRecetas(); });
 function temaOscuro(){ return document.documentElement.classList.contains("oscuro"); }
-function ponerTema(t){ lsSet("wgymnutri_tema_v1", t); document.documentElement.classList.toggle("oscuro", t === "oscuro"); var m = document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content", t === "oscuro" ? "#0A0A0B" : "#FFFFFF"); }
+function ponerTema(t){ lsSet("wgymnutri_tema_v2", t); document.documentElement.classList.toggle("oscuro", t === "oscuro"); var m = document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content", t === "oscuro" ? "#0A0A0B" : "#FFFFFF"); }
 /* 📸 Foto de perfil (11-10-2026, la dueña eligió la idea 7): se achica a 240 px y se guarda SOLO en
    este teléfono (nunca se sube). Aparece en un círculo sobre el logo de arriba y en «Mi perfil». */
 function claveFoto(){ return "wgymnutri_foto_v1_" + claveNutri(); }
@@ -3038,7 +3038,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026111602", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026111603", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
