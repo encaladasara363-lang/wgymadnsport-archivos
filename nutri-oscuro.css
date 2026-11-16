@@ -1,33 +1,33 @@
 /* WGYMNUTRI · tema oscuro (prueba del 10-10-2026, la dueña: "quiero ver cómo se ve con el
    fondo oscuro"). Va DESPUÉS de nutri-claro.css y solo actúa con <html class="oscuro">. */
-html.oscuro{ --bg:#0A0A0B; --panel:#141417; --panel2:#1C1C21; --line:#2A2A31; --fg:#F5F5F6; --muted:#C9C9D1; --gold:#D4AF37; --gold2:#F2D16B; color-scheme:dark; }
+html.oscuro{ --bg:#0A0A0B; --panel:#141417; --panel2:#1C1C21; --line:#2A2A31; --fg:#F5F5F6; --muted:#C9C9D1; --gold:#FF7A59; --gold2:#FFA587; color-scheme:dark; }
 html.oscuro, html.oscuro body{ background:#0A0A0B !important; }
 html.oscuro body{ background:
- radial-gradient(120% 40% at 50% -5%, rgba(227,6,19,.22), transparent 60%),
+ radial-gradient(120% 40% at 50% -5%, rgba(20,184,166,.22), transparent 60%),
  repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 9px), #0A0A0B !important; }
 /* Texto claro en todo, menos donde hay color propio */
 html.oscuro body *:not([style*="color"]):not(svg):not(svg *){ color:#F5F5F6 !important; }
 /* Cuadros */
 html.oscuro .card, html.oscuro .hoja, html.oscuro .semana-tira{ background:#141417 !important; border-color:#2A2A31 !important; box-shadow:0 6px 18px rgba(0,0,0,.5) !important; }
-html.oscuro .card{ border-left:4px solid #E30613 !important; }
-html.oscuro .card:has(.anillo-box){ background:linear-gradient(135deg,#2A0B0E,#141417 60%) !important; border:2px solid #E30613 !important; }
+html.oscuro .card{ border-left:4px solid #14B8A6 !important; }
+html.oscuro .card:has(.anillo-box){ background:linear-gradient(135deg,#062E2A,#141417 60%) !important; border:2px solid #14B8A6 !important; }
 html.oscuro .det-macros div, html.oscuro .plan-res div, html.oscuro .medalla, html.oscuro .res-datos div, html.oscuro .macros3 .macro, html.oscuro .vitc-hoy, html.oscuro .opc, html.oscuro .chip, html.oscuro .inp, html.oscuro .grande-inp{ background:#1C1C21 !important; border-color:#33333B !important; }
-html.oscuro .chip[aria-pressed="true"], html.oscuro .opc[aria-pressed="true"]{ background:#E30613 !important; border-color:#E30613 !important; }
+html.oscuro .chip[aria-pressed="true"], html.oscuro .opc[aria-pressed="true"]{ background:#14B8A6 !important; border-color:#14B8A6 !important; }
 html.oscuro .barra, html.oscuro .anillo .fondo{ background:#2A2A31 !important; stroke:#2A2A31 !important; }
-html.oscuro .restantes{ background:linear-gradient(135deg,#2A0B0E,#141417) !important; }
+html.oscuro .restantes{ background:linear-gradient(135deg,#062E2A,#141417) !important; }
 html.oscuro .aviso, html.oscuro .uni-falta, html.oscuro .cod-leido, html.oscuro .porc-rec{ background:#241D0B !important; border-color:#8A6A12 !important; }
 html.oscuro .add-l{ background:#1E1A0C !important; border-color:#8A6A12 !important; }
 html.oscuro .det-macros .vitc-det{ background:#241808 !important; border-color:#F5A623 !important; }
 html.oscuro .nav{ background:rgba(10,10,11,.95) !important; border-top-color:#2A2A31 !important; }
 html.oscuro .nav .mas{ border-color:#0A0A0B !important; }
 html.oscuro .nav button:not(.on){ color:#8A8A92 !important; }
-html.oscuro .nav button.on{ color:#FF2D3A !important; }
+html.oscuro .nav button.on{ color:#2DD4BF !important; }
 html.oscuro .st-dia.sel .st-l{ background:#F5F5F6 !important; color:#0A0A0B !important; }
 html.oscuro .tanque{ background:#0E1A24 !important; border-color:#141417 !important; }
 html.oscuro .taza{ background:#1C1C21 !important; }
 /* Acentos que vuelven a su color */
-html.oscuro .kick, html.oscuro .restantes small, html.oscuro .hora-com, html.oscuro .add-l, html.oscuro .add-l *, html.oscuro .st-dia.hoy b, html.oscuro .gate h1 .g, html.oscuro .res-datos b small, html.oscuro .cab > span{ color:#F2D16B !important; }
-html.oscuro .top .t span, html.oscuro .gate h1 .r, html.oscuro .restantes.pasado b{ color:#FF2D3A !important; }
+html.oscuro .kick, html.oscuro .restantes small, html.oscuro .hora-com, html.oscuro .add-l, html.oscuro .add-l *, html.oscuro .st-dia.hoy b, html.oscuro .gate h1 .g, html.oscuro .res-datos b small, html.oscuro .cab > span{ color:#FFA587 !important; }
+html.oscuro .top .t span, html.oscuro .gate h1 .r, html.oscuro .restantes.pasado b{ color:#2DD4BF !important; }
 html.oscuro .vitc-det b, html.oscuro .vitc-hoy .fila b{ color:#FFB547 !important; }
 html.oscuro .cafe-card .cab span{ color:#D9A97A !important; }
 html.oscuro .btn.sec, html.oscuro .btn.sec *, html.oscuro .racha, html.oscuro .racha *, html.oscuro .btn.oro, html.oscuro .btn.oro *{ color:#141416 !important; }
@@ -39,20 +39,20 @@ html.oscuro .hora-com{ background:#2A2210 !important; border-color:#8A6A12 !impo
 html.oscuro #dGr, html.oscuro #dCant, html.oscuro input, html.oscuro select{ color:#F5F5F6 !important; -webkit-text-fill-color:#F5F5F6 !important; }
 html.oscuro .sug-it, html.oscuro .supl-b, html.oscuro .rep-ay, html.oscuro .voz-mic{ background:#1C1C21 !important; border-color:#33333B !important; }
 html.oscuro .rep-ay{ border-color:#3B6E91 !important; }
-html.oscuro .voz-mic{ border-color:#E30613 !important; }
+html.oscuro .voz-mic{ border-color:#14B8A6 !important; }
 html.oscuro .supl-b.on{ background:#0F2A1B !important; border-color:#1F9D55 !important; }
 html.oscuro .entreno-av{ background:#0F2A1B !important; border-color:#1F9D55 !important; }
-html.oscuro .supl-b small{ color:#F2D16B !important; }
-html.oscuro details.compras summary b{ color:#F2D16B !important; }
-html.oscuro .ranking em{ color:#F2D16B !important; }
+html.oscuro .supl-b small{ color:#FFA587 !important; }
+html.oscuro details.compras summary b{ color:#FFA587 !important; }
+html.oscuro .ranking em{ color:#FFA587 !important; }
 /* 11-10-2026: medidas, sellos y menú */
 html.oscuro .medidas-ult div{ background:#1C1C21 !important; }
 html.oscuro .sin-sellos{ color:#2BD576 !important; }
 html.oscuro .sello span, html.oscuro .sello b{ color:#FFF !important; }
 /* Lista de compras amarilla también en oscuro (11-10-2026); clase repetida para ganarle a la regla general */
-html.oscuro details.compras.compras.compras{ background:#F2D16B !important; border-color:#D4AF37 !important; }
+html.oscuro details.compras.compras.compras{ background:#FFA587 !important; border-color:#FF7A59 !important; }
 html.oscuro body details.compras.compras.compras, html.oscuro body details.compras.compras.compras *{ color:#141416 !important; }
-html.oscuro body details.compras.compras.compras summary b, html.oscuro body details.compras.compras.compras .btn.sec, html.oscuro body details.compras.compras.compras .btn.sec *{ background-color:#141416 !important; color:#F2D16B !important; }
+html.oscuro body details.compras.compras.compras summary b, html.oscuro body details.compras.compras.compras .btn.sec, html.oscuro body details.compras.compras.compras .btn.sec *{ background-color:#141416 !important; color:#FFA587 !important; }
 html.oscuro body details.compras.compras.compras .btn.sec *{ background-color:transparent !important; }
 
 html.oscuro .nivel-pill, html.oscuro .nivel-pill *{ color:#141416 !important; }
@@ -60,7 +60,7 @@ html.oscuro .racha-n small{ color:#FFB347 !important; }
 html.oscuro .top.entreno .t span#saludo{ color:#FFE08A !important; } html.oscuro .top.entreno .t b{ color:#FFFFFF !important; }
 
 /* Búsqueda en amarillo también en el tema oscuro (13-10-2026). */
-html.oscuro body #agrQ#agrQ, html.oscuro body #recQ#recQ{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #D4AF37 !important; }
+html.oscuro body #agrQ#agrQ, html.oscuro body #recQ#recQ{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #FF7A59 !important; }
 html.oscuro body #agrQ#agrQ::placeholder, html.oscuro body #recQ#recQ::placeholder{ color:#5A4A10 !important; -webkit-text-fill-color:#5A4A10 !important; opacity:1; }
 
 /* Azúcar y sodio (16-10-2026): aviso de tope en rojo visible */
@@ -68,11 +68,11 @@ html.oscuro body .vitc-hoy .mic-h small.tope-aviso{color:#FF5252 !important}
 
 /* «Tu plan está listo» (16-10-2026, la dueña: letras blancas sobre crema no se leían): pastillas con letra negra */
 html.oscuro body .plan-chips.plan-chips span, html.oscuro body .plan-chips.plan-chips span *{color:#111 !important}
-html.oscuro body .plan-chips.plan-chips span{background:#F5D547 !important;border:1px solid #D4AF37 !important}
+html.oscuro body .plan-chips.plan-chips span{background:#F5D547 !important;border:1px solid #FF7A59 !important}
 html.oscuro body .vitc-hoy .mic-h small.tope-medio{color:#FFB547 !important}
 /* ⭐ Lo de siempre y 💧 agua por horas (19-10-2026) */
-html.oscuro .rep-ay.fav-c{background:#2A2208 !important;border:2px solid #D4AF37 !important;color:#FFD54A !important}
+html.oscuro .rep-ay.fav-c{background:#2A2208 !important;border:2px solid #FF7A59 !important;color:#FFD54A !important}
 html.oscuro .agua-hora.agua-hora.atras{background:#3A0207 !important;color:#FF8A8F !important}
 html.oscuro .agua-hora.agua-hora.aldia{background:#0B2A14 !important;color:#7CE39A !important}
 /* Hora de cada comida en amarillo (24-10-2026, pedido de la dueña) */
-html.oscuro .hora-com.hora-com, html.oscuro .comida-card .cab h3 .hora-com{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #D4AF37 !important; }
+html.oscuro .hora-com.hora-com, html.oscuro .comida-card .cab h3 .hora-com{ background:#F5D547 !important; color:#141416 !important; -webkit-text-fill-color:#141416 !important; border:2px solid #FF7A59 !important; }
