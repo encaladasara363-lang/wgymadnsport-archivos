@@ -21,7 +21,8 @@
   tarjeta virtual, al estilo Cal AI pero gratis (sin fotos con IA): búsqueda
   por nombre (nutri-alimentos.js), código de barras (Open Food Facts) y
   comidas manuales; recetario propio en nutri-recetas.js. Se entra con el QR de cartel-qr-wgymnutri.html.
-  - Se vende aparte: con la mensualidad del gimnasio vencida igual se entra si
+  - GRATIS para los socios desde el 16-11-2026 (NUTRI_GRATIS_SOCIOS): plan al día = entra; plan vencido = bloqueada.
+    Antes se vendía aparte: con la mensualidad del gimnasio vencida igual se entra si
     WGYMNUTRI está pagada; si no, se ve la pantalla de pago (17-10-2026). Fecha = la más nueva entre la
     copia del teléfono, socios.json y la hoja (listarSocios).
   - Todo lo que el socio anota (comidas, peso, edad, estatura) es dato de
@@ -456,10 +457,15 @@ function entrar(texto, silencioso){
    del gimnasio vencida igual se entra si WGYMNUTRI está pagada, y si no, se muestra cómo pagarla (ya no «Tu
    mensualidad está vencida»). */
 function abrir(){
+ if(NUTRI_GRATIS_SOCIOS){
+  if(bloqueado(socio)){ nutriLibre = false; mostrarBloqueo(); return; }
+  nutriLibre = true;
+ } else {
  var ns = nutriEstado();
  if(ns === "pendiente"){ vista("vCarga"); $("cargaTxt").textContent = "Revisando tu suscripción…"; revisarNutri(true); return; }
  if(ns === "no"){ mostrarPago(); return; }
  if(nutriConsultado !== claveNutri()) revisarNutri(false);   /* abre al tiro con lo guardado y confirma por detrás */
+ }
  D = leerDatos();
  if(!D.perfil){ onb.primera = true; onb.paso = 0; onb.slide = 0; onb.d = prellenar(); renderOnb(); vista("vOnb"); return; }
  enviarOrigen();
@@ -471,6 +477,10 @@ function abrir(){
    fecha vista para abrir al instante; la hoja la confirma por detrás. Si el
    script todavía no tiene la acción, nadie la tiene activa: la dueña no la
    quiere gratis (10-10-2026). */
+/* 16-11-2026 (la dueña: "deja la app nutri abierta para todos los socios, no les cobraré, y cuando se les venza
+   su mensualidad se les bloquee"): con true no se cobra WGYMNUTRI; entra todo socio con su plan al día y se
+   bloquea al vencer la mensualidad. Con false vuelve el cobro de $3.000 (hoja «WGYMNUTRI»). */
+var NUTRI_GRATIS_SOCIOS = true;
 var CLAVE_NUTRI = "wgymnutri_activa_v1", nutriConsultado = "", nutriLibre = false, renovando = "";
 function claveNutri(){ return normName(socio.n + " " + socio.a); }
 function nutriGuardado(){ var t = lsGet(CLAVE_NUTRI, {}) || {}; return t[claveNutri()]; }
@@ -500,6 +510,7 @@ function cargarNutri(){
  });
 }
 function revisarNutri(esperando){
+ if(NUTRI_GRATIS_SOCIOS) return Promise.resolve();
  var k = claveNutri();
  return cargarNutri().then(function(r){
   if(!socio || claveNutri() !== k) return;
@@ -580,7 +591,10 @@ function htmlVence(){
   '<p style="margin:0 0 12px;color:#FFB199;font-size:15px">Renueva antes y sigues sin cortes: el mes nuevo se suma desde tu fecha de vencimiento.</p>' +
   '<button type="button" class="btn rojo" id="venceRenovar">💳 Renovar ahora</button></div>';
 }
-function reevaluar(){ if($("vBloqueo").hidden === false) abrir(); }
+function reevaluar(){
+ if($("vBloqueo").hidden === false) abrir();
+ else if(NUTRI_GRATIS_SOCIOS && socio && bloqueado(socio) && ($("vApp").hidden === false || $("vOnb").hidden === false)) mostrarBloqueo();
+}
 function mostrarBloqueo(){
  cerrarHoja();
  var f = socio && socio.fv ? serialAISO(socio.fv).split("-").reverse().join("-") : "";
@@ -2919,7 +2933,7 @@ function htmlSemanaEntreno(){
 function renderPerfil(){
  var P = D.perfil, M = D.metas;
  var h = '<h2 class="disp" style="font-size:34px">Mi perfil</h2><div class="card"><div class="perfil-foto">' + (fotoPerfil() ? '<img src="' + fotoPerfil() + '" alt="Mi foto">' : '<span class="pf-vacia" aria-hidden="true">👤</span>') + '<div class="pf-bts"><label class="btn oro chico" style="display:flex;align-items:center;justify-content:center;cursor:pointer">📸 ' + (fotoPerfil() ? 'Cambiar mi foto' : 'Poner mi foto') + '<input type="file" id="fotoPerfilIn" accept="image/*" hidden></label>' + (fotoPerfil() ? '<button type="button" class="btn sec chico" id="fotoPerfilX">Quitar foto</button>' : '') + '<p class="muted" style="font-size:12px;margin:0">🔒 Solo en este teléfono.</p></div></div><p class="perfil-nombre">' + esc(socio.n + " " + socio.a) + '</p>' +
-  '<p class="muted" style="margin:6px 0 0">Plan: ' + esc(socio.plan || "") + ' · vence el <span style="white-space:nowrap">' + serialAISO(socio.fv).split("-").reverse().join("-") + '</span></p>' + (nutriGuardado() ? '<p class="muted" style="margin:4px 0 0">WGYMNUTRI activa hasta el <span style="white-space:nowrap">' + nutriGuardado().split("-").reverse().join("-") + '</span></p>' : '') + '</div>' +
+  '<p class="muted" style="margin:6px 0 0">Plan: ' + esc(socio.plan || "") + ' · vence el <span style="white-space:nowrap">' + serialAISO(socio.fv).split("-").reverse().join("-") + '</span></p>' + (NUTRI_GRATIS_SOCIOS ? '<p class="muted" style="margin:4px 0 0">WGYMNUTRI incluida gratis mientras tu plan esté al día</p>' : nutriGuardado() ? '<p class="muted" style="margin:4px 0 0">WGYMNUTRI activa hasta el <span style="white-space:nowrap">' + nutriGuardado().split("-").reverse().join("-") + '</span></p>' : '') + '</div>' +
   '<div class="card"><div class="cab"><h3>🎯 Mis metas</h3></div><div class="plan-res" style="margin-top:10px"><div><b style="color:var(--gold2)">' + miles(M.kcal) + '</b><span>kcal</span></div><div><b style="color:var(--red2)">' + M.p + ' g</b><span>Proteína</span></div><div><b>' + M.c + ' g</b><span>Carbohidratos</span></div><div><b>' + M.g + ' g</b><span>Grasas</span></div></div>' +
   (function(){ var fm = P.obj === "bajar" ? fechaMeta(P, calcular(P)) : null; return '<p class="muted" style="margin:12px 0 0">🎯 ' + esc(nombreObj(P.obj)) + (P.meta ? ' · meta ' + String(P.meta).replace(".", ",") + ' kg' : '') + (fm ? ' · cerca del ' + fechaLindaMeta(fm.f) : '') + '</p>'; })() +
   '<div class="campo" style="margin-top:12px"><label for="aguaMeta">💧 Meta de agua (vasos de 250 ml)</label><select class="inp" id="aguaMeta"><option value="auto"' + (M.aguaManual ? '' : ' selected') + '>Según mi peso: ' + aguaRecomendada(P) + ' vasos (' + String(r1(aguaRecomendada(P) * 0.25)).replace(".", ",") + ' L)</option>' + [6,7,8,9,10,11,12,13,14,15,16].map(function(n){ return '<option value="' + n + '"' + (M.aguaManual && n === M.agua ? " selected" : "") + '>' + n + ' vasos (' + String(r1(n * 0.25)).replace(".", ",") + ' L)</option>'; }).join("") + '</select></div>' +
@@ -3012,7 +3026,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026102801", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026111601", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
@@ -3035,7 +3049,8 @@ document.addEventListener("visibilitychange", function(){
  if(document.visibilityState !== "visible" || !socio) return;
  if(diaSel !== hoyISO() && tabSel === "tabHoy" && !$("vApp").hidden){ diaSel = hoyISO(); renderHoy(); }
  var cands = [[socio.n, socio.a]];
- cargarHoja().then(function(l){ var f = buscar(l, cands); if(f) aplicarFicha(f); });
+ cargarHoja().then(function(l){ var f = buscar(l, cands); if(f) aplicarFicha(f); reevaluar(); });
+ reevaluar();
  revisarNutri(false);
 });
 
