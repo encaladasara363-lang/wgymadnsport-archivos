@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ruleta WGYM</title>
+<meta name="description" content="Ruleta de desempate del Ranking del mes WGYMADNSPORT">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Atkinson+Hyperlegible:wght@700&family=Rubik+Distressed&display=swap" rel="stylesheet">
+<style>
+:root{--negro:#0A0A0B;--negro2:#151517;--rojo:#E30613;--dorado:#D4AF37;--blanco:#fff}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--negro);color:var(--blanco);font-family:"Atkinson Hyperlegible",Arial,sans-serif;font-weight:700}
+body{min-height:100vh;background:radial-gradient(circle at 50% 30%,#2a0a0d 0,#0A0A0B 65%)}
+header{display:flex;align-items:center;gap:14px;padding:14px 16px 8px;max-width:900px;margin:0 auto}
+header img{width:92px;height:auto}
+h1{font-family:"Rubik Distressed",Impact,sans-serif;text-transform:uppercase;font-weight:400;font-size:clamp(30px,7vw,54px);margin:0;line-height:1;color:var(--dorado);text-shadow:3px 3px 0 var(--rojo)}
+.sub{font-size:clamp(17px,3.6vw,22px);text-transform:uppercase;color:#ddd;margin-top:4px}
+.franja{height:8px;background:linear-gradient(90deg,var(--rojo) 0 60%,var(--dorado) 60% 100%);max-width:900px;margin:0 auto 10px}
+main{max-width:900px;margin:0 auto;padding:0 16px 40px}
+.rueda-wrap{position:relative;width:min(92vw,620px);aspect-ratio:1;margin:8px auto 0}
+canvas{width:100%;height:100%;display:block;filter:drop-shadow(0 0 22px rgba(212,175,55,.35))}
+.flecha{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;border-top:52px solid var(--dorado);filter:drop-shadow(0 3px 0 #000);z-index:2}
+.centro{position:absolute;inset:0;margin:auto;width:23%;height:23%;border-radius:50%;background:#000 url("maquinas-wgymadnsport/comun/logo.png") center/78% no-repeat;border:5px solid var(--dorado);box-shadow:0 0 0 4px var(--rojo)}
+.btn{font-family:"Atkinson Hyperlegible",Arial,sans-serif;font-weight:700;text-transform:uppercase;border:0;border-radius:14px;cursor:pointer;padding:14px 18px;font-size:20px}
+#bGirar{display:block;margin:18px auto 0;font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:1px;font-size:clamp(30px,7vw,44px);padding:14px 50px;background:var(--rojo);color:#fff;border:4px solid var(--dorado);box-shadow:0 6px 0 #7a030a}
+#bGirar:active{transform:translateY(4px);box-shadow:0 2px 0 #7a030a}
+#bGirar:disabled{opacity:.5}
+.panel{background:var(--negro2);border:3px solid var(--dorado);border-radius:18px;padding:16px;margin-top:22px}
+.panel h2{font-family:"Rubik Distressed",Impact,sans-serif;font-weight:400;text-transform:uppercase;color:var(--dorado);margin:0 0 8px;font-size:28px}
+.panel p{margin:0 0 10px;font-size:18px;color:#ccc;text-transform:uppercase}
+textarea{width:100%;min-height:140px;font:700 24px "Atkinson Hyperlegible",Arial,sans-serif;text-transform:uppercase;background:#fff;color:#000;border:3px solid var(--rojo);border-radius:12px;padding:10px}
+.fila{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.amarillo{background:#FFD400;color:#000}
+.gris{background:#333;color:#fff}
+.chk{display:flex;align-items:center;gap:10px;font-size:19px;text-transform:uppercase;margin-top:12px}
+.chk input{width:28px;height:28px}
+#ganador{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;z-index:20;padding:20px}
+#ganador.ver{display:flex}
+#ganador .t{font-family:"Rubik Distressed",Impact,sans-serif;font-size:clamp(40px,10vw,90px);color:var(--dorado);text-shadow:4px 4px 0 var(--rojo);text-transform:uppercase;line-height:1}
+#ganador .n{font-family:Anton,Impact,sans-serif;font-size:clamp(44px,12vw,110px);color:#fff;text-transform:uppercase;margin:14px 0;line-height:1.05;word-break:break-word;animation:late 1s ease-in-out infinite alternate}
+#ganador .trofeo{font-size:clamp(70px,16vw,140px);animation:late 1s ease-in-out infinite alternate}
+#ganador .pie{font-size:22px;color:#ddd;text-transform:uppercase;margin-bottom:18px}
+@keyframes late{from{transform:scale(1)}to{transform:scale(1.07)}}
+#conf{position:fixed;inset:0;pointer-events:none;z-index:21}
+.hist{margin-top:10px;font-size:19px;text-transform:uppercase;color:#ddd}
+.hist li{margin-bottom:4px}
+</style>
+</head>
+<body>
+<header>
+  <img src="maquinas-wgymadnsport/comun/logo.png" alt="WGYMADNSPORT">
+  <div><h1>Ruleta del ranking</h1><div class="sub">🏆 Desempate del ganador del mes</div></div>
+</header>
+<div class="franja"></div>
+<main>
+  <div class="rueda-wrap">
+    <div class="flecha"></div>
+    <canvas id="rueda" width="1240" height="1240"></canvas>
+    <div class="centro"></div>
+  </div>
+  <button class="btn" id="bGirar" type="button">🎡 ¡GIRAR!</button>
+
+  <section class="panel">
+    <h2>¿Quiénes participan?</h2>
+    <p>Escribe un nombre por línea (los empatados).</p>
+    <textarea id="nombres" placeholder="NOMBRE APELLIDO&#10;NOMBRE APELLIDO"></textarea>
+    <label class="chk"><input type="checkbox" id="quitar"> Sacar al ganador de la rueda después de cada giro</label>
+    <div class="fila">
+      <button class="btn amarillo" id="bListo" type="button">✅ Poner en la rueda</button>
+      <button class="btn gris" id="bBorrar" type="button">🗑 Borrar nombres</button>
+    </div>
+    <ul class="hist" id="hist"></ul>
+  </section>
+</main>
+
+<div id="ganador">
+  <div class="trofeo">🏆</div>
+  <div class="t">¡Ganador!</div>
+  <div class="n" id="gNombre"></div>
+  <div class="pie">Primer lugar · Ranking del mes WGYMADNSPORT</div>
+  <button class="btn amarillo" id="bCerrar" type="button">← Volver a la ruleta</button>
+</div>
+<canvas id="conf"></canvas>
+
+<script>
+(function(){
+  var KEY = "wgym_ruleta_nombres_v1";
+  var COLORES = ["#E30613","#0D0D0F","#D4AF37","#1c1c1f","#B0040F","#2a2a2e"];
+  var cv = document.getElementById("rueda"), ctx = cv.getContext("2d");
+  var ta = document.getElementById("nombres");
+  var nombres = [], ang = 0, girando = false, audio = null;
+
+  function leer(){ try { return localStorage.getItem(KEY) || ""; } catch(e){ return ""; } }
+  function guardar(t){ try { localStorage.setItem(KEY, t); } catch(e){} }
+  function limpiar(t){
+    var vistos = {};
+    return t.split(/\n/).map(function(s){ return s.trim().toUpperCase(); })
+      .filter(function(s){ if(!s || vistos[s]) return false; vistos[s] = 1; return true; });
+  }
+  function cargar(){
+    nombres = limpiar(ta.value);
+    guardar(ta.value);
+    dibujar();
+    document.getElementById("bGirar").disabled = nombres.length < 2;
+  }
+
+  function dibujar(){
+    var W = cv.width, R = W/2 - 14, c = W/2;
+    ctx.clearRect(0,0,W,W);
+    ctx.beginPath(); ctx.arc(c,c,R+10,0,Math.PI*2); ctx.fillStyle = "#D4AF37"; ctx.fill();
+    var lista = nombres.length ? nombres : ["ESCRIBE", "LOS NOMBRES"];
+    var n = lista.length, seg = Math.PI*2/n;
+    for (var i=0;i<n;i++){
+      var a0 = ang + i*seg - Math.PI/2;
+      ctx.beginPath(); ctx.moveTo(c,c); ctx.arc(c,c,R,a0,a0+seg); ctx.closePath();
+      var col = COLORES[i % COLORES.length];
+      if (n % COLORES.length === 1 && i === n-1) col = COLORES[1];
+      ctx.fillStyle = col; ctx.fill();
+      ctx.lineWidth = 6; ctx.strokeStyle = "#D4AF37"; ctx.stroke();
+      ctx.save(); ctx.translate(c,c); ctx.rotate(a0 + seg/2);
+      ctx.textAlign = "right"; ctx.textBaseline = "middle";
+      ctx.fillStyle = (col === "#D4AF37") ? "#000" : "#fff";
+      var tam = Math.min(70, Math.max(30, 520/Math.max(n,2)*1.4));
+      var txt = lista[i];
+      ctx.font = tam + "px Anton, Impact, sans-serif";
+      while (ctx.measureText(txt).width > R*0.66 && tam > 22){ tam -= 2; ctx.font = tam + "px Anton, Impact, sans-serif"; }
+      ctx.fillText(txt, R - 34, 0);
+      ctx.restore();
+    }
+    for (var k=0;k<n*2;k++){
+      var a = ang + k*seg/2 - Math.PI/2;
+      ctx.beginPath(); ctx.arc(c + Math.cos(a)*(R+2), c + Math.sin(a)*(R+2), 9, 0, Math.PI*2);
+      ctx.fillStyle = "#fff"; ctx.fill();
+    }
+  }
+
+  function tic(){
+    try {
+      if (!audio) return;
+      var o = audio.createOscillator(), g = audio.createGain();
+      o.type = "square"; o.frequency.value = 1400;
+      g.gain.setValueAtTime(0.18, audio.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.05);
+      o.connect(g); g.connect(audio.destination); o.start(); o.stop(audio.currentTime + 0.06);
+    } catch(e){}
+  }
+  function fanfarria(){
+    try {
+      if (!audio) return;
+      [523,659,784,1046].forEach(function(f,i){
+        var o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime + i*0.16;
+        o.type = "square"; o.frequency.value = f;
+        g.gain.setValueAtTime(0.25, t); g.gain.exponentialRampToValueAtTime(0.001, t + (i===3?0.7:0.15));
+        o.connect(g); g.connect(audio.destination); o.start(t); o.stop(t + (i===3?0.75:0.16));
+      });
+    } catch(e){}
+  }
+
+  function girar(){
+    if (girando || nombres.length < 2) return;
+    try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); audio.resume(); } catch(e){}
+    girando = true; document.getElementById("bGirar").disabled = true;
+    var n = nombres.length, seg = Math.PI*2/n;
+    var r = new Uint32Array(1); (window.crypto || window.msCrypto).getRandomValues(r);
+    var gana = r[0] % n;
+    var dentro = (0.15 + 0.7*Math.random()) * seg;
+    var finMod = -(gana*seg + dentro);
+    var actual = ang % (Math.PI*2);
+    var delta = ((finMod - actual) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
+    var total = delta + Math.PI*2*(6 + Math.floor(Math.random()*3));
+    var ini = ang, t0 = performance.now(), dur = 7500, ultimoSeg = Math.floor(ini/seg);
+    function paso(t){
+      var p = Math.min(1, (t - t0)/dur);
+      var e = 1 - Math.pow(1 - p, 4);
+      ang = ini + total*e;
+      var s = Math.floor(ang/seg);
+      if (s !== ultimoSeg){ ultimoSeg = s; tic(); if (navigator.vibrate) try{ navigator.vibrate(8); }catch(x){} }
+      dibujar();
+      if (p < 1) requestAnimationFrame(paso); else setTimeout(function(){ terminar(gana); }, 500);
+    }
+    requestAnimationFrame(paso);
+  }
+
+  function terminar(i){
+    var nom = nombres[i];
+    document.getElementById("gNombre").textContent = nom;
+    document.getElementById("ganador").classList.add("ver");
+    fanfarria(); confeti();
+    if (navigator.vibrate) try{ navigator.vibrate([200,100,200,100,400]); }catch(x){}
+    var li = document.createElement("li");
+    var h = new Date();
+    li.textContent = "🏆 " + nom + " · " + h.toLocaleDateString("es-CL") + " " + h.toLocaleTimeString("es-CL",{hour:"2-digit",minute:"2-digit"});
+    var hist = document.getElementById("hist"); hist.insertBefore(li, hist.firstChild);
+    if (document.getElementById("quitar").checked){
+      var l = limpiar(ta.value).filter(function(s){ return s !== nom; });
+      ta.value = l.join("\n"); cargar();
+    }
+    girando = false; document.getElementById("bGirar").disabled = nombres.length < 2;
+  }
+
+  function confeti(){
+    var c = document.getElementById("conf"), x = c.getContext("2d");
+    c.width = innerWidth; c.height = innerHeight;
+    var cols = ["#E30613","#D4AF37","#fff","#FFD400"], ps = [];
+    for (var i=0;i<220;i++) ps.push({x:Math.random()*c.width, y:-20-Math.random()*c.height*0.6, vx:(Math.random()-.5)*4, vy:3+Math.random()*5, r:Math.random()*Math.PI, vr:(Math.random()-.5)*.3, w:8+Math.random()*10, h:5+Math.random()*7, col:cols[i%4]});
+    var t0 = performance.now();
+    (function cuadro(t){
+      x.clearRect(0,0,c.width,c.height);
+      ps.forEach(function(p){ p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; x.save(); x.translate(p.x,p.y); x.rotate(p.r); x.fillStyle=p.col; x.fillRect(-p.w/2,-p.h/2,p.w,p.h); x.restore(); });
+      if (t - t0 < 5000) requestAnimationFrame(cuadro); else x.clearRect(0,0,c.width,c.height);
+    })(t0);
+  }
+
+  ta.value = leer();
+  document.getElementById("bListo").onclick = cargar;
+  ta.addEventListener("input", cargar);
+  document.getElementById("bBorrar").onclick = function(){ ta.value = ""; cargar(); };
+  document.getElementById("bGirar").onclick = girar;
+  document.getElementById("bCerrar").onclick = function(){ document.getElementById("ganador").classList.remove("ver"); };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(dibujar);
+  cargar();
+})();
+</script>
+</body>
+</html>
