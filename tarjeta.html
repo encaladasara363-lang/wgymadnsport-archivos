@@ -2483,7 +2483,7 @@ function renderEvolucion(s){
     oculta con «Ya no lo vendo» no llega. «Lo quiero» abre una ventanita (foto grande, cantidad, total)
     y después WhatsApp a Sara con el pedido. El stock solo baja cuando ella cobra en la tienda.
     Al cambiar una foto de img/tienda/ con el mismo nombre, subir TIENDA_FOTO_V junto con FOTO_V de tienda.html. */
- var TIENDA_FOTO_V = "66", TIENDA_WSP = "56975196394", TIENDA_SITIO = "https://encaladasara363-lang.github.io/wgymadnsport-archivos/";
+ var TIENDA_FOTO_V = "67", TIENDA_WSP = "56975196394", TIENDA_SITIO = "https://encaladasara363-lang.github.io/wgymadnsport-archivos/";
  /* Interruptor (25-10-2026, la dueña: "no quiero publicar la tienda el lunes porque compré ropa en Shein y no sé
     cuándo me llegaría"): en false la tarjeta no muestra la tienda aunque la Versión 25 esté instalada.
     Ponerlo en true (y subir TARJETA_VERSION) solo cuando ella lo pida. */
@@ -2541,7 +2541,7 @@ function renderEvolucion(s){
    /* El batido ganador de masa no tiene stock propio: sale de las porciones del tarro de «Batido de proteína»
       (27-10-2026, la dueña: "el ganador de masa me aparece sin stock"; mismo criterio que USA_PORCION de tienda.html). */
    /* Desde el 10-11-2026 la única proteína es la Prostar Vanilla (el Clear se devolvió; la Protein Phorm ya no se usa). */
-   l = l.filter(function(p){ return !/^(batido de prote|tarro de prote|batido ganador)/i.test(p.n) && !/^smoothie proteico choco (frutilla|oreo|man[ií])/i.test(p.n); }); /* 10-11-2026: solo queda el Choco Banana Cream */
+   l = l.filter(function(p){ return !/^(batido de prote|tarro de prote|batido ganador)/i.test(p.n) && !/^smoothie proteico choco (frutilla|oreo)/i.test(p.n); }); /* 10-11-2026: solo queda el Choco Banana Cream; 18-11-2026 vuelve el Choco Maní */
    var prostar = l.filter(function(p){ return /^prote[ií]na prostar/i.test(p.n); })[0];
    /* Smoothies de chocolate (10-11-2026): salen del tarro Dymatize ISO100; si no está cargado, de la Prostar. */
    var tarro = l.filter(function(p){ return /^prote[ií]na (dymatize )?iso ?100/i.test(p.n); })[0] || prostar;
@@ -2626,9 +2626,12 @@ function renderEvolucion(s){
  var TIENDA_MACROS = [
   { re:/^batido ganador/i, k:670, p:44, c:74, g:24, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, avena y mantequilla de maní", al:"leche, soya y maní" },
   /* Smoothie Choco Banana Cream (05-11-2026, receta de la dueña, vaso de 450 ml; proteína Dragon Pharma Protein Phorm 30 g). */
-  { re:/^smoothie proteico frutilla cream/i, k:305, p:33, c:26, g:9, por:"450 ml", lleva:"Proteína Prostar Whey vainilla, leche entera sin lactosa, frutillas, plátano, yogur natural sin azúcar y hielo", al:"leche" },
-  { re:/^smoothie proteico choco banana/i, k:330, p:32, c:30, g:9, por:"450 ml", lleva:"Proteína Dymatize ISO100 chocolate, leche entera sin lactosa, plátano, yogur natural sin azúcar y hielo", al:"leche" },
-  { re:/^smoothie proteico choco man[ií]/i, k:400, p:37, c:17, g:20, por:"450 ml", lleva:"Proteína Dymatize ISO100 chocolate, leche entera sin lactosa, mantequilla de maní y hielo", al:"leche y maní" },
+  { re:/^smoothie proteico frutilla cream/i, k:385, p:38, c:32, g:12, por:"450 ml", lleva:"Proteína Prostar Whey vainilla, leche entera sin lactosa, frutillas, plátano, yogur griego natural sin azúcar y base de helado", al:"leche" },
+  { re:/^smoothie proteico choco banana/i, k:405, p:38, c:39, g:11, por:"450 ml", lleva:"Proteína Dymatize ISO100 chocolate, leche entera sin lactosa, plátano, yogur griego natural sin azúcar y base de helado", al:"leche" },
+  { re:/^smoothie proteico choco man[ií]/i, k:460, p:42, c:33, g:19, por:"450 ml", lleva:"Proteína Dymatize ISO100 chocolate, leche entera sin lactosa, mantequilla de maní, plátano, yogur griego natural sin azúcar y base de helado", al:"leche y maní" },
+  { re:/^smoothie proteico vainilla latte/i, k:380, p:38, c:31, g:12, por:"450 ml", lleva:"Proteína Prostar Whey vainilla, leche entera sin lactosa, café, canela, plátano, yogur griego natural sin azúcar y base de helado", al:"leche" },
+  { re:/^smoothie proteico tropical mango/i, k:445, p:39, c:41, g:15, por:"450 ml", lleva:"Proteína Prostar Whey vainilla, leche entera sin lactosa, mango, plátano, coco rallado, yogur griego natural sin azúcar y base de helado", al:"leche" },
+  { re:/^smoothie proteico berry cream/i, k:400, p:38, c:36, g:12, por:"450 ml", lleva:"Proteína Prostar Whey vainilla, leche entera sin lactosa, arándanos, frambuesas, moras, plátano, yogur griego natural sin azúcar y base de helado", al:"leche" },
   { re:/^smoothie proteico choco oreo/i, k:375, p:33, c:29, g:14, por:"450 ml", lleva:"Proteína Dymatize ISO100 chocolate, leche entera sin lactosa, galletas tipo Oreo y hielo", al:"leche, trigo y soya" },
   { re:/^smoothie proteico choco frutilla/i, k:295, p:33, c:19, g:10, por:"450 ml", lleva:"Proteína Dymatize ISO100 chocolate, leche entera sin lactosa, frutillas y hielo", al:"leche" },
   { re:/^batido de prote/i, k:315, p:32, c:27, g:9, lleva:"Proteína whey chocolate, leche sin lactosa, plátano, hielo y un toque de canela o cacao", al:"leche y soya" },
@@ -2767,7 +2770,7 @@ function renderEvolucion(s){
     compara TARJETA_VERSION con tarjeta-version.txt del sitio y, si hay
     una más nueva, la página se recarga sola (el nombre ya aparece
     puesto). Al cambiar tarjeta.html, subir los DOS números juntos. */
- var TARJETA_VERSION = "2026111701", ultimaRevisionVersion = 0;
+ var TARJETA_VERSION = "2026111801", ultimaRevisionVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión
