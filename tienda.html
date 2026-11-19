@@ -467,7 +467,7 @@ function elegirDelGrupo(cat, alElegir, lista){
 /* Waffles fuera de la tienda (07-11-2026, la dueña: "elimina la sección de waffles"): no salen en el inventario ni en Vender. */
 /* Helados de palito fuera de la tienda (10-11-2026, la dueña: "bórrame la sección de helados de palito"), igual que los waffles. */
 /* Proteínas antiguas fuera (10-11-2026): el Clear se devolvió por vencido y la dueña trabaja solo con la Prostar ("la Prostar es nueva, con esa trabajaré"). */
-function esWaffle(p){ return p && (p.cat === "Waffles" || /^waffle/i.test(p.n || "") || /^(batido de prote|tarro de prote|batido ganador)/i.test(p.n || "") || /^smoothie proteico choco (frutilla|oreo)/i.test(p.n || "") || p.cat === "Helados de palito" || p.cat === "Paletas" || /^(helado de palito|paleta proteica)/i.test(p.n || "")); }
+function esWaffle(p){ return p && (p.cat === "Waffles" || /^waffle/i.test(p.n || "") || /^(batido de prote|tarro de prote|batido ganador)/i.test(p.n || "") || /^smoothie proteico choco (frutilla|oreo)/i.test(p.n || "") || /^muffin proteico (chocolate|frutilla)/i.test(p.n || "") /* 19-11-2026: un solo «Muffin proteico» */ || p.cat === "Helados de palito" || p.cat === "Paletas" || /^(helado de palito|paleta proteica)/i.test(p.n || "")); }
 function activos(){ return S.productos.filter(function(p){ return p.activo && !retirada(p) && !esWaffle(p); }); }
 /* 🏷 Ropa vendida (26-10-2026, la dueña: casi toda la ropa es de una sola prenda; "cuando se venda una prenda que se
    coloque vendido automático y que se quede en la tienda por 15 días y luego la eliminas"): una prenda sin stock con
@@ -694,7 +694,7 @@ setInterval(function(){ if(pend.length) enviarPendientes(); }, 30000);
   var on = document.documentElement.classList.toggle("rosa");
   try{ localStorage.setItem("wgym_tienda_tema_v2", on ? "rosa" : "oscuro"); }catch(e){}
   toast(on ? "🎨 Fondo rosita (solo en este equipo). Toca 🎨 de nuevo para volver al negro." : "🎨 Volviste al fondo negro.", 3500); }; })();
-var TIENDA_VERSION = "2026111802";
+var TIENDA_VERSION = "2026111901";
 setInterval(function(){ if(clave && !document.hidden && $("velo").hidden && !$("app").hidden) enviarPendientes().then(function(){ cargar(true); }); }, 30000);
 function revisarVersion(){
  fetch("tienda-version.txt?t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.text() : ""; }).then(function(v){
