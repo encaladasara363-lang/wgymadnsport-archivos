@@ -355,7 +355,7 @@ try{ if((JSON.parse(localStorage.getItem("wgymnutri_tema_v2")) || "claro") === "
 <canvas id="confeti" hidden></canvas>
 
 <script src="pago-datos.js?v=4"></script>
-<script src="nutri-alimentos.js?v=35"></script>
+<script src="nutri-alimentos.js?v=36"></script>
 <script src="nutri-recetas.js?v=28"></script>
 <script>
 (function(){
@@ -2188,10 +2188,10 @@ function textoPorcion(a){ var t = porcionDe(a); return t && t.indexOf(String(a.p
 /* «⭐ Agregado por WGYM» (11-10-2026, pedido de la dueña). */
 var WGYM_SET = {}; (window.NUTRI_WGYM || []).forEach(function(n){ WGYM_SET[n] = 1; });
 function tagWgym(a){ return a && a.cat === CAT_PROD ? '<em class="tag-wgym">📷 Escaneado en WGYM</em>' : agregadoWgym(a) ? '<em class="tag-wgym">⭐ Agregado por WGYM</em>' : ''; }
-function agregadoWgym(a){ return !!a && a.cat !== CAT_PROD && (WGYM_SET[a.n] || /B[aá]sicos fitness|Energ[eé]ticas|Endulzantes/.test(a.cat || "")); }
+function agregadoWgym(a){ return !!a && a.cat !== CAT_PROD && (WGYM_SET[a.n] || /B[aá]sicos fitness|Energ[eé]ticas|Endulzantes|Tienda WGYM/.test(a.cat || "")); }
 /* 🍗 Íconos por alimento (11-10-2026, la dueña eligió la idea 4): primero por palabras del nombre,
    después por categoría. Solo adorno: no cambia ningún cálculo. */
-var ICONOS = [[/papas? fritas/,"🍟"],[/arroz con leche|leche asada|flan|postre|s[eé]mola|manjar|maicena/,"🍮"],[/caf[eé]|cappuccino|latte|mocaccino|cortado/,"☕"],[/\bt[eé]\b|t[eé] (verde|negro|helado)/,"🍵"],[/jugo/,"🧃"],[/cerveza/,"🍺"],[/vino|espumante/,"🍷"],[/piscola|whisky|ron /,"🥃"],
+var ICONOS = [[/^smoothie/,"🥤"],[/^helado proteico/,"🍦"],[/papas? fritas/,"🍟"],[/arroz con leche|leche asada|flan|postre|s[eé]mola|manjar|maicena/,"🍮"],[/caf[eé]|cappuccino|latte|mocaccino|cortado/,"☕"],[/\bt[eé]\b|t[eé] (verde|negro|helado)/,"🍵"],[/jugo/,"🧃"],[/cerveza/,"🍺"],[/vino|espumante/,"🍷"],[/piscola|whisky|ron /,"🥃"],
  [/pizza/,"🍕"],[/completo|hot ?dog|italiano/,"🌭"],[/hamburguesa|churrasco|barros|chacarero|sandwich|s[aá]ndwich/,"🍔"],[/sushi/,"🍣"],[/empanada/,"🥟"],[/cazuela|sopa|caldo|charquic[aá]n|porotos con|lentejas con|pantruca/,"🍲"],
  [/whey|prote[ií]na en polvo|case[ií]na|scoop|batido/,"💪"],[/creatina|omega|vitamina|c[aá]psula/,"💊"],
  [/pollo|pavo|pechuga|trutro|\bala\b|nuggets/,"🍗"],[/jam[oó]n|vienesa|longaniza|salame|mortadela|chorizo|tocino|prieta|pat[eé]/,"🥓"],[/carne|vacuno|posta|lomo|bistec|filete|asiento|plateada|mechada|costillar|chuleta|cerdo|pulpa/,"🥩"],
@@ -2203,7 +2203,7 @@ var ICONOS = [[/papas? fritas/,"🍟"],[/arroz con leche|leche asada|flan|postre
  [/tomate|pomarola/,"🍅"],[/br[oó]coli|coliflor|repollito/,"🥦"],[/zanahoria/,"🥕"],[/choclo/,"🌽"],[/pepino|zapallo italiano/,"🥒"],[/piment[oó]n|aj[ií]\b/,"🌶️"],[/champi[ñn]/,"🍄"],[/cebolla|cebollin|puerro/,"🧅"],[/berenjena/,"🍆"],[/lechuga|ensalada|espinaca|r[uú]cula|kale|acelga|repollo|apio/,"🥬"],
  [/lenteja|garbanzo|poroto|edamame|soya|tofu|hummus|haba|arveja/,"🫘"],[/almendra|nuez|nueces|avellana|pistacho|casta[ñn]a|man[ií]|semilla|ch[ií]a/,"🥜"],
  [/aceite|mantequilla|margarina|mayonesa|salsa|aderezo|vinagreta|mostaza|ketchup/,"🫒"],[/endulzante|az[uú]car|stevia|sucralosa|miel|eritritol|xilitol|sirope/,"🍯"],[/agua/,"💧"],[/bebida|cola|sprite|fanta/,"🥤"]];
-var ICONO_CAT = { "⚡ Energéticas":"⚡", "Bebidas":"🥤", "Frutas":"🍎", "Verduras":"🥦", "Lácteos":"🥛", "Carnes y huevos":"🍖", "Panes y cereales":"🍞", "Legumbres":"🫘", "Snacks y dulces":"🍬", "Comida chilena":"🍲", "Comida rápida":"🍔", "Grasas y salsas":"🫒", "Endulzantes":"🍯", "Suplementos":"💊" };
+var ICONO_CAT = { "⚡ Energéticas":"⚡", "🏪 Tienda WGYM":"🏪", "Bebidas":"🥤", "Frutas":"🍎", "Verduras":"🥦", "Lácteos":"🥛", "Carnes y huevos":"🍖", "Panes y cereales":"🍞", "Legumbres":"🫘", "Snacks y dulces":"🍬", "Comida chilena":"🍲", "Comida rápida":"🍔", "Grasas y salsas":"🫒", "Endulzantes":"🍯", "Suplementos":"💊" };
 function iconoAlim(a){
  if(!a) return "🍽️"; if(a.cat === "⚡ Energéticas") return "⚡";
  var n = normName(a.n || "").toLowerCase();
@@ -3038,7 +3038,7 @@ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persis
 
 /* Actualización automática (10-10-2026, como la tarjeta): si nutri-version.txt trae un
    número mayor, la página se recarga sola. Al cambiar wgymnutri.html, subir LOS DOS números. */
-var NUTRI_VERSION = "2026111603", ultimaRevVersion = 0;
+var NUTRI_VERSION = "2026112301", ultimaRevVersion = 0;
 function recargarFresco_(v){
  /* Recarga pidiendo la página nueva (11-10-2026): location.reload() podía traer la copia
     guardada del teléfono (GitHub guarda la página ~10 min) y el socio seguía con la versión

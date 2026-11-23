@@ -2073,6 +2073,7 @@ probado: ella se activó desde el mesón y entró a la app).
   al agregar un alimento, un plato o varios por voz, y al tocar agua/café o leer un código. Android:
   `navigator.vibrate`; iPhone (no tiene esa función): un interruptor `<input switch>` escondido
   que iOS 18 o más nuevo acompaña con un golpecito del sistema (en iOS antiguos no vibra, sin error).
+- **🏪 Tienda WGYM en la lista (23-11-2026, la dueña: "hay socios que cuentan sus calorías"):** categoría «🏪 Tienda WGYM» en `nutri-alimentos.js` con los 10 smoothies («1 porción (vaso de 450 ml)») y los 31 helados («1 porción (vaso de 100 ml)»), mismos macros que `TIENDA_MACROS` de `tarjeta.html`, azúcar añadida 0 (Confeti Choco 4 g), etiqueta «⭐ Agregado por WGYM» e íconos 🥤/🍦. Al sumar un sabor o cambiar una receta, cambiar los dos archivos.
 - **Básicos fitness (10-10-2026, pedido de la dueña):** categoría «⭐ Básicos
   fitness» al comienzo de `nutri-alimentos.js` (pechuga, claras, atún, whey,
   avena, arroz, camote, cottage, etc., con porciones de gimnasio). La búsqueda
